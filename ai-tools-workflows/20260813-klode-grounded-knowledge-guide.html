@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23173f33'/%3E%3Cpath d='M17 13v38M18 34l23-20M19 34l27 18' fill='none' stroke='%23d38831' stroke-width='8'/%3E%3C/svg%3E">
+  <title>20260813-1034-klode 详细使用指南与最佳实践</title>
+  <style>
+    :root{
+      --paper:#f3eedf;
+      --paper-2:#e9e1cc;
+      --ink:#17201b;
+      --muted:#5e655d;
+      --forest:#173f33;
+      --moss:#667b45;
+      --amber:#d38831;
+      --red:#a13d2d;
+      --line:#b9ae93;
+      --code:#101914;
+      --code-ink:#e9e5d9;
+      --white:#fbf8ef;
+      --shadow:0 18px 50px rgba(36,31,21,.10);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%,rgba(211,136,49,.12),transparent 28rem),
+        linear-gradient(90deg,rgba(23,63,51,.035) 1px,transparent 1px),
+        var(--paper);
+      background-size:auto,32px 32px,auto;
+      font-family:"Songti SC","STSong","Noto Serif CJK SC","Times New Roman",serif;
+      font-size:17px;
+      line-height:1.72;
+    }
+    .page{width:min(1180px,calc(100% - 36px));margin:0 auto;padding:42px 0 86px}
+    .eyebrow,.label,.kicker,.step-no,.tag,.stamp,.code-title,.mini-title{
+      font-family:"Avenir Next","Trebuchet MS","PingFang SC",sans-serif;
+      text-transform:uppercase;
+      letter-spacing:.11em;
+      font-weight:800;
+    }
+    header{
+      position:relative;
+      overflow:hidden;
+      color:var(--white);
+      background:var(--forest);
+      border-radius:3px;
+      box-shadow:var(--shadow);
+      padding:58px 64px 52px;
+      min-height:470px;
+    }
+    header:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(120deg,transparent 0 62%,rgba(243,238,223,.08) 62% 63%,transparent 63%),
+        repeating-linear-gradient(0deg,transparent 0 27px,rgba(243,238,223,.055) 27px 28px);
+      pointer-events:none;
+    }
+    .hero-grid{position:relative;display:grid;grid-template-columns:1.55fr .72fr;gap:50px;align-items:end}
+    .eyebrow{display:flex;align-items:center;gap:12px;color:#d6bd8b;font-size:13px}
+    .eyebrow:before{content:"";width:42px;height:3px;background:var(--amber)}
+    h1{font-size:clamp(48px,6.2vw,88px);line-height:.94;letter-spacing:-.055em;margin:28px 0 22px;font-weight:900}
+    .subtitle{max-width:710px;font-size:22px;line-height:1.55;color:#e8e2d4;margin:0}
+    .hero-side{border-left:1px solid rgba(255,255,255,.24);padding-left:28px}
+    .hero-side p{margin:0 0 18px;color:#dce0d7;font-size:15px}
+    .hero-side strong{display:block;color:#fff;font-family:"Avenir Next","PingFang SC",sans-serif;font-size:18px}
+    .stamp{display:inline-block;border:1px solid #d6bd8b;color:#d6bd8b;padding:8px 12px;font-size:11px;transform:rotate(-2deg);margin-top:6px}
+    .thesis{
+      display:grid;grid-template-columns:1fr 2.4fr;gap:44px;
+      margin:28px 0 76px;padding:32px 38px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow)
+    }
+    .thesis .kicker{font-size:12px;color:var(--red);padding-top:5px}
+    .thesis blockquote{font-size:28px;line-height:1.45;margin:0;font-weight:750;letter-spacing:-.02em}
+    .thesis em{font-style:normal;color:var(--red)}
+    section{margin:0 0 82px}
+    .section-head{display:grid;grid-template-columns:110px 1fr;gap:28px;align-items:start;margin-bottom:30px}
+    .section-no{font:900 58px/.9 "Avenir Next","Trebuchet MS",sans-serif;color:var(--amber);letter-spacing:-.06em}
+    .section-head h2{font-size:38px;line-height:1.18;margin:0 0 9px;letter-spacing:-.035em}
+    .section-head p{margin:0;color:var(--muted);font-size:17px}
+    .rule{height:1px;background:linear-gradient(90deg,var(--forest),transparent);margin-top:21px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .panel{background:rgba(251,248,239,.86);border:1px solid var(--line);padding:25px 27px}
+    .panel h3{font-size:22px;line-height:1.3;margin:0 0 10px}
+    .panel p{margin:0;color:#3f463f}
+    .panel .label{display:block;font-size:10px;color:var(--red);margin-bottom:10px}
+    .contrast{background:var(--forest);color:var(--white);border:none}
+    .contrast p{color:#d9dfd6}
+    .contrast .label{color:#e5b86c}
+    .warning{background:#f0dfcd;border:1px solid #c67a58}
+    .truth-map{display:grid;grid-template-columns:1fr 72px 1fr;gap:22px;align-items:center}
+    .truth-arrow{font:900 42px/1 "Avenir Next",sans-serif;color:var(--amber);text-align:center}
+    ul.clean,ol.clean{margin:14px 0 0;padding-left:1.3em}
+    ul.clean li,ol.clean li{margin:.46em 0}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:28px;border:1px solid var(--line);background:var(--white)}
+    .flow-item{position:relative;padding:24px 18px 22px;border-right:1px solid var(--line);min-height:154px}
+    .flow-item:last-child{border-right:0}
+    .flow-item:after{content:"→";position:absolute;right:-12px;top:58px;z-index:2;background:var(--white);color:var(--amber);font:bold 24px/1 sans-serif;padding:3px}
+    .flow-item:last-child:after{display:none}
+    .step-no{font-size:10px;color:var(--red)}
+    .flow-item h3{font-size:19px;margin:10px 0 5px;line-height:1.25}
+    .flow-item p{font-size:14px;line-height:1.55;margin:0;color:var(--muted)}
+    pre{
+      position:relative;margin:14px 0 0;padding:24px 26px;border-radius:2px;overflow:hidden;
+      background:var(--code);color:var(--code-ink);font:14px/1.72 "SFMono-Regular","Cascadia Code","Menlo",monospace;
+      white-space:pre-wrap;word-break:break-word;border-left:4px solid var(--amber)
+    }
+    code{font-family:"SFMono-Regular","Cascadia Code","Menlo",monospace;font-size:.91em}
+    p code,li code,td code{background:rgba(23,63,51,.08);padding:.14em .36em;border-radius:2px;color:#183e33}
+    .code-title{display:flex;justify-content:space-between;gap:18px;color:#99aa9e;font-size:10px;margin-bottom:10px}
+    .cmd{color:#f0c979}.comment{color:#8fa195}.string{color:#cbd89e}.danger{color:#ef9b82}
+    .steps{counter-reset:step;display:grid;gap:17px}
+    .step{counter-increment:step;display:grid;grid-template-columns:58px 1fr;background:var(--white);border:1px solid var(--line)}
+    .step:before{content:counter(step,decimal-leading-zero);font:900 20px/1 "Avenir Next",sans-serif;color:var(--white);background:var(--forest);display:flex;align-items:flex-start;justify-content:center;padding-top:25px}
+    .step-body{padding:21px 25px 23px}
+    .step h3{font-size:20px;margin:0 0 6px}
+    .step p{margin:0;color:var(--muted)}
+    .step pre{margin-top:13px}
+    table{width:100%;border-collapse:collapse;background:rgba(251,248,239,.78);font-family:"Avenir Next","PingFang SC",sans-serif;font-size:14px;line-height:1.5}
+    th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:14px 15px}
+    th{background:var(--forest);color:var(--white);font-size:12px;letter-spacing:.04em}
+    tr:last-child td{border-bottom:0}
+    .status{display:inline-block;font:800 10px/1 "Avenir Next",sans-serif;letter-spacing:.08em;padding:5px 7px;text-transform:uppercase}
+    .ok{background:#dce6d1;color:#314828}.ask{background:#f2dcb7;color:#6e451b}.stop{background:#ead0c8;color:#7a2f25}
+    .callout{display:grid;grid-template-columns:70px 1fr;gap:20px;padding:24px 27px;margin:22px 0;background:#e2e7d8;border-top:3px solid var(--moss)}
+    .callout-mark{font:900 38px/1 "Avenir Next",sans-serif;color:var(--moss)}
+    .callout h3{font-size:20px;margin:0 0 5px}.callout p{margin:0;color:#3e4939}
+    .recipe{display:grid;grid-template-columns:210px 1fr;border-top:1px solid var(--line);padding:22px 0}
+    .recipe:last-child{border-bottom:1px solid var(--line)}
+    .recipe h3{font-size:19px;margin:0;padding-right:24px}
+    .recipe p{margin:0;color:var(--muted)}
+    .recipe pre{margin-top:12px}
+    .best-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line);background:var(--white)}
+    .practice{padding:26px 28px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .practice:nth-child(2n){border-right:0}.practice:nth-last-child(-n+2){border-bottom:0}
+    .practice .mini-title{font-size:10px;color:var(--red)}
+    .practice h3{font-size:21px;margin:9px 0 8px}.practice p{margin:0;color:var(--muted)}
+    .practice strong{color:var(--forest)}
+    .exit-codes{display:grid;grid-template-columns:repeat(3,1fr);margin:22px 0;background:var(--code);color:var(--code-ink)}
+    .exit{padding:25px;border-right:1px solid #3b493f}.exit:last-child{border-right:0}
+    .exit b{display:block;font:900 46px/1 "Avenir Next",sans-serif;color:#f0c979}.exit strong{display:block;margin:12px 0 4px}.exit p{font-size:14px;color:#b9c4bb;margin:0}
+    .do-dont{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .do-dont h3{font:900 13px/1 "Avenir Next",sans-serif;letter-spacing:.1em;text-transform:uppercase;margin:0 0 15px}
+    .do{border-top:5px solid var(--moss)}.dont{border-top:5px solid var(--red)}
+    .checklist{columns:2;column-gap:24px;margin-top:22px}
+    .check{break-inside:avoid;display:grid;grid-template-columns:24px 1fr;gap:9px;padding:12px 0;border-bottom:1px dotted var(--line)}
+    .box{width:17px;height:17px;border:2px solid var(--forest);margin-top:5px}
+    .source-list{font-family:"Avenir Next","PingFang SC",sans-serif;font-size:14px}
+    .source-list a{color:var(--forest);text-decoration-thickness:1px;text-underline-offset:3px}
+    footer{background:#16221c;color:#dfe3dc;padding:38px 42px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px}
+    footer h2{font-size:26px;margin:0 0 8px;color:#fff}footer p{margin:0;color:#bfc8bf;font-size:14px}
+    .footer-meta{text-align:right;font-family:"Avenir Next","PingFang SC",sans-serif;font-size:12px;color:#a8b5aa}
+    .footer-meta strong{display:block;color:#e5b86c;font-size:14px}
+    @media(max-width:760px){
+      body{font-size:16px;background-size:auto,24px 24px,auto}
+      .page{width:min(100% - 20px,1180px);padding-top:10px}
+      header{padding:36px 28px;min-height:auto}.hero-grid{grid-template-columns:1fr}.hero-side{border-left:0;border-top:1px solid rgba(255,255,255,.24);padding:22px 0 0}
+      h1{font-size:54px}.subtitle{font-size:18px}.thesis{grid-template-columns:1fr;gap:10px;padding:24px}.thesis blockquote{font-size:23px}
+      .section-head{grid-template-columns:64px 1fr;gap:16px}.section-no{font-size:42px}.section-head h2{font-size:30px}
+      .grid-2,.grid-3,.truth-map,.do-dont,.best-grid{grid-template-columns:1fr}.truth-arrow{transform:rotate(90deg)}
+      .flow{grid-template-columns:1fr}.flow-item{border-right:0;border-bottom:1px solid var(--line);min-height:auto}.flow-item:after{display:none}
+      .recipe{grid-template-columns:1fr;gap:10px}.checklist{columns:1}.practice{border-right:0!important;border-bottom:1px solid var(--line)!important}.practice:last-child{border-bottom:0!important}
+      .exit-codes{grid-template-columns:1fr}.exit{border-right:0;border-bottom:1px solid #3b493f}.exit:last-child{border-bottom:0}
+      footer{grid-template-columns:1fr}.footer-meta{text-align:left}
+      pre{font-size:12px;padding:18px 16px}.panel{padding:21px}
+    }
+    @media print{
+      @page{margin:0}
+      body{background:var(--paper)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .page{width:1180px!important;margin:0 auto!important;padding:42px 0 86px!important}
+      header{padding:58px 64px 52px!important;min-height:470px!important}
+      .hero-grid{grid-template-columns:1.55fr .72fr!important}.hero-side{border-left:1px solid rgba(255,255,255,.24)!important;border-top:0!important;padding:0 0 0 28px!important}
+      h1{font-size:88px!important}.thesis{grid-template-columns:1fr 2.4fr!important}.section-head{grid-template-columns:110px 1fr!important}
+      .grid-2,.do-dont,.best-grid{grid-template-columns:repeat(2,1fr)!important}.grid-3{grid-template-columns:repeat(3,1fr)!important}
+      .truth-map{grid-template-columns:1fr 72px 1fr!important}.truth-arrow{transform:none!important}.flow{grid-template-columns:repeat(5,1fr)!important}
+      .recipe{grid-template-columns:210px 1fr!important}.exit-codes{grid-template-columns:repeat(3,1fr)!important}.checklist{columns:2!important}
+      footer{grid-template-columns:1.4fr 1fr!important}.footer-meta{text-align:right!important}
+      section,.panel,.step,.practice,.recipe,table,.callout{break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Grounded knowledge field manual</div>
+        <h1>klode<br>实战指南</h1>
+        
+      </div>
+      <aside class="hero-side">
+        <p><strong>适用版本</strong>klode 0.4.2 · beta</p>
+        <p><strong>环境要求</strong>Python 3.11+ · 默认零 runtime dependency</p>
+        <p><strong>核验基准</strong>仓库 commit 984e48e</p>
+        <span class="stamp">Verified 2026·08·13</span>
+      </aside>
+    </div>
+  </header>
+
+  <div class="thesis">
+    <div class="kicker">先记住这一句</div>
+    
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">01</div>
+      <div><h2>它解决什么问题</h2><div class="rule"></div></div>
+    </div>
+    <div class="truth-map">
+      <div class="panel">
+        <span class="label">常见知识库</span>
+        <h3>搜索到相似内容</h3>
+        <p>回答看起来合理，但你很难知道摘要是否来自当前版本、引用是否已经漂移。</p>
+      </div>
+      <div class="truth-arrow">→</div>
+      <div class="panel contrast">
+        <span class="label">klode 的约束</span>
+        <h3>每个关键主张都带原文锚点</h3>
+        <p>卡片里的 <code>(grep: …)</code> 必须在指定 source 中解析；失效、缺源或歧义都会被显式报告。</p>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="flow-item"><span class="step-no">Input</span><h3>原始资料</h3><p>PDF / EPUB / DOCX / HTML / TXT</p></div>
+      <div class="flow-item"><span class="step-no">Normalize</span><h3>干净文本</h3><p>统一成 grep-ready source</p></div>
+      <div class="flow-item"><span class="step-no">Encode</span><h3>知识卡片</h3><p>摘要 + 原文锚点 + 层级</p></div>
+      <div class="flow-item"><span class="step-no">Verify</span><h3>失效检查</h3><p>引用是否仍存在且唯一</p></div>
+      <div class="flow-item"><span class="step-no">Consume</span><h3>人 / Agent</h3><p>CLI、JSON、MCP、Python</p></div>
+    </div>
+    <div class="grid-2" style="margin-top:22px">
+      <div class="panel"><span class="label">Loop A · 稳定核心</span><h3>编码专业知识</h3><p>导入 source，制作带 verbatim anchor 的 cards，搜索、consult、zoom、verify，并用 <code>klode check</code> 阻止引用腐烂。</p></div>
+      <div class="panel warning"><span class="label">Loop B · 实验层</span><h3>监督工作产出</h3><p>用 CriterionSpec rubric 评审草稿，输出 Go / Recycle / Unavailable。机制已实现，但<strong>尚未做人类评分校准</strong>，所有 verdict 都标记为 non-production。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">02</div>
+      <div><h2>5 分钟跑通最小闭环</h2><p>先用一个小型 TXT 跑通，再导入复杂 PDF。这样最容易分辨“配置问题”与“抽取问题”。</p><div class="rule"></div></div>
+    </div>
+    <div class="steps">
+      <article class="step"><div class="step-body"><h3>安装并确认版本</h3><p>正式使用建议隔离环境；只是体验可直接安装。源码开发模式用 <code>pipx install -e .</code>。</p><pre><span class="code-title"><span>Terminal</span><span>Python 3.11+</span></span><span class="cmd">python3 -m venv .venv</span>
+<span class="cmd">source .venv/bin/activate</span>
+<span class="cmd">python -m pip install -U pip klode</span>
+<span class="cmd">klode --help</span></pre></div></article>
+      <article class="step"><div class="step-body"><h3>初始化知识库</h3><p><code>--shelf</code> 可重复。shelf 是资料分类，不是权限边界。</p><pre><span class="code-title"><span>Terminal</span><span>Creates library.toml</span></span><span class="cmd">mkdir my-klode &amp;&amp; cd my-klode</span>
+<span class="cmd">klode init . --shelf books --shelf papers --shelf notes</span></pre></div></article>
+      <article class="step"><div class="step-body"><h3>先导入一个简单文件</h3><p>格式由内容签名识别，不依赖扩展名。<code>--id</code> 决定稳定 card/source id。</p><pre><span class="code-title"><span>Terminal</span><span>One source</span></span><span class="cmd">klode -c library.toml ingest ./sources/note.txt \</span>
+  <span class="cmd">--shelf notes --id grounded-writing</span></pre></div></article>
+      <article class="step"><div class="step-body"><h3>生成卡片骨架，再人工写 Thin / Full</h3><p><code>build</code> 生成 card 与 index，但不会替你凭空总结。关键主张后必须附 literal anchor。</p><pre><span class="code-title"><span>Terminal</span><span>Scaffold cards</span></span><span class="cmd">klode -c library.toml build</span>
+<span class="cmd">$EDITOR library/cards/grounded-writing.md</span></pre></div></article>
+      <article class="step"><div class="step-body"><h3>执行 fail-closed 检查</h3><p>严格模式会把“一句话在 source 中出现多次”的裸锚点标成 warning，提醒你增加上下文或指定第几次出现。</p><pre><span class="code-title"><span>Terminal</span><span>Quality gate</span></span><span class="cmd">klode -c library.toml check --strict</span></pre></div></article>
+      <article class="step"><div class="step-body"><h3>检索与原文复核</h3><p>搜索负责发现，verify 负责证明某个 exact phrase 是否存在；两者不要混为一谈。</p><pre><span class="code-title"><span>Terminal</span><span>Discover → verify</span></span><span class="cmd">klode -c library.toml search grounding</span>
+<span class="cmd">klode -c library.toml zoom grounded-writing --level thin</span>
+<span class="cmd">klode -c library.toml verify grounded-writing "exact source phrase"</span></pre></div></article>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">03</div>
+      <div><h2>知识库的目录与卡片模型</h2><p>source 留在本地，card 适合版本控制；这正是 klode 把“版权内容”和“可共享知识结构”分开的方式。</p><div class="rule"></div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <pre><span class="code-title"><span>Directory</span><span>Recommended</span></span>my-klode/
+├── library.toml
+├── .gitignore
+└── library/
+    ├── BIBLIOGRAPHY.md
+    ├── PROVENANCE.jsonl
+    ├── books/
+    │   └── source-id.txt      <span class="comment"># 本地、默认忽略</span>
+    ├── papers/
+    └── cards/
+        ├── INDEX.md
+        └── source-id.md       <span class="comment"># 可审查、可提交</span></pre>
+      </div>
+      <div class="panel">
+        <span class="label">Four levels of zoom</span>
+        <h3>不要让每次查询都吞下全文</h3>
+        <ul class="clean">
+          <li><strong>L0 · meta</strong>：id、标题、shelf、aliases 等导航信息</li>
+          <li><strong>L1 · thin</strong>：1–3 句核心机制，关键主张带锚点</li>
+          <li><strong>L2 · full</strong>：较完整的结构化观点，仍须逐条引用</li>
+          <li><strong>L3 · content</strong>：原始 clean text，用于精确验证与取证</li>
+        </ul>
+      </div>
+    </div>
+    <h3 style="margin:32px 0 10px;font-size:24px">一个合格 card 的最小形态</h3>
+    <pre><span class="code-title"><span>Markdown</span><span>library/cards/source-id.md</span></span>---
+id: source-id
+shelf: books
+file: library/books/source-id.txt
+aliases: [替代叫法, 核心概念]
+source_sha256: …
+---
+
+# Source title
+
+## Thin
+一个关键结论（grep: `原文中逐字存在的短语`）。
+
+## Full
+- 第二个主张（grep: `唯一原文片段`）。
+- 若片段重复，增加上下文（grep: `target` before `prefix` after `suffix`）。
+- 或精确指定第 2 次出现（grep: `target` #2）。</pre>
+    <div class="callout"><div class="callout-mark">!</div><div><h3>锚点要“短到稳定，长到唯一”</h3><p>太长，source 的标点或排版小改就容易断；太短，可能在全文出现多次。优先选择 6–16 个有辨识度的词，并用 <code>before / after / #n</code> 消除歧义。</p></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">04</div>
+      <div><h2>日常使用：发现、阅读、验证</h2><p>把 klode 当成一条检索链：先缩小范围，再读取 lens/card，最后对关键句做 exact verification。</p><div class="rule"></div></div>
+    </div>
+    <div class="recipe"><h3>列出可用内容</h3><div><p>先确认 KB、card 与 lens 是否存在。</p><pre><span class="cmd">klode kbs</span>
+<span class="cmd">klode -c library.toml cards</span>
+<span class="cmd">klode -c library.toml lenses</span></pre></div></div>
+    <div class="recipe"><h3>全文检索卡片</h3><div><p>默认偏向 L0/L1；只有确实需要更深召回时才加 <code>--full</code>。</p><pre><span class="cmd">klode -c library.toml search narrative pacing</span>
+<span class="cmd">klode -c library.toml search --full --limit 8 narrative pacing</span></pre></div></div>
+    <div class="recipe"><h3>按层级阅读</h3><div><p>先 Thin，信息不够再 Full，最后才触碰 Content。</p><pre><span class="cmd">klode -c library.toml zoom brevity --level meta</span>
+<span class="cmd">klode -c library.toml zoom brevity --level thin</span>
+<span class="cmd">klode -c library.toml zoom brevity --level content --grep "exact phrase"</span></pre></div></div>
+    <div class="recipe"><h3>咨询与诊断</h3><div><p><code>consult</code> 读一个维度 / 作者 / framework；<code>diagnose</code> 用自然语言症状路由到该看的 lens。</p><pre><span class="cmd">klode -c library.toml consult pacing</span>
+<span class="cmd">klode -c library.toml consult pacing --section options</span>
+<span class="cmd">klode -c library.toml diagnose "the reveal feels flat"</span></pre></div></div>
+    <div class="recipe"><h3>机器消费</h3><div><p>对 read verbs 加全局 <code>--json</code>；JSON 携带 op、KB 与 provenance，不要再从人类文本输出里做脆弱解析。</p><pre><span class="cmd">klode --json -c library.toml search pacing</span>
+<span class="cmd">klode --json -c library.toml verify brevity "exact quote"</span></pre></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">05</div>
+      <div><h2>资料导入：从 TXT 到复杂 PDF</h2><p>EPUB / DOCX / HTML / TXT 走标准库实现；PDF 的难点是 OCR、双栏阅读顺序与表格结构。</p><div class="rule"></div></div>
+    </div>
+    <table>
+      <thead><tr><th>格式</th><th>建议路径</th><th>关注点</th><th>结论</th></tr></thead>
+      <tbody>
+        <tr><td>TXT / HTML</td><td><code>--format auto</code></td><td>编码、导航噪声、重复页眉</td><td><span class="status ok">Start here</span></td></tr>
+        <tr><td>EPUB / DOCX</td><td>默认 stdlib handler</td><td>章节顺序、脚注、嵌套表格</td><td><span class="status ok">Low friction</span></td></tr>
+        <tr><td>文本型 PDF</td><td><code>--tier auto</code></td><td>文字层质量、页覆盖、阅读顺序</td><td><span class="status ask">Measure</span></td></tr>
+        <tr><td>扫描 / 双栏 PDF</td><td>remote docling</td><td>OCR、双栏、超时、上传边界</td><td><span class="status ask">Prefer remote</span></td></tr>
+        <tr><td>表格密集 PDF</td><td>docling + 人工逐表复核</td><td>cell value transposition 无法被现有完整性信号捕获</td><td><span class="status stop">Human gate</span></td></tr>
+      </tbody>
+    </table>
+    <div class="grid-2" style="margin-top:24px">
+      <div>
+        <h3 style="margin:0 0 8px">导入命令</h3>
+        <pre><span class="cmd">klode -c library.toml ingest report.pdf \</span>
+  <span class="cmd">--shelf papers --id report-2026 \</span>
+  <span class="cmd">--tier auto --lang eng</span></pre>
+      </div>
+      <div>
+        <h3 style="margin:0 0 8px">用户级设置</h3>
+        <pre><span class="code-title"><span>TOML</span><span>~/.klode/settings.toml</span></span>[ingest]
+tier = <span class="string">"auto"</span>
+verify = <span class="string">true</span>
+docling_url = <span class="string">"http://private-host:15001"</span>
+marker_url = <span class="string">"http://private-host:15002"</span>
+marker_mode = <span class="string">"fast"</span></pre>
+      </div>
+    </div>
+    <div class="callout"><div class="callout-mark">↯</div><div><h3>为什么仓库建议 remote backend</h3><p>远程转换有随文档规模调整的 deadline；本地 in-process kreuzberg / docling 没有 wall-clock bound，病态 PDF 可能长期卡住。远程还让 klode 客户端继续保持零依赖。服务应绑定在私有接口，不能靠 URL 难猜来当安全控制。</p></div></div>
+    <div class="do-dont">
+      <div class="panel do"><h3>推荐</h3><ul class="clean"><li>先 <code>--tier auto</code>，由测量决定升级</li><li>双栏 / layout-heavy 优先 docling</li><li>导入后抽查头、中、尾页与表格</li><li>用 <code>klode settings --lint</code> 检查被环境变量遮蔽的坏配置</li></ul></div>
+      <div class="panel dont"><h3>避免</h3><ul class="clean"><li>只看文件扩展名，不看内容签名</li><li>把 marker 默认塞入 auto ladder；当前测量不支持</li><li>在 settings 文件保存 API key</li><li>把 “integrity verified” 误读成“每个数字都正确”</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">06</div>
+      <div><h2>多知识库与 MCP：接入 AI 工作台</h2><p>一个 engine 可以服务单 KB，也可以用 registry 挂载多个 KB；CLI 与 MCP 共享同一个 operations core。</p><div class="rule"></div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <h3 style="margin-top:0">Registry manifest</h3>
+        <pre><span class="code-title"><span>TOML</span><span>~/.klode/registry.toml</span></span>[[kb]]
+id = <span class="string">"writing"</span>
+path = <span class="string">"~/kbs/writing/library.toml"</span>
+
+[[kb]]
+id = <span class="string">"product"</span>
+path = <span class="string">"~/kbs/product/library.toml"</span></pre>
+        <p style="font-size:14px;color:var(--muted)">查找顺序：显式 <code>--registry</code> → 当前项目 <code>./.klode/registry.toml</code> → 用户级 <code>~/.klode/registry.toml</code>。</p>
+      </div>
+      <div>
+        <h3 style="margin-top:0">按 KB 地址使用</h3>
+        <pre><span class="cmd">klode kbs</span>
+<span class="cmd">klode --kb writing search pacing</span>
+<span class="cmd">klode --kb product consult positioning</span>
+
+<span class="comment"># 单库 MCP</span>
+<span class="cmd">klode-mcp -c ~/kbs/writing/library.toml</span>
+
+<span class="comment"># 多库 MCP</span>
+<span class="cmd">klode-mcp --registry ~/.klode/registry.toml</span></pre>
+      </div>
+    </div>
+    
+    <pre><span class="code-title"><span>JSON</span><span>Illustrative client config</span></span>{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"klode"</span>: {
+      <span class="string">"command"</span>: <span class="string">"klode-mcp"</span>,
+      <span class="string">"args"</span>: [<span class="string">"--registry"</span>, <span class="string">"/absolute/path/to/.klode/registry.toml"</span>]
+    }
+  }
+}</pre>
+    <div class="grid-3" style="margin-top:22px">
+      <div class="panel"><span class="label">Agent tool</span><h3>发现</h3><p><code>list_kbs</code>、<code>list_lenses</code>、<code>search_sources</code></p></div>
+      <div class="panel"><span class="label">Agent tool</span><h3>深入</h3><p><code>consult_dimension</code>、<code>consult_framework</code>、<code>zoom_card</code></p></div>
+      <div class="panel"><span class="label">Agent tool</span><h3>取证</h3><p><code>verify_quote</code>、<code>diagnose</code>；所有 grounded result 都标注所属 KB。</p></div>
+    </div>
+    <div class="callout"><div class="callout-mark">◎</div><div><h3>给 Agent 的推荐工作协议</h3><p>先 <code>list_kbs</code> 定边界 → <code>search_sources</code> 找候选 → <code>zoom_card</code> 读 Thin / Full → 对最终答案中的关键证据调用 <code>verify_quote</code>。不要让 Agent 从搜索摘要直接跳到结论。</p></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">07</div>
+      <div><p>0.4.x 的重要变化：没测到，不再伪装成通过。CI 应区分“测量失败”和“无法测量”。</p><div class="rule"></div></div>
+    </div>
+    <div class="exit-codes">
+      <div class="exit"><b>0</b><strong>工作确实执行且通过</strong><p>可以继续 pipeline。</p></div>
+      <div class="exit"><b>1</b><strong>测量完成，但不通过</strong><p>例如 anchor 断裂或 check 发现错误。</p></div>
+      <div class="exit"><b>2</b><strong>无法完成测量</strong><p>例如 corpus 未安装、backend 不可用、没有匹配文件。</p></div>
+    </div>
+    <pre><span class="code-title"><span>CI</span><span>Fail closed by default</span></span><span class="cmd">klode -c library.toml check --strict</span>
+<span class="cmd">case $? in</span>
+  0) <span class="cmd">echo "verified"</span> ;;
+  1) <span class="danger">echo "measured and failed"; exit 1</span> ;;
+  2) <span class="danger">echo "abstained: measurement did not happen"; exit 2</span> ;;
+<span class="cmd">esac</span></pre>
+    <div class="panel warning" style="margin-top:20px"><span class="label">Use consciously</span><h3><code>--allow-unmeasured</code> 是接受缺口，不是修复缺口</h3><p>只有当某个环境“按设计就没有本地 corpus”且你明确接受无法检查时再使用。不要为了 CI 变绿而全局追加；否则引用可能全部腐烂，pipeline 仍然放行。</p></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">08</div>
+      <div><h2>最佳实践：把库做成长期资产</h2><p>好用的 klode 库不是一次性 ingest 出来的，而是围绕稳定 id、证据粒度、人工审查和自动门禁持续维护。</p><div class="rule"></div></div>
+    </div>
+    <div class="best-grid">
+      <article class="practice"><span class="mini-title">01 · Stable identity</span><h3>id 一旦公开就别随意改</h3><p>card id、MCP 引用与外部链接都会依赖它。用语义化、与文件名解耦的 slug，例如 <strong>cooper-stage-gate</strong>。</p></article>
+      <article class="practice"><span class="mini-title">02 · Source of truth</span><h3>card 不复制全文</h3><p>source 只保留一份 clean text；card 写 Thin / Full 与 anchors。减少重复、漂移和版权暴露。</p></article>
+      <article class="practice"><span class="mini-title">03 · Retrieval budget</span><h3>Thin 优先，Full 按需</h3><p>让人和 Agent 先消费 L1；只有结论需要更多语境时才加载 L2/L3，降低 token 与注意力成本。</p></article>
+      <article class="practice"><span class="mini-title">04 · Exact evidence</span><h3>锚点逐字引用，不要改写</h3></article>
+      <article class="practice"><span class="mini-title">05 · Deliberate ambiguity</span><h3>主动消除重复命中</h3><p>持续运行 <code>check --strict</code>，使用 <code>before / after / #n</code>。歧义不是小瑕疵，而是证据对象不明确。</p></article>
+      <article class="practice"><span class="mini-title">06 · Human review</span><h3>表格、数字、否定词人工抽查</h3><p>优先核对金额、日期、状态、列对应关系，以及 approved / rejected 这类一字翻转结论。</p></article>
+      <article class="practice"><span class="mini-title">07 · Copyright boundary</span><h3>提交 cards，不提交 corpus</h3><p>保留 <code>[copyright].guard = true</code> 和 managed <code>.gitignore</code>。执行 <code>init</code> 增加 shelf 后会刷新受管 ignore block。</p></article>
+      <article class="practice"><span class="mini-title">08 · Config hygiene</span><h3>设置可解释，密钥只进环境</h3><p>使用 <code>klode settings --explain</code> 与 <code>--lint</code>；<code>ANTHROPIC_API_KEY</code> 不进入 settings、仓库或备份。</p></article>
+    </div>
+    <div class="callout"><div class="callout-mark">↻</div><div><h3>推荐维护节奏</h3><p>每次 source 更新后：重新抽取 / 审查 → <code>build --stamp</code> 绑定当前 freshness hash → <code>check --strict</code> → 抽查高风险 claim → 再提交 cards。不要先 stamp 再“以后有空复核”。</p></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">09</div>
+      <div><h2>排错手册</h2><p>先判断问题属于配置、资料抽取、知识建模还是运行环境；不要一上来切 OCR backend。</p><div class="rule"></div></div>
+    </div>
+    <table>
+      <thead><tr><th>症状</th><th>最可能原因</th><th>检查 / 处理</th></tr></thead>
+      <tbody>
+        
+        <tr><td>anchor ambiguous</td><td>短语出现多次</td><td>用更有辨识度的片段，或增加 <code>before / after / #n</code>。</td></tr>
+        <tr><td>PDF 文字乱序</td><td>双栏 / layout-heavy 文档被普通 text layer 顺序误导</td><td>切到 remote docling；抽查每页 reading order；表格仍人工核对。</td></tr>
+        <tr><td><code>--tier auto</code> 拒绝结果</td><td>所有候选都没达到 auto 自己的质量门槛</td><td>不要盲目 <code>--force</code>；检查 scan 质量、语言与 backend。强制 tier 代表你主动承担该结果。</td></tr>
+        <tr><td>settings 看似没生效</td><td>参数或环境变量优先级更高</td><td>运行 <code>klode settings</code> 查看每个值的来源，再运行 <code>klode settings --lint</code>。</td></tr>
+        <tr><td>MCP 能启动但无 KB</td><td>registry 为空 / 路径错误 / 客户端 args 不正确</td><td>先在终端运行同一条 <code>klode-mcp</code> 命令，随后用 <code>klode kbs --registry …</code> 验证 catalog。</td></tr>
+        <tr><td>live review 没运行</td><td>未显式加 <code>--live-judge</code>，或缺 model / API key</td><td>这是安全设计：配置模型不等于同意产生 billed calls。先设置 model 与环境密钥，再显式调用。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">10</div>
+      <div><h2>进阶：监督 Agent 的正确预期</h2><p>Loop B 很有潜力，但截至 0.4.2，它是“可研究、可试验”，不是可直接替人拍板的生产审批器。</p><div class="rule"></div></div>
+    </div>
+    <div class="grid-3">
+      <div class="panel"><span class="label">Real</span><h3>CriterionSpec v1</h3><p>rubric 有稳定 id、行为锚定等级、字段级 epistemics、corpus fingerprint 与人工批准门。</p></div>
+      <div class="panel"><span class="label">Real</span><h3>Fail-closed grounding</h3><p>任一 criterion 的 evidence 失效就返回 Unavailable，不会偷偷丢掉该项后重新平均。</p></div>
+      <div class="panel warning"><span class="label">Not done</span><h3>人类评分校准</h3><p>没有任何 rubric 做过 judge-vs-human calibration；所有 verdict 明确标成 non-production。</p></div>
+    </div>
+    <pre><span class="code-title"><span>Experimental</span><span>Cost-aware</span></span><span class="comment"># rubric authoring tool（不是稳定 klode CLI 子命令）</span>
+<span class="cmd">python3 -m klode.gate -c library.toml derive pacing</span>
+<span class="cmd">python3 -m klode.gate -c library.toml check pacing</span>
+<span class="cmd">python3 -m klode.gate -c library.toml approve pacing</span>
+
+<span class="comment"># 默认不发网络请求；live judge 必须显式同意</span>
+<span class="cmd">klode -c library.toml review draft.md pacing</span>
+<span class="cmd">klode -c library.toml review draft.md pacing --live-judge</span></pre>
+    <div class="panel warning" style="margin-top:20px"><span class="label">Production boundary</span><h3>Agent 给建议，人做承诺</h3><p>当前只实现 should-meet score；must-meet knockout 与 Hold 仍未实现。即使未来完成校准，最终 Go / Recycle 也应由人确认，尤其是客户交付、合规、财务与公开发布。</p></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-no">11</div>
+      <div><h2>上线路线图：从试验到可依赖</h2><p>不要一开始导入几千份资料。用一个高价值、可人工核验的 shelf 建立质量基线。</p><div class="rule"></div></div>
+    </div>
+    <div class="grid-3">
+      <div class="panel"><span class="label">Day 1</span><h3>跑通 3 份资料</h3><p>1 个 TXT、1 个普通 PDF、1 个复杂 PDF。完成 ingest → card → check → verify。</p></div>
+      <div class="panel"><span class="label">Week 1</span><h3>形成 20 张高价值 cards</h3><p>每张至少有可用 Thin，核心 claim 全有 anchor；为 AI Agent 接上单 KB MCP。</p></div>
+      <div class="panel contrast"><span class="label">Week 2+</span><h3>再扩 registry 与 CI</h3><p>拆分领域 KB，加入 <code>check --strict</code>，建立 source 更新与人工复核节奏。</p></div>
+    </div>
+    <h3 style="font-size:24px;margin:34px 0 8px">交付前检查清单</h3>
+    <div class="checklist">
+      <div class="check"><span class="box"></span><span>Python 版本 ≥ 3.11，<code>klode --help</code> 正常</span></div>
+      <div class="check"><span class="box"></span><span><code>library.toml</code> 路径、shelves 与 copyright guard 正确</span></div>
+      <div class="check"><span class="box"></span><span>source 使用稳定 id，原始文件不被 Git 跟踪</span></div>
+      <div class="check"><span class="box"></span><span>每个核心 card 已完成 Thin，重要主张有 verbatim anchor</span></div>
+      <div class="check"><span class="box"></span><span><code>klode check --strict</code> 返回 0，不把 exit 2 当通过</span></div>
+      <div class="check"><span class="box"></span><span>表格、金额、日期、状态和否定词完成视觉复核</span></div>
+      <div class="check"><span class="box"></span><span><code>klode settings --lint</code> 通过，密钥仅在环境变量</span></div>
+      <div class="check"><span class="box"></span><span>MCP 用绝对路径启动，并通过 list → search → verify 闭环</span></div>
+      <div class="check"><span class="box"></span><span>CI 明确区分 0 / 1 / 2，不滥用 <code>--allow-unmeasured</code></span></div>
+      <div class="check"><span class="box"></span><span>Loop B verdict 没有被当成 production approval</span></div>
+    </div>
+  </section>
+
+  <section style="margin-bottom:34px">
+    <div class="section-head">
+      <div class="section-no">12</div>
+      <div><h2>证据来源与适用边界</h2><p>本指南以官方仓库与源码行为为依据，命令通过本地 checkout 实跑核验；不是第三方转述。</p><div class="rule"></div></div>
+    </div>
+    <div class="panel source-list">
+      <ul class="clean">
+        <li><a href="https://github.com/xiaolai/klode">官方仓库：github.com/xiaolai/klode</a></li>
+        <li><a href="https://github.com/xiaolai/klode/blob/984e48e96c2137f05853eaf21b5939606ce23821/README.md">README @ 984e48e：核心定位、安装、三种 surface、ingestion 与状态</a></li>
+        
+        <li><a href="https://github.com/xiaolai/klode/blob/984e48e96c2137f05853eaf21b5939606ce23821/dev-docs/SPEC.md">SPEC：card、levels of zoom、grep anchor 规范</a></li>
+        <li><a href="https://github.com/xiaolai/klode/blob/984e48e96c2137f05853eaf21b5939606ce23821/dev-docs/gate-README.md">Gate README：Loop B、calibration gate 与未完成项</a></li>
+      </ul>
+      
+    </div>
+  </section>
+
+  
+</main>
+</body>
+</html>

@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="LLM Council Report — mecha.im">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260608-1616-LLM Council Report — mecha.im</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #16161f;
+  --bg-glow: #1a1a2e;
+  --accent-gold: #d4a843;
+  --accent-gold-dim: #b8922e;
+  --accent-cyan: #4ecdc4;
+  --accent-magenta: #c44569;
+  --accent-blue: #556df6;
+  --accent-purple: #8b5cf6;
+  --text-primary: #e8e6e3;
+  --text-secondary: #9a9a9a;
+  --text-dim: #5a5a6a;
+  --border: #2a2a3a;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* === NOISE OVERLAY === */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-gold-dim); border-radius: 3px; }
+
+/* === HERO === */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 4rem 2rem;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold-dim);
+  padding: 0.5rem 1.5rem;
+  display: inline-block;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.3s;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.5s;
+}
+
+.hero h1 .gold { color: var(--accent-gold); }
+
+.hero-sub {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.8s;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1s;
+}
+
+.hero-meta span { display: flex; flex-direction: column; gap: 0.3rem; }
+.hero-meta .val { color: var(--accent-cyan); font-size: 1.4rem; font-weight: 700; }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1.2s;
+}
+
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-gold), transparent);
+  margin: 0 auto;
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* === SECTION LAYOUT === */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--accent-gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+}
+
+.section h2 em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+/* === DIVIDER === */
+.divider {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 1px;
+  position: relative;
+}
+
+.divider::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+}
+
+/* === COUNCIL PANEL === */
+.council-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .council-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.advisor-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.advisor-card:hover {
+  border-color: var(--accent-gold-dim);
+  transform: translateY(-4px);
+}
+
+.advisor-card .rank {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgba(212,168,67,0.06);
+  line-height: 1;
+  transform: translate(8px, -8px);
+}
+
+.advisor-card .model-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+}
+
+.tag-opus { background: rgba(139,92,246,0.15); color: var(--accent-purple); border: 1px solid rgba(139,92,246,0.3); }
+.tag-sonnet { background: rgba(85,109,246,0.15); color: var(--accent-blue); border: 1px solid rgba(85,109,246,0.3); }
+.tag-gpt { background: rgba(78,205,196,0.15); color: var(--accent-cyan); border: 1px solid rgba(78,205,196,0.3); }
+.tag-gemini { background: rgba(212,168,67,0.15); color: var(--accent-gold); border: 1px solid rgba(212,168,67,0.3); }
+.tag-haiku { background: rgba(196,69,105,0.15); color: var(--accent-magenta); border: 1px solid rgba(196,69,105,0.3); }
+
+.advisor-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.advisor-card .score {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin: 0.5rem 0;
+}
+
+.advisor-card .score span {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.score-bar {
+  height: 3px;
+  background: var(--border);
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-bar .fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent-gold-dim), var(--accent-gold));
+  transition: width 1.5s ease;
+  width: 0;
+}
+
+/* === PHILOSOPHY === */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 2rem;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .philosophy-grid { grid-template-columns: 1fr; }
+}
+
+.phil-item {
+  padding: 2.5rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.phil-item:last-child { border-right: none; }
+
+.phil-item .icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.phil-item h3 {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.phil-item .label {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-style: italic;
+  margin-bottom: 0.8rem;
+}
+
+.phil-item p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* === INNOVATION CARDS === */
+.innovation-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .innovation-list { grid-template-columns: 1fr; }
+}
+
+.inno-card {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-gold);
+  padding: 2rem;
+  transition: background 0.3s ease;
+}
+
+.inno-card:hover { background: var(--bg-glow); }
+
+.inno-card .num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-gold-dim);
+  letter-spacing: 0.2em;
+}
+
+.inno-card h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.inno-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* === COMPETITIVE MATRIX === */
+.matrix-wrap {
+  overflow-x: auto;
+  margin-top: 2rem;
+}
+
+.matrix {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.matrix th {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.matrix td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.matrix tbody tr { transition: background 0.2s ease; }
+.matrix tbody tr:hover { background: rgba(212,168,67,0.03); }
+
+.matrix .product-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stars { color: var(--accent-gold); letter-spacing: 2px; font-size: 0.9rem; }
+.stars-dim { color: var(--text-dim); letter-spacing: 2px; font-size: 0.9rem; }
+
+/* === RISK PANEL === */
+.risk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .risk-grid { grid-template-columns: 1fr; }
+}
+
+.risk-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.risk-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.risk-critical::before { background: var(--accent-magenta); }
+.risk-high::before { background: #f39c12; }
+.risk-medium::before { background: var(--accent-cyan); }
+
+.risk-card .severity {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.risk-critical .severity { color: var(--accent-magenta); }
+.risk-high .severity { color: #f39c12; }
+.risk-medium .severity { color: var(--accent-cyan); }
+
+.risk-card h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+.risk-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+.risk-card .source { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-top: 0.8rem; }
+
+/* === TRANSFERABLE PRINCIPLES === */
+.principles {
+  counter-reset: principle;
+  margin-top: 2rem;
+}
+
+.principle-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  counter-increment: principle;
+}
+
+.principle-item:last-child { border-bottom: none; }
+
+.principle-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgba(212,168,67,0.15);
+  line-height: 1;
+  text-align: right;
+}
+
+.principle-num::before { content: counter(principle, decimal-leading-zero); }
+
+.principle-content h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.principle-content .consensus {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.principle-content p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.principle-content .application {
+  margin-top: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  background: rgba(78,205,196,0.05);
+  border-left: 2px solid var(--accent-cyan);
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+}
+
+/* === INSIGHTS — AI WORK PARADIGM === */
+.insight-hero {
+  text-align: center;
+  padding: 6rem 2rem 3rem;
+  position: relative;
+}
+
+.insight-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 900px) {
+  .insight-grid { grid-template-columns: 1fr; }
+}
+
+.insight-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.insight-card:hover {
+  border-color: var(--accent-gold-dim);
+  transform: translateY(-4px);
+}
+
+.insight-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-gold), var(--accent-cyan));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.insight-card:hover::after { opacity: 1; }
+
+.insight-card .tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+}
+
+.insight-card h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.insight-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.insight-card .example {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(212,168,67,0.05);
+  border: 1px dashed rgba(212,168,67,0.2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  line-height: 1.6;
+}
+
+/* === PARADIGM SHIFT === */
+.paradigm-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+}
+
+.paradigm-grid {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .paradigm-grid { grid-template-columns: 1fr; }
+  .paradigm-arrow { transform: rotate(90deg); }
+}
+
+.paradigm-box {
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+}
+
+.paradigm-box.old { background: rgba(196,69,105,0.03); border-color: rgba(196,69,105,0.2); }
+.paradigm-box.new { background: rgba(78,205,196,0.03); border-color: rgba(78,205,196,0.2); }
+
+.paradigm-box h4 {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.paradigm-box.old h4 { color: var(--accent-magenta); }
+.paradigm-box.new h4 { color: var(--accent-cyan); }
+
+.paradigm-box ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.paradigm-box li {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.paradigm-box.old li::before {
+  content: '×';
+  position: absolute;
+  left: 0;
+  color: var(--accent-magenta);
+  font-weight: 700;
+}
+
+.paradigm-box.new li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.paradigm-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  font-size: 2rem;
+  color: var(--accent-gold);
+}
+
+/* === TIMELINE === */
+.timeline {
+  position: relative;
+  margin-top: 2rem;
+  padding-left: 3rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent-gold), var(--border));
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -3rem;
+  top: 0.4rem;
+  width: 9px;
+  height: 9px;
+  background: var(--accent-gold);
+  transform: rotate(45deg);
+}
+
+.timeline-item .period {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-item h4 { font-size: 1rem; margin-bottom: 0.3rem; }
+.timeline-item p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* === FOOTER === */
+.footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer p {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+.footer .brand {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+/* === QUOTE === */
+.quote-block {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2.5rem 3rem;
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(212,168,67,0.03);
+}
+
+.quote-block p {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.quote-block cite {
+  display: block;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-style: normal;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; height: 40px; }
+  50% { opacity: 1; height: 60px; }
+}
+
+/* === FLOW DIAGRAM === */
+.flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 2rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.flow-step {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.flow-step.active {
+  border-color: var(--accent-gold-dim);
+  background: rgba(212,168,67,0.08);
+  color: var(--accent-gold);
+}
+
+.flow-arrow {
+  color: var(--text-dim);
+  padding: 0 0.3rem;
+  font-size: 0.7rem;
+}
+
+/* === STAT ROW === */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+@media (max-width: 600px) {
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-item {
+  background: var(--bg-card);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-item .num {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.stat-item .label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+}
+
+/* === RADAR CHART === */
+.radar-container {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.radar-svg { max-width: 480px; width: 100%; }
+
+.radar-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.radar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.radar-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* === ARCHITECTURE DIAGRAM === */
+.arch-diagram {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.arch-layer {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+}
+
+.arch-layer:last-child { border-bottom: 1px solid var(--border); }
+
+.arch-label {
+  background: var(--bg-card);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+.arch-label h5 {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.arch-label .layer-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.arch-content {
+  display: flex;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.arch-node {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.arch-node.event { background: rgba(78,205,196,0.12); color: var(--accent-cyan); border: 1px solid rgba(78,205,196,0.3); }
+.arch-node.worker { background: rgba(139,92,246,0.12); color: var(--accent-purple); border: 1px solid rgba(139,92,246,0.3); }
+.arch-node.policy { background: rgba(196,69,105,0.12); color: var(--accent-magenta); border: 1px solid rgba(196,69,105,0.3); }
+.arch-node.store { background: rgba(212,168,67,0.12); color: var(--accent-gold); border: 1px solid rgba(212,168,67,0.3); }
+.arch-node.runtime { background: rgba(85,109,246,0.12); color: var(--accent-blue); border: 1px solid rgba(85,109,246,0.3); }
+
+.arch-arrow-row {
+  display: flex;
+  justify-content: center;
+  padding: 0.3rem 0;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+/* === BAR CHART === */
+.bar-chart {
+  margin-top: 2rem;
+}
+
+.bar-group {
+  margin-bottom: 1.8rem;
+}
+
+.bar-group-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-group-label .model-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 40px;
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.bar-dim {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.bar-track {
+  height: 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 0;
+}
+
+.bar-fill.accuracy { background: linear-gradient(to right, rgba(78,205,196,0.4), var(--accent-cyan)); }
+.bar-fill.depth { background: linear-gradient(to right, rgba(139,92,246,0.4), var(--accent-purple)); }
+.bar-fill.practicality { background: linear-gradient(to right, rgba(212,168,67,0.4), var(--accent-gold)); }
+.bar-fill.logic { background: linear-gradient(to right, rgba(85,109,246,0.4), var(--accent-blue)); }
+
+.bar-val {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* === MARKET POSITION === */
+.market-map {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 500px;
+  margin: 2rem auto;
+  border-left: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+.market-map .axis-label {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.market-map .axis-x { bottom: -2rem; left: 50%; transform: translateX(-50%); }
+.market-map .axis-y { top: 50%; left: -3.5rem; transform: translateY(-50%) rotate(-90deg); white-space: nowrap; }
+.market-map .axis-x-end { bottom: -2rem; right: 0; }
+.market-map .axis-y-end { top: 0; left: -3.5rem; transform: rotate(-90deg); white-space: nowrap; }
+
+.market-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.market-dot:hover {
+  transform: translate(-50%, -50%) scale(1.8);
+}
+
+.market-dot .dot-label {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.market-dot:hover .dot-label { opacity: 1; }
+
+.market-quadrant {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  opacity: 0.5;
+  letter-spacing: 0.1em;
+}
+
+/* === TECH STACK ANALYSIS === */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .tech-grid { grid-template-columns: 1fr; }
+}
+
+.tech-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  position: relative;
+}
+
+.tech-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tech-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.tech-item .name { color: var(--text-secondary); }
+.tech-item .val { font-family: var(--font-mono); font-size: 0.8rem; }
+
+.tech-tag {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  border-radius: 2px;
+}
+
+.tech-tag.go { background: rgba(78,205,196,0.12); color: var(--accent-cyan); }
+.tech-tag.ts { background: rgba(85,109,246,0.12); color: var(--accent-blue); }
+.tech-tag.docker { background: rgba(139,92,246,0.12); color: var(--accent-purple); }
+.tech-tag.sqlite { background: rgba(212,168,67,0.12); color: var(--accent-gold); }
+.tech-tag.yaml { background: rgba(196,69,105,0.12); color: var(--accent-magenta); }
+
+/* === DECISION TREE === */
+.decision-tree {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.tree-row {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+.tree-node {
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.tree-node.question {
+  background: rgba(212,168,67,0.05);
+  border-color: rgba(212,168,67,0.3);
+  text-align: center;
+}
+
+.tree-node.yes {
+  background: rgba(78,205,196,0.05);
+  border-color: rgba(78,205,196,0.3);
+}
+
+.tree-node.no {
+  background: rgba(196,69,105,0.05);
+  border-color: rgba(196,69,105,0.3);
+}
+
+.tree-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* === MATURITY GAUGE === */
+.maturity-gauges {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .maturity-gauges { grid-template-columns: 1fr; }
+}
+
+.gauge-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+}
+
+.gauge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.gauge-header h5 { font-size: 0.9rem; }
+
+.gauge-header .pct {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.gauge-bar {
+  height: 6px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.gauge-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent-gold-dim), var(--accent-gold));
+  transition: width 1.5s ease;
+  width: 0;
+}
+
+.gauge-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* === COMPARISON DONUT === */
+.donut-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.donut-item {
+  text-align: center;
+  width: 140px;
+}
+
+.donut-svg { width: 120px; height: 120px; }
+
+.donut-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.donut-val {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-badge">LLM Council Analysis Report</div>
+  <h1>mecha<span class="gold">.im</span></h1>
+  <p class="hero-sub">AI 代理治理基础设施的深度产品分析<br>五模型议会联合裁决</p>
+  <div class="hero-meta">
+    <span><div class="val">5</div>AI Models</span>
+    <span><div class="val">8</div>LLM Calls</span>
+    <span><div class="val">34.3</div>Top Score /40</span>
+  </div>
+  <div class="scroll-hint"></div>
+</section>
+
+
+<nav id="toc" style="
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 2rem;
+  display: flex; gap: 1rem; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0; transition: opacity 0.3s ease;
+">
+  <a href="#council" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">评审</a>
+  <a href="#radar" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">雷达图</a>
+  <a href="#essence" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">本质</a>
+  <a href="#philosophy" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">哲学</a>
+  <a href="#arch" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">架构</a>
+  <a href="#innovation" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">创新</a>
+  <a href="#competition" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">竞品</a>
+  <a href="#market-pos" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">定位</a>
+  <a href="#tech-stack" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">技术栈</a>
+  <a href="#risks" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">风险</a>
+  <a href="#principles" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">原则</a>
+  <a href="#insights" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">启发</a>
+  <a href="#roadmap" style="color:var(--text-dim);text-decoration:none;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#d4a843'" onmouseout="this.style.color='var(--text-dim)'">路线</a>
+</nav>
+
+
+<div class="divider"></div>
+
+
+
+<div class="divider"></div>
+<section class="section" id="radar">
+  <div class="section-num">01b — Multi-Dimensional Comparison</div>
+  <h2>雷达图 <em>竞品对比</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 1rem;">五个产品在六个关键维度上的量化对比。</p>
+
+  <div class="radar-container">
+    <svg class="radar-svg" viewBox="0 0 500 460">
+      <defs>
+        <style>
+          .radar-ring { fill: none; stroke: #2a2a3a; stroke-width: 0.5; }
+          .radar-axis { stroke: #2a2a3a; stroke-width: 0.5; }
+          .radar-label { fill: #9a9a9a; font-family: 'Space Mono', monospace; font-size: 9px; }
+          .radar-area { fill-opacity: 0.08; stroke-width: 2; transition: fill-opacity 0.3s; }
+          .radar-area:hover { fill-opacity: 0.2; }
+          .radar-dot { r: 3; transition: r 0.3s; }
+          .radar-dot:hover { r: 5; }
+        </style>
+      </defs>
+      
+      <polygon class="radar-ring" points="250,70 406,160 406,340 250,430 94,340 94,160" />
+      <polygon class="radar-ring" points="250,106 374,178 374,322 250,394 126,322 126,178" />
+      <polygon class="radar-ring" points="250,142 342,196 342,304 250,358 158,304 158,196" />
+      <polygon class="radar-ring" points="250,178 310,214 310,286 250,322 190,286 190,214" />
+      <polygon class="radar-ring" points="250,214 278,232 278,268 250,286 222,268 222,232" />
+      
+      <line class="radar-axis" x1="250" y1="250" x2="250" y2="70" />
+      <line class="radar-axis" x1="250" y1="250" x2="406" y2="160" />
+      <line class="radar-axis" x1="250" y1="250" x2="406" y2="340" />
+      <line class="radar-axis" x1="250" y1="250" x2="250" y2="430" />
+      <line class="radar-axis" x1="250" y1="250" x2="94" y2="340" />
+      <line class="radar-axis" x1="250" y1="250" x2="94" y2="160" />
+      
+      <text class="radar-label" x="250" y="58" text-anchor="middle">AI Agent 治理</text>
+      <text class="radar-label" x="418" y="158" text-anchor="start">自托管能力</text>
+      <text class="radar-label" x="418" y="345" text-anchor="start">多模型支持</text>
+      <text class="radar-label" x="250" y="450" text-anchor="middle">安全隔离</text>
+      <text class="radar-label" x="78" y="345" text-anchor="end">生态成熟度</text>
+      <text class="radar-label" x="78" y="158" text-anchor="end">编排能力</text>
+      
+      <polygon class="radar-area" fill="#d4a843" stroke="#d4a843"
+        points="250,70 406,160 374,322 250,394 126,322 158,196" />
+      
+      <polygon class="radar-area" fill="#4ecdc4" stroke="#4ecdc4"
+        points="250,142 342,196 310,286 250,358 374,322 374,178" />
+      
+      <polygon class="radar-area" fill="#556df6" stroke="#556df6"
+        points="250,142 342,196 342,304 250,358 406,340 310,214" />
+      
+      <polygon class="radar-area" fill="#8b5cf6" stroke="#8b5cf6"
+        points="250,106 310,214 310,286 250,358 158,304 158,196" />
+      
+      <polygon class="radar-area" fill="#c44569" stroke="#c44569"
+        points="250,178 342,196 342,304 250,322 158,304 126,178" />
+      
+      <circle class="radar-dot" cx="250" cy="70" fill="#d4a843" />
+      <circle class="radar-dot" cx="406" cy="160" fill="#d4a843" />
+      <circle class="radar-dot" cx="374" cy="322" fill="#d4a843" />
+      <circle class="radar-dot" cx="250" cy="394" fill="#d4a843" />
+      <circle class="radar-dot" cx="126" cy="322" fill="#d4a843" />
+      <circle class="radar-dot" cx="158" cy="196" fill="#d4a843" />
+    </svg>
+    <div class="radar-legend">
+      <div class="radar-legend-item"><div class="radar-legend-dot" style="background:#d4a843"></div><span><strong>mecha.im</strong> — 治理+自托管领先</span></div>
+      <div class="radar-legend-item"><div class="radar-legend-dot" style="background:#556df6"></div><span>Actions+Copilot — 生态+编排领先</span></div>
+      <div class="radar-legend-item"><div class="radar-legend-dot" style="background:#4ecdc4"></div><span>n8n+LLM — 编排+自托管均衡</span></div>
+      <div class="radar-legend-item"><div class="radar-legend-dot" style="background:#8b5cf6"></div><span>CodeRabbit — 治理中等，生态中等</span></div>
+      <div class="radar-legend-item"><div class="radar-legend-dot" style="background:#c44569"></div><span>Devin — 编排强，治理弱</span></div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="scoring-detail">
+  <div class="section-num">01c — Scoring Breakdown</div>
+  <h2>评审 <em>四维细分</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">三位评审员（Opus / Sonnet / Haiku）在准确性、深度、实用性、逻辑性四维度的平均得分。</p>
+
+  <div class="bar-chart">
+    <div class="bar-group">
+      
+      <div class="bar-row"><div class="bar-dim">准确性</div><div class="bar-track"><div class="bar-fill accuracy" data-width="87%"></div></div><div class="bar-val">8.7</div></div>
+      <div class="bar-row"><div class="bar-dim">深度</div><div class="bar-track"><div class="bar-fill depth" data-width="90%"></div></div><div class="bar-val">9.0</div></div>
+      <div class="bar-row"><div class="bar-dim">实用性</div><div class="bar-track"><div class="bar-fill practicality" data-width="77%"></div></div><div class="bar-val">7.7</div></div>
+      <div class="bar-row"><div class="bar-dim">逻辑性</div><div class="bar-track"><div class="bar-fill logic" data-width="90%"></div></div><div class="bar-val">9.0</div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-group-label">Advisor D — Gemini <span class="model-name">33.0/40</span></div>
+      <div class="bar-row"><div class="bar-dim">准确性</div><div class="bar-track"><div class="bar-fill accuracy" data-width="83%"></div></div><div class="bar-val">8.3</div></div>
+      <div class="bar-row"><div class="bar-dim">深度</div><div class="bar-track"><div class="bar-fill depth" data-width="83%"></div></div><div class="bar-val">8.3</div></div>
+      <div class="bar-row"><div class="bar-dim">实用性</div><div class="bar-track"><div class="bar-fill practicality" data-width="80%"></div></div><div class="bar-val">8.0</div></div>
+      <div class="bar-row"><div class="bar-dim">逻辑性</div><div class="bar-track"><div class="bar-fill logic" data-width="83%"></div></div><div class="bar-val">8.3</div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-group-label">Advisor B — Claude Sonnet <span class="model-name">32.3/40</span></div>
+      <div class="bar-row"><div class="bar-dim">准确性</div><div class="bar-track"><div class="bar-fill accuracy" data-width="83%"></div></div><div class="bar-val">8.3</div></div>
+      <div class="bar-row"><div class="bar-dim">深度</div><div class="bar-track"><div class="bar-fill depth" data-width="83%"></div></div><div class="bar-val">8.3</div></div>
+      <div class="bar-row"><div class="bar-dim">实用性</div><div class="bar-track"><div class="bar-fill practicality" data-width="77%"></div></div><div class="bar-val">7.7</div></div>
+      <div class="bar-row"><div class="bar-dim">逻辑性</div><div class="bar-track"><div class="bar-fill logic" data-width="80%"></div></div><div class="bar-val">8.0</div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-group-label">Advisor C — GPT-5.4 <span class="model-name">27.7/40</span></div>
+      <div class="bar-row"><div class="bar-dim">准确性</div><div class="bar-track"><div class="bar-fill accuracy" data-width="70%"></div></div><div class="bar-val">7.0</div></div>
+      <div class="bar-row"><div class="bar-dim">深度</div><div class="bar-track"><div class="bar-fill depth" data-width="63%"></div></div><div class="bar-val">6.3</div></div>
+      <div class="bar-row"><div class="bar-dim">实用性</div><div class="bar-track"><div class="bar-fill practicality" data-width="77%"></div></div><div class="bar-val">7.7</div></div>
+      <div class="bar-row"><div class="bar-dim">逻辑性</div><div class="bar-track"><div class="bar-fill logic" data-width="67%"></div></div><div class="bar-val">6.7</div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-group-label">Advisor E — Claude Haiku <span class="model-name">27.3/40</span></div>
+      <div class="bar-row"><div class="bar-dim">准确性</div><div class="bar-track"><div class="bar-fill accuracy" data-width="70%"></div></div><div class="bar-val">7.0</div></div>
+      <div class="bar-row"><div class="bar-dim">深度</div><div class="bar-track"><div class="bar-fill depth" data-width="60%"></div></div><div class="bar-val">6.0</div></div>
+      <div class="bar-row"><div class="bar-dim">实用性</div><div class="bar-track"><div class="bar-fill practicality" data-width="70%"></div></div><div class="bar-val">7.0</div></div>
+      <div class="bar-row"><div class="bar-dim">逻辑性</div><div class="bar-track"><div class="bar-fill logic" data-width="73%"></div></div><div class="bar-val">7.3</div></div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="essence">
+  <div class="section-num">02 — Product Essence</div>
+  <h2>产品 <em>本质</em></h2>
+
+  
+
+  <div class="stat-row">
+    <div class="stat-item"><div class="num">Go</div><div class="label">Primary Language</div></div>
+    <div class="stat-item"><div class="num">1</div><div class="label">Single Binary</div></div>
+    <div class="stat-item"><div class="num">ISC</div><div class="label">Open Source License</div></div>
+    <div class="stat-item"><div class="num">5+</div><div class="label">LLM Models Supported</div></div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">Event.arrive</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Event.match</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">Task.create</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step active">Task.dispatch</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step" style="border-color:var(--accent-magenta);color:var(--accent-magenta);">Policy.filter</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">Task.complete</div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="philosophy">
+  <div class="section-num">03 — Design Philosophy</div>
+  <h2>三层架构 <em>哲学</em></h2>
+
+  <div class="philosophy-grid">
+    <div class="phil-item">
+      <span class="icon">&#9646;</span>
+      <h3>Layer 1</h3>
+      <div class="label">Dumb Pipeline</div>
+      <p>管道保持确定性，事件路由与任务编排完全可预测。可审计、可回放、可调试——企业采用 AI 的前提。</p>
+    </div>
+    <div class="phil-item">
+      <span class="icon">&#9733;</span>
+      <h3>Layer 2</h3>
+      <div class="label">Smart Step</div>
+      <p>LLM 是唯一智能部分，不确定性被严格隔离在 Worker 边界内。三种 Worker 类型统一接入云端与本地模型。</p>
+    </div>
+    <div class="phil-item">
+      <span class="icon">&#9875;</span>
+      <h3>Layer 3</h3>
+      <div class="label">Policy Gate</div>
+      <p>策略是唯一治理检查点。声明式 YAML 配置写回权限：评论、标签、状态检查、提交建议分别授权。</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="arch">
+  <div class="section-num">03b — System Architecture</div>
+  <h2>系统 <em>架构图</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 1rem;">从事件源到写回的完整数据流，展示各层组件关系。</p>
+
+  <div class="arch-diagram">
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-cyan)">Event Sources</h5>
+        <div class="layer-name">事件源</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node event">GitHub Webhooks</div>
+        <div class="arch-node event">GitLab Webhooks</div>
+        <div class="arch-node event">Generic HTTP</div>
+        <span style="color:var(--text-dim);font-size:0.75rem">&darr; Event.arrive</span>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-gold)">Pipeline</h5>
+        <div class="layer-name">确定性管道</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node store">Event Store</div>
+        <span style="color:var(--text-dim);font-size:0.7rem">&rarr;</span>
+        <div class="arch-node store">Event Matcher</div>
+        <span style="color:var(--text-dim);font-size:0.7rem">&rarr;</span>
+        <div class="arch-node store">Task Dispatcher</div>
+        <span style="color:var(--text-dim);font-size:0.7rem">&rarr;</span>
+        <div class="arch-node store">SQLite WAL</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-purple)">Workers</h5>
+        <div class="layer-name">智能执行层</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node worker">Managed (Docker)</div>
+        <div class="arch-node worker">Adapter (Ollama)</div>
+        <div class="arch-node worker">Adapter (vLLM)</div>
+        <div class="arch-node worker">Unmanaged (HTTP)</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-blue)">Runtime</h5>
+        <div class="layer-name">运行时</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node runtime">TypeScript / Bun</div>
+        <div class="arch-node runtime">Claude SDK</div>
+        <div class="arch-node runtime">Codex MCP</div>
+        <div class="arch-node runtime">Gemini API</div>
+        <div class="arch-node runtime">OpenAI Compat</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-magenta)">Policy Gate</h5>
+        <div class="layer-name">治理层</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node policy">Comment Filter</div>
+        <div class="arch-node policy">Label Blocklist</div>
+        <div class="arch-node policy">Status Validator</div>
+        <div class="arch-node policy">Commit Guard</div>
+        <div class="arch-node policy">Audit Logger</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-label">
+        <h5 style="color: var(--accent-cyan)">Write-back</h5>
+        <div class="layer-name">写回层</div>
+      </div>
+      <div class="arch-content">
+        <div class="arch-node event">PR Comments</div>
+        <div class="arch-node event">Labels</div>
+        <div class="arch-node event">Status Checks</div>
+        <div class="arch-node event">Commit Suggestions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="innovation">
+  <div class="section-num">04 — Architecture Innovation</div>
+  <h2>架构 <em>创新</em></h2>
+
+  <div class="innovation-list">
+    <div class="inno-card">
+      <div class="num">Innovation 01</div>
+      <h4>单航班执行 + 429 背压</h4>
+      <p>拒绝并发而非排队缓冲。对昂贵的 LLM 操作，背压把调度权还给上游，避免资源过载和成本失控。反直觉但极其务实。</p>
+    </div>
+    <div class="inno-card">
+      <div class="num">Innovation 02</div>
+      <h4>Clone-on-Write 注册表</h4>
+      <p>借鉴数据库 MVCC 的不可变快照机制，内存 Map 副本+SQLite 事务，确保任务执行期间 Worker 配置不会被热更改。</p>
+    </div>
+    <div class="inno-card">
+      <div class="num">Innovation 03</div>
+      <h4>Policy-as-Code 治理</h4>
+      <p>将 AI 输出通过声明式策略过滤写回，所有审批和拒绝生成审计条目。比 prompt engineering 可靠得多，是 AI 进生产的必经之路。</p>
+    </div>
+    <div class="inno-card">
+      <div class="num">Innovation 04</div>
+      <h4>三层 Worker 统一模型</h4>
+      <p>Managed（Docker 容器）、Adapter（Ollama/vLLM 桥接）、Unmanaged（外部 HTTP）——一套 YAML 配置统一云端与本地模型接入。</p>
+    </div>
+    <div class="inno-card">
+      <div class="num">Innovation 05</div>
+      <h4>密钥前缀自动注入</h4>
+      <p>通过前缀检测（如 sk-ant-oat01-）自动注入正确的环境变量，消除大量样板配置。小设计，大体验。</p>
+    </div>
+    <div class="inno-card">
+      <div class="num">Innovation 06</div>
+      <h4>MCP Server 集成</h4>
+      <p>内置 MCP 服务器支持，标准化工具链访问，让 Agent 能无缝调用现有 DevOps 工具库，降低集成成本。</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="competition">
+  <div class="section-num">05 — Competitive Landscape</div>
+  <h2>竞品 <em>矩阵</em></h2>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">AI Agent 治理</th>
+          <th scope="col">自托管</th>
+          <th scope="col">多模型</th>
+          <th scope="col">生态成熟</th>
+          <th scope="col">编排能力</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="product-name" style="color:var(--accent-gold)">mecha.im</td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+        </tr>
+        <tr>
+          <td class="product-name">Actions + Copilot</td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;</span></td>
+        </tr>
+        <tr>
+          <td class="product-name">n8n + LLM</td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        </tr>
+        <tr>
+          <td class="product-name">CodeRabbit</td>
+          <td><span class="stars">&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+        </tr>
+        <tr>
+          <td class="product-name">Devin</td>
+          <td><span class="stars">&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;&#9733;</span></td>
+          <td><span class="stars">&#9733;&#9733;&#9733;&#9733;</span><span class="stars-dim">&#9733;</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="market-pos">
+  <div class="section-num">05b — Market Positioning</div>
+  <h2>市场 <em>定位图</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">X 轴：通用性（专用 &rarr; 通用），Y 轴：自主性（辅助工具 &rarr; 自主代理）。圆点大小反映生态成熟度。</p>
+
+  <div class="market-map">
+    <div class="axis-label axis-x" style="left:10%">专用工具</div>
+    <div class="axis-label axis-x-end">通用平台</div>
+    <div class="axis-label axis-y" style="bottom:10%">辅助工具</div>
+    <div class="axis-label axis-y-end">自主代理</div>
+    
+    <div class="market-quadrant" style="top:12%;left:8%">专用自主代理</div>
+    <div class="market-quadrant" style="top:12%;right:8%">通用自主代理</div>
+    <div class="market-quadrant" style="bottom:12%;left:8%">专用辅助工具</div>
+    <div class="market-quadrant" style="bottom:12%;right:8%">通用辅助平台</div>
+    
+    <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);opacity:0.5"></div>
+    <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);opacity:0.5"></div>
+    
+    <div class="market-dot" style="left:25%;top:22%;background:var(--accent-gold);width:18px;height:18px;box-shadow:0 0 20px rgba(212,168,67,0.4)">
+      <div class="dot-label" style="color:var(--accent-gold)">mecha.im</div>
+    </div>
+    <div class="market-dot" style="left:75%;top:65%;background:var(--accent-blue);width:24px;height:24px">
+      <div class="dot-label" style="color:var(--accent-blue)">Actions+Copilot</div>
+    </div>
+    <div class="market-dot" style="left:80%;top:45%;background:var(--accent-cyan);width:22px;height:22px">
+      <div class="dot-label" style="color:var(--accent-cyan)">n8n+LLM</div>
+    </div>
+    <div class="market-dot" style="left:35%;top:55%;background:var(--accent-purple);width:16px;height:16px">
+      <div class="dot-label" style="color:var(--accent-purple)">CodeRabbit</div>
+    </div>
+    <div class="market-dot" style="left:45%;top:15%;background:var(--accent-magenta);width:16px;height:16px">
+      <div class="dot-label" style="color:var(--accent-magenta)">Devin</div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="tech-stack">
+  <div class="section-num">05c — Technology Stack Analysis</div>
+  <h2>技术栈 <em>深度解析</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 1rem;">mecha.im 的技术选型逻辑与每个决策背后的权衡。</p>
+
+  <div class="tech-grid">
+    <div class="tech-card">
+      <h4>核心引擎</h4>
+      <div class="tech-item"><span class="name">语言</span><span class="tech-tag go">Go 1.26+</span></div>
+      <div class="tech-item"><span class="name">分发形式</span><span class="val">单二进制</span></div>
+      <div class="tech-item"><span class="name">并发模型</span><span class="val">Goroutine + 429 背压</span></div>
+      <div class="tech-item"><span class="name">持久化</span><span class="tech-tag sqlite">SQLite WAL</span></div>
+      <div class="tech-item"><span class="name">注册表</span><span class="val">Clone-on-Write</span></div>
+      <div class="tech-item"><span class="name">健康检查</span><span class="val">2s 间隔, 30s 超时</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:1rem;border-top:1px solid var(--border);padding-top:0.8rem">选型逻辑：Go 的单二进制编译 + 零依赖运行时是自托管场景的最优选择，goroutine 天然适合 webhook 并发处理。</p>
+    </div>
+    <div class="tech-card">
+      <h4>Worker 运行时</h4>
+      <div class="tech-item"><span class="name">容器化</span><span class="tech-tag docker">Docker 28+</span></div>
+      <div class="tech-item"><span class="name">运行时</span><span class="tech-tag ts">TypeScript / Bun</span></div>
+      <div class="tech-item"><span class="name">端口</span><span class="val">8080 (HTTP)</span></div>
+      <div class="tech-item"><span class="name">执行模式</span><span class="val">单航班 (Single-flight)</span></div>
+      <div class="tech-item"><span class="name">资源限制</span><span class="val">CPU / 内存 / PID</span></div>
+      <div class="tech-item"><span class="name">网络代理</span><span class="val">Caddy Reverse Proxy</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:1rem;border-top:1px solid var(--border);padding-top:0.8rem">选型逻辑：Docker 提供沙箱隔离，Bun 的启动速度适合短生命周期任务，Caddy 简化 TLS/路由。</p>
+    </div>
+    <div class="tech-card">
+      <h4>配置与集成</h4>
+      <div class="tech-item"><span class="name">配置格式</span><span class="tech-tag yaml">YAML 声明式</span></div>
+      <div class="tech-item"><span class="name">密钥管理</span><span class="val">secrets.yml + 前缀注入</span></div>
+      <div class="tech-item"><span class="name">事件源</span><span class="val">GitHub / GitLab / HTTP</span></div>
+      <div class="tech-item"><span class="name">MCP 支持</span><span class="val">内置 MCP Server</span></div>
+      <div class="tech-item"><span class="name">安装渠道</span><span class="val">Homebrew / curl / go</span></div>
+      <div class="tech-item"><span class="name">文档站</span><span class="val">VitePress</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:1rem;border-top:1px solid var(--border);padding-top:0.8rem">选型逻辑：YAML 对开发者友好且 Git-trackable，MCP 标准化接入降低生态集成门槛。</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="maturity">
+  <div class="section-num">05d — Maturity Assessment</div>
+  <h2>成熟度 <em>评估</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">基于代码结构、测试覆盖、文档质量等维度，评估项目当前成熟度。</p>
+
+  <div class="maturity-gauges">
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>核心架构</h5><div class="pct">85%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="85%"></div></div>
+      <div class="gauge-desc">Go internal 包分层清晰，MVCC 注册表和策略引擎已成型。线性管道是当前唯一架构限制。</div>
+    </div>
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>测试覆盖</h5><div class="pct">75%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="75%"></div></div>
+      <div class="gauge-desc">完整的集成测试覆盖 policy、worker、event 等核心包。单元测试密度中上。</div>
+    </div>
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>文档质量</h5><div class="pct">70%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="70%"></div></div>
+      <div class="gauge-desc">VitePress 文档站覆盖主要概念（architecture, policy, workers, events），缺少高级教程和最佳实践。</div>
+    </div>
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>开发者体验</h5><div class="pct">55%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="55%"></div></div>
+      <div class="gauge-desc">Homebrew 安装流畅，YAML 配置直观。缺少 --dry-run、结构化日志、JSON Schema 等调试工具。</div>
+    </div>
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>生态系统</h5><div class="pct">30%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="30%"></div></div>
+      <div class="gauge-desc">预置 Worker 模板有限（claude-reviewer、codex-coder、gemini-coder），缺少社区贡献机制和注册表。</div>
+    </div>
+    <div class="gauge-item">
+      <div class="gauge-header"><h5>生产就绪度</h5><div class="pct">60%</div></div>
+      <div class="gauge-bar"><div class="gauge-fill" data-width="60%"></div></div>
+      <div class="gauge-desc">Alpha v0.5.x 阶段，核心功能可用但缺少 RBAC、审计日志导出、监控集成等企业级特性。</div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="decision">
+  <div class="section-num">05e — Decision Framework</div>
+  <h2>选型 <em>决策树</em></h2>
+  <p style="color: var(--text-secondary); margin-bottom: 1rem;">何时选择 mecha.im，何时选择其他方案？</p>
+
+  <div class="decision-tree">
+    <div class="tree-row">
+      <div class="tree-node yes" style="grid-column: 1 / -1; text-align: center;">
+        <strong style="color: var(--accent-gold)">你需要 AI 代理自动化处理 Git 事件吗？</strong>
+      </div>
+    </div>
+    <div class="tree-row" style="margin-top: 0.5rem">
+      <div class="tree-node yes">
+        <strong style="color: var(--accent-cyan)">是 &rarr; 需要自托管 + 数据主权吗？</strong>
+        <div style="margin-top:0.8rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+          <div style="padding:0.4rem 0.8rem;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.3);font-size:0.78rem;color:var(--accent-cyan)">是 &rarr; mecha.im</div>
+          <div style="padding:0.4rem 0.8rem;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);font-size:0.78rem;color:var(--accent-purple)">否 &rarr; CodeRabbit</div>
+        </div>
+      </div>
+      <div class="tree-connector">&larr; &rarr;</div>
+      <div class="tree-node no">
+        <strong style="color: var(--accent-magenta)">否 &rarr; 你需要什么？</strong>
+        <div style="margin-top:0.8rem;display:flex;gap:0.5rem;flex-wrap:wrap;flex-direction:column">
+          <div style="padding:0.4rem 0.8rem;background:rgba(85,109,246,0.1);border:1px solid rgba(85,109,246,0.3);font-size:0.78rem;color:var(--accent-blue)">通用自动化 &rarr; n8n + LLM</div>
+          <div style="padding:0.4rem 0.8rem;background:rgba(85,109,246,0.1);border:1px solid rgba(85,109,246,0.3);font-size:0.78rem;color:var(--accent-blue)">CI/CD 集成 &rarr; Actions + Copilot</div>
+          <div style="padding:0.4rem 0.8rem;background:rgba(196,69,105,0.1);border:1px solid rgba(196,69,105,0.3);font-size:0.78rem;color:var(--accent-magenta)">自主编码 &rarr; Devin / Cursor</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-block" style="margin-top: 2rem">
+    <p>"mecha.im 的核心护城河是三个词：Policy-Controlled Write-back。任何想让 AI 代理自动写回 Git 仓库的团队，都需要回答一个问题：谁来控制 AI 的写权限？"</p>
+    <cite>— Council Chairman Synthesis</cite>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="risks">
+  <div class="section-num">06 — Risk Assessment</div>
+  <h2>风险 <em>评估</em></h2>
+
+  <div class="risk-grid">
+    <div class="risk-card risk-critical">
+      <div class="severity">Critical</div>
+      <h4>GitHub 平台蚕食风险</h4>
+      <p>GitHub 正将 Copilot 深度集成到 Actions。若原生提供"AI agent policy gate"能力，mecha.im 的独立价值将被大幅压缩。</p>
+      <div class="source">Window: 12-18 months — Advisor A</div>
+    </div>
+    <div class="risk-card risk-high">
+      <div class="severity">High</div>
+      <h4>SQLite 扩展天花板</h4>
+      <p>WAL 模式在高并发事件场景下是硬天花板。自托管场景短期正确，但中期需要清晰的迁移路径。</p>
+      <div class="source">Consensus — Advisor B, D</div>
+    </div>
+    <div class="risk-card risk-high">
+      <div class="severity">High</div>
+      <h4>线性管道缺乏 DAG</h4>
+      <p>当前管道不支持条件分支和多步编排。真实场景（测试 &rarr; 覆盖率 &rarr; 综合判断）需要 DAG。</p>
+      <div class="source">Structural — Advisor A</div>
+    </div>
+    <div class="risk-card risk-medium">
+      <div class="severity">Medium</div>
+      <h4>DX 调试体验短板</h4>
+      <p>事件匹配 &rarr; 任务分发 &rarr; Worker 执行 &rarr; Policy 过滤，链路较长。缺少 --dry-run 和结构化日志。</p>
+      <div class="source">DX Focus — Advisor B</div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="principles">
+  <div class="section-num">07 — Transferable Design Principles</div>
+  <h2>可迁移 <em>设计原则</em></h2>
+  
+
+  <div class="principles">
+    <div class="principle-item">
+      <div class="principle-num"></div>
+      <div class="principle-content">
+        <h4>治理与智能分离</h4>
+        <span class="consensus">Consensus: 5/5 advisors</span>
+        <p>任何让 AI 代理执行有副作用操作的产品，都需要一个独立于 AI 本身的策略层。不要把治理逻辑混入 prompt，而是建立独立的 Policy Gate。</p>
+        
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num"></div>
+      <div class="principle-content">
+        <h4>Policy-as-Code</h4>
+        <span class="consensus">Consensus: 4/5 advisors</span>
+        <p>将 AI 的输出通过预设的治理逻辑过滤，是所有 AI 代理进入生产环境的必经之路。声明式配置比 prompt engineering 可靠得多。</p>
+        <div class="application">应用: 用 YAML/JSON 定义 AI 的写回权限边界，替代在 system prompt 中用自然语言描述限制。</div>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num"></div>
+      <div class="principle-content">
+        <h4>隔离不确定性边界</h4>
+        <span class="consensus">Consensus: 4/5 advisors</span>
+        <p>LLM 只在定义好的 Step 边界内工作，其他层保持确定性。这让整个系统可审计、可调试、可回放。</p>
+        <div class="application">应用: 将 AI 推理封装为独立的函数/服务，输入输出有明确 schema，外部流程保持确定性编排。</div>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num"></div>
+      <div class="principle-content">
+        <h4>声明式能力定义</h4>
+        <span class="consensus">Consensus: 3/5 advisors</span>
+        <p>用 YAML 声明 AI 代理的能力边界（可用工具、资源限制、超时时间），而非在代码中硬编码。这应成为行业标准模式。</p>
+        <div class="application">应用: 为每个 AI Worker 创建配置文件，声明可调用工具、内存限制、最大执行时间、输出格式。</div>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num"></div>
+      <div class="principle-content">
+        <h4>背压优于排队</h4>
+        <span class="consensus">Consensus: 3/5 advisors</span>
+        <p>对昂贵的 AI 操作，拒绝（429）比缓冲更安全。背压把调度权还给上游，避免 token 成本失控和资源过载。</p>
+        <div class="application">应用: 在 AI API 网关中实现基于成本的速率限制，超载时返回 429 而非无限排队。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="insight-hero section" id="insights">
+  <div class="section-num">08 — AI Work Paradigm Shift</div>
+  <h2>AI 工作 <em>新范式启发</em></h2>
+  <p style="color: var(--text-secondary); max-width: 700px; margin: 0 auto;">从 mecha.im 的设计中提炼出的 AI 时代工作方法论转变。<br>这不只是一个产品分析——它揭示了 AI 协作的底层逻辑。</p>
+</section>
+
+<div class="insight-grid">
+  <div class="insight-card">
+    <div class="tag">Paradigm 01</div>
+    <h4>从"提示工程"到"治理工程"</h4>
+    
+    <div class="example">Before: "请不要修改 main 分支"<br>After: policy.commit.branches.blocked: [main]</div>
+  </div>
+  <div class="insight-card">
+    <div class="tag">Paradigm 02</div>
+    <h4>从"单模型依赖"到"模型可替换"</h4>
+    <p>mecha.im 用一行 YAML 切换模型的设计揭示了一个趋势：AI 产品不应该绑定单一模型。设计时将模型视为可替换的"Worker"，用统一接口抽象，让产品的价值锚定在编排和治理层。</p>
+    <div class="example">model: claude-sonnet-4-6 &rarr; model: gemini-2.5-pro<br>一行配置，零代码改动</div>
+  </div>
+  <div class="insight-card">
+    <div class="tag">Paradigm 03</div>
+    <h4>从"云端托管"到"主权 AI"</h4>
+    <p>单二进制自托管不是技术选择，是信任模型的选择。企业对 AI 代理最大的恐惧是"代码泄露到别人的服务器"。自托管 + 策略控制的组合，是打开企业市场的金钥匙。</p>
+    <div class="example">Your code never leaves your infrastructure.<br>Policy decides, not the cloud.</div>
+  </div>
+  <div class="insight-card">
+    <div class="tag">Paradigm 04</div>
+    <h4>从"智能堆砌"到"确定性优先"</h4>
+    <p>大多数 AI 产品把"更智能"当卖点。mecha.im 告诉我们：企业买单的不是智能，而是可控性。把确定性做到极致（可审计、可回放、可调试），智能只需要放在该放的地方。</p>
+    <div class="example">Deterministic pipeline + Isolated intelligence<br>= Enterprise-ready AI</div>
+  </div>
+  <div class="insight-card">
+    <div class="tag">Paradigm 05</div>
+    <h4>从"功能竞赛"到"架构品味"</h4>
+    <p>20 stars 的产品凭什么值得五模型议会分析？因为架构品味。在 AI 工具同质化严重的今天，优雅的抽象、正确的分层、克制的设计比堆砌功能更有长期价值。</p>
+    <div class="example">"dumb pipeline, smart step, policy gate"<br>九个词定义了一个品类</div>
+  </div>
+  <div class="insight-card">
+    <div class="tag">Paradigm 06</div>
+    <h4>从"一次性交互"到"事件驱动"</h4>
+    <p>AI 不应该只在你打开 IDE 时工作。事件驱动的 AI（webhook 触发、自动响应、策略过滤）才是 AI 价值最大化的方式。让 AI 成为基础设施的一部分，而非工具箱中的一个按钮。</p>
+    <div class="example">PR opened &rarr; auto review &rarr; policy filter &rarr; write back<br>Human: sleep. AI: work.</div>
+  </div>
+</div>
+
+
+<section class="paradigm-section section">
+  <h2 style="font-family: var(--font-display); font-size: 2rem;">思维 <em style="color: var(--accent-gold); font-style: italic;">转变</em></h2>
+  <div class="paradigm-grid">
+    <div class="paradigm-box old">
+      <h4>Old Paradigm</h4>
+      <ul>
+        <li>AI 是聊天工具，需要人工触发</li>
+        <li>Prompt 是唯一的控制手段</li>
+        <li>追求"最强模型"解决一切</li>
+        <li>AI 输出直接进生产</li>
+        <li>功能越多越好</li>
+        <li>托管 SaaS 是默认选项</li>
+      </ul>
+    </div>
+    <div class="paradigm-arrow">&rarr;</div>
+    <div class="paradigm-box new">
+      <h4>New Paradigm</h4>
+      <ul>
+        <li>AI 是事件驱动的基础设施</li>
+        <li>声明式策略层控制 AI 行为边界</li>
+        <li>模型可替换，价值在编排和治理</li>
+        <li>Policy Gate 过滤后才能写回</li>
+        <li>架构品味 > 功能数量</li>
+        <li>自托管 + 主权控制是企业刚需</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="section" id="roadmap">
+  <div class="section-num">09 — Strategic Roadmap</div>
+  <h2>发展 <em>路线图</em></h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="period">Phase 1 — 0-6 Months</div>
+      <h4>场景深耕</h4>
+      <p>聚焦 PR Review + Issue Triage 两个核心场景，打造开箱即用的完整体验。提供丰富的 Worker 模板和 Quick Start 文档。</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Phase 2 — 6-12 Months</div>
+      <h4>DX 与生态</h4>
+      <p>投资开发者体验：--dry-run 模式、Policy 决策结构化日志、YAML JSON Schema + IDE 补全。建立 Worker/Policy 社区注册表，参考 Terraform Provider 模型。增强可视化 Web UI。</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Phase 3 — 12-18 Months</div>
+      <h4>企业化与扩展</h4>
+      <p>Open Core 商业模式：企业版叠加审计日志、RBAC、合规报告、多租户隔离。从 SQLite 迁移到可扩展存储，支持 DAG 编排。抢在 GitHub 原生集成之前建立护城河。</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Phase 4 — 18+ Months</div>
+      <h4>平台化</h4>
+      <p>成为 AI Agent 领域的"容器编排器"。多节点协同、分布式调度、跨仓库工作流。从 DevOps 扩展到更广泛的事件驱动 AI 自动化场景。</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+<section class="footer">
+  <div class="brand">LLM Council</div>
+  <p>Five Models. One Verdict. Zero Bias.</p>
+  
+  <p style="margin-top: 0.5rem;">Generated on 2026-04-01 &middot; mecha.im Product Analysis Report</p>
+</section>
+
+<script>
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate score bars
+      entry.target.querySelectorAll('.score-bar .fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 300);
+      });
+      // Animate bar chart fills
+      entry.target.querySelectorAll('.bar-fill').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 100 + i * 50);
+      });
+      // Animate gauge fills
+      entry.target.querySelectorAll('.gauge-fill').forEach((g, i) => {
+        setTimeout(() => { g.style.width = g.dataset.width; }, 200 + i * 120);
+      });
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Market dots - show labels on page load after delay
+setTimeout(() => {
+  document.querySelectorAll('.market-dot .dot-label').forEach(l => {
+    l.style.opacity = '1';
+  });
+}, 2000);
+
+// Show/hide sticky nav on scroll
+const toc = document.getElementById('toc');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  toc.style.opacity = y > window.innerHeight * 0.8 ? '1' : '0';
+  lastScroll = y;
+}, { passive: true });
+</script>
+</body>
+</html>

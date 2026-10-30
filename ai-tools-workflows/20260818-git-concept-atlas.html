@@ -1,0 +1,1699 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="概念、类比边界、恢复策略、协作流程与
+AI 时代最佳实践">
+  <title>20260818-2151-Git 全景认知地图：从平行世界到可验证工程</title>
+  <style type="text/css">:root {
+--paper: oklch(96.8% 0.018 80);
+--paper-deep: oklch(93.2% 0.025 78);
+--ink: oklch(24% 0.035 48);
+--muted: oklch(48% 0.035 55);
+--line: oklch(81% 0.035 74);
+--red: oklch(48% 0.16 30);
+--red-soft: oklch(91% 0.045 28);
+--green: oklch(42% 0.08 158);
+--green-soft: oklch(91% 0.035 154);
+--blue: oklch(41% 0.085 240);
+--blue-soft: oklch(91% 0.035 238);
+--yellow: oklch(83% 0.10 86);
+--code: oklch(27% 0.025 55);
+--serif: "Iowan Old Style", "Songti SC", "STSong", "Source Han Serif SC", Georgia, serif;
+--sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+--mono: "SFMono-Regular", "Cascadia Code", "Fira Code", Menlo, monospace;
+--sidebar: 268px;
+--gap: clamp(28px, 4vw, 68px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--paper); }
+body {
+margin: 0;
+color: var(--ink);
+background:
+linear-gradient(90deg, transparent 0 49px, color-mix(in oklch, var(--red) 15%, transparent) 50px, transparent 51px),
+repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--line) 22%, transparent) 32px),
+var(--paper);
+font-family: var(--serif);
+font-size: 17px;
+line-height: 1.8;
+text-rendering: optimizeLegibility;
+}
+a { color: var(--blue); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--red); }
+::selection { background: var(--yellow); color: var(--ink); }
+#reading-progress {
+position: fixed;
+z-index: 100;
+inset: 0 auto auto 0;
+height: 4px;
+width: var(--progress, 0%);
+background: var(--red);
+transform-origin: left;
+}
+.masthead {
+width: min(1280px, calc(100% - 40px));
+margin: 24px auto 0;
+border-top: 8px solid var(--ink);
+border-bottom: 1px solid var(--ink);
+padding: clamp(28px, 5vw, 72px) 0 clamp(22px, 3vw, 40px);
+display: grid;
+grid-template-columns: 132px minmax(0, 1fr) 190px;
+gap: var(--gap);
+align-items: end;
+}
+.masthead-mark {
+writing-mode: vertical-rl;
+transform: rotate(180deg);
+letter-spacing: .18em;
+font: 700 12px/1 var(--sans);
+color: var(--red);
+height: 156px;
+}
+.eyebrow { margin: 0 0 14px; font: 700 12px/1.4 var(--sans); letter-spacing: .16em; color: var(--red); }
+.masthead h1 { margin: 0; max-width: 900px; font: 800 clamp(44px, 7vw, 92px)/.98 var(--serif); letter-spacing: -.055em; }
+.subtitle { margin: 22px 0 0; max-width: 760px; color: var(--muted); font: 500 clamp(17px, 1.6vw, 22px)/1.55 var(--sans); }
+.masthead-meta { display: grid; gap: 9px; align-self: stretch; align-content: end; font: 600 11px/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.masthead-meta span { padding-top: 8px; border-top: 1px solid var(--line); }
+.masthead-meta .partial { color: var(--red); }
+.page-shell {
+width: min(1280px, calc(100% - 40px));
+margin: 0 auto;
+display: grid;
+grid-template-columns: var(--sidebar) minmax(0, 1fr);
+gap: var(--gap);
+align-items: start;
+}
+.sidebar {
+position: sticky;
+top: 22px;
+max-height: calc(100vh - 44px);
+overflow: auto;
+padding: 38px 18px 30px 0;
+border-right: 1px solid var(--line);
+scrollbar-width: thin;
+}
+.sidebar-title { margin-bottom: 18px; font: 800 12px/1 var(--sans); letter-spacing: .16em; color: var(--red); }
+#TOC ul { margin: 0; padding: 0; list-style: none; }
+#TOC ul ul { margin: 6px 0 12px 14px; }
+#TOC li { margin: 0; }
+#TOC a { display: block; padding: 6px 8px; color: var(--muted); font: 600 12px/1.4 var(--sans); text-decoration: none; border-left: 2px solid transparent; }
+#TOC a:hover, #TOC a.active { color: var(--ink); background: color-mix(in oklch, var(--paper-deep) 72%, transparent); border-left-color: var(--red); }
+.sidebar-note { margin-top: 24px; padding: 15px 12px; background: var(--ink); color: var(--paper); font: 500 12px/1.65 var(--sans); }
+#toc-toggle { display: none; }
+.content { min-width: 0; padding: clamp(42px, 6vw, 82px) 0 120px; }
+.content > :first-child { margin-top: 0; }
+h1, h2, h3, h4 { color: var(--ink); text-wrap: balance; scroll-margin-top: 26px; }
+.content h1 {
+margin: 110px 0 36px;
+padding: 18px 0 16px;
+border-top: 4px solid var(--ink);
+border-bottom: 1px solid var(--ink);
+font: 800 clamp(32px, 4.2vw, 58px)/1.08 var(--serif);
+letter-spacing: -.035em;
+counter-increment: chapter;
+}
+.content h2 { margin: 64px 0 20px; font: 800 clamp(24px, 2.5vw, 34px)/1.2 var(--serif); letter-spacing: -.025em; }
+.content h3 { margin: 38px 0 12px; font: 800 21px/1.3 var(--sans); }
+.content h4 { margin: 28px 0 10px; font: 800 16px/1.4 var(--sans); }
+p { margin: 0 0 18px; }
+strong { font-weight: 800; }
+small { font-family: var(--sans); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0; }
+.status-strip { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 34px; padding: 11px 14px; background: var(--ink); color: var(--paper); font: 700 11px/1.4 var(--sans); letter-spacing: .07em; }
+.status-pill { color: var(--yellow); white-space: nowrap; }
+blockquote { margin: 28px 0 34px; padding: 20px 24px; border-left: 4px solid var(--red); background: var(--red-soft); font-size: 1.06em; }
+blockquote p:last-child { margin-bottom: 0; }
+.thesis { margin: 26px 0 44px; padding: clamp(28px, 5vw, 60px); background: var(--ink); color: var(--paper); position: relative; overflow: hidden; }
+.thesis::after { content: "⎇"; position: absolute; right: -18px; bottom: -76px; font: 700 240px/1 var(--serif); color: color-mix(in oklch, var(--paper) 8%, transparent); transform: rotate(-10deg); }
+.thesis-kicker { position: relative; z-index: 1; margin-bottom: 18px; color: var(--yellow); font: 800 11px/1 var(--sans); letter-spacing: .18em; }
+.thesis p { position: relative; z-index: 1; margin: 0; max-width: 880px; font: 700 clamp(25px, 3.5vw, 44px)/1.25 var(--serif); }
+.thesis .thesis-sub { margin-top: 22px; max-width: 760px; color: color-mix(in oklch, var(--paper) 76%, var(--ink)); font: 500 15px/1.7 var(--sans); }
+.legend { margin: 36px 0; padding: 15px 0; display: flex; flex-wrap: wrap; gap: 8px 18px; border-block: 1px solid var(--line); font: 600 12px/1.5 var(--sans); color: var(--muted); }
+.legend b { color: var(--ink); }
+ul, ol { padding-left: 1.3em; }
+li { margin: 7px 0; }
+li::marker { color: var(--red); font-weight: 800; }
+table { width: 100%; margin: 26px 0 40px; border-collapse: collapse; font: 500 13px/1.6 var(--sans); background: color-mix(in oklch, var(--paper) 88%, var(--paper-deep)); }
+thead { background: var(--ink); color: var(--paper); }
+th { text-align: left; font-weight: 800; letter-spacing: .02em; }
+th, td { padding: 12px 13px; border: 1px solid var(--line); vertical-align: top; }
+tbody tr:nth-child(even) { background: color-mix(in oklch, var(--paper-deep) 68%, transparent); }
+tbody tr:hover { background: var(--yellow); }
+code { padding: .14em .35em; border-radius: 2px; background: color-mix(in oklch, var(--paper-deep) 72%, transparent); color: var(--red); font: 600 .86em/1.5 var(--mono); overflow-wrap: anywhere; }
+pre { margin: 24px 0 36px; padding: 20px 22px; overflow: auto; background: var(--code); color: oklch(91% 0.022 80); border-left: 5px solid var(--yellow); }
+pre code { padding: 0; background: transparent; color: inherit; font-weight: 500; }
+.system-map { margin: 34px 0 48px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: stretch; gap: 9px; }
+.map-layer { min-height: 154px; padding: 18px 16px; display: grid; align-content: space-between; border-top: 5px solid currentColor; background: var(--paper-deep); }
+.map-layer span { font: 800 11px/1 var(--sans); }
+.map-layer b { font: 800 22px/1.1 var(--serif); }
+.map-layer em { font: 600 11px/1.4 var(--mono); font-style: normal; }
+.map-layer small { color: var(--muted); }
+.map-content { color: var(--red); }.map-history { color: var(--green); }.map-ref { color: var(--blue); }.map-collab { color: var(--ink); }
+.map-arrow { align-self: center; color: var(--red); font: 800 18px/1 var(--sans); }
+.dag { margin: 28px 0 44px; padding: 18px 24px 24px; border: 1px solid var(--ink); background: color-mix(in oklch, var(--paper) 82%, var(--green-soft)); }
+.dag svg { width: 100%; height: auto; color: var(--ink); }
+.dag .line { fill: none; stroke: currentColor; stroke-width: 4; }
+.dag .featureline { stroke: var(--red); }
+.dag circle { fill: var(--paper); stroke: var(--ink); stroke-width: 4; }
+.dag circle.feature { stroke: var(--red); }
+.dag text { fill: var(--ink); font: 800 16px var(--sans); }
+.dag text.label { font: 700 13px var(--mono); }
+.dag p { margin: 0; font-family: var(--sans); }
+.three-trees { margin: 32px 0 48px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: stretch; }
+.three-trees section { padding: 20px; border-top: 5px solid var(--red); background: var(--paper-deep); }
+.three-trees section:nth-of-type(2) { border-color: var(--green); }
+.three-trees section:nth-of-type(3) { border-color: var(--blue); }
+.three-trees span { font: 800 11px/1 var(--sans); letter-spacing: .12em; color: var(--muted); }
+.three-trees h3 { margin: 10px 0 12px; }
+.three-trees p { font: 500 13px/1.65 var(--sans); }
+.tree-arrow { align-self: center; white-space: nowrap; color: var(--red); font: 800 12px/1 var(--sans); }
+.decision-ladder { margin: 30px 0 46px; display: grid; grid-template-columns: repeat(5, 1fr); border-block: 1px solid var(--ink); }
+.decision-ladder > div { padding: 20px 16px; border-right: 1px solid var(--line); }
+.decision-ladder > div:last-child { border-right: 0; }
+.decision-ladder span { color: var(--red); font: 800 11px/1 var(--sans); }
+.decision-ladder b { display: block; margin: 12px 0 9px; font: 800 15px/1.3 var(--sans); }
+.decision-ladder p { margin: 0; color: var(--muted); font: 500 12px/1.55 var(--sans); }
+.danger { margin: 30px 0; padding: 22px 24px; background: var(--red); color: var(--paper); }
+.danger b { display: block; margin-bottom: 7px; color: var(--yellow); font: 800 12px/1 var(--sans); letter-spacing: .12em; }
+.danger p { margin: 0; font-family: var(--sans); }
+.agent-grid { margin: 32px 0 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.agent-grid article { padding: 22px; border-top: 5px solid var(--blue); background: var(--blue-soft); }
+.agent-grid article:nth-child(2) { border-color: var(--green); background: var(--green-soft); }
+.agent-grid article:nth-child(3) { border-color: var(--red); background: var(--red-soft); }
+.agent-grid .integrator { grid-column: 1 / -1; display: grid; grid-template-columns: 130px 1fr 1.3fr 1fr; align-items: center; gap: 18px; border-top-color: var(--ink); background: var(--ink); color: var(--paper); }
+.agent-grid span { font: 800 11px/1 var(--sans); letter-spacing: .12em; }
+.agent-grid h3 { margin: 12px 0 8px; color: inherit; }
+.agent-grid p, .agent-grid small { margin: 0; font-family: var(--sans); }
+.workflow-band { margin: 28px 0 36px; padding: 17px 18px; display: flex; gap: 11px; flex-wrap: wrap; align-items: center; background: var(--ink); color: var(--paper); font: 700 12px/1.4 var(--sans); }
+.workflow-band span { padding: 7px 9px; border: 1px solid color-mix(in oklch, var(--paper) 26%, transparent); }
+.workflow-band i { color: var(--yellow); font-style: normal; }
+.command-map { margin: 30px 0 42px; display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--ink); }
+.command-map section { padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.command-map section:nth-child(even) { border-right: 0; }
+.command-map section:nth-last-child(-n+2) { border-bottom: 0; }
+.command-map h3 { margin: 0 0 14px; }
+.command-map code { display: block; margin: 7px 0; padding: 7px 9px; background: var(--ink); color: var(--paper); }
+.footnotes, #资料索引 { font-size: .92em; }
+.content > p:last-child { margin-bottom: 0; }
+#back-to-top { position: fixed; right: 20px; bottom: 20px; z-index: 30; width: 44px; height: 44px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 18px/1 var(--sans); cursor: pointer; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .18s ease-out, transform .18s ease-out; }
+#back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#back-to-top:hover { background: var(--ink); color: var(--paper); }
+@media (max-width: 980px) {
+.masthead { grid-template-columns: 70px minmax(0, 1fr); }
+.masthead-meta { grid-column: 2; grid-template-columns: repeat(3, 1fr); }
+.page-shell { grid-template-columns: 1fr; }
+.sidebar { position: fixed; z-index: 60; inset: 0 auto 0 0; width: min(330px, 88vw); max-height: none; padding: 74px 24px 30px; background: var(--paper); transform: translateX(-105%); transition: transform .22s cubic-bezier(.22,1,.36,1); box-shadow: 18px 0 40px color-mix(in oklch, var(--ink) 18%, transparent); }
+.sidebar.open { transform: translateX(0); }
+#toc-toggle { display: block; position: fixed; z-index: 70; left: 14px; bottom: 14px; padding: 10px 14px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 12px/1 var(--sans); }
+.content { padding-top: 40px; }
+.system-map { grid-template-columns: 1fr 1fr; }
+.map-arrow { display: none; }
+.decision-ladder { grid-template-columns: 1fr 1fr; }
+.decision-ladder > div { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 680px) {
+body { font-size: 16px; background: var(--paper); }
+.masthead, .page-shell { width: min(100% - 28px, 1280px); }
+.masthead { margin-top: 14px; grid-template-columns: 1fr; padding-top: 28px; }
+.masthead-mark { writing-mode: horizontal-tb; transform: none; height: auto; }
+.masthead-meta { grid-column: 1; grid-template-columns: 1fr; }
+.masthead h1 { font-size: clamp(42px, 14vw, 68px); }
+.content h1 { margin-top: 76px; font-size: 36px; }
+.status-strip { align-items: flex-start; flex-direction: column; }
+.thesis { padding: 26px 22px; }
+.system-map, .three-trees, .agent-grid, .command-map { grid-template-columns: 1fr; }
+.three-trees .tree-arrow { transform: rotate(90deg); justify-self: center; }
+.agent-grid .integrator { grid-column: 1; grid-template-columns: 1fr; }
+.decision-ladder { grid-template-columns: 1fr; }
+.command-map section { border-right: 0; border-bottom: 1px solid var(--line) !important; }
+.command-map section:last-child { border-bottom: 0 !important; }
+table { display: block; overflow-x: auto; font-size: 12px; }
+th, td { min-width: 128px; }
+.workflow-band i { transform: rotate(90deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+@page { size: A4; margin: 16mm 14mm 18mm; }
+:root { --paper: #fbf7ef; --ink: #211d17; --line: #cfc5b5; }
+body { background: var(--paper); font-size: 10.5pt; }
+#reading-progress, #toc-toggle, #back-to-top, .sidebar { display: none !important; }
+.masthead, .page-shell { width: 100%; margin: 0; display: block; }
+.masthead { grid-template-columns: 1fr; border-top-width: 4px; padding: 0 0 12mm; }
+.masthead-mark, .masthead-meta { display: none; }
+.masthead h1 { font-size: 34pt; }
+.content { padding: 0; }
+.content h1 { break-before: page; margin-top: 0; font-size: 25pt; }
+.content h1:first-of-type { break-before: auto; }
+h2, h3, table, blockquote, pre, .thesis, .system-map, .dag, .three-trees, .decision-ladder, .agent-grid, .command-map { break-inside: avoid; }
+a { color: inherit; text-decoration: none; }
+a[href^="http"]::after { content: " (" attr(href) ")"; font: 7pt/1.2 var(--sans); overflow-wrap: anywhere; }
+}
+</style>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="masthead">
+    <div class="masthead-mark">GIT / FIELD ATLAS</div>
+    <div class="masthead-copy">
+      <p class="eyebrow">分布式版本控制 · 深度学习档案</p>
+      <h1>Git 全景认知地图：从平行世界到可验证工程</h1>
+      <p class="subtitle">概念、类比边界、恢复策略、协作流程与 AI
+时代最佳实践</p>
+    </div>
+    <div class="masthead-meta">
+      <span>2026.08.18</span>
+      <span>事实 / 类比 / 边界 / 实践</span>
+      <span class="partial">PARTIAL</span>
+    </div>
+  </header>
+  <button id="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">目录</button>
+  <div class="page-shell">
+    <aside class="sidebar">
+      <div class="sidebar-title">阅读路线</div>
+      <nav id="TOC" role="navigation" aria-label="目录">
+<ul>
+<li><a href="#先记住这一句" id="toc-先记住这一句">先记住这一句</a></li>
+<li><a href="#1-学习目标与资料边界" id="toc-1-学习目标与资料边界">1.
+学习目标与资料边界</a>
+<ul>
+<li><a href="#你读完后应能回答什么" id="toc-你读完后应能回答什么">你读完后应能回答什么</a></li>
+<li><a href="#资料权重" id="toc-资料权重">资料权重</a></li>
+</ul></li>
+<li><a href="#2-三组主类比先搭桥再检查桥会在哪里断" id="toc-2-三组主类比先搭桥再检查桥会在哪里断">2.
+三组主类比：先搭桥，再检查桥会在哪里断</a>
+<ul>
+<li><a href="#a-档案馆--时光机" id="toc-a-档案馆--时光机">A. 档案馆 +
+时光机</a></li>
+<li><a href="#b-平行世界--独立房间" id="toc-b-平行世界--独立房间">B.
+平行世界 + 独立房间</a></li>
+<li><a href="#c-物流网络--可移动路标" id="toc-c-物流网络--可移动路标">C.
+物流网络 + 可移动路标</a></li>
+</ul></li>
+<li><a href="#3-git-的物理世界对象图引用现场" id="toc-3-git-的物理世界对象图引用现场">3. Git
+的物理世界：对象、图、引用、现场</a>
+<ul>
+<li><a href="#四层总图" id="toc-四层总图">四层总图</a>
+<ul>
+<li><a href="#31-blob只关心内容不关心文件名" id="toc-31-blob只关心内容不关心文件名">3.1
+Blob：只关心内容，不关心文件名</a></li>
+<li><a href="#32-tree目录快照的结构" id="toc-32-tree目录快照的结构">3.2
+Tree：目录快照的结构</a></li>
+<li><a href="#33-commit快照--元数据--父关系" id="toc-33-commit快照--元数据--父关系">3.3 Commit：快照 + 元数据 +
+父关系</a></li>
+<li><a href="#34-dag历史不是时间线而是因果图" id="toc-34-dag历史不是时间线而是因果图">3.4
+DAG：历史不是时间线，而是因果图</a></li>
+<li><a href="#35-ref给-commit-起一个会移动的名字" id="toc-35-ref给-commit-起一个会移动的名字">3.5 Ref：给 commit
+起一个会移动的名字</a></li>
+<li><a href="#36-reflog引用移动的本地黑匣子" id="toc-36-reflog引用移动的本地黑匣子">3.6
+Reflog：引用移动的本地黑匣子</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#4-三棵树模型绝大多数操作都在移动内容或指针" id="toc-4-三棵树模型绝大多数操作都在移动内容或指针">4.
+三棵树模型：绝大多数操作都在移动“内容”或“指针”</a>
+<ul>
+<li><a href="#文件状态" id="toc-文件状态">文件状态</a></li>
+</ul></li>
+<li><a href="#5-核心概念地图名词动作目的边界" id="toc-5-核心概念地图名词动作目的边界">5.
+核心概念地图：名词、动作、目的、边界</a>
+<ul>
+<li><a href="#51-建仓与获取" id="toc-51-建仓与获取">5.1
+建仓与获取</a></li>
+<li><a href="#52-观察与比较" id="toc-52-观察与比较">5.2
+观察与比较</a></li>
+<li><a href="#53-形成提交" id="toc-53-形成提交">5.3 形成提交</a></li>
+<li><a href="#54-指针与路线" id="toc-54-指针与路线">5.4
+指针与路线</a></li>
+<li><a href="#55-临时搁置与多现场" id="toc-55-临时搁置与多现场">5.5
+临时搁置与多现场</a></li>
+<li><a href="#56-远程交换" id="toc-56-远程交换">5.6 远程交换</a></li>
+</ul></li>
+<li><a href="#6-分叉与整合mergerebasesquashcherry-pick" id="toc-6-分叉与整合mergerebasesquashcherry-pick">6.
+分叉与整合：merge、rebase、squash、cherry-pick</a>
+<ul>
+<li><a href="#一张决策表" id="toc-一张决策表">一张决策表</a></li>
+<li><a href="#merge保留两条历史的会面" id="toc-merge保留两条历史的会面">Merge：保留两条历史的会面</a></li>
+<li><a href="#rebase换一个祖先重新演算" id="toc-rebase换一个祖先重新演算">Rebase：换一个祖先重新演算</a></li>
+<li><a href="#squash把过程压成一个交付节点" id="toc-squash把过程压成一个交付节点">Squash：把过程压成一个交付节点</a></li>
+<li><a href="#cherry-pick摘取变化不搬整条路线" id="toc-cherry-pick摘取变化不搬整条路线">Cherry-pick：摘取变化，不搬整条路线</a></li>
+</ul></li>
+<li><a href="#7-撤销与恢复先判断要撤销哪一层" id="toc-7-撤销与恢复先判断要撤销哪一层">7.
+撤销与恢复：先判断“要撤销哪一层”</a>
+<ul>
+<li><a href="#restoreresetrevert-的对象不同" id="toc-restoreresetrevert-的对象不同">Restore、Reset、Revert
+的对象不同</a>
+<ul>
+<li><a href="#reset-三种常见模式" id="toc-reset-三种常见模式">Reset
+三种常见模式</a></li>
+</ul></li>
+<li><a href="#reflog-是恢复入口不是永生保险" id="toc-reflog-是恢复入口不是永生保险">Reflog
+是恢复入口，不是永生保险</a></li>
+<li><a href="#cleanstash未跟踪文件" id="toc-cleanstash未跟踪文件">Clean、Stash、未跟踪文件</a></li>
+</ul></li>
+<li><a href="#8-branch-与-worktree路线与房间" id="toc-8-branch-与-worktree路线与房间">8. Branch 与
+Worktree：路线与房间</a>
+<ul>
+<li><a href="#为什么只有-branch-仍可能不够" id="toc-为什么只有-branch-仍可能不够">为什么只有 branch
+仍可能不够</a></li>
+<li><a href="#worktree-真正隔离什么" id="toc-worktree-真正隔离什么">Worktree 真正隔离什么</a></li>
+<li><a href="#worktree-不隔离什么" id="toc-worktree-不隔离什么">Worktree
+不隔离什么</a></li>
+<li><a href="#多-agent-并行的最小治理模型" id="toc-多-agent-并行的最小治理模型">多 Agent
+并行的最小治理模型</a></li>
+</ul></li>
+<li><a href="#9-远程协作gitgithub-与发布层分开理解" id="toc-9-远程协作gitgithub-与发布层分开理解">9. 远程协作：Git、GitHub
+与发布层分开理解</a>
+<ul>
+<li><a href="#git--github" id="toc-git--github">Git ≠ GitHub</a></li>
+<li><a href="#fetchpullpush-的精确区别" id="toc-fetchpullpush-的精确区别">Fetch、Pull、Push 的精确区别</a>
+<ul>
+<li><a href="#fetch先把信息拿回来" id="toc-fetch先把信息拿回来">Fetch：先把信息拿回来</a></li>
+<li><a href="#pull获取--整合" id="toc-pull获取--整合">Pull：获取 +
+整合</a></li>
+<li><a href="#push发布历史并申请移动远端-ref" id="toc-push发布历史并申请移动远端-ref">Push：发布历史并申请移动远端
+ref</a></li>
+</ul></li>
+<li><a href="#prissueforkrelease" id="toc-prissueforkrelease">PR、Issue、Fork、Release</a></li>
+</ul></li>
+<li><a href="#10-冲突git-把无法替你决定的歧义显性化" id="toc-10-冲突git-把无法替你决定的歧义显性化">10. 冲突：Git
+把无法替你决定的歧义显性化</a>
+<ul>
+<li><a href="#冲突的三层" id="toc-冲突的三层">冲突的三层</a></li>
+<li><a href="#安全处理顺序" id="toc-安全处理顺序">安全处理顺序</a></li>
+<li><a href="#rerere-与复用冲突解决" id="toc-rerere-与复用冲突解决">Rerere 与复用冲突解决</a></li>
+</ul></li>
+<li><a href="#11-历史诊断把-git-从保存工具升级为调查系统" id="toc-11-历史诊断把-git-从保存工具升级为调查系统">11. 历史诊断：把 Git
+从“保存工具”升级为调查系统</a>
+<ul>
+<li><a href="#log先看图再看故事" id="toc-log先看图再看故事">Log：先看图，再看故事</a></li>
+<li><a href="#bisect对提交图做二分实验" id="toc-bisect对提交图做二分实验">Bisect：对提交图做二分实验</a></li>
+<li><a href="#blame找上下文不找罪人" id="toc-blame找上下文不找罪人">Blame：找上下文，不找罪人</a></li>
+</ul></li>
+<li><a href="#12-配置忽略钩子与仓库边界" id="toc-12-配置忽略钩子与仓库边界">12. 配置、忽略、钩子与仓库边界</a>
+<ul>
+<li><a href="#config-的作用域" id="toc-config-的作用域">Config
+的作用域</a></li>
+<li><a href="#gitignore-不是安全工具" id="toc-gitignore-不是安全工具">.gitignore 不是安全工具</a></li>
+<li><a href="#hooks本地自动化触点" id="toc-hooks本地自动化触点">Hooks：本地自动化触点</a></li>
+<li><a href="#submodulesubtreemonorepo" id="toc-submodulesubtreemonorepo">Submodule、Subtree、Monorepo</a></li>
+<li><a href="#git-lfs-与大文件" id="toc-git-lfs-与大文件">Git LFS
+与大文件</a></li>
+</ul></li>
+<li><a href="#13-安全与可信历史" id="toc-13-安全与可信历史">13.
+安全与可信历史</a>
+<ul>
+<li><a href="#git-是证据链的一部分不是全部" id="toc-git-是证据链的一部分不是全部">Git
+是证据链的一部分，不是全部</a></li>
+<li><a href="#敏感信息进入历史后的原则" id="toc-敏感信息进入历史后的原则">敏感信息进入历史后的原则</a></li>
+<li><a href="#备份边界" id="toc-备份边界">备份边界</a></li>
+</ul></li>
+<li><a href="#14-最佳实践个人团队ai-agent-三种工作流" id="toc-14-最佳实践个人团队ai-agent-三种工作流">14.
+最佳实践：个人、团队、AI Agent 三种工作流</a>
+<ul>
+<li><a href="#141-个人创作者--独立开发者" id="toc-141-个人创作者--独立开发者">14.1 个人创作者 /
+独立开发者</a></li>
+<li><a href="#142-小团队" id="toc-142-小团队">14.2 小团队</a></li>
+<li><a href="#143-ai-agent-工作流" id="toc-143-ai-agent-工作流">14.3 AI
+Agent 工作流</a></li>
+</ul></li>
+<li><a href="#15-提交与-pr让历史成为未来-ai-可读的知识库" id="toc-15-提交与-pr让历史成为未来-ai-可读的知识库">15. 提交与
+PR：让历史成为未来 AI 可读的知识库</a>
+<ul>
+<li><a href="#commit-message-模板" id="toc-commit-message-模板">Commit
+message 模板</a></li>
+<li><a href="#pr-最小信息" id="toc-pr-最小信息">PR 最小信息</a></li>
+</ul></li>
+<li><a href="#16-常见误区与纠偏" id="toc-16-常见误区与纠偏">16.
+常见误区与纠偏</a></li>
+<li><a href="#17-场景手册遇到什么情况先想到什么" id="toc-17-场景手册遇到什么情况先想到什么">17.
+场景手册：遇到什么情况，先想到什么</a>
+<ul>
+<li><a href="#想尝试两个-ui-方向" id="toc-想尝试两个-ui-方向">想尝试两个
+UI 方向</a></li>
+<li><a href="#ai-一次改了几十个文件" id="toc-ai-一次改了几十个文件">AI
+一次改了几十个文件</a></li>
+<li><a href="#本地提交很乱但还没推送" id="toc-本地提交很乱但还没推送">本地提交很乱但还没推送</a></li>
+<li><a href="#已推送的提交要撤销" id="toc-已推送的提交要撤销">已推送的提交要撤销</a></li>
+<li><a href="#pull-产生冲突" id="toc-pull-产生冲突">Pull
+产生冲突</a></li>
+<li><a href="#误删-branch--误-reset" id="toc-误删-branch--误-reset">误删
+branch / 误 reset</a></li>
+<li><a href="#想同步-obsidian--文档库" id="toc-想同步-obsidian--文档库">想同步 Obsidian / 文档库</a></li>
+</ul></li>
+<li><a href="#18-一份够用的观察优先命令地图" id="toc-18-一份够用的观察优先命令地图">18.
+一份够用的“观察优先”命令地图</a></li>
+<li><a href="#19-四周学习路线从理解到真正会用" id="toc-19-四周学习路线从理解到真正会用">19.
+四周学习路线：从理解到真正会用</a>
+<ul>
+<li><a href="#week-1看懂状态" id="toc-week-1看懂状态">Week
+1｜看懂状态</a></li>
+<li><a href="#week-2制造并比较路线" id="toc-week-2制造并比较路线">Week
+2｜制造并比较路线</a></li>
+<li><a href="#week-3恢复与调查" id="toc-week-3恢复与调查">Week
+3｜恢复与调查</a></li>
+<li><a href="#week-4agent-与协作" id="toc-week-4agent-与协作">Week
+4｜Agent 与协作</a></li>
+</ul></li>
+<li><a href="#20-teach-back完成学习闭环前仍缺的一步" id="toc-20-teach-back完成学习闭环前仍缺的一步">20.
+Teach-back：完成学习闭环前仍缺的一步</a></li>
+<li><a href="#自我拷问结论" id="toc-自我拷问结论">自我拷问结论</a></li>
+<li><a href="#资料索引" id="toc-资料索引">资料索引</a>
+<ul>
+<li><a href="#git--github-一手资料" id="toc-git--github-一手资料">Git /
+GitHub 一手资料</a></li>
+
+
+</ul></li>
+</ul>
+      </nav>
+      <div class="sidebar-note">先建立快照与指针模型，再读整合、恢复与协作。命令只作为模型的结果。</div>
+    </aside>
+    <main id="content" class="content">
+
+
+<blockquote>
+
+</blockquote>
+<h1 id="先记住这一句">先记住这一句</h1>
+<div class="thesis">
+  <div class="thesis-kicker">THE MENTAL MODEL</div>
+  <p>Git 是一套用<strong>不可变快照</strong>保存项目状态、用<strong>提交关系图</strong>表达因果、用<strong>可移动指针</strong>管理路线、用<strong>显式整合</strong>处理分歧的分布式版本控制系统。</p>
+  <p class="thesis-sub">它不是自动备份，不是 GitHub，也不只是“撤销按钮”。它真正降低的是试错、并行、审查和恢复的成本。</p>
+</div>
+
+<p>核心录音给出的直觉是：<strong>Git
+是“平行世界的时光机”</strong>。这个类比很有力量，因为它让分支实验、选择路线和回到历史节点变得可感知；但它还不够精确。完整模型需要再补三块：</p>
+<ol type="1">
+<li><strong>快照不是录像</strong>：Git
+不会记录每一次编辑，只记录你明确选择并提交的状态。</li>
+<li><strong>分支不是文件夹副本</strong>：branch 主要是一个指向 commit
+的可移动引用；worktree 才是额外的物理工作目录。</li>
+<li><strong>合并不是自动判对</strong>：Git
+能处理文本与图结构，却不能替你判断产品语义、业务意图和结果是否正确。</li>
+</ol>
+
+
+<h1 id="1-学习目标与资料边界">1. 学习目标与资料边界</h1>
+<h2 id="你读完后应能回答什么">你读完后应能回答什么</h2>
+<ul>
+<li>Git 到底保存什么？为什么说 commit 是快照，又为什么 diff
+仍然重要？</li>
+<li>working tree、index、HEAD、branch、remote
+分别是什么状态或指针？</li>
+<li>merge、rebase、squash、cherry-pick
+都在“整合”，它们改变的因果结构有什么不同？</li>
+<li>restore、reset、revert、reflog
+都像“撤销”，什么时候安全，什么时候会伤害共享历史？</li>
+<li>branch 与 worktree 到底是什么关系？为什么多 Agent
+并行时仅有分支还不够？</li>
+<li>fetch、pull、push、PR 为什么不是四个同义的“同步”？</li>
+<li>冲突为什么是决策界面，而不是 Git 出故障？</li>
+<li>如何让 Git 历史成为未来自己、协作者和 AI 都读得懂的知识库？</li>
+</ul>
+<h2 id="资料权重">资料权重</h2>
+<ul>
+<li><strong>一手事实</strong>：Git 官方文档与 Pro Git
+用于定义对象、引用、命令行为与边界。[G1][G2]</li>
+
+
+<li><strong>建议与推断</strong>：关于 AI Agent
+的提交粒度、并发隔离、语义合并风险，是基于 Git
+机制与本地工程材料的实践归纳，不是 Git 官方强制规范。[N3][L5]</li>
+</ul>
+<h1 id="2-三组主类比先搭桥再检查桥会在哪里断">2.
+三组主类比：先搭桥，再检查桥会在哪里断</h1>
+<h2 id="a-档案馆--时光机">A. 档案馆 + 时光机</h2>
+<table>
+<thead>
+<tr>
+<th>Git 概念</th>
+<th>类比映射</th>
+<th>准确之处</th>
+<th>不准确之处 / 失效边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>repository</td>
+<td>整座档案馆</td>
+<td>保存对象、引用与历史关系</td>
+<td>Git
+仓库不是给人直接翻阅的普通文件柜；底层是内容寻址对象库与引用</td>
+</tr>
+<tr>
+<td>working tree</td>
+<td>馆外工作桌</td>
+<td>你正在编辑、可能凌乱、尚未归档的现场</td>
+<td>工作桌上的内容并不自动安全；未提交内容可能丢失</td>
+</tr>
+<tr>
+<td>index / staging</td>
+<td>待入库清单</td>
+<td>精确决定下一只档案袋装什么</td>
+<td>它不是简单“缓存”；同一文件可以只暂存部分 hunk</td>
+</tr>
+<tr>
+<td>commit</td>
+<td>有编号的档案袋 / 存档点</td>
+<td>固化一次有意图的项目状态，并连接父提交</td>
+<td>commit 不是手动复制整套文件；未变化内容通过对象复用避免重复</td>
+</tr>
+<tr>
+<td>log</td>
+<td>档案目录</td>
+<td>能沿父关系追溯历史</td>
+<td>日志展示顺序不等于唯一真实因果；历史是 DAG，不总是一条线</td>
+</tr>
+<tr>
+<td>restore / revert</td>
+<td>取回旧档 / 新增纠错档</td>
+<td>能恢复旧内容或记录反向变更</td>
+<td>不是所有未提交内容都可恢复；revert 也可能冲突</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最有用的直觉</strong>：commit
+不是“保存一下”，而是“让项目历史多出一个可解释、可定位、可审查的节点”。</p>
+<p><strong>类比边界</strong>：真实时光机暗示“过去被改变后现在自动跟着改变”；Git
+的 commit 通常不可变。所谓改写历史，实际上是生成新 commit
+并移动引用，旧对象在一段时间内可能仍可由 reflog 找到。[G2][G9]</p>
+<h2 id="b-平行世界--独立房间">B. 平行世界 + 独立房间</h2>
+<table>
+<thead>
+<tr>
+<th>Git 概念</th>
+<th>类比映射</th>
+<th>准确之处</th>
+<th>不准确之处 / 失效边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>branch</td>
+<td>一条平行剧情路线</td>
+<td>从共同起点产生不同后续，便于独立试验</td>
+<td>branch 本身不是独立目录，也不是复制出的完整宇宙；它是 ref</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>两条剧情线汇合</td>
+<td>保留或整合两边有效变化</td>
+<td>不是机械“选一个”；可能要逐处裁决，且文本无冲突仍可能语义错误</td>
+</tr>
+<tr>
+<td>rebase</td>
+<td>把剧情搬到新起点重演</td>
+<td>让一组提交基于新的祖先重新生成</td>
+<td>会产生新 commit ID；共享后使用会让协作者的历史基础失配</td>
+</tr>
+<tr>
+<td>worktree</td>
+<td>给每条路线一间独立工作室</td>
+<td>多个分支可同时出现在不同目录里，减少工作区相互覆盖</td>
+<td>多个房间仍共享同一仓库管理数据；同一分支通常不能同时检出到多个
+worktree</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>把候选剧情送进编辑会</td>
+<td>聚合 diff、讨论、检查和合并决定</td>
+<td>PR 属于托管平台协作层，不是 Git 核心对象</td>
+</tr>
+</tbody>
+</table>
+<p>核心录音的小说案例非常适合这个类比：先提交“16 年前发生凶案、16
+年后发现尸体”的共同世界，再用多个 branch
+尝试不同主角，最后选择、组合或放弃路线。[N1]</p>
+<p><strong>类比边界</strong>：删除 branch 只是删掉路标，不保证相关
+commit 立刻从对象库消失；同样，保留 branch
+也不等于成果已经验证正确。</p>
+<h2 id="c-物流网络--可移动路标">C. 物流网络 + 可移动路标</h2>
+<p>这组类比最适合解释 remote、fetch、push 和引用。</p>
+<table>
+<thead>
+<tr>
+<th>Git 概念</th>
+<th>类比映射</th>
+<th>准确之处</th>
+<th>不准确之处 / 失效边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object</td>
+<td>有内容指纹的标准货箱</td>
+<td>相同内容可复用；内容决定身份</td>
+<td>Git 对象不是业务文件本身的简单压缩包</td>
+</tr>
+<tr>
+<td>commit graph</td>
+<td>带前序关系的运输网络</td>
+<td>能表达从哪里来、在哪分叉、在哪里汇合</td>
+<td>不是按时间排队的单线铁路；时间戳也可能不可靠</td>
+</tr>
+<tr>
+<td>branch / tag</td>
+<td>路标 / 固定里程碑</td>
+<td>给难记的 commit ID 提供名字</td>
+<td>tag 通常不自动移动；branch 会随提交前移</td>
+</tr>
+<tr>
+<td>remote</td>
+<td>另一座仓库站点的地址别名</td>
+<td>可以交换对象和引用</td>
+<td>remote 不是天然“权威中心”；权威来自团队约定和权限策略</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>把对方最新货物清单运到本地观察区</td>
+<td>获取对象并更新 remote-tracking refs，不自动改当前工作</td>
+<td>本地看到的是最近一次 fetch 的视图，不是实时直播</td>
+</tr>
+<tr>
+<td>push</td>
+<td>请求远端移动它的路标</td>
+<td>发布对象并更新允许移动的远端引用</td>
+<td>远端可以拒绝；push 不是“本地保存”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>类比边界</strong>：网络同步不是把目录做字节级镜像；Git
+交换的是对象和引用，并受可达性、权限、fast-forward
+与服务端规则约束。[G7][G8]</p>
+<h1 id="3-git-的物理世界对象图引用现场">3. Git
+的物理世界：对象、图、引用、现场</h1>
+<h2 id="四层总图">四层总图</h2>
+<div class="system-map" role="img" aria-label="Git 四层系统图">
+  <div class="map-layer map-content"><span>01</span><b>内容层</b><em>blob · tree · snapshot</em><small>项目“是什么”</small></div>
+  <div class="map-arrow">→</div>
+  <div class="map-layer map-history"><span>02</span><b>历史层</b><em>commit · parent · DAG</em><small>项目“怎么演化”</small></div>
+  <div class="map-arrow">→</div>
+  <div class="map-layer map-ref"><span>03</span><b>引用层</b><em>branch · tag · HEAD</em><small>“哪个节点叫什么”</small></div>
+  <div class="map-arrow">→</div>
+  <div class="map-layer map-collab"><span>04</span><b>协作层</b><em>remote · PR · CI</em><small>“谁批准进入主线”</small></div>
+</div>
+
+<h3 id="31-blob只关心内容不关心文件名">3.1
+Blob：只关心内容，不关心文件名</h3>
+<ul>
+<li><strong>是什么</strong>：文件内容对象；身份来自内容哈希。</li>
+<li><strong>关键关系</strong>：tree 把文件名、模式与 blob/tree
+对象连接起来。</li>
+<li><strong>价值</strong>：相同内容可以被复用；内容变化意味着对象身份变化。</li>
+<li><strong>陷阱</strong>：不要把“内容寻址”理解成绝对安全证明。Git
+已推进 SHA-256
+相关能力，但仓库格式、兼容性和签名验证仍是更完整的话题。[G2]</li>
+</ul>
+<h3 id="32-tree目录快照的结构">3.2 Tree：目录快照的结构</h3>
+<ul>
+<li><strong>是什么</strong>：记录某一目录下名称、权限模式与对象 ID
+的映射。</li>
+<li><strong>作用</strong>：递归构成完整项目树，使 commit
+能指向一次完整根目录快照。</li>
+<li><strong>类比</strong>：档案袋里的目录索引；不是文件内容本身。</li>
+</ul>
+<h3 id="33-commit快照--元数据--父关系">3.3 Commit：快照 + 元数据 +
+父关系</h3>
+<p>一个 commit 至少表达三件事：</p>
+<ol type="1">
+<li>项目当时的根 tree；</li>
+<li>作者、提交者、时间和 message；</li>
+<li>零个、一个或多个父 commit。</li>
+</ol>
+<p>首个 commit 没有父；普通 commit 通常一个父；merge commit
+通常两个或更多父。commit ID 因内容与父关系而定，所以 rebase
+即便得到相同文件结果，也会生成身份不同的新 commit。[G2][G5]</p>
+<h3 id="34-dag历史不是时间线而是因果图">3.4
+DAG：历史不是时间线，而是因果图</h3>
+<div class="dag" role="img" aria-label="提交 DAG 示意图">
+  <svg viewBox="0 0 920 260" aria-hidden="true">
+    <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="currentColor" /></marker></defs>
+    <path class="line mainline" d="M80 130 H270 H460 H650 H840" />
+    <path class="line featureline" d="M270 130 C340 130 345 52 430 52 H610 C690 52 690 130 650 130" />
+    <circle cx="80" cy="130" r="18"></circle><circle cx="270" cy="130" r="18"></circle><circle cx="460" cy="130" r="18"></circle><circle cx="650" cy="130" r="22"></circle><circle cx="840" cy="130" r="18"></circle>
+    <circle class="feature" cx="430" cy="52" r="18"></circle><circle class="feature" cx="610" cy="52" r="18"></circle>
+    <text x="65" y="175">A</text><text x="255" y="175">B</text><text x="445" y="175">C</text><text x="628" y="175">M</text><text x="825" y="175">D</text>
+    <text class="label" x="376" y="25">feature/idea</text><text class="label" x="720" y="112">main →</text>
+  </svg>
+  <p><b>M 是合流节点。</b>“历史”保留了 B 处分叉、两条路线分别推进、再于 M 汇合的因果结构。</p>
+</div>
+
+<h3 id="35-ref给-commit-起一个会移动的名字">3.5 Ref：给 commit
+起一个会移动的名字</h3>
+<ul>
+<li><strong>branch</strong>：通常指向某个 commit；在该分支上新建 commit
+时向前移动。</li>
+<li><strong>tag</strong>：给某个对象起稳定名字；annotated tag
+还能携带说明、tagger 和签名。</li>
+<li><strong>remote-tracking ref</strong>：本地记录“上次 fetch
+后所见远端分支位置”，例如
+<code>origin/main</code>；不是远端实时状态。</li>
+<li><strong>HEAD</strong>：表示当前检出位置，通常符号指向
+branch；detached HEAD 时直接指向 commit。</li>
+</ul>
+<h3 id="36-reflog引用移动的本地黑匣子">3.6
+Reflog：引用移动的本地黑匣子</h3>
+
+<h1 id="4-三棵树模型绝大多数操作都在移动内容或指针">4.
+三棵树模型：绝大多数操作都在移动“内容”或“指针”</h1>
+<div class="three-trees">
+  <section><span>现场</span><h3>Working Tree</h3><p>磁盘上能看见、能编辑的文件。可以包含未跟踪和未暂存变化。</p><code>edit · status · diff</code></section>
+  <div class="tree-arrow">选择 →</div>
+  <section><span>候选快照</span><h3>Index / Staging</h3><p>下一次 commit 准备记录的准确内容。是语义拆分层，不只是中转站。</p><code>add · restore --staged</code></section>
+  <div class="tree-arrow">固化 →</div>
+  <section><span>历史基线</span><h3>HEAD Commit</h3><p>当前检出路线的历史节点；commit 后 branch 通常移动到新节点。</p><code>commit · show · log</code></section>
+</div>
+
+<p>理解三棵树，才能区分三种 diff：</p>
+<table>
+<thead>
+<tr>
+<th>想看什么</th>
+<th>比较关系</th>
+<th>常用观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>尚未暂存的变化</td>
+<td>working tree ↔︎ index</td>
+<td><code>git diff</code></td>
+</tr>
+<tr>
+<td>已暂存、即将提交的变化</td>
+<td>index ↔︎ HEAD</td>
+<td><code>git diff --staged</code></td>
+</tr>
+<tr>
+<td>当前所有已跟踪变化</td>
+<td>working tree ↔︎ HEAD</td>
+<td><code>git diff HEAD</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>最关键的因果</strong>：<code>git add</code>
+不是“把文件标记一下”，而是把当下内容写入
+index。之后继续编辑同一文件，working tree 与 index 会再次不同。[G1]</p>
+<h2 id="文件状态">文件状态</h2>
+<ul>
+<li><strong>untracked</strong>：工作区存在，但不在当前历史跟踪集合中。</li>
+<li><strong>tracked / unmodified</strong>：与当前基线一致。</li>
+<li><strong>modified / unstaged</strong>：工作区与 index 不同。</li>
+<li><strong>staged</strong>：index 与 HEAD
+不同，已进入下一快照候选。</li>
+<li><strong>ignored</strong>：匹配 ignore
+规则而默认不进入普通未跟踪提示；已被跟踪的文件不会因新增
+<code>.gitignore</code> 自动停止跟踪。[G11]</li>
+</ul>
+<h1 id="5-核心概念地图名词动作目的边界">5.
+核心概念地图：名词、动作、目的、边界</h1>
+<h2 id="51-建仓与获取">5.1 建仓与获取</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>它改变什么</th>
+<th>正确心智模型</th>
+<th>典型陷阱</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>init</code></td>
+<td>创建仓库元数据</td>
+<td>让现有目录开始拥有 Git 对象与引用空间</td>
+<td>不要在未知目录或用户根目录盲目 init</td>
+</tr>
+<tr>
+<td><code>clone</code></td>
+<td>创建本地仓库、工作区与 remote 配置</td>
+<td>拿到可工作的历史副本，而非下载 ZIP</td>
+<td>克隆通常不是备份策略的全部</td>
+</tr>
+<tr>
+<td>bare repository</td>
+<td>只有仓库数据，无普通工作区</td>
+<td>常用于服务端或集中交换</td>
+<td>不适合直接编辑项目文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="52-观察与比较">5.2 观察与比较</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>回答的问题</th>
+<th>最佳实践</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>现在站在哪条分支？哪些文件在哪一层变化？</td>
+<td>高风险操作前后都看；机器集成可用 porcelain 格式</td>
+</tr>
+<tr>
+<td><code>diff</code></td>
+<td>两个状态之间具体差什么？</td>
+<td>提交前读 unstaged + staged diff；大改用 <code>--stat</code>
+先看边界</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td>某个对象/commit 包含什么？</td>
+<td>核验单个交付节点，而不是只信 commit message</td>
+</tr>
+<tr>
+<td><code>log</code></td>
+<td>历史关系和说明是什么？</td>
+<td>图形化查看分叉；按文件、作者、路径、范围缩小</td>
+</tr>
+<tr>
+<td><code>blame</code></td>
+<td>每行最后由哪个 commit 改动？</td>
+<td>用于寻找上下文，不用于“甩锅”；结合 commit 说明和 PR 阅读</td>
+</tr>
+<tr>
+<td><code>bisect</code></td>
+<td>哪个 commit 首次引入回归？</td>
+<td>准备可靠的 good/bad 判据；可接自动测试，复杂度近似对数级</td>
+</tr>
+</tbody>
+</table>
+<h2 id="53-形成提交">5.3 形成提交</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>本质</th>
+<th>最佳实践</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add</code></td>
+<td>更新 index</td>
+<td>按意图选择文件或 hunk；不要默认全塞</td>
+</tr>
+<tr>
+<td><code>commit</code></td>
+<td>从 index 建快照并连接父历史</td>
+<td>一个 commit 一个可解释、可验证、可独立回滚的语义变化</td>
+</tr>
+<tr>
+<td>amend</td>
+<td>用新 commit 替换分支尖端</td>
+<td>只整理尚未共享的最近提交；共享后慎用</td>
+</tr>
+<tr>
+<td>commit message</td>
+<td>给未来读者的因果说明</td>
+<td>标题写做了什么，正文解释为什么、约束和副作用；不要只写
+<code>update</code></td>
+</tr>
+<tr>
+<td>trailer</td>
+<td>结构化提交元数据</td>
+<td>可记录任务、协作者、签署或审查信息；先与团队约定字段</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原子提交不是“越小越好”</strong>。它的尺度应满足：只有一个意图、节点可构建/验证、撤销时不会带走无关变化、审查者能形成完整判断。[N3]</p>
+<h2 id="54-指针与路线">5.4 指针与路线</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>本质</th>
+<th>什么时候用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>branch</td>
+<td>可移动 ref</td>
+<td>为任务、假设、修复或发布线命名</td>
+</tr>
+<tr>
+<td>switch</td>
+<td>切换 branch 或创建后切换</td>
+<td>日常分支切换，语义比旧式 checkout 更聚焦</td>
+</tr>
+<tr>
+<td>detached HEAD</td>
+<td>HEAD 直接指向 commit</td>
+<td>查看历史、临时实验；要保留新提交需及时创建 branch</td>
+</tr>
+<tr>
+<td>tag</td>
+<td>稳定里程碑引用</td>
+<td>标记版本、交付点；发布场景优先 annotated/signed tag 取决于策略</td>
+</tr>
+<tr>
+<td>branch protection</td>
+<td>托管平台规则</td>
+<td>限制直接推送、要求审查和 checks；不是 Git 核心能力</td>
+</tr>
+</tbody>
+</table>
+<h2 id="55-临时搁置与多现场">5.5 临时搁置与多现场</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>本质</th>
+<th>适用 / 不适用</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>worktree</td>
+<td>同一仓库挂接多个工作目录</td>
+<td>并行任务、长测试、多个 Agent；避免一个目录频繁切换</td>
+</tr>
+<tr>
+<td>sparse checkout</td>
+<td>工作区只呈现路径子集</td>
+<td>大型单仓库减少检出范围；不是删除其他历史</td>
+</tr>
+</tbody>
+</table>
+<h2 id="56-远程交换">5.6 远程交换</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>事实</th>
+<th>容易混淆的边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>remote</td>
+<td>另一仓库位置的别名</td>
+<td><code>origin</code> 只是默认名字，不天然是权威</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>取对象并更新 remote-tracking refs</td>
+<td>不整合当前 branch，适合先观察</td>
+</tr>
+<tr>
+<td>pull</td>
+<td>fetch 后再 merge 或 rebase</td>
+<td>会改变当前历史/工作状态，不只是下载</td>
+</tr>
+<tr>
+<td>push</td>
+<td>发送对象并请求更新远端 ref</td>
+<td>可能被 non-fast-forward、权限或保护规则拒绝</td>
+</tr>
+<tr>
+<td>upstream branch</td>
+<td>当前 branch 默认比较/拉取/推送目标</td>
+<td>“upstream 仓库”与“上游分支配置”是相关但不同语境</td>
+</tr>
+<tr>
+<td>refspec</td>
+<td>定义本地与远端引用怎样映射</td>
+<td>高级能力；不理解时不要让自动化随意改</td>
+</tr>
+</tbody>
+</table>
+<h1 id="6-分叉与整合mergerebasesquashcherry-pick">6.
+分叉与整合：merge、rebase、squash、cherry-pick</h1>
+<h2 id="一张决策表">一张决策表</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>首选候选</th>
+<th>历史结果</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保留真实分叉与合流</td>
+<td>merge</td>
+<td>可能产生双父 merge commit</td>
+<td>历史更复杂；冲突仍需裁决</td>
+</tr>
+<tr>
+<td>让未共享功能分支基于新主线重放</td>
+<td>rebase</td>
+<td>生成一串新 commit，线性化</td>
+<td>改变 ID；共享历史会让协作者分叉</td>
+</tr>
+<tr>
+<td>主线只保留一个功能级节点</td>
+<td>squash merge</td>
+<td>多个分支提交压成一个主线 commit</td>
+<td>丢失分支内部细粒度因果</td>
+</tr>
+<tr>
+<td>只搬运一个明确修复</td>
+<td>cherry-pick</td>
+<td>在当前位置生成等价变更的新 commit</td>
+<td>重复变更可能给后续 merge 制造困惑</td>
+</tr>
+<tr>
+<td>目标分支只是落后、没有分叉</td>
+<td>fast-forward</td>
+<td>只前移 ref，不产生 merge commit</td>
+<td>容易让人误以为“merge 什么都没做”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="merge保留两条历史的会面">Merge：保留两条历史的会面</h2>
+<p>Git 通常先找共同祖先（merge
+base），再比较两条路线相对祖先的变化。没有重叠歧义时可自动组合；有歧义时把冲突交给人。真正的
+merge commit
+同时指向两个父节点，因此保留“这两条历史在这里会面”的事实。[G4]</p>
+<p><strong>准确类比</strong>：两位编辑分别在同一旧稿上修订，最终拿旧稿、甲版、乙版三份材料对照整合。</p>
+<p><strong>边界</strong>：没有冲突只说明 Git
+在文本/路径层面找到可组合结果，不代表接口语义、数据库迁移顺序、权限逻辑或
+UI 行为正确。[N3]</p>
+<h2 id="rebase换一个祖先重新演算">Rebase：换一个祖先重新演算</h2>
+<p>Rebase
+会找出当前路线独有的提交，把这些变化在新基线之上依次重放，生成新
+commit。文件最终内容可能与 merge 相似，但历史身份和叙事不同。[G5]</p>
+<p><strong>建议</strong>：</p>
+<ul>
+<li>未共享个人 feature branch：可以用来整理和降低合并噪声。</li>
+<li>已被他人基于其开发的 branch：除非团队明确协议，否则不要随意 rebase +
+force push。</li>
+<li>必须强制更新时优先考虑 <code>--force-with-lease</code>
+的保护语义，但它仍是高风险动作，先确认远端没有未知新提交。</li>
+</ul>
+<h2 id="squash把过程压成一个交付节点">Squash：把过程压成一个交付节点</h2>
+<p>Squash 适合把大量
+WIP/修正提交整理为一个主线语义单元。它改善主线可读性，但会丢掉分支内部可独立定位/回滚的细节。不要把“整洁”绝对化：调试与审计同样需要有意义的中间节点。</p>
+<h2 id="cherry-pick摘取变化不搬整条路线">Cherry-pick：摘取变化，不搬整条路线</h2>
+<p>适合把已知修复搬到 release
+branch，或从实验中选取一个独立成果。它创建新 commit，不能把两个相似 ID
+当成同一个历史节点。频繁 cherry-pick
+往往暗示分支策略或发布线管理需要重看。</p>
+<h1 id="7-撤销与恢复先判断要撤销哪一层">7.
+撤销与恢复：先判断“要撤销哪一层”</h1>
+<div class="decision-ladder">
+  <div><span>01</span><b>只是想看</b><p>先 status / diff / log / reflog，不改变状态。</p></div>
+  <div><span>02</span><b>改坏了未提交文件</b><p>restore 前先确认内容是否还有价值；未提交内容可能不可恢复。</p></div>
+  <div><span>03</span><b>暂存错了</b><p>把内容从 index 移出，通常保留 working tree 修改。</p></div>
+  <div><span>04</span><b>本地提交需整理</b></div>
+  <div><span>05</span><b>共享提交有问题</b><p>优先新增 revert，保持审计和协作者基础稳定。</p></div>
+</div>
+
+<h2 id="restoreresetrevert-的对象不同">Restore、Reset、Revert
+的对象不同</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>核心作用</th>
+<th style="text-align: right;">会不会新增 commit</th>
+<th style="text-align: right;">会不会移动 branch</th>
+<th>共享历史建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>restore</td>
+<td>从某状态恢复 working tree / index 内容</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">否</td>
+<td>适合文件级恢复，但会覆盖目标位置内容</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>移动当前 branch，并按模式更新 index/working tree</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">是</td>
+<td>主要用于尚未共享历史；hard 模式高风险</td>
+</tr>
+<tr>
+<td>revert</td>
+<td>计算指定 commit 的反向变化并提交</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;">正常前进</td>
+<td>共享历史的默认安全选择</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reset-三种常见模式">Reset 三种常见模式</h3>
+<ul>
+<li><strong>soft</strong>：移动 branch，保留 index 和 working
+tree；适合重新组合最近本地提交。</li>
+<li><strong>mixed（常见默认）</strong>：移动 branch 并重置 index，保留
+working tree；适合把提交拆回待选择修改。</li>
+
+</ul>
+<div class="danger"><b>高风险边界</b><p>不要把 `reset --hard`、`clean -fd`、无保护 force push 当成“卡住时的万能修复”。它们可能让 Git 没有机会替你恢复未提交、未跟踪或远端新增内容。</p></div>
+
+<h2 id="reflog-是恢复入口不是永生保险">Reflog
+是恢复入口，不是永生保险</h2>
+<p>常见恢复思路：先停手 → 看 status → 看 reflog → 找到误操作前的 commit
+→ 创建新 branch 指向它 → 再比较。不要一慌就继续
+reset，连续移动指针只会增加认知负担。[G9]</p>
+<h2 id="cleanstash未跟踪文件">Clean、Stash、未跟踪文件</h2>
+<ul>
+<li><code>clean</code> 面向未跟踪文件，风险不在 commit
+历史保护范围内；先 dry-run。</li>
+<li>stash
+默认行为与未跟踪/忽略文件处理取决于选项；不要假设“所有东西都被藏好了”。</li>
+<li>长期重要 WIP 应进入清晰 branch/commit，不要让 stash
+列表变成无标题仓库。</li>
+</ul>
+<h1 id="8-branch-与-worktree路线与房间">8. Branch 与
+Worktree：路线与房间</h1>
+
+<h2 id="为什么只有-branch-仍可能不够">为什么只有 branch 仍可能不够</h2>
+<p>在单一工作目录里切
+branch，会同时切换目录内容；未提交修改、构建产物、依赖缓存、正在运行的服务和终端上下文都可能阻碍或污染切换。多个
+worktree 让不同 branch 同时出现在不同目录，各自拥有工作区和
+index，同时共享仓库对象库。[G3]</p>
+<h2 id="worktree-真正隔离什么">Worktree 真正隔离什么</h2>
+<ul>
+<li>独立工作目录与可见文件状态；</li>
+<li>与该 worktree 关联的 HEAD 和 index；</li>
+<li>每个任务自己的终端、开发服务器和临时上下文。</li>
+</ul>
+<h2 id="worktree-不隔离什么">Worktree 不隔离什么</h2>
+<ul>
+<li>共享的 Git 对象数据库和大部分仓库配置；</li>
+<li>外部共享资源，例如同一数据库、端口、云环境或系统级依赖；</li>
+<li>合并时的文本冲突与跨分支语义冲突；</li>
+<li>人对任务边界、依赖和验收标准的责任。</li>
+</ul>
+<h2 id="多-agent-并行的最小治理模型">多 Agent 并行的最小治理模型</h2>
+<div class="agent-grid">
+  <article><span>ROOM A</span><h3>agent/reader-ui</h3><p>只负责 reader 页面；独立 worktree；独立端口。</p><small>输出：原子 commits + 测试证据</small></article>
+  <article><span>ROOM B</span><h3>agent/library-ui</h3><p>只负责 library 页面；不动 reader 共享协议。</p><small>输出：原子 commits + 截图</small></article>
+  <article><span>ROOM C</span><h3>agent/theme</h3><p>只负责 tokens/主题；变更公共接口前先协调。</p><small>输出：影响清单 + 回滚点</small></article>
+  <article class="integrator"><span>INTEGRATION</span><h3>human / lead</h3><p>决定顺序、读 diff、处理共享语义、运行组合测试并合并。</p><small>输出：主线上的可信节点</small></article>
+</div>
+
+<p><strong>建议</strong>：每个并发任务必须同时拥有五个边界：责任文件、branch、worktree、验证命令、完成定义。缺一项，就可能只是“并行活动”，不是“可整合的并行工作”。[N3][L6]</p>
+<h1 id="9-远程协作gitgithub-与发布层分开理解">9. 远程协作：Git、GitHub
+与发布层分开理解</h1>
+<h2 id="git--github">Git ≠ GitHub</h2>
+<ul>
+<li><strong>Git</strong>：对象、引用、历史、比较、传输协议；本地可完整运行。</li>
+<li><strong>GitHub/GitLab 等平台</strong>：仓库托管、身份权限、Pull
+Request、Issue、Discussion、Checks、Actions、保护规则、Release
+与社区关系。[GH1]</li>
+<li><strong>CI/CD</strong>：监听提交或
+PR，运行构建、测试、扫描和部署；它输出证据，但也会受测试覆盖、环境和权限配置限制。</li>
+</ul>
+<h2 id="fetchpullpush-的精确区别">Fetch、Pull、Push 的精确区别</h2>
+<h3 id="fetch先把信息拿回来">Fetch：先把信息拿回来</h3>
+<p>获取远端对象并更新本地 remote-tracking refs，不自动把它整合进当前
+branch。适合“先看看大家发生了什么，再决定怎么接”。[G7]</p>
+<h3 id="pull获取--整合">Pull：获取 + 整合</h3>
+<p>通常等价于先 fetch，再按配置或参数
+merge/rebase。它会改变当前历史，因此在脏工作区或不清楚团队策略时，盲目
+pull 容易把两个问题混在一起。[G8]</p>
+<h3 id="push发布历史并申请移动远端-ref">Push：发布历史并申请移动远端
+ref</h3>
+<p>它不是保存动作，而是协作动作。non-fast-forward 拒绝意味着远端 ref
+已含你本地没有纳入的历史，系统在阻止静默覆盖。[G8]</p>
+<h2 id="prissueforkrelease">PR、Issue、Fork、Release</h2>
+<table>
+<thead>
+<tr>
+<th>平台概念</th>
+<th>核心作用</th>
+<th>与 Git 的关系</th>
+<th>常见误区</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull Request</td>
+<td>提议把一组变化整合到目标分支</td>
+<td>围绕 commits、diff 和目标 ref 建协作上下文</td>
+<td>不是 <code>git pull</code></td>
+</tr>
+<tr>
+<td>Issue</td>
+<td>记录问题、任务、讨论或提案</td>
+<td>可与 branch/commit/PR 关联，但不是 Git 对象</td>
+<td>Issue 关闭不等于代码已经验证发布</td>
+</tr>
+<tr>
+<td>Fork</td>
+<td>托管平台上的关联仓库副本</td>
+<td>常用于无直接写权限时贡献</td>
+<td>不是 branch；拥有独立远端仓库关系</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>面向使用者的版本交付页面/资产</td>
+<td>常基于 tag，并附二进制、说明与链接</td>
+<td>tag 不自动等于经过验证的 release</td>
+</tr>
+</tbody>
+</table>
+<h1 id="10-冲突git-把无法替你决定的歧义显性化">10. 冲突：Git
+把无法替你决定的歧义显性化</h1>
+<h2 id="冲突的三层">冲突的三层</h2>
+<ol type="1">
+<li><strong>文本冲突</strong>：同一区域存在无法自动组合的修改，Git
+标出冲突块。</li>
+<li><strong>结构冲突</strong>：重命名、删除/修改、目录变化等让路径关系不明确。</li>
+<li><strong>语义冲突</strong>：文本可自动合并，但两边对接口、数据、权限或业务规则的理解互相矛盾。第三类最危险，因为
+Git 可能显示“合并成功”。[N3]</li>
+</ol>
+<h2 id="安全处理顺序">安全处理顺序</h2>
+<ol type="1">
+<li>停止继续叠加无关修改；</li>
+<li>看 status，确认正在进行 merge、rebase 还是 cherry-pick；</li>
+<li>找 merge base，理解两边各自意图，而不只是删除冲突标记；</li>
+<li>在目标文件里形成第三个正确版本；</li>
+<li>搜索冲突标记是否清理干净；</li>
+<li>运行相关测试、类型检查、构建与关键路径；</li>
+<li>阅读最终 diff，再完成整合；</li>
+<li>如果不确定，使用对应 abort 返回操作前状态，而不是强行提交。</li>
+</ol>
+<h2 id="rerere-与复用冲突解决">Rerere 与复用冲突解决</h2>
+<p>Git 的 rerere 能记录并复用曾经的冲突解决方式，适合重复 rebase/merge
+的团队；但自动复用的结果仍需验证，尤其当语义背景已改变。</p>
+<h1 id="11-历史诊断把-git-从保存工具升级为调查系统">11. 历史诊断：把 Git
+从“保存工具”升级为调查系统</h1>
+<h2 id="log先看图再看故事">Log：先看图，再看故事</h2>
+<ul>
+<li>分支图回答“在哪里分叉与汇合”；</li>
+<li>commit message 回答“为什么产生节点”；</li>
+<li>diff 回答“具体改变了什么”；</li>
+<li>PR/Issue/ADR 回答“当时讨论、选择和限制是什么”。</li>
+</ul>
+<p>任何一层缺失，历史解释力都会下降。只看 <code>log --oneline</code>
+很快，但可能把复杂因果压扁成标题列表。</p>
+<h2 id="bisect对提交图做二分实验">Bisect：对提交图做二分实验</h2>
+<p>给定一个已知 good 节点和一个已知 bad 节点，Git
+选择中间候选让你测试，从而不断缩小引入回归的范围。它的力量依赖两个前提：</p>
+<ul>
+<li>每个 commit 在该节点上可构建/测试；</li>
+<li>测试能稳定判定 good/bad。</li>
+</ul>
+<p>巨型 commit 即使被 bisect 命中，内部仍然难定位，这正是 atomic commit
+的工程价值。[N3]</p>
+<h2 id="blame找上下文不找罪人">Blame：找上下文，不找罪人</h2>
+<p>行级最后修改者只是调查入口；真正原因可能在更早重构、自动格式化、代码生成或需求变化里。正确用法是从行追到
+commit，再追到 diff、message、PR 和测试。</p>
+<h1 id="12-配置忽略钩子与仓库边界">12. 配置、忽略、钩子与仓库边界</h1>
+<h2 id="config-的作用域">Config 的作用域</h2>
+<p>常见层级包括 system、global、local/worktree
+等；后者覆盖前者。重要的不是背路径，而是每次知道“这个配置影响谁、在哪里定义、能否被仓库携带”。</p>
+<h2 id="gitignore-不是安全工具">.gitignore 不是安全工具</h2>
+<ul>
+<li>用于声明不应被普通跟踪流程纳入的生成物、缓存或本地配置模式；</li>
+<li>不会删除已经进入历史的文件；</li>
+<li>不会扫描秘密，也不保证同名文件从未被其他规则包含；</li>
+<li>团队共享规则放 <code>.gitignore</code>，个人本地排除可用仓库 exclude
+或全局 excludesfile，按场景选择。[G11]</li>
+</ul>
+<h2 id="hooks本地自动化触点">Hooks：本地自动化触点</h2>
+<p>hooks 能在 commit、merge、push 等事件前后运行检查或自动化。客户端
+hook 默认不会随 clone 自动启用，因此关键治理不能只依赖个人本地
+hook；服务端保护、CI 和可重复脚本更可靠。[G10]</p>
+<h2 id="submodulesubtreemonorepo">Submodule、Subtree、Monorepo</h2>
+<ul>
+<li><strong>submodule</strong>：父仓库记录另一个仓库的特定
+commit；能精确钉住依赖，但初始化、更新和协作认知成本较高。[G12]</li>
+<li><strong>subtree</strong>：把外部项目内容合入某个目录并保留同步策略；使用体验更像单仓库，但同步历史管理也有成本。</li>
+<li><strong>monorepo</strong>：多个项目共享一个仓库与历史；一致性强，但规模、权限、构建和
+ownership 需要额外工具。</li>
+</ul>
+<h2 id="git-lfs-与大文件">Git LFS 与大文件</h2>
+<p>Git 擅长文本和可差异审查的内容；视频、模型权重、大型设计源文件会放大
+clone、存储和历史成本。LFS 用小指针替代普通 Git
+对象中的大文件内容，但仍需服务端、配额、备份与迁移策略。</p>
+<h1 id="13-安全与可信历史">13. 安全与可信历史</h1>
+<h2 id="git-是证据链的一部分不是全部">Git
+是证据链的一部分，不是全部</h2>
+<ul>
+<li>内容哈希帮助发现对象变化，但不能自动证明作者身份或业务正确性；</li>
+<li>commit/tag
+签名增强来源验证，但密钥管理、信任链和平台显示策略同样重要；</li>
+<li>分支保护与 required checks
+能限制流程，但配置错误或测试不足仍会放行缺陷；</li>
+<li>Git 历史不是秘密保险箱：一旦密钥进入
+commit，即使后续删除文件，旧对象仍可能存在于历史、克隆、缓存和镜像。</li>
+</ul>
+<h2 id="敏感信息进入历史后的原则">敏感信息进入历史后的原则</h2>
+<ol type="1">
+<li>先轮换/吊销凭据，把泄露视为已经发生；</li>
+<li>再评估历史清理范围、所有克隆与远端镜像；</li>
+<li>使用专门工具重写历史并协调所有协作者；</li>
+<li>增加 secret scanning、pre-commit 检查和服务端保护；</li>
+<li>不要只做一次“删除文件”的新 commit 就宣布处理完毕。</li>
+</ol>
+<h2 id="备份边界">备份边界</h2>
+<p>Git 能通过多个 clone
+提供分布式冗余，但它不天然覆盖未提交工作、外部数据库、LFS 对象、Issue/PR
+讨论、CI secrets、Release
+附件或托管平台元数据。重要项目仍需独立备份和恢复演练。</p>
+<h1 id="14-最佳实践个人团队ai-agent-三种工作流">14.
+最佳实践：个人、团队、AI Agent 三种工作流</h1>
+<h2 id="141-个人创作者--独立开发者">14.1 个人创作者 / 独立开发者</h2>
+<ol type="1">
+<li><strong>一个真实目标，一条实验路线</strong>：只有存在真实不确定性时分支；分支名写任务或假设。</li>
+<li><strong>提交前完成观察三件套</strong>：status → diff →
+测试/预览。</li>
+<li><strong>按意图提交</strong>：HTML、文档、Skill 和代码都遵守一个
+commit 一个完整意图。</li>
+<li><strong>公开前做隐私检查</strong>：绝对路径、真实
+IP、邮箱、密钥、内部状态与用户数据。</li>
+<li><strong>设置远端但不把远端当唯一备份</strong>：验证能从干净环境恢复。</li>
+
+</ol>
+<h2 id="142-小团队">14.2 小团队</h2>
+<ol type="1">
+<li>main 受保护，默认通过 PR 合并；</li>
+<li>required checks 与实际风险匹配：测试、类型、构建、安全扫描；</li>
+<li>code owners 或模块 owner 负责公共接口；</li>
+<li>PR 说明目标、范围、风险、验证、回滚和截图；</li>
+<li>统一 merge/rebase/squash 策略，不让每个人临时发明历史风格；</li>
+<li>release tag、制品和部署环境都能追溯到 commit；</li>
+<li>定期验证恢复、权限和分支保护，而不是只配置一次。</li>
+</ol>
+<h2 id="143-ai-agent-工作流">14.3 AI Agent 工作流</h2>
+<div class="workflow-band">
+  <span>界定任务</span><i>→</i><span>独立 branch/worktree</span><i>→</i><span>读代码与测试</span><i>→</i><span>小步修改</span><i>→</i><span>机器验证</span><i>→</i><span>人读 diff</span><i>→</i><span>受控合并</span>
+</div>
+
+<ul>
+<li><strong>隔离</strong>：每个 Agent 独立责任范围、branch 和
+worktree；避免共享脏目录。</li>
+<li><strong>透明</strong>：提交写清任务、原因、验证和限制；PR
+保存人机交接信息。</li>
+<li><strong>可验证</strong>：不把 Agent
+的“完成”当证据，保存测试输出、构建结果和可观察产物。</li>
+<li><strong>最小权限</strong>：Agent 不应默认拥有 force
+push、生产发布、秘密访问或全仓删除权。</li>
+
+<li><strong>合并后复验</strong>：分支各自通过不代表组合后正确；在集成节点重新跑测试。</li>
+</ul>
+
+<h1 id="15-提交与-pr让历史成为未来-ai-可读的知识库">15. 提交与
+PR：让历史成为未来 AI 可读的知识库</h1>
+<h2 id="commit-message-模板">Commit message 模板</h2>
+<pre class="text"><code>&lt;type&gt;: &lt;一句话说明语义变化&gt;
+
+为什么：原问题、约束或决策背景
+怎么验证：测试、构建、截图或最小探针
+限制：未覆盖范围、兼容性或后续工作</code></pre>
+<p>不要机械追求 Conventional
+Commits；它只是可选协议。真正目标是让节点的<strong>意图、范围和验证</strong>可恢复。</p>
+<h2 id="pr-最小信息">PR 最小信息</h2>
+<ul>
+<li><strong>目标</strong>：解决什么问题，成功是什么；</li>
+<li><strong>范围</strong>：改了什么，明确没改什么；</li>
+<li><strong>决策</strong>：为什么选这个方案，替代方案为何没选；</li>
+<li><strong>证据</strong>：测试、构建、截图、性能或兼容性结果；</li>
+<li><strong>风险</strong>：数据、权限、迁移、回滚与观察指标；</li>
+<li><strong>审查提示</strong>：最需要人判断的 1–3 个位置。</li>
+</ul>
+<h1 id="16-常见误区与纠偏">16. 常见误区与纠偏</h1>
+<table>
+<thead>
+<tr>
+<th>诱人的错误相信</th>
+<th>为什么会信</th>
+<th>更准确的模型</th>
+<th>纠正提示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>commit = 保存</td>
+<td>GUI 常把 stage + commit 合成按钮</td>
+<td>commit 从 index 创建历史节点</td>
+<td>先问：下一张快照到底包含什么？</td>
+</tr>
+<tr>
+<td>Git 记录每次修改</td>
+<td>“时光机”类比太强</td>
+<td>Git 只记录提交过的状态</td>
+<td>未提交内容不自动安全</td>
+</tr>
+<tr>
+<td>Git 每次只存 diff</td>
+<td>GitHub 主要展示差异</td>
+<td>逻辑模型是快照；diff 是状态比较视图</td>
+<td>把 snapshot 和存储优化分开</td>
+</tr>
+<tr>
+<td>branch = 项目副本</td>
+<td>切换后文件真的变了</td>
+<td>branch 是 ref；工作树呈现被引用快照</td>
+<td>路线不是房间</td>
+</tr>
+<tr>
+<td>worktree 消灭冲突</td>
+<td>工作目录独立了</td>
+<td>只减少现场覆盖；整合仍可能冲突</td>
+<td>隔离执行 ≠ 自动集成</td>
+</tr>
+<tr>
+<td>pull = 下载</td>
+<td>名字像“拉取文件”</td>
+<td>fetch + 整合</td>
+<td>想只观察就先 fetch</td>
+</tr>
+<tr>
+<td>PR = pull</td>
+<td>英文相近</td>
+<td>PR 是平台上的合并提议</td>
+<td>命令与协作页面分开</td>
+</tr>
+<tr>
+<td>merge 成功 = 正确</td>
+<td>Git 没报红</td>
+<td>只说明算法得到文本结果</td>
+<td>组合测试 + 人工语义审查</td>
+</tr>
+<tr>
+<td>rebase 只是美化</td>
+<td>文件结果看起来相同</td>
+<td>它生成新 commits、改变身份与因果</td>
+<td>共享历史先问谁依赖它</td>
+</tr>
+<tr>
+<td>reset = 撤销</td>
+<td>名字像恢复出厂</td>
+<td>它移动 ref，并可能更新 index/工作区</td>
+<td>先判断要撤销哪一层</td>
+</tr>
+
+<tr>
+<td><code>.gitignore</code> 能防泄密</td>
+<td>文件不会出现在 status</td>
+<td>已跟踪内容仍在历史，规则也可能漏</td>
+<td>secret scan + 权限 + 轮换</td>
+</tr>
+<tr>
+<td>测试绿 = 可发布</td>
+<td>自动检查给出强心理信号</td>
+<td>测试只覆盖写下的假设</td>
+<td>补关键路径、边界与人工验收</td>
+</tr>
+
+</tbody>
+</table>
+<h1 id="17-场景手册遇到什么情况先想到什么">17.
+场景手册：遇到什么情况，先想到什么</h1>
+<h2 id="想尝试两个-ui-方向">想尝试两个 UI 方向</h2>
+<p><strong>建议</strong>：从同一基线开两个 branch；需要同时运行就用两个
+worktree。分别定义截图、交互和验收标准，最后比较证据，而不是让两个 Agent
+在同一目录互改。</p>
+<h2 id="ai-一次改了几十个文件">AI 一次改了几十个文件</h2>
+<p><strong>先做</strong>：status / diff --stat / 按目录看
+diff。确认是否混入格式化、锁文件、生成物、调试代码和不相关重构。必要时重新拆任务，不要用一个巨型
+commit 把混乱合法化。[N3]</p>
+<h2 id="本地提交很乱但还没推送">本地提交很乱但还没推送</h2>
+<p><strong>建议</strong>：先建临时恢复 branch；再用交互式 rebase、reset
+mixed 或分段暂存整理成语义 commits；每个节点重新验证。</p>
+<h2 id="已推送的提交要撤销">已推送的提交要撤销</h2>
+<p><strong>默认</strong>：新增
+revert，使团队看到错误与修复；除非团队明确协调历史重写，否则不要用 force
+push 擦除共享事实。[G7]</p>
+<h2 id="pull-产生冲突">Pull 产生冲突</h2>
+<p><strong>先拆问题</strong>：先 fetch，观察本地 branch 与
+<code>origin/...</code> 的分歧；再选择 merge 或
+rebase。不要让“下载”和“整合”同时发生后才开始理解。</p>
+<h2 id="误删-branch--误-reset">误删 branch / 误 reset</h2>
+<p><strong>先停手</strong>：看 reflog，找到原尖端，创建恢复
+branch。不要继续做清理和 GC。[G9]</p>
+<h2 id="想同步-obsidian--文档库">想同步 Obsidian / 文档库</h2>
+<p>文本非常适合 Git；图片、附件和多设备自动同步需要额外策略。先
+pull/fetch 再编辑、明确冲突处理，重要改动手动
+commit/push。整体回退优先考虑新增 revert；文件级恢复可用
+restore，但执行前确认未提交内容。[N5]</p>
+<h1 id="18-一份够用的观察优先命令地图">18.
+一份够用的“观察优先”命令地图</h1>
+<div class="command-map">
+  <section><h3>先观察</h3><code>git status</code><code>git diff</code><code>git diff --staged</code><code>git log --graph --oneline --decorate --all</code><code>git reflog</code></section>
+  <section><h3>再形成节点</h3><code>git add &lt;path&gt;</code><code>git add -p</code><code>git commit</code><code>git show &lt;commit&gt;</code></section>
+  <section><h3>隔离路线</h3><code>git switch -c &lt;branch&gt;</code><code>git worktree add &lt;path&gt; -b &lt;branch&gt;</code><code>git branch --show-current</code></section>
+  <section><h3>交换与比较</h3><code>git fetch --prune</code><code>git log HEAD..origin/main</code><code>git diff HEAD...origin/main</code><code>git push -u origin &lt;branch&gt;</code></section>
+</div>
+
+<p>这不是让你背命令。你只需在 AI 执行前能回答：</p>
+<ol type="1">
+<li>它会改变 working tree、index、branch、对象库还是 remote？</li>
+<li>它会覆盖未提交内容吗？</li>
+<li>它会改写已经共享的 commit ID 吗？</li>
+
+<li>完成后用什么证据验收？</li>
+</ol>
+<h1 id="19-四周学习路线从理解到真正会用">19.
+四周学习路线：从理解到真正会用</h1>
+<h2 id="week-1看懂状态">Week 1｜看懂状态</h2>
+<ul>
+<li>在一个真实小项目中练 <code>status</code>、三种
+<code>diff</code>、<code>show</code>、<code>log --graph</code>；</li>
+<li>每天做 2–3 次有意图的 commit；</li>
+<li>能画出 working tree → index → commit 的流转图。</li>
+</ul>
+<h2 id="week-2制造并比较路线">Week 2｜制造并比较路线</h2>
+<ul>
+<li>为一个真实设计选择开两个 branch；</li>
+<li>用 merge 合流一次，用 rebase 在未共享 branch 上重放一次；</li>
+<li>解释二者文件结果与历史结构的区别；</li>
+<li>故意制造一个小冲突并安全 abort / 解决。</li>
+</ul>
+<h2 id="week-3恢复与调查">Week 3｜恢复与调查</h2>
+<ul>
+<li>在练习仓库中体验 restore、revert、reset 三层差异；</li>
+<li>用 reflog 找回一个故意移动掉的 branch；</li>
+<li>用 bisect + 自动测试定位一个故意引入的 bug；</li>
+<li>写下哪些内容 Git 无法替你恢复。</li>
+</ul>
+<h2 id="week-4agent-与协作">Week 4｜Agent 与协作</h2>
+<ul>
+<li>为两个独立任务建立两个 worktree；</li>
+<li>每个 Agent 只拥有明确责任范围；</li>
+<li>用 PR 模板记录目标、证据、风险与回滚；</li>
+<li>合并后重新跑组合测试；</li>
+<li>从干净目录 clone 并验证项目可恢复。</li>
+</ul>
+<h1 id="20-teach-back完成学习闭环前仍缺的一步">20.
+Teach-back：完成学习闭环前仍缺的一步</h1>
+
+<p>请在下一轮用自己的话回答四件事：</p>
+<ol type="1">
+<li>Git 保存的核心对象和历史关系是什么？</li>
+<li>working tree、index、commit、branch、HEAD 的关系是什么？</li>
+<li>branch 与 worktree 为什么一个是“路线”、一个是“房间”？</li>
+<li>为什么共享历史出错时通常优先 revert，而不是 reset/rebase + force
+push？</li>
+</ol>
+<p>届时使用 canonical prompt 8
+做事实准确性、因果完整性、边界意识和遗漏概念校验。</p>
+<h1 id="自我拷问结论">自我拷问结论</h1>
+<ul>
+
+<li><strong>边界</strong>：本报告覆盖 Git
+的核心心智模型与高频工程概念，不替代特定仓库的团队协议、合规要求、托管平台配置或逐命令手册。</li>
+
+</ul>
+<h1 id="资料索引">资料索引</h1>
+<h2 id="git--github-一手资料">Git / GitHub 一手资料</h2>
+<ul>
+<li>[G1] <a href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">Pro
+Git：Git Basics</a></li>
+<li>[G2] <a href="https://git-scm.com/docs/gitglossary">Git
+Glossary</a></li>
+<li>[G3] <a href="https://git-scm.com/docs/git-worktree">git-worktree
+Documentation</a></li>
+<li>[G4] <a href="https://git-scm.com/docs/git-merge">git-merge
+Documentation</a></li>
+<li>[G5] <a href="https://git-scm.com/docs/git-rebase">git-rebase
+Documentation</a></li>
+<li>[G6] <a href="https://git-scm.com/docs/git-reset">git-reset
+Documentation</a></li>
+<li>[G7] <a href="https://git-scm.com/docs/git-revert">git-revert
+Documentation</a></li>
+<li>[G8] <a href="https://git-scm.com/docs/git-fetch">git-fetch /
+git-pull / git-push</a></li>
+<li>[G9] <a href="https://git-scm.com/docs/git-reflog">git-reflog
+Documentation</a></li>
+<li>[G10] <a href="https://git-scm.com/docs/githooks">githooks
+Documentation</a></li>
+<li>[G11] <a href="https://git-scm.com/docs/gitignore">gitignore
+Documentation</a></li>
+<li>[G12] <a href="https://git-scm.com/docs/git-submodule">git-submodule
+Documentation</a></li>
+<li>[GH1] <a href="https://docs.github.com/en/get-started/start-your-journey/about-github-and-git">GitHub
+Docs：About GitHub and Git</a></li>
+</ul>
+
+<ul>
+
+
+
+
+
+
+</ul>
+
+<ul>
+<li>[L1] <code>03-Git版本控制-来源-Claude-Code.html</code></li>
+<li>[L2] <code>03-Git版本控制-来源-Codex-CLI.html</code></li>
+<li>[L3] <code>03-Git版本控制-来源-Gemini-3.1-Pro.html</code></li>
+<li>[L4] <code>03-Git版本控制-来源-Gemini-3.6-Flash.html</code></li>
+<li>[L5] <code>20260814-Git-TDD-AI系统化试错指南.html</code></li>
+<li>[L6]
+<code>Parallel Work Needs Separate Rooms / x-article-copy.html</code></li>
+<li>[L7] <code>GitHub学习作战地图.html</code></li>
+</ul>
+    </main>
+  </div>
+<button id="back-to-top" type="button" aria-label="返回顶部">↑</button>
+<script>
+(() => {
+  const root = document.documentElement;
+  const progress = document.getElementById('reading-progress');
+  const topButton = document.getElementById('back-to-top');
+  const sidebar = document.querySelector('.sidebar');
+  const toggle = document.getElementById('toc-toggle');
+  const tocLinks = [...document.querySelectorAll('#TOC a[href^="#"]')];
+  const headings = tocLinks.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter(Boolean);
+  const update = () => {
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const pct = Math.min(100, Math.max(0, scrollY / max * 100));
+    root.style.setProperty('--progress', `${pct}%`);
+    topButton.classList.toggle('visible', scrollY > 900);
+  };
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+  topButton.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+  toggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  tocLinks.forEach(link => link.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (!visible) return;
+      tocLinks.forEach(link => link.classList.toggle('active', decodeURIComponent(link.hash.slice(1)) === visible.target.id));
+    }, { rootMargin: '-12% 0px -78% 0px', threshold: 0 });
+    headings.forEach(heading => observer.observe(heading));
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>20260615-1416-Loop Engineering 全景图</title>
+  <style>
+    :root {
+      --ink: #18201c;
+      --muted: #5c665f;
+      --paper: #f7f1e7;
+      --panel: #fffaf1;
+      --line: #d9cbb5;
+      --orange: #df6f21;
+      --green: #2f7b61;
+      --blue: #345a7b;
+      --red: #a64539;
+      --gold: #b98225;
+      --shadow: 0 14px 34px rgba(42, 31, 19, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(24,32,28,.035) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(rgba(24,32,28,.035) 1px, transparent 1px) 0 0 / 32px 32px,
+        var(--paper);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.58;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(223,111,33,.45); }
+    .page { width: 1280px; margin: 0 auto; background: #fbf5ea; overflow: hidden; }
+    .band { padding: 56px 72px; border-bottom: 1px solid var(--line); }
+    .hero {
+      padding: 72px 72px 44px;
+      background:
+        radial-gradient(circle at 82% 22%, rgba(223,111,33,.12), transparent 32%),
+        linear-gradient(135deg, #fff7e8 0%, #f7ebd7 48%, #edf2ea 100%);
+    }
+    .kicker { color: var(--green); font-weight: 800; font-size: 15px; text-transform: uppercase; }
+    h1 {
+      margin: 18px 0 18px;
+      font-size: 72px;
+      line-height: .98;
+      max-width: 920px;
+      letter-spacing: 0;
+    }
+    h2 { margin: 0 0 18px; font-size: 36px; line-height: 1.15; letter-spacing: 0; }
+    h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.25; letter-spacing: 0; }
+    p { margin: 0 0 14px; }
+    .lead { font-size: 24px; max-width: 930px; color: #2e382f; }
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; color: var(--muted); }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 36px;
+      align-items: stretch;
+      margin-top: 38px;
+    }
+    .statement {
+      background: var(--ink);
+      color: #fff7e8;
+      padding: 34px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .statement strong { color: #ffd392; }
+    .statement .big { font-size: 34px; line-height: 1.22; font-weight: 850; }
+    .source-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 24px; }
+    .metric { border-top: 4px solid var(--orange); background: rgba(255,255,255,.45); padding: 16px; min-height: 96px; }
+    .metric b { display: block; font-size: 26px; line-height: 1; margin-bottom: 8px; }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+    .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(42, 31, 19, .07);
+    }
+    .card.orange { border-top: 6px solid var(--orange); }
+    .card.green { border-top: 6px solid var(--green); }
+    .card.blue { border-top: 6px solid var(--blue); }
+    .card.red { border-top: 6px solid var(--red); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.58);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .step {
+      position: relative;
+      background: #fffaf1;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 18px 14px;
+      min-height: 170px;
+    }
+    .step:not(:last-child)::after {
+      content: ">";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 22px;
+      z-index: 2;
+    }
+    .num {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--ink);
+      color: #fff7e8;
+      border-radius: 50%;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .layer {
+      display: grid;
+      grid-template-columns: 220px 1fr 300px;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 10px solid var(--orange);
+      border-radius: 8px;
+    }
+    .layer:nth-child(2) { border-left-color: var(--green); }
+    .layer:nth-child(3) { border-left-color: var(--blue); }
+    .layer:nth-child(4) { border-left-color: var(--red); }
+    .layer b { font-size: 20px; }
+
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    th { background: #eadcc6; font-size: 14px; }
+    tr:last-child td { border-bottom: 0; }
+    .ok { color: var(--green); font-weight: 900; }
+    .warn { color: var(--gold); font-weight: 900; }
+    .risk { color: var(--red); font-weight: 900; }
+
+    .splitline {
+      display: grid;
+      grid-template-columns: 1fr 76px 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .vs {
+      display: grid;
+      place-items: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff7e8;
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .check {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(255,255,255,.52);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .tick {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      font-weight: 900;
+    }
+
+    .quote {
+      padding: 22px 26px;
+      border-left: 8px solid var(--orange);
+      background: #f2e4d0;
+      font-size: 23px;
+      line-height: 1.35;
+      font-weight: 800;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .footnotes li { margin-bottom: 8px; }
+
+    @media (max-width: 740px) {
+      .page { width: 100%; }
+      .band, .hero { padding: 32px 18px; }
+      h1 { font-size: 42px; }
+      h2 { font-size: 28px; }
+      .hero-grid, .two, .three, .four, .flow, .checklist, .splitline { grid-template-columns: 1fr; }
+      .step:not(:last-child)::after { display: none; }
+      .layer { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media print {
+      html, body { width: 1280px !important; background: var(--paper) !important; }
+      .page { width: 1280px !important; }
+      .hero-grid { grid-template-columns: 1.12fr .88fr !important; }
+      .two { grid-template-columns: 1fr 1fr !important; }
+      .three { grid-template-columns: repeat(3, 1fr) !important; }
+      .four { grid-template-columns: repeat(4, 1fr) !important; }
+      .flow { grid-template-columns: repeat(5, 1fr) !important; }
+      .checklist { grid-template-columns: repeat(2, 1fr) !important; }
+      .splitline { grid-template-columns: 1fr 76px 1fr !important; }
+      * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="kicker">Loop Engineering · 2026-06-15 核验版</div>
+      <h1>关于 Loop Engineering 的一张全景图</h1>
+      <p class="lead">从“我一句句指挥 agent”升级为“我设计一个会发现、执行、验证、记忆、调度 agent 的系统”。这不是更会写 prompt，而是把人从循环内移到循环外。</p>
+
+      <div class="hero-grid">
+        <div class="statement">
+          <div>
+            <div class="tag">核心定义</div>
+            <div class="big">Loop Engineering = 设计一套 <strong>会 prompt agent 的系统</strong>，而不是继续做人肉时钟。</div>
+          </div>
+          
+        </div>
+        <div class="source-box">
+          <h3>本页依据</h3>
+          <p>主材料：GitHub 仓库 <b>loop-engineering-orange-book</b>，v260615，中英文 PDF 全文已抽取。</p>
+          <p>补充核验：Addy Osmani 原文、Anthropic harness 文章、Claude Code 文档、OpenAI Codex Automations 文档、Stripe Minions 公开材料。</p>
+          <p class="small">说明：本页是结构化提炼和可视化解读，不复刻原书全文。</p>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><b>4</b><span>层能力栈</span></div>
+        <div class="metric"><b>5</b><span>个循环动作</span></div>
+        <div class="metric"><b>6</b><span>个工程零件</span></div>
+        <div class="metric"><b>4</b><span>类核心代价</span></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>1. 它到底是什么</h2>
+      <div class="two">
+        <div>
+          <p><b>旧工作方式：</b>你在屏幕前，给 agent 一个 prompt，等它做完，再给下一句。agent 停下来的每一拍，都要你来敲。</p>
+          <p><b>新工作方式：</b>你设计一个外层系统，让它按时间或事件醒来，自己找活，分派给 agent，检查结果，把状态写下来，再决定下一轮。</p>
+          <div class="quote">身份变化：从“操作 agent 的人”，变成“调度 agent 的系统设计者”。</div>
+        </div>
+        <div class="card orange">
+          <h3>最容易误解的点</h3>
+          <p><b>不是：</b>写一段更长的提示词。</p>
+          <p><b>不是：</b>把同一个任务手动重复跑十遍。</p>
+          <p><b>不是：</b>让 AI 自己说自己做得很好。</p>
+          <p><b>而是：</b>把“触发、上下文、隔离、验证、持久化、预算、人工复核”做成一套可运行的工程系统。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>2. 四层栈：Prompt → Context → Harness → Loop</h2>
+      <p class="muted">Loop 不是替代前面几层，而是坐在它们上面。越往上，人离单次执行越远，系统风险也越需要工程化管理。</p>
+      <div class="stack">
+        <div class="layer">
+          <b>Prompt Engineering</b>
+          <span>管一次输入怎么说：角色、目标、约束、例子。</span>
+          <span class="muted">核心问题：我该告诉模型什么？</span>
+        </div>
+        <div class="layer">
+          <b>Context Engineering</b>
+          <span>管这一轮窗口里放什么：资料、检索、摘要、清理。</span>
+          <span class="muted">核心问题：模型此刻该看见什么？</span>
+        </div>
+        <div class="layer">
+          <b>Harness Engineering</b>
+          <span>管 agent 单次运行的装备：工具、权限、完成条件、失败收尾。</span>
+          <span class="muted">核心问题：一次运行怎么可控？</span>
+        </div>
+        <div class="layer">
+          <b>Loop Engineering</b>
+          <span>管 harness 之上的外循环：定时、发现、分派、验证、记忆、下一步。</span>
+          <span class="muted">核心问题：怎么让它自己持续转？</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>3. 一个 Loop 转一圈的五个动作</h2>
+      <p class="muted">任何 loop 都可以拆成这五步。缺“调度”，只是一次运行；缺“验证”，就是自动化自我催眠。</p>
+      <div class="flow">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>发现</h3>
+          <p>系统自己判断这一轮该处理什么。</p>
+          <p class="small">例：读 CI 失败、issue、commit、收件箱。</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>交付</h3>
+          <p>把任务切小并隔离，交给具体 agent。</p>
+          <p class="small">例：每个发现开一个 worktree。</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>验证</h3>
+          <p>用独立评判者检查，不让生成者自评。</p>
+          <p class="small">例：第二 agent 跑测试、查页面、审 diff。</p>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <h3>持久化</h3>
+          <p>把状态写到对话之外。</p>
+          <p class="small">例：PR、ticket、Markdown 状态文件。</p>
+        </div>
+        <div class="step">
+          <div class="num">5</div>
+          <h3>调度</h3>
+          <p>决定下一轮何时、以什么输入继续。</p>
+          <p class="small">例：cron、Automation、Cloud Routine。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>4. 六个零件：把动作落成工程系统</h2>
+      <div class="three">
+        <div class="card orange"><span class="tag">调度</span><h3>Automations</h3><p>挂在时间表或事件触发器上，让任务不用人每天点开始。</p></div>
+        <div class="card blue"><span class="tag">隔离</span><h3>Worktrees</h3><p>让并行 agent 在不同工作区行动，避免同一份文件被多路改坏。</p></div>
+        <div class="card green"><span class="tag">知识复用</span><h3>Skills</h3><p>把项目规则、检查表、上下文策略固化为可维护的 SKILL.md。</p></div>
+        <div class="card blue"><span class="tag">外部世界</span><h3>Connectors / MCP</h3><p>接入 issue、数据库、PR、Slack、飞书、监控，让 loop 看到真实工作现场。</p></div>
+        <div class="card red"><span class="tag">能说不</span><h3>Sub-agents</h3><p>把生成者和评判者拆开，必要时换指令、换模型、换工具。</p></div>
+        <div class="card green"><span class="tag">记忆</span><h3>Memory</h3><p>把状态放到磁盘、看板或仓库里，而不是只放在上下文窗口。</p></div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>5. 生成器与评判器：Loop 的下限由评判器决定</h2>
+      <div class="splitline">
+        <div class="card orange">
+          <h3>Generator 生成者</h3>
+          <p>负责写代码、生成方案、起草修复、构建页面。</p>
+          <p class="muted">它的强项是推进产出，弱点是容易相信自己的解释。</p>
+        </div>
+        <div class="vs">VS</div>
+        <div class="card red">
+          <h3>Evaluator 评判器</h3>
+          <p>负责挑错、跑测试、打开页面、点按钮、截图、检查验收标准。</p>
+          <p class="muted">它的默认态度应该是怀疑：坏，除非被证明能跑。</p>
+        </div>
+      </div>
+      <table style="margin-top:22px">
+        <thead><tr><th>评判方式</th><th>问题</th><th>更好的做法</th></tr></thead>
+        <tbody>
+          <tr><td>agent 自评</td><td>同一个上下文里已经装满自我说服，容易高估结果。</td><td>只用于低风险草稿，不作为放行条件。</td></tr>
+          <tr><td>独立 evaluator</td><td>仍需调教，否则会看得太浅、太宽容。</td><td>给它明确 rubric、测试命令、截图和失败判定。</td></tr>
+          <tr><td>工具化 evaluator</td><td>成本更高，速度更慢。</td><td>让它用 Playwright、测试框架、lint、curl、像素检查等客观证据。</td></tr>
+          <tr><td>人类复核</td><td>不可完全省掉，尤其是业务判断和高风险改动。</td><td>把人从“写”移动到“审”和“决策”。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="band">
+      <h2>6. 三个真实场景：个人、企业、调度层</h2>
+      <div class="three">
+        <div class="card green">
+          <h3>Addy 的早晨分诊</h3>
+          <p>每天早上自动读 CI、issue、commit，分派 worktree，生成修复并审查，通过后开 PR，处理不了的进收件箱。</p>
+          <p class="small">意义：个人也能搭出小而完整的 loop。</p>
+        </div>
+        <div class="card blue">
+          <h3>Stripe Minions</h3>
+          <p>从 Slack 触发，云端 devbox 隔离运行，确定性流程准备上下文和 gate，agent 写代码，人类 review PR。</p>
+          <p class="small">意义：企业级 loop 的核心不是更大的模型，而是更强的约束和开发基础设施。</p>
+        </div>
+        <div class="card orange">
+          <h3>本地与云端调度</h3>
+          
+          <p class="small">意义：调度位置要按数据位置和可靠性要求选。</p>
+        </div>
+      </div>
+      <table style="margin-top:22px">
+        <thead><tr><th>调度方式</th><th>跑在哪里</th><th>适合</th><th>限制</th></tr></thead>
+        <tbody>
+          
+          
+          <tr><td>Cloud / GitHub Actions</td><td>云端</td><td>关机也要跑、仓库级周期任务。</td><td>本地文件、私有工具、低频间隔受限。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="band">
+      <h2>7. 四笔账：Loop 省下的时间不会凭空消失</h2>
+      <div class="four">
+        <div class="card red">
+          <span class="tag">风险 1</span>
+          <h3>验证债</h3>
+          <p>产出堆起来，但没有足够强的独立检查，错误安静积累。</p>
+          <p><b>防法：</b>独立 evaluator + 客观测试 + 人工卡点。</p>
+        </div>
+        <div class="card orange">
+          <span class="tag">风险 2</span>
+          <h3>理解腐烂</h3>
+          <p>代码库在长，你脑中的地图停在旧版本。</p>
+          <p><b>防法：</b>定期读产出，能讲清再合并。</p>
+        </div>
+        <div class="card blue">
+          <span class="tag">风险 3</span>
+          <h3>认知投降</h3>
+          <p>loop 越顺，人越懒得有自己的判断。</p>
+          <p><b>防法：</b>执行可外包，最终判断不可外包。</p>
+        </div>
+        <div class="card green">
+          <span class="tag">风险 4</span>
+          <h3>Token 失控</h3>
+          <p>自主重试、子 agent、定时空转会把账单放大。</p>
+          <p><b>防法：</b>单次预算、每日预算、最大重试次数。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>8. 第一个 Loop 怎么搭</h2>
+      
+      <div class="checklist">
+        <div class="check"><div class="tick">1</div><div><b>选一个发现源</b><br><span class="muted">CI、issue、commit、收件箱、飞书群、客户反馈都可以。</span></div></div>
+        <div class="check"><div class="tick">2</div><div><b>写一个 skill</b><br><span class="muted">把如何分诊、如何判断价值、如何输出结果固化下来。</span></div></div>
+        <div class="check"><div class="tick">3</div><div><b>落一个状态文件</b><br><span class="muted">每轮发现、处理状态、失败原因、下一步要在磁盘上。</span></div></div>
+        <div class="check"><div class="tick">4</div><div><b>加 evaluator</b><br><span class="muted">至少有测试、lint、截图、链接检查或人工复核。</span></div></div>
+        <div class="check"><div class="tick">5</div><div><b>隔离并行任务</b><br><span class="muted">涉及代码改动时用 worktree，避免多个 agent 抢同一份文件。</span></div></div>
+        <div class="check"><div class="tick">6</div><div><b>钉死预算与停止条件</b><br><span class="muted">明确什么时候算完成、什么时候停、失败几次后不再重试。</span></div></div>
+      </div>
+    </section>
+
+    
+
+    
+
+    <section class="band">
+      <h2>11. 一句话收束</h2>
+      <div class="quote">Loop Engineering 的本质不是让 AI 更自由，而是把自由包进边界：它可以自动跑，但必须有人设计目标、证据、预算、记忆和刹车。</div>
+      <p style="margin-top:22px">最值得带走的行动：今天就搭一个小 loop，但别省掉 evaluator 和人工复核点。第一个 loop 宁可慢，也要能说“不”。</p>
+    </section>
+
+    <section class="band">
+      <h2>来源</h2>
+      <ol class="footnotes">
+        <li>GitHub 原书仓库：<a href="https://github.com/alchaincyf/loop-engineering-orange-book">alchaincyf/loop-engineering-orange-book</a>，v260615。</li>
+        <li>Addy Osmani：<a href="https://addyosmani.com/blog/loop-engineering/">Loop Engineering</a>，2026-06-07。</li>
+        <li>Anthropic Engineering：<a href="https://www.anthropic.com/engineering/harness-design-long-running-apps">Harness design for long-running application development</a>。</li>
+        <li>Claude Code Docs：<a href="https://code.claude.com/docs/en/goal">Keep Claude working toward a goal</a>；<a href="https://code.claude.com/docs/en/scheduled-tasks">Run prompts on a schedule</a>。</li>
+        <li>OpenAI Developers：<a href="https://developers.openai.com/codex/app/automations">Codex app Automations</a>。</li>
+        <li>Stripe Dot Dev Blog：<a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents">Minions: Stripe’s one-shot, end-to-end coding agents</a>；<a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2">Part 2</a>。</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>
