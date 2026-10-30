@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>20260719-1917-AI CLI Kickstarter · 项目全景学习地图</title>
+  <style>
+    :root {
+      --ink: oklch(24% 0.028 252);
+      --muted: oklch(48% 0.025 252);
+      --paper: oklch(97% 0.014 88);
+      --surface: oklch(99% 0.008 88);
+      --blue: oklch(45% 0.13 255);
+      --blue-soft: oklch(92% 0.035 255);
+      --red: oklch(55% 0.17 29);
+      --red-soft: oklch(94% 0.035 29);
+      --green: oklch(46% 0.095 158);
+      --green-soft: oklch(93% 0.035 158);
+      --amber: oklch(61% 0.11 79);
+      --rule: oklch(83% 0.025 252);
+      --code: oklch(20% 0.026 252);
+      --code-ink: oklch(91% 0.025 252);
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, transparent 0 78px, color-mix(in oklch, var(--red) 19%, transparent) 78px 80px, transparent 80px),
+        repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--blue) 5%, transparent) 31px 32px),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.72;
+      font-kerning: normal;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-variant-ligatures: none; }
+    code { font-size: .9em; background: var(--blue-soft); padding: .08em .32em; border-radius: 3px; }
+    strong { font-weight: 700; }
+    .page { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: var(--space-12) 0 var(--space-16); }
+    .kicker { color: var(--red); font-size: .76rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .serif { font-family: Georgia, "Songti SC", "STSong", serif; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.55fr .8fr;
+      gap: var(--space-12);
+      align-items: end;
+      border-top: 10px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      padding: var(--space-8) 0 var(--space-8);
+    }
+    h1 {
+      margin: var(--space-3) 0 var(--space-4);
+      max-width: 13ch;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: clamp(3rem, 6.3vw, 5.8rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+      overflow-wrap: anywhere;
+    }
+    .dek { max-width: 64ch; margin: 0; font-size: 1.18rem; line-height: 1.65; color: var(--muted); }
+    .snapshot { border-top: 1px solid var(--rule); padding-top: var(--space-4); }
+    .snapshot dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 7px var(--space-4); }
+    .snapshot dt { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+    .snapshot dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-4);
+      align-items: center;
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: .84rem;
+    }
+    .toc b { margin-right: var(--space-2); }
+    .toc a { color: var(--muted); text-decoration: none; padding: 6px 0; }
+    .toc a:hover, .toc a:focus { color: var(--red); }
+
+    section { padding: var(--space-12) 0; border-bottom: 1px solid var(--rule); }
+    .section-head { display: grid; grid-template-columns: 96px 1fr; gap: var(--space-6); margin-bottom: var(--space-8); align-items: start; }
+    .section-no { color: var(--red); font-family: Georgia, serif; font-size: 2.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
+    h2 { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1.08; letter-spacing: -.03em; }
+    .section-intro { margin: var(--space-3) 0 0; max-width: 72ch; color: var(--muted); font-size: 1.06rem; }
+    h3 { margin: 0 0 var(--space-3); font-size: 1.08rem; line-height: 1.3; }
+    h4 { margin: 0 0 var(--space-2); font-size: .93rem; }
+    p { margin: 0 0 var(--space-4); }
+    ul, ol { margin: 0; padding-left: 1.2em; }
+    li + li { margin-top: 5px; }
+
+    .thesis { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: var(--space-8); }
+    .thesis > div { padding-top: var(--space-4); border-top: 3px solid var(--ink); }
+    .thesis .accent { border-color: var(--red); }
+    .thesis .accent-blue { border-color: var(--blue); }
+    .big-quote { margin: var(--space-8) 0 0 96px; max-width: 26ch; font: 700 2rem/1.35 Georgia, "Songti SC", serif; color: var(--blue); }
+
+    .metric-strip { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--rule); background: var(--surface); }
+    .metric { padding: var(--space-4); min-height: 106px; border-right: 1px solid var(--rule); }
+    .metric:last-child { border-right: 0; }
+    .metric .value { display: block; font: 700 2rem/1 Georgia, serif; font-variant-numeric: tabular-nums; }
+    .metric .label { display: block; margin-top: var(--space-2); color: var(--muted); font-size: .76rem; line-height: 1.35; }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 1fr 62px 1.1fr 62px 1fr;
+      align-items: stretch;
+      gap: var(--space-3);
+      margin: var(--space-8) 0;
+    }
+    .layer { padding: var(--space-6); background: var(--surface); border: 1px solid var(--rule); }
+    .layer small { display: block; color: var(--red); font-weight: 800; letter-spacing: .08em; margin-bottom: var(--space-2); }
+    .arrow { display: grid; place-items: center; font-size: 2rem; color: var(--red); }
+    .flow-note { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+
+    .tree {
+      margin: 0;
+      padding: var(--space-6);
+      background: var(--code);
+      color: var(--code-ink);
+      border-radius: 2px;
+      font-size: .86rem;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    .file-map { display: grid; grid-template-columns: 1fr 1.45fr; gap: var(--space-8); align-items: start; }
+    .file-list { display: grid; gap: 0; border-top: 2px solid var(--ink); }
+    .file-row { display: grid; grid-template-columns: 190px 1fr; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--rule); }
+    .file-row code { align-self: start; justify-self: start; }
+    .file-row span { color: var(--muted); font-size: .9rem; }
+
+    .state-line { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin: var(--space-6) 0 var(--space-3); }
+    .state { position: relative; padding: 11px 5px; text-align: center; background: var(--blue); color: var(--surface); font: 800 .68rem/1.15 "Avenir Next", sans-serif; letter-spacing: .02em; }
+    .state:not(:last-child)::after { content: "→"; position: absolute; right: -11px; top: 8px; color: var(--red); z-index: 2; font-size: 1rem; }
+    .branch-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: var(--space-8); margin-top: var(--space-8); }
+    .branch { display: grid; grid-template-columns: 112px 1fr; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--rule); }
+    .branch b { color: var(--blue); }
+    .alert { padding: var(--space-6); background: var(--red-soft); border: 1px solid color-mix(in oklch, var(--red) 35%, var(--rule)); }
+    .alert.safe { background: var(--green-soft); border-color: color-mix(in oklch, var(--green) 35%, var(--rule)); }
+    .alert h3 { color: var(--red); }
+    .alert.safe h3 { color: var(--green); }
+
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; background: var(--surface); }
+    th, td { text-align: left; vertical-align: top; padding: 11px 12px; border-bottom: 1px solid var(--rule); }
+    th { background: var(--blue-soft); color: var(--blue); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--rule); }
+    .table-wrap + .table-wrap { margin-top: var(--space-6); }
+    .table-note { color: var(--muted); font-size: .78rem; margin-top: var(--space-2); }
+
+    .source-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+    .source-card { padding: var(--space-6); background: var(--surface); border-top: 4px solid var(--blue); }
+    .source-card:nth-child(2n) { border-color: var(--red); }
+    .source-card .range { color: var(--muted); font-size: .77rem; }
+    .source-card p { color: var(--muted); font-size: .9rem; margin-bottom: 0; }
+
+    .trust {
+      display: grid;
+      grid-template-columns: 1fr 76px 1fr;
+      gap: var(--space-4);
+      align-items: center;
+      margin-bottom: var(--space-8);
+    }
+    .boundary { padding: var(--space-6); border: 1px solid var(--rule); background: var(--surface); min-height: 190px; }
+    .boundary.external { background: var(--red-soft); border-color: color-mix(in oklch, var(--red) 30%, var(--rule)); }
+    .boundary-arrow { text-align: center; color: var(--red); font-weight: 800; font-size: .8rem; }
+    .risk-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4) var(--space-8); }
+    .risk-item { padding-top: var(--space-3); border-top: 1px solid var(--rule); }
+    .risk-item b { display: block; }
+    .risk-item span { color: var(--muted); font-size: .86rem; }
+
+    .mission-map { display: grid; grid-template-columns: 1fr 1.65fr; gap: var(--space-8); align-items: start; }
+    .handoff { padding: var(--space-6); background: var(--blue); color: var(--surface); }
+    .handoff h3 { font-family: Georgia, "Songti SC", serif; font-size: 1.55rem; }
+    .handoff ol { padding-left: 1.25em; }
+    .mission-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+    .mission-group { padding-top: var(--space-3); border-top: 3px solid var(--ink); }
+    .mission-group b { color: var(--red); }
+
+    .test-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); margin-bottom: var(--space-8); }
+    .test-step { padding: var(--space-4); border: 1px solid var(--rule); background: var(--surface); position: relative; }
+    .test-step:not(:last-child)::after { content: "→"; position: absolute; right: -13px; top: 24px; color: var(--red); font-weight: 800; }
+    .test-step small { color: var(--red); font-weight: 800; }
+    .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); margin-top: var(--space-6); }
+    .pass { background: var(--green-soft); border-top: 5px solid var(--green); padding: var(--space-6); }
+    .limit { background: var(--red-soft); border-top: 5px solid var(--red); padding: var(--space-6); }
+    .pass strong, .limit strong { display: block; font: 700 2rem/1 Georgia, serif; margin-bottom: var(--space-3); }
+
+    .timeline { position: relative; display: grid; gap: 0; }
+    .commit { display: grid; grid-template-columns: 92px 112px 1fr; gap: var(--space-4); padding: 9px 0; border-bottom: 1px solid var(--rule); }
+    .commit code { justify-self: start; background: transparent; color: var(--red); padding: 0; }
+    .commit .theme { color: var(--blue); font-size: .78rem; font-weight: 800; }
+    .commit span:last-child { color: var(--muted); }
+
+    .learning { display: grid; grid-template-columns: 112px 1fr 230px; gap: 0 var(--space-6); }
+    .learn-row { display: contents; }
+    .learn-row > * { padding: var(--space-4) 0; border-bottom: 1px solid var(--rule); }
+    .learn-row .day { color: var(--red); font-family: Georgia, serif; font-size: 1.35rem; font-weight: 700; }
+    .learn-row .goal b { display: block; }
+    .learn-row .goal span, .learn-row .proof { color: var(--muted); font-size: .86rem; }
+    .glossary { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4) var(--space-8); margin-top: var(--space-8); }
+    .term { padding-top: var(--space-3); border-top: 1px solid var(--rule); }
+    .term dt { font-weight: 800; color: var(--blue); }
+    .term dd { margin: 4px 0 0; color: var(--muted); font-size: .86rem; }
+
+    .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+    .review-grid h3 { padding-bottom: var(--space-2); border-bottom: 3px solid var(--ink); }
+    .review-grid .good h3 { border-color: var(--green); }
+    .review-grid .next h3 { border-color: var(--red); }
+    .priority { display: grid; grid-template-columns: 32px 1fr; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--rule); }
+    .priority .p { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--red); color: var(--surface); font-size: .72rem; font-weight: 800; }
+    .priority span { color: var(--muted); font-size: .86rem; }
+
+    .source-index { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4) var(--space-8); }
+    .source-line { display: grid; grid-template-columns: 230px 1fr; gap: var(--space-3); padding-bottom: var(--space-3); border-bottom: 1px solid var(--rule); font-size: .84rem; }
+    .source-line code { justify-self: start; }
+    .source-line span { color: var(--muted); }
+    footer { padding: var(--space-8) 0 0; display: grid; grid-template-columns: 1fr auto; gap: var(--space-6); color: var(--muted); font-size: .78rem; }
+
+    @media (max-width: 900px) {
+      body { background: var(--paper); }
+      .page { width: min(100% - 28px, 760px); padding-top: var(--space-6); }
+      .hero, .thesis, .file-map, .branch-grid, .flow-note, .mission-map, .verdict, .review-grid { grid-template-columns: 1fr; }
+      .hero { gap: var(--space-6); }
+      h1 { font-size: clamp(3rem, 14vw, 5rem); }
+      .section-head { grid-template-columns: 54px 1fr; gap: var(--space-3); }
+      .big-quote { margin-left: 0; }
+      .metric-strip { grid-template-columns: repeat(3, 1fr); }
+      .metric:nth-child(3) { border-right: 0; }
+      .metric:nth-child(-n+3) { border-bottom: 1px solid var(--rule); }
+      .architecture { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .state-line { grid-template-columns: repeat(4, 1fr); }
+      .source-grid, .risk-list, .mission-groups, .source-index { grid-template-columns: 1fr; }
+      .trust { grid-template-columns: 1fr; }
+      .boundary-arrow { padding: var(--space-2); }
+      .test-flow { grid-template-columns: repeat(2, 1fr); }
+      .test-step::after { display: none; }
+      .learning { grid-template-columns: 72px 1fr; }
+      .learn-row .proof { grid-column: 2; padding-top: 0; }
+      .glossary { grid-template-columns: repeat(2, 1fr); }
+      .source-line { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { font-size: clamp(2.55rem, 12vw, 3.25rem); letter-spacing: -.055em; }
+      .metric-strip, .source-grid, .mission-groups, .glossary { grid-template-columns: 1fr; }
+      .metric { border-right: 0; border-bottom: 1px solid var(--rule); }
+      .state-line { grid-template-columns: repeat(2, 1fr); }
+      .file-row { grid-template-columns: 1fr; }
+      .test-flow { grid-template-columns: 1fr; }
+      .commit { grid-template-columns: 74px 1fr; }
+      .commit span:last-child { grid-column: 2; }
+      table { font-size: .78rem; }
+      th, td { padding: 9px 8px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 10mm; }
+      body { background: var(--paper) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
+      .toc { display: none; }
+      section { break-inside: auto; padding: 28px 0; }
+      .hero, .metric-strip, .architecture, .file-map, .branch-grid, .trust, .mission-map, .test-flow, .verdict, .review-grid, table, pre { break-inside: avoid; }
+      .hero { grid-template-columns: 1.55fr .8fr !important; }
+      .thesis { grid-template-columns: 1.1fr 1fr 1fr !important; }
+      .metric-strip { grid-template-columns: repeat(6, 1fr) !important; }
+      .architecture { grid-template-columns: 1fr 62px 1.1fr 62px 1fr !important; }
+      .file-map { grid-template-columns: 1fr 1.45fr !important; }
+      .branch-grid { grid-template-columns: 1.3fr .7fr !important; }
+      .trust { grid-template-columns: 1fr 76px 1fr !important; }
+      .mission-map { grid-template-columns: 1fr 1.65fr !important; }
+      .test-flow { grid-template-columns: repeat(4, 1fr) !important; }
+      .verdict, .review-grid { grid-template-columns: 1fr 1fr !important; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero" id="top">
+      <div>
+        <div class="kicker">Project Atlas · Source-led Edition</div>
+        <h1>AI CLI Kickstarter 项目全景学习地图</h1>
+        <p class="dek">面向完全不懂计算机的人，用不到 750 行代码完成“选择 AI CLI → 安装 → 验证 → 把后续指导交给 AI”的跨平台闭环。本页从产品意图、源码结构、状态机、安全边界、测试到学习路线，逐层拆开。</p>
+      </div>
+      <aside class="snapshot" aria-label="仓库快照">
+        <dl>
+          <dt>Repository</dt><dd>xiaolai/ai-cli-kickstarter</dd>
+          <dt>Branch</dt><dd>main</dd>
+          <dt>Commit</dt><dd><code>9370aef</code></dd>
+          <dt>Version</dt><dd>0.1.0</dd>
+          <dt>Snapshot</dt><dd>2026-07-19 CST</dd>
+          <dt>License</dt><dd>MIT</dd>
+        </dl>
+      </aside>
+    </header>
+
+    <nav class="toc" aria-label="页内目录">
+      <b>阅读路径</b>
+      <a href="#overview">01 一句话理解</a><a href="#structure">02 项目结构</a><a href="#state-machine">03 状态机</a><a href="#platforms">04 跨平台实现</a><a href="#source">05 源码导览</a><a href="#trust">06 安全边界</a><a href="#prompts">07 AI 交接</a><a href="#quality">08 测试与 CI</a><a href="#history">09 演进历史</a><a href="#learn">10 学习路线</a><a href="#review">11 评审结论</a>
+    </nav>
+
+    <section id="overview">
+      <div class="section-head">
+        <div class="section-no">01</div>
+        <div><h2>先抓住本质：它不是“安装器大全”</h2><p class="section-intro">它是一座很短的桥：前半段降低安装门槛，后半段把电脑治理的主导权交给刚装好的 AI。</p></div>
+      </div>
+      <div class="thesis">
+        <div class="accent-blue"><h3>用户问题</h3><p>新手知道 AI CLI 有用，却卡在终端、脚本、环境变量、权限与“装完以后做什么”。</p></div>
+        <div class="accent"><h3>项目解法</h3><p>用双击入口 + 中英状态机，逐步显示选择、来源、确认、安装、验证与下一步。</p></div>
+        <div><h3>产品闭环</h3><p>安装不是终点。最后生成一段带安全规则的交接 Prompt，让 AI 成为长期电脑助手。</p></div>
+      </div>
+      <p class="big-quote">“一次性脚本”被设计成“人类把控制权安全地交给 AI 的仪式”。</p>
+      <div class="metric-strip" style="margin-top:32px">
+        <div class="metric"><span class="value">11</span><span class="label">跟踪文件</span></div>
+        <div class="metric"><span class="value">739</span><span class="label">总行数（含 README / CI / 测试）</span></div>
+        <div class="metric"><span class="value">14</span><span class="label">提交，均在 2026-07-18</span></div>
+        <div class="metric"><span class="value">3×3</span><span class="label">3 款 CLI × 3 个操作系统</span></div>
+        <div class="metric"><span class="value">2</span><span class="label">镜像状态机：Bash / PowerShell</span></div>
+        <div class="metric"><span class="value">14/14</span><span class="label">本机离线冒烟断言通过</span></div>
+      </div>
+    </section>
+
+    <section id="structure">
+      <div class="section-head">
+        <div class="section-no">02</div>
+        <div><h2>结构极简，职责分层清楚</h2><p class="section-intro">没有框架、数据库、包管理器和构建步骤。三个薄入口把用户导向两份核心脚本；测试用 curl 替身隔离真实网络。</p></div>
+      </div>
+      <div class="architecture" aria-label="项目分层图">
+        <div class="layer"><small>ENTRY / 入口</small><h3>Start-* 文件</h3><p>适配双击或系统终端，定位脚本目录，然后把控制权交给对应状态机。</p></div>
+        <div class="arrow">→</div>
+        <div class="layer"><small>ENGINE / 引擎</small><h3>Bash + PowerShell</h3><p>语言、网络探测、供应商选择、确认、安装、验证、错误恢复与 AI 交接。</p></div>
+        <div class="arrow">→</div>
+        <div class="layer"><small>EXTERNAL / 外部</small><h3>三家官方安装脚本</h3><p>下载到内存后执行；真正的软件安装行为由供应商脚本决定。</p></div>
+      </div>
+      <div class="file-map">
+        <pre class="tree" aria-label="项目文件树">ai-cli-kickstarter/
+├── README.md
+├── Start-macOS.command ─┐
+├── Start-Linux.sh ──────┴─→ kickstarter.sh
+├── Start-Windows.cmd ─────→ kickstarter.ps1
+├── tests/
+│   ├── run-tests.sh
+│   └── stubs/curl
+├── .github/workflows/ci.yml
+├── .gitignore
+└── LICENSE</pre>
+        <div class="file-list">
+          <div class="file-row"><code>README.md</code><span>产品说明、使用方式、信任模型、开发命令与 10 个后续 Mission Prompt。</span></div>
+          <div class="file-row"><code>kickstarter.sh</code><span>macOS/Linux 主逻辑，184 行；检查 OS 与 curl，并通过 <code>bash -c</code> 执行下载内容。</span></div>
+          <div class="file-row"><code>kickstarter.ps1</code><span>Windows 镜像实现，209 行；要求 PowerShell 5+，用 <code>Invoke-Expression</code> 执行下载内容。</span></div>
+          <div class="file-row"><code>Start-*</code><span>每个仅 3 行。macOS/Linux 用 <code>exec bash</code>；Windows 使用 NoProfile + ExecutionPolicy Bypass。</span></div>
+          <div class="file-row"><code>tests/</code><span>真实驱动 Bash 状态机，但把 HOME、PATH、curl 和 stdin 都置于可控环境。</span></div>
+          <div class="file-row"><code>ci.yml</code><span>ShellCheck、Ubuntu/macOS 冒烟测试、Windows PSScriptAnalyzer 三路质量门禁。</span></div>
+        </div>
+      </div>
+      <div class="flow-note" style="margin-top:32px">
+        <div class="alert safe"><h3>为什么这套结构适合新手</h3><p>入口文件不用解释复杂命令；状态机一次只问一个问题；失败后提供“重试 / 换工具 / 退出”三条明确路径。</p></div>
+        <div class="alert"><h3>维护成本藏在哪里</h3><p>Bash 与 PowerShell、中文与英文文案都写在代码里。新增状态、供应商或语言时，需要人工同步多个位置。</p></div>
+      </div>
+    </section>
+
+    <section id="state-machine">
+      <div class="section-head">
+        <div class="section-no">03</div>
+        <div><h2>主角是状态机，不是 Shell 命令</h2><p class="section-intro">每一屏对应一个状态。用户选择和外部结果只负责改变 <code>STATE</code>，随后进入下一轮循环，这让流程可解释、可恢复、也容易测试。</p></div>
+      </div>
+      <div class="state-line" aria-label="主状态链">
+        <div class="state">LANGUAGE</div><div class="state">PROBE</div><div class="state">SELECT</div><div class="state">PRECHECK</div><div class="state">CONFIRM</div><div class="state">INSTALL</div><div class="state">VERIFY</div><div class="state">HANDOFF</div>
+      </div>
+      <p class="table-note">README 展示上面 8 个主状态；源码实际还包含 <code>ERROR</code> 与 <code>DONE</code>。</p>
+      <div class="branch-grid">
+        <div>
+          <div class="branch"><b>LANGUAGE</b><span>选择中文或 English；非法输入留在原状态，输入流关闭则安全退出。</span></div>
+          <div class="branch"><b>PROBE</b><span>请求 Google 204 探针，得到 reachable / unreachable / unknown；仅提示，不作为门禁。</span></div>
+          <div class="branch"><b>SELECT</b><span>默认 Qwen，也可选 Kimi 或 CodeBuddy；生成展示名、命令名、安装 URL 三元组。</span></div>
+          <div class="branch"><b>PRECHECK</b><span>Bash 检查 Darwin/Linux 与 curl；PowerShell 只在脚本开头检查版本，状态本身直接通过。</span></div>
+          <div class="branch"><b>CONFIRM</b><span>明示供应商、Google 状态和来源 URL；回车即同意，拒绝则进入 DONE，不返回选择页。</span></div>
+          <div class="branch"><b>INSTALL</b><span>下载到内存并动态执行。下载为空、网络错误或安装器非零退出都会进入 ERROR。</span></div>
+          <div class="branch"><b>VERIFY</b><span>刷新当前会话 PATH，运行 <code>&lt;command&gt; --version</code>；找不到命令只提示重开终端，仍继续交接。</span></div>
+          <div class="branch"><b>HANDOFF</b><span>输出安全约束 Prompt；用户可立即启动新 CLI，也可结束。</span></div>
+        </div>
+        <div>
+          <div class="alert"><h3>ERROR 分支</h3><ol><li>重试 → PRECHECK</li><li>换工具 → SELECT</li><li>退出 → DONE</li></ol></div>
+          <div class="alert safe" style="margin-top:16px"><h3>三个容易忽略的设计事实</h3><ul><li>网络探测结果不阻止安装。</li><li>验证失败不等于安装失败。</li><li>关闭 stdin 不会被当成默认同意。</li></ul></div>
+          <pre class="tree" style="margin-top:16px">核心数据
+Version      0.1.0
+State        当前流程状态
+Language     zh / en
+GoogleStatus 三值网络提示
+ProviderName UI 展示名
+CommandName  验证与启动命令
+InstallUrl   官方脚本地址
+LastError    错误说明</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="platforms">
+      <div class="section-head">
+        <div class="section-no">04</div>
+        <div><h2>同一产品逻辑，两套平台语言</h2><p class="section-intro">Bash 与 PowerShell 互为镜像，但不是逐字翻译：系统能力、下载 API、PATH 模型和进程启动方式不同。</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>环节</th><th>macOS / Linux</th><th>Windows</th><th>理解重点</th></tr></thead>
+          <tbody>
+            <tr><td>用户入口</td><td><code>Start-macOS.command</code> / <code>Start-Linux.sh</code></td><td><code>Start-Windows.cmd</code></td><td>先切到文件所在目录，避免从别处启动时找不到主脚本。</td></tr>
+            <tr><td>最低环境</td><td>Bash + curl；OS 必须是 Darwin/Linux</td><td>PowerShell 5+</td><td>不安装项目自身依赖，依赖系统自带能力。</td></tr>
+            <tr><td>环境隔离</td><td>当前 Shell，<code>set -u</code></td><td><code>-NoProfile</code>，减少用户 Profile 干扰</td><td>两边都显式处理输入/网络失败，而不是依赖全局“遇错即停”。</td></tr>
+            <tr><td>网络探测</td><td>curl：连接 4 秒，总计 7 秒</td><td>Invoke-WebRequest：7 秒</td><td>204=可达，无响应=不可达，其他 HTTP=不确定。</td></tr>
+            <tr><td>安装下载</td><td>curl：连接 10 秒，总计 60 秒</td><td>Invoke-WebRequest：60 秒</td><td>内容保存在内存变量，不落临时文件。</td></tr>
+            <tr><td>动态执行</td><td><code>bash -c "$installer"</code></td><td><code>Invoke-Expression $installer</code></td><td>简单，但把供应链信任直接扩展到远端脚本。</td></tr>
+            <tr><td>PATH 刷新</td><td>补入 local/npm/bun/cargo 常见目录</td><td>合并进程 + Machine + User PATH，并补 CodeBuddy</td><td>只刷新当前会话，帮助马上识别新命令。</td></tr>
+            <tr><td>立即启动</td><td><code>exec</code> 替换当前进程</td><td><code>&amp; $CommandName</code> 调用后返回</td><td>Unix 成功启动后不会再回到 DONE；Windows 会。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 style="margin-top:32px">三家供应商映射</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>选择</th><th>定位</th><th>命令</th><th>macOS / Linux 来源</th><th>Windows 来源</th></tr></thead>
+          <tbody>
+            <tr><td>1 · 默认</td><td><b>Qwen Code</b><br>大陆友好；独立安装器</td><td><code>qwen</code></td><td><code>qwen-code-assets…/install-qwen-standalone.sh</code></td><td><code>qwen-code-assets…/install-qwen-standalone.ps1</code></td></tr>
+            <tr><td>2</td><td><b>Kimi Code</b><br>首次启动后输入 <code>/login</code></td><td><code>kimi</code></td><td><code>https://code.kimi.com/install.sh</code></td><td><code>https://code.kimi.com/install.ps1</code></td></tr>
+            <tr><td>3</td><td><b>CodeBuddy CLI</b><br>腾讯生态；官方文档标为 Beta</td><td><code>codebuddy</code></td><td><code>https://www.codebuddy.cn/cli/install.sh</code></td><td><code>https://www.codebuddy.cn/cli/install.ps1</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="source">
+      <div class="section-head">
+        <div class="section-no">05</div>
+        <div><h2>源码导览：先读函数，再读循环</h2><p class="section-intro">推荐顺序不是从第 1 行读到最后，而是先认清“功能积木”，再看状态循环怎样拼装它们。</p></div>
+      </div>
+      <div class="source-grid">
+        <article class="source-card"><h3>① 国际化字典</h3><div class="range">Shell 18–73 · PowerShell 18–51</div><p><code>t/T</code> 根据当前语言返回界面文案。优点是单文件可运行；代价是新增语言时源码膨胀，并且两种实现都要同步。</p></article>
+        <article class="source-card"><h3>② 网络探针</h3><div class="range">Shell 77–84 · PowerShell 60–70</div><p>固定访问 <code>google.com/generate_204</code>，把复杂网络现象压缩成三值提示。结果与安装选择解耦。</p></article>
+        <article class="source-card"><h3>③ 供应商选择</h3><div class="range">Shell 86–92 · PowerShell 76–82</div><p>一个数字映射为 <code>ProviderName + CommandName + InstallUrl</code>。这三个字段贯穿确认、下载、验证与启动。</p></article>
+        <article class="source-card"><h3>④ PATH 同步</h3><div class="range">Shell 94–97 · PowerShell 84–90</div><p>安装器可能刚把命令放到新目录；当前终端不会自动刷新，所以项目主动补齐常见路径再验证。</p></article>
+        <article class="source-card"><h3>⑤ AI 交接 Prompt</h3><div class="range">Shell 99–129 · PowerShell 92–122</div><p>不是帮助文本，而是下一阶段的“行为合同”：解释、备份、先问、验证、单独测网络、避免过载。</p></article>
+        <article class="source-card"><h3>⑥ 状态分派循环</h3><div class="range">Shell 131–184 · PowerShell 124–209</div><p>每轮只执行一个状态分支，再更新状态。逻辑集中、跳转显式，因此可以用脚本化 stdin 驱动真实流程。</p></article>
+      </div>
+      <div class="alert safe" style="margin-top:24px"><h3>一条关键工程纪律</h3><p><code>kickstarter.sh</code> 与 <code>kickstarter.ps1</code> 顶部都写明彼此镜像；README 也要求修改状态或文案时同步两份。这是当前架构最重要的维护约束。</p></div>
+    </section>
+
+    <section id="trust">
+      <div class="section-head">
+        <div class="section-no">06</div>
+        <div><h2>安全模型：确认来源，不验证内容</h2><p class="section-intro">项目没有隐藏这一点：它把三家官方远程脚本下载到内存后直接执行。用户确认的是 URL 和供应商信任，不是某个经过固定校验的脚本版本。</p></div>
+      </div>
+      <div class="trust">
+        <div class="boundary"><div class="kicker">本仓库可控边界</div><h3>选择、提示、确认、状态恢复</h3><ul><li>来源 URL 固定在源码</li><li>执行前展示并等待确认</li><li>没有主动 sudo / UAC 逻辑</li><li>失败可重试、换工具或退出</li></ul></div>
+        <div class="boundary-arrow">下载 →<br>结果 ←</div>
+        <div class="boundary external"><div class="kicker">外部信任边界</div><h3>供应商远程安装脚本</h3><ul><li>内容随供应商服务器变化</li><li>可能安装依赖、改 PATH 或请求权限</li><li>项目不审阅、缓存或固定内容</li><li>真正的安装副作用在此发生</li></ul></div>
+      </div>
+      <div class="risk-list">
+        <div class="risk-item"><b>已有保护 · 明示 URL</b><span>用户在 CONFIRM 页面能看到将要访问的地址和供应商。</span></div>
+        <div class="risk-item"><b>已有保护 · 明确同意</b><span>核心 read/Read-Host 失败不会默认为同意；拒绝时跳过安装。</span></div>
+        <div class="risk-item"><b>待增强 · 无哈希/签名</b><span>没有 checksum、代码签名或公钥验证，无法证明下载内容与已审版本一致。</span></div>
+        <div class="risk-item"><b>待增强 · 无版本固定</b><span>URL 指向当前安装器，而非不可变版本；今天与明天下载的内容可能不同。</span></div>
+        <div class="risk-item"><b>待增强 · 无内容预览</b><span>脚本保存在内存后立即动态执行，用户无法先保存、检查再继续。</span></div>
+        <div class="risk-item"><b>待增强 · 无真实供应链测试</b><span>离线测试故意不访问网络，因此无法发现供应商 URL 或安装协议变化。</span></div>
+        <div class="risk-item"><b>语义提醒 · “直连”并不严格</b><span>curl / Invoke-WebRequest 默认可能服从环境或系统代理；探针证明的是当前进程可达，不一定是无代理直连。</span></div>
+        <div class="risk-item"><b>语义提醒 · 重定向后的来源</b><span>下载客户端允许跟随跳转，最终执行内容的实际主机可能不同于确认页展示的初始 URL。</span></div>
+      </div>
+      <div class="alert" style="margin-top:24px"><h3>正确心智模型</h3><p>“官方域名”降低了误下载风险，但不等同于“内容已被本项目验证”。把它当作透明的引导器，而不是安全沙箱。</p></div>
+    </section>
+
+    <section id="prompts">
+      <div class="section-head">
+        <div class="section-no">07</div>
+        <div><h2>真正的产品亮点：安装后的 AI 交接</h2><p class="section-intro">项目把“安装成功”改写成“能力交接”：先给 AI 一套行为边界，再通过 Mission Prompt 把模糊愿望变成可完成任务。</p></div>
+      </div>
+      <div class="mission-map">
+        <div class="handoff">
+          <h3>第 0 个任务 · 交接 Prompt</h3>
+          <ol><li>执行前用通俗语言解释。</li><li>改配置前先备份。</li><li>管理员权限、删除、覆盖、付费、隐私先询问。</li><li>每完成一步都验证。</li><li>每个在线服务分别实测。</li><li>只在必要时教学，避免一次塞太多。</li></ol>
+          <p style="margin:16px 0 0"><strong>首问：</strong>检查当前电脑，并告诉我下一步最值得做什么。</p>
+        </div>
+        <div class="mission-groups">
+          <div class="mission-group"><b>起步 · Mission 1–2</b><h3>初始化电脑 / AI 工作站</h3><p>建立必要工具链，并围绕编程、写作、研究、终端、浏览器与 Agent 选择能力。</p></div>
+          <div class="mission-group"><b>体检 · Mission 3–6</b><h3>硬件、终端、软件、存储</h3><p>先盘点和出方案，再逐项确认；清理明确要求未经确认不删除，并优先可恢复方式。</p></div>
+          <div class="mission-group"><b>网络 · Mission 7–8</b><h3>局域网 / 跨地点私网</h3><p>局域网审计保持只读；跨地点网络先比较架构，选定后再逐步实施。</p></div>
+          <div class="mission-group"><b>进阶 · Mission 9–10</b><h3>自动化 / 长期 IT 工程师</h3><p>先识别值得自动化的重复工作；长期模式强调最简单可靠方案和渐进式教学。</p></div>
+        </div>
+      </div>
+      <div class="flow-note" style="margin-top:28px">
+        <div><h3>Prompt 的写法为什么有效</h3><p>每个 Mission 都包含目标、范围、权限边界和交付顺序，减少 AI 自作主张；“先列清单、经确认再修复”是最常见控制结构。</p></div>
+        <div><h3>可迁移到你自己项目的公式</h3><p><code>角色 + 用户水平 + 目标 + 范围 + 禁区 + 验证 + 下一步</code>。这比一句“帮我优化电脑”稳定得多。</p></div>
+      </div>
+    </section>
+
+    <section id="quality">
+      <div class="section-head">
+        <div class="section-no">08</div>
+        <div><h2>测试策略：隔离副作用，驱动真实状态机</h2><p class="section-intro">测试不调用任何真实供应商。它通过脚本化输入、临时 HOME、最小 PATH 和 curl 替身，让真实 Bash 逻辑在安全环境中跑完整分支。</p></div>
+      </div>
+      <div class="test-flow">
+        <div class="test-step"><small>01</small><h3>脚本化 stdin</h3><p>精确模拟选择、确认、退出和 EOF。</p></div>
+        <div class="test-step"><small>02</small><h3>隔离 HOME / PATH</h3><p>避免读取真实配置或找到本机已有 CLI。</p></div>
+        <div class="test-step"><small>03</small><h3>curl stub</h3><p>网络探针固定 204；安装下载可成功或失败。</p></div>
+        <div class="test-step"><small>04</small><h3>验证退出码 / 输出</h3><p>15 秒超时捕捉无限循环回归。</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>断言</th><th>它防住什么</th></tr></thead>
+          <tbody>
+            <tr><td>一开始 stdin 关闭</td><td>非零退出；不运行安装器</td><td>无输入时死循环或误装。</td></tr>
+            <tr><td>选语言后 EOF</td><td>非零退出；不运行安装器</td><td>把 EOF 当成默认选择或默认同意。</td></tr>
+            <tr><td>下载失败</td><td>显示失败与下载原因；不进 VERIFY；可退出</td><td>空脚本被当作成功、错误状态不可恢复。</td></tr>
+            <tr><td>模拟安装成功</td><td>执行桩；进入 VERIFY；提示命令未出现；正常退出</td><td>状态链断裂、验证失败导致异常退出。</td></tr>
+            <tr><td>确认页拒绝</td><td>不运行安装器；正常退出</td><td>用户拒绝后仍执行外部脚本。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="verdict">
+        <div class="pass"><strong>14 / 14</strong><h3>本机离线冒烟断言通过</h3><p>同时完成 Bash 语法检查；测试没有联网，也没有执行真实安装器。</p></div>
+        <div class="limit"><strong>未全覆盖</strong><h3>本机缺少 ShellCheck 与 PowerShell</h3><p>因此未在本机复验 ShellCheck、PSScriptAnalyzer 和 Windows 功能流程；CI 配置包含前两项，但 PowerShell 目前仍只有静态 lint。</p></div>
+      </div>
+      <div class="alert" style="margin-top:24px"><h3>不要把 exit 0 当成“安装已成功”</h3><p>VERIFY 找不到命令时只显示提示，随后仍进入 HANDOFF，用户也可以正常退出。因此退出码代表启动器流程结束，不证明新 CLI 已可用；旧的同名命令还可能造成验证假阳性。</p></div>
+      <h3 style="margin-top:32px">CI 的三条跑道</h3>
+      <div class="metric-strip">
+        <div class="metric" style="grid-column:span 2"><span class="value">Linux</span><span class="label">ShellCheck：主脚本、入口、测试与 stub</span></div>
+        <div class="metric" style="grid-column:span 2"><span class="value">Linux + macOS</span><span class="label">真实驱动 Bash 状态机的离线冒烟测试</span></div>
+        <div class="metric" style="grid-column:span 2"><span class="value">Windows</span><span class="label">PSScriptAnalyzer；排除 Write-Host / Invoke-Expression 规则</span></div>
+      </div>
+    </section>
+
+    <section id="history">
+      <div class="section-head">
+        <div class="section-no">09</div>
+        <div><h2>14 次提交讲清了作者最在意什么</h2><p class="section-intro">所有提交发生在 2026-07-18。演进顺序不是堆功能，而是连续修正失败、授权、PATH、跨平台一致性、测试与文档。</p></div>
+      </div>
+      <div class="timeline">
+        <div class="commit"><code>6e7c0db</code><span class="theme">初始导入</span><span>导入 v0.1.0 的完整跨平台启动器。</span></div>
+        <div class="commit"><code>24526aa</code><span class="theme">错误处理</span><span>Bash 把下载失败明确转为 ERROR。</span></div>
+        <div class="commit"><code>230fa86</code><span class="theme">授权安全</span><span>stdin 关闭时退出，不再无限循环或推定同意。</span></div>
+        <div class="commit"><code>0afce62</code><span class="theme">简化</span><span>去除无用变量、复用同意判断、报告启动失败。</span></div>
+        <div class="commit"><code>24aac32</code><span class="theme">Windows</span><span>保留会话 PATH，并验证下载内容非空。</span></div>
+        <div class="commit"><code>adfcc59</code><span class="theme">一致性</span><span>增加 PowerShell 版本门禁，对齐网络探测与同意语义。</span></div>
+        <div class="commit"><code>f98cf16</code><span class="theme">入口稳健</span><span>切换脚本目录失败时立即退出。</span></div>
+        <div class="commit"><code>12a2324</code><span class="theme">测试</span><span>加入 Bash 状态机离线冒烟测试。</span></div>
+        <div class="commit"><code>85a7213</code><span class="theme">自动化</span><span>加入 Linux/macOS/Windows 三路 CI。</span></div>
+        <div class="commit"><code>353d846</code><span class="theme">开放许可</span><span>加入 MIT License。</span></div>
+        <div class="commit"><code>3418633</code><span class="theme">透明度</span><span>补 SmartScreen、信任模型、开发流程和许可证说明。</span></div>
+        <div class="commit"><code>45a4ef1</code><span class="theme">命名</span><span>把 Windows PATH 函数改名为更准确的 Sync-SessionPath。</span></div>
+        <div class="commit"><code>f3ef5b6</code><span class="theme">产品闭环</span><span>加入安装后的 Mission Prompt 库。</span></div>
+        <div class="commit"><code>9370aef</code><span class="theme">兼容性</span><span>clear_screen 改用显式 if，成为本报告快照提交。</span></div>
+      </div>
+    </section>
+
+    <section id="learn">
+      <div class="section-head">
+        <div class="section-no">10</div>
+        <div><h2>建议这样学：6 个回合，从产品到源码</h2><p class="section-intro">不要急着逐行背 Shell。每一回合只回答一个问题，并留下一个可以复述或验证的结果。</p></div>
+      </div>
+      <div class="learning">
+        <div class="learn-row"><div class="day">01</div><div class="goal"><b>先跑脑内流程</b><span>只读 README 1–40 与状态机 142–164，画出用户从双击到 HANDOFF 的路径。</span></div><div class="proof">能用 60 秒解释“项目为谁解决什么问题”。</div></div>
+        <div class="learn-row"><div class="day">02</div><div class="goal"><b>读三个入口</b><span>理解脚本目录、<code>exec</code>、NoProfile、ExecutionPolicy Bypass 的局部含义。</span></div><div class="proof">能解释为什么入口文件都只有 3 行。</div></div>
+        <div class="learn-row"><div class="day">03</div><div class="goal"><b>先函数后循环</b><span>按网络探针 → 供应商映射 → PATH → handoff 顺序读函数，再读状态循环。</span></div><div class="proof">能追踪选择“2”以后三个核心变量如何变化。</div></div>
+        <div class="learn-row"><div class="day">04</div><div class="goal"><b>比较 Bash 与 PowerShell</b><span>沿同一个状态横向对照两份实现，找出系统 API 不同与产品语义相同的地方。</span></div><div class="proof">能说出至少 4 个平台差异。</div></div>
+        <div class="learn-row"><div class="day">05</div><div class="goal"><b>读测试理解安全</b><span>先看 curl stub，再看 run_kickstarter 如何隔离 HOME/PATH、注入 stdin、捕捉超时。</span></div><div class="proof">能解释为什么测试不会真的安装软件。</div></div>
+        <div class="learn-row"><div class="day">06</div><div class="goal"><b>做一次小改动演练</b><span>在副本中新增一条纯文案，不碰安装 URL；同步中英与双脚本，并跑离线测试。</span></div><div class="proof">理解“镜像维护”成本，而不是只看见 739 行很少。</div></div>
+      </div>
+      <h3 style="margin-top:32px">核心术语词典</h3>
+      <dl class="glossary">
+        <div class="term"><dt>CLI</dt><dd>命令行界面；通过文字命令与软件交互。</dd></div>
+        <div class="term"><dt>状态机</dt><dd>把流程拆成有限状态，每次根据输入跳到下一状态。</dd></div>
+        <div class="term"><dt>stdin</dt><dd>标准输入；这里就是用户在终端里键入的回答。</dd></div>
+        <div class="term"><dt>PATH</dt><dd>系统寻找命令的目录清单；新安装命令常因 PATH 未刷新而暂时不可见。</dd></div>
+        <div class="term"><dt>stub / 测试替身</dt><dd>用可控小程序代替真实 curl，避免网络与安装副作用。</dd></div>
+        <div class="term"><dt>动态执行</dt><dd>把下载到的文本当代码运行；方便但需要高度信任来源。</dd></div>
+        <div class="term"><dt>CI</dt><dd>每次推送或 PR 自动运行检查，防止回归进入主分支。</dd></div>
+        <div class="term"><dt>smoke test</dt><dd>覆盖关键路径的快速测试，不等同于完整测试。</dd></div>
+        <div class="term"><dt>handoff</dt><dd>把后续任务、规则和上下文交给另一个执行者；这里是交给 AI CLI。</dd></div>
+      </dl>
+      <h3 style="margin-top:32px">常见误解，一次澄清</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>问题</th><th>准确答案</th></tr></thead>
+          <tbody>
+            <tr><td>它内置了 AI 吗？</td><td>没有。它安装外部 AI CLI，并输出后续交接 Prompt。</td></tr>
+            <tr><td>会把三款工具都装上吗？</td><td>不会。一次只选择一款，回车默认 Qwen。</td></tr>
+            <tr><td>Google 不通就不能继续？</td><td>不会拦截。探针只是提示，三家服务仍需分别测试。</td></tr>
+            <tr><td>只想看看，确认页按回车安全吗？</td><td>确认页的空输入等于 Yes；只参观应明确输入 <code>n</code>。</td></tr>
+            <tr><td>启动器会审查远端脚本吗？</td><td>不会。它展示初始 URL，但不做内容预览、版本固定、哈希或签名校验。</td></tr>
+            <tr><td>VERIFY 失败等于安装失败？</td><td>不一定，可能只是 PATH 尚未刷新；项目会继续显示 handoff。</td></tr>
+            <tr><td>测试会真的联网安装吗？</td><td>Bash 冒烟测试不会；curl 已被本地 stub 替换。</td></tr>
+            <tr><td>这是成熟大型工程吗？</td><td>不是。它是同日快速加固的小型 v0.1.0，适合学习清晰产品闭环与状态机。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="review">
+      <div class="section-head">
+        <div class="section-no">11</div>
+        <div><h2>评审结论：小而完整，但“远程脚本即信任”是天花板</h2><p class="section-intro">以下把源码事实与评审建议分开：左边是已经做好的工程选择，右边是若继续演进最值得优先投入的方向。</p></div>
+      </div>
+      <div class="review-grid">
+        <div class="good">
+          <h3>已经做得好的</h3>
+          <div class="priority"><div class="p">✓</div><div><b>目标用户与流程高度一致</b><span>一次一问、默认选择、失败恢复、双击入口都服务于“完全新手”。</span></div></div>
+          <div class="priority"><div class="p">✓</div><div><b>授权语义被认真修过</b><span>EOF 不被当成默认同意；确认页展示具体来源；拒绝后不安装。</span></div></div>
+          <div class="priority"><div class="p">✓</div><div><b>无框架、无构建、可读性高</b><span>核心逻辑都在两份脚本内，适合学习状态机和跨平台差异。</span></div></div>
+          <div class="priority"><div class="p">✓</div><div><b>离线测试真正驱动主逻辑</b><span>不是复制逻辑到测试里，而是通过 stdin 和 curl stub 运行真实脚本。</span></div></div>
+          <div class="priority"><div class="p">✓</div><div><b>安装后有明确产品闭环</b><span>交接 Prompt 与 Mission 库把一次安装转化为长期 AI 使用路径。</span></div></div>
+        </div>
+        <div class="next">
+          <h3>若继续演进，优先级建议</h3>
+          <div class="priority"><div class="p">P0</div><div><b>建立可验证供应链</b><span>固定发布版本；提供 checksum / 签名；支持“先下载并查看，再执行”。</span></div></div>
+          <div class="priority"><div class="p">P0</div><div><b>给 PowerShell 增加功能测试</b><span>目前 Windows 只有静态 lint，没有像 Bash 那样驱动状态机的离线分支测试。</span></div></div>
+          <div class="priority"><div class="p">P1</div><div><b>扩展网络三值与三供应商测试</b><span>覆盖 unreachable/unknown、各选项映射、重试与换工具路径。</span></div></div>
+          <div class="priority"><div class="p">P1</div><div><b>减少镜像漂移</b><span>把状态/文案/供应商元数据抽为单一规范，并自动生成或比对两端实现。</span></div></div>
+          <div class="priority"><div class="p">P2</div><div><b>加上可观察性与失败指导</b><span>为常见代理、TLS、权限、PATH 问题提供可复制诊断信息，同时避免泄露隐私。</span></div></div>
+        </div>
+      </div>
+      <div class="alert safe" style="margin-top:28px"><h3>最值得带走的一课</h3><p>这个项目的价值不在技术复杂度，而在“把用户从未知状态安全地推进到可自助状态”。结构、状态机、测试和 Prompt 都围绕同一个用户旅程，没有多余层。</p></div>
+    </section>
+
+    <section id="sources">
+      <div class="section-head">
+        <div class="section-no">↗</div>
+        <div><h2>证据索引与核对范围</h2><p class="section-intro">报告基于 main 分支提交 <code>9370aef</code> 的只读快照，并与 GitHub 仓库页交叉核对。没有运行任何真实安装器。</p></div>
+      </div>
+      <div class="source-index">
+        <div class="source-line"><code>README.md: 1–33</code><span>目标用户、支持范围、三平台用法。</span></div>
+        <div class="source-line"><code>README.md: 35–140</code><span>通用前置与 10 个 Mission Prompt。</span></div>
+        <div class="source-line"><code>README.md: 142–171</code><span>状态机、网络探测、信任模型、开发流程。</span></div>
+        <div class="source-line"><code>kickstarter.sh: 1–184</code><span>Bash 完整实现；核心状态循环为 131–184。</span></div>
+        <div class="source-line"><code>kickstarter.ps1: 1–209</code><span>PowerShell 完整实现；核心状态循环为 124–209。</span></div>
+        <div class="source-line"><code>tests/run-tests.sh: 1–96</code><span>隔离策略、五场景、14 个断言与超时机制。</span></div>
+        <div class="source-line"><code>tests/stubs/curl: 1–12</code><span>Google 204、下载成功/失败模拟。</span></div>
+        <div class="source-line"><code>ci.yml: 1–32</code><span>三路 CI 与 PowerShell lint 排除项。</span></div>
+        <div class="source-line"><code>git log: 14 commits</code><span>2026-07-18 的演进顺序与修复意图。</span></div>
+        <div class="source-line"><a href="https://github.com/xiaolai/ai-cli-kickstarter">GitHub 原仓库</a><span>官方 README、文件列表、提交与许可证入口。</span></div>
+      </div>
+    </section>
+
+    <footer>
+      <div>分析方法：源码逐文件核对 + Git 历史 + 离线 Bash 冒烟测试 + 静态语法检查。事实、推断与改进建议在文中分别标注。</div>
+      <div><a href="#top">返回顶部 ↑</a></div>
+    </footer>
+  </main>
+</body>
+</html>

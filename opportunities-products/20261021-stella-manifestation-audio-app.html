@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stella 显化音频 App 全方位研究：视频说法核对、增长路径、订阅经济与可迁移条件</title>
+<style>
+:root{
+  --c-bg:#f6f7f9;--c-surface:#ffffff;--c-surface-2:#eef1f5;--c-ink:#1c2330;--c-ink-2:#4b5563;--c-ink-3:#6b7280;
+  --c-line:#d9dee6;--c-accent:#3b5bdb;--c-accent-soft:#e7ecfb;
+  --c-ok:#1f7a4d;--c-ok-soft:#e3f3ea;--c-warn:#a2620a;--c-warn-soft:#fbefd9;--c-bad:#b42318;--c-bad-soft:#fde8e6;
+  --c-gray:#5b6472;--c-gray-soft:#eceff3;--c-self:#6d3fb8;--c-self-soft:#efe7fb;
+  --fs-xs:.78rem;--fs-sm:.88rem;--fs-md:1rem;--fs-lg:1.2rem;--fs-xl:1.55rem;--fs-2xl:2rem;--fs-num:1.7rem;
+  --lh:1.65;--sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2.25rem;--sp-7:3.25rem;
+  --r-sm:6px;--r-md:12px;--w-max:1080px;--col-min:260px;--col-min-wide:300px;--bw:1px;--bw-strong:3px;
+  --shadow:0 1px 2px rgba(20,30,50,.06);--flow-arrow:1.4rem;--bar-h:10px;--w-min-table:720px;--w-min-table-sm:560px;
+  --ls-tag:.02em;--fw-bold:700;--fw-semi:600;--lh-tight:1.3;--lh-num:1.15;--indent:1.4em;--rot-arrow:90deg;--font:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--font);font-size:var(--fs-md);line-height:var(--lh)}
+.wrap{max-width:var(--w-max);margin:0 auto;padding:var(--sp-5) var(--sp-4) var(--sp-7)}
+h1{font-size:var(--fs-2xl);line-height:var(--lh-tight);margin:0 0 var(--sp-3)}
+h2{font-size:var(--fs-xl);margin:var(--sp-7) 0 var(--sp-3);padding-top:var(--sp-4);border-top:var(--bw) solid var(--c-line)}
+h3{font-size:var(--fs-lg);margin:var(--sp-5) 0 var(--sp-2)}
+p{margin:0 0 var(--sp-3)}
+ul,ol{margin:0 0 var(--sp-3);padding-left:var(--indent)}
+li{margin-bottom:var(--sp-1)}
+a{color:var(--c-accent);word-break:break-all}
+small,.muted{color:var(--c-ink-3);font-size:var(--fs-sm)}
+.hero{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-5);box-shadow:var(--shadow)}
+.hero .lead{font-size:var(--fs-lg);margin-bottom:var(--sp-3)}
+.meta{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--c-ink-3)}
+.note{background:var(--c-accent-soft);border-left:var(--bw-strong) solid var(--c-accent);border-radius:var(--r-sm);padding:var(--sp-3) var(--sp-4);margin:var(--sp-4) 0}
+.note.warn{background:var(--c-warn-soft);border-left-color:var(--c-warn)}
+.note.bad{background:var(--c-bad-soft);border-left-color:var(--c-bad)}
+.note.self{background:var(--c-self-soft);border-left-color:var(--c-self)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin:var(--sp-3) 0}
+.tag{display:inline-block;font-size:var(--fs-xs);letter-spacing:var(--ls-tag);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);white-space:nowrap;font-weight:var(--fw-semi)}
+.t-ok{background:var(--c-ok-soft);color:var(--c-ok)}
+.t-warn{background:var(--c-warn-soft);color:var(--c-warn)}
+.t-bad{background:var(--c-bad-soft);color:var(--c-bad)}
+.t-gray{background:var(--c-gray-soft);color:var(--c-gray)}
+.t-acc{background:var(--c-accent-soft);color:var(--c-accent)}
+.t-self{background:var(--c-self-soft);color:var(--c-self)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--col-min),1fr));gap:var(--sp-3);margin:var(--sp-4) 0}
+.cards.wide{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-wide),1fr))}
+.card{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4);box-shadow:var(--shadow)}
+.card h3,.card h4{margin:0 0 var(--sp-2);font-size:var(--fs-md)}
+.card .num{font-size:var(--fs-num);font-weight:var(--fw-bold);line-height:var(--lh-num);margin-bottom:var(--sp-1)}
+.card .sub{font-size:var(--fs-sm);color:var(--c-ink-2)}
+.table-scroll{overflow-x:auto;margin:var(--sp-4) 0;border:var(--bw) solid var(--c-line);border-radius:var(--r-md);background:var(--c-surface)}
+table{border-collapse:collapse;width:100%;min-width:var(--w-min-table);font-size:var(--fs-sm)}
+table.sm{min-width:var(--w-min-table-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw) solid var(--c-line)}
+th{background:var(--c-surface-2);font-weight:var(--fw-semi);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:var(--sp-2);margin:var(--sp-4) 0}
+.flow .step{flex:1 1 var(--col-min);min-width:0;background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3);position:relative;box-shadow:var(--shadow)}
+.flow .step b{display:block;margin-bottom:var(--sp-1)}
+.flow .step .ev{font-size:var(--fs-xs);color:var(--c-ink-3);margin-top:var(--sp-2)}
+.flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--c-accent);font-size:var(--flow-arrow);flex:0 0 auto;padding:0 var(--sp-1)}
+.bar{height:var(--bar-h);background:var(--c-gray-soft);border-radius:var(--r-sm);overflow:hidden;margin:var(--sp-1) 0 var(--sp-2)}
+.bar span{display:block;height:100%;background:var(--c-accent)}
+.bar.self span{background:var(--c-self)}
+.bar.gray span{background:var(--c-gray)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--col-min),1fr));gap:var(--sp-3)}
+ol.src li{margin-bottom:var(--sp-2);font-size:var(--fs-sm)}
+.disclaimer{font-size:var(--fs-sm);color:var(--c-ink-2);background:var(--c-surface-2);border-radius:var(--r-md);padding:var(--sp-4);margin-top:var(--sp-6)}
+footer{margin-top:var(--sp-5);font-size:var(--fs-xs);color:var(--c-ink-3)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-1) var(--sp-3);font-size:var(--fs-sm)}
+.kv dt{color:var(--c-ink-3);white-space:nowrap}.kv dd{margin:0}
+/* 断点 640px：手机单列、缩小标题；与 token 分开写因媒体查询不能引用变量 */
+@media (max-width:640px){
+  :root{--fs-2xl:1.5rem;--fs-xl:1.3rem;--fs-num:1.4rem;--sp-7:2.25rem;--sp-6:1.75rem}
+  .wrap{padding:var(--sp-4) var(--sp-3) var(--sp-6)}
+  .hero{padding:var(--sp-4)}
+  .flow{flex-direction:column}
+  .flow .arrow{transform:rotate(var(--rot-arrow));padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="meta"><span>产品研究 · 事实核对</span><span>对象：Stella – Manifest Anything（iOS / Android）</span><span>资料截止 2026-10-21</span></div>
+  <h1>Stella：一位创作者用 AI 把「显化」肯定语做成每人一份的付费音频故事</h1>
+  <p class="lead">视频说的产品、创始人和获客方式在公开资料里都能找到对应。视频说的「月订阅收入一度超过三十万美元」只有创始人自报，没有独立核验。真正可以研究的，是它「先有内容和受众、再做付费个性化版本」的路径，以及这条路径依赖的前提。</p>
+  <div class="legend">
+    <span class="tag t-ok">直接支持</span><span class="tag t-warn">部分支持</span><span class="tag t-self">仅自报</span><span class="tag t-bad">存在冲突</span><span class="tag t-gray">证据不足</span><span class="tag t-acc">视频未提</span>
+  </div>
+  <p class="muted">「直接支持」指应用商店页、逐字稿或付费墙截图可以直接看到。「仅自报」指只有创始人在采访中说过，没有第三方数据。「存在冲突」指不同来源给出的数字或日期不一致。本页作者的推断会单独标出。</p>
+</header>
+
+<h2>一、三句话摘要</h2>
+<div class="cards">
+  <div class="card"><h3>产品已上架，机制可描述</h3><p class="sub">iOS 评分 4.7（5.4K 评分），Android 10K+ 下载。用户填名字、亲友和愿望，App 生成第一人称旁白音频，配环境音，每天一则。这是「运作机制」，不是「效果机制」。本页不评价「显化」是否有效。</p></div>
+  <div class="card"><h3>收入只有自报</h3><p class="sub">创始人在 2026-07-12 刊发的采访里展示仪表盘：MRR $341,537，活跃订阅 12,379（截图实际日期未确认）。第三方估算从 $100k/月 到 $350k/月 不一致，方法与时点不明，不能用来验证自报。</p></div>
+  <div class="card"><h3>可迁移的是路径，不是数字</h3><p class="sub">她 2020 年起积累受众并卖课，2026 年才做 App。路径是：免费内容 → 评论触发私信 → 下载 → 长问卷 → 硬付费墙。能不能复制，取决于你是否已有信任和分发。</p></div>
+</div>
+
+<h2>二、视频说法逐条核对</h2>
+<div class="table-scroll"><table>
+<thead><tr><th>视频说法</th><th>判定</th><th>核对结果</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td>「AI 故事 App，叫 Stella」</td><td><span class="tag t-warn">部分支持</span></td><td>App 名为 Stella – Manifest Anything，商店分类是 Health &amp; Fitness，官方定位是「显化」（manifestation）音频。核心产出确实是个性化叙事音频，所以叫「故事 App」不算错，但漏掉了它的品类和受众。</td><td>S1, S2</td></tr>
+<tr><td>「月订阅收入一度超过三十万美元」</td><td><span class="tag t-self">仅自报</span></td><td>创始人在 Starter Story 采访中自报「两个月内超过 $300K MRR」，仪表盘显示 $341,537（采访刊发 2026-07-12，数据实际对应时点未确认）。没有 Sensor Tower、Appfigures 等独立数据。MRR 是按月折算的经常性订阅收入指标，不等于当月实收，也不等于扣除平台分成后的收入。</td><td>S3, S4</td></tr>
+<tr><td>「填上自己和亲友的名字，写下愿望，AI 编进故事，配旁白和环境音」</td><td><span class="tag t-ok">直接支持</span></td><td>官方文案：把你的名字、你爱的人和真实愿望写进沉浸式旁白音频，配雨声、咖啡馆、海浪等环境音，可选男声女声，也可改为阅读。本次未能直接打开官网，文案来自搜索摘要与商店页。</td><td>S1, S2, S5</td></tr>
+<tr><td>「故事里出现 Michael，去瑞士阿尔卑斯山旅行」</td><td><span class="tag t-gray">证据不足</span></td><td>这是视频作者自己的演示样例，无法核对，也不需要核对。</td><td>—</td></tr>
+<tr><td>「百万粉丝女博主 Sarah」</td><td><span class="tag t-self">仅自报</span></td><td>Sarah Perl，网名 HotHighPriestess。粉丝数来自她在采访与 LinkedIn 的自报：TikTok 2.8M、Instagram 1.2M；本页未抓取平台页面快照。跨平台粉丝不能相加去重，但「百万粉丝」在单平台上就已满足。</td><td>S3, S6</td></tr>
+<tr><td>「她本来就做自我鼓励类视频」</td><td><span class="tag t-warn">部分支持</span></td><td>她从 2020 年起做塔罗与显化内容，并卖过塔罗解读、Manifest Magic 等课程，Stan 平台三年累计收入 $1M+（Stan 官方博客，带推广性质）。「自我鼓励」是中文转述，原语境是「显化 / 肯定语」。</td><td>S3, S6, S7</td></tr>
+<tr><td>「让想要专属内容的观众留言下载，用 ManyChat 发私信引到 App」</td><td><span class="tag t-ok">直接支持</span></td><td>采访逐字稿原话：观众评论「download」，ManyChat 自动私信送「定制肯定语」和 App Store 链接，私信里还请对方留评价。</td><td>S3</td></tr>
+<tr><td>「免费视频给所有人，付费 App 写进你的名字、关系和愿望」</td><td><span class="tag t-ok">直接支持</span></td><td>与采访和产品结构一致。视频没说的是：App 内先答 27–38 屏问卷，再见强制 7 天试用的周付硬付费墙。</td><td>S3, S8, S9</td></tr>
+<tr><td>「可借鉴：把已有人反复看的内容做成每人一份的专属版本」</td><td><span class="tag t-warn">部分支持</span></td><td>这是合理的归纳，但省掉了前提：五年受众积累、已有卖课收入和信任、不计成本的推广频率。本页第五部分给出迁移条件。</td><td>作者推断</td></tr>
+</tbody></table></div>
+
+<div class="note warn"><b>视频没说、但影响判断的事</b>：① 付费墙是硬墙，问卷里有性取向、孩子、困扰等私密问题；② 所见付费墙只展示周付，是否另有月付或年付尚未核实；按所见周价 $6.99–$9.99 连续续订 52 周约 $363–$519；③ 创始人此前已有百万美元级的课程生意和一个 TikTok Shop 品牌（自称月收入七位数，未核实）；④ 发布日期与「上线两个月」说法有冲突，见第三部分。</div>
+
+<h3>数字口径卡</h3>
+<div class="cards">
+  <div class="card"><span class="tag t-self">仅自报</span><div class="num">$341,537</div><div class="sub">MRR，采访中展示的仪表盘；采访刊发 2026-07-12，截图实际日期未确认。不是当月实收，不是净收入。</div></div>
+  <div class="card"><span class="tag t-self">仅自报</span><div class="num">12,379</div><div class="sub">活跃订阅数，同一截图。含试用期用户与否不明。</div></div>
+  <div class="card"><span class="tag t-self">仅自报</span><div class="num">200K+</div><div class="sub">累计下载，采访口头数字；采访刊发 2026-07-12，数据实际对应时点未确认。第三方 mwm.ai 记载 2026-05 达 250K。</div></div>
+  <div class="card"><span class="tag t-bad">存在冲突</span><div class="num">$100k ～ $350k</div><div class="sub">第三方 screensdesign 两个页面给出不同月收入估算，方法与时点不明，不能验证自报。</div></div>
+  <div class="card"><span class="tag t-ok">直接支持</span><div class="num">4.7 / 5.4K</div><div class="sub">App Store 评分与评分数，2026-10-21 抓取。2026-07 时为 3.7K，2026-08 为 7.9K，三个来源数字不一致。</div></div>
+  <div class="card"><span class="tag t-ok">直接支持</span><div class="num">10K+</div><div class="sub">Google Play 下载区间，2026-10-09 更新。Android 版规模远小于 iOS。</div></div>
+</div>
+<div class="note"><b>两个常见但不能做的推算</b>。第一，$341,537 ÷ 12,379 ≈ $27.6/月，只能叫「每活跃订阅的月均 MRR 粗估」，并且要求两个数来自同一时点、同一订阅定义。周价 $6.99 × 52 ÷ 12 ≈ $30.3，与 $27.6 并不相符，差异原因不明（可能含折扣档、试用期用户、地区定价）。第二，12,379 ÷ 200K ≈ 6%，这是活跃订阅存量除以累计下载，不是下载到付费的转化率。真实转化率需要同一批用户、固定观察窗口和明确的付费定义，公开资料没有。</div>
+
+<h2>三、用户路径与增长证据</h2>
+<p>下图是从公开采访和付费墙截图整理出的获客漏斗。它不是「飞轮」：公开资料里没有留存、转介绍反哺获客的数据，所以画不成闭环。</p>
+<div class="flow">
+  <div class="step"><b>① 免费肯定语视频</b>钩子如「连续七天重复这些肯定语」，促进收藏与分享。演示 App 用法的视频反而转化差。<div class="ev">S3 逐字稿</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><b>② 评论「download」</b>视频结尾引导评论关键词。<div class="ev">S3</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><b>③ ManyChat 自动私信</b>送一份「定制肯定语」加 App Store 链接，并请对方装好后留评价，承诺亲自致谢。<div class="ev">S3</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><b>④ 27–38 屏问卷</b>姓名、所在地、性别、性取向、年龄、孩子、工作、困扰、重要的人、伴侣名字；中途请求通知权限、评分、推荐码。<div class="ev">S8, S9 截图</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><b>⑤ 硬付费墙</b>强制 7 天试用后周付；倒计时「Your stories expire in 2:59:37」；「团队来信」解释需要试用。<div class="ev">S8, S10</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><b>⑥ 每日故事</b>Today's Moment 每天一则，可文字改写；另有愿望追踪、感恩日记。留存数据未公开。<div class="ev">S1, S5</div></div>
+</div>
+
+<div class="two">
+  <div class="card"><h3>创始人说的转化观察（自报；采访刊发 2026-07-12，各数据对应时点未确认）</h3>
+    <ul>
+      <li>一条约 30 万播放的视频「转化非常好」；一条 51 万播放的 UGC 风格视频，转化超过数百万播放的视频。她的结论是「播放量不等于收入」。</li>
+      <li>上线后新开一个 TikTok 账号，两个月约 4 万粉。这不是「从零起号」的证据：主账号与课程受众仍在导流。</li>
+      <li>原话：「我倒着做：先做内容和分发，再做产品」「最好的产品不赢，最知名的赢」「女性主导分发」。前两句是她的方法，第三句只是她的判断，本页不把它当成规律。</li>
+    </ul></div>
+  <div class="card"><h3>分发前提：2020–2026 的积累</h3>
+    <dl class="kv">
+      <dt>2020-11</dt><dd>开始发 TikTok 塔罗视频，粉丝不到 150 时出现 90 万播放爆款。</dd>
+      <dt>2021–2025</dt><dd>卖塔罗解读、Manifest Magic 等课程；Stan 平台三年累计 $1M+（Stan 博客）。另有 TikTok Shop 品牌，收入自称，未核实。</dd>
+      <dt>2026-01-28</dt><dd>Stella iOS 首发（screensdesign、mwm.ai 记载）。</dd>
+      <dt>2026-02 / 05</dt><dd>mwm.ai 记载 30 天内 50K 下载、一年内 250K 下载。</dd>
+      <dt>2026-07-12</dt><dd>Starter Story 采访刊发，自报 $300K+ MRR。</dd>
+      <dt>2026-10</dt><dd>iOS 2.3.16 更新（10-08），Android 更新（10-09）。</dd>
+    </dl></div>
+</div>
+
+<div class="note bad"><b>上线日期争议</b>。第三方记载 iOS 首发为 2026-01-28；但 2026-07-12 刊发的采访里创始人说「上线两个月」，多篇中英文转述因此写成「2026-05 上线」。两种说法不能互相替换。可能的解释是「1 月软上线、5 月前后才正式推广」，或采访录制日早于刊发日。这些都是待验证的解释，本页不替她选一个。</div>
+
+<h3>开发方式（自报）</h3>
+<p>创始人称没有编程背景，主要用 Claude Code，辅以 Claude 与 Google AI Studio 做设计和排错；MVP 约 2 天，完整版 2–3 个月。两组时间要一起看：「两天」说的是原型，不能推出零成本或一个人就能长期交付。团队规模、外包与持续维护情况公开资料没有说。</p>
+
+<h2>四、订阅经济、用户评价与风险</h2>
+<h3>定价口径（按抓取来源分列）</h3>
+<div class="table-scroll"><table class="sm">
+<thead><tr><th>来源 / 时间</th><th>看到的价格</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>toomanypaywalls，2026-07-16</td><td>$6.99 / 周，7 天强制试用</td><td>标记：强制试用、稀缺文案、倒计时、周付。该页同时标注「$481/年」，与 $6.99 × 52 ≈ $363 不对应（$481 对应约 $9.26/周），本页保留原数字并标注不一致。</td></tr>
+<tr><td>screensdesign</td><td>$7.99 / 周；美区试用后 $9.26 / 周</td><td>不同页面不同数字，可能是地区或版本差异。$9.26 × 52 ≈ $482/年。</td></tr>
+<tr><td>Google Play 用户评论</td><td>$9.99 / 周</td><td>单条评论口径，$9.99 × 52 ≈ $519/年。</td></tr>
+<tr><td>App Store 内购列表，2026-10-21</td><td>$6.99 ～ $29.99 共 10 档</td><td>档名 Stella / Stella Unlimited，周期未标。</td></tr>
+</tbody></table></div>
+<p class="muted">年化金额是「连续续订一年要花的钱」，不是有年付档。不同周价不能自行解释为价格实验，只能按来源、时间、地区分列。</p>
+
+<h3>公开资料里缺的账</h3>
+<div class="cards">
+  <div class="card"><h4>订阅质量</h4><p class="sub">试用转付费率、第 4 / 12 周留存、退款与取消原因，均无公开数据。MRR 高不代表留得住。</p></div>
+  <div class="card"><h4>成本</h4><p class="sub">Apple / Google 分成（15%–30%）、税费、语音合成与模型调用、客服、内容生产、获客投入，均未披露。本页不补估利润率。</p></div>
+  <div class="card"><h4>结论</h4><p class="sub">只能说「自报营收规模大」，不能判断净利润与可持续性。创作者其他生意的收入不能替 Stella 背书。</p></div>
+</div>
+
+<h3>用户评价两面</h3>
+<p class="muted">样本：App Store、Google Play 页面可见评论与第三方整理（2026-07 至 2026-10），非随机抽样。创始人在私信里邀请留评，这可能影响样本构成，方向与程度未知；邀评不等于刷评。下面只是所见评论举例，不代表问题出现的频率，也未按版本筛选。</p>
+<div class="two">
+  <div class="card"><h4><span class="tag t-ok">所见好评举例</span></h4><ul><li>听到自己名字和亲友名字出现在故事里，情感冲击强，有人说会流泪。</li><li>旁白声音自然，适合睡前。</li><li>对「不会在脑子里想画面」的人，音频比文字肯定语更容易用。</li></ul></div>
+  <div class="card"><h4><span class="tag t-bad">所见差评举例</span></h4><ul><li>答完一堆私密问题才发现是付费墙，觉得被套路。</li><li>抱怨只有周付，想要月付或年付。</li><li>音频中断、崩溃、卡顿。</li><li>用错名字、读错发音；故事情节跳跃，或加入没填过的细节。</li><li>Today's Moment 超过 24 小时不更新，或重复。</li><li>取消订阅困难，有人按月折算后抱怨「一个月 40 美元」。</li></ul></div>
+</div>
+
+<h3>需要审查的问题（提问，不下结论）</h3>
+<ul>
+  <li><b>隐私</b>：性取向、孩子、困扰、亲友姓名是否都是生成故事必需的？这些信息是否传给第三方模型？如何保存、如何删除？是否有未成年人保护？商店页标注收集姓名、粗略位置、敏感信息，但「未与身份关联」。</li>
+  <li><b>付费墙</b>：倒计时是否真实失效？试用结束自动续费的告知是否清楚？取消路径是否可见？</li>
+  <li><b>健康边界</b>：竞品 Noesis 博客批评 Stella「拥抱妄想」、可能带来心理健康顾虑。这是竞争方的观点，不是独立医学证据，本页只记录归属。</li>
+</ul>
+
+<h2>五、竞品对照与可迁移条件</h2>
+<div class="table-scroll"><table>
+<thead><tr><th>产品</th><th>个性化方式</th><th>声音</th><th>定价（公开可见）</th><th>付费墙</th><th>持续使用理由</th></tr></thead>
+<tbody>
+<tr><td><b>Stella</b></td><td>长问卷：姓名、亲友、愿望、困扰</td><td>预置男 / 女旁白</td><td>所见 $6.99–$9.99 / 周，7 天试用；其他周期未核</td><td>硬墙，倒计时</td><td>每日新故事</td></tr>
+<tr><td>Noesis</td><td>行为改变框架：冥想 / 肯定 / 日记 / 行动</td><td>可用自己的声音</td><td>未核</td><td>未核</td><td>10 / 20 分钟可视化练习</td></tr>
+<tr><td>Aya（Lit Apps）</td><td>「未来的自己」视角</td><td>模拟自己的声音</td><td>$5 / 周 ～ $99.99 终身</td><td>未核</td><td>未核</td></tr>
+<tr><td>Innertune、Manifested 等</td><td>肯定语库 + 提醒</td><td>多为文字或通用配音</td><td>未逐一核对</td><td>未核</td><td>提醒与打卡</td></tr>
+</tbody></table></div>
+<p class="muted">对照只列公开可见项，未知项留空。市场背景：冥想类 App 市场规模 2023 年约 $13.9 亿、预测 2033 年约 $72.5 亿（Spherical Insights，行业报告口径），这是邻近市场，不是「显化音频」细分数据。</p>
+
+<h3>值得验证的迁移假设（不是「可借鉴」清单）</h3>
+<div class="cards wide">
+  <div class="card"><h4>假设 1：已有人反复消费的内容，可以做成每人一份</h4><p class="sub"><b>前提</b>：你已经有一批重复观看、收藏、转发你内容的人，而且他们对「自己的名字出现在里面」有情绪反应。<b>风险</b>：没有受众时，这条路径的第一步就不存在。</p></div>
+  <div class="card"><h4>假设 2：评论触发私信比直接放链接转化高</h4><p class="sub"><b>前提</b>：平台允许自动私信工具，私信里先给一份免费小礼物再给链接。<b>风险</b>：平台规则变化、私信被判营销、单一账号依赖。</p></div>
+  <div class="card"><h4>假设 3：长问卷 + 硬付费墙能把情绪转成订阅</h4><p class="sub"><b>前提</b>：问卷里每一题都真的改变产出。<b>风险</b>：所见差评中，有用户抱怨长问卷与硬付费墙；私密问题带来隐私审查；周付与倒计时伤口碑。不建议直接复制。</p></div>
+  <div class="card"><h4>假设 4：AI 工具让非程序员两三个月上线</h4><p class="sub"><b>前提</b>：产品是「文字 → 语音」这类成熟 API 组合，没有复杂后台。<b>风险</b>：上线后崩溃、读错名字、重复内容都在差评里出现，维护不是零成本。</p></div>
+</div>
+
+<h2>六、给读者的最小试验与来源</h2>
+<h3>三道门（不先写 App）</h3>
+<ol>
+  <li><b>真实付款门</b>：用表单收集名字和愿望，人工或 AI 生成一段音频，先收一次钱。<b>判断标准</b>：固定推广窗口内，看内容的人里是否有至少预设比例付款。<b>注意</b>：一次付款只验证首次吸引力，不验证订阅需求。</li>
+  <li><b>重复使用与续费门</b>：对付过款的人做第二期、第三期，看是否愿意再付。<b>判断标准</b>：第二次付款率、第 4 周仍在用的人数。</li>
+  <li><b>交付成本门</b>：记录每份内容的生成、配音、客服与获客成本，扣除平台分成后看是否为正。<b>判断标准</b>：单份毛利为正，且时间成本可承受。</li>
+</ol>
+<p class="muted">试验只收必需信息，不复制 Stella 的敏感问卷与倒计时设计。</p>
+
+<h3>来源</h3>
+<ol class="src">
+  <li id="s1">S1 · App Store：Stella – Manifest Anything（Perl Productions LLC），抓取 2026-10-21。<a href="https://apps.apple.com/us/app/stella-manifest-anything/id6757347283">apps.apple.com/…/id6757347283</a></li>
+  <li>S2 · Google Play：10K+ 下载，更新 2026-10-09，抓取 2026-10-21。<a href="https://play.google.com/store/apps/details?id=com.priestess.manifestation">play.google.com/…/com.priestess.manifestation</a></li>
+  <li>S3 · Starter Story（Pat Walls）「She Built This $300K/Month App in 60 Days」，刊发 2026-07-12，HubSpot 赞助。创始人自报数据的主要来源。<a href="https://www.starterstory.com/stories/she-built-this-300k-month-app-in-60-days">starterstory.com</a>；逐字稿 <a href="https://podcasttranscript.ai/library/she-built-this-300k-month-app-in-60-days">podcasttranscript.ai</a>（ManyChat、「comment download」、「over $300K MRR in two months」均出自逐字稿）</li>
+  <li>S4 · 对 S3 的转述：<a href="https://www.startupfinder.co/posts/how-a-manifesting-app-hit-340kmonth-in-just-2-months-eg93">Startup Finder</a>（含仪表盘数字 $341,537 / 12,379）、<a href="https://www.thefuturist.co/340k-mrr-founder-reveals-why-pain-and-disbelief-is-your-greatest-fuel/">The Futurist</a>。多篇转述同一采访，不算独立交叉验证。</li>
+  <li>S5 · 官网 <a href="https://downloadstella.com/">downloadstella.com</a> 文案，来自搜索摘要；本次未能直接打开官网。</li>
+  <li>S6 · Yuma Ueno「A 25-Year-Old Who Can't Code Built an App With AI and Hit $300K a Month in 8 Weeks」，2026-08-05，<a href="https://yumaueno.substack.com/p/a-25-year-old-who-cant-code-built">Substack</a>；<a href="https://www.drpang.ai/ta-cong-wei-xie-guo-yi-xing-dai-ma-liang-ge-yue-hou-app-yue-shou-ru-da-dao-30-mo-mei-yuan/">drpang.ai 中文改写</a>，2026-08-09。</li>
+  <li>S7 · <a href="https://stan.store/blog/sarah-perl/">Stan 官方博客</a>（三年 $1M+，推广性质）；<a href="https://creatorinpublic.com/p/hothighpriestess-built-a-1m-tiktok-business-at-23">Creator in Public 访谈</a>，2025-03-08；<a href="https://www.linkedin.com/in/sarah-perl-758288325/">LinkedIn</a>（「4.5M+ followers」自述）。</li>
+  <li>S8 · screensdesign：<a href="https://screensdesign.com/showcase/stella-manifest-anything">showcase 页</a>与 <a href="https://screensdesign.com/apps/stella-manifest-anything/">apps 页</a>，onboarding 与付费墙截图及月收入估算（两个页面数字不一致）。</li>
+  <li>S9 · Yuma Ueno 对 38 屏 onboarding 的记录（与 S8 的 27–28 步口径不同）。</li>
+  <li>S10 · <a href="https://toomanypaywalls.com/app/stella">toomanypaywalls</a>，付费墙快照 2026-07-16。</li>
+  <li>S11 · <a href="https://mwm.ai/apps/stella-manifest-anything/6757347283">mwm.ai</a>，下载里程碑与评分数，2026-08-17。</li>
+  <li>S12 · <a href="https://www.trynoesis.app/blog/noesis-vs-stella/">Noesis 博客「Noesis vs Stella」</a>（Diego S. Ding，2026-07-05），竞品观点。</li>
+  <li>S13 · Spherical Insights，冥想 App 市场规模报告。</li>
+  <li>S14 · 用户要求核对的中文短视频转述稿（本页核对对象）。</li>
+</ol>
+
+<div class="disclaimer"><b>说明</b>：本页所有收入、下载、订阅数均为创始人自报或第三方估算，未经独立审计。价格按抓取来源和时间分列，可能已变化。用户评价为非随机样本。本页不评价「显化」的效果，也不构成投资或医疗建议。竞品批评均标明归属。</div>
+<footer>制作：Claude Code（飞书会话）· 内容审查：ChatGPT Pro 文字意见已采纳结构与口径建议 · 交叉审核：Codex 只读 · 生成日期 2026-10-21</footer>
+</div>
+</body>
+</html>

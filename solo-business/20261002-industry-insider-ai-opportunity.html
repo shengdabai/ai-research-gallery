@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 时代,真是「行业叛徒」的机会吗?——一段视频的拆解、例证与修订</title>
+<style>
+/* ==== tokens ==== */
+/* 断点:40rem(单列 → 双列)、60rem(双列 → 三列 / 横向流程) */
+:root {
+  /* primitive: color */
+  --c-ink-900: #0f1f24;
+  --c-ink-700: #2f444b;
+  --c-ink-500: #55676e;
+  --c-gray-50: #f1f4f6;
+  --c-gray-100: #e6ebee;
+  --c-gray-300: #cdd6da;
+  --c-white: #ffffff;
+  --c-teal-900: #0b474b;
+  --c-teal-700: #14747a;
+  --c-teal-100: #dcedee;
+  --c-amber-800: #7d4800;
+  /* primitive: type */
+  --ff-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-15: 0.9375rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-24: 1.5rem;
+  --fs-30: 1.875rem;
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+  --lh-tight: 1.3;
+  --lh-normal: 1.75;
+  /* primitive: space */
+  --sp-2: 0.125rem;
+  --sp-4: 0.25rem;
+  --sp-8: 0.5rem;
+  --sp-12: 0.75rem;
+  --sp-16: 1rem;
+  --sp-24: 1.5rem;
+  --sp-32: 2rem;
+  --sp-48: 3rem;
+  /* primitive: shape */
+  --r-4: 0.25rem;
+  --r-8: 0.5rem;
+  --r-12: 0.75rem;
+  --bw-1: 1px;
+  --bw-3: 3px;
+  --shadow-1: 0 1px 2px rgba(15, 31, 36, 0.06);
+  --w-page: 66rem;
+  --w-card-min: 17rem;
+  --w-label: 6.5rem;
+  --clip-hidden: inset(50%);
+  --size-hidden: 1px;
+  /* semantic */
+  --color-bg: var(--c-gray-50);
+  --color-surface: var(--c-white);
+  --color-surface-muted: var(--c-gray-100);
+  --color-text: var(--c-ink-900);
+  --color-text-soft: var(--c-ink-700);
+  --color-text-muted: var(--c-ink-500);
+  --color-border: var(--c-gray-300);
+  --color-primary: var(--c-teal-700);
+  --color-primary-strong: var(--c-teal-900);
+  --color-primary-soft: var(--c-teal-100);
+  --color-on-primary: var(--c-white);
+  --color-warn-text: var(--c-amber-800);
+  --color-warn-bg: var(--c-gray-100);
+  --text-body: var(--fs-16);
+  --text-small: var(--fs-14);
+  --text-micro: var(--fs-12);
+  --gap-section: var(--sp-48);
+  --gap-block: var(--sp-24);
+  --pad-card: var(--sp-16);
+  --radius-card: var(--r-12);
+  --radius-tag: var(--r-4);
+}
+
+/* ==== base ==== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--ff-sans);
+  font-size: var(--text-body);
+  line-height: var(--lh-normal);
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4, p, ul, ol, dl, dd, figure, table { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+a { color: var(--color-primary); text-underline-offset: var(--sp-2); }
+a:focus-visible, summary:focus-visible { outline: var(--bw-3) solid var(--color-primary); outline-offset: var(--sp-2); }
+strong { font-weight: var(--fw-bold); }
+
+/* ==== components ==== */
+.page { max-width: var(--w-page); margin: 0 auto; padding: var(--sp-16); }
+.section { margin-top: var(--gap-section); }
+.section > h2 {
+  font-size: var(--fs-24);
+  line-height: var(--lh-tight);
+  color: var(--color-primary-strong);
+  padding-bottom: var(--sp-8);
+  border-bottom: var(--bw-3) solid var(--color-primary);
+  margin-bottom: var(--sp-16);
+}
+.section > h3, .sub {
+  font-size: var(--fs-18);
+  line-height: var(--lh-tight);
+  margin-top: var(--gap-block);
+  margin-bottom: var(--sp-12);
+  color: var(--color-text);
+}
+.lead { color: var(--color-text-soft); margin-bottom: var(--sp-16); }
+.note { font-size: var(--text-small); color: var(--color-text-muted); margin-top: var(--sp-12); }
+
+.hero {
+  background: var(--color-primary-strong);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-card);
+  padding: var(--sp-24) var(--sp-16);
+}
+.hero h1 { font-size: var(--fs-24); line-height: var(--lh-tight); }
+.hero__sub { margin-top: var(--sp-12); font-size: var(--fs-15); }
+.hero__meta { margin-top: var(--sp-12); font-size: var(--text-micro); }
+
+.toc { margin-top: var(--sp-16); display: flex; flex-wrap: wrap; gap: var(--sp-8); }
+.toc a {
+  display: block;
+  padding: var(--sp-8) var(--sp-12);
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--r-8);
+  font-size: var(--text-small);
+  text-decoration: none;
+  color: var(--color-primary-strong);
+  font-weight: var(--fw-medium);
+}
+
+.thesis {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-left: var(--bw-3) solid var(--color-primary);
+  border-radius: var(--radius-card);
+  padding: var(--sp-24) var(--pad-card);
+  font-size: var(--fs-18);
+  line-height: var(--lh-normal);
+  font-weight: var(--fw-medium);
+  box-shadow: var(--shadow-1);
+}
+
+.grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-12); margin-top: var(--sp-16); }
+.card {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+  box-shadow: var(--shadow-1);
+}
+.card h3, .card h4 { font-size: var(--fs-16); line-height: var(--lh-tight); margin-bottom: var(--sp-8); }
+.card p { font-size: var(--fs-15); color: var(--color-text-soft); }
+.card p + p { margin-top: var(--sp-8); }
+.card__quote { color: var(--color-text); font-weight: var(--fw-medium); }
+
+.tag {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-8);
+  border-radius: var(--radius-tag);
+  font-size: var(--text-micro);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  background: var(--color-surface-muted);
+  color: var(--color-text-soft);
+  border: var(--bw-1) solid var(--color-border);
+  margin-right: var(--sp-4);
+}
+.tag--ok { background: var(--color-primary-soft); color: var(--color-primary-strong); border-color: var(--color-primary); }
+.tag--warn { background: var(--color-warn-bg); color: var(--color-warn-text); border-color: var(--color-warn-text); }
+.tag--solid { background: var(--color-primary-strong); color: var(--color-on-primary); border-color: var(--color-primary-strong); }
+
+.callout {
+  margin-top: var(--sp-16);
+  background: var(--color-warn-bg);
+  border: var(--bw-1) solid var(--color-border);
+  border-left: var(--bw-3) solid var(--color-warn-text);
+  border-radius: var(--r-8);
+  padding: var(--sp-12) var(--pad-card);
+  font-size: var(--fs-15);
+}
+.callout strong { color: var(--color-warn-text); }
+.callout--plain { border-left-color: var(--color-primary); }
+.callout--plain strong { color: var(--color-primary-strong); }
+
+.prose { display: grid; gap: var(--sp-12); }
+.prose article {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+}
+.prose h4 { font-size: var(--fs-16); line-height: var(--lh-tight); color: var(--color-primary-strong); margin-bottom: var(--sp-8); }
+.prose p { font-size: var(--fs-15); }
+.flag {
+  font-size: var(--text-small);
+  color: var(--color-warn-text);
+  background: var(--color-warn-bg);
+  border-radius: var(--radius-tag);
+  padding: 0 var(--sp-4);
+  font-weight: var(--fw-medium);
+}
+.revised {
+  margin-top: var(--sp-16);
+  background: var(--color-primary-soft);
+  border: var(--bw-1) solid var(--color-primary);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+}
+.revised h3 { font-size: var(--fs-16); color: var(--color-primary-strong); margin-bottom: var(--sp-8); line-height: var(--lh-tight); }
+.revised p { font-size: var(--fs-15); }
+
+.claim {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+  margin-top: var(--sp-16);
+  box-shadow: var(--shadow-1);
+}
+.claim > h3 { font-size: var(--fs-18); line-height: var(--lh-tight); margin-bottom: var(--sp-8); }
+.claim__said { font-size: var(--fs-15); color: var(--color-text-soft); margin-bottom: var(--sp-12); }
+.claim__row { border-top: var(--bw-1) solid var(--color-border); padding: var(--sp-12) 0; }
+.claim__row h4 { font-size: var(--text-small); color: var(--color-primary-strong); margin-bottom: var(--sp-4); line-height: var(--lh-tight); }
+.claim__row--limit h4 { color: var(--color-warn-text); }
+.claim__row ul { display: grid; gap: var(--sp-8); }
+.claim__row li, .claim__row p { font-size: var(--fs-15); }
+.claim__verdict {
+  border-top: var(--bw-1) solid var(--color-border);
+  padding-top: var(--sp-12);
+  font-size: var(--fs-15);
+  font-weight: var(--fw-medium);
+}
+.ref { font-size: var(--text-micro); white-space: nowrap; }
+
+.matrix { display: grid; grid-template-columns: 1fr; gap: var(--sp-12); margin-top: var(--sp-16); }
+.matrix .card--first { border-color: var(--color-primary); border-width: var(--bw-3); }
+
+.list { display: grid; gap: var(--sp-8); margin-top: var(--sp-12); }
+.list li {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--r-8);
+  padding: var(--sp-12) var(--pad-card);
+  font-size: var(--fs-15);
+}
+
+.flow { display: grid; grid-template-columns: 1fr; gap: var(--sp-8); margin-top: var(--sp-12); }
+.flow li {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-top: var(--bw-3) solid var(--color-primary);
+  border-radius: var(--r-8);
+  padding: var(--sp-12);
+  font-size: var(--text-small);
+}
+.flow b { display: block; font-size: var(--fs-15); color: var(--color-primary-strong); }
+
+.table-wrap { margin-top: var(--sp-12); }
+table { width: 100%; border-collapse: collapse; }
+thead {
+  position: absolute;
+  width: var(--size-hidden);
+  height: var(--size-hidden);
+  overflow: hidden;
+  clip-path: var(--clip-hidden);
+}
+tbody tr {
+  display: block;
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--r-8);
+  padding: var(--sp-12) var(--pad-card);
+  margin-bottom: var(--sp-8);
+}
+tbody td, tbody th { display: block; font-size: var(--fs-15); text-align: left; font-weight: var(--fw-regular); padding: var(--sp-4) 0; }
+tbody td::before, tbody th::before {
+  content: attr(data-label);
+  display: block;
+  font-size: var(--text-micro);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}
+
+.check { display: grid; gap: var(--sp-12); margin-top: var(--sp-12); }
+.check li {
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+}
+.check h4 { font-size: var(--fs-16); line-height: var(--lh-tight); margin-bottom: var(--sp-4); }
+.check p { font-size: var(--fs-15); color: var(--color-text-soft); }
+
+details {
+  margin-top: var(--sp-16);
+  background: var(--color-surface);
+  border: var(--bw-1) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-12) var(--pad-card);
+}
+summary { cursor: pointer; font-weight: var(--fw-bold); color: var(--color-primary-strong); }
+.sources { margin-top: var(--sp-12); display: grid; gap: var(--sp-8); list-style: decimal; padding-left: var(--sp-24); }
+.sources li { font-size: var(--text-small); color: var(--color-text-soft); }
+.footer { margin-top: var(--gap-section); padding: var(--sp-16) 0 var(--sp-32); font-size: var(--text-micro); color: var(--color-text-muted); border-top: var(--bw-1) solid var(--color-border); }
+
+@media (min-width: 40rem) {
+  .page { padding: var(--sp-32) var(--sp-24); }
+  .hero { padding: var(--sp-32); }
+  .hero h1 { font-size: var(--fs-30); }
+  .grid, .matrix, .prose, .check { grid-template-columns: 1fr 1fr; }
+  thead { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+  table { background: var(--color-surface); border: var(--bw-1) solid var(--color-border); }
+  tbody tr { display: table-row; border: 0; border-radius: 0; margin: 0; padding: 0; }
+  tbody td, tbody th, thead th {
+    display: table-cell;
+    padding: var(--sp-12);
+    border-bottom: var(--bw-1) solid var(--color-border);
+    vertical-align: top;
+    text-align: left;
+    font-size: var(--fs-15);
+  }
+  thead th { background: var(--color-surface-muted); font-size: var(--text-small); }
+  tbody td::before, tbody th::before { content: none; }
+  .claim__row { display: grid; grid-template-columns: var(--w-label) 1fr; gap: var(--sp-16); }
+}
+@media (min-width: 60rem) {
+  .grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+  .flow { grid-template-columns: repeat(5, 1fr); }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="hero">
+  <h1>AI 时代,真是「行业叛徒」的机会吗?</h1>
+  <p class="hero__sub">一段视频主张:用 AI 改造行业的,一定是在行业里熬了十年的内部人。核对来源后的结论是:方向有道理,但讲过头了。本页给出拆解、例证和一个修订版。</p>
+  <p class="hero__meta">事实核对日期:2026-10-02 · 共打开核对 28 个网址,列在页面末尾</p>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <a href="#conclusion">先给结论</a>
+  <a href="#rewrite">优化后的文字版</a>
+  <a href="#why">为什么这样判断</a>
+  <a href="#you">对你的选题意味着什么</a>
+  <a href="#check">用证据自检</a>
+  <a href="#appendix">存疑与来源</a>
+</nav>
+
+<section class="section" id="conclusion">
+  <h2>先给结论</h2>
+  <p class="thesis">做 AI 创业,不必先问「我是内行还是外行」。该问的是:谁能弄懂一件具体的活、拿到动手的许可,并把技术变成客户能验收、愿意持续付钱的交付。懂行是拿到这些条件的重要路径,但不是唯一的通行证。</p>
+
+  <div class="grid grid--3">
+    <article class="card">
+      <h3><span class="tag tag--warn">归因未获证实</span></h3>
+      <p class="card__quote">「摩根士丹利说,最大的钱流向改造自己行业的人」</p>
+      <p>摩根士丹利确有两份相关材料,一份讲 250 年五次创新浪潮,一份讲 AI 投资的十条判断。能查到的说法是「价值会从 AI 赋能者转向采用者」,没有哪一处说采用者就是行业内部人。</p>
+    </article>
+    <article class="card">
+      <h3><span class="tag tag--warn">讲过头</span></h3>
+      <p class="card__quote">「一定是内部的叛徒,绝不会是外面的技术人」</p>
+      <p>视频自己举的亚马逊、Uber、Airbnb,创始人都不是那个行业出身。视频称赞的 MovieFlow,本身是「懂行的人 + 懂技术的人」的组合。</p>
+    </article>
+    <article class="card">
+      <h3><span class="tag tag--ok">有证据支持</span></h3>
+      <p class="card__quote">「行业经验很值钱」</p>
+      <p>美国一项覆盖 270 万名创始人的研究发现,在同一细分行业工作过的人,做出高增长公司的概率明显更高。但它是优势,不是保证。</p>
+    </article>
+  </div>
+
+  <p class="callout"><strong>这个结论有多可靠:</strong>本页的正反案例都是事后挑出来的,只能说明「有这种情况」,不能当作统计比较。那项创始人研究不包含没有雇员的一人企业,数据也早于生成式 AI。</p>
+</section>
+
+<section class="section" id="rewrite">
+  <h2>优化后的文字版</h2>
+  <p class="lead">下面把口语逐字稿整理成清晰文字,忠实于讲述者的原意,不掺入我的判断。核对后有疑问的地方用深琥珀色小字标出,详情见后文。</p>
+
+  <div class="prose">
+    <article>
+      <h4>机会不在卖铲子,而在用铲子的人</h4>
+      <p>每一轮技术革命,大家先盯着卖铲子的:蒸汽机时代是设备,铁路时代是钢铁,互联网时代是光纤和服务器,今天是 GPU、算力和英伟达。基础设施确实先挣钱。但讲述者说,他读到一篇文章,摩根士丹利复盘了 250 年的技术革命,发现最大的钱最终流向拿着铲子重新改造自己行业的人 <span class="flag">存疑:这一归因未获证实</span>。淘金热里真正改变美国西部的是铁路、城市、银行、物流、零售和地产;互联网后来改变世界的,是亚马逊做零售、谷歌做手机和内容生态 <span class="flag">存疑:安卓是谷歌收购来的</span>、Uber 做出行、Airbnb 做住宿。</p>
+    </article>
+    <article>
+      <h4>改造行业的是「内部的叛徒」</h4>
+      <p>芯片和大模型只是第一幕。大戏是 AI 进入影视、教育、金融、医疗、法律、制造和内容,把流程、组织和利润拆一遍再搭一遍。讲述者断言,这件事不会由外面的技术人才完成,一定由内部人完成:在旧行业忍了十年、终于想明白怎么拆掉自己饭碗的人 <span class="flag">存疑:与他自己举的例子相反</span>。他的原话是:「他们才不写代码,他们是来算旧账的。」</p>
+    </article>
+    <article>
+      <h4>外行看到一堵墙,内行知道墙后面是什么</h4>
+      <p>影视行业的低效不是缺工具,而是审美、权力关系、预算、平台规则、艺人档期和宣发节奏。外行看是一堵墙;内行知道墙后有水管、电线、消防、产权、邻居和二十多年的烂账。技术能解决效率,解决不了权力结构、信任、习惯和利益。讲述者说,他投过一家纯技术团队做的影视公司,「连门在哪儿都不知道」;也投过炒菜机器人,老板逼厨师用,厨师把机器砸了 <span class="flag">无法核实</span>。老板请他们去改造公司,他们掉头就走:老板自己就是旧利益的一部分,下不了手裁人。</p>
+    </article>
+    <article>
+      <h4>是「行业人 + AI」,不是「AI + 行业」</h4>
+      <p>AI + 影视是卖工具,影视人 + AI 是重新定义制片流程;AI + 教育是答题软件,教育人 + AI 是重做学习系统;AI + 金融是自动写报告,金融人 + AI 是重构投研、风控、客服和资产配置。技术人知道「能不能做」,行业人知道「该不该做、谁会用、怎么收钱、谁会阻拦、哪一块能动」。技术解决的是能力,行业经验解决的是现实。</p>
+    </article>
+    <article>
+      <h4>炫的项目为什么卖不动</h4>
+      <p>很多 AI 项目演示很炫,客户用三天就忘了,因为它没有长进客户的业务里。好产品是你不用它就不舒服。AI 最值钱的不是替你做一件事,而是让你重新设计一套做事的方法。以教育为例,难的不是生成一套题,而是孩子为什么不学、家长为什么焦虑、老师为什么疲惫、机构为什么续不了费、效果为什么看不见。</p>
+    </article>
+    <article>
+      <h4>四样东西打通,才算机会</h4>
+      <p>行业经验、私有数据、AI 工作流、商业闭环,四样打通才是 AI 创业的机会。未来很多公司表面不像 AI 公司,内部已经是 AI 原生。真正的 AI 化,是敢不敢拆流程、改组织。不是外人攻城,是里面的人打开了城门。</p>
+    </article>
+  </div>
+
+  <div class="revised">
+    <h3>修订后的主张(我的版本)</h3>
+    <p>基础设施先铺开、应用重构随后释放生产率,这一点有历史依据;但谁的利润更高,现有证据没有回答,「创造了价值」也不等于「你能赚到利润」。改造一件事需要三样东西:弄懂具体任务的知识、把它稳定做出来的技术能力、动手改的许可与资源。三样可以集于一人,也可以由一个组合凑齐。出身不是关键,关键是能不能拿出客户肯验收、肯续费的结果。</p>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <h2>为什么这样判断</h2>
+  <p class="lead">把视频拆成六个论点,每个都摆出最强的支持和最强的限制,再下判定。每条证据前标明它是什么类型。</p>
+
+  <article class="claim">
+    <h3>基础设施先铺开,价值在应用阶段释放</h3>
+    <p class="claim__said">视频:每轮革命先是卖铲子的赚钱,最大的钱在后面的应用。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <ul>
+        <li><span class="tag">论文</span>经济史学家 Paul David 记录:1899 年,电动机只占美国工厂机械动力不到 5%;到 1920 年代初才略过半,距第一座中心电站已有 40 年。早期工厂只是把蒸汽机换成电机,直到给每台机器配上独立电机、重新布置厂房,效率才真正上来。<a class="ref" href="#s20">来源 20</a></li>
+        <li><span class="tag">媒体报道</span>摩根士丹利投资管理的 Jitania Kandhari 说,价值创造会从 AI 赋能者转向采用者。<a class="ref" href="#s3">来源 3</a></li>
+      </ul>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">作者推断</span>「创造价值」至少有四种口径:社会得到的好处、采用企业的利润、卖 AI 产品的人的收入、投资者的回报。前一项成立,推不出后三项。</li>
+        <li><span class="tag">百科条目</span>淘金热里卖淘金工具的 Samuel Brannan 成了加州第一位百万富翁,晚年却破产;给矿工开杂货店的 Leland Stanford,1861 年出任中央太平洋铁路总裁。卖铲子的人和修铁路的人,有时是同一批人。<a class="ref" href="#s5">来源 5</a> <a class="ref" href="#s6">来源 6</a></li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--ok">部分成立</span>基础设施先铺开、应用重构随后释放生产率和价值,这一顺序有依据;谁的利润更高,这些证据没有回答。</p>
+  </article>
+
+  <article class="claim">
+    <h3>摩根士丹利说钱流向「改造自己行业的人」</h3>
+    <p class="claim__said">视频:讲述者转述一篇文章里的摩根士丹利结论。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <p>没有找到直接依据。</p>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">媒体报道</span>那份 250 年复盘(《AI 之前五次创新浪潮的教训》)讲的是运河与早期工厂、铁路、电气化与机动化、战后电子与航空、互联网,主题是生产率和就业的重新配置。<a class="ref" href="#s1">来源 1</a></li>
+        <li><span class="tag">官方页面</span>另一份《人工智能:十条投资真相》发布于 2026-06-10,十条标题里最接近的一条是「数据、领域、分发:新的软件护城河」。<a class="ref" href="#s2">来源 2</a></li>
+        <li><span class="tag">媒体报道</span>中文解读举的例子是光纤铺好之后才出现的新公司,并写道「真正创造最大价值的公司可能尚未成立」。强调的是新公司,不是内部人。<a class="ref" href="#s4">来源 4</a></li>
+        <li><span class="tag">作者说明</span>我读到的是官方页面的摘要和媒体评述,没有读到两份报告的全文,所以只能说「未获证实」,不能说「报告没写」。</li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--warn">归因未获证实</span>从「采用者」到「行业内部人」这一步,在已核对的材料里没有直接依据;是谁加上去的,无法确定。</p>
+  </article>
+
+  <article class="claim">
+    <h3>一定是内部人,绝不会是外来的技术人</h3>
+    <p class="claim__said">视频:改造行业的是内部的叛徒,外面的技术人才连门都找不到。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <ul>
+        <li><span class="tag">媒体报道</span>视频提到的 MovieFlow:创始人梁巍 2007 年入行,经手近 200 部院线电影;技术合伙人来自阿里和美团。报道称产品上线不到 60 天,全球用户超过 40 万(公司早期数据,不代表已经盈利)。<a class="ref" href="#s13">来源 13</a></li>
+        <li><span class="tag">百科条目</span>法律 AI 公司 Harvey(2022 年)由一位诉讼律师和一位做过 DeepMind、Meta 研究的科学家合办。<a class="ref" href="#s12">来源 12</a></li>
+      </ul>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">百科条目</span>贝索斯创办亚马逊前在对冲基金工作,学的是电气工程与计算机,没有零售从业经历。Uber 由做网站起家的 Garrett Camp 和 Travis Kalanick 创办;Airbnb 三位创始人中有一位是程序员。两家的公开资料里都看不到出租车或酒店行业的从业经历。<a class="ref" href="#s7">来源 7</a> <a class="ref" href="#s8">来源 8</a> <a class="ref" href="#s9">来源 9</a></li>
+        <li><span class="tag">百科条目</span>生命科学软件公司 Veeva(2007 年)的创始人 Peter Gassner,此前在 PeopleSoft 和 Salesforce 做技术高管;公司 2026 财年收入 31.95 亿美元。软件人进入专业行业,同样能做成。<a class="ref" href="#s26">来源 26</a> <a class="ref" href="#s27">来源 27</a></li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--warn">讲过头</span>支持方的两个例子其实都是「内行 + 技术」的组合,而不是内行单干。</p>
+  </article>
+
+  <article class="claim">
+    <h3>行业经验是关键</h3>
+    <p class="claim__said">视频:行业人知道该不该做、谁会用、怎么收钱、谁会阻拦。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <ul>
+        <li><span class="tag">论文</span>Azoulay 等四位学者研究了 2007 至 2014 年在美国创办公司的 270 万名创始人:增长最快的千分之一公司,创始人平均 45 岁;在同一细分行业工作过的人,成功率最高可提升 125%,行业越贴近越明显。<a class="ref" href="#s11">来源 11</a></li>
+      </ul>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">论文</span>同一项研究排除了独资经营者,只看后来雇了人的公司;它也指出,团队合作可以弥补个人缺少的技术或市场知识。<a class="ref" href="#s11">来源 11</a></li>
+        <li><span class="tag">百科条目</span>内行同样会失败。好莱坞资深人士 Katzenberg 创办的短视频平台 Quibi 融资 17.5 亿美元,2020 年 4 月上线,同年 12 月停止服务。<a class="ref" href="#s17">来源 17</a></li>
+        <li><span class="tag">百科条目</span>机器人披萨公司 Zume 的联合创始人 Julia Collins 开过连锁餐厅,公司 2018 年拿到软银 3.75 亿美元,仍在 2023 年关闭。<a class="ref" href="#s14">来源 14</a> <a class="ref" href="#s15">来源 15</a></li>
+        <li><span class="tag">百科条目</span>房产平台 Zillow 2018 年开始自己买房转卖,2021 年 11 月叫停,该业务单季亏损 4.2 亿美元,公司裁员 25%。<a class="ref" href="#s25">来源 25</a></li>
+        <li><span class="tag">百科条目</span>柯达工程师 Steven Sasson 1975 年做出数码相机原型;2005 年柯达还是美国数码相机销量第一,2012 年仍申请破产保护。懂行、也转了型,还是没保住位置。<a class="ref" href="#s18">来源 18</a> <a class="ref" href="#s19">来源 19</a></li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--ok">有证据支持</span>行业经验提高胜率,但不是充分条件,也不能直接套到一人企业上。</p>
+  </article>
+
+  <article class="claim">
+    <h3>技术落地,卡在人和组织上</h3>
+    <p class="claim__said">视频:技术能解决效率,解决不了权力结构、信任、习惯和利益;老板逼厨师用炒菜机器人,厨师把机器砸了。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <ul>
+        <li><span class="tag">媒体报道</span>央广网 2026 年 8 月报道:一家餐饮企业 2024 年引入炒菜机器人时「并不被后厨团队接纳」,不少同行买了机器后闲置。<a class="ref" href="#s23">来源 23</a></li>
+        <li><span class="tag">百科条目</span>IBM Watson 与 MD Anderson 癌症中心的合作 2013 年启动,花费 6500 万美元后中止。有顶级专业机构参与,项目仍然中止;公开条目没有给出单一原因。<a class="ref" href="#s16">来源 16</a></li>
+      </ul>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">媒体报道</span>同一篇报道里,那家企业如今近 300 家门店都在用炒菜机器人。抵触是真的,但能克服。<a class="ref" href="#s23">来源 23</a></li>
+        <li><span class="tag">无法核实</span>「厨师砸机器」和讲述者的几段投资经历,找不到公开佐证。</li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--ok">部分成立</span>采纳阻力确实存在,也有被克服的例子;阻力是否源于利益冲突,现有证据不能确定。</p>
+  </article>
+
+  <article class="claim">
+    <h3>只加一个工具,够不够</h3>
+    <p class="claim__said">视频:AI 最值钱的不是替你做一件事,而是让你重新设计一套做事的方法。</p>
+    <div class="claim__row">
+      <h4>最强支持</h4>
+      <ul>
+        <li><span class="tag">媒体报道</span>麻省理工一个研究项目 2025 年的报告称,约 95% 的企业生成式 AI 试点对损益没有可衡量的影响,主因是通用工具不会适应工作流;向专业供应商采购并合作的项目,约 67% 做成,明显高于企业自建。注意口径:两家媒体转述的样本数量不一致,数据多为受访者自述,只能当方向参考。<a class="ref" href="#s21">来源 21</a> <a class="ref" href="#s22">来源 22</a></li>
+      </ul>
+    </div>
+    <div class="claim__row claim__row--limit">
+      <h4>最强限制</h4>
+      <ul>
+        <li><span class="tag">论文</span>Brynjolfsson 等人研究了 5,179 名客服人员:部署一个范围很窄的 AI 助手后,每小时解决的问题数平均提高 14%,新手和低技能员工提高 34%。窄工具也能带来实在的效果。<a class="ref" href="#s24">来源 24</a></li>
+        <li><span class="tag">媒体报道</span>美国医疗集团 Kaiser Permanente 2024 年 8 月在 40 家医院、600 多个诊所启用 Abridge 的病历记录工具:需要患者同意,医生审阅后才写入病历,上线前有一千多名临床人员参与评估。它嵌进了流程,但没有推翻流程。<a class="ref" href="#s28">来源 28</a></li>
+      </ul>
+    </div>
+    <p class="claim__verdict"><span class="tag tag--ok">不必二选一</span>窄工具和流程重做都有成功的证据。该问的是:用多小的改动,换来多可靠、可收费的结果。</p>
+  </article>
+</section>
+
+<section class="section" id="you">
+  <h2>对你的选题意味着什么</h2>
+  <p class="callout callout--plain"><strong>以下是作者推断,不是研究结论。</strong>它把上面的证据整理成选题时可用的检查框架;凑齐条件也不保证成功。</p>
+
+  <h3 class="sub">三把钥匙:缺哪一把,就去借哪一把</h3>
+  <div class="grid grid--3">
+    <article class="card">
+      <h4>任务知识</h4>
+      <p>这件活到底怎么干、卡在哪里。可以来自自己的从业经历,也可以来自和客户一起做、找合伙人、反复试错。</p>
+    </article>
+    <article class="card">
+      <h4>技术能力</h4>
+      <p>把它稳定做出来,并且知道哪里会出错、出错了怎么发现。</p>
+    </article>
+    <article class="card">
+      <h4>动手的许可</h4>
+      <p>客户让你碰真实的材料和流程,有人为结果签字,出了问题有人处理。视频里「老板下不了手」说的就是缺这一把。</p>
+    </article>
+  </div>
+
+  <h3 class="sub">选题先问两件事:客户要改多少,结果好不好验收</h3>
+  <p class="lead">分析的单位不是「行业」,而是一件具体的活。同一个行业里,既有一个人就能接的小环节,也有非内部人不可的硬骨头。</p>
+  <div class="matrix">
+    <article class="card card--first">
+      <h4><span class="tag tag--solid">客户改动少</span><span class="tag tag--solid">结果易验收</span></h4>
+      <p class="card__quote">从一个窄工具或标准化服务做起,不必预设出身。</p>
+      <p>适合作为一人企业的第一站。客服辅助、病历记录属于这一类。</p>
+    </article>
+    <article class="card">
+      <h4><span class="tag">客户改动多</span><span class="tag">结果易验收</span></h4>
+      <p class="card__quote">先在客户内部找到推动的人,拿到实施授权再动手。</p>
+      <p>炒菜机器人属于这一类:菜好不好吃一尝便知,难的是后厨愿不愿意用。</p>
+    </article>
+    <article class="card">
+      <h4><span class="tag">客户改动少</span><span class="tag tag--warn">结果难验收</span></h4>
+      <p class="card__quote">先建立专业复核和责任边界:谁来审,错了谁负责。</p>
+      <p>法律、医疗建议类的输出属于这一类,所以常见「专业人士 + 技术」的组合。</p>
+    </article>
+    <article class="card">
+      <h4><span class="tag">客户改动多</span><span class="tag tag--warn">结果难验收</span></h4>
+      <p class="card__quote">需要很强的行业伙伴和很长的周期。</p>
+      <p>不适合作为一人团队的第一站。视频说的「重构整个行业」大多落在这里。</p>
+    </article>
+  </div>
+
+  <h3 class="sub">四个容易忽略的地方</h3>
+  <ul class="list">
+    <li><strong>一人企业不等于颠覆行业。</strong>视频讲的是重构整个行业,那需要资本和组织;一人企业的目标是在一个小环节里稳定交付。</li>
+    <li><strong>用的人、付钱的人、批准的人、担责的人,常常不是同一个。</strong>只打动使用者,卖不出去。</li>
+    <li><strong>要算总交付成本。</strong>模型调用、人工复核、异常处理、返工、上线、售后、获客,再加上你自己的工时。生成便宜,不等于交付便宜。</li>
+    <li><strong>数据的重点不是「私有」,而是「获得授权、能纠错」。</strong>拿到客户允许你使用的真实样本,并且错了能改,比号称拥有私有数据重要。</li>
+  </ul>
+
+  <h3 class="sub">一个流程示意:影视素材整理与交付验收</h3>
+  <p class="note">这是为说明框架而设的假设例子,不是真实案例,不含任何效果数字。</p>
+  <ol class="flow">
+    <li><b>接收素材</b>客户把真实素材交给你(许可)</li>
+    <li><b>AI 打标签</b>按镜头标注并生成清单(技术)</li>
+    <li><b>人工抽查</b>修正错标,记下错在哪(任务知识)</li>
+    <li><b>客户验收</b>对着清单检查,签字确认(验收)</li>
+    <li><b>回填规则</b>把差错变成下一次的检查项(纠错)</li>
+  </ol>
+  <p class="note">它属于「客户改动少、结果易验收」:不动客户的制片流程,清单对不对一眼能查,可以按项目收费。</p>
+</section>
+
+<section class="section" id="check">
+  <h2>用证据自检</h2>
+  <h3 class="sub">视频的四要素,改成能检查的说法</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th scope="col">视频的说法</th><th scope="col">修订后的说法</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="视频的说法">行业经验</td><td data-label="修订后的说法">任务知识:可以借来,但必须是真的</td></tr>
+        <tr><td data-label="视频的说法">私有数据</td><td data-label="修订后的说法">获得授权、能纠错的真实样本</td></tr>
+        <tr><td data-label="视频的说法">AI 工作流</td><td data-label="修订后的说法">包含人工复核和异常处理的交付流程</td></tr>
+        <tr><td data-label="视频的说法">商业闭环</td><td data-label="修订后的说法">有人付款、能验收、会复购,扣掉全部成本后还有利润</td></tr>
+        <tr><td data-label="视频的说法">(没有提到)</td><td data-label="修订后的说法">获客渠道:客户从哪里来</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">五个问题,每个都要拿出证据</h3>
+  <ul class="check">
+    <li><h4>谁,为哪个结果付款?</h4><p>证据:一笔真实付款,或一份书面订单。</p></li>
+    <li><h4>你拿到获得授权的真实任务样本了吗?</h4><p>证据:客户提供的原始材料,不是你自己编的例子。</p></li>
+    <li><h4>原来的做法表现如何,谁按什么标准验收?</h4><p>证据:改之前的用时或差错记录,加一份验收标准。</p></li>
+    <li><h4>谁批准上线,出了异常谁处理?</h4><p>证据:一个有名有姓的负责人。</p></li>
+    <li><h4>扣掉交付成本和你自己的工时,还有利润吗?客户会再买吗?</h4><p>证据:一张成本表,加第二次购买。</p></li>
+  </ul>
+  <p class="note">这五问不打总分。哪一问答不上来,就先去补那一问。</p>
+</section>
+
+<section class="section" id="appendix">
+  <h2>存疑与来源</h2>
+  <h3 class="sub">逐字稿里核对不上或无法核实的地方</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th scope="col">视频原话(大意)</th><th scope="col">核对结果</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="视频原话(大意)">摩根士丹利说,最大的钱流向改造自己行业的人</td><td data-label="核对结果">归因未获证实。能查到的说法是价值从赋能者转向采用者。<a class="ref" href="#s2">来源 2</a> <a class="ref" href="#s3">来源 3</a></td></tr>
+        <tr><td data-label="视频原话(大意)">谷歌做了手机</td><td data-label="核对结果">安卓公司 2003 年由 Andy Rubin 等人创办,谷歌 2005 年收购。<a class="ref" href="#s10">来源 10</a></td></tr>
+        <tr><td data-label="视频原话(大意)">一定是内部的叛徒</td><td data-label="核对结果">与视频自己举的亚马逊、Uber、Airbnb 相反。</td></tr>
+        <tr><td data-label="视频原话(大意)">投过技术团队做的影视公司;投过炒菜机器人,厨师把机器砸了;当年投了 MovieFlow</td><td data-label="核对结果">找不到公开佐证。关于 MovieFlow 的公开报道没有提到融资方。<a class="ref" href="#s13">来源 13</a></td></tr>
+        <tr><td data-label="视频原话(大意)">四要素的序号(口误)</td><td data-label="核对结果">按「行业经验、私有数据、AI 工作流、商业闭环」整理,没有另作猜测。</td></tr>
+        <tr><td data-label="视频原话(大意)">中国一模一样</td><td data-label="核对结果">视频没有举例,本页没有展开。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details open>
+    <summary>来源(28 个网址,均于 2026-10-02 打开核对)</summary>
+    <ol class="sources">
+      <li id="s1">美国企业研究所评述:摩根士丹利 250 年五次创新浪潮报告(2026-04-06)<br><a href="https://www.aei.org/economics/the-ai-jobs-scare-meets-250-years-of-data/">aei.org</a></li>
+      <li id="s2">摩根士丹利投资管理:《人工智能:十条投资真相》官方页面(2026-06-10)<br><a href="https://www.morganstanley.com/im/en-be/institutional-investor/insights/big-picture/big-picture-artificial-intelligence.html">morganstanley.com</a></li>
+      <li id="s3">The AI Innovator 对 Jitania Kandhari 的报道(2026-07-21)<br><a href="https://theaiinnovator.com/morgan-stanleys-10-ai-investment-themes-beyond-the-obvious/">theaiinnovator.com</a></li>
+      <li id="s4">36 氪对十条投资真相的中文解读(2026-07-06)<br><a href="https://www.36kr.com/p/3884786855882755">36kr.com</a></li>
+      <li id="s5">维基百科:Samuel Brannan<br><a href="https://en.wikipedia.org/wiki/Samuel_Brannan">en.wikipedia.org</a></li>
+      <li id="s6">维基百科:Leland Stanford<br><a href="https://en.wikipedia.org/wiki/Leland_Stanford">en.wikipedia.org</a></li>
+      <li id="s7">维基百科:Jeff Bezos<br><a href="https://en.wikipedia.org/wiki/Jeff_Bezos">en.wikipedia.org</a></li>
+      <li id="s8">维基百科:Uber<br><a href="https://en.wikipedia.org/wiki/Uber">en.wikipedia.org</a></li>
+      <li id="s9">维基百科:Airbnb<br><a href="https://en.wikipedia.org/wiki/Airbnb">en.wikipedia.org</a></li>
+      <li id="s10">维基百科:Android<br><a href="https://en.wikipedia.org/wiki/Android_(operating_system)">en.wikipedia.org</a></li>
+      <li id="s11">Azoulay、Jones、Kim、Miranda:《年龄与高增长创业》(美国国家经济研究局工作论文 24489,2018)<br><a href="https://www.nber.org/papers/w24489">nber.org</a></li>
+      <li id="s12">维基百科:Harvey(法律 AI 公司)<br><a href="https://en.wikipedia.org/wiki/Harvey_(software)">en.wikipedia.org</a></li>
+      <li id="s13">晚点对 MovieFlow 与梁巍的报道(新浪财经转载,2025-12-03)<br><a href="https://finance.sina.com.cn/stock/t/2025-12-03/doc-infznqyk1528787.shtml">finance.sina.com.cn</a></li>
+      <li id="s14">维基百科:Zume<br><a href="https://en.wikipedia.org/wiki/Zume">en.wikipedia.org</a></li>
+      <li id="s15">维基百科:Julia Collins<br><a href="https://en.wikipedia.org/wiki/Julia_Collins_(entrepreneur)">en.wikipedia.org</a></li>
+      <li id="s16">维基百科:IBM Watson<br><a href="https://en.wikipedia.org/wiki/IBM_Watson">en.wikipedia.org</a></li>
+      <li id="s17">维基百科:Quibi<br><a href="https://en.wikipedia.org/wiki/Quibi">en.wikipedia.org</a></li>
+      <li id="s18">维基百科:Kodak<br><a href="https://en.wikipedia.org/wiki/Kodak">en.wikipedia.org</a></li>
+      <li id="s19">维基百科:Steven Sasson<br><a href="https://en.wikipedia.org/wiki/Steven_Sasson">en.wikipedia.org</a></li>
+      <li id="s20">Paul A. David:《发电机与计算机》(1990)<br><a href="https://gwern.net/doc/economics/automation/1990-david.pdf">gwern.net</a></li>
+      <li id="s21">《财富》对麻省理工 NANDA 报告的报道(2025-08-18)<br><a href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/">fortune.com</a></li>
+      <li id="s22">Virtualization Review 对同一报告的报道(2025-08-19)<br><a href="https://virtualizationreview.com/articles/2025/08/19/mit-report-finds-most-ai-business-investments-fail-reveals-genai-divide.aspx">virtualizationreview.com</a></li>
+      <li id="s23">央广网对炒菜机器人的报道(腾讯新闻转载,2026-08-26)<br><a href="https://news.qq.com/rain/a/20260826A0B7JN00">news.qq.com</a></li>
+      <li id="s24">Brynjolfsson、Li、Raymond:《工作中的生成式 AI》(美国国家经济研究局工作论文 31161,2023)<br><a href="https://www.nber.org/papers/w31161">nber.org</a></li>
+      <li id="s25">维基百科:Zillow<br><a href="https://en.wikipedia.org/wiki/Zillow">en.wikipedia.org</a></li>
+      <li id="s26">维基百科:Veeva Systems<br><a href="https://en.wikipedia.org/wiki/Veeva_Systems">en.wikipedia.org</a></li>
+      <li id="s27">维基百科:Peter Gassner<br><a href="https://en.wikipedia.org/wiki/Peter_Gassner">en.wikipedia.org</a></li>
+      <li id="s28">Healthcare Dive 对 Kaiser Permanente 启用 Abridge 的报道(2024-08-15)<br><a href="https://www.healthcaredive.com/news/kaiser-permanente-abridge-ai-clinical-documentation-rollout/724311/">healthcaredive.com</a></li>
+    </ol>
+  </details>
+</section>
+
+<footer class="footer">
+  本页是对一段公开视频逐字稿的分析。案例为举例说明,不构成投资或创业建议。维基百科条目可能随时被修改,关键数字请以原始来源为准。
+</footer>
+
+</main>
+</body>
+</html>

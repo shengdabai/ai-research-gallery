@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Claude Academy 22 门官方课程的中文学习地图、课程目录与分角色学习路径。">
+  <title>20260822-1103-Claude Academy 全课程学习指南</title>
+  <!--
+    我的假设：
+    - 读者为中文个人学习者，需要的是「先学什么」和「每门课讲什么」。
+    - 以 Claude Academy 2026-08-22 公开页面为事实基线；不冒充已阅读登录后视频、测验或隐藏课件。
+    - 视觉沿用官方暗色、Clay / Mineral / Plum 配色与人文衬线标题，但不复制原站界面。
+    - 学习路径为本指南的教学设计推断，页面中单独标识。
+  -->
+  <style>
+    :root{
+      --canvas:#151515; --surface:#1c1c1b; --surface-2:#232321; --line:#363532;
+      --paper:#f0efec; --muted:#aaa8a2; --dim:#77746e; --clay:#d97757;
+      --clay-strong:#c6613f; --mineral:#629987; --plum:#827dbd; --ink:#171716;
+      --display:Georgia,"Songti SC","STSong",serif;
+      --body:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+      --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+      --max:1280px; --radius:6px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--canvas)}
+    body{margin:0;background:var(--canvas);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+    button,a,input,select,summary{outline:none}
+    :focus-visible{box-shadow:0 0 0 3px color-mix(in oklch,var(--clay) 48%,transparent)}
+    .wrap{width:min(var(--max),calc(100% - 56px));margin-inline:auto}
+    .serif{font-family:var(--display);font-weight:400}
+    .mono{font-family:var(--mono);letter-spacing:.02em}
+    .eyebrow{margin:0 0 12px;color:var(--clay);font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+    .muted{color:var(--muted)}
+    .rule{height:1px;background:var(--line)}
+    .skip{position:fixed;top:10px;left:10px;z-index:1000;padding:10px 14px;background:var(--paper);color:var(--ink);transform:translateY(-160%)}
+    .skip:focus{transform:none}
+    header{position:sticky;top:0;z-index:50;background:color-mix(in oklch,var(--canvas) 92%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    .nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:22px;white-space:nowrap}
+    .brand img{width:24px;height:24px}
+    .navlinks{display:flex;align-items:center;gap:6px}
+    .navlinks a,.navlinks button{min-height:44px;padding:10px 14px;border:0;border-radius:var(--radius);background:transparent;color:var(--muted);cursor:pointer}
+    .navlinks a:hover,.navlinks button:hover{background:var(--surface-2);color:var(--paper)}
+    .hero{padding:100px 0 84px;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:72px;align-items:end}
+    h1{margin:0;max-width:920px;font-family:var(--display);font-size:clamp(56px,8vw,112px);font-weight:400;line-height:.91;letter-spacing:-.055em;text-wrap:balance}
+    h1 span{display:block;color:var(--clay)}
+    .lede{max-width:720px;margin:32px 0 0;color:#c9c7c1;font-size:clamp(18px,2vw,23px);line-height:1.65;text-wrap:pretty}
+    .source-note{margin:24px 0 0;color:var(--dim);font-size:13px}
+    .hero-stats{display:grid;gap:0;border-top:1px solid var(--line)}
+    .stat{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:19px 0;border-bottom:1px solid var(--line)}
+    .stat span{color:var(--muted)}
+    .stat strong{font-family:var(--display);font-size:36px;font-weight:400;color:var(--paper)}
+    section{padding:88px 0}
+    .section-head{display:grid;grid-template-columns:minmax(0,.7fr) minmax(300px,.3fr);gap:64px;align-items:end;margin-bottom:44px}
+    h2{margin:0;font-family:var(--display);font-size:clamp(40px,5vw,68px);font-weight:400;line-height:1.03;letter-spacing:-.035em;text-wrap:balance}
+    .section-intro{margin:0;color:var(--muted);text-wrap:pretty}
+    .scope{padding:32px 0;border-block:1px solid var(--line)}
+    .scope-grid{display:grid;grid-template-columns:160px 1fr;gap:32px}
+    .scope-label{color:var(--clay);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    .scope p{margin:0;max-width:940px;font-size:17px;color:#cbc9c3}
+    .map{position:relative;display:grid;grid-template-columns:1fr 48px 1fr;gap:28px;align-items:stretch;margin-top:48px}
+    .map-foundation,.map-branches{border:1px solid var(--line);background:var(--surface)}
+    .map-foundation{padding:34px;display:flex;flex-direction:column;justify-content:space-between;min-height:320px}
+    .map-label{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+    .map-foundation h3{max-width:500px;margin:44px 0 18px;font-family:var(--display);font-size:38px;font-weight:400;line-height:1.08}
+    .map-list{display:grid;gap:10px;margin:0;padding:0;list-style:none;color:var(--muted)}
+    .map-list strong{display:inline-block;min-width:34px;color:var(--clay);font-family:var(--mono);font-size:12px}
+    .map-arrow{display:grid;place-items:center;color:var(--dim);font-family:var(--mono);font-size:24px}
+    .map-branches{display:grid;grid-template-columns:1fr 1fr}
+    .branch{min-height:160px;padding:24px;border-bottom:1px solid var(--line)}
+    .branch:nth-child(odd){border-right:1px solid var(--line)}
+    .branch:nth-last-child(-n+2){border-bottom:0}
+    .branch b{display:block;margin:14px 0 6px;font-family:var(--display);font-size:22px;font-weight:400}
+    .branch p{margin:0;color:var(--muted);font-size:14px}
+    .routes{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line)}
+    .route{position:relative;display:flex;min-height:420px;flex-direction:column;padding:28px;border-right:1px solid var(--line);background:var(--surface);transition:background .2s ease}
+    .route:last-child{border-right:0}
+    .route:hover{background:var(--surface-2)}
+    .route-no{font-family:var(--mono);font-size:12px;color:var(--dim)}
+    .route .eyebrow{margin-top:52px}
+    .route h3{margin:0 0 18px;font-family:var(--display);font-size:29px;font-weight:400;line-height:1.1;text-wrap:balance}
+    .route p{margin:0;color:var(--muted);font-size:14px}
+    .route-foot{margin-top:auto;padding-top:28px}
+    .route-time{display:block;margin-bottom:12px;color:var(--paper);font-family:var(--mono);font-size:12px}
+    .route button{width:100%;min-height:46px;border:1px solid var(--line);border-radius:var(--radius);background:transparent;color:var(--paper);cursor:pointer}
+    .route button:hover{border-color:var(--clay);color:var(--clay)}
+    .month{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}
+    .week{padding:32px 28px;border-right:1px solid var(--line)}
+    .week:last-child{border-right:0}
+    .week-num{font-family:var(--display);font-size:50px;color:var(--clay);line-height:1}
+    .week h3{margin:22px 0 10px;font-family:var(--display);font-size:24px;font-weight:400}
+    .week p{margin:0;color:var(--muted);font-size:14px}
+    .week .deliverable{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:#d2d0ca;font-size:13px}
+    .explorer{padding-top:100px}
+    .toolbar{position:sticky;top:72px;z-index:40;margin:0 0 28px;padding:16px 0;background:color-mix(in oklch,var(--canvas) 94%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .toolbar-inner{display:grid;grid-template-columns:minmax(260px,.5fr) minmax(0,1fr) auto;gap:16px;align-items:center}
+    .search{position:relative}
+    .search:before{content:'⌕';position:absolute;left:15px;top:50%;transform:translateY(-54%);color:var(--dim);font-size:22px}
+    .search input{width:100%;height:48px;padding:0 16px 0 44px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--paper)}
+    .search input::placeholder{color:var(--dim)}
+    .filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+    .filter{min-height:44px;padding:8px 13px;border:0;border-radius:var(--radius);background:transparent;color:var(--muted);white-space:nowrap;cursor:pointer}
+    .filter:hover{background:var(--surface-2);color:var(--paper)}
+    .filter.active{background:var(--paper);color:var(--ink)}
+    .toolbar-actions{display:flex;gap:8px}
+    .plain-btn{min-height:44px;padding:8px 13px;border:1px solid var(--line);border-radius:var(--radius);background:transparent;color:var(--paper);cursor:pointer;white-space:nowrap}
+    .plain-btn:hover{border-color:var(--muted)}
+    .results-line{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 18px;color:var(--dim);font-family:var(--mono);font-size:12px}
+    .progress{display:flex;align-items:center;gap:10px}
+    .progress-bar{width:120px;height:4px;background:var(--line)}
+    .progress-bar span{display:block;height:100%;width:0;background:var(--mineral);transition:width .3s ease}
+    .course-list{border-top:1px solid var(--line)}
+    .course{position:relative;border-bottom:1px solid var(--line)}
+    .course.hidden{display:none}
+    .course.route-focus{background:color-mix(in oklch,var(--clay) 7%,var(--canvas))}
+    .course-main{display:grid;grid-template-columns:74px minmax(0,1fr) 210px;gap:28px;padding:32px 0;align-items:start}
+    .course-no{padding-top:4px;color:var(--dim);font-family:var(--mono);font-size:12px}
+    .course-title-row{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+    .course h3{margin:0;font-family:var(--display);font-size:clamp(25px,3vw,36px);font-weight:400;line-height:1.15;text-wrap:balance}
+    .course-en{margin-top:5px;color:var(--dim);font-family:var(--mono);font-size:11px}
+    .course-desc{max-width:820px;margin:16px 0 0;color:var(--muted);text-wrap:pretty}
+    .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+    .tag{padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:#aaa8a2;font-family:var(--mono);font-size:10px;letter-spacing:.03em}
+    .tag.group{border-color:color-mix(in oklch,var(--mineral) 50%,var(--line));color:#9fc0b5}
+    .course-meta{text-align:right}
+    .course-meta strong{display:block;font-family:var(--display);font-size:30px;font-weight:400}
+    .course-meta span{display:block;color:var(--dim);font-family:var(--mono);font-size:11px}
+    .course-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+    .done{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius);color:var(--muted);font-size:12px;cursor:pointer}
+    .done input{width:16px;height:16px;accent-color:var(--mineral)}
+    .official{display:inline-grid;place-items:center;min-width:42px;min-height:42px;border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:var(--mono)}
+    .official:hover{border-color:var(--clay);color:var(--clay)}
+    .course details{margin:0 0 28px 102px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+    .course summary{min-height:52px;padding:13px 18px;cursor:pointer;color:#c8c6c0;list-style:none}
+    .course summary::-webkit-details-marker{display:none}
+    .course summary:after{content:'+';float:right;color:var(--clay);font-family:var(--mono)}
+    .course details[open] summary:after{content:'−'}
+    .course-body{display:grid;grid-template-columns:1fr 1fr;gap:34px;padding:8px 18px 24px;border-top:1px solid var(--line)}
+    .course-body h4{margin:20px 0 8px;color:var(--clay);font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
+    .course-body p{margin:0;color:#bfbdB7;font-size:14px}
+    .core-list{margin:0;padding:0 0 0 19px;color:#cfcdc7;font-size:14px}
+    .core-list li+li{margin-top:6px}
+    .module{padding:16px 0;border-bottom:1px solid var(--line)}
+    .module:last-child{border-bottom:0}
+    .module b{font-family:var(--display);font-size:18px;font-weight:400}
+    .module ol{display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;margin:10px 0 0;padding-left:22px;color:var(--muted);font-size:13px}
+    .empty{display:none;padding:72px 0;text-align:center;color:var(--muted);border-bottom:1px solid var(--line)}
+    .method-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
+    .method{padding:32px;border-right:1px solid var(--line);background:var(--surface)}
+    .method:last-child{border-right:0}
+    .method h3{margin:44px 0 12px;font-family:var(--display);font-size:30px;font-weight:400}
+    .method p{margin:0;color:var(--muted)}
+    .method ul{margin:18px 0 0;padding-left:18px;color:#c7c5bf;font-size:14px}
+    .method li+li{margin-top:8px}
+    footer{padding:54px 0 72px;border-top:1px solid var(--line)}
+    .footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+    footer p{margin:0;color:var(--dim);font-size:13px}
+    footer a{color:var(--muted);text-decoration:underline;text-underline-offset:4px}
+    .backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--paper);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
+    .backtop.show{opacity:1;pointer-events:auto}
+    @media(max-width:1060px){
+      .hero-grid,.section-head{grid-template-columns:1fr;gap:36px}.hero-stats{grid-template-columns:repeat(4,1fr)}.stat{display:block}.stat strong{display:block;margin-top:6px}
+      .routes{grid-template-columns:repeat(2,1fr)}.route{min-height:340px;border-bottom:1px solid var(--line)}.route:nth-child(2n){border-right:0}.route:last-child{grid-column:1/-1}
+      .course-main{grid-template-columns:58px minmax(0,1fr) 170px}.course details{margin-left:86px}.toolbar-inner{grid-template-columns:1fr}.toolbar-actions{position:absolute;right:0;top:16px}.search{max-width:calc(100% - 210px)}
+    }
+    @media(max-width:760px){
+      .wrap{width:min(100% - 32px,var(--max))}.nav{height:62px}.navlinks{display:none}.hero{padding:72px 0 58px}.hero-grid{display:block}.hero-stats{grid-template-columns:1fr 1fr;margin-top:50px}.section-head{margin-bottom:30px}.scope-grid{grid-template-columns:1fr;gap:12px}
+      section{padding:64px 0}.map{grid-template-columns:1fr;gap:16px}.map-arrow{transform:rotate(90deg)}.map-branches{grid-template-columns:1fr}.branch,.branch:nth-child(odd){border-right:0;border-bottom:1px solid var(--line)}.branch:last-child{border-bottom:0}
+      .routes{grid-template-columns:1fr}.route,.route:nth-child(2n),.route:last-child{grid-column:auto;border-right:0}.month{grid-template-columns:1fr 1fr}.week:nth-child(2){border-right:0}.week:nth-child(-n+2){border-bottom:1px solid var(--line)}
+      .toolbar{top:62px}.toolbar-inner{display:block}.toolbar-actions{position:static;margin-top:10px}.search{max-width:none}.filters{margin-top:10px}.course-main{grid-template-columns:42px 1fr;gap:14px}.course-meta{grid-column:2;text-align:left;display:flex;align-items:baseline;gap:8px}.course-meta strong{font-size:22px}.course-actions{margin-left:auto}.course details{margin-left:56px}.course-body{grid-template-columns:1fr}.module ol{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr}.method{border-right:0;border-bottom:1px solid var(--line)}.method:last-child{border-bottom:0}.footer-grid{grid-template-columns:1fr;gap:24px}
+    }
+    @media(max-width:480px){
+      h1{font-size:51px}.brand{font-size:19px}.hero-stats{grid-template-columns:1fr 1fr}.stat strong{font-size:29px}.routes,.month{grid-template-columns:1fr}.week{border-right:0;border-bottom:1px solid var(--line)}.week:last-child{border-bottom:0}.course-main{display:block}.course-no{margin-bottom:10px}.course-title-row{display:block}.course-meta{margin-top:18px}.course-actions{justify-content:flex-start}.course details{margin-left:0}.toolbar-actions .plain-btn:first-child{display:none}.progress-bar{width:70px}
+    }
+    @media print{
+      :root{--canvas:#fff;--surface:#fff;--surface-2:#f4f1ed;--line:#cac6c0;--paper:#171716;--muted:#4c4945;--dim:#68635d;--clay:#a6472b;--mineral:#416f62}
+      header,.toolbar,.backtop,.route button,.course-actions{display:none!important}.hero{padding-top:30px}.wrap{width:100%;max-width:none}.course.hidden{display:block}.course details{margin-left:0}.course details:not([open])>:not(summary){display:grid!important}.course{break-inside:avoid}.routes{grid-template-columns:repeat(5,1fr)}section{padding:34px 0}body{font-size:12px}h1{font-size:58px}.course h3{font-size:24px}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="回到顶部"><img src="data:image/svg+xml;base64,PHN2ZyBkYXRhLWNkcz0iU3BhcmsiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiNkOTc3NTciIGFyaWEtaGlkZGVuPSJ0cnVlIj48cGF0aCBkPSJtMTkuNiA2Ni41IDE5LjctMTEgLjMtMS0uMy0uNWgtMWwtMy4zLS4yLTExLjItLjNMMTQgNTNsLTkuNS0uNS0yLjQtLjVMMCA0OWwuMi0xLjUgMi0xLjMgMi45LjIgNi4zLjUgOS41LjYgNi45LjRMMzggNDkuMWgxLjZsLjItLjctLjUtLjQtLjQtLjRMMjkgNDFsLTEwLjYtNy01LjYtNC4xLTMtMi0xLjUtMi0uNi00LjIgMi43LTMgMy43LjMuOS4yIDMuNyAyLjkgOCA2LjFMMzcgMzZsMS41IDEuMi42LS40LjEtLjMtLjctMS4xTDMzIDI1bC02LTEwLjQtMi43LTQuMy0uNy0yLjZjLS4zLTEtLjQtMi0uNC0zbDMtNC4yTDI4IDBsNC4yLjZMMzMuOCAybDIuNiA2IDQuMSA5LjNMNDcgMjkuOWwyIDMuOCAxIDMuNC4zIDFoLjd2LS41bC41LTcuMiAxLTguNyAxLTExLjIuMy0zLjIgMS42LTMuOCAzLTJMNjEgMi42bDIgMi45LS4zIDEuOC0xLjEgNy43TDU5IDI3LjFsLTEuNSA4LjJoLjlsMS0xLjEgNC4xLTUuNCA2LjktOC42IDMtMy41TDc3IDEzbDIuMy0xLjhoNC4zbDMuMSA0LjctMS40IDQuOS00LjQgNS42LTMuNyA0LjctNS4zIDcuMS0zLjIgNS43LjMuNGguN2wxMi0yLjYgNi40LTEuMSA3LjYtMS4zIDMuNSAxLjYuNCAxLjYtMS40IDMuNC04LjIgMi05LjYgMi0xNC4zIDMuMy0uMi4xLjIuMyA2LjQuNiAyLjguMmg2LjhsMTIuNiAxIDMuMyAyIDEuOSAyLjctLjMgMi01LjEgMi42LTYuOC0xLjYtMTYtMy44LTUuNC0xLjNoLS44di40bDQuNiA0LjUgOC4zIDcuNUw4OSA4MC4xbC41IDIuNC0xLjMgMi0xLjQtLjItOS4yLTctMy42LTMtOC02LjhoLS41di43bDEuOCAyLjcgOS44IDE0LjcuNSA0LjUtLjcgMS40LTIuNiAxLTIuNy0uNi01LjgtOC02LTktNC43LTguMi0uNS40LTIuOSAzMC4yLTEuMyAxLjUtMyAxLjItMi41LTItMS40LTMgMS40LTYuMiAxLjYtOCAxLjMtNi40IDEuMi03LjkuNy0yLjZ2LS4ySDQ5TDQzIDcybC05IDEyLjMtNy4yIDcuNi0xLjcuNy0zLTEuNS4zLTIuOEwyNCA4NmwxMC0xMi44IDYtNy45IDQtNC42LS4xLS41aC0uM0wxNy4yIDc3LjRsLTQuNy42LTItMiAuMi0zIDEtMSA4LTUuNVoiLz48L3N2Zz4K" alt=""><span>Claude Academy 学习指南</span></a>
+      <nav class="navlinks" aria-label="页面导航"><a href="#map">课程框架</a><a href="#routes">学习路线</a><a href="#courses">22 门课</a><button type="button" id="printBtn">打印 / PDF</button></nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Official curriculum map · 2026-08-22</p>
+          <h1>Claude Academy<span>全课程学习指南</span></h1>
+          <p class="lede">不是一张平铺的课程清单，而是一张能告诉你「为什么学、先学什么、学完能做什么」的中文地图。</p>
+          <p class="source-note">事实来源：Claude Academy 官方公开页面。学习路径为本指南提炼，非 Anthropic 官方指定顺序。</p>
+        </div>
+        <div class="hero-stats" aria-label="课程统计">
+          <div class="stat"><span>课程</span><strong>22</strong></div>
+          <div class="stat"><span>课时</span><strong>374</strong></div>
+          <div class="stat"><span>测验</span><strong>41</strong></div>
+          <div class="stat"><span>总时长</span><strong>69.5h</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap scope">
+      <div class="scope-grid">
+        <div class="scope-label">Evidence boundary</div>
+        <p><strong>官方事实</strong>包含课程标题、简介、课时、测验、时长、公开学习目标和可见目录。<strong>本指南提炼</strong>包含先修建议、分角色路线和 30 天计划。可见目录还包含章节页、结语、测验或徽章入口，因此其条目数不等于官方标注的「课时」数。未登录后的视频正文、测验题和隐藏课件不在提取范围内。</p>
+      </div>
+    </div>
+
+    <section id="map">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">01 · Curriculum architecture</p><h2>先看全局：这 22 门课其实是一个树</h2></div>
+          <p class="section-intro">根是「会不会正确与 AI 协作」，干是 Claude 产品与开发平台，枝是不同职业和云环境。</p>
+        </div>
+        <div class="map" aria-label="课程关系图">
+          <div class="map-foundation">
+            <div class="map-label">Foundation · 共同底座</div>
+            <div><h3>理解 AI 的能力边界，再用 4D 管理人机协作。</h3>
+              <ul class="map-list"><li><strong>09</strong> AI 流畅度：框架与基础</li><li><strong>01</strong> AI 能力与局限性</li><li><strong>11</strong> Claude 101</li></ul>
+            </div>
+          </div>
+          <div class="map-arrow" aria-hidden="true">→</div>
+          <div class="map-branches">
+            <div class="branch"><span class="map-label">Use Claude</span><b>日常工作</b><p>Claude 101 → Cowork</p></div>
+            <div class="branch"><span class="map-label">Build with Claude</span><b>工程构建</b><p>Code → Platform → API / MCP / Agents</p></div>
+            <div class="branch"><span class="map-label">Teach with AI</span><b>教育教学</b><p>教育者 / 学生 / pK–12 / 评估</p></div>
+            <div class="branch"><span class="map-label">Deploy & operate</span><b>云与组织</b><p>Bedrock / Vertex AI / 小企业 / 非营利</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="routes">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">02 · Role-based routes</p><h2>不需要全学，你只需要一条对的路线</h2></div>
+          <p class="section-intro">先完成共同底座，然后按工作目标分流。每条路线按「必修 → 主线 → 专项」组织。</p>
+        </div>
+        <div class="routes" id="routeCards"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">03 · 30-day sprint</p><h2>用一个月，把「看课」变成「会做」</h2></div>
+          <p class="section-intro">课程不以「播放完」为完成，而以「交付一个可验证成果」为完成。</p>
+        </div>
+        <div class="month">
+          <article class="week"><div class="week-num">01</div><h3>校准心智模型</h3><p>学 4D 框架与 AI 能力边界；记录 3 次「错误委派」和修复方式。</p><div class="deliverable">交付：个人 AI 协作清单</div></article>
+          <article class="week"><div class="week-num">02</div><h3>打通一条真实流程</h3><p>通用用户学 Claude 101 + Cowork；开发者学 Code 101 + Platform 101。</p><div class="deliverable">交付：一个端到端任务</div></article>
+          <article class="week"><div class="week-num">03</div><h3>只选一个专项</h3><p>从工程、教育、组织运营或云部署中选一条，不同时跳转。</p><div class="deliverable">交付：专项小项目</div></article>
+          <article class="week"><div class="week-num">04</div><h3>验证、复盘、固化</h3><p>用真实标准检查产出，将有效描述、核验规则与边界固化为模板。</p><div class="deliverable">交付：一份可重复 SOP</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="explorer" id="courses">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">04 · Course explorer</p><h2>22 门课，逐门拆解</h2></div>
+          <p class="section-intro">搜索课程、按主题筛选，或展开「核心内容 + 完整可见目录」。学习进度仅保存在本浏览器。</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="wrap toolbar-inner">
+          <label class="search"><span class="sr-only"></span><input id="searchInput" type="search" placeholder="搜课程、主题、对象…" aria-label="搜索课程"></label>
+          <div class="filters" id="filters" aria-label="课程分类筛选"></div>
+          <div class="toolbar-actions"><button class="plain-btn" id="expandBtn" type="button">展开全部</button><button class="plain-btn" id="resetBtn" type="button">重置</button></div>
+        </div>
+      </div>
+      <div class="wrap">
+        <div class="results-line"><span id="resultCount" aria-live="polite">22 门课程</span><div class="progress"><span id="progressText" aria-live="polite">0 / 22 已学</span><span class="progress-bar" aria-hidden="true"><span id="progressFill"></span></span></div></div>
+        <div class="course-list" id="courseList"></div>
+        <div class="empty" id="emptyState">没有找到匹配课程，请换一个关键词。</div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">05 · Learning loop</p><h2>每门课都用同一个三段循环</h2></div>
+          <p class="section-intro">把课程内容绑定到真实工作，否则「理解了」很快会退化为「好像看过」。</p>
+        </div>
+        <div class="method-grid">
+          <article class="method"><span class="map-label">Before</span><h3>学习前：定义产出</h3><p>先写下一个可验证成果，再开始看课。</p><ul><li>我要解决的真实问题是什么？</li><li>什么证据能证明我已学会？</li><li>哪些边界不能交给 AI？</li></ul></article>
+          <article class="method"><span class="map-label">During</span><h3>学习中：边学边做</h3><p>每看完一个模块，立即在真实任务中实验。</p><ul><li>保留首版输出，不要直接覆盖</li><li>记录每轮描述和辨别发生了什么</li><li>遇到失败时先诊断属性，不盲目重试</li></ul></article>
+          <article class="method"><span class="map-label">After</span><h3>学习后：固化与反证</h3><p>将有效方法固化为模板，并主动寻找会使它失效的条件。</p><ul><li>把验收标准、提示、检查步骤固化</li><li>请同事或用户独立审查结果</li><li>写下一条反证：什么情况下这套方法不成立？</li></ul></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <p><strong>数据口径</strong><br>课程统计以 Claude Academy「所有资源 → 课程」2026-08-22 页面为准。该站点同时有教程、用例和网络研讨会，本指南仅覆盖官方标记为「课程」的 22 项。</p>
+      <p><strong>来源与声明</strong><br><a href="https://academy.claude.com/" target="_blank" rel="noreferrer">Claude Academy 官方站点</a>。本页是独立学习指南，不代表 Anthropic 官方背书。课程会持续更新，学习前请以链接中的官方页面为准。</p>
+    </div>
+  </footer>
+  <button class="backtop" id="backTop" type="button" aria-label="回到顶部">↑</button>
+
+  <script  data-original-src="20260822-Claude-Academy课程学习指南/assets/course-data.js">
+/* Claude Academy 公开课程页时点快照：2026-08-22。标题与目录为页面事实，学习路径与关系为本指南提炼。 */
+window.COURSES = [
+  {
+    id:'ai-capabilities', no:1, group:'foundation', level:'入门', title:'AI 能力与局限性', en:'AI Capabilities and Limitations', lessons:13, quizzes:1, hours:3.5,
+    url:'https://academy.claude.com/zh-CN/courses/ai-capabilities-and-limitations',
+    desc:'建立关于大型语言模型能力边界的准确心智模型，覆盖下一个词元预测、知识、工作记忆、可操控性和上下文限制。',
+    audience:'所有需要校准 AI 信任、判断模型边界的学习者。', prereq:'无强制先修。',
+    core:['生成式 AI 与分类/预测 AI 的差异','预训练、微调与下一词元预测','幻觉、知识截止日期与训练覆盖不均','上下文窗口、注意力衰减与信息放置','按故障属性选择检索、工具、分块或重写指令'],
+    output:'能诊断意外输出，判断问题属于哪种能力限制，并采取针对性修复。', relation:'4D 框架的配套底层模型课；建议在行业专项课前学习。',
+    modules:[{name:'入门',items:['AI 能力与局限性简介','我们所说的 AI 是什么','AI 如何获得其性格']},{name:'下一个词元预测',items:['下一个令牌预测','试一试：下一个令牌预测']},{name:'知识',items:['知识','动手试一试：知识']},{name:'工作记忆',items:['工作记忆','试一试：工作记忆']},{name:'可操控性',items:['可操控性','试一试：可操控性']},{name:'整合',items:['当属性碰撞时','下一步','课程测验']}]
+  },
+  {
+    id:'fluency-builders', no:2, group:'work', level:'进阶', title:'面向建设者的 AI 流畅度', en:'AI Fluency for Builders', lessons:9, quizzes:1, hours:3,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-builders', desc:'帮助产品人员、工程师和创作者在从问题定义到交付的完整流程中培养 AI 流畅度并承担最终责任。',
+    audience:'产品经理、工程师、设计师与创作者。', prereq:'建议先完成《AI 流畅度：框架与基础》。',
+    core:['将 4D 框架应用于从问题到交付的完整链路','设计人工与 AI 的任务边界','写代码前定义验收测试与完成标准','用 Description Chain 把用户需求转成可执行指令','从正确性、质量、适配、体验、责任评估产出'],
+    output:'能定义验收标准、生成精确描述、评估代码与体验，并做出发布/修复/停止决策。', relation:'在 4D 基础课上增加建设者工作流；与 AI 能力与局限性互补。',
+    modules:[{name:'框架与机制',items:['欢迎来到面向建造者的 AI Fluency 课程','4D 框架','AI 能力与局限性']},{name:'建设者的 4D',items:['委派与构建者工具包','描述与构建卓越的产品']},{name:'辨别与责任',items:['代码的辨别力','用户体验的判断力','为您构建的成果负责到底']},{name:'结语',items:['收尾与展望','课程测验']}]
+  },
+  {
+    id:'fluency-educators', no:3, group:'education', level:'专项', title:'面向教育者的 AI Fluency', en:'AI Fluency for Educators', lessons:4, quizzes:1, hours:1.5,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-educators', desc:'帮助教师、教学设计师和教育领导者将 4D 框架应用于课程设计、学习材料和教学实践。',
+    audience:'教师、教学设计师、教育领导者。', prereq:'需先理解核心课中的 4D 框架。',
+    core:['将 4D 框架映射到教学情境','构建可复用的教学情境文档','设计课程、学习路径与可衡量目标','制作讲座、学习指南、练习与评估','用描述—辨别循环守住准确性与学术诚信'],
+    output:'能把 AI 纳入课程开发，同时记录 AI 作用、核验内容并维护学术诚信。', relation:'教育者侧的应用课；与学生课分别覆盖「教」和「学」。',
+    modules:[{name:'框架简介',items:['面向教育者的 AI 流利度简介','AI Fluency 框架回顾']},{name:'教育应用',items:['将 AI 流畅度应用于课程设计和学习成果','将 AI Fluency 应用于学习材料和作业']},{name:'结语',items:['结语与证书','课程测验']}]
+  },
+  {
+    id:'fluency-nonprofits', no:4, group:'organization', level:'专项', title:'面向非营利组织的 AI Fluency', en:'AI Fluency for Nonprofits', lessons:9, quizzes:1, hours:4,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-nonprofits', desc:'把 4D 框架应用于研究、写作、数据分析和组织范围的 AI 采用，同时忠于使命和价值观。',
+    audience:'筹款、沟通、项目、运营和领导岗位的非营利组织人员。', prereq:'建议先完成 4D 基础课；能使用 AI 聊天工具。',
+    core:['用 AI 研究政策、资金与资助前景','起草保持组织真实声音的提案与沟通','评估数据政策并保护敏感信息','用已知数据验证 AI 辅助分析','设计含人工审核的可重复工作流与组织政策'],
+    output:'能在使命约束、多方责任与有限资源下安全实施 AI 协作流程。', relation:'4D 框架在使命驱动组织中的行业版。',
+    modules:[{name:'框架',items:['欢迎来到非营利组织 AI 素养课程','4D 框架']},{name:'描述—辨别',items:['使用 AI 进行研究','使用 AI 写作']},{name:'委派—尽责',items:['理解隐私与数据','使用 AI 进行数据分析']},{name:'组织落地',items:['工作流增强','整合','后续步骤','课程测验']}]
+  },
+  {
+    id:'pk12-trainer', no:5, group:'education', level:'专项', title:'面向 pK–12 的 AI 素养培训者培训', en:'AI Fluency for pK–12 Train the Trainer', lessons:4, quizzes:0, hours:0.75,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-pk-12-train-the-trainer', desc:'帮助 pK–12 教育者主持同事培训，并提供基于 4D 框架的可直接使用工作坊工具包。',
+    audience:'准备为同事主持 AI 素养培训的 pK–12 教育者。', prereq:'建议先完成《面向 pK–12 教育者的 AI 流畅度》。',
+    core:['从学习者转变为培训者','让教育者声音处于 AI 决策核心','使用演示文稿、主持人指南和学员手册','带领按年级段设计的 4D 练习'],
+    output:'能独立组织培训场次并使用官方工具包。', relation:'明确承接 pK–12 教育者课，把个人学习转成同事工作坊。',
+    modules:[{name:'从学习者到培训者',items:['简介：从学习者到培训者']},{name:'工具包',items:['如何使用工具包','幻灯片与培训师指南','学员手册']}]
+  },
+  {
+    id:'pk12-educators', no:6, group:'education', level:'专项', title:'面向 pK–12 教育者的 AI 流畅度', en:'AI Fluency for pK–12 Educators', lessons:10, quizzes:1, hours:3,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-k-12-educators', desc:'帮助 pK–12 教育者以 4D 框架支持学生学习，同时忠于教育使命和价值观。',
+    audience:'pK–12 教师及相关教育工作者。', prereq:'建议先学 4D 基础课与 AI 能力与局限性。',
+    core:['把 4D 框架应用到教学实践','构建包含角色、学生与目标的情境文档','理解幻觉、知识截止等限制','用描述—辨别循环制作差异化教学材料','用委派—尽责循环保护学生数据与处理伦理灰区'],
+    output:'能针对真实教学任务运行完整 4D 工作流，并起草个人伦理承诺。', relation:'Teach For America 合作课；后续可进入培训者培训。',
+    modules:[{name:'框架',items:['欢迎学习面向教育者的 AI Fluency 课程','4D 框架','探索！']},{name:'AI 机制',items:['AI 的能力与局限']},{name:'负责任使用',items:['创建高质量的 AI 输出','伦理与负责任的 AI 使用','AI 的宪法、教学法与你']},{name:'整合',items:['将一切融会贯通','总结与拓展','课程测验']}]
+  },
+  {
+    id:'small-business', no:7, group:'organization', level:'专项', title:'小型企业的 AI 流畅度', en:'AI Fluency for Small Businesses', lessons:9, quizzes:1, hours:4,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-small-businesses', desc:'帮助小型企业主和员工把 4D 框架用于研究、客户数据和运营。',
+    audience:'小型企业主、客户互动、后台、供应链和领导岗位员工。', prereq:'建议先完成 4D 基础课。',
+    core:['理解生成式 AI 的能力、幻觉与知识截止','用描述—辨别循环做研究与评估','对敏感业务信息实施数据卫生','区分可自动化任务与必须人工主导的任务','构建可重复工作流与透明的 AI 使用政策'],
+    output:'能把 4D 落地到企业运营，建立透明、可问责的人机协作机制。', relation:'与非营利组织课互为业务运营与使命组织版本。',
+    modules:[{name:'框架',items:['小型企业的 AI 素养','4D 框架']},{name:'机制',items:['AI 的能力与局限性','探索一下！']},{name:'两组循环',items:['借助 AI 优化','透明的 AI 使用']},{name:'落地',items:['整合所有内容','人类参与其中','结语与证书','结束与展望','课程测验']}]
+  },
+  {
+    id:'fluency-students', no:8, group:'education', level:'专项', title:'面向学生的 AI 流畅力', en:'AI Fluency for Students', lessons:5, quizzes:1, hours:3,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-for-students', desc:'帮助学生把 4D 框架用于学习、职业规划和学业成功。',
+    audience:'学生。', prereq:'需理解核心课中的 4D 框架。',
+    core:['理解 AI 流畅力对学业与职业的意义','区分「让 AI 代做」与「借 AI 真正学会」','配置增强学习的 AI 学习伙伴与动态日志','用 AI 做职业探索、简历改进与面试练习','制定个人 AI 协作政策，保持人在环中'],
+    output:'能把 AI 用作学习与职业规划伙伴，同时保持学习主体性。', relation:'教育者课的学习者侧对应版。',
+    modules:[{name:'框架',items:['欢迎来到学生 AI 素养课程','AI Fluency 框架']},{name:'学生应用',items:['AI 作为学习伙伴','AI 在职业规划中的应用','成为循环中的人类']},{name:'评估',items:['课程测验']}]
+  },
+  {
+    id:'fluency-foundations', no:9, group:'foundation', level:'入门', title:'AI 流畅度：框架与基础', en:'AI Fluency: Framework & Foundations', lessons:14, quizzes:1, hours:4,
+    url:'https://academy.claude.com/zh-CN/courses/ai-fluency-framework-foundations', desc:'学习使用 4D 框架——委派、描述、辨别和尽责——有效、高效、合乎道德且安全地与 AI 协作。',
+    audience:'Claude 新手和希望系统化方法的 AI 从业者。', prereq:'无编程或 AI 使用经验要求。',
+    core:['AI 流畅度的定义与必要性','自动化、增强与自主性的委派选择','描述：把目标、情境与标准说清楚','辨别：评估输出、迭代提示','尽责：在伦理、安全与责任边界内部署'],
+    output:'能选择合适的委派方式，写出更清晰的提示，并建立输出核验与责任边界。', relation:'整个课程体系的通识底座，建议第一门学。',
+    modules:[{name:'AI 流畅度简介',items:['AI Fluency 简介','AI 流畅度框架','为什么我们需要 AI 流畅度？']},{name:'基础',items:['4D 框架','生成式 AI 基础','能力与局限']},{name:'委派',items:['深入了解委派','项目规划与委派']},{name:'描述',items:['深入了解 Description','有效的提示技巧']},{name:'辨别',items:['深入了解辨别力','描述—辨别循环']},{name:'尽责',items:['深入了解尽责']},{name:'结论',items:['结语','课程测验','额外活动','完成徽章']}]
+  },
+  {
+    id:'api', no:10, group:'build', level:'高级', title:'使用 Claude API 构建', en:'Building with the Claude API', lessons:67, quizzes:8, hours:9,
+    url:'https://academy.claude.com/zh-CN/courses/building-with-the-claude-api', desc:'从 API 请求一直到提示评估、工具使用、RAG、MCP、智能体与生产工作流的综合工程课。',
+    audience:'需要将 Claude 集成到生产应用的软件工程师。', prereq:'熟练 Python；基本 JSON；Anthropic API key。',
+    core:['API 身份验证、消息与流式输出','可测评的提示工程','多轮工具使用与结构化输出','RAG、BM25 与多索引检索','MCP、Claude Code、智能体与工作流'],
+    output:'能构建 Claude 后端服务、RAG 应用、工具调用流程和基础智能体架构。', relation:'平台工程主线；与 Bedrock / Vertex AI 课共享概念，接入平台不同。',
+    modules:[
+      {name:'通过 API 访问 Claude',items:['访问 API','获取 API 密钥','发起请求','多轮对话','系统提示','Temperature','响应流式传输','结构化数据','API 测验']},
+      {name:'提示评估',items:['提示评估','典型评估工作流','生成测试数据集','运行评估','基于模型的评分','基于代码的评分','提示评估测验']},
+      {name:'提示工程',items:['提示工程','清晰直接','具体明确','使用 XML 标签构建结构','提供示例','提示工程测验']},
+      {name:'Claude 的工具使用',items:['工具使用简介','项目概述','工具函数','工具模式','处理消息块','发送工具结果','使用工具的多轮对话','实现多轮对话','使用多个工具','细粒度工具调用','文本编辑工具','Web Search 工具','工具使用测验']},
+      {name:'RAG 与智能体搜索',items:['RAG 简介','文本分块策略','文本嵌入','完整 RAG 流程','实现 RAG 流程','BM25 词法搜索','多索引 RAG 管道']},
+      {name:'Claude 功能特性',items:['扩展思考','图像支持','PDF 支持','引用','提示缓存','提示缓存的规则','提示缓存实战','代码执行与 Files API','Claude 功能测验']},
+      {name:'Model Context Protocol',items:['MCP 简介','MCP 客户端','项目设置','使用 MCP 定义工具','服务器检查器','实现客户端','定义资源','访问资源','定义提示','客户端中的提示','MCP 测验']},
+      {name:'Anthropic 应用',items:['Anthropic 应用','Claude Code 设置','Claude Code 实战','使用 MCP 服务器进行增强']},
+      {name:'智能体与工作流',items:['智能体与工作流','并行化工作流','链式工作流','路由工作流','智能体与工具','环境检查','工作流与智能体','智能体与工作流测验','最终评估']}
+    ]
+  },
+  {
+    id:'claude-101', no:11, group:'product', level:'入门', title:'Claude 101', en:'Claude 101', lessons:13, quizzes:1, hours:2.5,
+    url:'https://academy.claude.com/zh-CN/courses/claude-101', desc:'学习日常工作中使用 Claude，从首次对话和有效提示，到 Projects、Artifacts、Skills 和连接工具。',
+    audience:'刚开始在工作中使用 Claude 的人，以及想系统了解产品能力的现有用户。', prereq:'任意 Claude 账户；无 AI 经验要求。部分功能需付费或 Team/Enterprise 计划。',
+    core:['从首次对话到更好结果的提示方法','Chat、Cowork、Code 在桌面应用中的分工','Projects、Artifacts、Skills 的组织与创作','Connectors、Enterprise Search、Research 的外部连接','按角色选择 Claude 产品模式'],
+    output:'能在日常工作中选择合适的 Claude 模式与协作功能。', relation:'产品使用主入口；非开发者建议先学，开发者学后再进 Code / Platform。',
+    modules:[{name:'课程',items:['什么是 Claude？','您与 Claude 的第一次对话','获得更好的结果','Claude 桌面应用：Chat、Cowork、Code','项目简介','使用 Artifacts 进行创作','使用技能','连接您的工具','企业搜索','用于深入研究的 Research 模式','Claude 实战：按角色划分的用例','与 Claude 协作的其他方式','接下来是什么？','课程测验']}]
+  },
+  {
+    id:'code-101', no:12, group:'build', level:'入门', title:'Claude Code 101', en:'Claude Code 101', lessons:12, quizzes:1, hours:1,
+    url:'https://academy.claude.com/zh-CN/courses/claude-code-101', desc:'了解运行在终端中的智能体编码工具、工作原理和完成真实工作的核心流程。',
+    audience:'刚进入软件工程的开发者，或尚未使用 AI 编码智能体的经验工程师。', prereq:'基本编辑器与命令行知识；合适的 Claude 账户或 API key。',
+    core:['编码智能体与聊天式 AI 的差异','智能体循环、上下文、工具与权限','手动、自动接受与计划模式','探索 → 计划 → 编码 → 提交','CLAUDE.md、子代理、Skills、MCP 与 Hooks'],
+    output:'能安全安装与使用 Claude Code，并为项目配置记忆、权限与扩展机制。', relation:'Claude Code 实战的明确前置。',
+    modules:[{name:'什么是 Claude Code',items:['什么是 Claude Code？','Claude Code 的工作原理']},{name:'第一个提示',items:['安装 Claude Code','您的第一个提示']},{name:'日常工作流',items:['探索 → 计划 → 编码 → 提交工作流','上下文管理','代码审查']},{name:'自定义',items:['CLAUDE.md 文件','子代理','技能','MCP','钩子（Hooks）']},{name:'评估',items:['课程测验']}]
+  },
+  {
+    id:'code-action', no:13, group:'build', level:'进阶', title:'Claude Code 实战', en:'Claude Code in Action', lessons:9, quizzes:1, hours:1,
+    url:'https://academy.claude.com/zh-CN/courses/claude-code-in-action', desc:'运行可信的长时间、少监督 Claude Code 会话：引导、配置、自动化和验证。',
+    audience:'已能用 Claude Code 处理单次提示，希望进入长会话、少监督与团队工作流的开发者。', prereq:'已使用 Claude Code；基本 Git 与命令行知识。',
+    core:['长会话的计划、压缩与回退','跟随项目的 CLAUDE.md','将验证与重复流程封装为 Skills','权限模式与 Hooks 约束','Headless、GitHub Actions、托管审查与 Plugins'],
+    output:'能设计有权限边界、验证机制与自动化触发器的团队级 Claude Code 流程。', relation:'紧接 Claude Code 101；从「会用」进入「可治理、可自动化、可团队复用」。',
+    modules:[{name:'课程',items:['Steering long sessions','A CLAUDE.md that follows','Verification skills','Permission modes','Hooks','Routines and headless','GitHub Actions and Code Review','Trust it: Verifying unsupervised runs','Plugins','Course quiz']}]
+  },
+  {
+    id:'platform-101', no:14, group:'build', level:'入门', title:'Claude Platform 101', en:'Claude Platform 101', lessons:13, quizzes:1, hours:1.5,
+    url:'https://academy.claude.com/zh-CN/courses/claude-platform-101', desc:'从零开始理解 Claude Platform，从首个 API 请求、模型选择到工具、MCP 与托管智能体。',
+    audience:'希望从聊天窗口转向构建 Claude 应用的开发者。', prereq:'能读写一种语言；基本命令行；能跟读 TypeScript/Node/npm 示例；API key 与少量额度。',
+    core:['messages.create 与结构化响应','按成本/延迟选择模型','从手写智能体循环到 SDK Tool Runner','工具、Thinking、Skills、MCP 与上下文管理','Managed Agents 与 Claude Code 构建'],
+    output:'能完成从首个 API 请求、模型选择、工具调用到 Managed Agent 的最小闭环。', relation:'比《使用 Claude API 构建》更短、更偏心智模型；建议先学本课再进综合工程课。',
+    modules:[{name:'课程（官方页当前显示英文）',items:['What is the Claude Platform?','Your first API call','Choosing the right model','The agent loop explained','What is tool use?','What is thinking?','Built-in tools','Skills','MCP','Context management','What are managed agents?','Building your first managed agent','Building with Claude Code','Claude Platform 101 quiz']}]
+  },
+  {
+    id:'bedrock', no:15, group:'deploy', level:'高级', title:'在 Amazon Bedrock 上使用 Claude', en:'Claude with Amazon Bedrock', lessons:65, quizzes:8, hours:8,
+    url:'https://academy.claude.com/zh-CN/courses/claude-with-amazon-bedrock', desc:'通过 Amazon Bedrock 集成和部署 Claude，覆盖 API、工具使用、RAG、智能体和 AWS 生产应用。',
+    audience:'AWS 上的开发者、ML/DevOps/全栈工程师、架构师与自动化工程师。', prereq:'熟练 Python；基本 JSON；AWS 账户与 Bedrock 访问权限。',
+    core:['Bedrock 接入、多轮对话与流式输出','提示评估与工程','JSON Schema 工具与多工具对话','RAG、BM25、重排与上下文检索','MCP、Claude Code、Computer Use 与智能体'],
+    output:'能在 Bedrock 环境中构建 API 应用、工具调用、RAG、MCP 和智能体流程。', relation:'概念上对应 Claude API 课；若团队以 AWS 为基础设施，直接优先本课。',
+    modules:[
+      {name:'课程介绍',items:['Claude 模型概览']},
+      {name:'使用 API',items:['访问 API','发起请求','多轮对话','系统提示','温度','流式传输','控制模型输出','结构化数据','API 测验']},
+      {name:'提示评估',items:['提示评估','典型评估工作流','生成测试数据集','运行评估','基于模型的评分','基于代码的评分','评估测验']},
+      {name:'提示工程',items:['提示工程','清晰直接地表达','具体明确','使用 XML 标签构建结构','提供示例','提示工程测验']},
+      {name:'工具使用',items:['工具使用简介','Tool functions','工具的 JSON Schema','处理工具使用响应','运行工具函数','发送工具结果','使用工具的多轮对话','添加多个工具','批量工具使用','用工具处理结构化数据','灵活的工具提取','文本编辑器工具','工具使用测验']},
+      {name:'检索增强生成',items:['RAG 简介','文本分块策略','文本嵌入','完整 RAG 流程','实现 RAG 流程','BM25 词法搜索','多搜索 RAG 管道','重新排序结果','上下文检索','RAG 测验']},
+      {name:'Claude 功能',items:['扩展思考','图像支持','PDF 支持','引用','提示缓存','提示缓存的规则','Claude 功能测验']},
+      {name:'Model Context Protocol',items:['MCP 简介','MCP 客户端','项目设置','使用 MCP 定义工具','服务器检查器','实现客户端','定义资源','访问资源','定义提示','客户端中的提示','MCP 回顾','MCP 测验']},
+      {name:'智能体',items:['Claude Code 实战','使用 MCP 服务器增强','并行化 Claude Code','自动化调试','计算机使用','计算机使用的工作原理','智能体的特质','最终评估测验']}
+    ]
+  },
+  {
+    id:'vertex', no:16, group:'deploy', level:'高级', title:'通过 Google Cloud 的 Vertex AI 使用 Claude', en:'Claude with Google Cloud\'s Vertex AI', lessons:66, quizzes:9, hours:8.5,
+    url:'https://academy.claude.com/zh-CN/courses/claude-with-google-cloud-s-vertex-ai', desc:'通过 Vertex AI 使用 Anthropic 模型，覆盖设置、提示、工具使用、RAG、智能体和生产部署模式。',
+    audience:'希望在 Google Cloud 应用中添加 AI 功能的开发者。', prereq:'熟练 Python；理解 JSON；Google Cloud/Vertex AI 访问权限与使用经验。',
+    core:['Vertex AI 接入、多轮对话与流式输出','提示工程和自动评估','工具调用、多工具与结构化输出','RAG、重排、上下文检索与高级功能','MCP、智能体与工作流'],
+    output:'能从 Vertex AI 接入 Claude，构建具备提示评估、工具、RAG、MCP 和智能体编排的应用。', relation:'Google Cloud 部署主线；若基础设施在 GCP，优先本课而不必重复学 Bedrock。',
+    modules:[
+      {name:'通过 API 访问 Claude',items:['访问 API','Vertex AI 设置','发起请求','多轮对话','系统提示','Temperature','响应流式传输','控制模型输出','结构化数据','API 测验']},
+      {name:'提示评估',items:['提示评估','典型评估工作流','生成测试数据集','运行评估','基于模型的评分','基于代码的评分','提示评估测验']},
+      {name:'提示工程',items:['提示工程','清晰直接地表达','具体明确','使用 XML 标签构建结构','提供示例','提示工程测验']},
+      {name:'Claude 的工具使用',items:['工具使用简介','项目概述','工具函数','工具模式','处理消息块','发送工具结果','使用工具的多轮对话','实现多轮对话','使用多个工具','批处理工具','用于结构化数据的工具','文本编辑工具','Web Search 工具','工具使用测验']},
+      {name:'检索增强生成',items:['RAG 简介','文本分块策略','文本嵌入','完整 RAG 流程','实现 RAG 流程','BM25 词法搜索','多索引 RAG 管道','结果重排','上下文检索','RAG 测验']},
+      {name:'Claude 功能',items:['扩展思考','图像支持','引用','提示缓存','提示缓存规则','提示缓存实战','Claude 功能测验']},
+      {name:'Model Context Protocol',items:['MCP 简介','MCP 客户端','项目设置','使用 MCP 定义工具','服务器检查器','实现客户端','定义资源','访问资源','定义提示','客户端中的提示','MCP 回顾','MCP 测验']},
+      {name:'智能体与工作流',items:['智能体与工作流','并行化工作流','链式工作流','路由工作流','智能体与工具','环境检查','工作流与智能体','智能体与工作流测验']},
+      {name:'最终评估',items:['期末评估测验']}
+    ]
+  },
+  {
+    id:'agent-skills', no:17, group:'build', level:'进阶', title:'智能体技能入门', en:'Introduction to Agent Skills', lessons:6, quizzes:0, hours:1,
+    url:'https://academy.claude.com/zh-CN/courses/introduction-to-agent-skills', desc:'在 Claude Code 中构建、配置和共享 Skills——任务匹配时自动应用的可复用 Markdown 指令。',
+    audience:'希望将重复流程产品化为可复用指令的 Claude Code 用户。', prereq:'建议先熟悉 Claude Code、项目目录与 Markdown。',
+    core:['Skills 的位置、匹配与加载机制','创建有效的 SKILL.md','描述质量与工具访问限制','渐进式披露、参考文件与脚本','Skills 与 CLAUDE.md、子代理、Hooks、MCP 的边界'],
+    output:'能创建、组织、共享并排查一个可复用 Skill 工作流。', relation:'与子代理课互补：前者是指令复用，后者是独立上下文委派。',
+    modules:[{name:'课程',items:['什么是技能？','创建您的第一个技能','配置与多文件技能','Skills 与其他 Claude Code 功能的比较','共享技能','技能故障排查']}]
+  },
+  {
+    id:'cowork', no:18, group:'product', level:'入门', title:'Claude Cowork 简介', en:'Introduction to Claude Cowork', lessons:14, quizzes:1, hours:2.5,
+    url:'https://academy.claude.com/zh-CN/courses/introduction-to-claude-cowork', desc:'在 Cowork 中将多步工作委派给 Claude：设置工作区、提供上下文、运行任务循环，并使用插件做研究、文档和浏览器任务。',
+    audience:'日常在文件、应用和工具之间搬运信息，希望 Claude 承担真实多步工作的知识工作者。', prereq:'付费 Claude 计划与桌面应用；无编码或命令行要求。',
+    core:['Cowork 与 Chat / Code 的区别','工作文件夹、连接器与权限设置','委派、运行与审查多步任务','全局指令、Projects、Skills 与 Plugins','Chrome / Microsoft 365 扩展、安全验证与团队共享'],
+    output:'能完成一次端到端 Cowork 任务，并配置适合个人或团队流程的上下文、Skills 与 Plugins。', relation:'面向非开发者的智能体工作流课；之后可学 Agent Skills 与 Subagents。',
+    modules:[{name:'认识 Claude Cowork',items:['什么是 Claude Cowork','设置 Claude Cowork','Claude Cowork 能为您做什么','将第一个任务交给 Claude Cowork']},{name:'让 Cowork 为您所用',items:['更快获得更好的结果','常设上下文：全局指令与项目','Skills：以您的方式教 Claude Cowork 工作','插件：编码您团队的专业知识']},{name:'在工作环境中',items:['Claude in Chrome','适用于 Microsoft 365 的 Claude']},{name:'共享与安全',items:['安全工作的最佳实践','验证插件的技能','与团队分享您构建的内容','总结与后续步骤']},{name:'评估',items:['Claude Cowork 测验']}]
+  },
+  {
+    id:'mcp-intro', no:19, group:'build', level:'入门', title:'Model Context Protocol 简介', en:'Introduction to Model Context Protocol', lessons:10, quizzes:1, hours:1,
+    url:'https://academy.claude.com/zh-CN/courses/introduction-to-model-context-protocol', desc:'使用 Python SDK 从零构建 MCP 服务器和客户端，覆盖工具、资源和提示三个核心原语。',
+    audience:'希望将 Claude 与外部工具和服务连接、同时减少集成样板代码的工程师。', prereq:'基础 Python；async/await；API、JSON 与 HTTP 请求—响应概念。',
+    core:['MCP 架构与传输无关通信','用 Python SDK 定义工具','使用 Inspector 调试服务器','实现客户端、资源与资源模板','提示原语与三类控制边界'],
+    output:'能使用 Python SDK 构建基础 MCP 服务器和客户端，并接入工具、资源与提示。', relation:'MCP 高级主题的明确前置。',
+    modules:[{name:'简介',items:['介绍 MCP','MCP clients']},{name:'MCP 服务器实践',items:['使用 MCP 定义工具','服务器检查器']},{name:'客户端连接',items:['实现客户端','定义资源','访问资源','Defining prompts','客户端中的提示']},{name:'评估与总结',items:['MCP 最终评估','MCP 回顾']}]
+  },
+  {
+    id:'subagents', no:20, group:'build', level:'进阶', title:'子代理入门', en:'Introduction to Subagents', lessons:4, quizzes:0, hours:0.75,
+    url:'https://academy.claude.com/zh-CN/courses/introduction-to-subagents', desc:'在并行的 Claude 子代理之间分解复杂任务，并以确定性方式编排。',
+    audience:'需要将复杂任务分治、隔离上下文或并行处理的 Claude Code 用户。', prereq:'建议具备基本 Claude Code 使用经验。',
+    core:['独立上下文窗口、输入与摘要返回','使用 /agents 创建子代理','用结构化输出和障碍报告提升可靠性','限制工具权限','判断适用场景与反模式'],
+    output:'能为代码审查、文档等任务创建子代理，并控制输出与工具边界。', relation:'与 Agent Skills 组成「指令复用 + 独立上下文委派」的组合。',
+    modules:[{name:'课程',items:['什么是子代理？','创建子代理','设计有效的子代理','有效使用子代理']}]
+  },
+  {
+    id:'mcp-advanced', no:21, group:'build', level:'高级', title:'Model Context Protocol：高级主题', en:'Model Context Protocol: Advanced Topics', lessons:11, quizzes:1, hours:1.5,
+    url:'https://academy.claude.com/zh-CN/courses/model-context-protocol-advanced-topics', desc:'超越 MCP 基础知识：采样、通知、Roots，以及 STDIO 与 Streamable HTTP 的通信和状态管理。',
+    audience:'构建生产级 MCP 服务器、需要理解协议高级能力的工程师。', prereq:'理解 MCP 服务器/客户端；异步编程；JSON、HTTP、SSE 基础。',
+    core:['Sampling 及协议流程','日志、进度通知与长任务','Roots 与文件访问边界','请求/结果/通知与 STDIO','Streamable HTTP、会话和有状态/无状态部署'],
+    output:'能按功能、部署与扩展需求选择 MCP 传输方式，设计更接近生产的服务器通信。', relation:'明确承接 MCP 简介。',
+    modules:[{name:'核心 MCP 功能',items:['Sampling','采样演练','日志和进度通知','通知功能演示','Roots','Roots 演练']},{name:'传输与通信',items:['JSON 消息类型','STDIO 传输','可流式传输的 HTTP 传输','深入理解 StreamableHTTP','状态与 StreamableHTTP 传输']},{name:'评估',items:['MCP 概念评估']}]
+  },
+  {
+    id:'teaching-fluency', no:22, group:'education', level:'进阶', title:'教授 AI Fluency', en:'Teaching AI Fluency', lessons:7, quizzes:1, hours:4.5,
+    url:'https://academy.claude.com/zh-CN/courses/teaching-ai-fluency', desc:'帮助学术教师和教学设计师在教师指导环境中教授和评估 AI Fluency，覆盖评估策略、作业设计和学科应用。',
+    audience:'学术教师、教学设计师及其他需在教师指导环境教授 AI Fluency 的人员。', prereq:'明确要求理解核心课中的 4D AI Fluency 框架。',
+    core:['线性、非线性、聚焦式与循环式教学方法','委派—尽责与描述—辨别循环','用结果、过程与反思评估 4D','设计真实、可迭代的 AI 作业','分析 AI 对学科课程、教学法与评估的影响'],
+    output:'能把 AI Fluency 转化为可教学、可评估、可迭代的课程和作业设计。', relation:'教育方向的进阶课；建议在 4D 基础课和面向教育者课之后学习。',
+    modules:[{name:'教学简介与方法',items:['欢迎及 AI 流畅度教学方法','委派—审慎循环','描述—辨别循环']},{name:'评估 AI Fluency',items:['我们如何评估 4D？','为 AI 素养设计作业']},{name:'AI 对学科的影响',items:['AI 的影响与您的学科','将学科专业知识应用于 AI Fluency']},{name:'结语与证书',items:['课程测验']},{name:'页面额外介绍',items:['关于本课程','认识您的讲师','我们如何在构建课程中使用 AI','完成证书']}]
+  }
+];
+
+window.GROUP_LABELS = {
+  all:'全部', foundation:'认知基础', product:'日常使用', work:'建设者流程', build:'工程构建', deploy:'云部署', education:'教育', organization:'组织运营'
+};
+
+window.ROUTES = [
+  {id:'everyone',eyebrow:'通用必修',title:'先建立正确的 AI 协作观',hours:'10 h',courses:['fluency-foundations','ai-capabilities','claude-101'],note:'不论你之后是写作、做产品、教学还是开发，先掌握 4D、能力边界和 Claude 产品全景。'},
+  {id:'knowledge',eyebrow:'知识工作者',title:'从对话到多步交付',hours:'5 h',courses:['claude-101','cowork'],note:'掌握 Projects、Artifacts、Skills、连接工具与 Cowork 任务循环，将零散提示升级为稳定工作流。'},
+  {id:'builder',eyebrow:'开发者',title:'从 Claude Code 到生产智能体',hours:'16.75 h + 云课',courses:['code-101','code-action','platform-101','api','mcp-intro','mcp-advanced','agent-skills','subagents'],note:'先建立 Code 与 Platform 心智模型，再深入 API / MCP / Skills / Subagents；最后按基础设施选 Bedrock 或 Vertex AI。'},
+  {id:'education',eyebrow:'教育者',title:'从 4D 基础到教学评估',hours:'10–16 h',courses:['fluency-foundations','fluency-educators','teaching-fluency','pk12-educators','pk12-trainer','fluency-students'],note:'高教走「基础 → 教育者 → 教授」；pK–12 走「基础 → pK–12 教育者 → 培训者」。'},
+  {id:'org',eyebrow:'小企业 / 非营利组织',title:'把 AI 变成可问责的运营流程',hours:'8–12 h',courses:['fluency-foundations','small-business','fluency-nonprofits'],note:'学习研究、写作、数据与运营的 AI 工作流，同时建立隐私、人工审核与组织政策。'}
+];
+
+</script>
+  <script>
+    (() => {
+      const $ = (sel, root=document) => root.querySelector(sel);
+      const courses = window.COURSES || [];
+      const groups = window.GROUP_LABELS || {};
+      const routes = window.ROUTES || [];
+      const state = { group:'all', query:'', route:null, expanded:false };
+      const safeStore = { get:(k)=>{try{return localStorage.getItem(k)}catch{return null}}, set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}} };
+      const done = new Set(JSON.parse(safeStore.get('claude-academy-progress') || '[]'));
+
+      const routeCards = $('#routeCards');
+      routeCards.innerHTML = routes.map((r,i)=>`<article class="route"><span class="route-no">0${i+1}</span><p class="eyebrow">${r.eyebrow}</p><h3>${r.title}</h3><p>${r.note}</p><div class="route-foot"><span class="route-time">${r.hours}</span><button type="button" data-route="${r.id}">查看这条路线</button></div></article>`).join('');
+
+      const filters = $('#filters');
+      const groupOrder = ['all','foundation','product','work','build','deploy','education','organization'];
+      filters.innerHTML = groupOrder.map(g=>`<button type="button" class="filter${g==='all'?' active':''}" data-group="${g}">${groups[g]}</button>`).join('');
+
+      const courseList = $('#courseList');
+      const moduleMarkup = c => c.modules.map(m=>`<div class="module"><b>${m.name}</b><ol>${m.items.map(i=>`<li>${i}</li>`).join('')}</ol></div>`).join('');
+      courseList.innerHTML = courses.map(c=>`<article class="course" id="course-${c.id}" data-group="${c.group}" data-search="${[c.title,c.en,c.desc,c.audience,c.prereq,c.core.join(' '),c.modules.flatMap(m=>m.items).join(' ')].join(' ').toLowerCase()}">
+        <div class="course-main"><div class="course-no">${String(c.no).padStart(2,'0')}</div><div><div class="course-title-row"><div><h3>${c.title}</h3><div class="course-en">${c.en}</div></div></div><p class="course-desc">${c.desc}</p><div class="tags"><span class="tag group">${groups[c.group]}</span><span class="tag">${c.level}</span><span class="tag">${c.lessons} 课时</span><span class="tag">${c.quizzes ? c.quizzes+' 测验' : '无公开测验'}</span></div></div><div class="course-meta"><strong>${c.hours}<small>h</small></strong><span>官方预估时长</span><div class="course-actions"><label class="done"><input type="checkbox" data-done="${c.id}" ${done.has(c.id)?'checked':''}> 已学</label><a class="official" href="${c.url}" target="_blank" rel="noreferrer" title="打开官方课程" aria-label="打开 ${c.title} 官方课程">↗</a></div></div></div>
+        <details><summary>展开核心内容与完整页面可见目录</summary><div class="course-body"><div><h4>核心内容</h4><ul class="core-list">${c.core.map(x=>`<li>${x}</li>`).join('')}</ul><h4>适合谁</h4><p>${c.audience}</p><h4>先修建议</h4><p>${c.prereq}</p><h4>学习产出</h4><p>${c.output}</p><h4>与其他课的关系·本指南提炼</h4><p>${c.relation}</p></div><div><h4>官方页面可见目录·含章节/测验/结语入口</h4>${moduleMarkup(c)}</div></div></details>
+      </article>`).join('');
+
+      function applyFilters(){
+        const route = state.route ? routes.find(r=>r.id===state.route) : null;
+        let count = 0;
+        document.querySelectorAll('.course').forEach(card=>{
+          const matchesGroup = state.group==='all' || card.dataset.group===state.group;
+          const matchesQuery = !state.query || card.dataset.search.includes(state.query);
+          const matchesRoute = !route || route.courses.some(id=>card.id===`course-${id}`);
+          const visible = matchesGroup && matchesQuery && matchesRoute;
+          card.classList.toggle('hidden',!visible); card.classList.toggle('route-focus',!!route && visible); if(visible) count++;
+        });
+        $('#resultCount').textContent = route ? `${count} 门课程 · ${route.title}` : `${count} 门课程`;
+        $('#emptyState').style.display = count ? 'none' : 'block';
+      }
+      function updateProgress(){
+        $('#progressText').textContent = `${done.size} / ${courses.length} 已学`;
+        $('#progressFill').style.width = `${(done.size/courses.length)*100}%`;
+        safeStore.set('claude-academy-progress',JSON.stringify([...done]));
+      }
+      function moveTo(el){ if(!el) return; const top=el.getBoundingClientRect().top+window.scrollY-128; window.scrollTo({top,behavior:'smooth'}); }
+      filters.addEventListener('click',e=>{const btn=e.target.closest('[data-group]');if(!btn)return;state.group=btn.dataset.group;state.route=null;filters.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===btn));applyFilters();});
+      $('#searchInput').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();state.route=null;applyFilters();});
+      routeCards.addEventListener('click',e=>{const btn=e.target.closest('[data-route]');if(!btn)return;state.route=btn.dataset.route;state.group='all';state.query='';$('#searchInput').value='';filters.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x.dataset.group==='all'));applyFilters();moveTo($('#courses'));});
+      $('#resetBtn').addEventListener('click',()=>{state.group='all';state.query='';state.route=null;$('#searchInput').value='';filters.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x.dataset.group==='all'));applyFilters();});
+      $('#expandBtn').addEventListener('click',()=>{state.expanded=!state.expanded;document.querySelectorAll('.course:not(.hidden) details').forEach(d=>d.open=state.expanded);$('#expandBtn').textContent=state.expanded?'收起全部':'展开全部';});
+      courseList.addEventListener('change',e=>{const cb=e.target.closest('[data-done]');if(!cb)return;cb.checked?done.add(cb.dataset.done):done.delete(cb.dataset.done);updateProgress();});
+      $('#printBtn').addEventListener('click',()=>window.print());
+      $('#backTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+      window.addEventListener('scroll',()=>$('#backTop').classList.toggle('show',window.scrollY>900),{passive:true});
+      applyFilters(); updateProgress();
+    })();
+  </script>
+</body>
+</html>

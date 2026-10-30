@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Sutskever 30 仓库的可视化研究地图：30 篇核心思想、NumPy 落点、类比、局限与实跑审计。">
+  <title>20260818-1021-Sutskever 30｜AI 核心思想可运行地图</title>
+  <style>
+    :root {
+      --paper: oklch(96% 0.018 78);
+      --paper-deep: oklch(90% 0.028 76);
+      --ink: oklch(24% 0.025 55);
+      --ink-soft: oklch(43% 0.025 58);
+      --line: oklch(75% 0.035 72);
+      --red: oklch(48% 0.15 28);
+      --red-soft: oklch(91% 0.045 30);
+      --blue: oklch(40% 0.09 245);
+      --blue-soft: oklch(91% 0.035 245);
+      --green: oklch(42% 0.09 145);
+      --green-soft: oklch(91% 0.04 145);
+      --gold: oklch(58% 0.11 82);
+      --shadow: 0 1.2rem 3rem color-mix(in oklch, var(--ink) 10%, transparent);
+      --serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+      --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --step--1: .82rem;
+      --step-0: 1rem;
+      --step-1: 1.25rem;
+      --step-2: clamp(1.55rem, 2.5vw, 2.2rem);
+      --step-3: clamp(2.3rem, 5vw, 4.8rem);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, transparent 49.8%, color-mix(in oklch, var(--line) 28%, transparent) 50%, transparent 50.2%) 0 0 / 3.2rem 3.2rem,
+        linear-gradient(color-mix(in oklch, var(--line) 22%, transparent) 1px, transparent 1px) 0 0 / 100% 1.6rem,
+        var(--paper);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      font-kerning: normal;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    a { color: var(--blue); text-underline-offset: .2em; }
+    a:hover { color: var(--red); }
+    button, input, select { font: inherit; color: inherit; }
+    button, select { min-height: 44px; }
+    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+    .skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 99; background: var(--ink); color: var(--paper); padding: .7rem 1rem; }
+    .skip-link:focus { top: 1rem; }
+
+    .shell { width: min(1180px, calc(100% - 2rem)); margin-inline: auto; }
+    .eyebrow { margin: 0 0 .7rem; color: var(--red); font-size: var(--step--1); font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+    .section-kicker { display: flex; align-items: center; gap: .7rem; margin-bottom: .6rem; color: var(--red); font-weight: 750; }
+    .section-kicker::before { content: ""; width: 2.6rem; height: 2px; background: currentColor; }
+    h1, h2, h3 { font-family: var(--serif); text-wrap: balance; }
+    h1 { margin: 0; max-width: 14ch; font-size: var(--step-3); line-height: 1.06; letter-spacing: -.045em; }
+    h2 { margin: 0; font-size: var(--step-2); line-height: 1.2; letter-spacing: -.025em; }
+    h3 { margin: 0; font-size: var(--step-1); line-height: 1.35; }
+    p { text-wrap: pretty; }
+
+    .hero { position: relative; padding: clamp(4rem, 8vw, 8rem) 0 3.2rem; border-bottom: 2px solid var(--ink); overflow: clip; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.4rem; align-items: end; }
+    .hero-grid > *, .paper-card > *, .detail-item { min-width: 0; }
+    .hero-lead { max-width: 43rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: clamp(1.05rem, 1.5vw, 1.3rem); overflow-wrap: anywhere; }
+    .seal {
+      width: 8rem; aspect-ratio: 1; display: grid; place-items: center; justify-self: end;
+      border: 3px double var(--red); color: var(--red); transform: rotate(5deg);
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 800; line-height: 1.25; text-align: center;
+      background: color-mix(in oklch, var(--paper) 88%, var(--red-soft));
+    }
+    .hero-note { margin: 2.2rem 0 0; padding: 1rem 0 0; border-top: 1px solid var(--line); font-size: .92rem; color: var(--ink-soft); }
+
+    .sticky-nav { position: sticky; top: 0; z-index: 20; background: color-mix(in oklch, var(--paper) 92%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .sticky-nav .shell { display: flex; gap: .35rem; overflow-x: auto; padding-block: .55rem; scrollbar-width: none; }
+    .sticky-nav a { flex: 0 0 auto; min-height: 44px; display: grid; place-items: center; padding: .25rem .85rem; color: var(--ink-soft); text-decoration: none; font-size: .88rem; font-weight: 650; }
+    .sticky-nav a:hover { color: var(--red); background: var(--red-soft); }
+
+    section { padding: clamp(3.5rem, 7vw, 7rem) 0; }
+    .section-head { display: grid; gap: 1rem; margin-bottom: 2.4rem; }
+    .section-head p { max-width: 65ch; margin: 0; color: var(--ink-soft); }
+
+    .verdict { display: grid; gap: 0; border-block: 2px solid var(--ink); background: color-mix(in oklch, var(--paper) 82%, var(--red-soft)); }
+    .verdict > div { padding: 1.3rem; border-bottom: 1px solid var(--line); }
+    .verdict > div:last-child { border-bottom: 0; }
+    .verdict strong { display: block; margin-bottom: .3rem; color: var(--red); font-family: var(--serif); font-size: 1.15rem; }
+
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 2rem; border: 1px solid var(--ink); background: var(--paper); }
+    .metric { padding: 1.2rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .metric:nth-child(2n) { border-right: 0; }
+    .metric:nth-last-child(-n+2) { border-bottom: 0; }
+    .metric b { display: block; font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1; font-variant-numeric: tabular-nums; }
+    .metric span { color: var(--ink-soft); font-size: .84rem; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: .65rem 1.2rem; margin-top: 1.2rem; color: var(--ink-soft); font-size: .86rem; }
+    .dot { width: .7rem; aspect-ratio: 1; display: inline-block; margin-right: .35rem; border-radius: 50%; background: var(--green); }
+    .dot.fail { background: var(--red); }
+    .dot.addon { background: var(--blue); }
+
+    .metro { position: relative; display: grid; gap: 1.2rem; }
+    .metro::before { content: ""; position: absolute; left: 1rem; top: 1rem; bottom: 1rem; width: 3px; background: linear-gradient(var(--red), var(--gold), var(--blue), var(--green)); }
+    .line-stop { position: relative; display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; align-items: start; }
+    .stop-mark { position: relative; z-index: 1; width: 2rem; aspect-ratio: 1; border: 3px solid var(--paper); border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+    .stop-copy { padding: 0 0 1.4rem; }
+    .stop-copy p { margin: .35rem 0 0; color: var(--ink-soft); }
+    .stop-copy code { color: var(--red); font-family: var(--sans); font-weight: 700; }
+
+    .concept-grid { display: grid; gap: 1px; border: 1px solid var(--ink); background: var(--line); }
+    .concept-card { min-width: 0; padding: 1.25rem; background: var(--paper); }
+    .concept-card:nth-child(2n) { background: color-mix(in oklch, var(--paper) 88%, var(--blue-soft)); }
+    .concept-card h3 { color: var(--red); }
+    .concept-card p { margin: .45rem 0 0; color: var(--ink-soft); }
+    .concept-card strong { color: var(--ink); }
+    .analogy-lab { display: grid; gap: .9rem; margin-top: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--gold); background: color-mix(in oklch, var(--paper) 84%, var(--gold) 16%); }
+    .analogy-lab h3 { color: var(--ink); }
+    .analogy-lab p { margin: 0; color: var(--ink-soft); }
+    .analogy-lab b { color: var(--red); }
+
+    .route-board { display: grid; gap: 1rem; counter-reset: route; }
+    .route { position: relative; padding: 1.35rem 1.35rem 1.35rem 4.2rem; border-top: 1px solid var(--ink); background: color-mix(in oklch, var(--paper) 78%, var(--blue-soft)); counter-increment: route; }
+    .route::before { content: counter(route, decimal-leading-zero); position: absolute; left: 1.2rem; top: 1.1rem; color: var(--red); font-family: var(--serif); font-size: 1.55rem; font-weight: 800; }
+    .route p { margin: .4rem 0 0; color: var(--ink-soft); }
+    .route-path { display: block; margin-top: .65rem; color: var(--blue); font-weight: 750; letter-spacing: .02em; }
+
+    .loop { margin-top: 2rem; padding: 1.4rem; border: 2px solid var(--red); background: var(--red-soft); }
+    .loop > p { max-width: 70ch; margin: .35rem 0 0; color: var(--ink-soft); }
+    .loop-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-top: 1rem; }
+    .loop-flow span { position: relative; min-width: 0; padding: .75rem .5rem; text-align: center; border-bottom: 2px solid var(--red); font-weight: 750; }
+    .loop-flow b { display: block; color: var(--red); font-family: var(--serif); font-size: 1.1rem; }
+    .loop-flow em { display: block; margin-top: .25rem; color: var(--ink-soft); font-size: .78rem; font-style: normal; font-weight: 500; line-height: 1.5; }
+    .loop-flow span:not(:last-child)::after { content: "→"; position: absolute; right: -.55rem; color: var(--red); }
+    .loop-check { margin-bottom: 0 !important; font-size: .9rem; }
+
+    .explorer-tools { display: grid; gap: .8rem; padding: 1rem; margin-bottom: 1.5rem; border-block: 1px solid var(--ink); background: color-mix(in oklch, var(--paper) 85%, var(--paper-deep)); }
+    .search-wrap label, .select-wrap label { display: block; margin-bottom: .25rem; font-size: .82rem; font-weight: 750; color: var(--ink-soft); }
+    .search-wrap input, .select-wrap select { width: 100%; min-height: 46px; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: 0; background: var(--paper); }
+    .filter-row { display: flex; gap: .45rem; overflow-x: auto; padding-bottom: .2rem; scrollbar-width: thin; }
+    .filter-row button, .tool-button { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 0; background: transparent; padding: .55rem .85rem; cursor: pointer; }
+    .filter-row button[aria-pressed="true"] { border-color: var(--ink); color: var(--paper); background: var(--ink); }
+    .tool-button:hover, .filter-row button:hover { border-color: var(--red); }
+    .tool-row { display: flex; align-items: end; gap: .7rem; flex-wrap: wrap; }
+    .result-count { margin: 0 0 0 auto; color: var(--ink-soft); font-size: .88rem; font-variant-numeric: tabular-nums; }
+
+    .paper-list { border-top: 2px solid var(--ink); }
+    .paper-card { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); animation: rise .45s var(--ease) both; animation-delay: calc(min(var(--i), 8) * 35ms); }
+    .paper-number { font-family: var(--serif); font-size: 2rem; color: var(--red); font-variant-numeric: tabular-nums; line-height: 1; }
+    .paper-meta { display: flex; flex-wrap: wrap; gap: .4rem .8rem; margin-bottom: .45rem; color: var(--ink-soft); font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
+    .paper-card h3 { max-width: 38ch; }
+    .paper-core { margin: .55rem 0 .8rem; max-width: 70ch; font-family: var(--serif); font-size: 1.08rem; }
+    .analogy { margin: 0; padding-left: 1rem; border-left: 3px solid var(--gold); color: var(--ink-soft); }
+    .badges { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .8rem; }
+    .badge { display: inline-flex; align-items: center; min-height: 1.8rem; padding: .15rem .55rem; border: 1px solid var(--line); font-size: .72rem; font-weight: 750; }
+    .badge.pass { color: var(--green); background: var(--green-soft); border-color: color-mix(in oklch, var(--green) 35%, var(--paper)); }
+    .badge.fail { color: var(--red); background: var(--red-soft); border-color: color-mix(in oklch, var(--red) 35%, var(--paper)); }
+    .badge.addon { color: var(--blue); background: var(--blue-soft); border-color: color-mix(in oklch, var(--blue) 35%, var(--paper)); }
+    details { margin-top: .9rem; border-top: 1px dashed var(--line); }
+    summary { min-height: 44px; display: flex; align-items: center; gap: .5rem; cursor: pointer; color: var(--blue); font-weight: 750; }
+    summary::marker { color: var(--red); }
+    .detail-grid { display: grid; gap: .8rem; padding: .4rem 0 1rem; }
+    .detail-item { padding-top: .65rem; border-top: 1px solid color-mix(in oklch, var(--line) 55%, transparent); }
+    .detail-item b { display: block; margin-bottom: .25rem; font-size: .78rem; color: var(--red); letter-spacing: .06em; }
+    .detail-item p { margin: 0; }
+    .formula { font-family: "SFMono-Regular", Consolas, monospace; font-size: .88rem; overflow-wrap: anywhere; }
+    .source-links { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding-top: .4rem; }
+    .source-links a { display: inline-flex; align-items: center; min-height: 44px; }
+    .empty { padding: 3rem 1rem; text-align: center; border-bottom: 1px solid var(--line); }
+
+    .audit-grid { display: grid; gap: 1.2rem; }
+    .audit-panel { padding: 1.4rem; border: 1px solid var(--ink); background: var(--paper); }
+    .audit-panel h3 { margin-bottom: .7rem; }
+    .audit-panel ul { margin: 0; padding-left: 1.25rem; }
+    .audit-panel li + li { margin-top: .55rem; }
+    .fact { border-color: var(--blue); }
+    .inference { border-color: var(--gold); }
+    .advice { border-color: var(--green); }
+    .counter { border-color: var(--red); }
+    .failure-table { width: 100%; border-collapse: collapse; margin-top: 1.4rem; font-size: .88rem; }
+    .failure-table th, .failure-table td { padding: .75rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .failure-table th { color: var(--red); font-size: .76rem; letter-spacing: .06em; }
+
+    .sources { display: grid; gap: 1rem; }
+    .source-note { padding: 1rem 0; border-top: 1px solid var(--line); }
+    .source-note p { margin: .3rem 0 0; color: var(--ink-soft); }
+    .sources a { display: inline-flex; align-items: center; min-height: 44px; }
+    footer { padding: 2rem 0 4rem; border-top: 2px solid var(--ink); color: var(--ink-soft); font-size: .84rem; }
+    footer strong { color: var(--ink); }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(.7rem); } to { opacity: 1; transform: none; } }
+    @media (min-width: 700px) {
+      .hero-grid { grid-template-columns: 1fr auto; }
+      .verdict { grid-template-columns: repeat(3, 1fr); }
+      .verdict > div { border-bottom: 0; border-right: 1px solid var(--line); }
+      .verdict > div:last-child { border-right: 0; }
+      .metrics { grid-template-columns: repeat(4, 1fr); }
+      .metric, .metric:nth-child(2n) { border-right: 1px solid var(--line); border-bottom: 0; }
+      .metric:last-child { border-right: 0; }
+      .route-board { grid-template-columns: repeat(2, 1fr); }
+      .concept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .explorer-tools { grid-template-columns: minmax(15rem, 1.2fr) minmax(10rem, .6fr); }
+      .filter-row, .tool-row { grid-column: 1 / -1; }
+      .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .audit-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1020px) {
+      .paper-card { grid-template-columns: 5rem minmax(0, 1.05fr) minmax(19rem, .75fr); gap: 1.5rem; }
+      .paper-card .paper-main { grid-column: 2; }
+      .paper-card details { grid-column: 3; grid-row: 1; margin-top: 0; border-top: 0; border-left: 1px dashed var(--line); padding-left: 1.2rem; }
+      .metro { grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
+      .metro::before { left: 1rem; right: 1rem; top: 1rem; bottom: auto; width: auto; height: 3px; }
+      .line-stop { grid-template-columns: 1fr; grid-template-rows: 2rem auto; }
+      .stop-copy { padding-top: .7rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 1.25rem, 1180px); }
+      .hero { padding-top: 3.25rem; padding-bottom: 2rem; }
+      .hero-grid { gap: 1rem; }
+      .seal { width: 6.25rem; justify-self: start; margin: .25rem 0 0 .35rem; transform: rotate(-2deg); font-size: .9rem; }
+      .loop-flow { grid-template-columns: 1fr; gap: .15rem; }
+      .loop-flow span { text-align: left; padding: .65rem 0; }
+      .loop-flow span:not(:last-child)::after { content: "↓"; right: 0; bottom: -.65rem; }
+      .loop-flow b, .loop-flow em { display: inline; }
+      .loop-flow em { margin-left: .35rem; }
+      .failure-table { display: block; overflow-x: auto; white-space: normal; }
+    }
+    @media print {
+      body { background: var(--paper); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .sticky-nav, .explorer-tools, .skip-link { display: none !important; }
+      section { padding: 2.2rem 0; }
+      .hero { padding-top: 2.5rem; }
+      .paper-card { break-inside: avoid; animation: none; }
+      .paper-list .paper-card[hidden] { display: grid !important; }
+      details { display: block; }
+      details > summary { display: none; }
+      details > .detail-grid { display: grid; }
+      a { color: var(--ink); text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="hero" id="top">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">Repository field guide · 2026-08-18</p>
+        <h1>Sutskever 30<br>AI 思想地图</h1>
+        <p class="hero-lead">把 30 个 Notebook 当作一组“可拆开的机器”：看见信息如何被记忆、压缩、路由、检索与放大。公式只是零件图，NumPy 才是拆机过程。</p>
+        <p class="hero-note">基于仓库提交 <code>225cba7</code> 的逐文件检查与隔离实跑。页面无远程脚本、无追踪资源，可离线阅读。</p>
+      </div>
+      <div class="seal" aria-label="审计结论：教学原型，不是论文复现">教学原型<br>≠<br>论文复现</div>
+    </div>
+  </header>
+
+  <nav class="sticky-nav" aria-label="页面目录">
+    <div class="shell">
+      <a href="#verdict">先看结论</a>
+      <a href="#concepts">阅读坐标</a>
+      <a href="#map">总地图</a>
+      <a href="#route">学习路径</a>
+      <a href="#papers">30 篇核心</a>
+      <a href="#audit">仓库审计</a>
+      <a href="#sources">来源</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section id="verdict">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">01 · 先校正期待</div>
+            <h2>值得学，但要用对姿势</h2>
+          </div>
+          <p>这个仓库最大的价值，是把抽象机制压缩成能单步观察的数组运算；最大的风险，是把“玩具模型跑起来”误当成“论文结果被复现”。</p>
+        </div>
+
+        <div class="verdict">
+          <div><strong>它是什么</strong>30 个教学型 Notebook，覆盖机制直觉、前向计算、少量手写反向传播与合成实验。</div>
+          <div><strong>它不是什么</strong>不是逐论文忠实复现；没有原数据集、统一环境、完整训练配方、指标对齐或结果表。</div>
+          <div><strong>最优用法</strong>先预测数组形状与信息流，再运行代码、改一个变量、解释偏差；最后回到原文核对。</div>
+        </div>
+
+        <div class="metrics" aria-label="仓库审计指标">
+          <div class="metric"><b>30</b><span>Notebook 文件</span></div>
+          <div class="metric"><b>25/30</b><span>Python 3.11 当前依赖实跑通过</span></div>
+          <div class="metric"><b>16,227</b><span>代码行（Notebook 代码单元）</span></div>
+          <div class="metric"><b>0</b><span>仓库内已保存的执行输出</span></div>
+        </div>
+        <div class="legend">
+          <span><i class="dot"></i>实跑通过</span>
+          <span><i class="dot fail"></i>实跑失败</span>
+          <span><i class="dot addon"></i>后补的现代主题</span>
+          <span>核心计算不用 PyTorch / TensorFlow，但依赖 NumPy、SciPy、Matplotlib，#12 还需 NetworkX。</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">02 · 先定义，再类比</div>
+            <h2>每篇都在改写同一条学习链</h2>
+          </div>
+          <p>这里的“懂”不是记住名词，而是能指出：什么进入系统、被怎样表示、靠什么信号改变、最后拿什么证据判断。30 篇论文分别在这条链的不同位置动刀。</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept-card"><h3>输入</h3><p><strong>可被模型读取的观测。</strong>字符、图像块、节点、段落或历史状态；先写清 shape，才知道“数据”究竟是什么。</p></article>
+          <article class="concept-card"><h3>表征</h3><p><strong>为了完成任务而保留下来的数组。</strong>隐藏状态、卷积特征、潜变量、记忆槽与文档向量，都是“把什么留下”的不同答案。</p></article>
+          <article class="concept-card"><h3>学习信号</h3><p><strong>告诉参数往哪里改的可计算差异。</strong>损失、奖励或编码长度；没有目标与反向路径，前向演示还不等于学会。</p></article>
+          <article class="concept-card"><h3>评估</h3><p><strong>独立于直觉的外部校准。</strong>基线、留出数据、消融、误差曲线或论文指标；“画面很像”不是评估。</p></article>
+        </div>
+        <aside class="analogy-lab" aria-labelledby="analogy-title">
+          <h3 id="analogy-title">类比的使用说明：它照亮局部，不替代证明</h3>
+          <p><b>像：</b>注意力像会议中按问题选择发言者，帮助理解“加权汇聚”。<b>不像：</b>高注意力权重不自动证明因果关系或模型真的“理解”。</p>
+          <p><b>像：</b>残差像高速主路加修正支路，帮助理解恒等捷径。<b>不像：</b>有捷径不保证深网一定可训练；初始化、归一化、优化与数据仍决定结果。</p>
+          <p><b>用法：</b>先用类比提出一个可观察预测，再用公式、shape、变量改动和评价指标推翻或支持它。推不出预测时，类比只是故事。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">03 · 一张总地图</div>
+            <h2>AI 像一座会学习的城市</h2>
+          </div>
+          <p>类比不是证明，而是暂时的脚手架。先借熟悉事物看清信息如何流动，再用公式和代码把脚手架拆掉。</p>
+        </div>
+        <div class="metro">
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>压缩：什么才算“懂”</h3><p><code>01 · 05 · 19 · 23 · 24 · 25</code><br>城市需要最短的地图与规则。MDL、Kolmogorov 复杂度把“解释”变成编码长度。</p></div></article>
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>记忆：过去如何进入现在</h3><p><code>02 · 03 · 04 · 20 · 21 · 27</code><br>RNN、LSTM、外部存储和 CTC 解决时间轴上的保留、对齐与预测。</p></div></article>
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>结构：邻域如何形成表征</h3><p><code>07 · 10 · 11 · 12 · 15 · 26</code><br>CNN 看局部街区，GNN 沿道路传话，残差连接保留主干道。</p></div></article>
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>路由：该听谁、指向谁</h3><p><code>06 · 08 · 13 · 14 · 16 · 18</code><br>注意力把“固定压缩”改成“按问题取信息”，关系网络显式比较对象。</p></div></article>
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>生成：在约束中创造</h3><p><code>17</code><br>VAE 用概率空间保存可生成的摘要：不是复制样本，而是学习样本可能来自哪里。</p></div></article>
+          <article class="line-stop"><span class="stop-mark"></span><div class="stop-copy"><h3>放大：规模与外部知识</h3><p><code>09 · 22 · 28 · 29 · 30</code><br>流水线扩大计算，幂律估算收益，检索给模型接图书馆，长上下文暴露注意偏置。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="route">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">04 · 不按编号硬啃</div>
+            <h2>四轮学习，比“一次读完”更可靠</h2>
+          </div>
+          <p>推荐顺序按认知依赖排列，不按仓库编号。每轮都必须产生可检查的输出，避免把收藏、浏览和理解混成一件事。</p>
+        </div>
+        <div class="route-board">
+          <article class="route"><h3>先抓住信息流</h3><p>从最小循环到选择性记忆，再到动态取信息和并行注意力。</p><span class="route-path">02 → 03 → 14 → 13 → 10</span></article>
+          <article class="route"><h3>再看结构归纳偏置</h3><p>理解模型为什么用局部、尺度、邻接和对象关系来减少搜索空间。</p><span class="route-path">07 → 11 → 12 → 16 → 15 → 26</span></article>
+          <article class="route"><h3>补齐内外部记忆</h3><p>把潜变量、软地址、关系记忆、无对齐训练与多步预测串起来。</p><span class="route-path">17 → 20 → 18 → 21 → 06 → 08 → 27</span></article>
+          <article class="route"><h3>最后讨论边界与规模</h3><p>压缩理论告诉你何谓解释；系统与检索告诉你现实机器如何获得能力。</p><span class="route-path">01 → 19 → 23 → 25 → 24 → 05 → 09 → 22 → 28 → 29 → 30</span></article>
+        </div>
+        <div class="loop">
+          <h3>每篇只做一个递归闭环</h3>
+          <p>把本轮输出留给下一轮：预测错在哪里、改了哪个变量、证据如何变化。这样“看懂”才会逐步变成可迁移的判断力。</p>
+          <div class="loop-flow" aria-label="学练用造循环">
+            <span><b>学</b><em>定义输入、输出、目标</em></span><span><b>练</b><em>关掉输出，预测 shape / 数值</em></span><span><b>用</b><em>只改一个变量，记录差异</em></span><span><b>造</b><em>构造反例，写出失败原因</em></span>
+          </div>
+          <p class="loop-check"><strong>一篇的停止条件：</strong>不看 Notebook，仍能写出信息流、一个可证伪预测和一个忠实度边界；否则回到“练”，不要继续加新论文。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="papers">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">05 · 30 篇核心</div>
+            <h2>从公式、类比回到代码</h2>
+          </div>
+          <p>每条先给“解决什么”，再给“像什么”；展开后用关键式、代码锚点、可证伪练习与忠实度边界把直觉校准回来。搜索支持标题、机制、代码名和类比。</p>
+        </div>
+
+        <div class="explorer-tools" aria-label="论文筛选工具">
+          <div class="search-wrap">
+            <label for="search">搜索论文或概念</label>
+            <input id="search" type="search" placeholder="例如：注意力、压缩、softmax、记忆" autocomplete="off">
+          </div>
+          <div class="select-wrap">
+            <label for="run-status">运行状态</label>
+            <select id="run-status">
+              <option value="all">全部状态</option>
+              <option value="pass">实跑通过</option>
+              <option value="fail">实跑失败</option>
+            </select>
+          </div>
+          <div class="filter-row" role="group" aria-label="主题筛选" id="topic-filters"></div>
+          <div class="tool-row">
+            <button class="tool-button" id="toggle-details" type="button">展开全部细节</button>
+            <p class="result-count" id="result-count" aria-live="polite">显示 30 / 30</p>
+          </div>
+        </div>
+        <div class="paper-list" id="paper-list"></div>
+        <div class="empty" id="empty" hidden><h3>没有匹配项</h3><p>换一个关键词，或把筛选恢复为“全部”。</p></div>
+      </div>
+    </section>
+
+    <section id="audit">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">06 · 仓库审计</div>
+            <h2>事实、推断、建议、反证分开看</h2>
+          </div>
+          <p>研究仓库不只看星标与 README，还要看可复现环境、执行证据、测试边界和实现是否真的对应论文实验。</p>
+        </div>
+        <div class="audit-grid">
+          <article class="audit-panel fact"><h3>事实</h3><ul><li>30 个 Notebook、271 个代码单元、约 16,227 行代码。</li><li>所有 Notebook 提交时都没有保存执行计数和输出。</li><li>README 没有锁定 Python/依赖版本；安装说明漏掉 #12 的 NetworkX。</li><li>根目录没有 LICENSE 文件；“Educational use”不是标准许可证。</li></ul></article>
+          <article class="audit-panel inference"><h3>综合推断</h3><ul><li>它优化的是“机制可见性”，不是实验忠实度。</li><li>大量随机权重、合成数据和启发式规则，适合建立直觉，不足以支持论文结论。</li><li>26 个早期条目加 4 个现代主题构成仓库的 30 项；不是可核验的 Ilya 原始 30 条逐项照录。</li></ul></article>
+          <article class="audit-panel advice"><h3>建议</h3><ul><li>把它用作读论文前的拆机实验，而不是读论文的替代品。</li><li>优先学习 02、03、10、13、14；再选一个真实任务重写最小训练闭环。</li><li>引用或二次发布代码前，先向作者确认许可。</li></ul></article>
+          <article class="audit-panel counter"><h3>最强反证</h3><ul><li>玩具实现会删掉规模、优化、数据与评估，恰好可能删掉论文最重要的部分。</li><li>类比让人“感觉懂了”，但不能保证能推导 shape、梯度和复杂度。</li><li>“90% of what matters”目前可定位到第三方 X 帖转述，不应写成已核验的 Ilya 原话。</li></ul></article>
+        </div>
+
+        <table class="failure-table">
+          <thead><tr><th>Notebook</th><th>隔离实跑失败点</th><th>意味着什么</th></tr></thead>
+          <tbody>
+            <tr><td>04 · RNN Regularization</td><td><code>imshow</code> 收到一维 <code>(400,)</code> 数组</td><td>可执行叙述未被端到端验证</td></tr>
+            <tr><td>09 · GPipe</td><td>子类缺少 <code>get_timeline_matrix</code></td><td>重计算演示与可视化接口脱节</td></tr>
+            <tr><td>19 · Coffee Automaton</td><td>历史列表取样索引越界</td><td>展示帧数与实际记录长度不一致</td></tr>
+            <tr><td>24 · Machine Super Intelligence</td><td>Python 3.11 f-string 语法失败；3.12 下又遇 Matplotlib 参数兼容</td><td>缺少版本锁定与兼容性测试</td></tr>
+            <tr><td>26 · CS231n</td><td>卷积权重变量被整数覆盖</td><td>Notebook 的后段 CNN 流程没有全程跑通</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">07 · 来源与方法</div>
+            <h2>哪些是原始资料，哪些是项目叙述</h2>
+          </div>
+          <p>页面中的论文机制优先指向论文、作者博客或课程原页；仓库评价来自源码与本地实跑；对 Ilya 的归因只按可找到的证据强度表达。</p>
+        </div>
+        <div class="sources">
+          <div class="source-note"><h3>一手代码</h3><p><a href="https://github.com/pageman/sutskever-30-implementations">pageman/sutskever-30-implementations</a>，审计提交 <code>225cba7b03622c9c21655d39d64662dee162b37e</code>。每篇卡片链接到该提交的固定 Notebook。</p></div>
+          <div class="source-note"><h3>论文与作者资料</h3><p>每篇卡片中的“原文”链接；包括 arXiv、NeurIPS、作者博客、CS231n 官方课程页等。Aman’s AI Journal 仅用作发现索引，不替代原文。</p></div>
+          <div class="source-note"><h3>名单来源边界</h3><p><a href="https://x.com/keshavchan/status/1787861946173186062">Keshav 在 X 的 2024-05-07 帖子</a>转述“Ilya 给 John Carmack 约 30 项阅读材料，并称掌握后可了解当时 90% 的要点”。暂未在本次研究中定位到 Ilya 或 Carmack 的直接原始发布。</p></div>
+          <div class="source-note"><h3>实跑条件</h3><p>macOS arm64；Python 3.11.15；NumPy 2.4.6、Matplotlib 3.11.1、SciPy 1.17.1、NetworkX 3.6.1；无 GPU，<code>MPLBACKEND=Agg</code>。另用 Python 3.12.13 复核 #24。</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell"><strong>停止条件：</strong>当你能不看代码说出输入 shape、信息流、损失与一个失败模式，再用一次变量改动验证预测，这篇才算“吃透了第一层”。生成日期：2026-08-18。</div>
+  </footer>
+
+  <script>
+    "use strict";
+    const COMMIT = "225cba7b03622c9c21655d39d64662dee162b37e";
+    const REPO = "https://github.com/pageman/sutskever-30-implementations/blob/" + COMMIT + "/";
+    const PAPERS = Object.freeze([
+      {id:1,year:"2013",title:"The First Law of Complexodynamics",zh:"复杂动力学第一定律",group:"复杂性与压缩",tier:"概念模拟",status:"pass",core:"熵可以一路增加，但“有组织的复杂性”常在中途达到峰值：起点太整齐，终点太均匀，真正复杂的是演化过程。",analogy:"牛奶刚倒入咖啡时是两块简单区域；旋涡交错时最复杂；彻底混匀后又变得简单。",formula:"复杂度轨迹：simple → complex → simple；Notebook 用 Shannon entropy / 压缩代理量观察。",code:"rule_30 · evolve_ca · measure_entropy_over_time · diffusion_2d",limit:"元胞自动机和扩散是直觉演示，不是对 complextropy 猜想的证明。",source:"https://scottaaronson.blog/?p=762",file:"01_complexity_dynamics.ipynb"},
+      {id:2,year:"2015",title:"The Unreasonable Effectiveness of RNNs",zh:"循环神经网络的惊人有效性",group:"序列与记忆",tier:"训练/拟合",status:"pass",core:"把上一步的隐藏状态带到下一步，网络就能在共享同一组参数的同时处理任意长度序列，并学习字符级规律。",analogy:"一条流水线只传递一本不断改写的工作日志；当前工人只看新零件和日志，就决定下一页写什么。",formula:"hₜ = tanh(Wₓₕxₜ + Wₕₕhₜ₋₁ + b)；p(yₜ)=softmax(Wₕᵧhₜ)",code:"VanillaRNN.forward · backward · sample · train_rnn",limit:"在很小的字符语料上手写 BPTT；能展示生成，不代表现代语言模型能力。",source:"https://karpathy.github.io/2015/05/21/rnn-effectiveness/",file:"02_char_rnn_karpathy.ipynb"},
+      {id:3,year:"2015",title:"Understanding LSTM Networks",zh:"理解 LSTM",group:"序列与记忆",tier:"机制演示",status:"pass",core:"LSTM 给记忆开三道门：忘掉什么、写入什么、读出什么；加法式 cell state 让梯度更容易跨越长距离。",analogy:"传送带上的档案盒沿途不重抄，只由三位门卫决定销毁、补充和展示哪些页。",formula:"cₜ = fₜ⊙cₜ₋₁ + iₜ⊙gₜ；hₜ = oₜ⊙tanh(cₜ)",code:"LSTMCell.forward · LSTM · simulate_gradient_flow",limit:"主要是前向门控和模拟梯度对比，没有完整的 LSTM 训练反向传播。",source:"https://colah.github.io/posts/2015-08-Understanding-LSTMs/",file:"03_lstm_understanding.ipynb"},
+      {id:4,year:"2014",title:"Recurrent Neural Network Regularization",zh:"RNN 正则化",group:"序列与记忆",tier:"机制演示",status:"fail",core:"Dropout 要避免破坏循环记忆通道；对序列使用固定掩码，比每个时间步随机换一套噪声更稳定。",analogy:"一条长途路线可以封几条支路，但不能每走一步就随机封不同道路，否则记忆会被噪声反复摇散。",formula:"训练时：x̃ₜ = m⊙xₜ/(1-p)，序列内复用同一 m；循环状态路径谨慎加噪。",code:"dropout · RNNWithDropout · RNNWithVariationalDropout",limit:"简化了论文设定；当前环境在可视化阶段因一维数组传给 imshow 而失败。",source:"https://arxiv.org/abs/1409.2329v5",file:"04_rnn_regularization.ipynb"},
+      {id:5,year:"1993",title:"Keeping Neural Networks Simple",zh:"用描述长度保持网络简单",group:"复杂性与压缩",tier:"训练/拟合",status:"pass",core:"好模型不只要拟合数据，还要用更少比特描述权重；把预测误差和模型编码成本放到同一账本。",analogy:"搬家不是只求东西都装下，还要让箱子更少、标签更短；多余重量再准也会增加运输成本。",formula:"L(total) = L(weights) + L(data | weights)",code:"SimpleNN · train_network · prune_by_magnitude · iterative_pruning · compute_mdl",limit:"Notebook 主要做幅值剪枝和简化 MDL，并未复现论文的变分编码与权重噪声方法。",source:"https://www.cs.toronto.edu/~hinton/absps/colt93.pdf",file:"05_neural_network_pruning.ipynb"},
+      {id:6,year:"2015",title:"Pointer Networks",zh:"指针网络",group:"注意力与关系",tier:"机制演示",status:"pass",core:"输出词表不再固定；注意力分布本身就是指针，直接选择输入序列中的某个位置。",analogy:"服务员不重新抄一道菜名，而是在原菜单上指给你看；菜单可以变长，答案空间也跟着变。",formula:"p(Cᵢ | C₁…Cᵢ₋₁,P)=softmax(vᵀtanh(W₁eⱼ+W₂dᵢ))",code:"PointerAttention.forward · PointerNetwork.encode · decode_step",limit:"展示寻址与凸包/排序数据生成，随机权重为主，没有监督训练出可解题的指针网络。",source:"https://arxiv.org/abs/1506.03134v2",file:"06_pointer_networks.ipynb"},
+      {id:7,year:"2012",title:"ImageNet Classification with Deep CNNs",zh:"AlexNet 与深度卷积",group:"视觉与空间",tier:"机制演示",status:"pass",core:"共享卷积核扫描局部区域，逐层把边缘、纹理组合成物体；ReLU 和数据增强让大网络更容易训练和泛化。",analogy:"同一块小模板沿整张图滑动找线条，再把许多线条拼成零件，最后拼成物体。",formula:"y[i,j,k] = Σₐ,ᵦ,c W[a,b,c,k]·x[i+a,j+b,c]",code:"conv2d · max_pool2d · AlexNetSimplified.forward · augment_image",limit:"只有简化前向、合成图像和增强，没有 AlexNet 训练、ImageNet 数据或论文指标。",source:"https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",file:"07_alexnet_cnn.ipynb"},
+      {id:8,year:"2015",title:"Order Matters: Sequence to Sequence for Sets",zh:"集合的序列到序列学习",group:"注意力与关系",tier:"机制演示",status:"pass",core:"集合本身没有顺序，但普通 RNN 强迫输入有顺序；Read–Process–Write 用反复注意整个集合获得近似置换不变的表示。",analogy:"开会时座位不应改变结论；主持人多轮扫视所有人，再决定发言顺序。",formula:"rₜ = Σᵢ softmax(qₜᵀmᵢ)·mᵢ；q*ₜ=[qₜ,rₜ]",code:"SetEncoder · Attention · LSTMDecoder · Set2Seq · Seq2Seq",limit:"搭出模块并比较前向行为，没有通过反向传播学出论文中的集合任务策略。",source:"https://arxiv.org/pdf/1511.06391",file:"08_seq2seq_for_sets.ipynb"},
+      {id:9,year:"2019",title:"GPipe",zh:"微批次流水线并行",group:"规模与工程",tier:"机制演示",status:"fail",core:"把超大模型按层切到多台设备，再把一个 batch 切成微批次，让不同设备像流水线工位一样同时工作。",analogy:"整车一次穿过所有工位会让后段闲等；拆成连续到达的小车架后，焊接、喷漆、装配可以并行。",formula:"流水线气泡比例约 (K−1)/(M+K−1)；K=分区数，M=微批次数。",code:"Partition · GPipePipeline · GPipePipelineWithRemat · accumulate_gradients",limit:"在单进程 CPU 上模拟调度而非真实多设备并行；重计算子类缺接口导致可视化失败。",source:"https://arxiv.org/abs/1811.06965",file:"09_gpipe.ipynb"},
+      {id:10,year:"2015",title:"Deep Residual Learning",zh:"深度残差学习",group:"视觉与空间",tier:"机制演示",status:"pass",core:"让层学习“需要改多少”而不是“从头重建答案”；恒等捷径给信息和梯度一条不绕路的通道。",analogy:"主干高速公路保持直行，残差分支只负责需要修正的弯道；修正为零时也能安全通过。",formula:"y = F(x, W) + x；∂y/∂x = 1 + ∂F/∂x",code:"ResidualBlock.forward · backward · ResidualNetwork · measure_gradient_flow",limit:"用小型全连接块和合成模式说明梯度，不是卷积 ResNet 的 ImageNet 复现。",source:"https://arxiv.org/abs/1512.03385",file:"10_resnet_deep_residual.ipynb"},
+      {id:11,year:"2015",title:"Dilated Convolutions",zh:"空洞卷积与多尺度上下文",group:"视觉与空间",tier:"机制演示",status:"pass",core:"在卷积核采样点之间插空，参数数量不变却能快速扩大感受野，同时保留高分辨率。",analogy:"不必踩遍每块地砖；按越来越大的步幅踩石头，就能看更远又不把地图缩小。",formula:"(F *_l k)(p) = Σₛ F(p − l·s)k(s)",code:"dilated_conv1d · dilated_conv2d · MultiScaleContext.forward",limit:"实现小型卷积与感受野可视化，没有语义分割网络、数据集或 IoU 对比。",source:"https://arxiv.org/abs/1511.07122",file:"11_dilated_convolutions.ipynb"},
+      {id:12,year:"2017",title:"Neural Message Passing for Quantum Chemistry",zh:"图神经网络消息传递",group:"视觉与空间",tier:"机制演示",status:"pass",core:"每个节点从邻居收集消息、更新自身，重复多轮后再做置换不变的全图汇总。",analogy:"街区居民先听邻居传话、更新判断；几轮之后，市政厅把所有街区摘要汇总成城市结论。",formula:"mᵥᵗ⁺¹=Σᵤ∈N(v) Mₜ(hᵥᵗ,hᵤᵗ,eᵥᵤ)；hᵥᵗ⁺¹=Uₜ(hᵥᵗ,mᵥᵗ⁺¹)",code:"Graph · MessagePassingLayer · MPNN · sum_aggregation",limit:"依赖 NetworkX，使用随机小图和前向传播；没有 QM9 分子数据与化学性质训练。",source:"https://arxiv.org/pdf/1704.01212",file:"12_graph_neural_networks.ipynb"},
+      {id:13,year:"2017",title:"Attention Is All You Need",zh:"Transformer",group:"注意力与关系",tier:"机制演示",status:"pass",core:"每个 token 都能直接按相关性汇聚其他 token；多头在不同子空间并行寻找关系，位置编码补回顺序。",analogy:"会议里每个人先提出查询，再按问题选择该听谁；多组讨论同时进行，最后合并纪要。",formula:"Attention(Q,K,V)=softmax(QKᵀ/√dₖ)V",code:"scaled_dot_product_attention · MultiHeadAttention · positional_encoding · TransformerBlock",limit:"展示单个前向 block、mask 和位置编码；没有完整编码器—解码器、训练或翻译实验。",source:"https://arxiv.org/abs/1706.03762",file:"13_attention_is_all_you_need.ipynb"},
+      {id:14,year:"2014",title:"Neural Machine Translation with Attention",zh:"Bahdanau 注意力",group:"注意力与关系",tier:"机制演示",status:"pass",core:"解码每个词时，不再依赖同一个固定句向量，而是对所有源词重新分配注意力并形成动态上下文。",analogy:"同声传译不会把整段讲话压成一句摘要；每翻一个词，都把聚光灯移到最相关的原句位置。",formula:"eᵢⱼ=vₐᵀtanh(Wₐsᵢ₋₁+Uₐhⱼ)；cᵢ=Σⱼαᵢⱼhⱼ",code:"EncoderRNN · BahdanauAttention · AttentionDecoder · Seq2SeqWithAttention",limit:"前向对齐与注意力图为主，随机参数和合成序列不等于训练出的翻译系统。",source:"https://arxiv.org/pdf/1409.0473",file:"14_bahdanau_attention.ipynb"},
+      {id:15,year:"2016",title:"Identity Mappings in Deep ResNets",zh:"预激活残差网络",group:"视觉与空间",tier:"机制演示",status:"pass",core:"把归一化和激活放到卷积之前，使加法后的恒等路径保持真正干净，信息和梯度能更直接穿过深层网络。",analogy:"高速主路上不设收费站；检查和加工都放在支路进入前，主路仍保持无障碍通行。",formula:"xₗ₊₁ = xₗ + F(BN→ReLU→Conv(xₗ))",code:"PreActivationResidualBlock · compute_gradient_flow · DeepResNet",limit:"用简化一维块测试恒等映射和梯度，未训练论文中的 1000 层卷积网络。",source:"https://arxiv.org/abs/1603.05027",file:"15_identity_mappings_resnet.ipynb"},
+      {id:16,year:"2017",title:"A Simple Module for Relational Reasoning",zh:"关系网络",group:"注意力与关系",tier:"机制演示",status:"pass",core:"把“对象是什么”与“对象之间什么关系”分开；显式遍历对象对，再聚合关系表示回答问题。",analogy:"侦探不只列嫌疑人档案，还逐对检查谁见过谁、谁先后出现，最后汇总证据。",formula:"RN(O)=fφ(Σᵢ,ⱼ gθ(oᵢ,oⱼ,q))",code:"MLP · RelationNetwork · SortOfCLEVR · BaselineNetwork",limit:"生成 Sort-of-CLEVR 场景并比较前向结构，没有训练出论文报告的视觉问答能力。",source:"https://arxiv.org/abs/1706.01427",file:"16_relational_reasoning.ipynb"},
+      {id:17,year:"2016",title:"Variational Lossy Autoencoder",zh:"变分有损自编码器",group:"生成与潜变量",tier:"机制演示",status:"pass",core:"编码器只在潜变量里保留解码器无法轻易补出的全局信息；重建项保证像，KL 项让潜空间可采样。",analogy:"压缩照片时，档案只存人物、姿势和场景；强大的画师负责补纹理。档案越短，越要保留高层语义。",formula:"ELBO = E_q[log p(x|z)] − KL(q(z|x) || p(z))；z=μ+σ⊙ε",code:"VAE.encode · reparameterize · decode · loss",limit:"随机网络计算 ELBO 与潜空间图，没有反向传播训练，也未体现强自回归解码器带来的信息分工。",source:"https://arxiv.org/pdf/1611.02731",file:"17_variational_autoencoder.ipynb"},
+      {id:18,year:"2018",title:"Relational Recurrent Neural Networks",zh:"关系循环神经网络",group:"注意力与关系",tier:"训练/拟合",status:"pass",core:"把单个隐藏向量换成多个记忆槽；每个时间步让槽位彼此多头注意，再由门控写回，兼顾时间记忆与关系推理。",analogy:"不是一个秘书写单本日志，而是一间会议室的多块白板先互相对照，再共同更新下一时刻的记录。",formula:"M̃ₜ = MHA(Mₜ₋₁, Mₜ₋₁, Mₜ₋₁)；Mₜ = gate(M̃ₜ, xₜ)",code:"RelationalMemory · RelationalRNNCell · MultiHeadAttentionWithGrad · ComputationGraph",limit:"是仓库最深入的实现之一，含手写反向与数值检查；仍只在小型合成顺序任务上验证。",source:"https://arxiv.org/pdf/1806.01822",file:"18_relational_rnn.ipynb"},
+      {id:19,year:"2014",title:"The Coffee Automaton",zh:"咖啡自动机：复杂性的升与降",group:"复杂性与压缩",tier:"概念模拟",status:"fail",core:"微观动力学可逆，不代表宏观上容易逆转；粗粒化丢掉了细节，使混合、熵增与时间箭头出现。",analogy:"录像倒放时每粒分子都能回位，但现实中没人知道全部速度与位置；一杯混匀咖啡几乎不会自己分层。",formula:"H(X)=−Σp(x)log₂p(x)；复杂性在“完全分离”和“完全混匀”之间上升后下降。",code:"simulate_coffee_mixing · compute_shannon_entropy · MaxwellsDemon · hash_function",limit:"扩散、粒子与压缩演示跨度很大；当前环境在宏观历史取样时索引越界。",source:"https://arxiv.org/pdf/1405.6903",file:"19_coffee_automaton.ipynb"},
+      {id:20,year:"2014",title:"Neural Turing Machines",zh:"神经图灵机",group:"序列与记忆",tier:"机制演示",status:"pass",core:"神经控制器通过连续可微的权重读写外部矩阵，既能按内容找位置，也能沿位置平移与锐化。",analogy:"不是翻到唯一页码，而是用一束可调焦手电同时照亮几页；读写强度就是每页收到的光。",formula:"rₜ=Σᵢwₜ(i)Mₜ(i)；Mₜ=Mₜ₋₁⊙(1−wₜeₜᵀ)+wₜaₜᵀ",code:"Memory.read · write · content_addressing · NTMHead.address",limit:"实现寻址算子和读写头，没有训练控制器完成复制、排序等 NTM 任务。",source:"https://arxiv.org/abs/1410.5401",file:"20_neural_turing_machine.ipynb"},
+      {id:21,year:"2015",title:"Deep Speech 2 & CTC",zh:"端到端语音识别与 CTC",group:"序列与记忆",tier:"机制演示",status:"pass",core:"CTC 不要求每个音频帧预先标注字符；它把所有能折叠成目标文本的对齐路径概率相加。",analogy:"字幕员只拿到整句答案，不知道每个字对应哪一帧；系统把所有可能时间对齐都算进去。",formula:"p(y|x)=Σπ∈B⁻¹(y) ∏ₜp(πₜ|x)；B 删除空白并合并重复",code:"collapse_ctc · AcousticModel.forward · ctc_loss_naive · greedy_decode",limit:"使用合成声学特征、朴素损失与贪心解码；没有真实语音、深层网络训练或论文 WER。",source:"https://arxiv.org/pdf/1512.02595",file:"21_ctc_speech.ipynb"},
+      {id:22,year:"2020",title:"Scaling Laws for Neural Language Models",zh:"神经语言模型缩放定律",group:"规模与工程",tier:"概念模拟",status:"pass",core:"在一定区间内，损失随参数、数据和计算量呈平滑幂律下降；瓶颈不平衡时，继续放大单一资源收益会变差。",analogy:"厨房要同时扩容厨师、食材和灶台；只买更大的锅，不增加食材与火力，不会按预期提高产量。",formula:"L(N)=L∞+(N_c/N)^α；类似地对数据 D 与计算 C 拟合幂律。",code:"power_law · scaling_law_params · curve_fit · SimpleLanguageModel.train",limit:"用合成数据拟合曲线，不能复现论文的大规模训练、不可约损失或计算最优结论。",source:"https://arxiv.org/abs/2001.08361",file:"22_scaling_laws.ipynb"},
+      {id:23,year:"2004",title:"Minimum Description Length Principle",zh:"最小描述长度原则",group:"复杂性与压缩",tier:"概念模拟",status:"pass",core:"选择能最短地同时描述模型和数据误差的解释；复杂模型只有在显著缩短残差编码时才值得。",analogy:"最好的食谱不是最短，也不是逐粒描述食材，而是“规则说明 + 例外修正”总字数最少。",formula:"M* = argmin_M [L(M)+L(D|M)]",code:"universal_code_length · mdl_polynomial · mdl_neural_network · compress_sequence",limit:"用多项式、简化神经网和压缩器做近似；MDL 的编码选择与理论细节远比示例复杂。",source:"https://arxiv.org/pdf/math/0406077",file:"23_mdl_principle.ipynb"},
+      {id:24,year:"2008",title:"Machine Super Intelligence",zh:"机器超级智能与通用智能",group:"复杂性与压缩",tier:"概念模拟",status:"fail",core:"把智能定义为跨许多环境获得奖励的能力，并用简单环境更高权重构造理论度量；AIXI 是极限参照，不是可运行算法。",analogy:"终极玩家要考虑所有可能规则书，并按规则书简洁程度加权；它理论上最通用，也因为搜索无限而不可实现。",formula:"Υ(π)=Σ_μ 2⁻ᴷ⁽μ⁾ V_μ^π；AIXI 结合 Solomonoff 预测与期望效用最大化。",code:"SimpleProgramEnumerator · SimpleMCAIXI · compute_universal_intelligence · SelfImprovingAgent",limit:"只做程序枚举和网格世界近似；Python/Matplotlib 兼容问题导致当前环境无法跑完。",source:"https://www.vetta.org/documents/Machine_Super_Intelligence.pdf",file:"24_machine_super_intelligence.ipynb"},
+      {id:25,year:"2017",title:"Kolmogorov Complexity",zh:"柯尔莫哥洛夫复杂度",group:"复杂性与压缩",tier:"概念模拟",status:"pass",core:"一个对象的复杂度，是生成它的最短程序长度；真正随机的串没有比逐字写出更短的描述。",analogy:"“打印一百万个 0”是一条短食谱；一百万个无规律数字只能把整份原料清单带上。",formula:"K_U(x)=min_{p:U(p)=x}|p|；理论上不可计算，压缩器只给上界代理。",code:"estimate_kolmogorov_via_compression · compression_ratio · algorithmic_probability_approximation",limit:"gzip/zlib 能估计可压缩模式，却不等于 Kolmogorov 复杂度，也依赖压缩器偏好。",source:"https://www.lirmm.fr/~ashen/kolmbook-eng-scan.pdf",file:"25_kolmogorov_complexity.ipynb"},
+      {id:26,year:"2015–",title:"CS231n: CNNs for Visual Recognition",zh:"CS231n 视觉识别基础",group:"视觉与空间",tier:"机制演示",status:"fail",core:"把视觉学习拆成完整工程链：数据、基线、损失、优化、反向传播、卷积、诊断与迁移学习。",analogy:"这不是一台机器，而是一间学徒工坊：先用尺子和模板，再学电动工具，最后学会观察噪声、过拟合和故障。",formula:"Softmax loss、SVM hinge loss、SGD/Adam、卷积前向与两层网络反向构成一条训练链。",code:"KNearestNeighbor · LinearClassifier · Adam · TwoLayerNet · SimpleCNN",limit:"前半段在合成 CIFAR 上训练，CNN 部分因权重变量被整数覆盖而失败；不是 CS231n 全课程复现。",source:"https://cs231n.github.io/",file:"26_cs231n_cnn_fundamentals.ipynb"},
+      {id:27,year:"2024",title:"Multi-token Prediction",zh:"多词元预测",group:"序列与记忆",tier:"训练/拟合",status:"pass",addon:true,core:"训练时同时预测未来多个 token，给每段文本提供更密集的监督，并迫使表示规划更长的局部未来。",analogy:"老师不只问“下一个词是什么”，而是让学生一次写出接下来几步；每道题产生更多反馈。",formula:"L = (1/n)Σ_{k=1}^n −log p(xₜ₊ₖ | x≤t)",code:"SingleTokenRNN · MultiTokenRNN · train_single_token · train_multi_token",limit:"用小型 RNN 和合成序列替代论文中的 Transformer 与大规模实验，不能支持“2–3×”普遍收益。",source:"https://arxiv.org/pdf/2404.19737",file:"27_multi_token_prediction.ipynb"},
+      {id:28,year:"2020",title:"Dense Passage Retrieval",zh:"稠密段落检索",group:"检索与上下文",tier:"机制演示",status:"pass",addon:true,core:"问题和段落由两个编码器映射到同一向量空间，用内积快速寻找语义上匹配的文本；批内其他段落天然充当负样本。",analogy:"给问题和书页各画一张坐标地图；坐标接近的书页就可能回答问题，不必共享完全相同的关键词。",formula:"score(q,p)=E_Q(q)ᵀE_P(p)；L=−log exp(s⁺)/Σⱼexp(sⱼ)",code:"SimpleTextEncoder · retrieve_top_k · contrastive_loss · SimpleBM25",limit:"编码器是简化词袋/投影，未训练 BERT 双塔，也没有 Wikipedia 索引与开放域 QA 指标。",source:"https://arxiv.org/pdf/2004.04906.pdf",file:"28_dense_passage_retrieval.ipynb"},
+      {id:29,year:"2020",title:"Retrieval-Augmented Generation",zh:"检索增强生成",group:"检索与上下文",tier:"机制演示",status:"pass",addon:true,core:"先从外部知识库检索文档，再让生成器在文档条件下作答，并对候选文档的不确定性做边缘化。",analogy:"闭卷答题变开卷：先找可能相关的几页资料，再综合写答案；知识可以换书，不必全刻进脑子。",formula:"p(y|x)=Σ_{z∈top-k} pη(z|x)·pθ(y|x,z)",code:"SimpleRetriever · SimpleGenerator · RAGSequence · RAGToken",limit:"固定小知识库和简化概率演示，没有学习检索器、序列生成器或端到端联合训练。",source:"https://arxiv.org/abs/2005.11401v4",file:"29_rag.ipynb"},
+      {id:30,year:"2023",title:"Lost in the Middle",zh:"长上下文中的中部遗失",group:"检索与上下文",tier:"概念模拟",status:"pass",addon:true,core:"长上下文模型常对开头和结尾利用更好，对中间信息利用较差，形成 U 形位置曲线；上下文长度不等于有效使用长度。",analogy:"找夹在厚档案中间的一张便签，比找封面内页或最后一页更容易漏掉。",formula:"accuracy(position) ≈ U-shaped；位置、文档数量与顺序共同影响答案。",code:"SimpleLM.get_position_weights · test_all_positions · test_varying_lengths · order_documents",limit:"位置权重由启发式函数预先写成 U 形，没有运行真实语言模型；它展示结论形状，不是在复现实验证据。",source:"https://arxiv.org/abs/2302.12345",file:"30_lost_in_middle.ipynb"}
+    ].map(Object.freeze));
+
+    const GROUPS = Object.freeze(["全部", "复杂性与压缩", "序列与记忆", "视觉与空间", "注意力与关系", "生成与潜变量", "规模与工程", "检索与上下文"]);
+    const PRACTICE = Object.freeze({
+      "复杂性与压缩": "学：写出“模型描述 + 残差描述”的两项。练：比较两种规则在同一数据上的总编码长度。用：只增加一个复杂度，记录拟合改善是否抵过编码成本。造：构造一组对训练集更好、总描述更长的规则；若它仍被选中，说明你的准则写错了。",
+      "序列与记忆": "学：标出 t 时刻读到的输入、状态与输出。练：在不运行时预测序列加长或打乱后哪一步会变。用：只改记忆长度、门值或 mask，记录逐步误差。造：构造一个必须记住更远信息的序列；若结果不变，要检查实验是否真的依赖记忆。",
+      "视觉与空间": "学：写出局部邻域、共享参数与汇聚的位置。练：先算一层输出 shape / 感受野。用：只改卷积间隔、捷径或一条边，记录输出或梯度变化。造：交换空间位置或断开关键邻接；若性质本应不变却改变，说明归纳偏置没有被验证。",
+      "注意力与关系": "学：区分 query、key、value 与聚合结果。练：手算一个极小 softmax 或对象对。用：只遮住一个候选位置或改为均匀权重，比较结果。造：塞入一个高相似度干扰项；若模型仍声称“选择正确”，就需要独立评价而非看热图。",
+      "生成与潜变量": "学：分开重建项与 KL 项各在约束什么。练：固定 z 或只改采样噪声，预测输出变化。用：扫描一个潜变量维度并保存差异。造：让解码器过强或 KL 权重极端，检查 z 是否被忽略；重建好不等于潜空间有用。",
+      "规模与工程": "学：列出参数、数据、计算或设备中哪一个是瓶颈。练：根据公式预估一次资源翻倍的方向。用：一次只放大一个资源，画出损失 / 吞吐差异。造：故意制造资源失配；若曲线仍“完美”，检查模拟假设是否预先写死了结论。",
+      "检索与上下文": "学：标出查询、候选、排序与生成器的责任边界。练：先预测 top-k 会否包含证据。用：调换文档顺序、加入干扰段或移动证据位置，记录检索与回答。造：让正确证据在中部且有相似干扰项；回答正确才可说链路有效。"
+    });
+    const list = document.querySelector("#paper-list");
+    const empty = document.querySelector("#empty");
+    const count = document.querySelector("#result-count");
+    const search = document.querySelector("#search");
+    const statusSelect = document.querySelector("#run-status");
+    const filters = document.querySelector("#topic-filters");
+    const toggle = document.querySelector("#toggle-details");
+    let activeGroup = "全部";
+    let allOpen = false;
+
+    const el = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+
+    function makeBadge(text, kind="") {
+      return el("span", "badge " + kind, text);
+    }
+
+    function makeDetail(label, text, extra="") {
+      const box = el("div", "detail-item " + extra);
+      box.append(el("b", "", label), el("p", extra, text));
+      return box;
+    }
+
+    function practiceFor(paper) {
+      return PRACTICE[paper.group] || "先写出一个可观察预测，再只改一个变量，用独立指标判断是否成立。";
+    }
+
+    function createCard(paper, index) {
+      const article = el("article", "paper-card");
+      article.style.setProperty("--i", index);
+      article.dataset.group = paper.group;
+      article.dataset.status = paper.status;
+      article.dataset.search = Object.values(paper).join(" ").toLowerCase();
+
+      article.append(el("div", "paper-number", String(paper.id).padStart(2, "0")));
+      const main = el("div", "paper-main");
+      const meta = el("div", "paper-meta");
+      meta.append(el("span", "", paper.year), el("span", "", paper.group), el("span", "", paper.tier));
+      if (paper.addon) meta.append(el("span", "", "现代增补"));
+      const title = el("h3", "", paper.zh + " · " + paper.title);
+      const core = el("p", "paper-core", paper.core);
+      const analogy = el("p", "analogy", "像｜" + paper.analogy);
+      const badges = el("div", "badges");
+      badges.append(makeBadge(paper.status === "pass" ? "✓ 实跑通过" : "× 实跑失败", paper.status));
+      badges.append(makeBadge(paper.tier));
+      if (paper.addon) badges.append(makeBadge("后补主题", "addon"));
+      main.append(meta, title, core, analogy, badges);
+      article.append(main);
+
+      const details = el("details");
+      const summary = el("summary", "", "查看公式、代码与边界");
+      const grid = el("div", "detail-grid");
+      grid.append(
+        makeDetail("关键式 / 机制", paper.formula, "formula"),
+        makeDetail("NumPy 代码锚点", paper.code, "formula"),
+        makeDetail("学—练—用—造：可证伪练习", practiceFor(paper)),
+        makeDetail("不像 / 忠实度边界", paper.limit)
+      );
+      const links = el("div", "source-links");
+      const source = el("a", "", "打开原文"); source.href = paper.source; source.target = "_blank"; source.rel = "noreferrer";
+      const notebook = el("a", "", "打开固定版本 Notebook"); notebook.href = REPO + paper.file; notebook.target = "_blank"; notebook.rel = "noreferrer";
+      links.append(source, notebook);
+      grid.append(links);
+      details.append(summary, grid);
+      article.append(details);
+      return article;
+    }
+
+    function renderFilters() {
+      GROUPS.forEach((group) => {
+        const button = el("button", "", group);
+        button.type = "button";
+        button.setAttribute("aria-pressed", String(group === activeGroup));
+        button.addEventListener("click", () => {
+          activeGroup = group;
+          [...filters.children].forEach((b) => b.setAttribute("aria-pressed", String(b.textContent === group)));
+          applyFilters();
+        });
+        filters.append(button);
+      });
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+      const run = statusSelect.value;
+      let visible = 0;
+      document.querySelectorAll(".paper-card").forEach((card) => {
+        const matchesGroup = activeGroup === "全部" || card.dataset.group === activeGroup;
+        const matchesStatus = run === "all" || card.dataset.status === run;
+        const matchesText = !query || card.dataset.search.includes(query);
+        card.hidden = !(matchesGroup && matchesStatus && matchesText);
+        if (!card.hidden) visible += 1;
+      });
+      count.textContent = `显示 ${visible} / ${PAPERS.length}`;
+      empty.hidden = visible !== 0;
+    }
+
+    PAPERS.forEach((paper, index) => list.append(createCard(paper, index)));
+    renderFilters();
+    search.addEventListener("input", applyFilters);
+    statusSelect.addEventListener("change", applyFilters);
+    toggle.addEventListener("click", () => {
+      allOpen = !allOpen;
+      document.querySelectorAll(".paper-card:not([hidden]) details").forEach((d) => { d.open = allOpen; });
+      toggle.textContent = allOpen ? "收起全部细节" : "展开全部细节";
+    });
+
+    let printState = [];
+    window.addEventListener("beforeprint", () => {
+      printState = [...document.querySelectorAll("details")].map((d) => d.open);
+      document.querySelectorAll("details").forEach((d) => { d.open = true; });
+    });
+    window.addEventListener("afterprint", () => {
+      document.querySelectorAll("details").forEach((d, i) => { d.open = printState[i]; });
+    });
+  </script>
+</body>
+</html>

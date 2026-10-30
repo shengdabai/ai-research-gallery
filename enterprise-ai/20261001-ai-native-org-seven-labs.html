@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 原生组织拆解：七家大模型公司的架构与协作</title>
+<style>
+/* ============================================================
+   1. TOKENS（唯一设计值来源）
+   命名：primitive scale → semantic role。暗色只覆盖 semantic。
+   断点：720px（窄屏堆叠），见文件末尾 @media，CSS 变量不能用于媒体查询。
+   扩展：新增颜色先加 primitive，再映射到 role，组件只用 role。
+   ============================================================ */
+:root {
+  color-scheme: light;
+  /* primitive: neutral */
+  --n-0: #ffffff; --n-50: #f2f4f7; --n-100: #e8ebef; --n-200: #dfe3e8; --n-300: #c4cad3;
+  --n-500: #7a8492; --n-700: #47505c; --n-900: #10151c;
+  /* primitive: series（dataviz 参考调色板 slot1/slot2，已过校验） */
+  --blue-100: #e3eefb; --blue-450: #2a78d6; --blue-600: #184f95;
+  --orange-100: #fdebe3; --orange-500: #eb6834; --orange-700: #a8431b;
+  /* semantic roles */
+  --bg-page: var(--n-50);
+  --bg-surface: var(--n-0);
+  --bg-sunken: var(--n-100);
+  --ink: var(--n-900);
+  --ink-2: var(--n-700);
+  --ink-muted: var(--n-500);
+  --line: var(--n-200);
+  --line-strong: var(--n-300);
+  --link: var(--blue-600);
+  --series-us: var(--blue-450);
+  --series-us-tint: var(--blue-100);
+  --series-cn: var(--orange-500);
+  --series-cn-tint: var(--orange-100);
+  --series-base: var(--n-500);
+  --mark: var(--blue-450);
+  --focus: var(--blue-450);
+  /* spacing scale */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 72px;
+  /* type */
+  --font: system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --fs-xs: 12px; --fs-sm: 13px; --fs-base: 15px; --fs-md: 17px; --fs-lg: 21px; --fs-xl: 28px;
+  --fs-hero: clamp(30px, 5.4vw, 52px);
+  --lh-tight: 1.25; --lh-chip: 1.5; --lh-snug: 1.6; --lh-body: 1.75;
+  --ls-tight: -0.01em; --ul-offset: 3px;
+  --fw-regular: 400; --fw-medium: 500; --fw-bold: 700; --fw-heavy: 800;
+  /* shape */
+  --r-sm: 4px; --r-md: 8px;
+  --bw: 1px; --bw-strong: 2px; --bw-rule: 4px;
+  --dot: 14px; --dot-ring: 2px;
+  --bar-h: 14px;
+  /* layout */
+  --w-page: 1120px; --w-text: 760px;
+  --map-h: 380px;
+  --col-first: 104px; --col-min: 168px; --col-label: 6.5em; --col-label-narrow: 5.5em; --col-key: 9em;
+  --w-title: 18em; --note-min-h: 4.5em; --chip-min: 1.5em; --ref-gap: 2px;
+  --tl-nudge: 3px; --tl-dot-top: 0.55em; --tbl-min: 640px;
+  --layer-w1: 44%; --layer-w2: 64%; --layer-w3: 82%;
+  --z-nav: 10; --nav-offset: 56px;
+  --dur: 160ms;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --n-0: #171b21; --n-50: #0f1216; --n-100: #1d2229; --n-200: #2a3038; --n-300: #3a424d;
+    --n-500: #8a93a0; --n-700: #b9c0ca; --n-900: #f2f4f7;
+    --blue-100: #1a2a40; --blue-450: #3987e5; --blue-600: #86b6ef;
+    --orange-100: #3a2218; --orange-500: #d95926; --orange-700: #f0a482;
+  }
+}
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg-page); color: var(--ink); font-family: var(--font); font-size: var(--fs-base); line-height: var(--lh-body); }
+a { color: var(--link); text-underline-offset: var(--ul-offset); }
+a:focus-visible, button:focus-visible { outline: var(--bw-strong) solid var(--focus); outline-offset: var(--sp-1); }
+h1, h2, h3, h4 { line-height: var(--lh-tight); margin: 0; }
+p { margin: 0 0 var(--sp-4); }
+ul { margin: 0; padding-left: var(--sp-5); }
+li { margin-bottom: var(--sp-2); }
+strong { font-weight: var(--fw-bold); }
+.wrap { max-width: var(--w-page); margin: 0 auto; padding: 0 var(--sp-4); }
+.prose { max-width: var(--w-text); }
+.muted { color: var(--ink-muted); }
+.small { font-size: var(--fs-sm); }
+
+/* ============================================================
+   3. COMPONENTS
+   ============================================================ */
+/* hero */
+.hero { padding: var(--sp-8) 0 var(--sp-6); border-bottom: var(--bw) solid var(--line); background: var(--bg-surface); }
+.hero h1 { font-size: var(--fs-hero); font-weight: var(--fw-heavy); letter-spacing: var(--ls-tight); max-width: var(--w-title); }
+.hero .deck { font-size: var(--fs-md); color: var(--ink-2); max-width: var(--w-text); margin-top: var(--sp-5); }
+.hero .meta { font-size: var(--fs-sm); color: var(--ink-muted); margin-top: var(--sp-5); display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); }
+
+/* nav */
+.nav { position: sticky; top: 0; z-index: var(--z-nav); background: var(--bg-surface); border-bottom: var(--bw) solid var(--line); }
+.nav .wrap { display: flex; gap: var(--sp-5); overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.nav .wrap::-webkit-scrollbar { display: none; }
+.nav a { display: block; padding: var(--sp-3) 0; font-size: var(--fs-sm); color: var(--ink-2); text-decoration: none; border-bottom: var(--bw-strong) solid transparent; transition: border-color var(--dur); }
+.nav a:hover { color: var(--ink); border-bottom-color: var(--line-strong); }
+
+/* section */
+section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--line); }
+section, .co { scroll-margin-top: var(--nav-offset); }
+section > .wrap > h2 { font-size: var(--fs-xl); font-weight: var(--fw-heavy); margin-bottom: var(--sp-3); }
+.lede { color: var(--ink-2); max-width: var(--w-text); margin-bottom: var(--sp-5); }
+h3 { font-size: var(--fs-lg); font-weight: var(--fw-bold); margin: var(--sp-6) 0 var(--sp-3); }
+h4 { font-size: var(--fs-base); font-weight: var(--fw-bold); margin: var(--sp-5) 0 var(--sp-2); }
+
+/* card */
+.card { background: var(--bg-surface); border: var(--bw) solid var(--line); border-radius: var(--r-md); padding: var(--sp-5); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+
+/* findings */
+.findings { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+.finding { background: var(--bg-surface); border: var(--bw) solid var(--line); border-left: var(--bw-rule) solid var(--ink); border-radius: var(--r-sm); padding: var(--sp-4) var(--sp-5); }
+.finding b { display: block; font-size: var(--fs-md); margin-bottom: var(--sp-1); }
+.finding p { margin: 0; color: var(--ink-2); font-size: var(--fs-sm); }
+
+/* evidence tag */
+.ev { display: inline-block; min-width: var(--chip-min); text-align: center; font-size: var(--fs-xs); font-weight: var(--fw-bold); line-height: var(--lh-chip); padding: 0 var(--sp-1); border: var(--bw) solid var(--line-strong); border-radius: var(--r-sm); color: var(--ink-2); vertical-align: baseline; margin-left: var(--sp-1); }
+.ev[data-g="D"] { border-color: var(--ink); color: var(--ink); border-style: solid; background: var(--bg-sunken); }
+.ref { font-size: var(--fs-xs); color: var(--ink-muted); margin-left: var(--ref-gap); white-space: nowrap; }
+.infer { font-size: var(--fs-xs); border-bottom: var(--bw) solid var(--line-strong); color: var(--ink-muted); }
+
+/* tables */
+.tbl-scroll { overflow-x: auto; border: var(--bw) solid var(--line); border-radius: var(--r-md); background: var(--bg-surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-sm); line-height: var(--lh-snug); }
+th, td { text-align: left; vertical-align: top; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--line); }
+tr:last-child > th, tr:last-child > td { border-bottom: 0; }
+thead th { font-weight: var(--fw-bold); background: var(--bg-sunken); white-space: nowrap; }
+tbody th { font-weight: var(--fw-bold); color: var(--ink); min-width: var(--col-label); }
+.tbl-scroll > table:not(.tbl-kv):not(.tbl-fit) { min-width: var(--tbl-min); }
+.tbl-wide th, .tbl-wide td { min-width: var(--col-min); }
+.tbl-wide th:first-child, .tbl-wide td:first-child { position: sticky; left: 0; min-width: var(--col-first); width: var(--col-first); background: var(--bg-surface); border-right: var(--bw) solid var(--line); }
+.tbl-wide thead th:first-child { background: var(--bg-sunken); }
+.tbl-kv th { width: var(--col-key); color: var(--ink-2); }
+.co-name { display: inline-flex; align-items: center; gap: var(--sp-2); white-space: nowrap; }
+.swatch { width: var(--sp-3); height: var(--sp-3); border-radius: 50%; flex: none; background: var(--series-base); }
+.swatch.us { background: var(--series-us); }
+.swatch.cn { background: var(--series-cn); }
+
+/* figure */
+figure { margin: 0; }
+figcaption { font-size: var(--fs-sm); color: var(--ink-muted); margin-top: var(--sp-3); }
+.fig-title { font-weight: var(--fw-bold); font-size: var(--fs-base); margin-bottom: var(--sp-1); }
+.fig-sub { font-size: var(--fs-sm); color: var(--ink-muted); margin-bottom: var(--sp-4); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); font-size: var(--fs-sm); color: var(--ink-2); margin-bottom: var(--sp-3); }
+.legend span { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.swatch.hollow { background: transparent; border: var(--bw-strong) solid var(--series-us); }
+
+/* position map */
+.map { position: relative; height: var(--map-h); margin: var(--sp-5) var(--sp-2) var(--sp-6) var(--sp-5); border-left: var(--bw) solid var(--line-strong); border-bottom: var(--bw) solid var(--line-strong); }
+.map::before, .map::after { content: ""; position: absolute; background: var(--line); }
+.map::before { left: 50%; top: 0; bottom: 0; width: var(--bw); }
+.map::after { top: 50%; left: 0; right: 0; height: var(--bw); }
+.map .axis { position: absolute; font-size: var(--fs-xs); color: var(--ink-muted); white-space: nowrap; }
+.map .ax-top { top: calc(-1 * var(--sp-5)); left: 0; }
+.map .ax-bottom { bottom: calc(-1 * var(--sp-5)); left: 0; }
+.map .ax-right { bottom: calc(-1 * var(--sp-5)); right: 0; }
+.map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.map svg line { stroke: var(--series-us); stroke-width: var(--bw-strong); vector-effect: non-scaling-stroke; }
+.pt { position: absolute; transform: translate(-50%, -50%); width: var(--sp-5); height: var(--sp-5); padding: 0; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; }
+.pt i { width: var(--dot); height: var(--dot); border-radius: 50%; background: var(--series-base); box-shadow: 0 0 0 var(--dot-ring) var(--bg-surface); }
+.pt.us i { background: var(--series-us); }
+.pt.cn i { background: var(--series-cn); }
+.pt.hollow i { background: var(--bg-surface); box-shadow: inset 0 0 0 var(--bw-strong) var(--series-us); }
+.pt span { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: var(--fs-sm); font-family: var(--font); color: var(--ink); font-weight: var(--fw-medium); }
+.pt.lbl-left span { left: auto; right: 100%; }
+.pt[aria-pressed="true"] span { font-weight: var(--fw-heavy); text-decoration: underline; text-underline-offset: var(--ul-offset); }
+.map-note { background: var(--bg-sunken); border-radius: var(--r-sm); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); color: var(--ink-2); min-height: var(--note-min-h); }
+
+/* bars */
+.bars { display: grid; gap: var(--sp-3); }
+.bar-row { display: grid; grid-template-columns: var(--col-label) 1fr; gap: var(--sp-3); align-items: start; font-size: var(--fs-sm); }
+.bar-track { display: grid; gap: var(--sp-1); min-width: 0; }
+.bar { height: var(--bar-h); background: var(--mark); border-radius: 0 var(--r-sm) var(--r-sm) 0; min-width: var(--bw-strong); margin-top: var(--sp-1); }
+.bar-val { color: var(--ink); font-variant-numeric: tabular-nums; line-height: var(--lh-snug); }
+.bar-val small { color: var(--ink-muted); font-size: var(--fs-xs); }
+
+/* company block */
+.co { padding-top: var(--sp-6); margin-top: var(--sp-6); border-top: var(--bw-strong) solid var(--ink); }
+.co:first-of-type { margin-top: var(--sp-5); }
+.co-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); margin-bottom: var(--sp-2); }
+.co-head h3 { margin: 0; font-size: var(--fs-xl); font-weight: var(--fw-heavy); }
+.co-tag { font-size: var(--fs-sm); color: var(--ink-muted); display: inline-flex; align-items: center; gap: var(--sp-2); }
+.co-one { font-size: var(--fs-md); color: var(--ink-2); max-width: var(--w-text); margin-bottom: var(--sp-5); }
+.co-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: var(--sp-5); align-items: start; }
+.layers { display: grid; gap: var(--sp-2); justify-items: center; }
+.layer { width: 100%; text-align: center; border: var(--bw) solid var(--line-strong); border-radius: var(--r-sm); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); background: var(--bg-surface); }
+.layer b { display: block; }
+.layer small { color: var(--ink-muted); font-size: var(--fs-xs); }
+.layer.w1 { width: var(--layer-w1); } .layer.w2 { width: var(--layer-w2); } .layer.w3 { width: var(--layer-w3); }
+.layer.us { border-color: var(--series-us); background: var(--series-us-tint); }
+.layer.cn { border-color: var(--series-cn); background: var(--series-cn-tint); }
+.layer.ai { border-style: dashed; }
+.conn { width: var(--bw); height: var(--sp-3); background: var(--line-strong); }
+.facts { list-style: none; padding: 0; margin: var(--sp-4) 0 0; font-size: var(--fs-sm); }
+.facts li { display: flex; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) 0; border-bottom: var(--bw) solid var(--line); margin: 0; }
+.facts li span:first-child { color: var(--ink-muted); flex: none; }
+.facts li span:last-child { text-align: right; }
+.two-lists { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
+.two-lists ul { font-size: var(--fs-sm); }
+.src-line { font-size: var(--fs-xs); color: var(--ink-muted); margin-top: var(--sp-4); }
+
+/* timeline */
+.tl { list-style: none; padding: 0; margin: 0; border-left: var(--bw-strong) solid var(--line-strong); }
+.tl li { position: relative; padding: 0 0 var(--sp-4) var(--sp-5); margin: 0; font-size: var(--fs-sm); }
+.tl li::before { content: ""; position: absolute; left: calc(-1 * (var(--sp-2) / 2 + var(--bw-strong) / 2 + var(--tl-nudge))); top: var(--tl-dot-top); width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--series-base); box-shadow: 0 0 0 var(--dot-ring) var(--bg-page); }
+.tl li.us::before { background: var(--series-us); }
+.tl li.cn::before { background: var(--series-cn); }
+.tl time { font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; margin-right: var(--sp-2); }
+
+/* stat tiles */
+.stat { background: var(--bg-surface); border: var(--bw) solid var(--line); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-5); }
+.stat .v { font-size: var(--fs-xl); font-weight: var(--fw-heavy); line-height: var(--lh-tight); }
+.stat .k { font-size: var(--fs-sm); color: var(--ink-2); margin-top: var(--sp-1); }
+
+/* callout */
+.note { border-left: var(--bw-rule) solid var(--line-strong); padding: var(--sp-2) var(--sp-4); color: var(--ink-2); font-size: var(--fs-sm); margin: var(--sp-4) 0; }
+
+footer { padding: var(--sp-6) 0 var(--sp-8); font-size: var(--fs-sm); color: var(--ink-muted); }
+
+/* ============================================================
+   4. RESPONSIVE（断点 720px）
+   ============================================================ */
+@media (max-width: 720px) {
+  .hero { padding-top: var(--sp-7); }
+  .grid-2, .grid-3, .findings, .co-grid, .two-lists { grid-template-columns: 1fr; }
+  section { padding: var(--sp-6) 0; }
+  .tbl-kv th, .tbl-kv td { display: block; width: auto; }
+  .tbl-kv th { padding-bottom: 0; border-bottom: 0; }
+  .tbl-kv td { padding-top: var(--sp-1); }
+  .map { margin-left: var(--sp-2); }
+  .pt span { font-size: var(--fs-xs); }
+  .bar-row { grid-template-columns: var(--col-label-narrow) 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>AI 原生组织拆解：七家大模型公司到底怎么组织人、怎么干活</h1>
+    <p class="deck">OpenAI、Anthropic、xAI，以及对标的 DeepSeek、MiniMax、智谱、月之暗面。逐家看架构、沟通方式、任务从哪来、用不用 KPI、AI 在组织里算什么角色，再看它们的共性、分歧和代价。</p>
+    <div class="meta">
+      <span>成稿：2026-10-01</span>
+      <span>来源：49 条（GetNote 笔记 + 公开报道 + 官方材料），每条标证据等级</span>
+      <span>组织状态变化快，文中结论都带时点</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="页内导航">
+  <div class="wrap">
+    <a href="#findings">结论</a>
+    <a href="#map">全景图</a>
+    <a href="#compare">总对比表</a>
+    <a href="#drive">任务还是 KPI</a>
+    <a href="#companies">逐家拆解</a>
+    <a href="#timeline">时间线</a>
+    <a href="#patterns">共性与分歧</a>
+    <a href="#research">研究视角</a>
+    <a href="#takeaway">能带走什么</a>
+    <a href="#sources">来源</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="findings">
+  <div class="wrap">
+    <h2>先看结论</h2>
+    <p class="lede">「AI 原生组织」不是一种形态。七家公司里至少有五种做法，共同点比想象的少，但有几条规律反复出现。</p>
+    <div class="findings">
+      <div class="finding"><b>没有一家靠 KPI 驱动研发，但替代品各不相同</b><p>DeepSeek 用不成文的愿景，月之暗面用使命加人才密度，Anthropic 用「下注」和月度规划，MiniMax 用「所有人优化同一个目标」，xAI 用一号位定的极限时间。只有智谱保留了事业部和销售体系这类传统结构。</p></div>
+      <div class="finding"><b>层级确实少，但少的原因是人少且人强</b><p>DeepSeek 研究团队两层，月之暗面联创直连每个人，MiniMax 在 CEO 之下不超过三层。这三家都在 400 人上下或更少。月之暗面内部自己说：扁平是结果，不是设计。</p></div>
+      <div class="finding"><b>规模一上去，结构就回来</b><p>xAI 过千人后被 SpaceX 的管理层接管并重分工程线；DeepSeek 融资后承认部分部门要建层级；OpenAI 从「没有季度路线图」走到 2026 年合并产品线、集中指挥。月之暗面的应对是主动把人数压在 500 以内。</p></div>
+      <div class="finding"><b>沟通全面文字化、公开化</b><p>OpenAI 一切在 Slack，前员工一年只收到约 10 封邮件；Anthropic 人人有公开的 notebook 频道，可以在里面和 CEO 辩论；月之暗面「直接问」，不开协调会；MiniMax 在飞书里和 AI 实习生对话改代码。</p></div>
+      <div class="finding"><b>AI 已经进了组织图</b><p>MiniMax 把 AI 叫实习生，覆盖近 90% 员工；Anthropic 产品团队 65% 的代码来自 Slack 里的 Claude；OpenAI 97.9% 的员工在用 Codex；xAI 的虚拟员工一度出现在汇报线上。瓶颈从写代码转到了验证。</p></div>
+      <div class="finding"><b>代价是真实的</b><p>重复造轮子（OpenAI）、失重感和大厂高管水土不服（月之暗面）、联创全部离开（xAI）、核心作者被高薪挖走（DeepSeek）、倦怠（Anthropic 自己承认）。这些公司的做法都有前置条件，不能单独抄一条。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>全景图</h2>
+    <p class="lede">两张图：一张看七家公司在「结构化程度」和「任务来源」上的相对位置，一张看人数量级。位置图是基于来源材料的编辑判断，不是测量数据。</p>
+    <div class="grid-2">
+      <figure class="card">
+        <div class="fig-title">组织定位：结构多不多，任务谁来定</div>
+        <div class="fig-sub">点一下圆点看判断依据。位置为定性判断。</div>
+        <div class="legend" aria-hidden="true">
+          <span><i class="swatch us"></i>美国公司</span>
+          <span><i class="swatch cn"></i>中国公司</span>
+          <span><i class="swatch"></i>传统大厂基线</span>
+          <span><i class="swatch hollow"></i>xAI 早期（2025）</span>
+        </div>
+        <div class="map" id="posmap">
+          <span class="axis ax-top">↑ 任务自上而下指派</span>
+          <span class="axis ax-bottom">↓ 自下而上 · 结构少</span>
+          <span class="axis ax-right">结构多、层级多 →</span>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="25" y1="15" x2="70" y2="8"/></svg>
+          <button class="pt cn" style="left:10%;top:75%" data-k="deepseek"><i></i><span>DeepSeek</span></button>
+          <button class="pt cn" style="left:15%;top:60%" data-k="kimi"><i></i><span>月之暗面</span></button>
+          <button class="pt cn lbl-left" style="left:35%;top:45%" data-k="minimax"><i></i><span>MiniMax</span></button>
+          <button class="pt us" style="left:50%;top:60%" data-k="anthropic"><i></i><span>Anthropic</span></button>
+          <button class="pt us" style="left:62%;top:42%" data-k="openai"><i></i><span>OpenAI</span></button>
+          <button class="pt us hollow lbl-left" style="left:25%;top:15%" data-k="xai0"><i></i><span>xAI 2025</span></button>
+          <button class="pt us" style="left:70%;top:8%" data-k="xai1"><i></i><span>xAI 2026</span></button>
+          <button class="pt cn lbl-left" style="left:75%;top:30%" data-k="zhipu"><i></i><span>智谱</span></button>
+          <button class="pt lbl-left" style="left:90%;top:20%" data-k="base"><i></i><span>传统大厂</span></button>
+        </div>
+        <div class="map-note" id="map-note" aria-live="polite">点任意圆点，这里显示该公司放在这个位置的依据。</div>
+      </figure>
+
+      <figure class="card">
+        <div class="fig-title">人数量级</div>
+        <div class="fig-sub">口径和时点各不相同，只适合看量级，不适合精确比较。</div>
+        <div class="bars" role="img" aria-label="七家公司员工人数量级条形图，数值见右侧标注">
+          <div class="bar-row"><span>OpenAI</span><div class="bar-track"><div class="bar" style="width:72%"></div><span class="bar-val">约 4,500 <small>2026 第三方估计，另有 7,800 的说法</small></span></div></div>
+          <div class="bar-row"><span>Anthropic</span><div class="bar-track"><div class="bar" style="width:40%"></div><span class="bar-val">2,500 <small>2026-02 Fortune；6 月第三方估约 5,000</small></span></div></div>
+          <div class="bar-row"><span>xAI</span><div class="bar-track"><div class="bar" style="width:16%"></div><span class="bar-val">1,000+ <small>2026-02</small></span></div></div>
+          <div class="bar-row"><span>智谱</span><div class="bar-track"><div class="bar" style="width:14.1%"></div><span class="bar-val">883 <small>2025-06 招股书</small></span></div></div>
+          <div class="bar-row"><span>MiniMax</span><div class="bar-track"><div class="bar" style="width:6.2%"></div><span class="bar-val">385 <small>2025-09 招股书</small></span></div></div>
+          <div class="bar-row"><span>月之暗面</span><div class="bar-track"><div class="bar" style="width:4.8%"></div><span class="bar-val">300+ <small>2026-04</small></span></div></div>
+          <div class="bar-row"><span>DeepSeek</span><div class="bar-track"><div class="bar" style="width:3.2%"></div><span class="bar-val">不到 200 <small>2026-04 晚点</small></span></div></div>
+        </div>
+        <figcaption>条长按 OpenAI 4,500 = 72% 的同一比例绘制；OpenAI 与 Anthropic 的人数没有官方口径，证据等级 C。来源：S8、S9、S21、S38、S31、S42、S27。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <h2>总对比表</h2>
+    <p class="lede">七家公司、九个维度。窄屏可以横向滑动，第一列固定。带「推断」标记的是根据结构反推、没有直接来源的判断。</p>
+    <div class="tbl-scroll">
+      <table class="tbl-wide">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th><span class="co-name"><i class="swatch us"></i>OpenAI</span></th>
+            <th><span class="co-name"><i class="swatch us"></i>Anthropic</span></th>
+            <th><span class="co-name"><i class="swatch us"></i>xAI</span></th>
+            <th><span class="co-name"><i class="swatch cn"></i>DeepSeek</span></th>
+            <th><span class="co-name"><i class="swatch cn"></i>MiniMax</span></th>
+            <th><span class="co-name"><i class="swatch cn"></i>智谱</span></th>
+            <th><span class="co-name"><i class="swatch cn"></i>月之暗面</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>组织原型</th>
+            <td>自下而上的研究实验室，叠加战时集中指挥</td>
+            <td>产品孵化器加人机混编团队</td>
+            <td>一号位驱动的战时突击队，后被科层接管</td>
+            <td>导师制大型实验室</td>
+            <td>少层级的效率型团队，AI 当实习生</td>
+            <td>基模母公司加交付子公司的双层结构</td>
+            <td>联创直连的「天才集群」</td></tr>
+          <tr><th>层级</th>
+            <td>多层，但高管每天在 Slack 直接参与</td>
+            <td>有管理层；技术岗统一头衔，管理者兼做一线</td>
+            <td>2025 年三层；2026 年组织图上是 19 人的领导团队</td>
+            <td>研究团队两层：梁文锋和研究员</td>
+            <td>CEO 之下不超过三层</td>
+            <td>董事会、委员会、事业部或子公司</td>
+            <td>联创到个人，五位联创各对接 40 到 50 人</td></tr>
+          <tr><th>任务从哪来</th>
+            <td>研究员和工程师自提；危机时 CEO 发「红色警报」统一转向</td>
+            <td>Labs 两周一评的「下注」；产品团队月度规划</td>
+            <td>马斯克定核心指标和时限，工程师主动认领</td>
+            <td>一半兴趣自选，一半跟模型版本主线分工</td>
+            <td>模型里程碑；算法和基础设施共担一个目标</td>
+            <td>研发跟模型路线；商业侧跟客户和交付</td>
+            <td>联创定方向，个人「直接问」自行组合</td></tr>
+          <tr><th>KPI / OKR</th>
+            <td>未见公司级 KPI 描述；2024 年一度没有季度路线图</td>
+            <td>不用代码行数和 Token 量衡量；团队自定质量目标</td>
+            <td>没有 KPI 说法；用单一核心指标倒推</td>
+            <td>无 KPI、无考核、无截止日期</td>
+            <td>试过 OKR 后放弃，也不用 KPI</td>
+            <td>未披露；有事业部和销售体系 <span class="infer">推断有收入目标</span></td>
+            <td>无 OKR、无 KPI、无打卡</td></tr>
+          <tr><th>主要沟通工具与方式</th>
+            <td>Slack 承载一切，几乎没有邮件</td>
+            <td>Slack 公开频道、个人 notebook 频道、双周全员长文宣讲</td>
+            <td>当面走到工位；几乎不写文档</td>
+            <td>各团队周会对全员开放，梁文锋出席每个团队的会</td>
+            <td>飞书；会上公开争论</td>
+            <td>每周对齐会；委员会集体决策</td>
+            <td>群聊为主，少开会；年会上员工可以挑战老板</td></tr>
+          <tr><th>决策方式</th>
+            <td>谁动手谁定架构，没有架构委员会</td>
+            <td>项目负责人对结果全权负责；高自主配高担当</td>
+            <td>拿实验数据说话；卡点由马斯克一个电话解决</td>
+            <td>寻求共识，梁文锋做重大决定</td>
+            <td>CEO 亲自终面并深入技术</td>
+            <td>大事上董事会，日常由委员会几人决定</td>
+            <td>集体讨论，联创决策；看事实说话</td></tr>
+          <tr><th>AI 在组织里的角色</th>
+            <td>97.9% 员工用 Codex，法务和招聘也在用</td>
+            <td>Claude 是 Slack 里的队友，有自己的职责和权限</td>
+            <td>虚拟员工进过组织图；一人带 20 个 Agent 重构接口</td>
+            <td>模型首先要让自己人好用，用来加速下一代研发</td>
+            <td>「实习生」覆盖近 90% 员工，八成以上代码由 AI 写</td>
+            <td>对外卖模型和方案为主，对内用法披露少</td>
+            <td>个人带多个 Agent 干活；员工描述的场景是三人两天的活一人一上午</td></tr>
+          <tr><th>工作强度</th>
+            <td>团队差异大；冲刺期每天到深夜</td>
+            <td>高强度；公司要求主动留白防倦怠</td>
+            <td>作战室连续数月，办公室有睡眠舱</td>
+            <td>多数人晚上六七点下班，不打卡</td>
+            <td>年轻团队，强度未见系统披露</td>
+            <td>未见系统披露</td>
+            <td>不打卡，可睡到自然醒；自驱压力大</td></tr>
+          <tr><th>主要代价</th>
+            <td>重复造轮子；研究资源被产品挤压，资深人员离开</td>
+            <td>七成项目被砍；工程师变孤独；倦怠</td>
+            <td>联创全部离开；汇报线频繁变动</td>
+            <td>核心作者被高薪挖走；期权长期没有标价</td>
+            <td>目标统一时有人离职；创始人承认管理是短板</td>
+            <td>产研裁员重组；员工身份从母公司变子公司</td>
+            <td>失重感；大厂中高层适应失败</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="drive">
+  <div class="wrap">
+    <h2>到底是任务驱动、KPI 考核，还是层层汇报</h2>
+    <p class="lede">直接回答这个问题。七家里没有一家是纯粹的层层汇报，也没有一家是完全放任。区别在于「谁定义任务」和「靠什么保证大家往一个方向走」。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>公司</th><th>谁定义任务</th><th>靠什么对齐方向</th><th>怎么判断做得好不好</th><th>一句话</th></tr></thead>
+        <tbody>
+          <tr><th><span class="co-name"><i class="swatch us"></i>OpenAI</span></th><td>平时是做事的人自己；危机时是 CEO</td><td>使命、Slack 上的公开讨论、关键时刻的全员备忘录</td><td>晋升看「能提出好想法并落地」<span class="ref">S1</span></td><td>自下而上打底，危机时自上而下</td></tr>
+          <tr><th><span class="co-name"><i class="swatch us"></i>Anthropic</span></th><td>项目负责人和团队；Labs 里任何人可以提原型</td><td>CEO 双周长文宣讲、月度轻量规划、每六个月一次主题对齐</td><td>看业务结果，不看提交量；两周一次「继续还是转向」评审<span class="ref">S12 S13</span></td><td>下注驱动，自主和担当成对出现</td></tr>
+          <tr><th><span class="co-name"><i class="swatch us"></i>xAI</span></th><td>马斯克定指标和时限，工程师自己领模块</td><td>一号位本人；全员会</td><td>结果导向，做成了范围扩大，做不成出局<span class="ref">S20</span></td><td>战时任务制</td></tr>
+          <tr><th><span class="co-name"><i class="swatch cn"></i>DeepSeek</span></th><td>研究员自己（非正式部分）；发版时自上而下分工</td><td>不成文的愿景；梁文锋参加所有团队的会</td><td>没有考核<span class="ref">S27 S28</span></td><td>愿景加兴趣驱动</td></tr>
+          <tr><th><span class="co-name"><i class="swatch cn"></i>MiniMax</span></th><td>公司级技术目标拆下来</td><td>「所有人优化同一个目标，而不是每人优化自己的目标」<span class="ref">S32</span></td><td>模型和产品结果；认为日活是虚荣指标</td><td>目标一致的技术任务制</td></tr>
+          <tr><th><span class="co-name"><i class="swatch cn"></i>智谱</span></th><td>研发侧是模型路线；商业侧是事业部和客户</td><td>每周对齐会；委员会</td><td>未披露。事业部按区域和客户运作 <span class="infer">推断有收入口径</span></td><td>七家里最接近传统公司</td></tr>
+          <tr><th><span class="co-name"><i class="swatch cn"></i>月之暗面</span></th><td>联创定大方向，个人自己找事、找人</td><td>使命、招聘筛选、联创直接对接</td><td>没有成文标准；有人因此感到「不知道自己做得怎么样」<span class="ref">S42</span></td><td>使命加人才密度驱动</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">没有 KPI 不等于没有约束。这些公司把约束前移到了招聘（月之暗面一年 100 多人来自内推，MiniMax 创始人亲自终面），以及股权（智谱 51.2% 员工持股；据网传纪要，DeepSeek 融资后核心员工拿到了较多期权）。得到的一篇笔记提醒：DeepSeek 清华姚班实习生日薪可达 5,000 多元，动力绑定在进门前就完成了。<span class="ref">S29</span></p>
+  </div>
+</section>
+
+<section id="companies">
+  <div class="wrap">
+    <h2>逐家拆解</h2>
+    <p class="lede">每家看四样东西：组织形状、日常怎么协作、有意思的做法、代价。来源编号对应文末列表，字母是证据等级。</p>
+
+    <!-- OpenAI -->
+    <article class="co" id="openai">
+      <div class="co-head"><h3>OpenAI</h3><span class="co-tag"><i class="swatch us"></i>美国 · 2015 年成立</span></div>
+      <p class="co-one">平时靠工程师和研究员自己推项目，一切在 Slack 上发生；一旦竞争吃紧，CEO 一纸备忘录就能让全公司转向。它同时是七家里规模最大、最像「大公司」的一家。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w1 us"><b>Sam Altman</b><small>CEO</small></div>
+            <div class="conn"></div>
+            <div class="layer w3"><b>研究 · 核心产品 · 商业与职能</b><small>2026-05 起 ChatGPT、Codex、API 并成一个产品组，归 Greg Brockman</small></div>
+            <div class="conn"></div>
+            <div class="layer"><b>项目小队</b><small>例：Codex 首发 17 人，七周上线</small></div>
+            <div class="layer ai"><b>Codex</b><small>97.9% 员工在用</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>2024-05 约 1,000，2025-06 超 3,000；2026 无官方数<span class="ev" data-g="C">C</span></span></li>
+            <li><span>主要工具</span><span>Slack</span></li>
+            <li><span>代码</span><span>单一大仓库，Python 为主</span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>架构</th><td>2025-08 起设「应用 CEO」Fidji Simo，COO、CFO、CPO 向她汇报，Altman 专注研究、算力和安全。2026-04 她病休，5 月公司把 ChatGPT、Codex 和 API 合并为一个核心产品组交给 Brockman，7 月她卸任转兼职顾问。<span class="ref">S2 S3</span></td></tr>
+            <tr><th>沟通</th><td>「一切，真的是一切，都在 Slack 上」，前员工一年收到约 10 封邮件。高管几乎每天在 Slack 群里发言。Slack 分多个权限等级，收入和算力成本严格保密。<span class="ref">S1</span></td></tr>
+            <tr><th>任务与规划</th><td>2024 年问季度路线图，得到的回答是「不存在」（后来有了）。研究员被看作「自己的小执行官」，各做各的方向看能跑出什么。<span class="ref">S1</span></td></tr>
+            <tr><th>决策</th><td>「代码说了算」。没有架构委员会，哪个团队要做就哪个团队定。跨团队借人，聊一次，第二天人就到位，不等季度规划。<span class="ref">S1</span></td></tr>
+            <tr><th>集中指挥</th><td>2025-12 Altman 发「红色警报」备忘录：暂缓个人助理 Pulse、购物和广告等项目，鼓励员工临时转组，每天开 ChatGPT 协调会。<span class="ref">S4</span><span class="ev" data-g="C">C</span></td></tr>
+            <tr><th>AI 的角色</th><td>公司论文称 97.9% 员工在用 Codex，2025-08 时约 40%，法务和招聘也把它当主要工具。Sora 安卓版借助 Codex 28 天从零上线。<span class="ref">S5 S6</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>「先开枪，再瞄准」：先发布，再按真实使用反馈改。<span class="ref">S6</span></li>
+          <li>Codex 首发团队是 8 名工程师、4 名研究员、2 名设计师、2 名市场销售、1 名产品经理，研究和产品坐在一起。<span class="ref">S1</span></li>
+          <li>Altman 用一个思想实验来设计组织：要让一个 AI 当 CEO 比我干得好，现在还缺什么、卡在哪。<span class="ref">S7</span></li>
+          <li>公司对社交媒体舆论高度敏感，前员工的原话是「这家公司靠推特氛围运转」。<span class="ref">S1</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>重复造轮子：排队系统和 Agent 运行框架各有五六套实现。<span class="ref">S1</span></li>
+          <li>团队文化差异极大，有的像创业公司日夜冲刺，有的按流程走。<span class="ref">S1</span></li>
+          <li>据《金融时报》，资源从长期研究转向 ChatGPT，非语言模型项目经费被拒或缩减，有资深人员离开；首席研究官回应仍坚持基础研究。<span class="ref">S4</span><span class="ev" data-g="C">C</span></li>
+          <li>有人在没有路线图的环境里觉得没有方向感。<span class="ref">S1</span></li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S1（B，单一前员工 2024-05 至 2025-06 的视角，之后情况可能已变）、S2–S8。</p>
+    </article>
+
+    <!-- Anthropic -->
+    <article class="co" id="anthropic">
+      <div class="co-head"><h3>Anthropic</h3><span class="co-tag"><i class="swatch us"></i>美国 · 2021 年成立</span></div>
+      <p class="co-one">公开材料最多、做法最成体系的一家：一支 20 人的孵化小队负责下注新产品，产品团队把 Claude 当成 Slack 里有职责的同事，CEO 把三分之一以上的时间花在文化上。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w2 us"><b>Dario Amodei · Daniela Amodei</b><small>CEO · 总裁</small></div>
+            <div class="conn"></div>
+            <div class="layer w3"><b>研究 · 产品 · 工程 · Labs · 商业</b><small>Labs 约 20 人，由联创 Ben Mann 带</small></div>
+            <div class="conn"></div>
+            <div class="layer"><b>小队与项目负责人</b><small>技术岗统一头衔 Member of Technical Staff</small></div>
+            <div class="layer ai"><b>Claude</b><small>在共享频道里有名册、职责和工具权限</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>2023 夏约 160；2026-02 为 2,500<span class="ev" data-g="B">B</span></span></li>
+            <li><span>主要工具</span><span>Slack、Claude Code</span></li>
+            <li><span>人均提交量</span><span>2026 Q2 是 2025 年前的 8 倍<span class="ref">S13</span></span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>架构</th><td>2026-01 调整：原首席产品官 Mike Krieger 转去 Labs 做一线，头衔就是普通的技术员工；Ami Vora 接管产品组织，与 CTO Rahul Patil 搭档。设计团队按 Claude Code、API 平台、企业、消费者四个方向分组，功能归属经常随产品变化重新划分。<span class="ref">S11 S18</span></td></tr>
+            <tr><th>沟通</th><td>每人有一个公开的 Slack「notebook」频道，像个人动态流一样写想法和进展，谁都能进；员工可以在 CEO 的频道里公开反驳他。Dario 每两周开一次全员会，带一份三四页的文档讲一小时，从产品讲到地缘政治。<span class="ref">S9 S10</span></td></tr>
+            <tr><th>任务与规划</th><td>Labs：任何人提原型，每两周评一次「继续还是转向」，成功率 20% 到 30%，项目超过 4 个人就「毕业」成独立产品团队。Claude Code 团队：放弃六个月路线图，改成月度规划，只有一张小表格，每周确认一次优先级。<span class="ref">S12 S13</span></td></tr>
+            <tr><th>管理</th><td>项目负责人对结果负全责但不管人。新来的管理者先当一线工程师，之后也要持续提交代码、每天用自己的产品。给自由的同时要讲清「你想验证什么假设、谁负责」。<span class="ref">S12 S13</span></td></tr>
+            <tr><th>AI 的角色</th><td>官方总结的四条经验：默认公开频道，让 Agent 看得到上下文；给人和 Agent 各列清职责和工具权限；人定北极星目标；信任逐步放开，一个 Agent 做、另一个 Agent 查。产品团队 65% 的代码来自 Slack 里的 Claude。<span class="ref">S14 S17</span></td></tr>
+            <tr><th>衡量</th><td>不用代码行数或工具调用量，「别拿忙碌冒充进展」。各团队自己定义哪些问题算「不可恢复的坏」，哪些算「可恢复的糟」，并设质量目标。<span class="ref">S13</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>统一头衔的用意：看到名字下面写着「软件工程师」就不会去问他产品问题；都叫技术员工，默认每个人什么都做。<span class="ref">S15</span></li>
+          <li>管理者挂一个常驻的 Claude 会话，接上所有代码库、Slack 频道和指标，月度复盘时直接问它「这个月发了什么、反馈如何」。<span class="ref">S13</span></li>
+          <li>把「什么算好」写成规范文件放进代码仓库，让 Claude 审查时对照；合规、安全边界、产品审美仍由人审。<span class="ref">S13</span></li>
+          <li>内部应用扫描所有 Slack 频道，找出跨部门自发冒出来的项目，提醒管理者注意。<span class="ref">S18</span></li>
+          <li>有专门的「老旧功能淘汰计划」，主动下线低价值功能。<span class="ref">S12</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>Labs 约七成项目被砍。管理者的做法是复盘会上先说自己的遗憾和挫败。<span class="ref">S12</span></li>
+          <li>工程师只和自己的 Agent 干活，变得孤独，团队为此专门组织结对和黑客松。<span class="ref">S13</span></li>
+          <li>2025 年内部调研（132 人问卷、53 人访谈）：多数人能「完全委派」给 Claude 的工作只有 0 到 20%，同时担心技能退化。<span class="ref">S16</span></li>
+          <li>联创团队反复提醒倦怠恢复期很长。上市后 Labs 能否保持速度，公司自己也当作未解问题。<span class="ref">S12</span></li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S9–S19。官方材料和高管访谈居多，天然偏正面，缺少离职员工视角。</p>
+    </article>
+
+    <!-- xAI -->
+    <article class="co" id="xai">
+      <div class="co-head"><h3>xAI（2026-07 起称 SpaceXAI）</h3><span class="co-tag"><i class="swatch us"></i>美国 · 2023 年成立</span></div>
+      <p class="co-one">变化最剧烈的一家。2025 年是三层结构、没人说不、不写文档的突击队；2026 年并入 SpaceX 后，管理层几乎全换成马斯克旧部，工程被重新切成五条线。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w1 us"><b>Elon Musk</b></div>
+            <div class="conn"></div>
+            <div class="layer w3"><b>2025：联创与经理（仍写代码）</b><small>2026：SpaceX 总裁督导，Starlink 高管任总裁，9 个管理席位 8 个来自 SpaceX、家族办公室或 DOGE</small></div>
+            <div class="conn"></div>
+            <div class="layer"><b>工程师</b><small>2025 年初约 100 人，销售也是工程师</small></div>
+            <div class="layer ai"><b>虚拟员工</b><small>曾出现在组织图的汇报线里</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>2026-02 为 1,000+</span></li>
+            <li><span>主要方式</span><span>当面沟通，作战室</span></li>
+            <li><span>现状</span><span>除马斯克外联创均已离开<span class="ev" data-g="C">C</span></span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>2025 年的样子</th><td>三层：一线工程师、联创和经理、马斯克。入职第一天没人安排工作，「谁需要你就去哪」，帮着帮着就成了某个模块的负责人；人事系统里的归属从来没人更新。任何人可以改任何代码，改完给负责人看一眼就上线。<span class="ref">S20</span></td></tr>
+            <tr><th>任务与时限</th><td>「没有截止日期，永远是昨天就该完成」。新项目先定一个直接关系到收入或硬件产出的指标，所有事围绕它倒推。被压时间时先抱怨两分钟，然后回头砍掉估算里的假设。<span class="ref">S20</span></td></tr>
+            <tr><th>决策</th><td>马斯克「愿意被证明是错的，只要你拿出实验数据」。他的反馈要么非常宏观（只做这个细分市场），要么非常细（算力效率的具体方案）。卡点常常是他一个电话解决。<span class="ref">S20</span></td></tr>
+            <tr><th>2026-02 重组</th><td>一周内至少 9 名工程师含两位联创离开，马斯克称这是重组并承认实质是裁员。公开的全员会上宣布四条线：Grok 主模型与语音、编程、图像视频、MacroHard，另有基础设施。他的比喻：几十人可以随便聊，几百人就得有结构，再长大要「分化出器官」。<span class="ref">S21</span></td></tr>
+            <tr><th>2026-04 之后</th><td>Starlink 高管 Michael Nicolls 任总裁，内部备忘录写「明显落后」，近期目标是追平 Claude；工程重分为预训练、工具、后训练、Grok Code、视频图像五条线。彭博社 7 月报道称日常运营混乱、汇报线频繁变动。<span class="ref">S22 S23 S24</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>招聘用黑客松，500 人里挑 5 个。面试题里故意塞一个错误需求，候选人没指出来就不要。<span class="ref">S20</span></li>
+          <li>「先删掉，确认必须要再加回来」，几乎每天都在用。<span class="ref">S20</span></li>
+          <li>销售团队全是工程师，理由是信息每多传一层就丢一截，让工程师直接听客户。<span class="ref">S20</span></li>
+          <li>马斯克和工程师打赌：24 小时内在新机柜上跑起训练，就送一辆 Cybertruck。赌注兑现了。<span class="ref">S20</span></li>
+          <li>预训练系统约 7 人撑起 10 万张 GPU 的集群训练。<span class="ref">S21</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>讲出这些细节的工程师在播客发布三天后被解雇。<span class="ref">S20</span></li>
+          <li>关键项目期连续两三个月没有周末，办公室有睡眠舱和上下铺。<span class="ref">S20</span></li>
+          <li>据报道预训练团队一度不足 5 人，后训练负责人等多名资深人员离开。<span class="ref">S24</span></li>
+          <li>早期的「没人管」文化在一年内被接管式管理取代，说明这种形态对一号位和规模高度敏感。</li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S20（B，单一员工第一人称，且本人是马斯克粉丝）、S21（A，公开录像）、S22–S25。2026 年下半年的信息多为二手，等级 B 到 C。</p>
+    </article>
+
+    <!-- DeepSeek -->
+    <article class="co" id="deepseek">
+      <div class="co-head"><h3>DeepSeek</h3><span class="co-tag"><i class="swatch cn"></i>中国 · 2023 年成立</span></div>
+      <p class="co-one">最接近「实验室」的一家。创始人自己说「我们没有组织，靠愿景驱动」。不考核、不加班、一半时间不安排工作。融资之后，这套做法正在被规模和人才竞争逼着调整。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w1 cn"><b>梁文锋</b><small>更像导师，论文署通讯作者</small></div>
+            <div class="conn"></div>
+            <div class="layer"><b>研究员 100 多人</b><small>基模架构、基础设施、数据各几十人，交叉分工；另有几十人的产品团队</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>不到 200（2026-04）</span></li>
+            <li><span>构成</span><span>2025 年初已知履历的 84 人中，超七成本硕、超七成不到 30 岁</span></li>
+            <li><span>二把手</span><span>没有</span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>架构</th><td>研究团队只有梁文锋和研究员两层。基础设施团队不是完成算法需求的「内部乙方」，在模型定版阶段就参与讨论。<span class="ref">S27</span></td></tr>
+            <tr><th>分工</th><td>2024 年梁文锋原话：「全是自下而上。我们一般不前置分工，而是自然分工……当一个想法显示出潜力，我们也会自上而下去调配资源。」「每个人对于卡和人的调动是不设上限的。」<span class="ref">S26</span><span class="ev" data-g="A">A</span></td></tr>
+            <tr><th>两条线</th><td>网传 2026-05 投资人交流纪要：自上而下的部分叫「正式工作」，比如发新版本要分工，希望它不超过员工时间的一半；另一半不被安排，想做什么做什么。<span class="ref">S28</span><span class="ev" data-g="D">D</span></td></tr>
+            <tr><th>沟通</th><td>梁文锋出席每个团队的会，了解全局进度和卡点。大部分团队的周会向其他团队开放。他本人不参加季度团建，很少聚餐。<span class="ref">S27</span></td></tr>
+            <tr><th>考核与节奏</th><td>没有绩效考核和截止日期，不打卡，多数人晚上六七点离开。梁文锋的理由：一个人每天高质量工作很难超过六到八小时，疲劳下的错误判断会浪费算力。<span class="ref">S27</span></td></tr>
+            <tr><th>决策</th><td>纪要中的说法：决策建立在共识上，「不是我一个人决定所有事情」；公司唯一不能退让的核心利益是团队稳定。<span class="ref">S28</span><span class="ev" data-g="D">D</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>开始一个新方向，常常只是因为三五个人都觉得某个想法不错，就一起做了。<span class="ref">S27</span></li>
+          <li>允许有人做「一年都可能没有成效」的长期研究；梁文锋把这类前沿探索叫「摸奖」，不占卡也不占编制。<span class="ref">S27 S28</span></li>
+          <li>不加班的另一个原因是做得少：不做视频生成、不做世界模型、不做垂直应用，「产品很多不完善，我们也没有去补」。<span class="ref">S28</span><span class="ev" data-g="D">D</span></li>
+          <li>模型的第一用户是自己人，目标是让它帮团队更快做出下一版。<span class="ref">S28</span><span class="ev" data-g="D">D</span></li>
+        </ul></div>
+        <div><h4>代价与变化</h4><ul>
+          <li>2025 下半年起，多位核心作者离开，竞争对手开出两到三倍薪资。<span class="ref">S27</span></li>
+          <li>长期不融资导致期权没有标价，员工有疑问；2026 年完成首轮外部融资。<span class="ref">S27 S30</span></li>
+          <li>人数已超过幻方，是梁文锋管过的最大组织。纪要中他承认：「再不做调整，很多事情没法推进」，部分部门要建立较严谨的层级，其余保持松散。<span class="ref">S28</span><span class="ev" data-g="D">D</span></li>
+          <li>2026-04 起开始招 CFO、COO、内审经理等支持岗。<span class="ref">S49</span><span class="ev" data-g="C">C</span></li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S26（A）、S27（B）、S28（D，网传纪要，DeepSeek 官方未确认真伪，但关键说法与 S26、S27 一致）、S29、S30、S49。</p>
+    </article>
+
+    <!-- MiniMax -->
+    <article class="co" id="minimax">
+      <div class="co-head"><h3>MiniMax</h3><span class="co-tag"><i class="swatch cn"></i>中国 · 2022 年成立 · 2026-01 港股上市</span></div>
+      <p class="co-one">把「AI 原生组织」写进财报的一家。CEO 之下不超过三层，试过 OKR 后放弃，内部管 AI 叫实习生。创始人的看法是管理的杠杆很低，组织的杠杆很大。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w1 cn"><b>闫俊杰</b><small>CEO，亲自终面算法岗</small></div>
+            <div class="conn"></div>
+            <div class="layer w2"><b>负责人</b></div>
+            <div class="conn"></div>
+            <div class="layer"><b>一线</b><small>按「人才画像」而不是岗位来配</small></div>
+            <div class="layer ai"><b>Agent 实习生</b><small>覆盖近 90% 员工</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>385（2025-09），平均 29 岁</span></li>
+            <li><span>研发占比</span><span>73.8%</span></li>
+            <li><span>AI 写代码</span><span>超过 80%<span class="ev" data-g="B">B</span></span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>架构</th><td>招股书口径：CEO 之下不超过三层。2026 年 5 月公司人员在行业会议上说「只有 400 多人」，法务、财务、人力、销售人手都不够，靠 Agent 补。<span class="ref">S31 S33 S35</span></td></tr>
+            <tr><th>目标管理</th><td>试过 OKR，行不通。原因是模型研发不确定：下一个模型有很细的计划，但能不能做出来不知道。2025 年的大改动是把算法和基础设施并成一体，「所有人优化同一个目标」。<span class="ref">S32</span></td></tr>
+            <tr><th>岗位</th><td>「我们公司其实没有岗位，或者现在有，但我认为不应该有。应该是有几种不同画像的人。」售前自己写代码做演示。闫俊杰拿模型作比：输出越多样，能力上限越高，组织也一样。<span class="ref">S32</span><span class="ev" data-g="A">A</span></td></tr>
+            <tr><th>招聘与激励</th><td>看三样：聪明、热情、能不能与人合作。很多人是第一份工作。期权覆盖所有职能。士气低的时候，办法之一是「发更多的钱」。<span class="ref">S32</span></td></tr>
+            <tr><th>AI 的角色</th><td>实习生可以看代码库和线上环境；出了问题在飞书里跟它聊几句就改，团队审过就上线。Token 不限量。招聘从筛简历、打招呼到面试评估都让 Agent 参与。2025-10 起全公司推广。<span class="ref">S33 S34 S35</span></td></tr>
+            <tr><th>沟通</th><td>闫俊杰承认自己会着急，开会时大家会公开争吵；对事不对人的争吵他认为是健康的。<span class="ref">S32</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>闫俊杰说自己不喜欢做管理，但非常喜欢研究组织：「很多管理问题其实是组织不顺导致的。」<span class="ref">S32</span></li>
+          <li>把内部用法和产品迭代绑在一起：自己的模型先在自己公司的开发、运维、销售跟进里用，再发布。<span class="ref">S35</span></li>
+          <li>把日活叫作虚荣指标。<span class="ref">S32</span></li>
+          <li>成立到 2025-09 累计花费约 5 亿美元，公司拿这个数字说明小团队的效率。<span class="ref">S33</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>统一目标那次调整后，一部分人离职。<span class="ref">S32</span></li>
+          <li>闫俊杰自己说公司「现在还不是」他理想中的 AI 原生人才结构。<span class="ref">S32</span></li>
+          <li>公开信息主要来自创始人和公司本身，缺少第三方对内部运作的深度报道。</li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S31–S35。其中「80% 代码由 AI 完成」「三层」来自公司披露或创始人口述，未见独立核实。</p>
+    </article>
+
+    <!-- Zhipu -->
+    <article class="co" id="zhipu">
+      <div class="co-head"><h3>智谱</h3><span class="co-tag"><i class="swatch cn"></i>中国 · 2019 年成立 · 2026 年初港股上市</span></div>
+      <p class="co-one">七家里最像传统公司的一家，也是组织调整最频繁的一家。从清华实验室转出来，董事长、CEO、首席科学家各管一块，靠委员会决策；商业侧从事业部一路拆到独立子公司。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w2 cn"><b>董事会</b><small>董事长刘德兵 · CEO 张鹏 · 首席科学家唐杰</small></div>
+            <div class="conn"></div>
+            <div class="layer w3"><b>业务委员会 · 运营委员会</b></div>
+            <div class="conn"></div>
+            <div class="layer"><b>母公司：基模研发与云端平台</b></div>
+            <div class="layer"><b>子公司：华北、华南交付团队</b><small>智谱持股 80%，负责人持股约 20%</small></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>883（2025-06）</span></li>
+            <li><span>研发</span><span>657 人，74.4%</span></li>
+            <li><span>员工持股</span><span>452 人，51.2%</span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>治理</th><td>张鹏的说法：大事上董事会；日常有管业务和管运营的委员会，几个人一起决定。董事长对接监管、政府和融资，唐杰管科研，他自己管日常运营和商业化。<span class="ref">S36</span><span class="ev" data-g="A">A</span></td></tr>
+            <tr><th>沟通</th><td>每周开会对齐，重点是让研究和商业化「不是两张皮」。张鹏把 CEO 定位成桥梁和搭台子的人。<span class="ref">S36</span></td></tr>
+            <tr><th>组织演变</th><td>2025 年前：政府业务和企业业务两条线，后者由 COO 张帆带，按行业线加城市线铺开，近 50 名销售。2025 年初两线合并归张鹏，张帆年中离职。同年产研中心裁员重组，人员分到各事业部，产品方案不再由公司统一规划。2026-03 华北、华南两个事业部拆成子公司。<span class="ref">S37 S39 S41</span></td></tr>
+            <tr><th>为什么拆</th><td>本地化部署占 2025 年收入的 73.7%，但毛利下滑；云端调用占比升到 26.3%。母公司想集中做基模和平台，交付和咨询交给子公司，子公司未来甚至可以服务用别家模型的客户。<span class="ref">S37</span></td></tr>
+            <tr><th>管理者的自述</th><td>100 多人时张鹏能叫出每个人的名字；搬到两层楼之后，「有一批人我叫不出名字了」，于是把精力转向机制和规章。<span class="ref">S36</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>值得注意的地方</h4><ul>
+          <li>它展示了另一条路：研发像实验室，商业像系统集成商，中间用股权而不是汇报线来连接。</li>
+          <li>两家子公司并行，报道认为不排除形成集团内「赛马」。<span class="ref">S37</span></li>
+          <li>上市后在补战略、人力、财务、法务、审计岗位，也就是在加中后台。<span class="ref">S49</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>有内部员工说部分部门管理水平不高，存在领导权力重叠。<span class="ref">S39</span><span class="ev" data-g="C">C</span></li>
+          <li>拆子公司让员工面临从「智谱员工」变成「另一家公司员工」的身份变化。<span class="ref">S37</span></li>
+          <li>2025-10 传出部门解散，公司回应是正常调整、涉及十余人。<span class="ref">S40</span></li>
+          <li>梁文锋评价智谱的开源「有一种被迫的感觉」，侧面说明两家的驱动力不同。<span class="ref">S28</span><span class="ev" data-g="D">D</span></li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S36–S41。智谱没有公开讲过考核方式，「推断有收入目标」是根据事业部和销售编制做的判断，不是事实陈述。</p>
+    </article>
+
+    <!-- Kimi -->
+    <article class="co" id="kimi">
+      <div class="co-head"><h3>月之暗面（Kimi）</h3><span class="co-tag"><i class="swatch cn"></i>中国 · 2023 年成立</span></div>
+      <p class="co-one">结构最少的一家：没有部门、职级、头衔、OKR、KPI 和打卡。五位联创每人直接对接四五十人。它把管理的难度转移到了招聘上，也因此对「不适合的人」很不友好。</p>
+      <div class="co-grid">
+        <div>
+          <div class="layers">
+            <div class="layer w2 cn"><b>五位联创</b><small>每人对接 40 到 50 人</small></div>
+            <div class="conn"></div>
+            <div class="layer"><b>300 多名个人贡献者</b><small>算法、产研、增长、战略、职能，只有大致方向，没有部门</small></div>
+            <div class="layer ai"><b>各人自带的 Agent</b></div>
+          </div>
+          <ul class="facts">
+            <li><span>人数</span><span>300+，平均不到 30 岁</span></li>
+            <li><span>规模上限</span><span>自我约束在 500 人内<span class="ref">S43</span></span></li>
+            <li><span>内推</span><span>一年 100+ 人</span></li>
+          </ul>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl-kv">
+            <tr><th>架构</th><td>公司爱用「团队」这个词，但细到谁属于哪个部门，没人说得清。一位带过近千人的大厂技术管理者加入时被告知，能给他带的人数是 2 个左右。<span class="ref">S42</span></td></tr>
+            <tr><th>协作</th><td>要别人配合，「直接问」，不经过领导、不开协调会。一位从大厂来的员工说，原公司白天开会晚上干活，这里不开会就能干活。群聊里信息量很大；八成员工性格内向，并排坐着也更愿意打字。<span class="ref">S42</span></td></tr>
+            <tr><th>决策</th><td>联创深入技术和业务一线。年会在每年 3 月，允许所有员工挑战老板。技术上共享所有实验结果，鼓励质疑从目标到细节的一切。没有内部赛马。<span class="ref">S42 S44</span></td></tr>
+            <tr><th>招聘</th><td>四个标准：品味、好奇心、泛化能力、学习速率。杨植麟要的是「基础模型型」的人，什么都能学；在大厂 KPI 体系里训练太久的专家被形容为「过度拟合」。<span class="ref">S42 S43</span></td></tr>
+            <tr><th>流动</th><td>受访的 30 人里过半数职责变过多次。增长团队的人想转去做产品，公司一开始就同意。<span class="ref">S42</span></td></tr>
+            <tr><th>背后的理念</th><td>内部说法是「架构扁平是一个结果」。顺序是业务、架构、流程、组织：先定业务目标和系统架构，流程和组织去适应它们。<span class="ref">S43</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="two-lists">
+        <div><h4>有意思的做法</h4><ul>
+          <li>项目失败不解散。一个长文本项目三次被退回，团队叫它进「思过崖」，公司调各路高手「饱和救援」，最后做成。<span class="ref">S42</span></li>
+          <li>一位产品同事描述的工作场景：启动三个 Agent 处理五个市场的 3,000 条反馈，自己只做三个判断，一个半小时出需求文档，过去要三人两天。报道里这是一个示意场景，不是实测记录。<span class="ref">S42</span></li>
+          <li>17 岁高中实习生可以做论文第一作者。<span class="ref">S42</span></li>
+          <li>调试排错在预训练和后训练里始终是最高优先级。<span class="ref">S44</span></li>
+        </ul></div>
+        <div><h4>代价</h4><ul>
+          <li>失重感：一位回流大厂的前员工说，有时早上走进办公室不知道该做什么，也没人告诉你做得怎么样。<span class="ref">S42</span></li>
+          <li>至少三位大厂中高层入职后没能适应。<span class="ref">S42</span></li>
+          <li>联创的精力是瓶颈。被问到从 300 人到 3,000 人这套还行不行，受访者都答得很谨慎。<span class="ref">S42</span></li>
+          <li>早期也有过二十人轮流汇报、联创逐项拍板的漫长周会，说明现在的状态是演变出来的。<span class="ref">S42</span></li>
+        </ul></div>
+      </div>
+      <p class="src-line">主要来源：S42（B，独立作者经公司许可驻场 100 小时，未采访联创，叙述带文学色彩）、S43、S44。</p>
+    </article>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <h2>时间线：2024 到 2026 的组织大事</h2>
+    <p class="lede">放在一起看，会发现 2026 年几乎每家都在动结构，方向大多是「加一点结构」。</p>
+    <div class="grid-2">
+      <ul class="tl">
+        <li class="cn"><time>2024-07</time>梁文锋接受访谈，讲「不前置分工，自然分工」。</li>
+        <li class="cn"><time>2025-01</time>DeepSeek R1 爆红；月之暗面随后把全公司重心收回到模型。</li>
+        <li class="us"><time>2025-02</time>Claude Code 预览版发布，出自 Anthropic Labs。</li>
+        <li class="cn"><time>2025-06</time>智谱 COO 张帆离职，政府与企业业务已合并。</li>
+        <li class="us"><time>2025-07</time>前工程师发文讲述 OpenAI 内部运作。</li>
+        <li class="us"><time>2025-08</time>OpenAI 设「应用 CEO」，Altman 聚焦研究与算力。</li>
+        <li class="cn"><time>2025-10</time>MiniMax 在全公司推广 Agent 实习生。</li>
+        <li class="us"><time>2025-12</time>OpenAI 发「红色警报」，暂缓多个项目，集中做 ChatGPT。</li>
+        <li class="cn"><time>2026-01</time>智谱、MiniMax 相继在港股上市。</li>
+        <li class="us"><time>2026-01</time>Anthropic 调整高管分工，扩充 Labs。</li>
+      </ul>
+      <ul class="tl">
+        <li class="us"><time>2026-02</time>xAI 一周内多人离职，公开全员会宣布四条线；并入 SpaceX。</li>
+        <li class="cn"><time>2026-03</time>智谱把华北、华南事业部拆成子公司。</li>
+        <li class="us"><time>2026-04</time>Starlink 高管出任 xAI 总裁，工程重分五条线。</li>
+        <li class="cn"><time>2026-04</time>《晚点》报道 DeepSeek 核心成员流失与组织特质。</li>
+        <li class="us"><time>2026-05</time>OpenAI 把 ChatGPT、Codex、API 合并为一个产品组。</li>
+        <li class="cn"><time>2026-06</time>DeepSeek 完成首轮外部融资。</li>
+        <li class="us"><time>2026-06</time>Anthropic 发布 Claude Tag，披露 65% 代码来自它。</li>
+        <li><time>2026-06</time>哈佛商学院发布《AI-Native Firms》工作论文。</li>
+        <li class="us"><time>2026-07</time>OpenAI 应用 CEO 卸任；xAI 更名 SpaceXAI。</li>
+        <li class="cn"><time>2026-07</time>梁文锋投资人交流纪要流出，提到要给部分部门建层级。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="patterns">
+  <div class="wrap">
+    <h2>共性与分歧</h2>
+    <h3>反复出现的八条规律</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>规律</th><th>表现</th><th>出现在哪几家</th></tr></thead>
+        <tbody>
+          <tr><th>用愿景和筛选替代考核</th><td>不设 KPI，把力气花在招对人和讲清方向上</td><td>DeepSeek、月之暗面、MiniMax、Anthropic</td></tr>
+          <tr><th>沟通默认公开、文字化</th><td>公开频道、个人动态流、对全员开放的周会，减少会议和传话</td><td>OpenAI、Anthropic、DeepSeek、月之暗面</td></tr>
+          <tr><th>小队加单一负责人</th><td>几个人到十几个人，一个人对结果负责，但不一定管人</td><td>Anthropic、OpenAI、xAI、DeepSeek</td></tr>
+          <tr><th>管理者也干一线</th><td>经理写代码，创始人参与架构定版和终面</td><td>Anthropic、xAI（早期）、DeepSeek、MiniMax、月之暗面</td></tr>
+          <tr><th>研究和产品互相喂</th><td>产品需求变成研究问题；模型先给自己人用</td><td>Anthropic、OpenAI、DeepSeek、MiniMax</td></tr>
+          <tr><th>AI 有了「编制」</th><td>叫实习生、队友、虚拟员工，有职责、权限和审查流程</td><td>MiniMax、Anthropic、xAI、OpenAI</td></tr>
+          <tr><th>规划周期变短</th><td>从季度和半年缩到月和两周，甚至没有路线图</td><td>Anthropic、OpenAI、xAI</td></tr>
+          <tr><th>规模触发结构</th><td>几十人自由，几百人要分工，过千人回到部分科层</td><td>xAI、OpenAI、DeepSeek、智谱；月之暗面选择不长大</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>分歧最大的三件事</h3>
+    <div class="grid-3">
+      <div class="card"><h4>加不加班</h4><p class="small">DeepSeek 明确不加班，理由是研究需要松弛，而且做的事少。xAI 是作战室和睡眠舱。OpenAI 冲刺期每天到深夜。同样叫 AI 原生，强度可以差一倍。</p></div>
+      <div class="card"><h4>谁来定方向</h4><p class="small">xAI 是一个人定，DeepSeek 说靠共识，月之暗面是五位联创，Anthropic 把大量决定下放给项目负责人。方向权集中的公司转向快，但人走得也快。</p></div>
+      <div class="card"><h4>要不要中后台</h4><p class="small">智谱和上市后的公司在补财务、法务、合规。Anthropic 把规范写成 AI 可检查的文件。月之暗面和早期 xAI 基本没有。得到的一篇笔记的判断是：只砍层级不建公共基础设施，等于把中后台偷偷摊给每个人。<span class="ref">S46</span></p></div>
+    </div>
+
+    <h3>和传统大厂比</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>对照点</th><th>七家模型公司的常见做法</th><th>大厂里看到的情况</th></tr></thead>
+        <tbody>
+          <tr><th>资源分配</th><td>算力向主线集中；DeepSeek 个人调卡不设上限</td><td>据报道谷歌云与 DeepMind 争芯片资源；阿里通义团队质问为何外部公司用云算力更顺畅<span class="ref">S47</span><span class="ev" data-g="C">C</span></td></tr>
+          <tr><th>创新机制</th><td>Anthropic 接受七成失败、快速关项目；月之暗面不赛马</td><td>阿里多条产品线并行后由集团收编，更像内部赛马，团队间有资源和指标竞争<span class="ref">S12</span></td></tr>
+          <tr><th>研究与商业</th><td>同一个小队里坐着研究员、工程师、设计师</td><td>DeepMind 的长期研究传统与产品部门的上线要求反复拉扯<span class="ref">S47</span><span class="ev" data-g="C">C</span></td></tr>
+          <tr><th>反例</th><td></td><td>大厂也能跑出小团队：腾讯一个产品经理加三名同事用一个周末做出办公 Agent 原型，当晚决定全公司内测，四个月后升格为独立部门<span class="ref">S12</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <h2>研究视角：数据和框架怎么说</h2>
+    <p class="lede">GetNote 里相关笔记和公开研究提供了几个可以用来检验上面观察的框架。</p>
+    <h3>哈佛商学院工作论文 26-090（2026-06）</h3>
+    <p class="prose">Hyunjin Kim 和 Rembrand Koning 把约 2,900 家 YC 公司和数万家美国风投支持的初创公司对到员工数据上，比较 AI 原生公司和同行业同期的其他初创公司。<span class="ref">S45</span></p>
+    <div class="grid-3">
+      <div class="stat"><div class="v">小 25%</div><div class="k">AI 原生初创公司的团队规模</div></div>
+      <div class="stat"><div class="v">少 15%</div><div class="k">管理者占比；入门级员工占比也少约 15%</div></div>
+      <div class="stat"><div class="v">少半层</div><div class="k">层级深度，控制公司规模后依然成立</div></div>
+    </div>
+    <p class="note">论文里最要紧的一条：只是在公司内部用 ChatGPT 或 Cursor，并不能预测团队更小或更扁；差别来自把 AI 做进产品本身。这和「全员用上 AI 工具就是 AI 原生」的说法相反。数字取自二手报道对论文的转述，精确值以论文原文为准。</p>
+
+    <h3>三个来自笔记的框架</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>框架</th><th>内容</th><th>用它看这七家</th></tr></thead>
+        <tbody>
+          <tr><th>组织竞争力公式<br><span class="muted">腾讯研究院</span></th><td>人才密度 × AI 杠杆 ÷ 组织摩擦。5 到 50 人是自治的甜蜜点，50 到 300 人要引入协调机制，300 人以上必须有系统化的信息基础设施。<span class="ref">S43</span></td><td>DeepSeek 和月之暗面把前两项拉满、把摩擦压到最低；OpenAI 和 xAI 已经越过 300 人线，摩擦项开始变大。</td></tr>
+          <tr><th>小前台，强中台<br><span class="muted">得到笔记</span></th><td>前面是两到十人的小队，后面是很厚的公共基础设施（模型入口、权限、评测、合规模板），旁边有专家处理例外。强的是基础设施，不是人多权大。<span class="ref">S46</span></td><td>Anthropic 最接近：小队加上写进仓库的规范和自动审查。月之暗面和早期 xAI 有小前台，中台很薄。</td></tr>
+          <tr><th>让组织对 AI 可读<br><span class="muted">YC 相关笔记</span></th><td>没记录下来的等于没发生。上下文是资产，代码可以按需再生成。<span class="ref">S48</span></td><td>Anthropic 官方第一条经验就是「没写下来、访问不到的，对 Agent 来说不存在」。OpenAI 的全量 Slack、MiniMax 的飞书对话也是这个方向。xAI「不写文档」则相反。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="takeaway">
+  <div class="wrap">
+    <h2>能带走什么，不能照搬什么</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h4>小团队可以直接试的</h4>
+        <ul class="small">
+          <li><strong>给时间留白。</strong>DeepSeek 的做法是指派的工作不超过一半时间。小团队可以先从每周固定半天不排任务开始。</li>
+          <li><strong>规划缩到月。</strong>一张表列本月重点，每周问一次「这还是不是优先级」。来自 Anthropic 的 Claude Code 团队。</li>
+          <li><strong>默认公开写。</strong>每人一个公开的进展频道或文档，既给同事看，也给 AI 当上下文。</li>
+          <li><strong>把「什么算好」写下来。</strong>写成 AI 能对照检查的规范，人只审风险、合规和品味。</li>
+          <li><strong>给 AI 明确的职责和验收。</strong>像 MiniMax 那样当实习生用：能看、能改，但上线前有人审；或者一个 Agent 做、另一个查。</li>
+          <li><strong>定期砍一个流程。</strong>挑最贵、最吵、最手工的那个，问它还有没有存在的意义。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>有前置条件、不能单抄的</h4>
+        <ul class="small">
+          <li><strong>取消 KPI。</strong>前提是进门筛选极严，加上足够的股权或薪酬。没有这两样，取消考核只会失去方向。</li>
+          <li><strong>不加班。</strong>DeepSeek 能做到是因为砍掉了大量业务线，产品不完善也不补。想要的多，就做不到。</li>
+          <li><strong>无层级。</strong>在几百人以内、人人能独立交付时才成立。月之暗面自己也在限制规模。</li>
+          <li><strong>一号位直接驱动。</strong>速度极快，但 xAI 的联创在三年内全部离开。</li>
+          <li><strong>高失败率下注。</strong>Anthropic 能接受七成项目被砍，是因为离模型研究足够近、试错成本低，而且有文化去消化挫败感。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <h2>来源与证据等级</h2>
+    <div class="tbl-scroll">
+      <table class="tbl-fit">
+        <thead><tr><th>等级</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><th>A</th><td>一手：创始人或高管本人原话、官方博客与研究、招股书、公开录像</td></tr>
+          <tr><th>B</th><td>权威媒体深度报道、经许可的驻场报道、单一知情者的第一人称叙述</td></tr>
+          <tr><th>C</th><td>二手转述、聚合站点、观点文章、第三方估计</td></tr>
+          <tr><th>D</th><td>未证实：真实性没有得到当事方确认</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>来源清单</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>编号</th><th>来源</th><th>等级</th><th>取得方式</th></tr></thead>
+        <tbody>
+          <tr><td>S1</td><td><a href="https://calv.info/openai-reflections">Calvin French-Owen，Reflections on OpenAI</a>（2025-07）</td><td>B</td><td>原文 + GetNote 笔记</td></tr>
+          <tr><td>S2</td><td><a href="https://techcrunch.com/2026/07/09/fidji-simo-steps-down-from-openais-no-2-role/">TechCrunch，Fidji Simo 卸任</a>（2026-07-09）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S3</td><td><a href="https://thenextweb.com/news/openai-brockman-chatgpt-codex-unified-agentic-platform">The Next Web，OpenAI 合并 ChatGPT 与 Codex</a>（2026-05）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S4</td><td><a href="https://dataconomy.com/2026/02/03/code-red-memo-triggers-strategic-reorganization-at-openai/">Dataconomy，「红色警报」后的重组</a>（转述《华尔街日报》《金融时报》）</td><td>C</td><td>搜索摘要</td></tr>
+          <tr><td>S5</td><td><a href="https://www.theregister.com/ai-and-ml/2026/06/25/openai-says-979-percent-of-its-employees-are-now-using-agents/5262499">The Register，OpenAI 97.9% 员工使用 Codex</a>（2026-06-25）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S6</td><td>GetNote 笔记《OpenAI Codex 深度解析：从工具到队友》（Codex 产品负责人访谈，2025-12）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S7</td><td>GetNote 笔记《OpenAI CEO 山姆·奥特曼深度访谈》逐字稿（2025-12）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S8</td><td>维基百科、Built In、JobsByCulture 的 OpenAI 人数估计</td><td>C</td><td>搜索摘要</td></tr>
+          <tr><td>S9</td><td><a href="https://fortune.com/2026/02/26/anthropic-ceo-dario-amodei-leadership-style-csuite-communication-tech-ai-dario-vision-quest/">Fortune，Dario Amodei 的管理方式</a>（2026-02-26）</td><td>B</td><td>原文</td></tr>
+          <tr><td>S10</td><td><a href="https://www.aol.com/articles/anthropics-head-growth-says-company-042553435.html">Business Insider，Anthropic 增长负责人谈 notebook 频道</a></td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S11</td><td><a href="https://www.anthropic.com/news/introducing-anthropic-labs">Anthropic 官方，Introducing Labs</a>（2026-01）</td><td>A</td><td>搜索摘要</td></tr>
+          <tr><td>S12</td><td><a href="https://mp.weixin.qq.com/s/lqflwzMbuYhp-K4eHL7P7A">InfoQ 编译，Anthropic 的 20 人 Labs 团队</a>（引 Business Insider，2026-09）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S13</td><td><a href="https://mp.weixin.qq.com/s/Ri8OHqcMIfoApZvF05YiCg">Lenny's Podcast × Fiona Fung 编译稿</a>（2026-06）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S14</td><td><a href="https://claude.com/blog/building-effective-human-agent-teams">Claude 官方博客，人类与 Agent 团队的经验</a></td><td>A</td><td>原文</td></tr>
+          <tr><td>S15</td><td>GetNote 笔记《与 Claude Code 负责人 Boris Cherny 的访谈》逐字稿</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S16</td><td>GetNote 笔记《AI 如何改变 Anthropic 工程师的工作方式》（官方研究，2025）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S17</td><td>GetNote 笔记《Anthropic 发布 Claude Tag》（2026-06）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S18</td><td>GetNote 笔记《Anthropic 设计负责人 Joel Lu 深度访谈》（2026-09）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S19</td><td>GetNote 笔记《Anthropic 创始团队出走 OpenAI 内幕》（量子位，2026-10）</td><td>C</td><td>GetNote</td></tr>
+          <tr><td>S20</td><td><a href="https://mp.weixin.qq.com/s/N7bGyQF-ZGIE7T-nd9SvdA">AI 前线整理，xAI 工程师 Sulaiman Ghori 播客</a>（<a href="https://www.youtube.com/watch?v=8jN60eJr4Ps">原视频</a>，2026-01）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S21</td><td><a href="https://mp.weixin.qq.com/s/XeDDTDNYEBHsXnzJAZrexQ">AI 前线整理，xAI 全员大会</a>（<a href="https://www.youtube.com/watch?v=aOVnB88Cd1A">公开录像</a>，2026-02）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S22</td><td><a href="https://www.bloomberg.com/features/2026-elon-musk-xai-allies-spacex-ipo/">Bloomberg，xAI 组织架构图</a>（经新智元转述）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S23</td><td><a href="https://www.aol.com/articles/xai-reorganizes-engineering-team-ahead-225826490.html">Business Insider，xAI 重组工程团队</a>（2026-04）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S24</td><td><a href="https://www.bloomberg.com/news/articles/2026-07-16/spacexai-identity-crisis-at-elon-musk-s-chatbot-company">Bloomberg，SpaceXAI 的身份危机</a>（2026-07-16）</td><td>B</td><td>原文打不开，取搜索摘要</td></tr>
+          <tr><td>S25</td><td>维基百科 SpaceXAI 条目</td><td>C</td><td>搜索摘要</td></tr>
+          <tr><td>S26</td><td><a href="https://m.36kr.com/p/2872793466982535">36 氪「暗涌」，揭秘 DeepSeek</a>（梁文锋访谈，2024-07）</td><td>A</td><td>原文</td></tr>
+          <tr><td>S27</td><td><a href="https://mp.weixin.qq.com/s/bYZrKp48Y7EpsU8_vd6TcQ">晚点 LatePost，V4 发布前的 DeepSeek</a>（2026-04）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S28</td><td><a href="https://mp.weixin.qq.com/s/697WwOaeKw0ZhQ-TgPquOA">网传梁文锋投资人交流纪要</a>（2026-05-20 交流，7 月流出）</td><td>D</td><td>GetNote</td></tr>
+          <tr><td>S29</td><td>GetNote 笔记《42 页梁文锋录音刷屏：学不会 DeepSeek，但这三件事你能带走》</td><td>C</td><td>GetNote</td></tr>
+          <tr><td>S30</td><td><a href="https://finance.sina.com.cn/roll/2026-06-16/doc-inicrqci7435615.shtml">新浪财经，DeepSeek 首轮融资完成</a>（2026-06-16）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S31</td><td>GetNote 笔记《MiniMax 招股书深度解析》两篇（2025-12）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S32</td><td><a href="https://m.huxiu.com/aibrief/11566.html">虎嗅，复盘罗永浩对谈闫俊杰</a> + GetNote 逐字稿（2025-12）</td><td>A</td><td>原文 + GetNote</td></tr>
+          <tr><td>S33</td><td><a href="https://www.qbitai.com/2026/01/369227.html">量子位，MiniMax 上市报道</a>（2026-01-12）</td><td>B</td><td>原文</td></tr>
+          <tr><td>S34</td><td><a href="https://wallstreetcn.com/articles/3766553">华尔街见闻，MiniMax 业绩电话会</a></td><td>B</td><td>搜索摘要 + GetNote</td></tr>
+          <tr><td>S35</td><td>GetNote 笔记《2026 中国 AIGC 产业峰会：MiniMax 的 AI Native 组织实践》（2026-05）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S36</td><td>GetNote 笔记《智谱 AI 创始人深度访谈》（张鹏，逐字稿，2026-02）</td><td>A</td><td>GetNote</td></tr>
+          <tr><td>S37</td><td><a href="https://www.tmtpost.com/7939299.html">字母榜，4000 亿智谱把收入大头分拆出去了？</a>（2026-04-02）</td><td>B</td><td>原文</td></tr>
+          <tr><td>S38</td><td><a href="https://www.stcn.com/article/detail/3579827.html">证券时报，智谱上市与招股书数据</a></td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S39</td><td><a href="https://letschuhai.com/64896997">职场 Bonus，智谱 COO 张帆即将离职</a></td><td>C</td><td>搜索摘要</td></tr>
+          <tr><td>S40</td><td><a href="https://m.jiemian.com/article/13480405.html">界面新闻，智谱回应裁员</a>（2025-10-17）</td><td>B</td><td>搜索摘要</td></tr>
+          <tr><td>S41</td><td>GetNote 笔记《国内大模型 IPO 前瞻：智谱与 MiniMax》（引虎嗅，2025-12）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S42</td><td><a href="https://tech.sina.cn/2026-04-01/detail-inhszihk2474473.d.html">人均扛 4 亿估值、80% 是 I 人：一家 1200 亿 AI 公司的组织实验</a>（2026-04-01）</td><td>B</td><td>原文</td></tr>
+          <tr><td>S43</td><td><a href="https://mp.weixin.qq.com/s/GZqTLfeOrfrLgG-R2bOjGw">腾讯研究院，超级个体时代</a>（2026-06）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S44</td><td>GetNote 笔记《月之暗面 AMA 深度解析》（2026-02）</td><td>B</td><td>GetNote</td></tr>
+          <tr><td>S45</td><td><a href="https://www.hbs.edu/ris/Publication%20Files/26-090_96f92aa0-37d9-4789-beaa-5c0cb87a4032.pdf">HBS Working Paper 26-090，AI-Native Firms</a>（2026-06-09）</td><td>A</td><td>二手报道转述，未读原文</td></tr>
+          <tr><td>S46</td><td>GetNote 笔记《AI 原生组织为什么是「小前台，强中台」？》（2026-08）</td><td>C</td><td>GetNote</td></tr>
+          <tr><td>S47</td><td>GetNote 笔记《全栈 AI 迷局：大厂通吃是终局还是陷阱？》（转述路透社、晚点，2026-08）</td><td>C</td><td>GetNote</td></tr>
+          <tr><td>S48</td><td>GetNote 笔记《AI 原生公司的未来架构：从罗马军团到自我进化的智能系统》（2026-05）</td><td>C</td><td>GetNote</td></tr>
+          <tr><td>S49</td><td>GetNote 笔记《2026 年 AI 新职业研究》（2026-05）</td><td>C</td><td>GetNote</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>这份材料的局限</h3>
+    <ul class="prose">
+      <li>各家信息量不均。Anthropic 和 OpenAI 有大量一手材料，MiniMax 和智谱主要靠创始人自述和财务文件，内部运作的第三方报道少。</li>
+      <li>幸存者视角。讲述者多是创始人、在职高管或对公司有好感的人。离职者的声音只在 OpenAI、月之暗面、xAI 有少量出现。</li>
+      <li>时点问题。OpenAI 的内部描写主要截至 2025 年中，xAI 的早期文化截至 2026 年初，之后都发生了大的结构变化。</li>
+      <li>DeepSeek 的多处细节依赖一份未获官方确认的纪要，已逐条标 D。</li>
+      <li>定位图和「推断」标注是整理者的判断，不是数据。</li>
+      <li>标「搜索摘要」的来源没有逐一打开原文核对。</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">整理：Claude Code · 2026-10-01 · 资料取自 GetNote 知识库与公开网络</div>
+</footer>
+
+<script>
+(function () {
+  var notes = {
+    deepseek: "DeepSeek：研究团队只有两层，无考核无截止日期，一半时间不安排工作，所以放在最左下。发新版本时会自上而下分工，因此没有贴底。",
+    kimi: "月之暗面：没有部门和职级，结构极少；但大方向由五位联创定，联创深入一线，所以比 DeepSeek 略靠上。",
+    minimax: "MiniMax：CEO 之下不超过三层，不用 OKR 和 KPI；任务来自公司级的模型目标，强调所有人优化同一个目标，居中偏上。",
+    anthropic: "Anthropic：2,500 人以上，有完整的管理层，但 Labs 下注和项目负责人制让大量任务自下而上产生，结构居中、任务偏下。",
+    openai: "OpenAI：规模最大，层级多；研究和工程平时自下而上，但 2025-12 的「红色警报」和 2026-05 的产品线合并显示自上而下的力度在加大。",
+    xai0: "xAI 2025：三层结构、不写文档、任何人可改任何代码，结构很少；但指标和时限都由马斯克定，所以在左上。",
+    xai1: "xAI 2026：并入 SpaceX 后，组织图上是 19 人的领导团队，工程分成五条线，结构明显变多，方向仍由一号位定。连线表示一年内的移动。",
+    zhipu: "智谱：董事会、委员会、事业部或子公司，结构最接近传统公司；商业侧由客户和交付驱动。",
+    base: "传统大厂基线：多层汇报、年度或季度目标、部门边界清晰。作为参照，不特指某一家。"
+  };
+  var box = document.getElementById("map-note");
+  var pts = document.querySelectorAll("#posmap .pt");
+  function show(btn) {
+    pts.forEach(function (p) { p.setAttribute("aria-pressed", "false"); });
+    btn.setAttribute("aria-pressed", "true");
+    box.textContent = notes[btn.getAttribute("data-k")] || "";
+  }
+  pts.forEach(function (p) {
+    p.setAttribute("aria-pressed", "false");
+    p.addEventListener("click", function () { show(p); });
+    p.addEventListener("mouseenter", function () { show(p); });
+    p.addEventListener("focus", function () { show(p); });
+  });
+})();
+</script>
+</body>
+</html>

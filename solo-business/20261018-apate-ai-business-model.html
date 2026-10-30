@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>让 AI 去"被骗"：Apate.ai 商业模式拆解</title>
+<style>
+/* ==========================================================
+   TOKENS — 本页唯一的设计取值来源
+   方向：primitive（原始色阶/尺寸）→ semantic（用途角色）→ 组件只用 semantic。
+   断点（media query 不能用 var()，在此登记，下方查询直接写字面值）：
+     --bp-md 720px：卡片网格由单列变双列、表格可完整展示
+     --bp-lg 1080px：三列网格、流程图横排
+   扩展：新颜色先加 primitive，再映射到 semantic，组件里不写原始值。
+   ========================================================== */
+:root {
+  /* primitive: color */
+  --p-navy-950: #0b1524;
+  --p-navy-800: #15253d;
+  --p-navy-600: #2b4466;
+  --p-slate-700: #3b4a5e;
+  --p-slate-500: #5d6d82;
+  --p-slate-300: #b9c5d4;
+  --p-slate-200: #d6dee8;
+  --p-slate-100: #e9eef4;
+  --p-slate-50: #f3f6f9;
+  --p-white: #ffffff;
+  --p-teal-800: #0a5a63;
+  --p-teal-600: #0e7c86;
+  --p-teal-300: #7fd3d9;
+  --p-teal-100: #dcf2f4;
+  --p-green-800: #14532d;
+  --p-green-100: #dcfce7;
+  --p-amber-800: #854d0e;
+  --p-amber-100: #fef3c7;
+  --p-red-800: #9f1239;
+  --p-red-100: #ffe4e6;
+  --p-violet-800: #5b21b6;
+  --p-violet-100: #ede9fe;
+  --p-white-a70: rgba(255, 255, 255, 0.72);
+  --p-white-a12: rgba(255, 255, 255, 0.12);
+  --p-navy-a10: rgba(11, 21, 36, 0.10);
+
+  /* primitive: size */
+  --p-space-1: 4px;
+  --p-space-2: 8px;
+  --p-space-3: 12px;
+  --p-space-4: 16px;
+  --p-space-5: 24px;
+  --p-space-6: 32px;
+  --p-space-7: 48px;
+  --p-space-8: 72px;
+  --p-radius-1: 4px;
+  --p-radius-2: 8px;
+  --p-radius-3: 12px;
+  --p-line-1: 1px;
+  --p-line-2: 3px;
+  --p-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --p-fs-12: 0.78rem;
+  --p-fs-14: 0.9rem;
+  --p-fs-16: 1rem;
+  --p-fs-18: 1.125rem;
+  --p-fs-22: 1.375rem;
+  --p-fs-28: 1.75rem;
+  --p-fs-40: clamp(1.75rem, 5vw, 2.6rem);
+  --p-fs-stat: clamp(1.4rem, 4vw, 1.9rem);
+  --p-lh-tight: 1.3;
+  --p-lh-body: 1.75;
+  --p-fw-regular: 400;
+  --p-fw-medium: 600;
+  --p-fw-bold: 700;
+  --p-dur-fast: 160ms;
+  --p-ease: ease-out;
+  --p-shadow-1: 0 1px 3px var(--p-navy-a10);
+  --p-width-page: 1120px;
+  --p-width-text: 760px;
+  --p-z-nav: 10;
+  --p-angle-hero: 135deg;
+  --p-basis-step: 160px;
+  --p-width-table: 760px;
+
+  /* semantic: color roles */
+  --color-bg: var(--p-slate-50);
+  --color-surface: var(--p-white);
+  --color-surface-muted: var(--p-slate-100);
+  --color-border: var(--p-slate-200);
+  --color-border-strong: var(--p-slate-300);
+  --color-text: var(--p-navy-950);
+  --color-text-muted: var(--p-slate-500);
+  --color-text-soft: var(--p-slate-700);
+  --color-accent: var(--p-teal-600);
+  --color-accent-strong: var(--p-teal-800);
+  --color-accent-soft: var(--p-teal-100);
+  --color-hero-bg-start: var(--p-navy-950);
+  --color-hero-bg-end: var(--p-navy-600);
+  --color-hero-text: var(--p-white);
+  --color-hero-muted: var(--p-white-a70);
+  --color-hero-card: var(--p-white-a12);
+  --color-hero-accent: var(--p-teal-300);
+  --color-nav-bg: var(--p-navy-800);
+  --color-nav-text: var(--p-white-a70);
+  --color-nav-text-active: var(--p-white);
+  --color-ok-bg: var(--p-green-100);
+  --color-ok-text: var(--p-green-800);
+  --color-partial-bg: var(--p-amber-100);
+  --color-partial-text: var(--p-amber-800);
+  --color-over-bg: var(--p-red-100);
+  --color-over-text: var(--p-red-800);
+  --color-none-bg: var(--p-violet-100);
+  --color-none-text: var(--p-violet-800);
+  --color-focus: var(--p-teal-600);
+
+  /* semantic: layout & type */
+  --space-xs: var(--p-space-1);
+  --space-sm: var(--p-space-2);
+  --space-md: var(--p-space-4);
+  --space-lg: var(--p-space-5);
+  --space-xl: var(--p-space-6);
+  --space-2xl: var(--p-space-7);
+  --space-section: var(--p-space-8);
+  --gap-card: var(--p-space-4);
+  --pad-card: var(--p-space-5);
+  --radius-card: var(--p-radius-3);
+  --radius-control: var(--p-radius-2);
+  --radius-chip: var(--p-radius-1);
+  --border-thin: var(--p-line-1) solid var(--color-border);
+  --border-accent: var(--p-line-2) solid var(--color-accent);
+  --shadow-card: var(--p-shadow-1);
+  --font-body: var(--p-font-sans);
+  --text-xs: var(--p-fs-12);
+  --text-sm: var(--p-fs-14);
+  --text-md: var(--p-fs-16);
+  --text-lg: var(--p-fs-18);
+  --text-xl: var(--p-fs-22);
+  --text-2xl: var(--p-fs-28);
+  --text-hero: var(--p-fs-40);
+  --text-stat: var(--p-fs-stat);
+  --leading-tight: var(--p-lh-tight);
+  --leading-body: var(--p-lh-body);
+  --weight-regular: var(--p-fw-regular);
+  --weight-medium: var(--p-fw-medium);
+  --weight-bold: var(--p-fw-bold);
+  --motion-fast: var(--p-dur-fast) var(--p-ease);
+  --width-page: var(--p-width-page);
+  --width-text: var(--p-width-text);
+  --z-nav: var(--p-z-nav);
+  --angle-hero: var(--p-angle-hero);
+  --basis-chain-step: var(--p-basis-step);
+  --width-table-min: var(--p-width-table);
+}
+
+/* ========== BASE ========== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 { line-height: var(--leading-tight); margin: 0 0 var(--space-md); font-weight: var(--weight-bold); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-lg); }
+p { margin: 0 0 var(--space-md); }
+ul, ol { margin: 0 0 var(--space-md); padding-left: var(--space-lg); }
+a { color: var(--color-accent-strong); }
+:focus-visible { outline: var(--p-line-2) solid var(--color-focus); outline-offset: var(--p-line-2); }
+.wrap { max-width: var(--width-page); margin: 0 auto; padding: 0 var(--space-md); }
+.lead { font-size: var(--text-lg); color: var(--color-text-soft); max-width: var(--width-text); }
+.muted { color: var(--color-text-muted); font-size: var(--text-sm); }
+.note { font-size: var(--text-sm); color: var(--color-text-muted); border-left: var(--border-accent); padding-left: var(--space-md); max-width: var(--width-text); }
+
+/* ========== HERO ========== */
+.hero {
+  background: linear-gradient(var(--angle-hero), var(--color-hero-bg-start), var(--color-hero-bg-end));
+  color: var(--color-hero-text);
+  padding: var(--space-2xl) 0 var(--space-xl);
+}
+.hero h1 { font-size: var(--text-hero); margin-bottom: var(--space-lg); }
+.hero .kicker { color: var(--color-hero-accent); font-weight: var(--weight-medium); font-size: var(--text-sm); margin-bottom: var(--space-sm); }
+.hero .verdict { font-size: var(--text-lg); max-width: var(--width-text); }
+.hero .verdict strong { color: var(--color-hero-accent); }
+.hero .sub { color: var(--color-hero-muted); max-width: var(--width-text); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-card); margin-top: var(--space-xl); }
+.stat { background: var(--color-hero-card); border-radius: var(--radius-card); padding: var(--space-md); }
+.stat b { display: block; font-size: var(--text-stat); line-height: var(--leading-tight); }
+.stat span { display: block; font-size: var(--text-sm); color: var(--color-hero-muted); line-height: var(--leading-tight); margin-top: var(--space-xs); }
+@media (min-width: 1080px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+
+/* ========== NAV ========== */
+.nav { position: sticky; top: 0; z-index: var(--z-nav); background: var(--color-nav-bg); }
+.nav ul { list-style: none; margin: 0 auto; padding: 0 var(--space-md); display: flex; gap: var(--space-md); overflow-x: auto; max-width: var(--width-page); scrollbar-width: none; }
+.nav ul::-webkit-scrollbar { display: none; }
+.nav a { display: block; white-space: nowrap; color: var(--color-nav-text); text-decoration: none; font-size: var(--text-sm); padding: var(--space-sm) 0; }
+.nav a:hover { color: var(--color-nav-text-active); }
+
+/* ========== SECTION ========== */
+section { padding: var(--space-section) 0 0; scroll-margin-top: var(--space-2xl); }
+section:last-of-type { padding-bottom: var(--space-section); }
+.sec-head { max-width: var(--width-text); margin-bottom: var(--space-lg); }
+.sec-head .tag { color: var(--color-accent); font-weight: var(--weight-medium); font-size: var(--text-sm); margin-bottom: var(--space-xs); }
+
+/* ========== CARD GRID ========== */
+.grid { display: grid; grid-template-columns: 1fr; gap: var(--gap-card); }
+@media (min-width: 720px) { .grid-2, .grid-3 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1080px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+.card { background: var(--color-surface); border: var(--border-thin); border-radius: var(--radius-card); padding: var(--pad-card); box-shadow: var(--shadow-card); min-width: 0; }
+.card h3 { margin-bottom: var(--space-sm); }
+.card p:last-child, .card ul:last-child { margin-bottom: 0; }
+.card .label { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-medium); margin-bottom: var(--space-xs); }
+
+/* ========== COMPARE (视频 vs 实际) ========== */
+.compare { display: grid; grid-template-columns: 1fr; gap: var(--gap-card); }
+@media (min-width: 720px) { .compare { grid-template-columns: 1fr 1fr; } }
+.compare .card.said { background: var(--color-surface-muted); }
+.compare .card.real { border-color: var(--color-accent); }
+
+/* ========== TIMELINE ========== */
+.timeline { list-style: none; padding: 0; margin: 0; border-left: var(--border-accent); }
+.timeline li { position: relative; padding: 0 0 var(--space-lg) var(--space-lg); }
+.timeline li::before { content: ""; position: absolute; left: calc(var(--space-sm) * -1 + var(--p-line-1) * -1); top: var(--space-sm); width: var(--space-md); height: var(--space-md); border-radius: var(--radius-card); background: var(--color-surface); border: var(--border-accent); }
+.timeline .when { font-weight: var(--weight-bold); color: var(--color-accent-strong); }
+.timeline .what { display: block; }
+.timeline .src { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* ========== FLOW (三层流程) ========== */
+.flow { display: grid; grid-template-columns: 1fr; gap: var(--gap-card); }
+@media (min-width: 1080px) { .flow { grid-template-columns: 1fr 1fr 1fr; } }
+.flow .layer { background: var(--color-surface); border: var(--border-thin); border-radius: var(--radius-card); padding: var(--pad-card); min-width: 0; }
+.flow .layer.known { border-top: var(--p-line-2) solid var(--color-ok-text); }
+.flow .layer.maybe { border-top: var(--p-line-2) solid var(--color-partial-text); }
+.flow .layer.unproven { border-top: var(--p-line-2) solid var(--color-none-text); }
+.flow ol { padding-left: var(--space-lg); margin-bottom: 0; }
+.flow li { margin-bottom: var(--space-sm); }
+.flow .arrow { text-align: center; color: var(--color-text-muted); font-size: var(--text-sm); }
+@media (min-width: 1080px) { .flow .arrow { display: none; } }
+
+/* ========== CHAIN（潜在优势→成立条件） ========== */
+.chain { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: stretch; }
+.chain .step { flex: 1 1 var(--basis-chain-step); background: var(--color-surface); border: var(--border-thin); border-radius: var(--radius-control); padding: var(--space-md); min-width: 0; }
+.chain .step b { display: block; margin-bottom: var(--space-xs); }
+.chain .step span { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+/* ========== CHIPS & FILTER ========== */
+.chip { display: inline-block; font-size: var(--text-xs); font-weight: var(--weight-medium); padding: 0 var(--space-sm); border-radius: var(--radius-chip); line-height: var(--leading-body); white-space: nowrap; }
+.chip.ok { background: var(--color-ok-bg); color: var(--color-ok-text); }
+.chip.partial { background: var(--color-partial-bg); color: var(--color-partial-text); }
+.chip.over { background: var(--color-over-bg); color: var(--color-over-text); }
+.chip.none { background: var(--color-none-bg); color: var(--color-none-text); }
+.chip.ev { background: var(--color-surface-muted); color: var(--color-text-soft); }
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); }
+.btn { font: inherit; font-size: var(--text-sm); cursor: pointer; border: var(--border-thin); background: var(--color-surface); color: var(--color-text); border-radius: var(--radius-control); padding: var(--space-xs) var(--space-md); transition: background var(--motion-fast); }
+.btn:hover { background: var(--color-surface-muted); }
+.btn[aria-pressed="true"] { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-hero-text); }
+
+/* ========== CLAIMS ========== */
+.claims { display: grid; grid-template-columns: 1fr; gap: var(--gap-card); }
+@media (min-width: 720px) { .claims { grid-template-columns: 1fr 1fr; } }
+.claim { background: var(--color-surface); border: var(--border-thin); border-radius: var(--radius-card); padding: var(--space-md) var(--pad-card); min-width: 0; }
+.claim .top { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; margin-bottom: var(--space-sm); }
+.claim .said { font-weight: var(--weight-medium); margin-bottom: var(--space-xs); }
+.claim .real { color: var(--color-text-soft); font-size: var(--text-sm); margin: 0; }
+.claim[data-hidden="true"] { display: none; }
+.count { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-md); }
+
+/* ========== CALCULATOR ========== */
+.calc { background: var(--color-surface); border: var(--border-thin); border-radius: var(--radius-card); padding: var(--pad-card); }
+.calc .controls { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); margin-bottom: var(--space-lg); }
+@media (min-width: 720px) { .calc .controls { grid-template-columns: 1fr 1fr; } }
+.calc label { display: block; font-weight: var(--weight-medium); margin-bottom: var(--space-xs); }
+.calc input[type="range"] { width: 100%; accent-color: var(--color-accent); }
+.calc .val { color: var(--color-accent-strong); font-weight: var(--weight-bold); }
+.calc .presets { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-sm); }
+.calc .out { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-card); }
+@media (min-width: 1080px) { .calc .out { grid-template-columns: repeat(4, 1fr); } }
+.calc .out div { background: var(--color-surface-muted); border-radius: var(--radius-control); padding: var(--space-md); min-width: 0; }
+.calc .out b { display: block; font-size: var(--text-xl); line-height: var(--leading-tight); color: var(--color-text); }
+.calc .out span { font-size: var(--text-xs); color: var(--color-text-muted); display: block; line-height: var(--leading-tight); margin-top: var(--space-xs); }
+.calc .readout { margin-top: var(--space-lg); margin-bottom: 0; }
+.mt-md { margin-top: var(--space-md); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-xl { margin-top: var(--space-xl); }
+
+/* ========== TABLE ========== */
+.table-scroll { overflow-x: auto; border: var(--border-thin); border-radius: var(--radius-card); background: var(--color-surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); }
+.table-scroll table { min-width: var(--width-table-min); }
+th, td { text-align: left; vertical-align: top; padding: var(--space-sm) var(--space-md); border-bottom: var(--border-thin); }
+th { background: var(--color-surface-muted); font-weight: var(--weight-medium); }
+tbody th { background: var(--color-surface); }
+tr:last-child td, tr:last-child th { border-bottom: none; }
+
+/* ========== LESSONS ========== */
+.lesson h3 { color: var(--color-accent-strong); }
+.lesson .ask { background: var(--color-accent-soft); border-radius: var(--radius-control); padding: var(--space-sm) var(--space-md); font-size: var(--text-sm); margin-bottom: 0; }
+.idea .gate { font-size: var(--text-sm); color: var(--color-text-soft); }
+.idea.no { border-color: var(--color-over-text); }
+
+/* ========== SOURCES ========== */
+.sources { font-size: var(--text-sm); padding-left: var(--space-lg); }
+.sources li { margin-bottom: var(--space-sm); }
+footer { border-top: var(--border-thin); padding: var(--space-lg) 0 var(--space-2xl); font-size: var(--text-sm); color: var(--color-text-muted); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">公司拆解 · 研究截至 2026-10-18</p>
+    <h1>让 AI 去"被骗"：Apate.ai 靠什么赚钱，对我们有什么用</h1>
+    <p class="verdict">视频说的公司真实存在，是澳大利亚悉尼的 <strong>Apate.ai</strong>。它的产品已经接入真实的反诈场景，也拿到了银行、电信合作方和投资机构的支持。<strong>但它能不能持续收钱、实际减少了多少损失、能不能规模化盈利，目前都没有公开证据。</strong></p>
+    <p class="sub">视频把"浪费骗子时间"讲成了主角，又把规模和效果讲满了。按公开信息看，对话里挖出的可封堵线索（收款账户、钓鱼网址、加密钱包）可能比拖延时间更值钱；但两者各占多少，公司没有公开数据。下面每个数字都标了来源类型，"公司自报"的数字没有第三方独立核实。</p>
+    <div class="stats">
+      <div class="stat"><b>US$815 万</b><span>种子轮，2026-08-31 宣布（约 A$1140 万，单位是美元不是人民币）</span></div>
+      <div class="stat"><b>250 万+ 次</b><span>AI 自主对话，含电话和文字，不全是电话（公司自报）</span></div>
+      <div class="stat"><b>25 万+ 条</b><span>诈骗情报：冒充手法、钓鱼网址、骡子账户、加密钱包（公司自报）</span></div>
+      <div class="stat"><b>A$21.8 亿</b><span>澳大利亚 2025 年报告的诈骗损失，比 2024 年多 7.8%（官方报告）</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="页面目录">
+  <ul>
+    <li><a href="#compare">视频 vs 实际</a></li>
+    <li><a href="#who">它是谁</a></li>
+    <li><a href="#how">怎么运转</a></li>
+    <li><a href="#model">怎么赚钱</a></li>
+    <li><a href="#moat">护城河</a></li>
+    <li><a href="#claims">逐条核对</a></li>
+    <li><a href="#calc">17 年算一算</a></li>
+    <li><a href="#peers">同类对照</a></li>
+    <li><a href="#risk">风险</a></li>
+    <li><a href="#lessons">启发</a></li>
+    <li><a href="#try">能做的小版本</a></li>
+    <li><a href="#sources">来源</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<section id="compare">
+  <div class="sec-head">
+    <p class="tag">先对齐事实</p>
+    <h2>视频怎么说，实际是什么</h2>
+  </div>
+  <div class="compare">
+    <div class="card said">
+      <p class="label">视频的说法</p>
+      <ul>
+        <li>35 万个 AI 假扮退休大爷大妈</li>
+        <li>24 小时接诈骗电话、回短信、混进骗子群</li>
+        <li>套出银行卡、假网站、加密钱包，卖给银行和电信封杀</li>
+        <li>250 多万次诈骗电话，浪费骗子 17 年</li>
+        <li>骗子不划算，慢慢就没人做了</li>
+      </ul>
+    </div>
+    <div class="card real">
+      <p class="label">公开资料能支持的说法</p>
+      <ul>
+        <li>AI 代理扮演"真实受害者"，年龄、性别、口音、语言都有，老人只是其中一类；"35 万"找不到出处</li>
+        <li>渠道包括电话、短信、邮件、网页、WhatsApp/Telegram 和社交群组（公司自报）</li>
+        <li>公司卖的是<strong>平台和情报服务</strong>，客户是银行、电信、政府等机构；电信同时是诈骗来电的分流渠道；封不封由客户决定</li>
+        <li>250 万+ 次是<strong>对话</strong>，包括文字；17 年是公司累计口径，计算方法没有公开</li>
+        <li>没有证据表明诈骗在减少：澳大利亚报告损失 2025 年反而回升</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="who">
+  <div class="sec-head">
+    <p class="tag">公司背景</p>
+    <h2>它是谁：从一通 44 分钟的电话到美国公司</h2>
+    <p class="lead">联合创始人：Dali Kaafar（CEO，Macquarie University 教授）、Peter Eckermann（CPO）、Brad Joffe（CCO）。团队约 20 人。</p>
+  </div>
+  <ol class="timeline">
+    <li><span class="when">2021-11</span><span class="what">Kaafar 在悉尼家庭野餐时接到诈骗电话，故意装傻拖了对方 44 分钟。他意识到这 44 分钟骗子没去骗别人，但自己的 44 分钟也浪费了，于是想把这件事自动化。</span><span class="src">创始人自述，TechCrunch / BigGo 转述</span></li>
+    <li><span class="when">2023-06</span><span class="what">Macquarie University 网络安全中心发布研究原型，有 Malcolm（英国口音老年男性）等多个人设，原型平均通话约 5 分钟；获澳大利亚国家情报办公室 A$72 万资助。</span><span class="src">高校发布，经媒体转引</span></li>
+    <li><span class="when">2024</span><span class="what">成立公司；2024 年 11 月与澳大利亚联邦银行 CBA 合作，这是它的第一家大银行客户。</span><span class="src">媒体报道</span></li>
+    <li><span class="when">2025</span><span class="what">融资 A$250 万（OIF 领投）。与 TPG 电信的试点被 GSMA 写成行业案例。</span><span class="src">媒体报道、GSMA 案例</span></li>
+    <li><span class="when">2026-08</span><span class="what">8 月 25 日起改为美国特拉华公司；8 月 31 日宣布 US$815 万种子轮，Lobby Capital 领投，OIF、Investible、Concept、Baobab 跟投；累计融资不到 US$1000 万。</span><span class="src">公司公告、Startup Daily</span></li>
+    <li><span class="when">2026-10</span><span class="what">TechCrunch Disrupt 2026 创业大赛亚军。伦敦办公室是<strong>公司计划</strong>，不是已经落地的海外业务。</span><span class="src">TechCrunch、公司公告</span></li>
+  </ol>
+</section>
+
+<section id="how">
+  <div class="sec-head">
+    <p class="tag">产品流程</p>
+    <h2>它怎么运转：分清"已知能力"和"还没证明的闭环"</h2>
+    <p class="lead">产品分三块：Apate Voice（语音代理）、Apate Text（文字代理）、Apate Insights（情报分析）。下图按证据强度分三层，越往右证据越弱。</p>
+  </div>
+  <div class="flow">
+    <div class="layer known">
+      <h3>第 1 层 · 产品已知能力</h3>
+      <p class="muted">公司公开说明 + GSMA 运营商案例</p>
+      <ol>
+        <li>运营商识别可疑来电，通过 SIP/RTP 转给 AI；呼叫中心也可转接；文字代理可自行部署</li>
+        <li>AI 扮演受害者对话，单次最长可达 2 小时；TPG 试点中最长一通 54 分钟</li>
+        <li>按客户派的任务套取信息，例如收款账户或钱包地址</li>
+        <li>客户在仪表盘和洞察门户里看告警与情报；本地或私有云部署，公司称"不到一天"上线</li>
+      </ol>
+    </div>
+    <p class="arrow">↓ 情报交给客户之后</p>
+    <div class="layer maybe">
+      <h3>第 2 层 · 客户可能采取的动作</h3>
+      <p class="muted">由银行、电信、平台、执法机构各自决定</p>
+      <ol>
+        <li>核实线索是否真实</li>
+        <li>拦截号码、冻结或关闭骡子账户</li>
+        <li>下架钓鱼网站、标记加密钱包</li>
+        <li>与其他机构共享情报</li>
+      </ol>
+      <p class="muted">套出一个账号 ≠ 这个账号已被封。"情报产出量"和"有效处置量"是两个数字，公司只公开了前一个。</p>
+    </div>
+    <p class="arrow">↓ 处置结果能不能回来</p>
+    <div class="layer unproven">
+      <h3>第 3 层 · 待验证的闭环</h3>
+      <p class="muted">公开资料没有证据</p>
+      <ol>
+        <li>处置结果是否反馈给 Apate</li>
+        <li>反馈是否用于训练模型或调整策略</li>
+        <li>一个客户的情报能否合法地给另一个客户用</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="model">
+  <div class="sec-head">
+    <p class="tag">商业模式</p>
+    <h2>怎么赚钱：买单的是机构，不是被保护的人</h2>
+    <p class="lead">定价是"可定制"，没有公开。下面"收入方式"一栏是本页推断，不是公司披露。</p>
+  </div>
+  <div class="grid grid-3">
+    <div class="card"><p class="label">谁付钱</p><h3>机构买方：银行、电信为主</h3><p>已公开的合作方是 CBA 银行和 TPG 电信；公司称也服务其他电信、公用事业和政府机构，本页没有核实付款情况。付费方和受益者不是同一个人：普通用户少被骗，但掏钱的是机构。</p></div>
+    <div class="card"><p class="label">为什么愿意付</p><h3>损失、成本、监管三重压力</h3><ul><li>诈骗损失和赔付：英国 2024-10-07 起，符合规则的 APP 诈骗（受害者被骗后自己授权付款）由银行强制赔付，最高 £8.5 万，汇出与收款机构各担一半</li><li>客服和调查成本</li><li>监管：澳大利亚《诈骗防范框架法》2025-02-13 通过，覆盖银行、电信、数字平台，单次违规最高 A$5000 万</li></ul><p class="muted">买了 Apate 不等于就履行了法定义务，这只是购买动机之一。</p></div>
+    <div class="card"><p class="label">卖什么</p><h3>打乱诈骗 + 可行动情报</h3><p>语音/文字代理负责"拖住并套话"，Insights 负责把对话变成告警和情报。浪费时间更像副产品和传播点。</p></div>
+    <div class="card"><p class="label">怎么进入客户</p><h3>接入现有管道</h3><p>运营商网络分流、呼叫中心转接、本地或私有云部署。客户不需要改变自己的用户流程。</p></div>
+    <div class="card"><p class="label">收入方式（推断）</p><h3>平台费 + 用量费</h3><p>可能按代理数量、对话量或情报模块收费。公司没有公开价格、合同额或续约率，本页不估毛利和收入。</p></div>
+    <div class="card"><p class="label">关键资源</p><h3>研究背景 + 背书 + 语料</h3><p>高校研究、国家情报办公室资助、CBA 和 TPG 的试点、GSMA 案例，以及积累的诈骗对话。模型用前沿大模型加自研微调模型。</p></div>
+  </div>
+
+  <h3 class="mt-xl">一单生意怎么走完：采购链</h3>
+  <div class="chain">
+    <div class="step"><b>预算方</b><span>反诈/风控或网络安全预算</span></div>
+    <div class="step"><b>业务负责人</b><span>证明损失和投诉能下降</span></div>
+    <div class="step"><b>安全与合规</b><span>录音、隐私、误转合法来电</span></div>
+    <div class="step"><b>采购与技术集成</b><span>接入网络或呼叫中心</span></div>
+    <div class="step"><b>试点验收</b><span>转入量、准确率、减损估算</span></div>
+    <div class="step"><b>续约</b><span>公开资料没有续约数据</span></div>
+  </div>
+
+  <div class="grid grid-2 mt-xl">
+    <div class="card">
+      <h3>单位经济学：需要验证的 6 个数</h3>
+      <p class="muted">定价未公开，下面只列要问的问题，不填数字。</p>
+      <ul>
+        <li>每通转入的诈骗电话成本多少（模型调用 + 线路）</li>
+        <li>每拿到一条有效情报花多少钱</li>
+        <li>误转一通合法来电造成多少成本</li>
+        <li>部署和维护一个客户要多少人工</li>
+        <li>一个客户一年付多少钱</li>
+        <li>客户续约率是多少</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>出海的四道门槛</h3>
+      <p class="muted">改成美国公司、拿到融资、计划开办公室，不等于已经拿到当地客户。</p>
+      <ul>
+        <li><strong>运营商接入</strong>：每个国家的电信网络和监管不同</li>
+        <li><strong>语料和语言</strong>：本地诈骗话术、口音、语言要重新适配</li>
+        <li><strong>隐私和数据跨境</strong>：录音告知、数据保存地、情报共享规则各不相同</li>
+        <li><strong>采购和处置合作</strong>：要有本地银行、平台、执法机构愿意用情报去封堵</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="moat">
+  <div class="sec-head">
+    <p class="tag">护城河</p>
+    <h2>"数据飞轮"现在只是一个待验证的假设</h2>
+    <p class="lead">对话越多、情报越全，听起来像护城河。但数据多不等于数据独占，更不等于对手做不出来。下面每一环都要成立，优势才成立。</p>
+  </div>
+  <div class="chain">
+    <div class="step"><b>情报覆盖广</b><span>要看：每天新增账户、网址、钱包数量</span></div>
+    <div class="step"><b>情报可以合法共享</b><span>要看：跨客户、跨国家的合同和隐私许可</span></div>
+    <div class="step"><b>情报准确</b><span>要看：核实后为真的比例</span></div>
+    <div class="step"><b>处置及时</b><span>要看：从拿到线索到封堵的时间</span></div>
+    <div class="step"><b>客户持续使用</b><span>要看：续约率、合同扩大</span></div>
+  </div>
+  <p class="note mt-md">目前公开的只有第一环的累计量（25 万+ 条，公司自报）。后四环没有公开数据。</p>
+</section>
+
+<section id="claims">
+  <div class="sec-head">
+    <p class="tag">事实核对</p>
+    <h2>视频 12 个说法逐条核对</h2>
+    <p class="lead">每条有两个标签：判定结果，以及证据来自哪里。"公司自报"表示数字来自公司或创始人，没有第三方独立核实。</p>
+  </div>
+  <div class="filters" role="group" aria-label="按判定筛选">
+    <button class="btn" type="button" data-filter="all">全部</button>
+    <button class="btn" type="button" data-filter="ok">成立</button>
+    <button class="btn" type="button" data-filter="partial">部分成立</button>
+    <button class="btn" type="button" data-filter="over">说过头</button>
+    <button class="btn" type="button" data-filter="none">无出处 / 无证据</button>
+  </div>
+  <p class="count" id="claim-count" aria-live="polite"></p>
+  <div class="claims" id="claims-list">
+    <div class="claim" data-v="ok"><div class="top"><span class="chip ok">成立</span><span class="chip ev">公司公告 + 媒体</span></div><p class="said">"澳大利亚有一家 AI 公司"</p><p class="real">Apate.ai，总部悉尼，源自 Macquarie University 研究；2026 年 8 月起注册地改为美国特拉华。</p></div>
+    <div class="claim" data-v="partial"><div class="top"><span class="chip partial">部分成立</span><span class="chip ev">公司公开说明</span></div><p class="said">"核心业务只有一个：让 AI 假扮受害者"</p><p class="real">对话代理是核心技术，但收钱的是"打乱诈骗 + 情报分析"的平台，产品有 Voice、Text、Insights 三块。</p></div>
+    <div class="claim" data-v="over"><div class="top"><span class="chip over">说过头</span><span class="chip ev">公司公开说明 + O2 新闻稿</span></div><p class="said">"假扮最容易受骗的退休大爷大妈"</p><p class="real">人设覆盖不同年龄、性别、口音、语言，老人只是其中一类。网上流传的"AI 奶奶 Daisy"是英国 O2 电信 2024 年的营销项目，不是 Apate。</p></div>
+    <div class="claim" data-v="none"><div class="top"><span class="chip none">无出处</span><span class="chip ev">本次检索未找到</span></div><p class="said">"总共弄了 35 万个 AI"</p><p class="real">没有找到出处。公司说的是"数千个代理"，二手媒体称约 20 万个人设。人设数和同时在线的代理数不是一回事。</p></div>
+    <div class="claim" data-v="ok"><div class="top"><span class="chip ok">成立</span><span class="chip ev">公司自报</span></div><p class="said">"24 小时接诈骗电话、回钓鱼短信、混进骗子群"</p><p class="real">渠道包括电话、短信、邮件、网页、WhatsApp/Telegram 和社交群组。公司称代理每天和数以万计的骗子对话。</p></div>
+    <div class="claim" data-v="ok"><div class="top"><span class="chip ok">成立</span><span class="chip ev">公司自报 + GSMA 案例</span></div><p class="said">"疯狂装傻来浪费骗子的时间"</p><p class="real">单次对话最长可达 2 小时（公司说法）；TPG 试点中最长一通 54 分钟。</p></div>
+    <div class="claim" data-v="ok"><div class="top"><span class="chip ok">成立</span><span class="chip ev">公司自报</span></div><p class="said">"套出银行卡、假网站、加密钱包"</p><p class="real">公司称已提取 25 万+ 条情报，包括冒充手法、钓鱼网址、骡子账户和加密钱包。有多少条被核实为真，没有公开。</p></div>
+    <div class="claim" data-v="partial"><div class="top"><span class="chip partial">部分成立</span><span class="chip ev">公司公开说明 + 媒体</span></div><p class="said">"把信息卖给银行和电信公司进行封杀"</p><p class="real">卖的是平台和情报服务，收费结构没有公开。电信不只是买方，也是把诈骗来电转给 AI 的渠道。封不封由客户自己决定。</p></div>
+    <div class="claim" data-v="partial"><div class="top"><span class="chip partial">部分成立</span><span class="chip ev">公司自报</span></div><p class="said">"跑了 250 多万次诈骗电话"</p><p class="real">公司说的是 250 万+ 次<strong>对话</strong>，电话和文字都算，不全是电话。TPG 一家已转入近 59 万通电话。</p></div>
+    <div class="claim" data-v="partial"><div class="top"><span class="chip partial">部分成立</span><span class="chip ev">公司自报</span></div><p class="said">"相当于浪费了骗子 17 年的时间"</p><p class="real">是公司累计口径，文字对话怎样计时、并发怎样累计都没有公开。下方计算器可以看它换算后是什么量级。</p></div>
+    <div class="claim" data-v="partial"><div class="top"><span class="chip partial">部分成立</span><span class="chip ev">公司公告 + 媒体</span></div><p class="said">"8 月份拿到了 815 万的融资，准备全球扩张"</p><p class="real">2026-08-31 宣布，单位是<strong>美元</strong>（约 A$1140 万）。改为美国公司、在澳洲、欧洲、亚洲、非洲有业务；伦敦办公室是计划。</p></div>
+    <div class="claim" data-v="none"><div class="top"><span class="chip none">无证据</span><span class="chip ev">官方数据</span></div><p class="said">"骗子投入和成本不对等，慢慢就没人愿意做了"</p><p class="real">没有证据支持。澳大利亚报告的诈骗损失 2024 年 A$20.3 亿，2025 年回升 7.8% 至 A$21.8 亿。CBA 诈骗损失下降 76% 是创始人口径，36Kr 报道指出该行同期还上了多项其他措施，不能全归功于 Apate。</p></div>
+  </div>
+</section>
+
+<section id="calc">
+  <div class="sec-head">
+    <p class="tag">数字解读</p>
+    <h2>"浪费骗子 17 年"到底有多大</h2>
+    <p class="lead">按公司累计口径粗略换算：17 年 ≈ 14.9 万小时，除以 250 万次，约 3.6 分钟/次。这是两个累计数相除的派生均值，不一定等于真实平均通话时长。拖动滑杆看不同假设下的结果。</p>
+  </div>
+  <div class="calc">
+    <div class="controls">
+      <div>
+        <label for="min">平均每次对话时长：<span class="val" id="min-val"></span> 分钟</label>
+        <input type="range" id="min" min="0.5" max="10" step="0.1" value="3.6">
+        <div class="presets" role="group" aria-label="常用口径">
+          <button class="btn" type="button" data-min="0.5">0.5 分钟 · 按 TPG 试点下限假设</button>
+          <button class="btn" type="button" data-min="3.6">3.6 分钟 · 公司累计口径推算</button>
+          <button class="btn" type="button" data-min="5">5 分钟 · 2023 原型平均</button>
+        </div>
+      </div>
+      <div>
+        <label for="conv">累计对话次数：<span class="val" id="conv-val"></span> 万次</label>
+        <input type="range" id="conv" min="50" max="2500" step="50" value="250">
+        <p class="muted mt-sm">公司当前口径是 250 万+ 次。往右拖可以看规模扩大 10 倍时的结果。</p>
+      </div>
+    </div>
+    <div class="out">
+      <div><b id="o-hours"></b><span>骗子累计时间（小时）</span></div>
+      <div><b id="o-years"></b><span>换算成不间断的年数</span></div>
+      <div><b id="o-fte"></b><span>标准全职人年（每年 2000 小时）</span></div>
+      <div><b id="o-share"></b><span>占 22 万人一年工时的比例</span></div>
+    </div>
+    <p class="readout" id="readout" role="status" aria-live="polite"></p>
+  </div>
+  <p class="note mt-md">口径说明：① 人年是时间换算，不等于骗子损失了这么多员工或这么多钱。② "22 万人"取联合国人权高专办 2023 年的估计：缅甸至少 12 万人、柬埔寨约 10 万人可能被迫从事网络诈骗。这只是两个国家，也不是全球诈骗从业人数，只用来感受量级。③ TPG 试点 28 万+ 通电话累计占用骗子 100+ 天：两个数都只是下限，假设取 100 天和 28 万通，100 × 24 × 60 ÷ 28 万 ≈ 0.5 分钟/通；实际均值未知，而且与公司总体指标统计范围不同，不宜直接对比。④ 滑杆默认值按 3.6 分钟舍入，所以显示 15 万小时，略多于按 17 年精确换算的 14.9 万小时。结论：<strong>这个换算判断不了诈骗是否"亏本"，因为还缺诈骗收益、成本和有效处置数据。</strong>它只说明一点：被拖住的时间和诈骗劳动力的规模相比很小，所以视频把"浪费时间"当成让骗子退场的主因，证据不够。</p>
+</section>
+
+<section id="peers">
+  <div class="sec-head">
+    <p class="tag">同类对照</p>
+    <h2>四个"AI 钓骗子"项目不在同一条赛道</h2>
+    <p class="lead">它们目标、客户和成熟度都不同，不做排名，只看五个维度。</p>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th scope="col">项目</th><th scope="col">主要目标</th><th scope="col">互动渠道</th><th scope="col">客户</th><th scope="col">证据强度</th><th scope="col">商业化程度</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Apate.ai（澳大利亚）</th><td>打乱诈骗 + 生产情报</td><td>电话、短信、邮件、网页、社交群组</td><td>银行、电信、政府</td><td>公司自报为主；有 GSMA 运营商案例</td><td>已有银行、电信合作和试点；付款情况本页未能确认；种子轮</td></tr>
+        <tr><th scope="row">O2 "AI 奶奶 Daisy"（英国）</th><td>营销与防骗宣传</td><td>电话（诱饵号码）</td><td>O2 自有品牌传播</td><td>O2 自报：拖住 1000+ 骗子，单通最长 50 分钟</td><td>营销活动，不是独立产品</td></tr>
+        <tr><th scope="row">Netcraft 对话式诈骗情报</th><td>获取收款账户等情报</td><td>文字对话</td><td>金融机构、品牌、安全团队</td><td>公司自报：约六分之一的对话拿到银行账户</td><td>成熟安全公司的产品线</td></tr>
+        <tr><th scope="row">arXiv 2509.08493 学术系统</th><td>验证可行性</td><td>文字消息</td><td>无</td><td>5 个月 2600+ 次接触，约 32% 拿到敏感金融信息，仅 48.7% 骗子回复首条消息</td><td>研究原型</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note mt-md">学术系统的比例只说明特定实验可行，不能用来预测 Apate 的实际表现。</p>
+</section>
+
+<section id="risk">
+  <div class="sec-head">
+    <p class="tag">风险与限制</p>
+    <h2>看好之前要知道的 8 件事</h2>
+  </div>
+  <div class="grid grid-2">
+    <div class="card"><h3>数据多为自报</h3><p>250 万次、17 年、25 万条情报都来自公司，口径没有公开，也没有第三方审计。</p></div>
+    <div class="card"><h3>收入和定价未知</h3><p>没有公开价格、合同额、续约率，无法判断生意是否赚钱。</p></div>
+    <div class="card"><h3>误转合法来电</h3><p>识别错了会把真客户的电话转给机器人。GSMA 案例提到试点检测准确率 98%，并专门设计了"误判逃生"流程。</p></div>
+    <div class="card"><h3>AI 对 AI</h3><p>骗子也在用 AI，可能学会识别机器人，或者用机器人反过来消耗 Apate 的算力。</p></div>
+    <div class="card"><h3>录音与隐私合规</h3><p>录音告知、数据保存、跨境共享在每个国家规则不同，出海时成本会上升。</p></div>
+    <div class="card"><h3>骡子账户背后可能是被胁迫的人</h3><p>东南亚诈骗园区里有大量被贩卖、被强迫的人，收款账户也可能属于被利用的普通人。封堵时要考虑这部分人。</p></div>
+    <div class="card"><h3>欺骗的伦理边界</h3><p>AI 主动骗骗子，要和执法、平台规则配合，避免越界去"反向诈骗"。</p></div>
+    <div class="card"><h3>依赖少数渠道</h3><p>电话量主要靠运营商转入，一两家大客户的合作变化会明显影响规模。</p></div>
+  </div>
+</section>
+
+<section id="lessons">
+  <div class="sec-head">
+    <p class="tag">给 AI 教育与一人公司的启发</p>
+    <h2>6 条启发，每条附一个要回答的问题</h2>
+    <p class="lead">研究背景、政府资助、头部客户背书是 Apate 的具体条件，不能照搬。能借鉴的是下面的思考方法。</p>
+  </div>
+  <div class="grid grid-3">
+    <div class="card lesson"><h3>成本不对称要算全</h3><p>对方花人工，你花算力，这是 Apate 的出发点。但算力之外还有号码、接入、误判、人工复核和合规成本。</p><p class="ask">问自己：对方每多花 1 小时，我要花多少钱？</p></div>
+    <div class="card lesson"><h3>传播故事和收费产品分开</h3><p>"AI 耍骗子"负责上新闻；情报和合规支持负责收钱。两者对应的受众不同。</p><p class="ask">问自己：我的作品里，哪部分负责传播，哪部分负责收钱？</p></div>
+    <div class="card lesson"><h3>找有损失、有压力、有预算的买方</h3><p>银行要赔钱、要应对监管，所以愿意为反诈付费。被保护的普通用户反而不付钱。</p><p class="ask">问自己：客户现在为哪种损失付钱？谁有预算和采购权？</p></div>
+    <div class="card lesson"><h3>接进客户已有的流程</h3><p>Apate 接入运营商网络和呼叫中心，客户不必改变用户体验。</p><p class="ask">问自己：我的服务能不能放进客户现在就在用的工具或流程里？</p></div>
+    <div class="card lesson"><h3>用试点证明一个可核对的数</h3><p>TPG 试点给出了转入量、准确率、减损估算，这些数字后来成了 GSMA 案例。</p><p class="ask">问自己：我的第一个试点，能证明哪一个别人能核对的数字？</p></div>
+    <div class="card lesson"><h3>信任要一级一级搭</h3><p>Apate 是研究 → 政府资助 → 头部客户。普通创作者对应的是：公开作品 → 小额付费试点 → 可引用的客户案例。</p><p class="ask">问自己：客户第二次付钱的理由是什么？</p></div>
+  </div>
+</section>
+
+<section id="try">
+  <div class="sec-head">
+    <p class="tag">能做的小版本</p>
+    <h2>低风险的方向：防骗教育，不是去钓骗子</h2>
+    <p class="lead">以下是待验证的想法，不是已证明的生意。先用小额报价测有没有人愿意付钱、学完后识别能力有没有提高，再考虑做复杂的 AI 产品。</p>
+  </div>
+  <div class="grid grid-2">
+    <div class="card idea"><p class="label">想法 A</p><h3>中文诈骗话术识别课</h3><p>把常见诈骗话术拆成"危险信号清单"，配真实公开案例讲解。</p><p class="gate"><strong>门槛：</strong>只用公开案例；不提供可直接拿去行骗的完整脚本。<strong>验证：</strong>学员课前课后各做一次识别测验，看正确率变化。</p></div>
+    <div class="card idea"><p class="label">想法 B</p><h3>家庭防骗演练包</h3><p>让 AI 扮演骗子，家人练习"挂断 → 用官方号码回拨核实 → 告诉家人"三步。</p><p class="gate"><strong>门槛：</strong>全程使用虚构身份和虚构账户；开始前告知参与者这是演练；不记录真实银行卡、验证码等信息。<strong>验证：</strong>有没有子女愿意为父母付费。</p></div>
+    <div class="card idea"><p class="label">想法 C</p><h3>小组织防骗工作坊</h3><p>给社区、老年大学、小企业财务做一次性演练和复盘。</p><p class="gate"><strong>门槛：</strong>和机构合作、由机构通知参与者；不收集个人敏感信息。<strong>验证：</strong>机构是否愿意第二次付费。</p></div>
+    <div class="card idea no"><p class="label">不建议</p><h3>个人主动去"钓骗子"</h3><p>个人主动接触骗子，可能暴露自己的号码、账号和住址；录音和数据处理也可能有法律风险。个人没有银行级的核实和封堵渠道，套到的信息基本没法用。</p><p class="gate"><strong>同样不建议：</strong>自建诱饵号码、收集或转卖诈骗情报。</p></div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="sec-head">
+    <p class="tag">来源</p>
+    <h2>来源列表</h2>
+    <p class="lead">按一手优先排列。标注"本次未能直接打开"的页面，内容来自检索摘要或其他媒体转引。</p>
+  </div>
+  <ol class="sources">
+    <li><span class="chip ev">公司公告</span> Apate.ai：<a href="https://www.apate.ai/post/apate-ai-raises-us-8-15m-taking-its-autonomous-fleet-of-ai-agents-to-a-global-fight-against-scammers-and-reincorporates-in-the-united-states">US$8.15M 融资与美国重新注册公告</a>（2026-08-31）；<a href="https://www.apate.ai/">官网产品说明</a></li>
+    <li><span class="chip ev">行业案例</span> GSMA：<a href="https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_study/apate-ai-powered-scam-detection-diversion-and-real-time-threat-intelligence/">Apate 与 TPG 试点案例</a>（本次未能直接打开）</li>
+    <li><span class="chip ev">高校</span> Macquarie University Lighthouse：<a href="https://lighthouse.mq.edu.au/article/june-2023/scamming-the-scammers">Scamming the scammers</a>（2023-06，本次未能直接打开）</li>
+    <li><span class="chip ev">官方数据</span> Scamwatch：<a href="https://www.scamwatch.gov.au/system/files/targeting-scams-report-2024.pdf">Targeting Scams 2024</a>；NASC：<a href="https://www.nasc.gov.au/system/files/targeting-scams-report-2025.pdf">Targeting Scams 2025</a>（本次未能直接打开）</li>
+    <li><span class="chip ev">监管</span> 英国 PSR：<a href="https://www.psr.org.uk/our-work/app-scams/">APP 诈骗强制赔付</a>；Jones Day：<a href="https://www.jonesday.com/en/insights/2025/03/australia-passes-landmark-scam-prevention-legislation">澳大利亚《诈骗防范框架法》解读</a>（2025-03）</li>
+    <li><span class="chip ev">联合国</span> 联合国人权高专办 2023-08-29 关于东南亚诈骗园区被贩卖人员的新闻稿（本次未能直接打开，经检索摘要转引）</li>
+    <li><span class="chip ev">媒体</span> TechCrunch：<a href="https://techcrunch.com/2026/10/14/apate-sends-ai-agents-undercover-to-get-scammed-so-they-can-gather-fraud-intelligence/">Apate sends AI agents undercover…</a>（2026-10-14）</li>
+    <li><span class="chip ev">媒体</span> Startup Daily：<a href="https://www.startupdaily.net/topic/funding/anti-scammer-startup-apate-ai-nabs-11-4-million-seed-raise-amid-us-move/">A$11.4M 种子轮报道</a>；FinTech Global：<a href="https://fintech.global/2026/09/01/apate-ai-raises-8-15m-to-fight-fraud-with-ai-agents/">融资报道</a>（2026-09-01）</li>
+    <li><span class="chip ev">媒体</span> 36Kr Europe：<a href="https://eu.36kr.com/en/p/4028474386780804">Apate 报道（含 CBA 76% 不能单独归因的说明）</a></li>
+    <li><span class="chip ev">二手聚合</span> BigGo Finance：<a href="https://finance.biggo.com/news/040a214f-a015-4963-beb1-ccf760141aef">Apate 报道（约 20 万人设、6 周 60 万通等说法）</a></li>
+    <li><span class="chip ev">公司新闻稿</span> Virgin Media O2：<a href="https://news.virginmediao2.co.uk/o2-unveils-daisy-the-ai-granny-wasting-scammers-time/">Daisy AI 奶奶</a>（2024-11-14）；Marketing Week：<a href="https://www.marketingweek.com/o2-ai-granny-scammers-public/">Daisy 营销复盘</a></li>
+    <li><span class="chip ev">公司产品页</span> Netcraft：<a href="https://www.netcraft.com/solutions/by-service/conversational-scam-intelligence/">Conversational Scam Intelligence</a>（本次未能直接打开）</li>
+    <li><span class="chip ev">论文</span> arXiv：<a href="https://arxiv.org/abs/2509.08493">2509.08493，LLM 钓骗系统实测</a>（2025-09）</li>
+  </ol>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    研究截至 2026-10-18。"公司自报"数字未经第三方独立核实；推断内容已在正文标注。本页不构成投资建议。
+  </div>
+</footer>
+
+<script>
+(function () {
+  // 核对表筛选
+  var buttons = document.querySelectorAll('[data-filter]');
+  var claims = document.querySelectorAll('#claims-list .claim');
+  var countEl = document.getElementById('claim-count');
+  function applyFilter(key) {
+    var shown = 0;
+    claims.forEach(function (c) {
+      var hit = key === 'all' || c.getAttribute('data-v') === key;
+      c.setAttribute('data-hidden', hit ? 'false' : 'true');
+      if (hit) shown += 1;
+    });
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-filter') === key ? 'true' : 'false'); });
+    countEl.textContent = '显示 ' + shown + ' / ' + claims.length + ' 条';
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { applyFilter(b.getAttribute('data-filter')); }); });
+  applyFilter('all');
+
+  // 17 年计算器
+  var HOURS_PER_YEAR = 8766;      // 365.25 × 24
+  var FTE_HOURS = 2000;           // 标准全职人年
+  var WORKFORCE = 220000;         // OHCHR 2023：缅甸 12 万 + 柬埔寨 10 万
+  var minEl = document.getElementById('min');
+  var convEl = document.getElementById('conv');
+  var presetBtns = document.querySelectorAll('[data-min]');
+  function fmt(n, d) { return n.toLocaleString('zh-CN', { maximumFractionDigits: d, minimumFractionDigits: d }); }
+  function update(announce) {
+    var m = parseFloat(minEl.value);
+    var conv = parseFloat(convEl.value) * 10000;
+    var hours = conv * m / 60;
+    var years = hours / HOURS_PER_YEAR;
+    var fte = hours / FTE_HOURS;
+    var share = hours / (WORKFORCE * FTE_HOURS) * 100;
+    document.getElementById('min-val').textContent = fmt(m, 1);
+    document.getElementById('conv-val').textContent = fmt(parseFloat(convEl.value), 0);
+    document.getElementById('o-hours').textContent = fmt(Math.round(hours), 0);
+    document.getElementById('o-years').textContent = fmt(years, 1) + ' 年';
+    document.getElementById('o-fte').textContent = fmt(fte, 0) + ' 人年';
+    document.getElementById('o-share').textContent = fmt(share, 3) + '%';
+    if (announce) document.getElementById('readout').textContent =
+      '按 ' + fmt(parseFloat(convEl.value), 0) + ' 万次、每次 ' + fmt(m, 1) + ' 分钟算，骗子累计被占用约 ' + fmt(years, 1) +
+      ' 年，相当于 ' + fmt(fte, 0) + ' 个全职人年，只占 22 万人一年工时的 ' + fmt(share, 3) + '%。';
+    presetBtns.forEach(function (b) { b.setAttribute('aria-pressed', Math.abs(parseFloat(b.getAttribute('data-min')) - m) < 0.05 ? 'true' : 'false'); });
+  }
+  // 拖动时只刷新数字；松手（change）或点预设时才刷新播报摘要，避免读屏连续播报
+  minEl.addEventListener('input', function () { update(false); });
+  convEl.addEventListener('input', function () { update(false); });
+  minEl.addEventListener('change', function () { update(true); });
+  convEl.addEventListener('change', function () { update(true); });
+  presetBtns.forEach(function (b) { b.addEventListener('click', function () { minEl.value = b.getAttribute('data-min'); update(true); }); });
+  update(true);
+})();
+</script>
+</body>
+</html>

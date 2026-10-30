@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>别急着写代码,也别急着照抄:一段副业建议的证据边界</title>
+<meta name="description" content="拆解陈一行短视频「程序员副业去技术化」:三条主张各停在证据能支持的位置,附模仿边界对照表与投入决策分支。">
+<style>
+/* ===== tokens:设计字面量只在 :root;比例数据(.sNN)与媒体查询阈值 40rem/60rem 为已注明例外 ===== */
+:root{
+  --c-bg:#eef1f5;--c-surface:#ffffff;--c-surface-2:#f6f8fa;--c-ink:#17202b;--c-ink-2:#4a5566;--c-ink-3:#6f7a8a;
+  --c-line:#d5dbe3;--c-brand:#1d4e89;--c-brand-2:#dfe9f5;--c-ok:#1f6f4a;--c-ok-2:#e2f1e8;--c-warn:#8a5a00;--c-warn-2:#e9e5db;
+  --c-bad:#9b2c2c;--c-bad-2:#f3e3e3;--c-note:#2f3a4a;--c-track:#e3e8ee;--c-fill:#1d4e89;--c-fill-2:#5b8ac4;--c-fill-3:#a9c1dd;
+  --f-sans:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
+  --fs-0:0.8125rem;--fs-1:0.9375rem;--fs-2:1.0625rem;--fs-3:1.25rem;--fs-4:1.625rem;--fs-5:2.25rem;--fs-6:3rem;
+  --lh-tight:1.25;--lh:1.7;--fw-b:700;--fw-m:600;--fw-r:400;
+  --sp-1:0.25rem;--sp-2:0.5rem;--sp-3:0.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-7:3rem;--sp-8:4.5rem;
+  --r-1:0.25rem;--r-2:0.5rem;--r-3:0.75rem;--bw:1px;--bw-2:3px;--bw-3:6px;
+  --w-max:72rem;--w-text:46rem;--track-h:0.5rem;--track-h-2:1.5rem;--pct:1%;--full:100%;--half:50%;--zero:0;
+  --sh:0 1px 2px rgba(23,32,43,.06),0 4px 14px rgba(23,32,43,.05);
+  --grid-min:14rem;--grid-min-2:18rem;--col-label:7.5rem;--col-num:4.5rem;--opacity-dim:.75;--step-w:2rem;
+  --clip-hide:inset(50%);
+}
+/* 媒体查询阈值统一为 40rem(手机→平板)与 60rem(平板→桌面),规则允许的例外 */
+/* ===== 数据类:比例/分值作为内容数据 ===== */
+.s1{--score:1}
+.s2{--score:2}
+.s3{--score:3}
+.s4{--score:4}
+.s5{--score:5}
+.s6{--score:6}
+.s7{--score:7}
+.s8{--score:8}
+.s9{--score:9}
+.s10{--score:10}
+.s11{--score:11}
+.s12{--score:12}
+.s13{--score:13}
+.s14{--score:14}
+/* ===== 结构 ===== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--f-sans);font-size:var(--fs-2);line-height:var(--lh)}
+a{color:var(--c-brand)}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:0}
+h1{font-size:var(--fs-5);font-weight:var(--fw-b)}
+h2{font-size:var(--fs-4);font-weight:var(--fw-b);margin-bottom:var(--sp-4)}
+h3{font-size:var(--fs-3);font-weight:var(--fw-b)}
+h4{font-size:var(--fs-2);font-weight:var(--fw-m);color:var(--c-brand)}
+p,li{margin:0}
+p+p{margin-top:var(--sp-3)}
+ul,ol{padding-left:var(--sp-5);margin:0}
+li+li{margin-top:var(--sp-2)}
+.wrap{max-width:var(--w-max);margin:0 auto;padding:0 var(--sp-4)}
+.text{max-width:var(--w-text)}
+.sr{position:absolute;clip-path:var(--clip-hide);width:var(--bw);height:var(--bw);overflow:hidden}
+/* 顶部 */
+.hero{background:var(--c-surface);border-bottom:var(--bw) solid var(--c-line);padding:var(--sp-7) 0 var(--sp-6)}
+.kicker{color:var(--c-ink-3);font-size:var(--fs-1);font-weight:var(--fw-m);margin-bottom:var(--sp-3)}
+.lede{font-size:var(--fs-3);color:var(--c-ink-2);margin-top:var(--sp-4)}
+.verdict{margin-top:var(--sp-5);padding:var(--sp-4) var(--sp-5);background:var(--c-brand-2);border-left:var(--bw-3) solid var(--c-brand);border-radius:var(--r-2)}
+.verdict p+p{margin-top:var(--sp-2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--grid-min),1fr));gap:var(--sp-3);margin-top:var(--sp-5);padding:0;list-style:none}
+.stats li{background:var(--c-surface-2);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.stats b{display:block;font-size:var(--fs-4);color:var(--c-brand);line-height:var(--lh-tight)}
+.stats span{display:block;color:var(--c-ink-2);font-size:var(--fs-1);margin-top:var(--sp-1)}
+.tag{display:inline-block;font-size:var(--fs-0);font-weight:var(--fw-m);padding:0 var(--sp-2);border-radius:var(--r-1);line-height:var(--lh);vertical-align:middle}
+.tag-self{background:var(--c-warn-2);color:var(--c-warn)}
+.tag-fact{background:var(--c-ok-2);color:var(--c-ok)}
+.tag-infer{background:var(--c-brand-2);color:var(--c-brand)}
+.tag-local{background:var(--c-surface-2);color:var(--c-ink-2);border:var(--bw) solid var(--c-line)}
+.tags{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-top:var(--sp-4)}
+.tags+.sec-note{margin-top:var(--sp-3);margin-bottom:0;font-size:var(--fs-1)}
+/* 目录 */
+.toc{background:var(--c-surface);border-bottom:var(--bw) solid var(--c-line);padding:var(--sp-3) 0}
+.toc ol{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);list-style:none;padding:0;font-size:var(--fs-1)}
+.toc li{margin:0}
+.toc a{text-decoration:none;color:var(--c-ink-2)}
+.toc a:hover{color:var(--c-brand);text-decoration:underline}
+/* 章节 */
+section.sec{padding:var(--sp-7) 0}
+section.sec+section.sec{border-top:var(--bw) solid var(--c-line)}
+.sec-note{color:var(--c-ink-2);margin-bottom:var(--sp-5)}
+.card{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);box-shadow:var(--sh)}
+.card+.card{margin-top:var(--sp-4)}
+.grid{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--grid-min-2),1fr))}
+.grid .card+.card{margin-top:0}
+/* 时间线 */
+.tl{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.tl li{display:grid;grid-template-columns:var(--col-label) 1fr;gap:var(--sp-3);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.tl time{font-weight:var(--fw-b);color:var(--c-brand)}
+/* 公式 */
+.formula{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:stretch;list-style:none;padding:0}
+.formula li{flex:1 1 var(--grid-min);background:var(--c-surface);border-top:var(--bw-2) solid var(--c-brand);border-radius:var(--r-2);padding:var(--sp-4);box-shadow:var(--sh);margin:0}
+.formula b{display:block;font-size:var(--fs-3);margin-bottom:var(--sp-2)}
+.formula p{color:var(--c-ink-2);font-size:var(--fs-1)}
+/* 比例条 */
+.ratio{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.ratio li{display:grid;grid-template-columns:var(--col-label) 1fr var(--col-num);align-items:center;gap:var(--sp-3);margin:0}
+.ratio .lab{font-weight:var(--fw-m)}
+.track{height:var(--track-h-2);background:var(--c-track);border-radius:var(--r-1);overflow:hidden}
+.fill{display:block;height:var(--full);width:calc(var(--score) * var(--pct));background:var(--c-fill)}
+.fill-2{background:var(--c-fill-2)}
+.fill-3{background:var(--c-fill-3)}
+.num{text-align:right;font-weight:var(--fw-b);color:var(--c-brand)}
+.ratio-title{font-weight:var(--fw-m);color:var(--c-ink-2);margin-bottom:var(--sp-2)}
+.two{display:grid;gap:var(--sp-5);grid-template-columns:1fr}
+/* 流程 */
+.flow{list-style:none;padding:0;display:grid;gap:var(--sp-3);counter-reset:step}
+.flow li{counter-increment:step;display:grid;grid-template-columns:var(--step-w) 1fr;gap:var(--sp-3);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-4);margin:0}
+.flow li::before{content:counter(step);width:var(--step-w);height:var(--step-w);border-radius:var(--half);background:var(--c-brand);color:var(--c-surface);font-weight:var(--fw-b);display:grid;place-items:center;font-size:var(--fs-1)}
+.flow b{display:block;font-size:var(--fs-2)}
+.flow .tool{color:var(--c-ink-3);font-size:var(--fs-0);margin-top:var(--sp-1)}
+.flow .human{border-left:var(--bw-3) solid var(--c-ok)}
+.flow .ai{border-left:var(--bw-3) solid var(--c-brand)}
+.legend{display:flex;gap:var(--sp-4);flex-wrap:wrap;font-size:var(--fs-1);color:var(--c-ink-2);margin-bottom:var(--sp-4)}
+.legend span::before{content:"";display:inline-block;width:var(--sp-3);height:var(--sp-3);border-radius:var(--r-1);margin-right:var(--sp-2);vertical-align:middle;background:var(--c-brand)}
+.legend .lg-h::before{background:var(--c-ok)}
+/* 判定 */
+.claim{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);box-shadow:var(--sh)}
+.claim+.claim{margin-top:var(--sp-4)}
+.claim-head{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-3);align-items:baseline;justify-content:space-between;margin-bottom:var(--sp-3)}
+.v{font-size:var(--fs-1);font-weight:var(--fw-b);padding:var(--sp-1) var(--sp-3);border-radius:var(--r-1)}
+.v-ok{background:var(--c-ok-2);color:var(--c-ok)}
+.v-part{background:var(--c-warn-2);color:var(--c-warn)}
+.v-open{background:var(--c-surface-2);color:var(--c-ink-2);border:var(--bw) solid var(--c-line)}
+.claim-body{display:grid;gap:var(--sp-4);grid-template-columns:1fr}
+.claim-body h4{margin-bottom:var(--sp-1)}
+.claim-body .limit h4{color:var(--c-warn)}
+.claim .judge{margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:var(--bw) solid var(--c-line)}
+blockquote{margin:0;padding:var(--sp-3) var(--sp-4);background:var(--c-surface-2);border-left:var(--bw-2) solid var(--c-line);color:var(--c-note);border-radius:var(--r-1)}
+blockquote+p{margin-top:var(--sp-3)}
+/* 数字卡 */
+.facts{display:grid;gap:var(--sp-3);grid-template-columns:repeat(auto-fit,minmax(var(--grid-min),1fr));list-style:none;padding:0}
+.facts li{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-4);margin:0}
+.facts b{display:block;font-size:var(--fs-4);color:var(--c-brand);line-height:var(--lh-tight)}
+.facts span{display:block;color:var(--c-ink-2);font-size:var(--fs-1);margin-top:var(--sp-2)}
+/* 表 */
+table{width:var(--full);border-collapse:collapse;background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);font-size:var(--fs-1)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-3) var(--sp-4);border-bottom:var(--bw) solid var(--c-line)}
+th{background:var(--c-surface-2);font-weight:var(--fw-m)}
+tr:last-child td{border-bottom:0}
+.tbl{overflow-x:auto}
+/* 行动 */
+.weeks{list-style:none;padding:0;display:grid;gap:var(--sp-4)}
+.weeks li{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);margin:0;box-shadow:var(--sh)}
+.weeks h3{margin-bottom:var(--sp-2)}
+.weeks .kpi{margin-top:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:var(--c-ok-2);border-radius:var(--r-2);color:var(--c-ok);font-weight:var(--fw-m)}
+.weeks .stop{margin-top:var(--sp-2);padding:var(--sp-3) var(--sp-4);background:var(--c-warn-2);border-radius:var(--r-2);color:var(--c-warn)}
+/* 自检 */
+.check{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.check li{background:var(--c-surface);border-left:var(--bw-3) solid var(--c-warn);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.check+h3{margin-top:var(--sp-5)}
+.two h3{margin-bottom:var(--sp-3)}
+/* 来源 */
+.src{font-size:var(--fs-1)}
+.src li{margin-top:var(--sp-2)}
+.src-meta{display:block;color:var(--c-ink-3);font-size:var(--fs-0)}
+.cite{text-decoration:none;font-size:var(--fs-0);vertical-align:super;line-height:var(--lh-tight)}
+footer{padding:var(--sp-6) 0 var(--sp-8);color:var(--c-ink-3);font-size:var(--fs-0)}
+/* 响应式 */
+@media (min-width:40rem){
+  h1{font-size:var(--fs-6)}
+  .two{grid-template-columns:1fr 1fr}
+  .claim-body{grid-template-columns:1fr 1fr}
+}
+@media (min-width:60rem){
+  .wrap{padding:0 var(--sp-6)}
+  .claim-body{grid-template-columns:1fr 1fr 1fr}
+}
+@media (max-width:40rem){
+  .tl li{grid-template-columns:1fr}
+  .ratio li{grid-template-columns:1fr var(--col-num)}
+  .ratio .lab{grid-column:1/-1}
+  .ratio .num{text-align:right}
+  .toc ol{gap:var(--sp-2) var(--sp-3)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.sub{margin-top:var(--sp-6);margin-bottom:var(--sp-3)}
+.claim-body p.tag{margin-top:var(--sp-3)}
+.claim-body p+p{margin-top:var(--sp-3)}
+.stats li:nth-child(2) b{color:var(--c-warn)}
+.stats li:nth-child(3) b{color:var(--c-ink-2)}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">短视频拆解 · 讲者陈一行(自称前大厂架构师,现在上海做自己的产品)· 整理于 2026-10-03</p>
+    <h1>别急着写代码,也别急着照抄:一段副业建议的证据边界</h1>
+    <p class="lede text">讲者把自己一次亏钱的副业经历,总结成两条口号:「任何需要写代码才能启动的项目都是伪风口」「只有死人才会去蓝海,活人都在红海」。这页把每条主张拆成「他说什么—证据证明什么—还不能推出什么—你怎么判断」,结论停在证据真正能支持的位置。<a class="cite" href="#s9">[9]</a></p>
+    <div class="verdict text">
+      <p><strong>三个记忆点:</strong>少自研,不等于不写代码;有市场,不等于你能获客;研究需求,不等于拿到内容使用授权。</p>
+      <p>讲者的全部经营数字(投入 5 万、月流水 3 万、一年几十万)都是自述或转述,本次未独立核验;下文凡出现这些数字,只代表「他这样说」。</p>
+    </div>
+    <ul class="stats">
+      <li><b>有条件支持</b><span>技术投入:对可人工验证、人工交付的项目,少做前期自研有经验依据</span></li>
+      <li><b>证据不支持</b><span>市场选择:「蓝海就是死海」与原著定义不同;「红海对资源少的人更优」缺比较证据</span></li>
+      <li><b>须分开判</b><span>模仿边界:抄需求与价格是研究;复制他人课程内容是另一件事,要核授权</span></li>
+    </ul>
+    <div class="tags">
+      <span class="tag tag-self">亲历自述 / 讲者转述</span>
+      <span class="tag tag-fact">官方条款 / 作者原文</span>
+      <span class="tag tag-infer">媒体报道 / 媒体转引</span>
+      <span class="tag tag-local">同行观点 / 整理者推断</span>
+    </div>
+    <p class="sec-note">标签只标来源性质,不代表证据分量。判定分三档:<strong>有条件支持</strong>(限缩后的版本有证据)、<strong>所列证据不支持</strong>(原命题超出证据)、<strong>具体事实待核</strong>(讲者作了自述或转述,本页尚未独立核验)。</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <div class="wrap">
+    <ol>
+      <li><a href="#claims">一、三组判定</a></li>
+      <li><a href="#mix">二、模仿边界对照表</a></li>
+      <li><a href="#flow">三、投入决策:先问最不确定的是什么</a></li>
+      <li><a href="#open">四、落地前仍缺的信息</a></li>
+      <li><a href="#sources">来源</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main>
+<section class="sec" id="claims">
+  <div class="wrap">
+    <h2>一、三组判定</h2>
+    <p class="sec-note text">每组按同一节奏:他说什么 → 证据实际证明什么 → 还不能推出什么 → 读者如何判断。</p>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>1. 技术投入:「任何需要写代码才能启动的项目都是伪风口」</h3>
+        <span class="v v-ok">限缩版有条件支持 · 原命题不支持</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">自述 / 转述</span></h4>
+          <blockquote>「去年搞副业……砸了 5 万块钱,买了服务器买了各种 API 接口,没日没夜写了三个月代码,一分钱都没挣着,服务器费还倒贴 2000。」</blockquote>
+          <p>再举两个对照:上海一位做 AI 头像的年轻人,不是程序员、不装 Python,在闲鱼花 9.9 买教程,用开源 Stable Diffusion 给客户出图,一单 29.9,「一个月流水 3 万」;一位前同事技术大牛自己训模型、自己写 Web 端,「折腾半年没上线,风口早就过去了」。结论是「商业的本质是交易,不是构建系统」「能用 Excel 解决的绝不写代码,能人工解决的绝不自动化」。<a class="cite" href="#s9">[9]</a></p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-fact">作者原文</span></h4>
+          <p>Paul Graham 2013 年的文章支持「早期手工获客、手工交付、瓶颈出现后再自动化」:Stripe 创始人对同意试用的人说「把你的笔记本给我」,当场装好;他自己在 Viaweb 时替商户建站,建到一半缺功能就花两小时补上再继续。<a class="cite" href="#s1">[1]</a></p>
+          <p class="tag tag-local">书评摘要</p>
+          <p>《The Mom Test》建议用对方付出的实质性承诺来检验早期客户兴趣:承诺可以是时间、声誉或金钱,不能把夸奖当作需求已获验证的证据。<a class="cite" href="#s2">[2]</a></p>
+          <p class="tag tag-local">同行观点</p>
+          <p>Pieter Levels:「他们得拿出信用卡付钱,我才知道想法被验证了」,其 Avatar AI 启动页只有 HTML、Stripe 支付链接和 Typeform。<a class="cite" href="#s10">[10]</a> 刘小排:填空题「什么人、什么场景、愿意花多少钱、解决什么问题」答不出就不写代码。<a class="cite" href="#s11">[11]</a></p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>Viaweb 的例子恰恰在写代码。</strong>Graham 支持的是「少做不必要的前期系统」,不是「凡需代码皆不值得做」。</li>
+            <li><strong>头像案例是「少自研」,不是「去技术」。</strong>它依赖别人已做好的模型和教程;「不装 Python」说明操作方式,不说明技术不重要。</li>
+            <li><strong>头像卖家与自研同事不构成因果对照。</strong>两人的客户、渠道、投入时间、交付要求是否可比,视频没说;即使都属实,也只能说「出现过两种结果」,推不出「追求壁垒就是逃避销售」这种动机判断。</li>
+            <li><strong>「承诺」不能压成「必须先付钱」。</strong>书里三类承诺并列;产品风险大的项目作者也承认不能只靠对话验证。<a class="cite" href="#s2">[2]</a></li>
+            <li><strong>数字口径。</strong>「砸了 5 万」是投入,不是已核净亏损;「2000」是否含在 5 万内不明;「流水 3 万」不是利润;「去年」须锚定视频发布日期,日期未知。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>对可以用聊天、表格、人工交付先跑起来的项目,减少前期系统建设有经验依据;技术可行性本身存疑的项目,则需要最小原型,而不是禁止写代码。把「不写代码」当信仰,和把「技术牛」当信仰,是同一种错误换了方向。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>1b. 头像案例的三层证据:许可、经营事实、收益代表性</h3>
+        <span class="v v-open">具体事实待核</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>工具许可 <span class="tag tag-fact">官方条款</span></h4>
+          <p>所核 stable-diffusion-v1-4 模型卡写明许可为 CreativeML OpenRAIL-M:可以把模型用于商业或作为服务,许可方不主张生成结果的权利,但附带禁止有害用途等限制,再分发时须沿用同样限制。<a class="cite" href="#s3">[3]</a> 它不等于保证输出不侵犯第三方权利,也不替代对具体模型版本、素材来源和销售平台条款的核查。</p>
+        </div>
+        <div>
+          <h4>市场有多大、有多挤 <span class="tag tag-infer">媒体转引</span></h4>
+          <p>脑极体 2026 年 8 月文章转引闲鱼数据:今年上半年 AI 服务订单 981.6 万单,同比增长 157%;「闲鱼 AI 卖家月均成交额不足 900 元」;「9.9 元、19.9 元的基础订单比比皆是」;「月入过万」案例「只是极少数全职深耕、审美出众、技术过硬的头部玩家」;并提到有 AI 绘画平台更新协议禁止生成内容商用。<a class="cite" href="#s4">[4]</a></p>
+          <p>该文没有交代均值的统计方法,且同一订单数先称「上半年」后称「年度」;能确认的是「文章如此报道」,不是「平台口径已核实」。</p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li>全平台 AI 服务卖家的均值,和特定头像卖家未必同类、同期、同样工时;<strong>不能用一个宽口径均值去给一个未核个案贴「头部」或「虚假」标签。</strong></li>
+            <li>所列模型许可允许附条件商用,媒体文章报道了 AI 服务交易;<strong>这两点并未核实视频中那位头像商家的经营事实</strong>,更不能据此估计新进入者的收益。</li>
+            <li>3 万与 897 这两个数来源、样本、时间口径都不一致,不能直接比较。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>把这个故事当作一则讲者转述、尚待核实的经营案例,用来提出待验证的问题;不据此设定新手收益预期,也不能凭平台均值直接判它为假。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>2. 市场选择:「只有死人才会去蓝海,活人都在红海;蓝海就是死海」</h3>
+        <span class="v v-part">术语纠偏有据 · 适用结论不支持</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">自述</span></h4>
+          <blockquote>「蓝海意味着你根本就没有市场去验证,意味着你要花钱去教育你的用户。」</blockquote>
+          <p>自述案例:做过一个面向家长的 AI 分析工具(原话为「给京东家长的」,转写存疑,本页不替讲者选定人群),自以为是蓝海,「结果家长根本不信 AI,只信名师」;对比隔壁做公务员资料打包、「内容全是网上抄的」、每天十条视频「一年赚几十万」。<a class="cite" href="#s9">[9]</a></p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-fact">作者原文</span></h4>
+          <p>《蓝海战略》作者官方定义:红海是「今天所有已存在的产业,已知的市场空间」;蓝海是「今天尚不存在的产业,未知的、未被竞争污染的市场空间」;蓝海战略是「同时追求差异化与低成本,以开辟新市场空间、创造新需求」。<a class="cite" href="#s5">[5]</a></p>
+          <p>蓝海指新的市场空间,蓝海战略强调通过价值创新开辟这类空间,并不等于随便找一个没人做过的点子。本页从这段经历中提炼的提醒是:不要把竞争者少当作需求已经得到验证。这是对经验的限缩,不是讲者原话,也不足以否定蓝海战略。</p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>「红海对无流量、无资本的个人更优」是补出来的结论。</strong>需求有过交易,和新进入者能否获客、留下利润,是两件事;拥挤市场里渠道、价格战和买方议价也可能让资源少的人更难进。</li>
+            <li><strong>家长 AI 工具的失败原因只是讲者归因。</strong>讲者把失败归因于「家长不信 AI」;现有材料未排除产品效果、定价、渠道、目标用户选择等原因。少量反馈也推不出「全体家长只信名师」。</li>
+            <li><strong>资料卖家的「一年几十万」是对他人的转述</strong>,口径(流水还是利润)不明;「内容全网上抄」涉及哪些他人受保护的表达、相关使用是否有授权或法定依据,见第二节。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>「已有交易」是需求线索,值得优先看;但进不进去,要核自己的获客渠道、交付能力和利润空间,不能因为别人在赚钱就默认自己也能分到。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>3. 模仿边界:「别人 199 的课火了,买回来拆解优化卖 99,不叫抄袭,叫市场验证后的降维打击」</h3>
+        <span class="v v-part">商业效果待核 · 合法性须逐项审查</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">自述</span></h4>
+          <blockquote>「这其实不叫抄袭,这叫市场验证后的降维打击。别把你的才华浪费在发明轮子上,要去正在流动的地方,拿个盆接住。」「不要脸比写好代码重要 100 倍。」</blockquote>
+          <p>讲者说的是「买回来拆解、优化、再卖」,没有交代拆解到什么程度、授权如何、独立创作边界在哪。本页不把它改写成「教人录屏转卖」,只指出这句话没有回答的问题。</p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-infer">媒体报道</span></h4>
+          <p>两件行为匹配的报道:北京海淀法院 2024 年判决,被告通过微信、网盘传播销售注会、初级会计课程视频一万余部、每份 50 元,以侵犯著作权罪判有期徒刑三年、罚金四万元。<a class="cite" href="#s6">[6]</a> 上海虹口法院 2026 年判决,认定授课内容「属于受法律保护的口述作品」,被告发送的「前 20 节课程的文字内容……构成实质性相似」,判赔 1.5 万元。<a class="cite" href="#s7">[7]</a> 两件均为媒体报道,未核裁判文书原件。</p>
+          <p class="tag tag-local">同行观点</p>
+          <p>刘小排:「抄需求和商业模式,不抄 UI」;dontbesilent:「对标的本质是降维模仿」,同时承认它与原创、版权伦理有张力。<a class="cite" href="#s11">[11]</a><a class="cite" href="#s12">[12]</a> 某公众号文章把「找对标,像素级模仿」列为赚钱最快方式之一,理由是「用户不在乎你是原创还是模仿,只在乎能不能解决他的问题」。<a class="cite" href="#s13">[13]</a></p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>商业上:</strong>某课卖得好,不证明你降到 99 就能获客,更不证明计入获客、交付、售后后还赚钱。侵权案例对这一点没有证明力。</li>
+            <li><strong>法律上:</strong>改写、重录、降价都不是自动排除侵权的条件;反过来,有授权的内容也不是一律不能用。「只要自讲就没事」「抄编排一定不行」两种绝对说法都需要换成逐项审查(见第二节)。</li>
+            <li><strong>归因:</strong>直接传播盗版的刑案<a class="cite" href="#s8">[8]</a>,不能不经区分套用到所有「拆解重讲」;一般相似争议也不该用刑事大案吓人。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>研究公开的需求、价格、交付方式,然后自主形成内容,是正常的市场研究;使用他人具体内容时核查权利与授权,不能以「网上找得到」「我买过课」「我优化过」为依据。</p>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="mix">
+  <div class="wrap">
+    <h2>二、模仿边界对照表:借鉴什么、具体做了什么、要核什么</h2>
+    <p class="sec-note text">把「研究需求」与「复制内容」分开,也把「自主创作」与「已有授权」分开。右列是核查项,不是绿灯或红灯;具体个案请咨询知识产权律师。<span class="tag tag-local">整理者推断</span></p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>借鉴什么</th><th>具体做了什么</th><th>需要核查什么</th></tr></thead>
+        <tbody>
+          <tr><td>需求与人群</td><td>看谁在为什么问题付钱、付多少、在哪买</td><td>你能否触达同一群人;他们换供应商的成本</td></tr>
+          <tr><td>定价与套餐</td><td>参考 9.9 / 29.9 / 199 这类价位带设计自己的报价</td><td>计入平台费率、工具费、沟通与修改工时后的单位利润</td></tr>
+          <tr><td>交付形式与流程</td><td>学别人用什么渠道接单、怎么交付、怎么售后</td><td>平台规则;所用工具的许可是否允许商用<a class="cite" href="#s3">[3]</a></td></tr>
+          <tr><td>内容框架</td><td>借鉴选题方向、章节划分、标题思路,自己写讲稿</td><td>核查你的成稿与原课是否实质性相似<a class="cite" href="#s7">[7]</a></td></tr>
+          <tr><td>他人成品</td><td>翻录、转录、改几个词、拆成文字稿售卖或引流</td><td>据媒体报道,两案中的具体复制传播行为被法院认定侵权<a class="cite" href="#s6">[6]</a><a class="cite" href="#s7">[7]</a>;购课本身不当然授予复制、改编或对外传播的权限,须核查权利状态及是否有覆盖拟用行为的授权或法定依据<a class="cite" href="#s14">[14]</a></td></tr>
+          <tr><td>公开资料汇编</td><td>把网上免费资料打包成「公务员资料包」</td><td>核查每份资料的权利状态与使用依据;若采用他人具有独创性的选择或编排,还可能涉及汇编作品的著作权<a class="cite" href="#s14">[14]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="flow">
+  <div class="wrap">
+    <h2>三、投入决策:先问「现在最不确定的是什么」</h2>
+    <p class="sec-note text">下面是整理者综合 Graham「瓶颈后再自动化」、Mom Test「用承诺检验早期客户兴趣」与同行经验改写的行动建议,<strong>不是讲者原话,也不是这些来源共同证明的必胜流程</strong>。判断办法是:先找出当前最不确定的一项,按风险选最低成本的有效试验,期限与投入上限按项目自定。<span class="tag tag-local">整理者建议</span></p>
+    <div class="grid">
+      <article class="card">
+        <h3>分支 A:不确定有没有人要</h3>
+        <p>先明确付费者、实际问题、现有替代方案和触达办法。用聊天记录、表格、人工交付跑最小闭环;看对方是否付出时间、声誉或金钱三类承诺之一。<a class="cite" href="#s2">[2]</a></p>
+        <p>证据不足就不做重投入,但允许用小原型回答关键疑问。</p>
+      </article>
+      <article class="card">
+        <h3>分支 B:不确定技术做不做得到</h3>
+        <p>做必要的原型验证可行性,不做完整系统。这里「不写代码」不成立;该写的是最窄的一段。</p>
+        <p>工具可以跳级:现成模型、开源流程、脚本、自写系统都是选项,也可以长期停在人工阶段。</p>
+      </article>
+      <article class="card">
+        <h3>分支 C:不确定获客与成本</h3>
+        <p>查价格、获客成本、平台与工具费、交付与售后工时,再对固定成本和个人工时回报。不要用「利润要覆盖认知差」这类无法计量的词替代账目。</p>
+        <p>出现第一笔付费不等于获客、持续交付和盈利都验证了;防止从「代码迷信」转向「首单迷信」。</p>
+      </article>
+    </div>
+    <h3 class="sub">三条共同约束</h3>
+    <ul class="check">
+      <li><strong>事先定好可承受投入与测试期限</strong>,未达标就停止当前投入或修改假设;期限按项目定,不套通用死线。</li>
+      <li><strong>自动化的时机</strong>:当重复劳动、错误或响应速度成为可观察的瓶颈,再比较自动化收益与开发、维护成本。<a class="cite" href="#s1">[1]</a></li>
+      <li><strong>用别人的内容前</strong>,按第二节对照表核权利与授权;用别人的模型前,核许可版本与平台条款。<a class="cite" href="#s3">[3]</a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="open">
+  <div class="wrap">
+    <h2>四、落地前仍缺的信息</h2>
+    <p class="sec-note text">这些是整理者认为读者落地前还需要补的事实,不代表讲者刻意隐瞒,也不排除完整视频里提过。</p>
+    <div class="two">
+      <div>
+        <h3>讲者数字的口径提示</h3>
+        <ul class="check">
+          <li>「月流水 3 万」是未经核验的流水转述,不能当作利润或典型收益,也不能与不同口径的平台均值直接比较。</li>
+          <li>「一年几十万」同样是转述,流水还是利润不明。</li>
+          <li>「砸了 5 万」是投入,是否即净亏损、是否含「倒贴 2000」,视频没说。</li>
+          <li>讲者履历(大厂架构师)为自称,标题与正文均不替其认证。</li>
+        </ul>
+      </div>
+      <div>
+        <h3>现有材料尚未回答的问题</h3>
+        <ul class="check">
+          <li>AI 头像类目的复购、退款、沟通修改工时,以及平台费率变化。</li>
+          <li>「公务员资料打包」借鉴的是选题、知识点,还是使用了他人受保护的具体表达;无论原资料免费还是付费,都须核查权利状态和使用依据。</li>
+          <li>「拆解优化卖 99」拆到什么程度算自主创作,讲者没有给边界。</li>
+          <li>「家长不信 AI」之外,那次失败还有哪些可能原因。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sources">
+  <div class="wrap">
+    <h2>来源</h2>
+    <p class="sec-note text">「正文已读」指整理者打开原文核对;「仅核摘要」指只核对了可靠摘要;媒体报道的判决未核裁判文书原件。来源性质写在每条之后。</p>
+    <ol class="src">
+          <li id="s1"><a href="https://paulgraham.com/ds.html" rel="noopener">Paul Graham「Do Things That Don&#x27;t Scale」</a><span class="src-meta">2013-07 · 作者经验文章,正文已读</span></li>
+          <li id="s2">Rob Fitzpatrick《The Mom Test》(2013)<span class="src-meta">2026-10-03 核作者官网简介与多篇书评 · 方法论著作,仅核摘要:承诺指时间、声誉或金钱三类</span></li>
+          <li id="s3"><a href="https://huggingface.co/CompVis/stable-diffusion-v1-4" rel="noopener">CompVis「stable-diffusion-v1-4」模型卡(Hugging Face)</a><span class="src-meta">2026-10-03 查看 · 官方条款摘要,正文已读;许可为 CreativeML OpenRAIL-M,仅核该版本</span></li>
+          <li id="s4"><a href="https://www.tmtpost.com/8114147.html" rel="noopener">脑极体「在闲鱼卖AI,普通人的搞钱天堂?」(钛媒体首发,新浪财经转载正文已读)</a><span class="src-meta">2026-08-24 · 媒体转引平台数据;均值统计口径未交代,文中「上半年」与「年度」口径并存</span></li>
+          <li id="s5"><a href="https://www.blueoceanstrategy.com/what-is-blue-ocean-strategy/" rel="noopener">Blue Ocean Strategy 官方网站「What is Blue Ocean Strategy」</a><span class="src-meta">2026-10-03 查看 · 作者官方定义,正文已读;原著 Kim &amp; Mauborgne 2005</span></li>
+          <li id="s6"><a href="https://xinwen.bjd.com.cn/content/s6667a09de4b0f6c5abd60d96.html" rel="noopener">北京日报「北京号」:转售盗版网课,男子获刑三年</a><span class="src-meta">2024-06-11 · 媒体报道海淀法院判决,未核裁判文书原件</span></li>
+          <li id="s7"><a href="https://news.qq.com/rain/a/20260903A04XKE00" rel="noopener">腾讯新闻:教培机构靠盗版网课引流?法院:构成侵害作品信息网络传播权</a><span class="src-meta">2026-09-03 · 媒体报道上海虹口法院判决,未核裁判文书原件</span></li>
+          <li id="s8"><a href="https://www.ncac.gov.cn/xxfb/ywxx/202508/t20250801_925366.html" rel="noopener">国家版权局「2024年度全国打击侵权盗版十大案件」</a><span class="src-meta">2025-08-01 · 官方通报,仅核摘要;杭州案同时涉及盗版图书与盗录网课</span></li>
+          <li id="s9">原始分享:陈一行短视频逐字稿<span class="src-meta">2026-10-03 由用户提供 · 主材料;讲者自称前大厂架构师、现在上海做产品,履历未核;视频发布日期未知</span></li>
+          <li id="s10">Pieter Levels 访谈(Lex Fridman Podcast #440)与 12 startups 公开帖<span class="src-meta">2024-08-20 / 2014-03-01 · 公开人物的公开言论,引自整理者人物资料,本次未重核音频</span></li>
+          <li id="s11">刘小排公开文章:《如何提高做产品的成功率?》《我的创业点子好吗》《充分条件 vs 必要条件》<span class="src-meta">2025-05 至 2026-01 · 公开人物的公开文章,引自整理者人物资料</span></li>
+          <li id="s12">dontbesilent 公开帖《100 条思考》<span class="src-meta">2026-05 前后 · 公开人物的公开言论,引自整理者人物资料</span></li>
+          <li id="s13">本机笔记:某公众号文章《如何在一天内开始赚钱》<span class="src-meta">2026-01-23 摘录 · 同行观点,无公开链接</span></li>
+          <li id="s14"><a href="https://zscqj.beijing.gov.cn/zscqj/zwgk/flfg18/436481084/index.html" rel="noopener">《中华人民共和国著作权法》(2020 修正)第十五条(汇编作品)、第二十六条、第二十九条(许可使用范围)</a><span class="src-meta">2021-06-01 施行 · 法律条文,2026-10-03 经搜索摘要核对条号与要旨,未逐字核对全文</span></li>
+    </ol>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <p>整理者说明:本页基于用户提供的逐字稿与上列来源整理;讲者经营数字一律视为自述或转述,未独立核验;「京东家长」为转写存疑原词,未替讲者选定人群。法律部分为一般性边界说明,不构成法律意见。</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>王兴饭否五条心法口播核对：哪些有史料、哪些说过头、普通人能用什么</title>
+<meta name="description" content="对「王兴饭否五条心法」口播逐字稿的 37 条可查主张做证据分级（A 多源核实到 E 与事实不符），拆开史料核查与实践价值，附时间线、五张心法卡、迁移条件表与读者练习。">
+<style>
+/* ===== 1. Design tokens（唯一取值来源；断点字面值只在本节注释登记：--bp-md 760px，--bp-sm 480px） ===== */
+:root{
+  color-scheme:light;
+  --color-bg:#f6f5f1;
+  --color-surface:#ffffff;
+  --color-surface-alt:#f0eee8;
+  --color-ink:#1f2328;
+  --color-ink-2:#4a4f57;
+  --color-ink-3:#595e66;
+  --color-line:#d9d6ce;
+  --color-line-strong:#b9b5aa;
+  --color-accent:#1c4f8f;
+  --color-accent-bg:#e4edf8;
+  --color-accent-ink:#163f73;
+  --color-focus:#2a78d6;
+  --color-quote-bar:#b9b5aa;
+  --color-grade-a:#008300; --color-grade-a-bg:#e3f3e3; --color-grade-a-ink:#135c13;
+  --color-grade-b:#2a78d6; --color-grade-b-bg:#e4edf8; --color-grade-b-ink:#163f73;
+  --color-grade-c:#eda100; --color-grade-c-bg:#fbf0d2; --color-grade-c-ink:#6b4a00;
+  --color-grade-d:#6250d6; --color-grade-d-bg:#ebe8fa; --color-grade-d-ink:#3c2f96;
+  --color-grade-e:#e34948; --color-grade-e-bg:#fbe3e3; --color-grade-e-ink:#8a1f1f;
+  --color-tl-ev:#2a78d6; --color-tl-say:#008300; --color-tl-rec:#eda100;
+  --color-judge-bg:#f0eee8; --color-judge-ink:#4a4f57;
+  --font-body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --fs-xs:.78rem; --fs-sm:.88rem; --fs-md:1rem; --fs-lg:1.15rem; --fs-xl:1.45rem; --fs-2xl:1.9rem; --fs-hero:2.4rem;
+  --lh-tight:1.25; --lh-body:1.65;
+  --fw-regular:400; --fw-medium:500; --fw-bold:700;
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem; --sp-6:2rem; --sp-7:3rem; --sp-8:4rem;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:14px; --radius-pill:999px;
+  --bw-0:0; --bw-1:1px; --bw-2:2px; --bw-4:4px;
+  --shadow-card:0 1px 2px rgba(31,35,40,.06),0 4px 14px rgba(31,35,40,.06);
+  --w-page:1080px; --w-prose:72ch; --w-full:100%; --w-zero:0;
+  --h-bar:28px; --size-dot:12px; --size-num:1.9rem; --size-tl-dot:10px; --size-tl-line:2px;
+  --col-1:1fr; --cols-3:repeat(3,minmax(0,1fr)); --cols-2:repeat(2,minmax(0,1fr));
+  --gap-seg:2px;
+  --op-muted:.75;
+  --grow-0:0;
+  --dur-fast:150ms; --ease-out:cubic-bezier(.2,.7,.3,1);
+  --tl-indent:1.6rem;
+  --minw-table:720px;
+}
+/* ===== 2. Base ===== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:var(--w-full);text-size-adjust:var(--w-full)}
+body{margin:var(--w-zero);background:var(--color-bg);color:var(--color-ink);font-family:var(--font-body);font-size:var(--fs-md);line-height:var(--lh-body)}
+a{color:var(--color-accent);text-decoration-thickness:var(--bw-1);text-underline-offset:var(--bw-2)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:var(--bw-2) solid var(--color-focus);outline-offset:var(--bw-2)}
+h1,h2,h3{line-height:var(--lh-tight);margin:var(--w-zero) var(--w-zero) var(--sp-3)}
+h1{font-size:var(--fs-hero)} h2{font-size:var(--fs-xl);margin-top:var(--sp-6)} h3{font-size:var(--fs-lg)}
+p{margin:var(--w-zero) var(--w-zero) var(--sp-3)}
+.wrap{max-width:var(--w-page);margin:var(--w-zero) auto;padding:var(--sp-5) var(--sp-4) var(--sp-8)}
+.muted{color:var(--color-ink-3);font-size:var(--fs-sm)}
+/* ===== 3. Components ===== */
+.hero{background:var(--color-surface);border:var(--bw-1) solid var(--color-line);border-radius:var(--radius-lg);padding:var(--sp-6) var(--sp-5);box-shadow:var(--shadow-card)}
+.hero .kicker{font-size:var(--fs-sm);color:var(--color-ink-3);margin-bottom:var(--sp-2)}
+.hero .lead{font-size:var(--fs-lg);max-width:var(--w-prose)}
+.stats{display:grid;grid-template-columns:var(--cols-3);gap:var(--sp-3);margin-top:var(--sp-5)}
+.stat{background:var(--color-surface-alt);border-radius:var(--radius-md);padding:var(--sp-3) var(--sp-4)}
+.stat b{display:block;font-size:var(--size-num);line-height:var(--lh-tight)}
+.stat span{font-size:var(--fs-sm);color:var(--color-ink-2)}
+nav.toc{margin:var(--sp-5) var(--w-zero);font-size:var(--fs-sm)}
+nav.toc ol{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);padding:var(--w-zero);margin:var(--w-zero);list-style:none}
+.grid3{display:grid;grid-template-columns:var(--cols-3);gap:var(--sp-4)}
+.box{background:var(--color-surface);border:var(--bw-1) solid var(--color-line);border-radius:var(--radius-md);padding:var(--sp-4)}
+.box h3{font-size:var(--fs-md);color:var(--color-accent-ink)}
+.box ul{padding-left:var(--sp-5);margin:var(--w-zero)}
+.box li{margin-bottom:var(--sp-2)}
+.fixes li b{display:block;color:var(--color-grade-e-ink)}
+/* bar */
+.bar{display:flex;height:var(--h-bar);border-radius:var(--radius-sm);overflow:hidden;gap:var(--gap-seg);background:var(--color-surface);margin:var(--sp-3) var(--w-zero)}
+.seg{flex-grow:var(--grow-0);flex-shrink:var(--grow-0);flex-basis:var(--seg)}
+.seg-a{background:var(--color-grade-a)} .seg-b{background:var(--color-grade-b)} .seg-c{background:var(--color-grade-c)} .seg-d{background:var(--color-grade-d)} .seg-e{background:var(--color-grade-e)}
+.legend{list-style:none;padding:var(--w-zero);margin:var(--w-zero) var(--w-zero) var(--sp-4);display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm)}
+.legend li{display:flex;align-items:center;gap:var(--sp-2)}
+.dot{width:var(--size-dot);height:var(--size-dot);border-radius:var(--radius-pill);display:inline-block}
+.dot-a{background:var(--color-grade-a)} .dot-b{background:var(--color-grade-b)} .dot-c{background:var(--color-grade-c)} .dot-d{background:var(--color-grade-d)} .dot-e{background:var(--color-grade-e)}
+.grades{display:grid;grid-template-columns:var(--cols-2);gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);margin:var(--w-zero) var(--w-zero) var(--sp-4);padding:var(--w-zero);list-style:none}
+/* chips & tags */
+.chip{display:inline-block;padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-sm);font-size:var(--fs-xs);white-space:nowrap;border-left:var(--bw-4) solid}
+.chip-a{background:var(--color-grade-a-bg);color:var(--color-grade-a-ink);border-color:var(--color-grade-a)}
+.chip-b{background:var(--color-grade-b-bg);color:var(--color-grade-b-ink);border-color:var(--color-grade-b)}
+.chip-c{background:var(--color-grade-c-bg);color:var(--color-grade-c-ink);border-color:var(--color-grade-c)}
+.chip-d{background:var(--color-grade-d-bg);color:var(--color-grade-d-ink);border-color:var(--color-grade-d)}
+.chip-e{background:var(--color-grade-e-bg);color:var(--color-grade-e-ink);border-color:var(--color-grade-e)}
+.tag{display:inline-block;padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-pill);background:var(--color-surface-alt);color:var(--color-ink-2);font-size:var(--fs-xs);white-space:nowrap}
+.tag-j{background:var(--color-judge-bg);color:var(--color-judge-ink)}
+/* tables */
+.tbl{width:var(--w-full);border-collapse:collapse;font-size:var(--fs-sm);background:var(--color-surface);border:var(--bw-1) solid var(--color-line);border-radius:var(--radius-md);overflow:hidden}
+.tbl th,.tbl td{padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw-1) solid var(--color-line);vertical-align:top;text-align:left}
+.tbl th{background:var(--color-surface-alt);font-weight:var(--fw-bold);color:var(--color-ink-2)}
+.tbl tr:last-child td{border-bottom:var(--bw-0)}
+.tbl td:first-child{white-space:nowrap}
+/* timeline */
+.tl{list-style:none;padding:var(--w-zero) var(--w-zero) var(--w-zero) var(--tl-indent);margin:var(--w-zero);position:relative}
+.tl::before{content:"";position:absolute;left:var(--sp-1);top:var(--w-zero);bottom:var(--w-zero);width:var(--size-tl-line);background:var(--color-line-strong)}
+.tl-item{position:relative;margin-bottom:var(--sp-4)}
+.tl-item::before{content:"";position:absolute;left:calc(var(--tl-indent) * -1);top:var(--sp-2);width:var(--size-tl-dot);height:var(--size-tl-dot);border-radius:var(--radius-pill);background:var(--color-tl-ev);border:var(--bw-2) solid var(--color-surface)}
+.tl-say::before{background:var(--color-tl-say)} .tl-rec::before{background:var(--color-tl-rec)}
+.tl time{font-family:var(--font-mono);font-size:var(--fs-sm);color:var(--color-ink-2);margin-right:var(--sp-2)}
+.tl-kind{font-size:var(--fs-xs);color:var(--color-ink-3);border:var(--bw-1) solid var(--color-line);border-radius:var(--radius-pill);padding:var(--w-zero) var(--sp-2)}
+.tl p{margin:var(--sp-1) var(--w-zero) var(--w-zero)}
+.refs{font-size:var(--fs-xs)}
+/* cards */
+.cards{display:grid;grid-template-columns:var(--col-1);gap:var(--sp-4)}
+.card{background:var(--color-surface);border:var(--bw-1) solid var(--color-line);border-radius:var(--radius-lg);padding:var(--sp-5);box-shadow:var(--shadow-card)}
+.card h3{display:flex;align-items:center;gap:var(--sp-3)}
+.num{display:inline-flex;align-items:center;justify-content:center;width:var(--size-num);height:var(--size-num);border-radius:var(--radius-pill);background:var(--color-accent-bg);color:var(--color-accent-ink);font-weight:var(--fw-bold);flex:none}
+blockquote{margin:var(--sp-3) var(--w-zero) var(--sp-4);padding:var(--sp-2) var(--sp-4);border-left:var(--bw-4) solid var(--color-quote-bar);background:var(--color-surface-alt);border-radius:var(--radius-sm)}
+blockquote p{margin:var(--w-zero) var(--w-zero) var(--sp-1);font-weight:var(--fw-medium)}
+blockquote footer{font-size:var(--fs-xs);color:var(--color-ink-2)}
+.card dl{display:grid;grid-template-columns:var(--cols-2);gap:var(--sp-3) var(--sp-4);margin:var(--w-zero)}
+.card dt{font-size:var(--fs-xs);color:var(--color-accent-ink);font-weight:var(--fw-bold);margin-bottom:var(--sp-1)}
+.card dd{margin:var(--w-zero);font-size:var(--fs-sm)}
+.card dl > div{display:contents}
+/* calculator */
+.calc{display:grid;grid-template-columns:var(--cols-2);gap:var(--sp-3) var(--sp-4);align-items:end}
+.calc label{display:block;font-size:var(--fs-sm);color:var(--color-ink-2)}
+.calc input{width:var(--w-full);font:inherit;padding:var(--sp-2) var(--sp-3);border:var(--bw-1) solid var(--color-line-strong);border-radius:var(--radius-sm);background:var(--color-surface);color:var(--color-ink)}
+.calc-out{grid-column:1 / -1;background:var(--color-accent-bg);color:var(--color-accent-ink);border-radius:var(--radius-md);padding:var(--sp-3) var(--sp-4)}
+.calc-out b{font-size:var(--fs-xl)}
+.practice ol,.practice ul{padding-left:var(--sp-5)}
+.four{display:grid;grid-template-columns:var(--cols-2);gap:var(--sp-3)}
+.four div{border:var(--bw-1) dashed var(--color-line-strong);border-radius:var(--radius-md);padding:var(--sp-3)}
+.four b{display:block;margin-bottom:var(--sp-1);color:var(--color-accent-ink)}
+/* sources */
+.src{font-size:var(--fs-sm);padding-left:var(--sp-5)}
+.src li{margin-bottom:var(--sp-2)}
+.src-note{display:block;color:var(--color-ink-3);font-size:var(--fs-xs)}
+footer.page{margin-top:var(--sp-7);font-size:var(--fs-xs);color:var(--color-ink-3);border-top:var(--bw-1) solid var(--color-line);padding-top:var(--sp-4)}
+/* ===== 4. Responsive（断点见 token 注释） ===== */
+@media (max-width:760px){
+  h1{font-size:var(--fs-2xl)}
+  .stats,.grid3,.card dl,.calc,.four,.grades{grid-template-columns:var(--col-1)}
+  .tbl thead{display:none}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:var(--w-full)}
+  .tbl tr{border-bottom:var(--bw-2) solid var(--color-line-strong);padding:var(--sp-2) var(--w-zero)}
+  .tbl td{border-bottom:var(--bw-0);padding:var(--sp-1) var(--sp-3);white-space:normal}
+  .tbl td::before{content:attr(data-label);display:block;font-size:var(--fs-xs);color:var(--color-ink-3);font-weight:var(--fw-bold)}
+  .tbl td:first-child{white-space:normal}
+  .calc-out{grid-column:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<p class="kicker">口播逐字稿核对 · 王兴饭否存档五条心法 · 检索日期 2026-10-23</p>
+<h1>王兴的五条心法：哪些有史料，哪些说过头，普通人能用什么</h1>
+<p class="lead">口播把饭否短句、商业事件和作者解释剪成了一条顺滑的成功叙事。本页把三样东西拆开看：这句话他说过吗，这件事发生过吗，这个结论能迁移到你身上吗。</p>
+<div class="stats">
+<div class="stat"><b>37</b><span>条可查主张（史实、引文、因果解释）</span></div>
+<div class="stat"><b>20</b><span>条有可追溯来源（A 多源 4 + B 单源 16）</span></div>
+<div class="stat"><b>7</b><span>条口径不一：数字、日期、对象或措辞与口播不同</span></div>
+<div class="stat"><b>9</b><span>条待核实：只见于口播，公开汇编没收录</span></div>
+<div class="stat"><b>1</b><span>条与事实不符：他读的是清华，不是北大</span></div>
+<div class="stat"><b>7</b><span>条作者引申另列：按逻辑判定，不计入证据分级</span></div>
+</div>
+</header>
+
+<nav class="toc" aria-label="页内导航"><ol>
+<li><a href="#sum">结论先行</a></li><li><a href="#tl">时间线</a></li><li><a href="#check">核对表</a></li><li><a href="#cards">五条心法</a></li><li><a href="#over">说过头的地方</a></li><li><a href="#practice">读者练习</a></li><li><a href="#src">来源与方法</a></li>
+</ol></nav>
+
+<section id="sum">
+<h2>结论先行</h2>
+<div class="grid3">
+<div class="box"><h3>值得学什么</h3><ul>
+<li>做重大投入决定前先算自己的账（获客成本、现金能撑多久），不照抄对手。这一点 2011 年有多源记录。</li>
+<li>区分「有效工作时间」和「在座时间」。原帖说的是前者。</li>
+<li>退出也是记录的一部分：他 2006 年卖掉校内网，2009 年饭否被关停后另起项目做美团。口播只讲「不服输」，没讲另一半。</li>
+<li>每天小剂量输入、长期累积。这是本页最容易做的一条，也是史料最弱的一条。</li>
+</ul></div>
+<div class="box"><h3>不足以证明什么</h3><ul>
+<li>不能证明「不打广告」是千团大战胜出的决定性原因。对手的融资、现金消耗、组织执行同样起作用，口播没有给对照。</li>
+<li>不能证明「周末加班」带来了业绩增长。时间上的先后关系，不等于因果关系；「11 月涨 40%」也没找到出处。</li>
+<li>不能证明「方向对就坚持」。原话只说战争由等待组成，没说无条件熬。</li>
+<li>不能证明「他每天都在想」。发布记录不能证明每天都在思考，也不能完整代表一个人的内在状态。</li>
+</ul></div>
+<div class="box fixes"><h3>4 处要纠正</h3><ul>
+<li><b>清华，不是北大</b>王兴 1997 年保送清华大学电子工程系。口播说「来北京大学读书」，与公开履历不符（第 29 条）。</li>
+<li><b>「一百亿对一百亿」是拼接转述</b>「不惜一切代价赢得这场竞争」出自 2025 年 5 月一季度电话会；「滑稽」一句媒体转述为「每个玩家都想投 100 亿」。口播把两句拼成一句（第 10 条）。</li>
+<li><b>「普通工人」是转写错</b>饭否原文是「比一个普通人更勤奋 1.5 倍」（第 19 条）。</li>
+<li><b>博客，不是微博</b>2006 年引丘吉尔那句话是在博客上，当时还没有微博（第 24 条）。</li>
+</ul></div>
+</div>
+</section>
+
+<section id="tl">
+<h2>时间线：事件、原话、回忆分开标</h2>
+<p class="muted">蓝点是事件发生时间，绿点是原话发布时间，黄点是事后回忆或报道。把三者分开，是为了避免把成功之后的解释当成当时的动机。</p>
+<ol class="tl">
+<li class="tl-item tl-ev"><time>2005</time><span class="tl-kind">事件</span><p>王兴从美国回国创业，仿 Facebook 做校内网。 <span class="refs"><a href="#s2">[2]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2006-10</time><span class="tl-kind">事件</span><p>校内网卖给千橡，200 万美元；第二天在博客引丘吉尔「开始的结束」。 <span class="refs"><a href="#s1">[1]</a>、<a href="#s22">[22]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2007-05-12</time><span class="tl-kind">事件</span><p>饭否上线。口播所用存档从 2007 年 5 月开始。 <span class="refs"><a href="#s22">[22]</a>、<a href="#s15">[15]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2008-09</time><span class="tl-kind">事件</span><p>张一鸣以技术合伙人身份加入饭否。 <span class="refs"><a href="#s14">[14]</a></span></p></li>
+<li class="tl-item tl-say"><time>2008-12-21</time><span class="tl-kind">原话发布</span><p>饭否引用「为了逃避真正的思考……」（日期取自口播，未独立核实；作者归属未核实）。 <span class="refs"><a href="#s17">[17]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2009-07</time><span class="tl-kind">事件</span><p>饭否被关停；张一鸣离开后创办九九房。 <span class="refs"><a href="#s14">[14]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2010 年初</time><span class="tl-kind">事件</span><p>王兴约见大众点评联合创始人龙伟，问对方会不会做团购。 <span class="refs"><a href="#s28">[28]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2010-03-04</time><span class="tl-kind">事件</span><p>美团网上线。 <span class="refs"><a href="#s5">[5]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2011-03-04</time><span class="tl-kind">事件</span><p>美团第一场发布会。王兴 2016 年回忆：当时说行业至少 900 亿，媒体多数不信。 <span class="refs"><a href="#s19">[19]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2011-05</time><span class="tl-kind">事件</span><p>团购网站达到约五千家（口径见核对表第 3 条）。 <span class="refs"><a href="#s22">[22]</a>、<a href="#s5">[5]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2011-05-04</time><span class="tl-kind">事件</span><p>人人网在纽交所上市，收盘市值约 70.7 亿美元。 <span class="refs"><a href="#s3">[3]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2011-07</time><span class="tl-kind">事件</span><p>B 轮 5000 万美元到账，发布会展示约 6200 万美元账户余额。 <span class="refs"><a href="#s6">[6]</a>、<a href="#s7">[7]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2011-11</time><span class="tl-kind">事件</span><p>干嘉伟加入美团负责销售。口播所说「血战五十天」未找到出处。 <span class="refs"><a href="#s6">[6]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2012 年初</time><span class="tl-kind">事件</span><p>多篇回顾称美团做到团购行业第一。 <span class="refs"><a href="#s5">[5]</a>、<a href="#s6">[6]</a></span></p></li>
+<li class="tl-item tl-say"><time>2013</time><span class="tl-kind">原话发布</span><p>《有限与无限的游戏》中文版重版，王兴写推荐语（年份依据二手报道，未核实）。 <span class="refs"><a href="#s27">[27]</a>、<a href="#s26">[26]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2015-10-08</time><span class="tl-kind">事件</span><p>美团与大众点评宣布合并，5:5 换股。 <span class="refs"><a href="#s29">[29]</a></span></p></li>
+<li class="tl-item tl-rec"><time>2016</time><span class="tl-kind">回忆或报道</span><p>《财经》访谈：「这句话很残酷」「我时刻都适度焦虑中」。 <span class="refs"><a href="#s19">[19]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2017-02-14</time><span class="tl-kind">事件</span><p>美团打车在南京上线；当天与程维吃饭的细节为媒体转述。 <span class="refs"><a href="#s8">[8]</a>、<a href="#s9">[9]</a></span></p></li>
+<li class="tl-item tl-rec"><time>2017-06</time><span class="tl-kind">回忆或报道</span><p>《财经》访谈：「哪里有什么真正的终局」「棋盘还在不断扩大」。 <span class="refs"><a href="#s30">[30]</a></span></p></li>
+<li class="tl-item tl-say"><time>2017-12-28</time><span class="tl-kind">原话发布</span><p>程维在《财经》访谈里说「尔要战，便战」。 <span class="refs"><a href="#s9">[9]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2020-03</time><span class="tl-kind">事件</span><p>口播所用网友存档的截止月份；另有汇编收录到 2021-05-09 的最后一条。 <span class="refs"><a href="#s15">[15]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2025 年 2 月至 5 月</time><span class="tl-kind">事件</span><p>京东外卖上线并推百亿补贴（起点口径不一）；阿里升级淘宝闪购并加大补贴，5 月初加入。 <span class="refs"><a href="#s10">[10]</a>、<a href="#s31">[31]</a></span></p></li>
+<li class="tl-item tl-say"><time>2025-05-26</time><span class="tl-kind">原话发布</span><p>一季度财报电话会：「我们将不惜一切代价赢得这场竞争」。 <span class="refs"><a href="#s10">[10]</a>、<a href="#s11">[11]</a></span></p></li>
+<li class="tl-item tl-ev"><time>2025-11-28</time><span class="tl-kind">事件</span><p>三季度财报：经调整净亏损 160.1 亿元，期内亏损 186.3 亿元。 <span class="refs"><a href="#s12">[12]</a>、<a href="#s13">[13]</a></span></p></li>
+</ol>
+</section>
+
+<section id="check">
+<h2>核对表：37 条可查主张的证据状态</h2>
+<p class="muted">分级只回答「有没有可追溯的证据」。找不到出处，不等于内容一定错误；饭否原站已不公开，完整存档只有网友整理的电子书，本次没有取得。主张类型另标：引文是否逐字（逐字 / 有改写 / 未收录）写在「类型」里，不影响证据状态。一句饭否原文可以是 B 级引文，但从它推出的经营原则只是作者推论。</p>
+<div class="bar" role="img" aria-label="证据状态分布：A 4 条，B 16 条，C 7 条，D 9 条，E 1 条，共 37 条"><div class="seg seg-a" style="--seg:10.81%" title="A 多源核实 4 条"></div><div class="seg seg-b" style="--seg:43.24%" title="B 单一来源支持 16 条"></div><div class="seg seg-c" style="--seg:18.92%" title="C 部分核实／口径不一 7 条"></div><div class="seg seg-d" style="--seg:24.32%" title="D 待核实 9 条"></div><div class="seg seg-e" style="--seg:2.70%" title="E 与事实不符 1 条"></div></div>
+<ul class="legend">
+<li><i class="dot dot-a"></i><span><b>A</b> 多源核实 · 4 条</span></li>
+<li><i class="dot dot-b"></i><span><b>B</b> 单一来源支持 · 16 条</span></li>
+<li><i class="dot dot-c"></i><span><b>C</b> 部分核实／口径不一 · 7 条</span></li>
+<li><i class="dot dot-d"></i><span><b>D</b> 待核实 · 9 条</span></li>
+<li><i class="dot dot-e"></i><span><b>E</b> 与事实不符 · 1 条</span></li>
+</ul>
+<ul class="grades">
+<li><b>A</b> 多源核实：两份本机抓到正文、独立采编的来源说法一致。</li><li><b>B</b> 单一来源支持：有可追溯的来源，但本机只抓到一份正文、或只有检索摘要；饭否引文均只能靠二手汇编。</li><li><b>C</b> 部分核实／口径不一：事件基本成立，但数字、日期、对象或措辞与口播不同。</li><li><b>D</b> 待核实：只有口播或网友汇编，本次未找到可定位的出处。找不到出处，不等于内容一定错误。</li><li><b>E</b> 与事实不符：现有材料与口播说法相反，有反证。</li>
+</ul>
+<table class="tbl">
+<thead><tr><th>序号</th><th>口播说法</th><th>类型</th><th>证据状态</th><th>查到的口径</th><th>来源</th></tr></thead>
+<tbody>
+<tr>
+<td data-label="序号">1</td>
+<td data-label="口播说法">校内网以 200 万美元卖出</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">2006 年 10 月卖给千橡，价格 200 万美元。多篇回顾一致，本机抓到正文的只有虎嗅妙投一篇；搜狐那篇写 2006 年 3 月陈一舟曾出价一千多万元被拒。王兴当时 27 岁。</td>
+<td data-label="来源"><a href="#s7">[7]</a>、<a href="#s1">[1]</a>、<a href="#s2">[2]</a></td>
+</tr>
+<tr>
+<td data-label="序号">2</td>
+<td data-label="口播说法">改名人人网后在纽约上市，第一天市值 71 亿美元</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">2011-05-04 纽交所上市，发行价 14 美元、收盘 18 美元，按收盘价市值约 70.7 亿美元；另有报道写首日市值 74.82 亿美元，口径未说明。「71 亿」是对 70.7 亿的取整。</td>
+<td data-label="来源"><a href="#s3">[3]</a>、<a href="#s4">[4]</a></td>
+</tr>
+<tr>
+<td data-label="序号">3</td>
+<td data-label="口播说法">2011 年全国冒出五千多家团购网站</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">澎湃的王兴特写写「千团大战不是一千个团购网站打群架，而是五千个」；「2011 年 5 月已超过 5000 家」出自检索摘要，本机抓到的正文里没有这个数字。</td>
+<td data-label="来源"><a href="#s22">[22]</a>、<a href="#s5">[5]</a></td>
+</tr>
+<tr>
+<td data-label="序号">4</td>
+<td data-label="口播说法">对手有的说要投 5.5 亿打广告，地铁电视明星代言</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">线下广告战是公开记录（拉手上半年融资 1.6 亿美元、大众点评 1.27 亿美元）；「5.5 亿」归属哪家、是否原话，本次没有找到出处。</td>
+<td data-label="来源"><a href="#s5">[5]</a>、<a href="#s6">[6]</a></td>
+</tr>
+<tr>
+<td data-label="序号">5</td>
+<td data-label="口播说法">一分钱线下广告不打，在媒体沟通会上打开银行账户给记者看，账上 6192 万美元</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-a"><b>A</b> 多源核实</span></td>
+<td data-label="查到的口径">2011 年 7 月 B 轮 5000 万美元到账后开发布会展示账户。多数报道写「6200 万美元」，虎嗅妙投写「6192 万美元」。展示的目的按王慧文回忆是让商户相信美团能过资本寒冬。</td>
+<td data-label="来源"><a href="#s5">[5]</a>、<a href="#s7">[7]</a></td>
+</tr>
+<tr>
+<td data-label="序号">6</td>
+<td data-label="口播说法">千团大战打完，他是第一</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">多篇回顾都写 2011 年底至 2012 年初美团做到团购行业第一；口径是团购交易额，不是审计数据。</td>
+<td data-label="来源"><a href="#s5">[5]</a>、<a href="#s6">[6]</a></td>
+</tr>
+<tr>
+<td data-label="序号">7</td>
+<td data-label="口播说法">2017 年情人节与程维吃饭，当天美团打车在南京上线，程维看新闻才知道</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">界面、经济观察网等转述了同一饭局故事：2017-02-14 南京上线，程维问为什么做打车，王兴答「试试」。饭桌细节只有媒体转述。</td>
+<td data-label="来源"><a href="#s8">[8]</a>、<a href="#s9">[9]</a></td>
+</tr>
+<tr>
+<td data-label="序号">8</td>
+<td data-label="口播说法">后来程维当着媒体回了他一句「尔要战，便战」</td>
+<td data-label="类型"><span class="tag">引文·逐字</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">这句话出自 2017-12-28《财经》对程维的访谈，引的是成吉思汗典故，在南京上线 10 个月之后。口播说「后来」，与时间顺序一致。</td>
+<td data-label="来源"><a href="#s9">[9]</a></td>
+</tr>
+<tr>
+<td data-label="序号">9</td>
+<td data-label="口播说法">2025 年京东杀进外卖，阿里跟上，补贴一轮比一轮狠</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-a"><b>A</b> 多源核实</span></td>
+<td data-label="查到的口径">前瞻正文写京东外卖 2025 年 2 月上线；澎湃正文写京东入局「近四个月」（按 5 月底倒推也在 2 月前后）。两篇都写阿里随后升级淘宝闪购并加大补贴，澎湃写淘宝闪购 5 月初加入。京东补贴起点口径不一：前瞻写 4 月 11 日启动百亿补贴，澎湃写补贴从 3 月开始。</td>
+<td data-label="来源"><a href="#s10">[10]</a>、<a href="#s31">[31]</a></td>
+</tr>
+<tr>
+<td data-label="序号">10</td>
+<td data-label="口播说法">他在财报电话会上说：「一百亿对一百亿听起来有点滑稽，我们会不惜一切代价赢得这场竞争」</td>
+<td data-label="类型"><span class="tag">引文·拼接改写</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">出处是 2025-05-26 一季度财报电话会。「不惜一切代价赢得这场竞争」多家报道一致。「滑稽」一句媒体转述为「每个互联网玩家都想投入 100 亿……听起来有点滑稽」。口播把两句拼成一句，并把「滑稽」一句改写了；口播没有说明是哪次会议。</td>
+<td data-label="来源"><a href="#s10">[10]</a>、<a href="#s34">[34]</a>、<a href="#s11">[11]</a></td>
+</tr>
+<tr>
+<td data-label="序号">11</td>
+<td data-label="口播说法">那年第三季度，美团一个季度亏了一百六十亿</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">2025 年三季度经调整净亏损 160.1 亿元，期内亏损 186.3 亿元，核心本地商业经营亏损 141 亿元。口播数字对应「经调整」口径，没有说明。</td>
+<td data-label="来源"><a href="#s12">[12]</a>、<a href="#s13">[13]</a></td>
+</tr>
+<tr>
+<td data-label="序号">12</td>
+<td data-label="口播说法">张一鸣 2008 年是饭否的技术合伙人</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-a"><b>A</b> 多源核实</span></td>
+<td data-label="查到的口径">2008 年 9 月张一鸣以技术合伙人身份加入饭否，负责搜索、消息分发、热词挖掘；两人同为福建龙岩人（界面、虎嗅妙投均写 2008 年 9 月；品玩只写「2007 年王兴创办饭否，张一鸣则成为技术合伙人」，没有给加入月份）。</td>
+<td data-label="来源"><a href="#s14">[14]</a>、<a href="#s7">[7]</a>、<a href="#s32">[32]</a></td>
+</tr>
+<tr>
+<td data-label="序号">13</td>
+<td data-label="口播说法">网友整理的饭否存档：2007 年 5 月到 2020 年 3 月，15420 条、2284 页</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">即刻上一份网友整理电子书的口径与此一致（15420 条、2284 页、约 88 万字）。其他汇编口径不同：12838 条（至 2018）、15170 条（至 2020）、「一万七千条」。都不是官方数据。</td>
+<td data-label="来源"><a href="#s15">[15]</a>、<a href="#s16">[16]</a></td>
+</tr>
+<tr>
+<td data-label="序号">14</td>
+<td data-label="口播说法">2008-12-21 饭否引用：「为了逃避真正的思考，人们是不惜采取任何手段的」，雷诺兹说的</td>
+<td data-label="类型"><span class="tag">引文·逐字</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 173 条原文一致。本机抓到的汇编只有引文本身，没有注明出处；「雷诺兹说的」与其他网络汇编的注明一致，但归属本次未核实。发帖日期无法独立核实。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">15</td>
+<td data-label="口播说法">爱迪生特别喜欢这句话，1921 年印成牌子挂满工厂</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">这句话常被归到爱迪生名下（卡耐基书中也引用过）。「1921 年挂满工厂」的细节本次没有找到一手出处。</td>
+<td data-label="来源"><a href="#s18">[18]</a></td>
+</tr>
+<tr>
+<td data-label="序号">16</td>
+<td data-label="口播说法">2016 年《财经》采访：2011 年首场发布会判断行业至少 900 亿，媒体多数不信；他说「这句话真的很残酷」</td>
+<td data-label="类型"><span class="tag">引文·有改写</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">访谈原文：「2011 年 3 月 4 日美团开了第一个发布会……当时我们说至少 900 亿，媒体多数都不信」，这是王兴自己的话；「这句话很残酷」没有「真的」。估算方法（约 3 亿支付用户 × 每年 6 次 × 50 元）见知乎转载的内部讲话。</td>
+<td data-label="来源"><a href="#s19">[19]</a>、<a href="#s20">[20]</a></td>
+</tr>
+<tr>
+<td data-label="序号">17</td>
+<td data-label="口播说法">请教阿里前总裁关明生把账算清：线下广告获客几百元，线上几十元</td>
+<td data-label="类型"><span class="tag">因果解释</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">请教关明生有多篇回顾支持。成本口径不一：投资界版本是「线上 10 元能做到线下 30 元的效果」，并写关明生建议重地推。「几百元 / 几十元」是美团早期高管的回忆口径。腾讯新闻版本：关明生的反馈是「2B 业务做补贴是无效的，走线下地推对商家端效率更高」。</td>
+<td data-label="来源"><a href="#s5">[5]</a>、<a href="#s6">[6]</a></td>
+</tr>
+<tr>
+<td data-label="序号">18</td>
+<td data-label="口播说法">开会时员工站起来问「到底投不投广告」，他还是说不投</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">投资界版本：沈阳巡讲时员工质问的是王慧文，王慧文答「广告没有效果」。被质问的对象可能不是王兴。此段依据检索摘要，本机抓到的投资界正文不含。</td>
+<td data-label="来源"><a href="#s6">[6]</a></td>
+</tr>
+<tr>
+<td data-label="序号">19</td>
+<td data-label="口播说法">2012-02-28：「比一个普通人更聪明 1.5 倍或许很难，但要比一个普通工人更勤奋 1.5 倍却很容易」，有效工作 20–35 小时</td>
+<td data-label="类型"><span class="tag">引文·转写错字</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 165 条原文为「比一个普通人更勤奋 1.5 倍」，口播的「普通工人」是转写错误。原帖后半句「每周 60 小时很轻松、80 小时比较紧张、90 小时长期持续有难度」被口播省略。日期未核。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">20</td>
+<td data-label="口播说法">2010-09-09：「多数人愿意承认自己懒而不愿意承认自己蠢……」</td>
+<td data-label="类型"><span class="tag">引文·有改写</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 107 条原文是「多数人愿意承认自己懒，而不承认自己蠢」，口播多了「愿意」。日期未核。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">21</td>
+<td data-label="口播说法">2009-02-27：「有人喜欢周末是因为可以休息，另一些人喜欢周末是因为可以在竞争对手休息的时候继续工作」</td>
+<td data-label="类型"><span class="tag">引文·有改写</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 96 条原文为「有人喜欢周末是因为可以休息了，另一些人喜欢周末则是因为……」，口播少了「了」「则」。日期未核。</td>
+<td data-label="来源"><a href="#s17">[17]</a>、<a href="#s21">[21]</a></td>
+</tr>
+<tr>
+<td data-label="序号">22</td>
+<td data-label="口播说法">2011 年 9 月美团喊出「血战五十天」，国庆不放假；11 月业绩比 10 月涨 40%</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">两路检索都没有找到「血战五十天」和「涨 40%」的公开出处。可核实的是 2011 年 11 月干嘉伟加入美团负责销售。</td>
+<td data-label="来源"><a href="#s6">[6]</a></td>
+</tr>
+<tr>
+<td data-label="序号">23</td>
+<td data-label="口播说法">2015-07-04 记下一位老大哥的话：「大多数人以为战争是由拼搏组成的，其实不是，是由等待和煎熬组成的」</td>
+<td data-label="类型"><span class="tag">引文·逐字</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 174 条原文一致，后半句注明「说这话的大哥当年参加过中越战争，后来创过业，现在做投资」。日期未核。</td>
+<td data-label="来源"><a href="#s17">[17]</a>、<a href="#s21">[21]</a></td>
+</tr>
+<tr>
+<td data-label="序号">24</td>
+<td data-label="口播说法">卖掉校内网后，他在微博上引用丘吉尔「这不是结束……而是开始的结束」</td>
+<td data-label="类型"><span class="tag">引文·逐字</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">引文一致，但 2006 年还没有微博。多篇回顾写他是在卖掉校内网第二天在自己的博客引用；百度百科给出英文原句。</td>
+<td data-label="来源"><a href="#s1">[1]</a>、<a href="#s22">[22]</a></td>
+</tr>
+<tr>
+<td data-label="序号">25</td>
+<td data-label="口播说法">饭否上写：「上个世纪初美国的汽车公司从一千八百家减少到三家」</td>
+<td data-label="类型"><span class="tag">引文·未收录</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">公开汇编没有收录这一条。美国汽车业早期有上千家厂商、后来集中到三大的说法在产业史里常见，本页没有核对具体数字。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">26</td>
+<td data-label="口播说法">2016 年《财经》问焦虑，他说「我时刻都处在适度的焦虑中」，靠看《人类简史》</td>
+<td data-label="类型"><span class="tag">引文·有改写</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">访谈原文是「我时刻都适度焦虑中」；《人类简史》和「鸡毛蒜皮」的段落一致。</td>
+<td data-label="来源"><a href="#s19">[19]</a></td>
+</tr>
+<tr>
+<td data-label="序号">27</td>
+<td data-label="口播说法">2014-08-14：「不服输是一种优良品质，愿赌服输是另一种」</td>
+<td data-label="类型"><span class="tag">引文·逐字</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">汇编第 8 条原文一致。日期未核。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">28</td>
+<td data-label="口播说法">2016-10-05 饭否谈《肖申克的救赎》：所有人都在现实俗世这个大监狱里，极少数人在系统而坚持地挖通道</td>
+<td data-label="类型"><span class="tag">引文·未收录</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">192 条、95 条两份公开汇编都没有收录；两路检索也没有找到。只能标待核实，不等于不存在。</td>
+<td data-label="来源"><a href="#s17">[17]</a>、<a href="#s21">[21]</a></td>
+</tr>
+<tr>
+<td data-label="序号">29</td>
+<td data-label="口播说法">来北京大学读书之前，他连福建省都没出过</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-e"><b>E</b> 与事实不符</span></td>
+<td data-label="查到的口径">王兴 1997 年从龙岩一中保送清华大学电子工程系，不是北京大学。「没出过福建」最接近的记载是「18 岁前没见过大块平地，到北京上大学才见到地平线落日」。</td>
+<td data-label="来源"><a href="#s23">[23]</a>、<a href="#s24">[24]</a></td>
+</tr>
+<tr>
+<td data-label="序号">30</td>
+<td data-label="口播说法">2015-01-10：「每天读二十页书，半个月读完一本，一年二十四本」</td>
+<td data-label="类型"><span class="tag">引文·未收录</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">公开汇编没有收录。投资界 2018 年统计他一年里在饭否提到二十余本书，与「24 本」量级相当，但不是同一回事。</td>
+<td data-label="来源"><a href="#s25">[25]</a></td>
+</tr>
+<tr>
+<td data-label="序号">31</td>
+<td data-label="口播说法">2008 年两人在饭否上聊怎么读书、怎么读得更快</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">没有找到公开记录。</td>
+<td data-label="来源"><a href="#s14">[14]</a></td>
+</tr>
+<tr>
+<td data-label="序号">32</td>
+<td data-label="口播说法">2016-07-10：「我大概明白我为什么不喜欢动不动提初心了，还是有限和无限游戏的逻辑」</td>
+<td data-label="类型"><span class="tag">引文·未收录</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">公开汇编与检索都没有找到这一条。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+<tr>
+<td data-label="序号">33</td>
+<td data-label="口播说法">他为《有限与无限的游戏》中文版写推荐语：「实际上只有一个无限游戏那就是你的人生……」</td>
+<td data-label="类型"><span class="tag">引文·逐字节选</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">推荐语原文与腾讯新闻转载一致；「2013 年中文版重版时所写」来自新浪财经 2026 年报道，本机未打开，年份未核实。口播省略了前半句「有限游戏在边界内玩，无限游戏却是在和边界……玩」。</td>
+<td data-label="来源"><a href="#s27">[27]</a>、<a href="#s26">[26]</a></td>
+</tr>
+<tr>
+<td data-label="序号">34</td>
+<td data-label="口播说法">2010-01-13 美团上线前第一次见大众点评联合创始人龙伟</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-c"><b>C</b> 部分核实／口径不一</span></td>
+<td data-label="查到的口径">界面报道：王兴主动约见龙伟，在北京京广桥的酒店大堂问「大众点评会不会做团购」，龙伟答「没有考虑」。时间只写在美团筹划期（2010 年初），具体日期未核。</td>
+<td data-label="来源"><a href="#s28">[28]</a></td>
+</tr>
+<tr>
+<td data-label="序号">35</td>
+<td data-label="口播说法">2015 年 10 月美团和大众点评宣布合并</td>
+<td data-label="类型"><span class="tag">史实</span></td>
+<td data-label="证据状态"><span class="chip chip-a"><b>A</b> 多源核实</span></td>
+<td data-label="查到的口径">2015-10-08 宣布，5:5 换股，新公司估值 170 亿美元，联席 CEO。</td>
+<td data-label="来源"><a href="#s29">[29]</a>、<a href="#s33">[33]</a></td>
+</tr>
+<tr>
+<td data-label="序号">36</td>
+<td data-label="口播说法">记者问终局，他说「哪里有什么真正的终局呢？终局本来是下棋的术语，现在的实际情况是棋盘还在不断扩大」</td>
+<td data-label="类型"><span class="tag">引文·有改写</span></td>
+<td data-label="证据状态"><span class="chip chip-b"><b>B</b> 单一来源支持</span></td>
+<td data-label="查到的口径">出自 2017 年 6 月《财经》访谈（宋玮）。口播多了「就」「地」两个字，意思不变。口播没有说年份。</td>
+<td data-label="来源"><a href="#s30">[30]</a></td>
+</tr>
+<tr>
+<td data-label="序号">37</td>
+<td data-label="口播说法">2007 年 28 岁时回复朋友：「我们多数人一辈子也就忙碌一万多天吧，所以每一天都要好好利用」</td>
+<td data-label="类型"><span class="tag">引文·未收录</span></td>
+<td data-label="证据状态"><span class="chip chip-d"><b>D</b> 待核实</span></td>
+<td data-label="查到的口径">公开汇编与检索都没有找到。年龄对得上（1979 年生，2007 年 28 岁）。</td>
+<td data-label="来源"><a href="#s17">[17]</a></td>
+</tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:var(--sp-5)">作者引申 7 条：按逻辑判定</h3>
+<p class="muted">这些不是史实，是口播作者从王兴的话推出来的结论。判定看的是逻辑是否成立、有没有说过头。</p>
+<table class="tbl">
+<thead><tr><th>作者引申</th><th>判定</th><th>说明</th></tr></thead>
+<tbody>
+<tr>
+<td data-label="作者引申">跟风是逃避思考最体面的一种方式</td>
+<td data-label="判定"><span class="tag tag-j">说过头</span></td>
+<td data-label="说明">未经独立判断的跟风，可能是逃避思考的一种方式。但跟随成熟方案也可能是理性地降低试错成本。要看有没有自己算过账。</td>
+</tr>
+<tr>
+<td data-label="作者引申">承认懒是给自己留一个永远不用兑现的借口</td>
+<td data-label="判定"><span class="tag tag-j">有条件成立</span></td>
+<td data-label="说明">这是对「懒 vs 蠢」那条的心理学引申。它对「一直说还没发力」的人成立；对已经在做、只是结果慢的人不成立。</td>
+</tr>
+<tr>
+<td data-label="作者引申">只要确定方向正确，就坚持地打下去</td>
+<td data-label="判定"><span class="tag tag-j">说过头</span></td>
+<td data-label="说明">原话只说战争由等待组成，没有说要无条件坚持。王兴自己卖掉校内网；饭否被关停后他另起项目。坚持要以阶段证据、现金流、机会成本和退出条件为约束。</td>
+</tr>
+<tr>
+<td data-label="作者引申">每天 20 页其实不难，难的是 365 天都在挖</td>
+<td data-label="判定"><span class="tag tag-j">实践建议</span></td>
+<td data-label="说明">可执行。但这条饭否本身待核实（第 30 条），页面把它当读者练习，不当王兴原话。</td>
+</tr>
+<tr>
+<td data-label="作者引申">一次考试、一个 offer 是有限游戏，人生是无限游戏</td>
+<td data-label="判定"><span class="tag tag-j">有条件成立</span></td>
+<td data-label="说明">把部分选择看成长期积累，有助于减少对单次输赢的过度关注。考试、合同、融资仍需要明确期限与交付标准，不能用「无限」逃避。</td>
+</tr>
+<tr>
+<td data-label="作者引申">十三年里他几乎每天都在想商业、想历史</td>
+<td data-label="判定"><span class="tag tag-j">作者推论</span></td>
+<td data-label="说明">公开存档呈现出长期、频繁的思考记录。发布记录不能证明每天都在思考，也不能完整代表一个人的内在状态。</td>
+</tr>
+<tr>
+<td data-label="作者引申">美团只是这个想法里长出来的一个结果</td>
+<td data-label="判定"><span class="tag tag-j">作者推论</span></td>
+<td data-label="说明">这是因果叙事：先有思考，后有结果。资本、团队、时机同样是条件，口播没有给对照。</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section id="cards">
+<h2>五条心法：原文、证据、机制、反例、边界、动作</h2>
+<p class="muted">每张卡用同一个顺序。注意第 4 条的两句「原话」都待核实，卡片只保留可核实的部分。</p>
+<div class="cards">
+<article class="card" id="rule1">
+<h3><span class="num">1</span>多数人都在逃避真正的思考</h3>
+<blockquote><p>为了逃避真正的思考，人们是不惜采取任何手段的</p><footer>饭否引文见汇编第 173 条 [17]（汇编未注出处，「雷诺兹」归属未核实）；2016 年《财经》访谈复述并说「这句话很残酷」[19]</footer></blockquote>
+<dl>
+<dt>史实证据</dt><dd>2011 年美团不投线下广告、把钱花在线上流量和地推，2011 年 7 月展示账户余额，年底到次年初做到行业第一（第 5、6、17 条）。</dd>
+<dt>可能机制</dt><dd>在同质化竞争里，先算单位获客成本再决定渠道，可以避免跟着对手烧钱。这是一个可检验的经营判断，不是玄学。</dd>
+<dt>反例或对照</dt><dd>同期拉手、窝窝等对手融资更多、广告更猛，但没有活到最后。这只能说明「砸广告」不是充分条件，不能证明「不砸广告」是美团胜出的决定性原因。对手的现金消耗、组织执行、行业整合同样起作用（Pro 审查提示）。</dd>
+<dt>适用边界</dt><dd>这条对「要做重大投入决定的人」成立。对打工读者，可迁移的部分是：做决定前写下自己的账，而不是写下别人的做法。</dd>
+<dt>可执行动作</dt><dd>重大决定前做「跟风自检」三问（见练习区）。</dd>
+</dl>
+</article>
+<article class="card" id="rule2">
+<h3><span class="num">2</span>比别人聪明很难，比别人勤奋很容易</h3>
+<blockquote><p>要比一个普通人更聪明1.5倍或许很难，但要比一个普通人更勤奋1.5倍却很容易</p><footer>汇编第 165 条 [17]；口播转写成「普通工人」是错的。原帖还说每周 60 小时很轻松、90 小时难持续，口播没讲</footer></blockquote>
+<dl>
+<dt>史实证据</dt><dd>周末在竞争对手休息时继续工作（第 96 条）与承认懒、不承认蠢（第 107 条）都有汇编原文。口播用来佐证的「血战五十天、11 月涨 40%」没有找到出处（第 22 条）。</dd>
+<dt>可能机制</dt><dd>对部分可控任务而言，增加有效投入往往比显著提高认知能力更可操作。关键词是「有效」：原帖说的是有效工作时间，不是在座时间。</dd>
+<dt>反例或对照</dt><dd>单月业绩增长不能直接证明某种工作制度的效果。时间上的先后关系，不等于因果关系。还要考虑疲劳、边际收益递减和任务难度。</dd>
+<dt>适用边界</dt><dd>创始人和员工的收益结构不同。迁移前先确认额外投入能否带来自己重视的收益：股权、薪酬、技能或信用。能，再加；不能，先换位置。</dd>
+<dt>可执行动作</dt><dd>记一周「有效工作小时」，而不是在座小时。先把真实基线量出来，再决定要不要加。</dd>
+</dl>
+</article>
+<article class="card" id="rule3">
+<h3><span class="num">3</span>战争是由等待和煎熬组成的</h3>
+<blockquote><p>大多数人以为战争是由拼搏组成的，其实不是，是由等待和煎熬组成的</p><footer>汇编第 174 条 [17][21]，王兴记的是一位参加过中越战争、后来创业做投资的「大哥」的话，不是他自己的原创</footer></blockquote>
+<dl>
+<dt>史实证据</dt><dd>卖校内网（2006）到美团（2010）之间做了饭否、海内；2016 年《财经》访谈说「时刻都适度焦虑」、靠读《人类简史》（第 26 条）。「汽车公司 1800 家到 3 家」那条饭否待核实（第 25 条）。</dd>
+<dt>可能机制</dt><dd>在行业出清阶段，活得久比冲得猛更重要，前提是现金够用。这就是展示账户余额那件事的逻辑。</dd>
+<dt>反例或对照</dt><dd>王兴的记录里有退出：2006 年卖掉校内网；2009 年饭否被关停后他另起项目。他 2014 年那条饭否说不服输是一种品质，愿赌服输是另一种（第 27 条）。口播只讲「坚持」，漏掉了退出这一半。出售的动机本页无法确定。</dd>
+<dt>适用边界</dt><dd>短期困难不必然意味着方向错误，但坚持应以阶段性证据、现金流、机会成本和退出条件为约束。没有退出条件的「熬」不是策略。</dd>
+<dt>可执行动作</dt><dd>给现在在熬的事写一行退出条件：到什么日期、看到什么数字，就停。</dd>
+</dl>
+</article>
+<article class="card" id="rule4">
+<h3><span class="num">4</span>所有人都在监狱里，只有少数人在挖地道</h3>
+<blockquote><p>（口播引述的「肖申克」饭否原文，公开汇编未收录，本页不转引）</p><footer>第 28 条待核实；「每天读二十页书」第 30 条待核实</footer></blockquote>
+<dl>
+<dt>史实证据</dt><dd>可核实的是：王兴 1997 年保送清华电子工程系（口播说北大，第 29 条与事实不符）；家里和学校的书是他的早期资源；投资界 2018 年统计他一年在饭否提到二十余本书 [25]。</dd>
+<dt>可能机制</dt><dd>每天固定小剂量输入，一年累积成可观的量。这个机制不依赖王兴说没说过。</dd>
+<dt>反例或对照</dt><dd>「监狱与地道」是文学隐喻，不是对现实处境的普遍判断。个人努力有价值，但结构性障碍并不总能靠努力克服。</dd>
+<dt>适用边界</dt><dd>这是本页最适合普通读者直接做的一条，也是史料最弱的一条。把它当「读者练习」，不要当「王兴原话」。</dd>
+<dt>可执行动作</dt><dd>用读书计算器算自己的理论本数，再乘上完成率。</dd>
+</dl>
+</article>
+<article class="card" id="rule5">
+<h3><span class="num">5</span>人生是一场无限游戏</h3>
+<blockquote><p>实际上只有一个无限游戏，那就是你的人生，死亡是不可逾越的边界</p><footer>2013 年《有限与无限的游戏》中文版推荐语 [26][27]，多源一致。「不喜欢动不动提初心」那条饭否待核实（第 32 条）</footer></blockquote>
+<dl>
+<dt>史实证据</dt><dd>2010 年初见龙伟、2015 年与大众点评合并（第 34、35 条）；2017 年《财经》访谈「棋盘还在不断扩大」（第 36 条）。</dd>
+<dt>可能机制</dt><dd>把竞争看成持续的游戏，就不会把一次对抗当成终点，也更容易和昨天的对手合作。</dd>
+<dt>反例或对照</dt><dd>「无限游戏」不能解释为什么 2025 年补贴战会亏到创纪录。王兴自己在三季度会上说价格战「不可持续」[13]。无限游戏也要算每一局的代价。</dd>
+<dt>适用边界</dt><dd>把部分选择视为长期积累，有助于减少对单次输赢的过度关注。考试、合同、融资等有限目标仍需要明确期限与交付标准。</dd>
+<dt>可执行动作</dt><dd>做「有限／无限四栏」练习：短期交付、长期积累、不可突破的约束、退出或调整条件。</dd>
+</dl>
+</article>
+</div>
+
+<h3 style="margin-top:var(--sp-5)">迁移条件表：哪些做法你现在就能用</h3>
+<p class="muted">创始人拥有的决策权、信息、资源和收益结构，和员工、一人公司经营者不同。先看条件，再决定学不学。</p>
+<table class="tbl">
+<thead><tr><th>做法</th><th>需要自主权</th><th>需要现金储备</th><th>只需个人调整</th><th>何时失效</th></tr></thead>
+<tbody>
+<tr><td data-label="做法">不投线下广告、自己算获客账</td><td data-label="需要自主权">需要决策权和预算</td><td data-label="需要现金储备">需要现金储备</td><td data-label="只需个人调整">—</td><td data-label="何时失效">行业变了会失效</td></tr>
+<tr><td data-label="做法">展示账户余额给商户和媒体看</td><td data-label="需要自主权">需要决策权</td><td data-label="需要现金储备">需要真的有钱</td><td data-label="只需个人调整">—</td><td data-label="何时失效">交易对手不担心你的履约能力时用处不大</td></tr>
+<tr><td data-label="做法">周末在对手休息时工作</td><td data-label="需要自主权">—</td><td data-label="需要现金储备">—</td><td data-label="只需个人调整">个人可调</td><td data-label="何时失效">额外投入没有自己重视的回报时失效</td></tr>
+<tr><td data-label="做法">每天读 20 页</td><td data-label="需要自主权">—</td><td data-label="需要现金储备">—</td><td data-label="只需个人调整">个人可调</td><td data-label="何时失效">—</td></tr>
+<tr><td data-label="做法">把对手当无限游戏的同伴</td><td data-label="需要自主权">需要决策权</td><td data-label="需要现金储备">—</td><td data-label="只需个人调整">个人可调（心态）</td><td data-label="何时失效">零和场景失效</td></tr>
+<tr><td data-label="做法">卖掉校内网（退出）</td><td data-label="需要自主权">需要决策权</td><td data-label="需要现金储备">—</td><td data-label="只需个人调整">个人可调（判断）</td><td data-label="何时失效">—</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="over">
+<h2>说过头的地方：把结论改成有边界的说法</h2>
+<p class="muted">三类问题反复出现：把多因结果归到单一决定（因果归因）、只看赢家的习惯（幸存者偏差）、把创始人的经验直接套给打工读者（经验外推）。五张卡不能都用同一个成功事件来佐证，否则就是循环论证：因为王兴成功，所以这些话正确；因为这些话正确，所以王兴成功。</p>
+<table class="tbl">
+<thead><tr><th>口播的说法</th><th>有边界的说法</th></tr></thead>
+<tbody>
+<tr><td data-label="口播的说法">不打线下广告帮助美团胜出</td><td data-label="有边界的说法">在当时的成本判断与竞争环境下，美团选择不投线下广告；这一选择是否构成胜出的关键因素，仍需结合其他经营变量判断。</td></tr>
+<tr><td data-label="口播的说法">跟风是逃避思考</td><td data-label="有边界的说法">未经独立判断的跟风，可能是逃避思考的一种方式。跟随成熟方案也可能是理性地降低试错成本。</td></tr>
+<tr><td data-label="口播的说法">勤奋比聪明容易</td><td data-label="有边界的说法">对部分可控任务而言，增加有效投入往往比显著提高认知能力更可操作。还需考虑疲劳、边际收益递减和任务本身的难度。</td></tr>
+<tr><td data-label="口播的说法">难熬是正常阶段，方向对就坚持</td><td data-label="有边界的说法">短期困难不必然意味着方向错误，但坚持应以阶段性证据、现金流、机会成本和退出条件为约束。</td></tr>
+<tr><td data-label="口播的说法">所有人都在监狱里，少数人挖地道</td><td data-label="有边界的说法">这是文学隐喻，不是对现实处境的普遍判断。个人努力有价值，但结构性障碍并不总能靠努力克服。</td></tr>
+<tr><td data-label="口播的说法">人生是无限游戏</td><td data-label="有边界的说法">把部分选择视为长期积累，有助于减少对单次输赢的过度关注。考试、合同、融资等有限目标仍需要明确期限与交付标准。</td></tr>
+<tr><td data-label="口播的说法">他十三年几乎每天都在想</td><td data-label="有边界的说法">公开存档呈现出长期、频繁的思考记录。发布记录不能证明每天都在思考，也不能完整代表一个人的内在状态。</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="practice" class="practice">
+<h2>读者练习：三件现在就能做的事</h2>
+<div class="box">
+<h3>一、读书计算器</h3>
+<p class="muted">算的是「理论阅读本数」，不等于学习效果。每本书页数自己填；完成率按你过去一年的真实记录填，不要填 100%。</p>
+<form class="calc" onsubmit="return false">
+<label>每天读的页数<input id="calc-pages" type="number" min="1" max="500" value="20" inputmode="numeric"></label>
+<label>坚持的天数<input id="calc-days" type="number" min="1" max="3650" value="365" inputmode="numeric"></label>
+<label>每本书的页数<input id="calc-book" type="number" min="20" max="2000" value="300" inputmode="numeric"></label>
+<label>实际完成率（%）<input id="calc-rate" type="number" min="0" max="100" value="60" inputmode="numeric"></label>
+<div class="calc-out" aria-live="polite"><span id="calc-msg" hidden>请按范围填写：每天 1–500 页，1–3650 天，每本 20–2000 页，完成率 0–100%。</span><span id="calc-res">理论本数 <b id="calc-theory">24.3</b> 本 · 按完成率折算约 <b id="calc-real">14.6</b> 本 · 计划页数 <span id="calc-total">7300</span> 页</span></div>
+</form>
+<p class="muted" style="margin-top:var(--sp-3)">口播的「每天 20 页、一年 24 本」按每本约 300 页算：20 × 365 ÷ 300 ≈ 24.3 本。它成立的前提是完成率 100%，大多数人做不到，所以先量基线。</p>
+</div>
+
+<div class="grid3" style="margin-top:var(--sp-4)">
+<div class="box"><h3>二、重大决定前的「跟风自检」</h3>
+<ol>
+<li>我为什么选择这个方案，证据是什么？</li>
+<li>如果行业里没有人在做，我还会选择它吗？</li>
+<li>什么新证据会让我改变主意？</li>
+</ol>
+<p class="muted">第三问最重要。它能避免把独立思考变成固执。</p>
+</div>
+<div class="box"><h3>三、有限／无限四栏</h3>
+<p class="muted">不要把每件事二分。对手头的一件事分别填四栏：</p>
+<div class="four">
+<div><b>短期交付目标</b>到什么日期交什么</div>
+<div><b>长期积累价值</b>做完留下什么能力或资产</div>
+<div><b>不可突破的约束</b>钱、时间、健康、法律</div>
+<div><b>退出或调整条件</b>看到什么数字就停或改</div>
+</div>
+</div>
+<div class="box"><h3>给熬着的人一行话</h3>
+<p>短期困难不必然意味着方向错误。但「熬」要有退出条件，否则它只是拖延的另一个名字。王兴的记录里既有退出（卖校内网），也有重开（美团）。</p>
+</div>
+</div>
+</section>
+
+<section id="src">
+<h2>来源与方法</h2>
+<p class="muted">共 34 个来源。本机 curl 实际打开 26 个（HTTP 200），其中 25 个抓到正文并用关键句核对、1 个只确认可打开；3 个知乎链接返回 403（反爬），5 个在本机网络环境连接失败；这 9 个的内容依据搜索引擎摘要，读者点开前请自行确认。饭否引文以 MBA 智库转载的 192 条汇编逐条检索为准，条号均指该汇编。</p>
+<ol class="src">
+<li id="s1"><a href="https://baike.baidu.com/item/%E7%8E%8B%E5%85%B4/3918107" rel="noopener" target="_blank">百度百科：王兴词条</a><span class="src-note">本机未能打开（连接失败），依据检索摘要</span></li>
+<li id="s2"><a href="https://www.sohu.com/a/417128252_120646625" rel="noopener" target="_blank">搜狐：王兴丨校内网的发展与失败</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s3"><a href="https://m.jiemian.com/article/2624045.html" rel="noopener" target="_blank">界面：6000万美元卖身，从94亿市值跌落的人人网做错了什么</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s4"><a href="https://zhuanlan.zhihu.com/p/10429930261" rel="noopener" target="_blank">知乎专栏：从辉煌到落幕，人人网的兴衰沉浮</a><span class="src-note">本机 403（知乎反爬），依据检索摘要</span></li>
+<li id="s5"><a href="https://news.qq.com/rain/a/20211227A07O7D00" rel="noopener" target="_blank">腾讯新闻：一文讲透美团兴盛史（一）千团大战</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s6"><a href="https://news.pedaily.cn/202110/479342.shtml" rel="noopener" target="_blank">投资界：从几场战役里看美团，和王兴的世界观</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s7"><a href="https://pro.huxiu.com/article/305512.html" rel="noopener" target="_blank">虎嗅妙投：美团：以战养战</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s8"><a href="https://m.jiemian.com/article/1973847.html" rel="noopener" target="_blank">界面：程维叫了美团打车，王兴点了滴滴外卖</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s9"><a href="http://www.eeo.com.cn/2018/0102/320087.shtml" rel="noopener" target="_blank">经济观察网：王兴进攻，程维反击（2018-01-02）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s10"><a href="https://m.thepaper.cn/newsDetail_forward_30894004" rel="noopener" target="_blank">澎湃：这轮外卖大战，王兴很想赢（2025-05）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s11"><a href="https://finance.sina.com.cn/stock/wbstock/2025-05-28/doc-ineycmqy7879625.shtml" rel="noopener" target="_blank">新浪财经转 21 世纪商业评论：备仓 1000 亿，王兴高调应战（2025-05-28）</a><span class="src-note">本机未能打开（连接失败），依据检索摘要</span></li>
+<li id="s12"><a href="https://www.meituan.com/news/NN251128093005515" rel="noopener" target="_blank">美团官网：2025 年 Q3 财报新闻（2025-11-28）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s13"><a href="https://finance.sina.com.cn/stock/hyyj/2025-11-28/doc-infyypay7163183.shtml" rel="noopener" target="_blank">新浪财经：美团 3 个月亏了 160 亿，王兴：外卖大战不可持续（2025-11-28）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s14"><a href="https://www.jiemian.com/article/10251343.html" rel="noopener" target="_blank">界面 JMedia：美团「宣战」抖音，王兴张一鸣「反目成仇」？</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s15"><a href="https://m.okjike.com/originalPosts/638e8c403d600ff5f15affbc" rel="noopener" target="_blank">即刻：王兴饭否动态整理电子书 2007–2020（网友整理）</a><span class="src-note">已打开</span></li>
+<li id="s16"><a href="https://zhuanlan.zhihu.com/p/108686101" rel="noopener" target="_blank">知乎专栏：读完王兴的 15170 条饭否，我摘录了最有启发的 90 句话</a><span class="src-note">本机 403（知乎反爬），依据检索摘要</span></li>
+<li id="s17"><a href="https://news.mbalib.com/story/256909" rel="noopener" target="_blank">MBA 智库：王兴 14 年来的 192 条饭否（2024-03-04 转载）</a><span class="src-note">已打开并抓到正文（逐条检索）</span></li>
+<li id="s18"><a href="https://www.goodreads.com/quotes/48271-there-is-no-expedient-to-which-a-man-will-not" rel="noopener" target="_blank">Goodreads：Edison 语录页（该英文句的流传记录，归属未核实）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s19"><a href="https://www.woshipm.com/it/277069.html" rel="noopener" target="_blank">人人都是产品经理转《财经》2016：王兴：多数人为了逃避真正的思考愿意做任何事情</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s20"><a href="https://zhuanlan.zhihu.com/p/92230437" rel="noopener" target="_blank">知乎专栏：王兴 2011 年内部讲话：团购是超完美的商业模式</a><span class="src-note">本机 403（知乎反爬），依据检索摘要</span></li>
+<li id="s21"><a href="https://news.qq.com/rain/a/20210520A06DW300" rel="noopener" target="_blank">腾讯新闻：王兴 95 条反思：战争是由等待和煎熬组成的（2021-05-20）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s22"><a href="https://www.thepaper.cn/newsDetail_forward_4766870" rel="noopener" target="_blank">澎湃湃客：「狼人」王兴</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s23"><a href="https://m.ithome.com/html/551075.htm" rel="noopener" target="_blank">IT 之家：美团创始人王兴刚捐完清华，又捐 5000 万元给高中母校</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s24"><a href="https://wapbaike.baidu.com/tashuo/browse/content?id=11fca6ec3275206af5c55995" rel="noopener" target="_blank">百科 TA 说：美团王兴，四十不惑</a><span class="src-note">本机未能打开（连接失败），依据检索摘要</span></li>
+<li id="s25"><a href="https://news.pedaily.cn/201809/436042.shtml" rel="noopener" target="_blank">投资界：王兴的另一面：饭否上看他如何读书、发问与思考（2018-09）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s26"><a href="https://wapbaike.baidu.com/tashuo/browse/content?id=7a42871d79b0ccfd79e93f3f" rel="noopener" target="_blank">百科 TA 说：《有限与无限的游戏》曾深刻影响王兴、程维等大佬的一本哲学书</a><span class="src-note">本机未能打开（连接失败），依据检索摘要</span></li>
+<li id="s27"><a href="https://news.qq.com/rain/a/20230115A01PYA00" rel="noopener" target="_blank">腾讯新闻：读书｜人生是一场无限游戏（2023-01-15）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s28"><a href="https://www.jiemian.com/article/2741110.html" rel="noopener" target="_blank">界面：O2O 创业消亡史与一个消费时代的诞生</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s29"><a href="https://www.gelonghui.com/p/32243" rel="noopener" target="_blank">格隆汇：美团大众点评已签字合并，双方 CEO 内部邮件原文（2015-10-08）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s30"><a href="https://tech.sina.com.cn/i/2017-06-21/doc-ifyhfnqa4533824.shtml" rel="noopener" target="_blank">新浪科技转《财经》2017：对话王兴：太多人关注边界 而不关注核心</a><span class="src-note">本机未能打开（连接失败），依据检索摘要</span></li>
+<li id="s31"><a href="https://t.qianzhan.com/caijing/detail/250527-d308392e.html" rel="noopener" target="_blank">前瞻经济学人：王兴回应京东外卖百亿补贴：美团将不惜代价赢得竞争（2025-05-27）</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s32"><a href="https://www.pingwest.com/a/256096" rel="noopener" target="_blank">品玩：王兴跟张一鸣不谈友情</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s33"><a href="https://www.thepaper.cn/newsDetail_forward_1382928" rel="noopener" target="_blank">澎湃：大众点评和美团「相杀到相爱」全过程解密</a><span class="src-note">已打开并抓到正文</span></li>
+<li id="s34"><a href="https://m.163.com/dy/article/K0LU17UA0541U4DE.html" rel="noopener" target="_blank">网易号：美团王兴谈外卖大战，「我们将不惜一切代价赢得竞争！」</a><span class="src-note">已打开并抓到正文</span></li>
+</ol>
+<h3>未核实清单</h3>
+<ul>
+<li>饭否存档的条数（15420）与页数（2284）来自网友整理，没有官方口径。</li>
+<li>所有饭否引文的发帖日期（口播给了 8 个具体日期）本次都没有独立核实。</li>
+<li>「血战五十天」「11 月比 10 月涨 40%」「5.5 亿广告」「爱迪生 1921 年挂牌」「汽车公司 1800 家到 3 家」没有找到出处。</li>
+<li>「肖申克」「每天读二十页」「不喜欢提初心」「一万多天」四条饭否，公开汇编没有收录。</li>
+</ul>
+<h3>方法说明</h3>
+<ul>
+<li>证据分级采用五级（A 多源核实 / B 单一来源 / C 口径不一 / D 待核实 / E 与事实不符），并把「证据状态」和「主张类型」分开标。这一分级框架采纳自本次 ChatGPT Pro 的内容审查建议；分级结果由本机逐条核对后给出。</li>
+<li>史料核查和实践价值分开评分：一条经验可能有史料支持却不适合推广，也可能无法证明它造成了成功，但仍值得读者在自身条件下验证。</li>
+<li>本页不替代原始档案。要核对原话，请找网友整理的饭否电子书或《财经》访谈原文。</li>
+</ul>
+</section>
+
+<footer class="page">口播作者「小华」；本页为核对与延展，不转载口播全文。饭否引文均为短句引用，出处见来源 [17][21]。制作：2026-10-23。</footer>
+</div>
+<script>
+(function(){
+  var ids=["calc-pages","calc-days","calc-book","calc-rate"];
+  function num(id){return parseFloat(document.getElementById(id).value);}
+  function run(){
+    var p=num("calc-pages"),d=num("calc-days"),b=num("calc-book"),r=num("calc-rate");
+    var msg=document.getElementById("calc-msg"),res=document.getElementById("calc-res");
+    var bad=!(p>=1&&p<=500&&d>=1&&d<=3650&&b>=20&&b<=2000&&r>=0&&r<=100);
+    msg.hidden=!bad; res.hidden=bad; if(bad) return;
+    var pages=p*d, theory=pages/b, real=theory*r/100;
+    document.getElementById("calc-total").textContent=Math.round(pages).toLocaleString("zh-CN");
+    document.getElementById("calc-theory").textContent=theory.toFixed(1);
+    document.getElementById("calc-real").textContent=real.toFixed(1);
+  }
+  ids.forEach(function(id){document.getElementById(id).addEventListener("input",run);});
+  run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2099 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#081321">
+  <meta name="description" content="对照 Peter Steinberger 的《Fun Is Velocity》，分清演讲原话、解说引申与遗漏条件，理解 AI 时代产品难点的迁移。">
+  <title>AI 越强，做产品反而越难｜原话、边界与遗漏</title>
+  <style>
+    /*
+      设计令牌：
+      --c-* 为颜色，--s-* 为空间，--fs-* / --lh-* 为字号与行高，
+      --r-* / --b-* / --shadow-* 为形状与边界，
+      --layout-* 为布局，--state-* 为交互状态。
+
+      扩展方式：
+      新组件优先复用现有令牌；需要新设计值时，只在 :root 添加，
+      组件通过 var() 引用，不在组件内部散落颜色、尺寸或其他设计值。
+
+      响应式：
+      媒体查询集中在样式末尾。自定义属性不能用于媒体查询条件，
+      因此 680px（宽手机／平板）、1100px（桌面）只在那里写为字面量。
+
+      图表：
+      条形比例由演讲中的数值计算；SVG 的 viewBox 与路径坐标仅是绘图几何，
+      不是新增数据。所有实际文本、描边和填色仍由令牌控制。
+    */
+    :root {
+      --c-bg: #081321;
+      --c-surface: #101e30;
+      --c-raised: #17283e;
+      --c-deep: #0b1828;
+      --c-text: #f1f5fc;
+      --c-muted: #b3c2d7;
+      --c-subtle: #9aafca;
+      --c-line: #344a63;
+      --c-accent: #cbff69;
+      --c-accent-bg: #203520;
+      --c-original: #7bdbff;
+      --c-original-bg: #10344a;
+      --c-original-line: #39738e;
+      --c-partial: #ffd18b;
+      --c-partial-bg: #3b2c1b;
+      --c-partial-line: #967344;
+      --c-inferred: #d3bdff;
+      --c-inferred-bg: #2c2443;
+      --c-inferred-line: #776295;
+      --c-transparent: transparent;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      --fs-xs: .75rem;
+      --fs-sm: .875rem;
+      --fs-base: 1rem;
+      --fs-body: 1.0625rem;
+      --fs-lead: clamp(1.0625rem, 1.5vw, 1.25rem);
+      --fs-h3: clamp(1.25rem, 1.8vw, 1.625rem);
+      --fs-h2: clamp(1.625rem, 2.5vw, 2.25rem);
+      --fs-hero: clamp(2.125rem, 3.5vw, 3.5rem);
+      --fs-stat: clamp(1.875rem, 3.3vw, 2.625rem);
+      --fs-formula: 36px;
+      --fs-svg: 24px;
+      --fw-normal: 400;
+      --fw-medium: 500;
+      --fw-semibold: 600;
+      --fw-bold: 700;
+      --fw-heavy: 800;
+      --lh-tight: 1.23;
+      --lh-heading: 1.4;
+      --lh-compact: 1.55;
+      --lh-body: 1.85;
+      --ls-title: -.025em;
+      --ls-number: -.035em;
+      --ls-kicker: .06em;
+
+      --s-0: 0;
+      --s-1: .25rem;
+      --s-2: .5rem;
+      --s-3: .75rem;
+      --s-4: 1rem;
+      --s-5: 1.25rem;
+      --s-6: 1.5rem;
+      --s-7: 2rem;
+      --s-8: 2.5rem;
+      --s-9: 3rem;
+      --s-10: 4rem;
+      --s-11: 5rem;
+      --space-page: clamp(1rem, 3.4vw, 3.5rem);
+      --space-card: clamp(1.125rem, 2.1vw, 2rem);
+      --space-section: clamp(3.5rem, 6vw, 6rem);
+
+      --page-max: 92rem;
+      --copy-max: 52rem;
+      --size-full: 100%;
+      --size-auto: auto;
+      --size-min: 0;
+      --size-hairline: 1px;
+      --size-checkbox: 1.25rem;
+      --size-mark: 2rem;
+      --size-line-node: .625rem;
+      --size-bar: .875rem;
+
+      --r-sm: .25rem;
+      --r-md: .75rem;
+      --r-lg: 1.25rem;
+      --r-none: 0;
+      --b-width: 1px;
+      --b-style: solid;
+      --b-base: var(--b-width) var(--b-style) var(--c-line);
+      --b-accent: 2px var(--b-style) var(--c-accent);
+      --b-original: var(--b-width) var(--b-style) var(--c-original-line);
+      --b-partial: var(--b-width) var(--b-style) var(--c-partial-line);
+      --b-inferred: var(--b-width) var(--b-style) var(--c-inferred-line);
+      --b-transparent: 2px var(--b-style) var(--c-transparent);
+      --shadow-card: 0 16px 48px rgb(0 0 0 / .14);
+
+      --bg-hero: radial-gradient(ellipse at 85% 0%, rgb(94 164 255 / .10), transparent 55%);
+      --bg-diagram: linear-gradient(rgb(123 219 255 / .04) 1px, transparent 1px), linear-gradient(90deg, rgb(123 219 255 / .04) 1px, transparent 1px), var(--c-deep);
+      --bg-grid-size: 24px 24px;
+
+      --focus-ring: 3px solid var(--c-accent);
+      --focus-offset: 4px;
+      --underline-offset: .2em;
+
+      --download-low: calc(83.5 / 470 * 100%);
+      --download-peak: 100%;
+      --security-media: 100%;
+      --security-scan: calc(.3 / 20 * 100%);
+      --svg-stroke: 3px;
+      --svg-anchor: middle;
+      --svg-linecap: square;
+      --timeline-node-offset: calc(var(--size-line-node) / -2 - var(--size-hairline) / 2);
+      --content-empty: "";
+
+      --display-block: block;
+      --display-inline-block: inline-block;
+      --display-flex: flex;
+      --display-inline-flex: inline-flex;
+      --display-grid: grid;
+      --display-none: none;
+      --position-relative: relative;
+      --position-absolute: absolute;
+      --position-fixed: fixed;
+      --box-sizing: border-box;
+      --text-left: left;
+      --text-center: center;
+      --text-normal: normal;
+      --text-nowrap: nowrap;
+      --decoration-none: none;
+      --font-inherit: inherit;
+      --number-style: tabular-nums;
+      --list-none: none;
+      --cursor-pointer: pointer;
+      --align-start: start;
+      --align-center: center;
+      --align-baseline: baseline;
+      --justify-between: space-between;
+      --flex-wrap: wrap;
+      --overflow-hidden: hidden;
+      --overflow-wrap: anywhere;
+      --vertical-top: top;
+      --appearance-auto: auto;
+      --table-collapse: collapse;
+      --table-fixed: fixed;
+
+      --grid-double: repeat(2, minmax(0, 1fr));
+      --grid-arrow: minmax(0, 1fr) auto minmax(0, 1fr);
+      --grid-check: auto minmax(0, 1fr);
+      --grid-all: 1 / -1;
+
+      --layout-hero: minmax(0, 1fr);
+      --layout-metrics: repeat(2, minmax(0, 1fr));
+      --layout-reader: minmax(0, 1fr);
+      --layout-nav: repeat(2, minmax(0, 1fr));
+      --layout-card: minmax(0, 1fr);
+      --layout-insights: minmax(0, 1fr);
+      --layout-actions: minmax(0, 1fr);
+      --layout-footer: minmax(0, 1fr);
+      --layout-legend: minmax(0, 1fr);
+      --layout-toc-position: static;
+      --layout-timeline: minmax(0, 1fr);
+      --layout-filter: repeat(2, minmax(0, 1fr));
+
+      --layout-table: block;
+      --layout-tbody: grid;
+      --layout-tr: grid;
+      --layout-cell: block;
+      --layout-tr-columns: 2rem minmax(0, 1fr);
+      --layout-tr-bg: var(--c-surface);
+      --layout-tr-border: var(--b-base);
+      --layout-tr-padding: var(--s-4);
+      --layout-tr-radius: var(--r-md);
+      --layout-cell-padding: var(--s-0);
+      --layout-cell-border: none;
+      --layout-decision-column: 2;
+      --layout-head-position: absolute;
+      --layout-head-size: 1px;
+      --layout-head-overflow: hidden;
+      --layout-head-clip: inset(50%);
+      --layout-number-width: auto;
+      --layout-statement-width: auto;
+
+      --state-scroll: smooth;
+      --state-transition: color .16s ease, border-color .16s ease, background-color .16s ease;
+      --state-skip-hidden: translateY(-180%);
+      --state-skip-shown: translateY(0);
+      --state-z-front: 10;
+      --sr-clip: inset(50%);
+      --sr-margin: -1px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: var(--box-sizing);
+    }
+    html {
+      scroll-behavior: var(--state-scroll);
+      background: var(--c-bg);
+    }
+    body {
+      margin: var(--s-0);
+      color: var(--c-text);
+      font-family: var(--font-sans);
+      font-size: var(--fs-base);
+      line-height: var(--lh-body);
+      background: var(--bg-hero);
+      overflow-wrap: var(--overflow-wrap);
+    }
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+      margin: var(--s-0);
+    }
+    h1, h2, h3, h4 {
+      font-weight: var(--fw-bold);
+      line-height: var(--lh-heading);
+    }
+    h1 {
+      font-size: var(--fs-hero);
+      line-height: var(--lh-tight);
+      letter-spacing: var(--ls-title);
+    }
+    h2 {
+      font-size: var(--fs-h2);
+      letter-spacing: var(--ls-title);
+    }
+    h3 { font-size: var(--fs-h3); }
+    h4 { font-size: var(--fs-base); }
+    p + p { margin-block-start: var(--s-3); }
+    strong { font-weight: var(--fw-bold); }
+    a {
+      color: var(--c-original);
+      text-decoration-thickness: var(--size-hairline);
+      text-underline-offset: var(--underline-offset);
+    }
+    a:hover { color: var(--c-accent); }
+    button, input { font: var(--font-inherit); }
+    button, label { -webkit-tap-highlight-color: var(--c-transparent); }
+    button { cursor: var(--cursor-pointer); }
+    :focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-offset);
+    }
+    ::selection {
+      background: var(--c-accent);
+      color: var(--c-bg);
+    }
+    [hidden] { display: var(--display-none) !important; }
+    section[id], article[id], footer[id], li[id] {
+      scroll-margin-top: var(--s-7);
+    }
+    svg {
+      display: var(--display-block);
+      width: var(--size-full);
+      height: var(--size-auto);
+    }
+
+    .container {
+      width: var(--size-full);
+      max-width: var(--page-max);
+      margin-inline: var(--size-auto);
+      padding-inline: var(--space-page);
+    }
+    .sr-only {
+      position: var(--position-absolute);
+      width: var(--size-hairline);
+      height: var(--size-hairline);
+      padding: var(--s-0);
+      margin: var(--sr-margin);
+      overflow: var(--overflow-hidden);
+      clip-path: var(--sr-clip);
+      white-space: var(--text-nowrap);
+      border: var(--s-0);
+    }
+    .skip-link {
+      position: var(--position-fixed);
+      z-index: var(--state-z-front);
+      inset-block-start: var(--s-4);
+      inset-inline-start: var(--s-4);
+      transform: var(--state-skip-hidden);
+      background: var(--c-accent);
+      color: var(--c-bg);
+      padding: var(--s-3) var(--s-5);
+      border-radius: var(--r-sm);
+    }
+    .skip-link:focus {
+      transform: var(--state-skip-shown);
+      color: var(--c-bg);
+    }
+
+    .topbar {
+      display: var(--display-flex);
+      align-items: var(--align-center);
+      justify-content: var(--justify-between);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-3);
+      padding-block: var(--s-5);
+      border-block-end: var(--b-base);
+    }
+    .brand {
+      display: var(--display-inline-flex);
+      align-items: var(--align-center);
+      gap: var(--s-3);
+      color: var(--c-text);
+      font-weight: var(--fw-bold);
+      text-decoration: var(--decoration-none);
+    }
+    .brand-mark {
+      display: var(--display-grid);
+      place-items: var(--align-center);
+      width: var(--size-mark);
+      height: var(--size-mark);
+      background: var(--c-accent);
+      color: var(--c-bg);
+      border-radius: var(--r-sm);
+      font-weight: var(--fw-heavy);
+    }
+    .top-note, .small {
+      font-size: var(--fs-sm);
+      color: var(--c-muted);
+    }
+
+    .hero {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-hero);
+      align-items: var(--align-center);
+      gap: var(--s-9);
+      padding-block: var(--space-section);
+    }
+    .kicker {
+      display: var(--display-block);
+      margin-block-end: var(--s-4);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-semibold);
+      letter-spacing: var(--ls-kicker);
+      color: var(--c-accent);
+    }
+    .hero .lead {
+      margin-block-start: var(--s-6);
+      font-size: var(--fs-lead);
+      color: var(--c-muted);
+      max-width: var(--copy-max);
+    }
+    .hero .byline {
+      margin-block-start: var(--s-5);
+      font-size: var(--fs-sm);
+      color: var(--c-subtle);
+    }
+    .accent { color: var(--c-accent); }
+    .hero-actions {
+      display: var(--display-flex);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-3);
+      margin-block-start: var(--s-6);
+    }
+    .button {
+      display: var(--display-inline-flex);
+      align-items: var(--align-center);
+      justify-content: var(--align-center);
+      gap: var(--s-2);
+      padding: var(--s-3) var(--s-5);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-compact);
+      border: var(--b-base);
+      border-radius: var(--r-sm);
+      color: var(--c-text);
+      background: var(--c-surface);
+      text-decoration: var(--decoration-none);
+      transition: var(--state-transition);
+    }
+    .button:hover {
+      border-color: var(--c-accent);
+      color: var(--c-accent);
+    }
+    .button--primary {
+      color: var(--c-bg);
+      background: var(--c-accent);
+      border-color: var(--c-accent);
+    }
+    .button--primary:hover {
+      color: var(--c-bg);
+      background: var(--c-text);
+      border-color: var(--c-text);
+    }
+
+    .panel {
+      padding: var(--space-card);
+      background: var(--c-surface);
+      border: var(--b-base);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-card);
+    }
+    .panel-top {
+      display: var(--display-flex);
+      align-items: var(--align-start);
+      justify-content: var(--justify-between);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-3);
+      margin-block-end: var(--s-5);
+    }
+    .cost-map {
+      background: var(--bg-diagram);
+      background-size: var(--bg-grid-size);
+    }
+    .cost-grid {
+      display: var(--display-grid);
+      grid-template-columns: var(--grid-double);
+      gap: var(--s-3);
+    }
+    .cost-column { min-width: var(--size-min); }
+    .cost-title {
+      display: var(--display-flex);
+      align-items: var(--align-center);
+      gap: var(--s-2);
+      font-size: var(--fs-h3);
+    }
+    .cost-title--down { color: var(--c-original); }
+    .cost-title--up { color: var(--c-accent); }
+    .cost-path { margin-block: var(--s-4); }
+    .svg-down {
+      stroke: var(--c-original);
+      stroke-width: var(--svg-stroke);
+      fill: var(--c-transparent);
+      stroke-linecap: var(--svg-linecap);
+    }
+    .svg-up {
+      stroke: var(--c-accent);
+      stroke-width: var(--svg-stroke);
+      fill: var(--c-transparent);
+      stroke-linecap: var(--svg-linecap);
+    }
+    .cost-items {
+      display: var(--display-grid);
+      gap: var(--s-2);
+      padding: var(--s-0);
+      margin: var(--s-0);
+      list-style: var(--list-none);
+    }
+    .cost-items li {
+      padding: var(--s-2) var(--s-3);
+      background: var(--c-surface);
+      border: var(--b-base);
+      border-radius: var(--r-sm);
+      font-size: var(--fs-sm);
+    }
+    .cost-items--up li { border-inline-start: var(--b-accent); }
+    figcaption {
+      margin-block-start: var(--s-4);
+      font-size: var(--fs-sm);
+      color: var(--c-muted);
+      line-height: var(--lh-compact);
+    }
+
+    .tag {
+      display: var(--display-inline-block);
+      padding: var(--s-1) var(--s-2);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-compact);
+      border-radius: var(--r-sm);
+      border: var(--b-base);
+      text-decoration: var(--decoration-none);
+      vertical-align: var(--vertical-top);
+    }
+    .tag--original {
+      color: var(--c-original);
+      background: var(--c-original-bg);
+      border: var(--b-original);
+    }
+    .tag--partial {
+      color: var(--c-partial);
+      background: var(--c-partial-bg);
+      border: var(--b-partial);
+    }
+    .tag--inferred {
+      color: var(--c-inferred);
+      background: var(--c-inferred-bg);
+      border: var(--b-inferred);
+    }
+    .tag--source {
+      color: var(--c-muted);
+      background: var(--c-deep);
+    }
+    a.tag:hover {
+      color: var(--c-text);
+      border-color: var(--c-text);
+    }
+
+    .legend {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-legend);
+      gap: var(--s-6);
+      padding: var(--s-6);
+      border: var(--b-base);
+      border-radius: var(--r-md);
+      background: var(--c-deep);
+    }
+    .legend h2 {
+      font-size: var(--fs-base);
+      margin-block-end: var(--s-3);
+    }
+    .legend-items {
+      display: var(--display-flex);
+      align-items: var(--align-center);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-2);
+      margin-block-end: var(--s-3);
+    }
+    .legend p {
+      font-size: var(--fs-sm);
+      color: var(--c-muted);
+    }
+
+    .metrics-section { padding-block: var(--space-section); }
+    .section-heading { margin-block-end: var(--s-6); }
+    .section-heading p {
+      color: var(--c-muted);
+      margin-block-start: var(--s-3);
+      max-width: var(--copy-max);
+    }
+    .metrics {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-metrics);
+      gap: var(--s-3);
+    }
+    .metric {
+      padding: var(--s-5);
+      min-width: var(--size-min);
+      border: var(--b-base);
+      border-radius: var(--r-md);
+      background: var(--c-surface);
+    }
+    .metric dt {
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-compact);
+    }
+    .metric dd { margin-block-start: var(--s-3); }
+    .metric-value {
+      display: var(--display-block);
+      font-size: var(--fs-stat);
+      line-height: var(--lh-tight);
+      font-weight: var(--fw-heavy);
+      font-variant-numeric: var(--number-style);
+      letter-spacing: var(--ls-number);
+    }
+    .metric-value small {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      letter-spacing: var(--text-normal);
+    }
+    .metric-note {
+      display: var(--display-block);
+      margin-block-start: var(--s-3);
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-compact);
+    }
+
+    .reader-layout {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-reader);
+      align-items: var(--align-start);
+      gap: var(--s-8);
+      padding-block-end: var(--space-section);
+    }
+    .toc {
+      position: var(--layout-toc-position);
+      inset-block-start: var(--s-6);
+      padding-block-start: var(--s-4);
+      border-block-start: var(--b-accent);
+    }
+    .toc h2 {
+      font-size: var(--fs-sm);
+      color: var(--c-subtle);
+      margin-block-end: var(--s-3);
+    }
+    .toc nav {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-nav);
+      gap: var(--s-1);
+    }
+    .toc a {
+      display: var(--display-block);
+      padding: var(--s-2) var(--s-3);
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+      text-decoration: var(--decoration-none);
+      border-inline-start: var(--b-transparent);
+      transition: var(--state-transition);
+    }
+    .toc a:hover, .toc a[aria-current="location"] {
+      color: var(--c-accent);
+      border-inline-start: var(--b-accent);
+      background: var(--c-surface);
+    }
+    .toc-note {
+      font-size: var(--fs-xs);
+      line-height: var(--lh-compact);
+      color: var(--c-subtle);
+      padding: var(--s-4) var(--s-3);
+    }
+    .reading-content { min-width: var(--size-min); }
+    .reading-content > section + section {
+      margin-block-start: var(--space-section);
+    }
+
+    .chart {
+      padding: var(--s-6);
+      border: var(--b-base);
+      border-radius: var(--r-md);
+      background: var(--c-deep);
+    }
+    .chart h3, .chart h4 { margin-block-end: var(--s-4); }
+    .bar-row + .bar-row { margin-block-start: var(--s-5); }
+    .bar-label {
+      display: var(--display-flex);
+      align-items: var(--align-baseline);
+      justify-content: var(--justify-between);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-2);
+      margin-block-end: var(--s-2);
+      font-size: var(--fs-sm);
+      color: var(--c-muted);
+    }
+    .bar-value {
+      color: var(--c-text);
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      line-height: var(--lh-compact);
+      font-variant-numeric: var(--number-style);
+    }
+    .bar-track {
+      height: var(--size-bar);
+      width: var(--size-full);
+      background: var(--c-raised);
+      border-radius: var(--r-sm);
+      overflow: var(--overflow-hidden);
+    }
+    .bar {
+      display: var(--display-block);
+      height: var(--size-full);
+      border-radius: var(--r-none);
+    }
+    .bar--low {
+      width: var(--download-low);
+      background: var(--c-original);
+    }
+    .bar--peak {
+      width: var(--download-peak);
+      background: var(--c-accent);
+    }
+    .bar--media {
+      width: var(--security-media);
+      background: var(--c-partial);
+    }
+    .bar--scan {
+      width: var(--security-scan);
+      background: var(--c-original);
+    }
+
+    .timeline {
+      list-style: var(--list-none);
+      padding: var(--s-0);
+      margin: var(--s-7) var(--s-0) var(--s-0);
+    }
+    .timeline li {
+      position: var(--position-relative);
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-timeline);
+      gap: var(--s-2) var(--s-5);
+      padding: var(--s-0) var(--s-0) var(--s-6) var(--s-6);
+      border-inline-start: var(--b-base);
+    }
+    .timeline li::before {
+      content: var(--content-empty);
+      position: var(--position-absolute);
+      inset-inline-start: var(--timeline-node-offset);
+      inset-block-start: var(--s-2);
+      width: var(--size-line-node);
+      height: var(--size-line-node);
+      background: var(--c-accent);
+      border: var(--b-base);
+    }
+    .timeline li:last-child { padding-block-end: var(--s-0); }
+    .timeline-date {
+      font-weight: var(--fw-semibold);
+      font-size: var(--fs-sm);
+      color: var(--c-accent);
+    }
+    .timeline-content { min-width: var(--size-min); }
+    .timeline-content .tag { margin-block-start: var(--s-2); }
+    .timeline-content .small { margin-block-start: var(--s-2); }
+
+    .judgments {
+      display: var(--display-grid);
+      gap: var(--s-6);
+    }
+    .judgment {
+      overflow: var(--overflow-hidden);
+      border: var(--b-base);
+      border-radius: var(--r-lg);
+      background: var(--c-surface);
+      box-shadow: var(--shadow-card);
+    }
+    .judgment-head {
+      display: var(--display-flex);
+      align-items: var(--align-start);
+      justify-content: var(--justify-between);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-3);
+      padding: var(--space-card);
+      border-block-end: var(--b-base);
+    }
+    .judgment-head .topic {
+      display: var(--display-block);
+      margin-block-end: var(--s-2);
+      font-size: var(--fs-sm);
+      color: var(--c-subtle);
+    }
+    .judgment-head h3 { max-width: var(--copy-max); }
+    .card-body {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-card);
+      gap: var(--s-6);
+      padding: var(--space-card);
+    }
+    .card-stack {
+      display: var(--display-grid);
+      align-content: var(--align-start);
+      gap: var(--s-5);
+      min-width: var(--size-min);
+    }
+    .voice {
+      padding: var(--s-4);
+      background: var(--c-deep);
+      border-radius: var(--r-md);
+    }
+    .voice h4, .verdict h4, .omitted h4, .insight h4 {
+      margin-block-end: var(--s-2);
+      font-size: var(--fs-sm);
+    }
+    .voice--commentator h4 { color: var(--c-inferred); }
+    .voice--peter { border-inline-start: var(--b-original); }
+    .voice--peter h4 { color: var(--c-original); }
+    .voice p, .verdict p, .omitted p, .insight p {
+      font-size: var(--fs-base);
+    }
+    .verdict {
+      padding-block-end: var(--s-4);
+      border-block-end: var(--b-base);
+    }
+    .verdict h4 { color: var(--c-text); }
+    .omitted h4 { color: var(--c-partial); }
+    .insight {
+      padding: var(--s-4);
+      border: var(--b-inferred);
+      border-radius: var(--r-md);
+      background: var(--c-inferred-bg);
+    }
+    .insight h4 { color: var(--c-inferred); }
+    .inline-source {
+      display: var(--display-inline-block);
+      font-size: var(--fs-xs);
+      margin-inline-start: var(--s-1);
+    }
+    .quote {
+      padding-inline-start: var(--s-4);
+      border-inline-start: var(--b-accent);
+      font-size: var(--fs-body);
+      font-weight: var(--fw-medium);
+    }
+    .card-foot {
+      padding: var(--s-0) var(--space-card) var(--space-card);
+    }
+
+    .figure-grid {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-card);
+      align-items: var(--align-center);
+      gap: var(--s-5);
+    }
+    .switch-svg { max-width: var(--copy-max); }
+    .svg-box {
+      rx: var(--r-sm);
+      fill: var(--c-surface);
+      stroke: var(--c-line);
+      stroke-width: var(--svg-stroke);
+    }
+    .svg-box--accent {
+      fill: var(--c-accent-bg);
+      stroke: var(--c-accent);
+    }
+    .svg-label {
+      fill: var(--c-text);
+      font-family: var(--font-sans);
+      font-size: var(--fs-svg);
+      font-weight: var(--fw-semibold);
+      text-anchor: var(--svg-anchor);
+    }
+    .svg-formula {
+      fill: var(--c-accent);
+      font-size: var(--fs-formula);
+    }
+    .figure-grid figcaption { margin-block-start: var(--s-0); }
+
+    .role-grid {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-card);
+      gap: var(--s-4);
+    }
+    .role-lane {
+      display: var(--display-grid);
+      grid-template-columns: var(--grid-arrow);
+      align-items: var(--align-center);
+      gap: var(--s-3);
+    }
+    .role-cell {
+      padding: var(--s-3);
+      border: var(--b-base);
+      border-radius: var(--r-sm);
+      background: var(--c-surface);
+      text-align: var(--text-center);
+    }
+    .role-cell--new {
+      color: var(--c-accent);
+      border-color: var(--c-accent);
+    }
+    .role-arrow { color: var(--c-subtle); }
+    .duality {
+      display: var(--display-grid);
+      grid-template-columns: var(--grid-double);
+      gap: var(--s-3);
+      margin-block-start: var(--s-4);
+    }
+    .duality div {
+      border-block-start: var(--b-base);
+      padding-block-start: var(--s-3);
+    }
+    .duality dt {
+      color: var(--c-subtle);
+      font-size: var(--fs-sm);
+    }
+    .duality dd {
+      margin-block-start: var(--s-1);
+      font-weight: var(--fw-semibold);
+    }
+
+    .omissions-grid {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-insights);
+      gap: var(--s-4);
+    }
+    .omission-card {
+      min-width: var(--size-min);
+      padding: var(--s-6);
+      border: var(--b-base);
+      border-radius: var(--r-md);
+      background: var(--c-surface);
+    }
+    .omission-card h3 { margin-block: var(--s-3) var(--s-4); }
+    .omission-card > p { color: var(--c-muted); }
+    .omission-card strong { color: var(--c-text); }
+    .omission-card--wide { grid-column: var(--grid-all); }
+    .omission-card .chart { margin-block-start: var(--s-5); }
+    .takeaway {
+      margin-block-start: var(--s-5);
+      padding-block-start: var(--s-4);
+      border-block-start: var(--b-base);
+      font-size: var(--fs-sm);
+      color: var(--c-inferred);
+    }
+    .takeaway strong { color: var(--c-inferred); }
+
+    .filter-bar {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-filter);
+      gap: var(--s-2);
+      padding: var(--s-0);
+      margin: var(--s-0) var(--s-0) var(--s-4);
+      border: var(--s-0);
+      min-width: var(--size-min);
+    }
+    .filter-bar button[aria-pressed="true"] {
+      color: var(--c-bg);
+      background: var(--c-accent);
+      border-color: var(--c-accent);
+    }
+    .filter-status {
+      margin-block-end: var(--s-4);
+      color: var(--c-subtle);
+      font-size: var(--fs-sm);
+    }
+    .audit-table {
+      display: var(--layout-table);
+      width: var(--size-full);
+      border-collapse: var(--table-collapse);
+      table-layout: var(--table-fixed);
+      font-size: var(--fs-sm);
+    }
+    .audit-table thead {
+      position: var(--layout-head-position);
+      width: var(--layout-head-size);
+      height: var(--layout-head-size);
+      overflow: var(--layout-head-overflow);
+      clip-path: var(--layout-head-clip);
+    }
+    .audit-table tbody {
+      display: var(--layout-tbody);
+      gap: var(--s-3);
+    }
+    .audit-table tbody tr {
+      display: var(--layout-tr);
+      grid-template-columns: var(--layout-tr-columns);
+      gap: var(--s-3);
+      padding: var(--layout-tr-padding);
+      border: var(--layout-tr-border);
+      border-radius: var(--layout-tr-radius);
+      background: var(--layout-tr-bg);
+    }
+    .audit-table th, .audit-table td {
+      display: var(--layout-cell);
+      padding: var(--layout-cell-padding);
+      text-align: var(--text-left);
+      vertical-align: var(--vertical-top);
+      border-block-end: var(--layout-cell-border);
+      min-width: var(--size-min);
+    }
+    .audit-table thead th {
+      color: var(--c-muted);
+      background: var(--c-raised);
+      font-weight: var(--fw-semibold);
+    }
+    .audit-table th:first-child { width: var(--layout-number-width); }
+    .audit-table th:nth-child(2) { width: var(--layout-statement-width); }
+    .audit-table tbody th {
+      color: var(--c-subtle);
+      font-variant-numeric: var(--number-style);
+    }
+    .audit-table .decision { grid-column: var(--layout-decision-column); }
+    .audit-table .decision p {
+      margin-block-start: var(--s-2);
+      color: var(--c-muted);
+    }
+    .audit-summary {
+      display: var(--display-flex);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-2);
+      margin-block-start: var(--s-5);
+    }
+    .editor-note {
+      margin-block-start: var(--s-4);
+      padding-inline-start: var(--s-4);
+      border-inline-start: var(--b-base);
+      color: var(--c-subtle);
+      font-size: var(--fs-sm);
+    }
+
+    .actions {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-actions);
+      gap: var(--s-3);
+      list-style: var(--list-none);
+      padding: var(--s-0);
+      margin: var(--s-0);
+    }
+    .actions li {
+      min-width: var(--size-min);
+      background: var(--c-surface);
+      border: var(--b-base);
+      border-radius: var(--r-md);
+    }
+    .actions label {
+      display: var(--display-grid);
+      grid-template-columns: var(--grid-check);
+      gap: var(--s-4);
+      padding: var(--s-5);
+      cursor: var(--cursor-pointer);
+    }
+    .actions input {
+      appearance: var(--appearance-auto);
+      accent-color: var(--c-accent);
+      width: var(--size-checkbox);
+      height: var(--size-checkbox);
+      margin: var(--s-1) var(--s-0) var(--s-0);
+    }
+    .actions strong {
+      display: var(--display-block);
+      margin-block-end: var(--s-2);
+    }
+    .actions .action-detail {
+      display: var(--display-block);
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+    }
+    .actions input:checked + span strong { color: var(--c-accent); }
+
+    .closing {
+      padding: var(--space-card);
+      border: var(--b-accent);
+      border-radius: var(--r-lg);
+      background: var(--c-deep);
+    }
+    .closing h2 { margin-block: var(--s-4) var(--s-5); }
+    .closing blockquote { font-size: var(--fs-lead); }
+    .last-advice {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-card);
+      gap: var(--s-6);
+      margin-block-start: var(--s-6);
+      padding-block-start: var(--s-6);
+      border-block-start: var(--b-base);
+    }
+    .last-advice h3 {
+      font-size: var(--fs-base);
+      margin-block-end: var(--s-3);
+    }
+    .last-advice ul {
+      margin: var(--s-0);
+      padding-inline-start: var(--s-5);
+      color: var(--c-muted);
+    }
+    .last-advice p { color: var(--c-muted); }
+
+    .footer {
+      padding-block: var(--s-9);
+      border-block-start: var(--b-base);
+      background: var(--c-deep);
+    }
+    .footer-grid {
+      display: var(--display-grid);
+      grid-template-columns: var(--layout-footer);
+      gap: var(--s-8);
+    }
+    .footer h2 {
+      font-size: var(--fs-h3);
+      margin-block-end: var(--s-4);
+    }
+    .sources {
+      list-style: var(--list-none);
+      padding: var(--s-0);
+      margin: var(--s-0);
+      display: var(--display-grid);
+      gap: var(--s-5);
+    }
+    .sources li { min-width: var(--size-min); }
+    .sources .tag { margin-block-end: var(--s-2); }
+    .source-link {
+      display: var(--display-block);
+      font-size: var(--fs-sm);
+    }
+    .source-url {
+      display: var(--display-block);
+      margin-block-start: var(--s-1);
+      font-size: var(--fs-xs);
+      color: var(--c-subtle);
+      overflow-wrap: var(--overflow-wrap);
+    }
+    .footer-note {
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+    }
+    .footer-bottom {
+      display: var(--display-flex);
+      justify-content: var(--justify-between);
+      align-items: var(--align-start);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--s-3);
+      margin-block-start: var(--s-8);
+      padding-block-start: var(--s-5);
+      border-block-start: var(--b-base);
+      font-size: var(--fs-xs);
+      color: var(--c-subtle);
+    }
+
+    /* 媒体查询集中区：阈值必须为字面量；仅覆盖 :root 令牌。 */
+    @media (min-width: 680px) {
+      :root {
+        --layout-metrics: repeat(4, minmax(0, 1fr));
+        --layout-nav: repeat(3, minmax(0, 1fr));
+        --layout-legend: repeat(2, minmax(0, 1fr));
+        --layout-timeline: 9rem minmax(0, 1fr);
+        --layout-filter: repeat(4, minmax(0, 1fr));
+
+        --layout-table: table;
+        --layout-tbody: table-row-group;
+        --layout-tr: table-row;
+        --layout-cell: table-cell;
+        --layout-tr-border: none;
+        --layout-tr-padding: var(--s-0);
+        --layout-tr-radius: var(--r-none);
+        --layout-cell-padding: var(--s-4);
+        --layout-cell-border: var(--b-base);
+        --layout-decision-column: auto;
+        --layout-head-position: static;
+        --layout-head-size: auto;
+        --layout-head-overflow: visible;
+        --layout-head-clip: none;
+        --layout-number-width: 3.5rem;
+        --layout-statement-width: 48%;
+      }
+    }
+    @media (min-width: 1100px) {
+      :root {
+        --layout-hero: minmax(0, 1.12fr) minmax(0, .88fr);
+        --layout-reader: 12.5rem minmax(0, 1fr);
+        --layout-nav: minmax(0, 1fr);
+        --layout-card: repeat(2, minmax(0, 1fr));
+        --layout-insights: repeat(2, minmax(0, 1fr));
+        --layout-footer: minmax(0, 1.4fr) minmax(0, .6fr);
+        --layout-toc-position: sticky;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --state-scroll: auto;
+        --state-transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="container">
+    <div class="topbar">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">↗</span>
+        演讲核对 · 产品方法
+      </a>
+      <span class="top-note">原话有边界，洞察要署名。</span>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <span class="kicker">《AI 越强，做产品反而越难》· 对照阅读</span>
+        <h1 id="hero-title">AI 没让做产品变简单，它把难点从「做出来」挪到了<span class="accent">「选什么、不做什么、靠什么被信任」</span>。</h1>
+        <p class="lead">做出来变便宜了，注意力、判断、可靠性和控制权变贵了。</p>
+        <p class="byline">基于 OpenClaw 创始人 Peter Steinberger 在 YC Startup School 2026 的演讲《Fun Is Velocity》（含问答）。对照中文频道「换个视角看懂AI」的解说，区分演讲依据与后续引申。</p>
+        <div class="hero-actions">
+          <a class="button button--primary" href="#judgments">读六个核心判断 <span aria-hidden="true">↓</span></a>
+          <a class="button" href="#audit">直接看核对总表</a>
+        </div>
+      </div>
+
+      <figure class="panel cost-map" aria-labelledby="cost-title" aria-describedby="cost-caption">
+        <div class="panel-top">
+          <h2 id="cost-title">难点没有消失，<br>只是换了位置。</h2>
+          <span class="tag tag--inferred">整理者推断</span>
+        </div>
+        <div class="cost-grid">
+          <div class="cost-column">
+            <h3 class="cost-title cost-title--down"><span aria-hidden="true">↓</span>变便宜</h3>
+            <svg class="cost-path" viewBox="0 0 150 64" width="100%" role="img" aria-label="制作成本下降的概念曲线，非实测数据">
+              <path class="svg-down" d="M8 10 L52 27 L94 32 L139 54 M128 54 H139 V43"/>
+            </svg>
+            <ul class="cost-items">
+              <li>代码</li>
+              <li>功能</li>
+              <li>原型</li>
+            </ul>
+          </div>
+          <div class="cost-column">
+            <h3 class="cost-title cost-title--up"><span aria-hidden="true">↑</span>变贵</h3>
+            <svg class="cost-path" viewBox="0 0 150 64" width="100%" role="img" aria-label="注意力、判断与信任更稀缺的概念曲线，非实测数据">
+              <path class="svg-up" d="M8 54 L52 39 L94 32 L139 10 M128 10 H139 V21"/>
+            </svg>
+            <ul class="cost-items cost-items--up">
+              <li>注意力</li>
+              <li>判断</li>
+              <li>可靠性</li>
+              <li>信任</li>
+              <li>控制权</li>
+            </ul>
+          </div>
+        </div>
+        <figcaption id="cost-caption">成本迁移的概念示意，不代表价格或变化幅度。「变贵」指更稀缺、更决定产品成败；这张图是综合提炼，不是 Peter 的原始图表。</figcaption>
+      </figure>
+    </section>
+
+    <aside class="legend" aria-label="判定与来源的阅读说明">
+      <div>
+        <h2>先看判定：这句话是谁的？</h2>
+        <div class="legend-items">
+          <span class="tag tag--original">原话</span>
+          <span class="tag tag--partial">部分</span>
+          <span class="tag tag--inferred">引申</span>
+        </div>
+        <p>「原话」表示逐字稿支持其要点，不等于逐字直译；「部分」表示数量、措辞或语境需校正；「引申」必须分清是解说员观点，还是整理者的分析。</p>
+      </div>
+      <div>
+        <h2>再看来源：证据来自哪里？</h2>
+        <div class="legend-items">
+          <a class="tag tag--source" href="#source-yc">逐字稿</a>
+          <a class="tag tag--source" href="#source-notes">现场照片笔记（二手）</a>
+          <a class="tag tag--source" href="#source-wiki">百科</a>
+          <span class="tag tag--inferred">整理者推断</span>
+        </div>
+        <p>本页事实以 YC 官方逐字稿为主依据，引文均为意译。演讲中的组织规模、招聘与下载数据是当时状态，不是实时信息；二手日期单独标注。</p>
+      </div>
+    </aside>
+
+    <section class="metrics-section" aria-labelledby="metrics-title">
+      <div class="section-heading">
+        <span class="kicker">先把数字读准</span>
+        <h2 id="metrics-title">快的是起步，贵的是后半程。</h2>
+        <p>以下数字均来自演讲逐字稿；其中最容易被听错的，是「一小时」之后的一个月，以及「9,500」的计数方式。<a class="inline-source" href="#source-yc">查看逐字稿来源</a></p>
+      </div>
+
+      <dl class="metrics">
+        <div class="metric">
+          <dt>第一个 WhatsApp ↔ Mac 中继</dt>
+          <dd>
+            <span class="metric-value"><small>约</small> 1 <small>小时</small></span>
+            <span class="metric-note">用编程 Agent 做出来，只是起点。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>随后打磨产品「感觉」</dt>
+          <dd>
+            <span class="metric-value"><small>约</small> 1 <small>个月</small></span>
+            <span class="metric-note">简洁回答、主动问候、像朋友。这段被解说漏掉。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>历史周下载峰值</dt>
+          <dd>
+            <span class="metric-value">470 <small>万</small></span>
+            <span class="metric-note">同一年，5 月低谷约 83.5 万 / 周。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>含排列组合的配置计数</dt>
+          <dd>
+            <span class="metric-value"><small>约</small> 9,500</span>
+            <span class="metric-note"><strong>不是 9,500 个独立配置项。</strong></span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>一次 QA 中启动的子 Agent</dt>
+          <dd>
+            <span class="metric-value">12 <small>个</small></span>
+            <span class="metric-note">在 Codex 中做测试与评审，并非全自动组织。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>团队扫描后的恶意技能占比</dt>
+          <dd>
+            <span class="metric-value">0.3%</span>
+            <span class="metric-note">扫描全部 67,000 个技能；媒体声称的是 20%。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>供应商关停订阅用量前的通知</dt>
+          <dd>
+            <span class="metric-value"><small>约</small> 24 <small>小时</small></span>
+            <span class="metric-note">长期优化的 harness 来不及转向。</span>
+          </dd>
+        </div>
+        <div class="metric">
+          <dt>提交过代码的贡献者</dt>
+          <dd>
+            <span class="metric-value"><small>约</small> 3,000 <small>人</small></span>
+            <span class="metric-note">8 个月里，18,000+ 人开过 issue 或 PR。</span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="reader-layout">
+      <aside class="toc" aria-labelledby="toc-title">
+        <h2 id="toc-title">本页导航</h2>
+        <nav aria-label="章节导航">
+          <a href="#trajectory">起落与时间线</a>
+          <a href="#judgments">六个核心判断</a>
+          <a href="#omissions">被漏掉的洞察</a>
+          <a href="#audit">逐项核对总表</a>
+          <a href="#actions">一人行动清单</a>
+          <a href="#sources">引用与来源</a>
+        </nav>
+        <p class="toc-note">一句有依据的话，也可能因为少了一个条件，变成错误的方法论。</p>
+      </aside>
+
+      <div class="reading-content">
+        <section id="trajectory" aria-labelledby="trajectory-title">
+          <div class="section-heading">
+            <span class="kicker">把爆红放回时间里</span>
+            <h2 id="trajectory-title">低谷与历史峰值，两件事同时为真。</h2>
+            <p>「一小时做出来」不是整个产品故事；「被宣布已死」也不是采用情况的终点。</p>
+          </div>
+
+          <figure class="chart" aria-labelledby="download-title" aria-describedby="download-caption">
+            <div class="panel-top">
+              <h3 id="download-title">同一年的周下载量，两种截面</h3>
+              <a class="tag tag--source" href="#source-yc">逐字稿</a>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">
+                <span>2026 年 5 月 · 低谷</span>
+                <span class="bar-value">约 83.5 万</span>
+              </div>
+              <div class="bar-track" aria-hidden="true"><span class="bar bar--low"></span></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">
+                <span>6 月被宣布「已死」后的历史峰值</span>
+                <span class="bar-value">470 万</span>
+              </div>
+              <div class="bar-track" aria-hidden="true"><span class="bar bar--peak"></span></div>
+            </div>
+            <figcaption id="download-caption">单位：下载次数 / 周。条长采用同一线性尺度，以 470 万为满刻度。这是两个时间点的对比，不是完整趋势；下载量也不能直接当作活跃用户或留存。</figcaption>
+          </figure>
+
+          <ol class="timeline" aria-label="OpenClaw 产品与创作者状态时间线">
+            <li>
+              <div class="timeline-date"><time datetime="2025-11">2025 年 11 月</time></div>
+              <div class="timeline-content">
+                <p>雨天，想在厨房用手机看 Agent 进度，于是约一小时做出 WhatsApp ↔ Mac 中继。之后又花约一个月打磨回答、问候和使用感受。</p>
+                <a class="tag tag--source" href="#source-yc">逐字稿</a>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date">2025 年 12 月底<br>至 2026 年 1 月初</div>
+              <div class="timeline-content">
+                <p>开 Discord 公开演示。夜里守护进程自动重启，继续回复；醒来看到约 800 条消息，项目随之爆红。</p>
+                <a class="tag tag--source" href="#source-yc">逐字稿</a>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date"><time datetime="2026-02-14">2026 年 2 月 14 日</time></div>
+              <div class="timeline-content">
+                <p>宣布加入 OpenAI，并宣布将设立非营利基金会。<a class="inline-source" href="#source-wiki">百科来源</a></p>
+                <p class="small">现场幻灯片记：2 月 15 日宣布基金会，3 月 12 日提交章程，5 月 2 日首次发薪，7 月 8 日公开 501(c)(3) 状态。<a class="inline-source" href="#source-notes">现场照片笔记（二手）</a></p>
+                <p>另据演讲，约 2 月起产品「不再好玩」，他停止使用自己的产品。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date">2026 年春</div>
+              <div class="timeline-content">
+                <p>模型供应商提前约 24 小时通知：关闭第三方工具的订阅用量。长期针对其模型优化的 harness 受到重创。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                <p class="small">具体日期「4 月 4 日」来自现场照片笔记，属于二手信息，不当作逐字稿中的精确日期。</p>
+                <a class="tag tag--source" href="#source-notes">现场照片笔记（二手）</a>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date"><time datetime="2026-05">2026 年 5 月</time></div>
+              <div class="timeline-content">
+                <p>周下载跌到约 83.5 万。生日前后，「造东西的乐趣回来了」。</p>
+                <a class="tag tag--source" href="#source-yc">逐字稿</a>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date"><time datetime="2026-06">2026 年 6 月</time></div>
+              <div class="timeline-content">
+                <p>项目被宣布「已死」。之后，周下载冲上 470 万的历史峰值；峰值的精确日期未注明。</p>
+                <a class="tag tag--source" href="#source-yc">逐字稿</a>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-date"><time datetime="2026-07">2026 年 7 月</time></div>
+              <div class="timeline-content">
+                <p>演讲所述：基金会 10 人在岗，正在招聘 CEO。演讲场合为 YC Startup School 2026。</p>
+                <a class="tag tag--source" href="#source-yc">逐字稿</a>
+                <p class="small">社区笔记将演讲日期记为 7 月 26 日；该具体日期按二手来源处理。<a class="inline-source" href="#source-notes">查看社区笔记</a></p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="judgments" aria-labelledby="judgments-title">
+          <div class="section-heading">
+            <span class="kicker">核心六个判断</span>
+            <h2 id="judgments-title">方向大体对，条件不能丢。</h2>
+            <p>每张卡都拆开四层：解说员说法、Peter 的原话要点、核对结论，以及明确署名的补充洞察。</p>
+          </div>
+
+          <div class="judgments">
+            <article class="judgment" aria-labelledby="judgment-self">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">自己先用 · 产品判断</span>
+                  <h3 id="judgment-self">「做出来」在贬值，第一个用户必须是你。</h3>
+                </div>
+                <span class="tag tag--original">原话</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p>第一个用户必须是你自己；执行趋近免费，选择最贵。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p>约一小时做出中继。问答中说，「1 号用户应该是你，2–20 号是朋友」；眼球是这个时代最贵的货币，因为做东西太快了。</p>
+                    <p>但从能用到有感觉，又花了约一个月：回答简洁、主动问候、用起来像朋友。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>「第一个用户是你」和一小时原型有直接依据；「执行趋近免费，选择最贵」是解说员的概括，不是 Peter 的原句。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>解说漏掉的关键信号</h4>
+                    <p>Peter 当时把这件事视为产品与市场匹配（PMF）的一个信号：<strong>非技术朋友很想用，被告知「还不适合你」时生气了。</strong>他们已经想用，而不只是觉得技术很酷。</p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>执行变便宜后，稀缺的是<strong>「你自己天天用」带来的判断</strong>。一个月打磨的不是更多按钮，而是值得每天打开的体验。</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="judgment" aria-labelledby="judgment-features">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">功能与边界 · 维护责任</span>
+                  <h3 id="judgment-features">加功能便宜，好产品仍然稀缺。</h3>
+                </div>
+                <span class="tag tag--partial">部分：计数需校正</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p>新功能只差一个 prompt，却累积到约 9,500 个配置项；删除比生成高级。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p>新功能只差一个 prompt，真正的成本在后面。为了不破坏旧用户的习惯，每个功能都带上配置项；<strong>算上所有排列组合，约 9,500 种</strong>，测试写得再多也覆盖不了。演进有用户的软件难得多。</p>
+                    <p>他的反思是「我说『不』说得不够」。现在每个新开源项目先写 <span lang="en">vision.md</span>，说明它现在是什么、将来往哪去。</p>
+                    <p>合并一个功能，就等于接手一堆你和作者都不完全理解的代码的责任。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>核心论点基本是原话；<strong>9,500 不是独立配置项数量</strong>。「删除比生成高级」是解说员引申。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>解说漏掉的后果</h4>
+                    <p>逐字稿提到，对手有「更简单的故事、激进营销、一行命令迁移」。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                    <p>现场幻灯片还写道：「我们留住了人群，丢掉了日常用户——输在可靠性，不是愿景。」<a class="inline-source" href="#source-notes">现场照片笔记（二手）</a></p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>AI 压低了功能的生产成本，却没有抹掉维护成本与组合爆炸。<strong>功能合并不是完成一次生成，而是接受一笔长期责任。</strong></p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-foot">
+                <figure class="chart figure-grid" aria-labelledby="switch-title" aria-describedby="switch-caption">
+                  <div>
+                    <h4 id="switch-title">开关是加法，组合不是。</h4>
+                    <svg class="switch-svg" viewBox="0 0 360 140" width="100%" role="img" aria-label="示意：n 个相互独立的二态开关，可以产生 2 的 n 次方种组合。非 OpenClaw 实测。">
+                      <rect class="svg-box" x="4" y="18" width="130" height="102"/>
+                      <text class="svg-label" x="69" y="78">n 个开关</text>
+                      <path class="svg-up" d="M149 69 H192 M182 59 L192 69 L182 79"/>
+                      <rect class="svg-box svg-box--accent" x="208" y="18" width="148" height="102"/>
+                      <text class="svg-label svg-formula" x="282" y="65">2ⁿ</text>
+                      <text class="svg-label" x="282" y="99">种组合</text>
+                    </svg>
+                  </div>
+                  <figcaption id="switch-caption">
+                    <span class="tag tag--inferred">示意，非 OpenClaw 实测</span>
+                    <p>假设每个开关只有开、关两态，且彼此独立，n 个开关就对应 2<sup>n</sup> 种组合。实际配置结构更复杂，不能用这张示意图反推「9,500」对应多少个开关。</p>
+                  </figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="judgment" aria-labelledby="judgment-agents">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">Agent 编排 · 测试可靠性</span>
+                  <h3 id="judgment-agents">工作的单位在变，但别把 QA 说成自治组织。</h3>
+                </div>
+                <span class="tag tag--partial">部分：语境与措辞需校正</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p>从使用工具转向管理 AI 组织；Agent 应该 <span lang="en">always on, always thinking</span>，并逐渐变成岗位。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p>一次 QA 中，他在 Codex 里启动了 12 个子 Agent：理解项目、拆分功能，各自做压力测试或代码评审，再告诉另一个会话该重点测试哪里。</p>
+                    <p><strong>还没到能全自动的地步，仍需手动点一遍，感受一下。</strong></p>
+                    <p>关于常驻 Agent，他说的是「我们还没有一个永远在线、持续同步的 Agent」——<span lang="en">always on, always syncing</span>。</p>
+                    <p>这更多是 token 问题，而不只是技术问题。旧心跳机制在一小时后检查大会话，缓存失效时，需要重发约 60 万 token。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>12 个子 Agent 是原话，但语境是<strong>QA 与可靠性测试</strong>，不是「管理 AI 组织」。原词是 <span lang="en">syncing</span>，不是 <span lang="en">thinking</span>，而且 Peter 明确说的是<strong>现在还没有</strong>。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>需要划出的边界</h4>
+                    <p>「Agent 变成岗位」是解说员引申。一次有人工兜底的测试编排，不等于一个已经存在的、持续思考的自治团队。</p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>常驻 Agent 的瓶颈是<strong>token 经济与系统设计</strong>，不只是模型能力。持续运行是否值得，还取决于检查频率、缓存与上下文成本。</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="judgment" aria-labelledby="judgment-review">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">代码评审 · 场景分级</span>
+                  <h3 id="judgment-review">评审即风险管理，不等于可以少负责。</h3>
+                </div>
+                <span class="tag tag--original">原话 · 有条件</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p>不必认真读每一行代码，要把代码评审看作风险管理；支付、权限、底层架构需要重点看。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p>他很早就决定不读所有代码，而是把评审看成风险管理。「吓人的系统」读细一些；UI 看起来对，就可以。</p>
+                    <p>用时长作为信号：一个小改动花了三小时，就说明可能有问题，应该细看。观察改动大小，相信直觉。</p>
+                    <p><strong>但他在 OpenAI 做的软件，仍然会读全部代码。</strong><a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>风险管理的说法是原话；解说漏掉了最重要的场景条件：<strong>个人开源不等于公司生产系统</strong>。支付、权限、底层架构这些例子是解说员举的。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>解说漏掉的限定</h4>
+                    <p>风险分级不是固定的「哪些代码不用看」，而是要随系统责任、使用场景与出错后果改变。不能把个人项目的做法直接复制到公司系统。</p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>人的工作从「亲手生产」移向<strong>「定义哪里不能错」</strong>。真正需要设计的，是人工介入的边界，而不是免审代码的理由。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-foot">
+                <figure class="chart" aria-labelledby="role-title" aria-describedby="role-caption">
+                  <div class="panel-top">
+                    <h4 id="role-title">人的角色迁移</h4>
+                    <span class="tag tag--inferred">整理者推断</span>
+                  </div>
+                  <div class="role-grid">
+                    <div class="role-lane">
+                      <span class="role-cell">生产</span>
+                      <span class="role-arrow" aria-hidden="true">→</span>
+                      <span class="sr-only">转向</span>
+                      <strong class="role-cell role-cell--new">判断</strong>
+                    </div>
+                    <div class="role-lane">
+                      <span class="role-cell">审过程</span>
+                      <span class="role-arrow" aria-hidden="true">→</span>
+                      <span class="sr-only">转向</span>
+                      <strong class="role-cell role-cell--new">审风险</strong>
+                    </div>
+                  </div>
+                  <figcaption id="role-caption">这是注意力重心的迁移，不是取消生产或过程检查。高风险场景里，逐行阅读仍可能是必要责任。</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="judgment" aria-labelledby="judgment-boring">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">选题与市场 · 价值感知</span>
+                  <h3 id="judgment-boring">做「又难又无聊」的事，前面还有两个前提。</h3>
+                </div>
+                <span class="tag tag--original">原话 · 保留「也许」</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p>重新创业就做 <span lang="en">hard and boring</span>；人类忍了 20 年的抱怨，是最被低估的创业数据库。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p><strong>先说：</strong>做你自己想用的东西。</p>
+                    <p><strong>再说：</strong>希望你已经经营个人品牌与可见度，最难的是获得眼球。</p>
+                    <p><strong>然后才是：</strong>「也许」会再选又难又无聊的类别，更容易找到真会感激你解决问题的人；好玩的东西，在人人都能 prompt 出来的时代会很难。</p>
+                    <p>他想要别人做的，是快速、便宜的 Mac / Windows / Linux 测试机；同时提醒，开发者工具本来就难。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>有原话依据，但必须保留<strong>「也许」与回答顺序</strong>。这不是一条脱离个人需要和分发能力的万能选赛道公式。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>明确归属</h4>
+                    <p>「人类忍了 20 年的抱怨是创业数据库」是解说员的合理引申，不是 Peter 说的。</p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>难且无聊的价值不只是竞争少，而是<strong>付费意愿更清楚，解决价值更容易被感知</strong>。这是需要验证的商业判断，不代表无聊的产品就会成功。</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="judgment" aria-labelledby="judgment-fun">
+              <header class="judgment-head">
+                <div>
+                  <span class="topic">创造者状态 · 日常使用</span>
+                  <h3 id="judgment-fun">乐趣就是速度。</h3>
+                </div>
+                <span class="tag tag--original">原话</span>
+              </header>
+              <div class="card-body">
+                <div class="card-stack">
+                  <div class="voice voice--commentator">
+                    <h4>解说员说法</h4>
+                    <p><span lang="en">Fun is velocity</span>；市场可以无聊，但你不能无聊。</p>
+                  </div>
+                  <div class="voice voice--peter">
+                    <h4>Peter 原话要点 · 逐字稿意译</h4>
+                    <p>约 2 月开始，事情不好玩了，像一份责任。最糟的是，他不再使用自己的产品：不再做自己爱的产品，而是在做给所有人的东西。</p>
+                    <p>很难和一个纯粹在享受的人竞争。乐趣就是速度。享受的那几周，产品明显变好；不享受的那几周，他们在加配置项。</p>
+                    <p>他的灵感来源，是「被烦到」。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+                  </div>
+                </div>
+                <div class="card-stack">
+                  <div class="verdict">
+                    <h4>核对结论</h4>
+                    <p>乐趣、速度与停止使用自己产品的经历，都是原话。「市场可以无聊，但你不能无聊」是解说员对两个判断的合理综合。</p>
+                  </div>
+                  <div class="omitted">
+                    <h4>两句话并不矛盾</h4>
+                    <p>「又难又无聊」选的是<strong>问题</strong>；「乐趣就是速度」管的是<strong>创造者状态</strong>。它们不在同一个维度上。</p>
+                  </div>
+                  <div class="insight">
+                    <h4>补充洞察 · 整理者推断</h4>
+                    <p>失去乐趣可能削弱产品判断：他不享受的那几周，产品没有变好，只多了配置项。选一个无聊、但你每天都被烦到的问题，让解决问题的过程有乐趣，而不是靠不断加功能维持兴奋感。</p>
+                    <dl class="duality">
+                      <div><dt>选择的问题</dt><dd>难、无聊、真实</dd></div>
+                      <div><dt>创造者的状态</dt><dd>想用、享受、专注</dd></div>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="omissions" aria-labelledby="omissions-title">
+          <div class="section-heading">
+            <span class="kicker">被漏掉的洞察</span>
+            <h2 id="omissions-title">比「能做什么」更值钱的，是这些代价。</h2>
+            <p>下列标题都是 Peter 原话的意译（「采用是气候」半句来自现场幻灯片，标为二手）；每张卡下方的「补充洞察」才是整理者推断，两者分开标注。</p>
+          </div>
+
+          <div class="omissions-grid">
+            <article class="omission-card">
+              <span class="tag tag--original">原话 · 供应商依赖</span>
+              <h3>你依赖方的商业模式，就是你的商业模式。</h3>
+              <p>harness 长期针对单一供应商的模型优化；对方只提前约 24 小时通知，关闭第三方工具的订阅用量，来不及转向。<a class="inline-source" href="#source-yc">事实：逐字稿</a></p>
+              <p class="takeaway"><strong>补充洞察：</strong>解说员说「控制权更贵」，这就是它的真实来源。模型适配再深，也不能替代对价格、渠道与接入规则的控制。</p>
+            </article>
+
+            <article class="omission-card">
+              <span class="tag tag--original">原话 · 安全体验</span>
+              <h3>用户喜欢抽象的「安全」，实际感受到的是「更难用」。</h3>
+              <p>大量安全加固在用户眼里，是变慢、难更新、坏了。建设者看到的是防护增强，用户感受到的却可能是产品退步。<a class="inline-source" href="#source-yc">事实：逐字稿</a></p>
+              <p class="takeaway"><strong>补充洞察：</strong>安全与可用性需要一起设计。不能只解释「为什么必须更安全」，也要修复用户实际承受的摩擦。</p>
+            </article>
+
+            <article class="omission-card omission-card--wide">
+              <span class="tag tag--original">原话 · 声誉不对称</span>
+              <h3>纠错传得没有恐慌远。</h3>
+              <p>媒体声称恶意技能占比为 20%；团队扫描全部 67,000 个技能后，得到 0.3%。按 Peter 的讲述，即使论文发布，纠错传播也追不上恐慌。<a class="inline-source" href="#source-yc">事实：逐字稿</a></p>
+
+              <figure class="chart" aria-labelledby="security-title" aria-describedby="security-caption">
+                <h4 id="security-title">同一场争议，两种占比</h4>
+                <div class="bar-row">
+                  <div class="bar-label">
+                    <span>媒体声称</span>
+                    <span class="bar-value">20%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true"><span class="bar bar--media"></span></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">
+                    <span>团队扫描全部 67,000 个技能后</span>
+                    <span class="bar-value">0.3%</span>
+                  </div>
+                  <div class="bar-track" aria-hidden="true"><span class="bar bar--scan"></span></div>
+                </div>
+                <figcaption id="security-caption">以 20% 为满刻度，条长按同一比例绘制，0.3% 的细条没有放大。统计按演讲转述呈现，并非本页独立复测；不能据此推断每个技能都安全，也不假定媒体与团队采用了完全相同的方法。</figcaption>
+              </figure>
+
+              <p class="takeaway"><strong>补充洞察：</strong>可靠性是系统问题，可信度还是传播问题。证明自己没那么糟，与让人重新信任，是两件事。</p>
+            </article>
+
+            <article class="omission-card">
+              <span class="tag tag--original">原话意译 + 幻灯片文字（二手）</span>
+              <h3>热度是天气，采用是气候。</h3>
+              <p>同一年里，低谷约 83.5 万 / 周与峰值 470 万 / 周都是真实的。他说热度像天气：你看得到它来，却控制不了它。<a class="inline-source" href="#source-yc">逐字稿</a></p>
+              <p>「采用是气候」这一表达来自现场幻灯片照片，按二手来源处理。<a class="inline-source" href="#source-notes">现场照片笔记（二手）</a></p>
+              <p class="takeaway"><strong>补充洞察：</strong>别用一次舆论高潮或低谷替代产品判断；还要分清下载、实际使用与可靠体验。</p>
+            </article>
+
+            <article class="omission-card">
+              <span class="tag tag--original">原话 · 协作单位</span>
+              <h3>别先讲功能想法，直接做出来、截图给我玩。</h3>
+              <p>他希望别人带来能体验的东西，而不是只有想法。多数人自己试过，就发现并不好，根本不用再找他。<a class="inline-source" href="#source-yc">事实：逐字稿</a></p>
+              <p class="takeaway"><strong>补充洞察：</strong>执行便宜后，团队协作的单位可以从「讨论」变成「可试用的原型」。先自测，再占用别人的判断力。</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="audit" aria-labelledby="audit-title">
+          <div class="section-heading">
+            <span class="kicker">核对总表</span>
+            <h2 id="audit-title">哪些能直接引用，哪些必须加条件？</h2>
+            <p>「原话」不是省略上下文的许可证。下面保留每条说法的判定与必要修正，窄屏自动改为卡片。</p>
+          </div>
+
+          <fieldset id="audit-filters" class="filter-bar" hidden>
+            <legend class="sr-only">按核对判定筛选</legend>
+            <button class="button" type="button" data-filter="all" aria-pressed="true" aria-controls="audit-body">全部说法</button>
+            <button class="button" type="button" data-filter="original" aria-pressed="false" aria-controls="audit-body">原话（含条件）</button>
+            <button class="button" type="button" data-filter="partial" aria-pressed="false" aria-controls="audit-body">部分 · 需要校正</button>
+            <button class="button" type="button" data-filter="inferred" aria-pressed="false" aria-controls="audit-body">解说员引申</button>
+          </fieldset>
+
+          <p id="filter-status" class="filter-status" role="status" aria-live="polite" aria-atomic="true">显示全部说法；以逐项判定为准。</p>
+
+          <table class="audit-table" role="table" aria-labelledby="audit-title" aria-describedby="audit-count-note">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">序号</th>
+                <th scope="col" role="columnheader">解说员说法</th>
+                <th scope="col" role="columnheader">判定与引用边界</th>
+              </tr>
+            </thead>
+            <tbody id="audit-body" role="rowgroup">
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">1</th>
+                <td role="cell">一周最高 470 万下载</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话</span>
+                  <p>历史峰值；同年 5 月低谷约 83.5 万 / 周也为真。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">2</th>
+                <td role="cell">一小时做出 WhatsApp 控制 Agent</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话 · 漏掉后续</span>
+                  <p>最初做的是 WhatsApp ↔ Mac 中继；之后还花了约一个月打磨体验。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">3</th>
+                <td role="cell">第一个用户必须是你自己</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话</span>
+                  <p>1 号用户是你，2–20 号是朋友。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">4</th>
+                <td role="cell">新功能只差一个 prompt</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话</span>
+                  <p>后半句同样重要：真正的成本在后面。</p>
+                </td>
+              </tr>
+              <tr data-verdict="partial" role="row">
+                <th scope="row" role="rowheader">5</th>
+                <td role="cell">约 9,500 个配置项</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--partial">部分</span>
+                  <p>是「算上所有排列组合」的计数，不是独立配置项数量。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">6</th>
+                <td role="cell">12 个子 Agent 互相告诉哪里值得测</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话 · 限 QA 语境</span>
+                  <p>用于压力测试与代码评审，仍然需要人工体验。</p>
+                </td>
+              </tr>
+              <tr data-verdict="partial" role="row">
+                <th scope="row" role="rowheader">7</th>
+                <td role="cell">Agent 应该 <span lang="en">always on, always thinking</span></td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--partial">部分</span>
+                  <p>原话是 <span lang="en">always syncing</span>，而且明确说「还没有」。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">8</th>
+                <td role="cell">不认真读每行代码，评审即风险管理</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话 · 漏掉条件</span>
+                  <p>他在 OpenAI 做的软件，仍读全部代码；不能跨场景照搬。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">9</th>
+                <td role="cell">重新创业做 <span lang="en">hard and boring</span></td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话 · 有保留</span>
+                  <p>带「也许」，且排在「自己想用」「个人品牌」之后。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">10</th>
+                <td role="cell"><span lang="en">Fun is velocity</span>；不再用自己的产品</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话</span>
+                  <p>乐趣消失时，产品从「自己爱用」变成「做给所有人」。</p>
+                </td>
+              </tr>
+              <tr data-verdict="original" role="row">
+                <th scope="row" role="rowheader">11</th>
+                <td role="cell">一切可被 fork，名字不能</td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--original">原话</span>
+                  <p>个人品牌应在需要之前开始经营。</p>
+                </td>
+              </tr>
+              <tr data-verdict="inferred" role="row">
+                <th scope="row" role="rowheader">12</th>
+                <td role="cell">
+                  「执行趋近免费，选择最贵」<br>
+                  「删除比生成高级」<br>
+                  「Agent 变岗位」<br>
+                  「抱怨是创业数据库」
+                </td>
+                <td class="decision" role="cell">
+                  <span class="tag tag--inferred">解说员引申</span>
+                  <p>同一组中的 4 句，不应加上 Peter 的名字当作原话传播。</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="audit-summary">
+            <span class="tag tag--original">原话：9 条（4 条附条件）</span>
+            <span class="tag tag--partial">部分：2 条</span>
+            <span class="tag tag--inferred">引申：1 组，4 句</span>
+          </div>
+          <p id="audit-count-note" class="editor-note">计数说明：原话 9 条，其中 4 条附「漏掉后续 / 限定语境 / 漏掉条件 / 有保留」提醒；部分 2 条；解说员引申 1 组 4 句。附加提醒不另算一种判定。</p>
+        </section>
+
+        <section id="actions" aria-labelledby="actions-title">
+          <div class="section-heading">
+            <span class="kicker">给一人创业者的行动清单</span>
+            <h2 id="actions-title">把判断写进下一次开发。</h2>
+            <p><span class="tag tag--inferred">整理者建议 · 非 Peter 原话</span></p>
+            <p>可以在本页勾选；勾选状态不保存、不上传。</p>
+          </div>
+
+          <ol class="actions">
+            <li>
+              <label>
+                <input type="checkbox">
+                <span>
+                  <strong>先写「不做什么」。</strong>
+                  <span class="action-detail">每个新项目写一页 vision，说明它现在是什么、未来往哪去，以及明确不做什么。每个新功能先过这页。</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox">
+                <span>
+                  <strong>每加一个配置项，记一笔维护账。</strong>
+                  <span class="action-detail">它会与哪些已有选项组合？增加的不只是一个开关，还有兼容、测试与长期解释成本。</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox">
+                <span>
+                  <strong>代码评审按风险分级，规则随场景变。</strong>
+                  <span class="action-detail">碰钱、权限、数据、不可逆操作必须细看；纯展示以结果检查为主。公司生产系统不能直接套用个人开源项目的规则。</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox">
+                <span>
+                  <strong>不把核心体验押在单一供应商上。</strong>
+                  <span class="action-detail">不要只依赖某个供应商的订阅或当前价格；至少留一条可切换的模型或渠道，并把切换能力当作产品设计的一部分。</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox">
+                <span>
+                  <strong>选一个每天都烦到你的难题，同时经营自己的名字。</strong>
+                  <span class="action-detail">问题可以又难又无聊，但你要真想解决、真会使用。个人名字的积累，不必等到产品需要流量时才开始。</span>
+                </span>
+              </label>
+            </li>
+          </ol>
+        </section>
+
+        <section class="closing" aria-labelledby="closing-title">
+          <a class="tag tag--original" href="#source-yc">收尾 · 逐字稿意译</a>
+          <h2 id="closing-title">产品可以被 fork，<br><span class="accent">你的名字不能。</span></h2>
+          <blockquote class="quote">「你能做出来的一切都可以被 fork 或克隆，但你的名字不能。个人品牌比任何单个产品都重要，在需要之前就开始经营。」</blockquote>
+          <div class="last-advice">
+            <div>
+              <h3>Peter 最后的三条建议</h3>
+              <ul>
+                <li>别停止享受。</li>
+                <li>相信直觉，修那些烦你的东西。</li>
+                <li>保持专注；「再上一个播客不会让你赢」。</li>
+              </ul>
+              <a class="inline-source" href="#source-yc">逐字稿来源</a>
+            </div>
+            <div>
+              <h3>整理者的落点</h3>
+              <p>做得出来，已经不够。更难的是决定不做什么、守住哪种可靠性，以及让别人知道：这个名字，值得信任。</p>
+              <p><span class="tag tag--inferred">整理者推断</span></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer id="sources" class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <section aria-labelledby="sources-title">
+          <h2 id="sources-title">来源与引用边界</h2>
+          <ul class="sources">
+            <li id="source-yc">
+              <span class="tag tag--source">逐字稿 · 主要依据</span>
+              <a class="source-link" href="https://www.ycombinator.com/library/Xa-peter-steinberger-fun-is-velocity" target="_blank" rel="noopener noreferrer">
+                YC Startup Library：Peter Steinberger: "Fun Is Velocity"（含官方逐字稿）
+                <span class="source-url">https://www.ycombinator.com/library/Xa-peter-steinberger-fun-is-velocity</span>
+              </a>
+            </li>
+            <li id="source-youtube">
+              <span class="tag tag--source">原演讲视频</span>
+              <a class="source-link" href="https://www.youtube.com/watch?v=whcfSGN6CAU" target="_blank" rel="noopener noreferrer">
+                YouTube 原视频：观看完整演讲与问答
+                <span class="source-url">https://www.youtube.com/watch?v=whcfSGN6CAU</span>
+              </a>
+            </li>
+            <li id="source-notes">
+              <span class="tag tag--source">现场照片笔记（二手）</span>
+              <a class="source-link" href="https://github.com/Princeu3/yc-startup-school-2026-notes/blob/main/sessions/07-peter-steinberger-openclaw.md" target="_blank" rel="noopener noreferrer">
+                社区整理：Peter Steinberger 演讲现场照片与笔记
+                <span class="source-url">https://github.com/Princeu3/yc-startup-school-2026-notes/blob/main/sessions/07-peter-steinberger-openclaw.md</span>
+              </a>
+            </li>
+            <li id="source-wiki">
+              <span class="tag tag--source">百科 · 补充时间信息</span>
+              <a class="source-link" href="https://en.wikipedia.org/wiki/OpenClaw" target="_blank" rel="noopener noreferrer">
+                维基百科：OpenClaw 词条
+                <span class="source-url">https://en.wikipedia.org/wiki/OpenClaw</span>
+              </a>
+            </li>
+            <li>
+              <span class="tag tag--source">对照对象 · 未提供链接</span>
+              <p class="small">中文视频号 / 频道「换个视角看懂AI」：解说视频《AI 越强，做产品反而越难》。未补造视频链接。</p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="footer-note" aria-labelledby="boundary-title">
+          <h2 id="boundary-title">引用时，请把条件一起带走。</h2>
+          <p>本页数字与引语以 YC 官方逐字稿为主依据；只见于现场照片笔记的内容单独标为二手，加入 OpenAI 的日期参考维基百科。逐字稿引文均为意译，幻灯片文字另标二手；英文词组用于保留需要校正的原始措辞。</p>
+          <p>「原话 / 部分 / 引申」是对解说说法的判定；「逐字稿 / 现场照片笔记（二手）/ 百科 / 整理者推断」是来源级别。判定与来源，不是同一条轴。</p>
+          <p>4 月 4 日、7 月 26 日及相关幻灯片文字，保留二手来源标记。统计比较来自演讲中的陈述，不冒充本页独立测量。</p>
+          <p>成本迁移图、开关组合示意、人的角色迁移图及行动清单均为整理性表达；它们帮助理解，不替代原始证据。</p>
+        </section>
+      </div>
+      <div class="footer-bottom">
+        <p>核心不是更快地产出一切，而是更清楚地知道哪些东西值得存在。</p>
+        <a href="#top">返回页首 ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      'use strict';
+
+      // 渐进增强：无 JavaScript 时保留全部内容，筛选控件不显示。
+      const filterGroup = document.getElementById('audit-filters');
+      const tableBody = document.getElementById('audit-body');
+      const status = document.getElementById('filter-status');
+
+      if (filterGroup && tableBody && status) {
+        const buttons = Array.from(
+          filterGroup.querySelectorAll('button[data-filter]')
+        );
+        const rows = Array.from(
+          tableBody.querySelectorAll('tr[data-verdict]')
+        );
+        const messages = {
+          all: '显示全部说法；以逐项判定为准。',
+          original: '仅显示原话条目；请同时保留后续、语境与条件。',
+          partial: '仅显示需要修正数量、措辞或语境的条目。',
+          inferred: '仅显示解说员引申；这些说法不是 Peter 的原话。'
+        };
+
+        filterGroup.hidden = false;
+
+        filterGroup.addEventListener('click', (event) => {
+          const button = event.target instanceof Element
+            ? event.target.closest('button[data-filter]')
+            : null;
+
+          if (!button || !filterGroup.contains(button)) return;
+
+          const filter = button.dataset.filter;
+          if (!Object.prototype.hasOwnProperty.call(messages, filter)) return;
+
+          buttons.forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+
+          rows.forEach((row) => {
+            row.hidden = filter !== 'all' && row.dataset.verdict !== filter;
+          });
+
+          status.textContent = messages[filter];
+        });
+      }
+
+      // 导航仅增加当前位置提示，不劫持原生锚点或键盘行为。
+      if ('IntersectionObserver' in window) {
+        const links = Array.from(document.querySelectorAll('.toc nav a'));
+        const targets = links
+          .map((link) => document.getElementById(link.hash.slice(1)))
+          .filter(Boolean);
+        const visible = new Set();
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              visible.add(entry.target);
+            } else {
+              visible.delete(entry.target);
+            }
+          });
+
+          const current = targets.find((target) => visible.has(target));
+
+          links.forEach((link) => {
+            if (current && link.hash === '#' + current.id) {
+              link.setAttribute('aria-current', 'location');
+            } else {
+              link.removeAttribute('aria-current');
+            }
+          });
+        });
+
+        targets.forEach((target) => observer.observe(target));
+      }
+    })();
+  </script>
+</body>
+</html>

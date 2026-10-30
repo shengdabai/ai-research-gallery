@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code Mods 完整指南(官方资料核验版)</title>
+<meta name="description" content="Claude Code Mods(v2.1.287 起)的选型、安装前检查、编写、权限裁决、失败恢复、测试分发与排错,逐条对照官方文档核验。">
+<style>
+/* ========== Design tokens ========== */
+:root {
+  /* color */
+  --color-bg: #eef1f5;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f7fa;
+  --color-ink: #141c28;
+  --color-ink-soft: #465264;
+  --color-line: #d3dae4;
+  --color-accent: #0f5fb8;
+  --color-accent-strong: #0a4689;
+  --color-accent-soft: #e3eefb;
+  --color-on-accent: #ffffff;
+  --color-code-bg: #111a27;
+  --color-code-ink: #e3eaf4;
+  --color-code-inline-bg: #e4e9f1;
+  --color-official: #0b6541;
+  --color-official-bg: #dff3e9;
+  --color-relay: #855000;
+  --color-relay-bg: #fbeed6;
+  --color-infer: #5936a2;
+  --color-infer-bg: #ece6fa;
+  --color-open: #47515f;
+  --color-open-bg: #e4e8ee;
+  --color-danger: #9f2424;
+  --color-danger-bg: #fbe6e6;
+  /* type */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+  --fs-2xl-narrow: 1.625rem;
+  --fs-xl-narrow: 1.375rem;
+  --lh-tight: 1.3;
+  --lh-base: 1.7;
+  --lh-code: 1.55;
+  --fw-normal: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+  /* space */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  /* shape */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --border-w: 1px;
+  --border-w-strong: 3px;
+  --shadow-card: 0 1px 2px rgba(20, 28, 40, 0.06);
+  --focus-ring: 0 0 0 3px rgba(15, 95, 184, 0.35);
+  /* layout */
+  --content-max: 72rem;
+  --measure: 48rem;
+  --col-min: 17rem;
+  --col-min-narrow: 13rem;
+  --col-min-wide: 22rem;
+  --table-min: 46rem;
+  --table-min-narrow: 30rem;
+}
+/* 断点说明:单一断点 40rem(640px)。媒体查询不能使用 CSS 变量,所以这里是唯一写成字面量的布局数值。 */
+
+/* ========== Base ========== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-normal);
+  line-height: var(--lh-base);
+  overflow-wrap: anywhere;
+}
+a { color: var(--color-accent); text-underline-offset: var(--sp-1); }
+a:hover { color: var(--color-accent-strong); }
+a:focus-visible, summary:focus-visible, .table-scroll:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
+h1, h2, h3, h4 { line-height: var(--lh-tight); margin: 0; font-weight: var(--fw-bold); }
+h1 { font-size: var(--fs-2xl); }
+h2 { font-size: var(--fs-xl); }
+h3 { font-size: var(--fs-lg); margin-top: var(--sp-6); }
+h4 { font-size: var(--fs-md); }
+p { margin: var(--sp-3) 0 0; }
+ul, ol { margin: var(--sp-3) 0 0; padding-left: var(--sp-5); }
+li + li { margin-top: var(--sp-2); }
+code {
+  font-family: var(--font-code);
+  font-size: var(--fs-sm);
+  background: var(--color-code-inline-bg);
+  padding: 0 var(--sp-1);
+  border-radius: var(--radius-sm);
+}
+pre {
+  margin: var(--sp-3) 0 0;
+  background: var(--color-code-bg);
+  color: var(--color-code-ink);
+  padding: var(--sp-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  line-height: var(--lh-code);
+  max-width: 100%;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: var(--fs-sm); overflow-wrap: normal; white-space: pre; }
+
+.skip-link { position: absolute; left: var(--sp-4); top: var(--sp-2); padding: var(--sp-2) var(--sp-3); background: var(--color-accent); color: var(--color-on-accent); border-radius: var(--radius-sm); transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+.legend { list-style: none; padding: 0; margin: var(--sp-5) 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min)), 1fr)); gap: var(--sp-2) var(--sp-4); font-size: var(--fs-sm); color: var(--color-ink-soft); max-width: none; }
+.legend li + li { margin-top: 0; }
+
+/* ========== Layout ========== */
+.wrap { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--sp-5); }
+.hero { background: var(--color-surface); border-bottom: var(--border-w) solid var(--color-line); padding: var(--sp-7) 0 var(--sp-6); }
+.hero p.lede { font-size: var(--fs-md); color: var(--color-ink-soft); max-width: var(--measure); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min)), 1fr)); gap: var(--sp-4); margin-top: var(--sp-4); }
+.grid.wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-wide)), 1fr)); }
+.grid > * { min-width: 0; }
+section { padding: var(--sp-7) 0 0; }
+section > .wrap > p, section > .wrap > ul, section > .wrap > ol { max-width: var(--measure); }
+.section-lede { color: var(--color-ink-soft); font-size: var(--fs-md); }
+footer { margin-top: var(--sp-8); padding: var(--sp-5) 0 var(--sp-7); border-top: var(--border-w) solid var(--color-line); color: var(--color-ink-soft); font-size: var(--fs-sm); }
+
+/* ========== Components ========== */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min-narrow)), 1fr)); gap: var(--sp-3); margin: var(--sp-5) 0 0; padding: 0; }
+.facts div { background: var(--color-surface-alt); border: var(--border-w) solid var(--color-line); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4); min-width: 0; }
+.facts dt { font-size: var(--fs-xs); color: var(--color-ink-soft); }
+.facts dd { margin: 0; font-weight: var(--fw-medium); }
+
+.entry {
+  display: block;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+}
+.entry:hover { background: var(--color-accent-strong); color: var(--color-on-accent); }
+.entry strong { display: block; font-size: var(--fs-md); }
+.entry span { font-size: var(--fs-sm); }
+
+.toc { background: var(--color-surface); border-bottom: var(--border-w) solid var(--color-line); padding: var(--sp-3) 0; }
+.toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); font-size: var(--fs-sm); }
+.toc li + li { margin-top: 0; }
+
+.card {
+  background: var(--color-surface);
+  border: var(--border-w) solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-card);
+}
+.card > :first-child { margin-top: 0; }
+.card-title { font-size: var(--fs-md); font-weight: var(--fw-bold); line-height: var(--lh-tight); margin: 0; }
+.card h4 + p, .card h4 + ul, .card h4 + dl, .card-title + p, .card-title + ul, .card-title + dl { margin-top: var(--sp-2); }
+.card.accent { border-left: var(--border-w-strong) solid var(--color-accent); }
+.card.warn { border-left: var(--border-w-strong) solid var(--color-danger); background: var(--color-danger-bg); }
+.card.note { border-left: var(--border-w-strong) solid var(--color-relay); background: var(--color-relay-bg); }
+.block { margin-top: var(--sp-4); }
+
+.tag {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-tight);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-sm);
+  border: var(--border-w) solid currentColor;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.tag-official { color: var(--color-official); background: var(--color-official-bg); }
+.tag-relay { color: var(--color-relay); background: var(--color-relay-bg); }
+.tag-infer { color: var(--color-infer); background: var(--color-infer-bg); }
+.tag-open { color: var(--color-open); background: var(--color-open-bg); }
+.tag-conflict { color: var(--color-danger); background: var(--color-danger-bg); }
+.src { font-size: var(--fs-xs); color: var(--color-ink-soft); white-space: nowrap; }
+
+dl.kv { margin: var(--sp-2) 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-1); }
+dl.kv dt { font-size: var(--fs-xs); color: var(--color-ink-soft); margin-top: var(--sp-2); }
+dl.kv dd { margin: 0; }
+
+.table-hint { font-size: var(--fs-xs); color: var(--color-ink-soft); margin-top: var(--sp-3); }
+.table-scroll { overflow-x: auto; margin-top: var(--sp-2); border: var(--border-w) solid var(--color-line); border-radius: var(--radius-md); background: var(--color-surface); }
+table { border-collapse: collapse; width: 100%; min-width: var(--table-min); font-size: var(--fs-sm); }
+table.narrow { min-width: var(--table-min-narrow); }
+caption { text-align: left; padding: var(--sp-3) var(--sp-4); font-weight: var(--fw-medium); color: var(--color-ink-soft); }
+th, td { text-align: left; vertical-align: top; padding: var(--sp-3) var(--sp-4); border-top: var(--border-w) solid var(--color-line); }
+thead th { background: var(--color-surface-alt); }
+tbody th { background: var(--color-surface-alt); font-weight: var(--fw-medium); white-space: nowrap; }
+
+.code-label { display: block; margin-top: var(--sp-4); font-size: var(--fs-xs); color: var(--color-ink-soft); }
+.code-label + pre { margin-top: var(--sp-1); }
+
+/* 洋葱链:嵌套盒 */
+.onion { margin-top: var(--sp-4); }
+.onion .layer { border: var(--border-w) solid var(--color-accent); border-radius: var(--radius-md); padding: var(--sp-3); background: var(--color-surface); }
+.onion .layer .layer { margin-top: var(--sp-3); background: var(--color-accent-soft); }
+.onion .layer .layer .layer { background: var(--color-surface); }
+.onion .layer .layer .layer .layer { background: var(--color-accent-soft); }
+.onion .core { margin-top: var(--sp-3); background: var(--color-accent); color: var(--color-on-accent); border-radius: var(--radius-md); padding: var(--sp-3); }
+.onion .layer-title { font-weight: var(--fw-medium); }
+.onion .layer-note { font-size: var(--fs-sm); color: var(--color-ink-soft); }
+.onion .core .layer-note { color: var(--color-on-accent); }
+.onion .core code { background: var(--color-accent-strong); color: var(--color-on-accent); }
+
+/* 时序步骤 */
+ol.seq { list-style: none; padding: 0; margin: var(--sp-4) 0 0; counter-reset: seq; max-width: none; }
+ol.seq > li { counter-increment: seq; position: relative; background: var(--color-surface); border: var(--border-w) solid var(--color-line); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-7); }
+ol.seq > li::before { content: counter(seq); position: absolute; left: var(--sp-4); top: var(--sp-3); font-weight: var(--fw-bold); color: var(--color-accent); }
+ol.seq > li + li { margin-top: var(--sp-2); }
+ol.seq .stop { display: block; margin-top: var(--sp-2); padding: var(--sp-2) var(--sp-3); background: var(--color-danger-bg); color: var(--color-danger); border-radius: var(--radius-sm); font-size: var(--fs-sm); }
+
+/* 预算条 */
+.budget { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--col-min)), 1fr)); gap: var(--sp-2); margin-top: var(--sp-4); }
+.budget div { padding: var(--sp-3); border-radius: var(--radius-md); font-size: var(--fs-sm); min-width: 0; }
+.budget .counted { background: var(--color-danger-bg); border: var(--border-w) solid var(--color-danger); }
+.budget .free { background: var(--color-official-bg); border: var(--border-w) solid var(--color-official); }
+.budget strong { display: block; }
+
+details { background: var(--color-surface); border: var(--border-w) solid var(--color-line); border-radius: var(--radius-md); margin-top: var(--sp-3); }
+summary { cursor: pointer; padding: var(--sp-3) var(--sp-4); font-weight: var(--fw-medium); }
+details > .inner { padding: 0 var(--sp-4) var(--sp-4); }
+details > .inner > :first-child { margin-top: 0; }
+
+.timeline { list-style: none; padding: 0; margin-top: var(--sp-4); }
+.timeline li { border-left: var(--border-w-strong) solid var(--color-accent); padding: 0 0 var(--sp-3) var(--sp-4); }
+.timeline li + li { margin-top: 0; }
+.timeline time { font-weight: var(--fw-bold); display: block; }
+
+@media (max-width: 40rem) {
+  h1 { font-size: var(--fs-2xl-narrow); }
+  h2 { font-size: var(--fs-xl-narrow); }
+  .wrap { padding: 0 var(--sp-4); }
+  .hero { padding: var(--sp-5) 0; }
+  section { padding-top: var(--sp-6); }
+  ol.seq > li { padding-left: var(--sp-6); }
+  ol.seq > li::before { left: var(--sp-3); }
+}
+@media print {
+  body { background: var(--color-surface); }
+  details { break-inside: avoid; }
+  pre { white-space: pre-wrap; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#summary">跳到正文</a>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Claude Code Mods 完整指南</h1>
+    <p class="lede">Mods 让插件里的函数直接跑在 Claude Code 进程内:能看、能改、能代答工具调用、提示词、命令、回合和界面。本页按「先判断要不要用 → 装之前查什么 → 怎么写 → 多个 Mod 与权限怎么裁决 → 坏了怎么查」的顺序整理,所有事实逐条对照官方页面,二手说法单独标注。</p>
+    <dl class="facts">
+      <div><dt>最低版本</dt><dd>Claude Code v2.1.287,默认开启</dd></div>
+      <div><dt>发布日期</dt><dd>2026-10-01</dd></div>
+      <div><dt>资料核验日</dt><dd>2026-10-02(逐页打开官方文档)</dd></div>
+      <div><dt>实测情况</dt><dd>未做运行实测:写作用的机器是 2.1.286,低于门槛</dd></div>
+    </dl>
+    <div class="grid">
+      <a class="entry" href="#check"><strong>我要安装别人的 Mod</strong><span>先看安装前七项检查与停用方式</span></a>
+      <a class="entry" href="#first-mod"><strong>我要自己写一个</strong><span>三个文件的最小示例,或让 Claude 代写</span></a>
+      <a class="entry" href="#troubleshoot"><strong>装了没反应,要查错</strong><span>按症状找原因和官方报错原文</span></a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="章节导航">
+  <div class="wrap">
+    <ul>
+      <li><a href="#summary">一屏结论</a></li>
+      <li><a href="#choose">选型与运行环境</a></li>
+      <li><a href="#check">安装前检查与停用</a></li>
+      <li><a href="#install">安装与首次验收</a></li>
+      <li><a href="#first-mod">写第一个 Mod</a></li>
+      <li><a href="#tasks">按任务扩展</a></li>
+      <li><a href="#chain">多 Mod 与权限裁决</a></li>
+      <li><a href="#state">状态、预算与失败</a></li>
+      <li><a href="#ship">测试、保留与分发</a></li>
+      <li><a href="#troubleshoot">排错</a></li>
+      <li><a href="#reference">参考区</a></li>
+      <li><a href="#appendix">更正、时间线与来源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ 一屏结论 ============ -->
+<section id="summary">
+  <div class="wrap">
+    <h2>一屏结论与版本基线</h2>
+    <p class="section-lede">读完这一屏就能决定要不要继续往下看。</p>
+    <div class="grid wide">
+      <article class="card accent">
+        <h3 class="card-title">它是什么</h3>
+        <p>Mod 是一个带 hooks module 的插件:<code>hooks/hooks.json</code> 里的 <code>modules</code> 指向一个 JS/TS 文件,Claude Code 在事件发生时调用其中的函数。每个 hook 拿到 <code>($, e, next)</code>,可以观察(Observe)、改写(Rewrite)或代答(Answer)。 <span class="tag tag-official">官方文档</span></p>
+      </article>
+      <article class="card accent">
+        <h3 class="card-title">和旧机制的差别</h3>
+        <p>settings hook、Skill、状态栏、MCP server 都在 Claude Code 外面工作;Mod 在里面,所以能画界面、改内置界面、按住一次工具调用去问用户、把一次请求换到别的模型、在没有 Claude 回合时响应 <code>/命令</code>。 <span class="tag tag-official">官方文档</span></p>
+      </article>
+      <article class="card warn">
+        <h3 class="card-title">没有安全沙箱</h3>
+        <p>Mod 以安装者的用户权限读写文件、启动进程、发网络请求,能在权限弹窗出现之前批准或拒绝工具调用。Mod 启动的进程不受 Claude Code 沙箱约束。 <span class="tag tag-official">官方文档</span></p>
+      </article>
+      <article class="card warn">
+        <h3 class="card-title">个人环境风险更高</h3>
+        <p>在没有托管设置、也没用 Team/Enterprise 登录的机器上,内置守卫不加载,此时 Mod 的 <code>tool.check</code> 能批准 deny 规则拒绝的调用。deny 规则压过 Mod 只在守卫加载的环境里成立。 <span class="tag tag-official">官方文档</span></p>
+      </article>
+      <article class="card warn">
+        <h3 class="card-title">出错默认放行</h3>
+        <p>hook 抛错、超过 10 秒或返回形状不对时会被跳过,事件继续往下走。拦截类 hook 不加 <code>.catch</code>,一出错命令就照常执行。 <span class="tag tag-official">官方文档</span></p>
+      </article>
+      <article class="card note">
+        <h3 class="card-title">流传说法要打折</h3>
+        <p>中文社区流传的解读里,有几处与官方文档不符或没有官方出处(源码「全部公开」、<code>claude -p</code> 不加载、提示词 token 减少 26.6% 等)。逐条对照见<a href="#corrections">更正记录</a>。</p>
+      </article>
+    </div>
+    <ul class="legend" aria-label="证据标签图例">
+      <li><span class="tag tag-official">官方文档</span> 来自 Anthropic 的文档、博客、发布说明或源码仓库,2026-10-02 打开核对过。</li>
+      <li><span class="tag tag-relay">二手转述</span> 出自第三方文章或账号,没有打开一手出处。</li>
+      <li><span class="tag tag-infer">编辑推导</span> 基于官方事实做的归纳或建议,不是官方说法。</li>
+      <li><span class="tag tag-open">待核实</span> 这次没找到明确答案,不要当事实用。</li>
+    </ul>
+    <p>事件和方法会随版本变化。官方的说法是:文档与类型声明文件不一致时,以你本机生成的 <code>.claude-plugin/types/claude-code/index.d.ts</code> 为准。本页所有 API 名称以 v2.1.287 文档为基线。</p>
+  </div>
+</section>
+
+<!-- ============ 选型 ============ -->
+<section id="choose">
+  <div class="wrap">
+    <h2>选型与运行环境</h2>
+    <p class="section-lede">先确认 Mod 是不是对的工具,再确认它在你用的那个界面里能不能跑、能不能画。</p>
+
+    <h3>四种扩展方式对比</h3>
+    <p class="table-hint">表格较宽,可在表格区域内左右滑动。</p>
+    <div class="table-scroll" role="region" aria-label="Mod、settings hook、Skill、MCP server 对比表" tabindex="0">
+      <table>
+        <caption>官方对比表(译自 overview 页) <span class="tag tag-official">官方文档</span></caption>
+        <thead>
+          <tr><th scope="col">维度</th><th scope="col">Mod</th><th scope="col">Settings hook</th><th scope="col">Skill</th><th scope="col">MCP server</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">是什么</th><td>插件里的函数,Claude Code 在自己进程内调用</td><td>生命周期事件上运行的 shell 命令、HTTP 请求或 prompt</td><td>一份 Claude 会读的 <code>SKILL.md</code> 指令</td><td>给 Claude 提供工具的外部进程或服务</td></tr>
+          <tr><th scope="row">能改什么</th><td>工具调用、提示词、命令、回合,以及界面画什么</td><td>工具调用或提示词是否放行、工具调用的参数与结果、给 Claude 追加的上下文</td><td>Claude 知道什么、怎么做</td><td>Claude 有哪些工具</td></tr>
+          <tr><th scope="row">能画界面吗</th><td>能</td><td>不能</td><td>不能</td><td>不能</td></tr>
+          <tr><th scope="row">你要写什么</th><td>JavaScript 或 TypeScript</td><td>一个脚本加一条 <code>settings.json</code> 配置</td><td>Markdown</td><td>任意语言的 server</td></tr>
+          <tr><th scope="row">什么时候选它</th><td>想要一个面板、输入框上方的信息带、自定义命令,或要改写某个事件</td><td>已有脚本,只想拦截、放行或记录某个事件</td><td>总在反复粘贴同一段指令</td><td>Claude 需要访问外部系统</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>注意第二行:settings hook 也能改工具调用的参数和结果、追加上下文,「旧 hook 只能拦截」的说法过头了。官方还补了一句:一个插件可以同时装下这四样。</p>
+
+    <h3>只有 Mod 能做的事</h3>
+    <div class="grid">
+      <div class="card"><h4>画界面</h4><p>开面板、在输入框上方画信息带、加按钮和输入框。</p></div>
+      <div class="card"><h4>重画内置界面</h4><p>工具行、spinner、Claude 向你提问的对话框。权限弹窗除外,它不能被改样式。</p></div>
+      <div class="card"><h4>介入一次调用或请求</h4><p>按住工具调用去问用户、不跑工具直接给结果、把某一次请求发给另一个模型。</p></div>
+      <div class="card"><h4>无回合响应命令</h4><p>自定义 <code>/命令</code> 直接跑代码,不启动 Claude 回合,Claude 正在干活时也能用。</p></div>
+      <div class="card"><h4>hook 之间共享数据</h4><p>同一个文件里的变量,所有 hook 都能读写。</p></div>
+    </div>
+
+    <h3>选型顺序 <span class="tag tag-infer">编辑推导</span></h3>
+    <ol>
+      <li>只是让 Claude 记住一套做法 → 写 Skill。</li>
+      <li>要接外部系统(数据库、工单、API)→ MCP server。</li>
+      <li>固定的命令或路径要放行或禁止 → 权限规则(如 <code>Bash(npm test)</code>),不用写代码。</li>
+      <li>已有脚本,只做拦截、放行、记录 → settings hook。</li>
+      <li>要画界面、要自定义命令、要按当时的状态动态改写事件 → Mod。</li>
+    </ol>
+
+    <h3>在哪里能跑、在哪里能画</h3>
+    <p class="table-hint">「hook 是否执行」和「界面是否显示」是两件事,分开看。表格可左右滑动。</p>
+    <div class="table-scroll" role="region" aria-label="Mod 运行环境对照表" tabindex="0">
+      <table class="narrow">
+        <caption>运行环境(overview 页) <span class="tag tag-official">官方文档</span></caption>
+        <thead><tr><th scope="col">环境</th><th scope="col">hook 是否执行</th><th scope="col">界面是否显示</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">终端 CLI</th><td>是</td><td>是</td></tr>
+          <tr><th scope="row">桌面 App 的 Code 标签(非 WSL)</th><td>是</td><td>是,仅终端可用的元素除外</td></tr>
+          <tr><th scope="row">桌面 App 的 WSL 会话</th><td>否</td><td>否</td></tr>
+          <tr><th scope="row">VS Code 扩展聊天面板</th><td>是</td><td>否</td></tr>
+          <tr><th scope="row"><code>claude -p</code> 与 Agent SDK</th><td>是</td><td>否</td></tr>
+          <tr><th scope="row">Remote Control</th><td>在本机执行</td><td>画在本机终端</td></tr>
+          <tr><th scope="row">云端会话</th><td>插件可达时执行</td><td>否</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>会画界面的 Mod 可以检查自己跑在哪个应用里,在画不出来的地方退回成 transcript 里的一行字或命令的文本回复。</p>
+  </div>
+</section>
+
+<!-- ============ 安装前检查 ============ -->
+<section id="check">
+  <div class="wrap">
+    <h2>安装前检查与停用方式</h2>
+    <p class="section-lede">装一个第三方 Mod,相当于让一段别人的代码以你的身份常驻在 Claude Code 里。先知道它能碰什么,再知道怎么让它停下。</p>
+
+    <h3>不运行代码,先看它会做什么</h3>
+    <p>Mod 只能通过 mods API(代码里写作 <code>$</code>)触达文件、进程和网络,而且必须把每个调用写全,所以 Claude Code 能在安装前静态列出来:</p>
+    <span class="code-label">命令与输出节选 · 官方 admin 页示例</span>
+    <pre><code>claude plugin validate ./some-mod
+
+  ❯ ./register.js hooks: session.start, tool.call, ui.render{component=Pane}
+  ❯ ./register.js calls: $.fs.read, $.http.fetch, $.store.set, $.ui.open</code></pre>
+    <p><code>hooks:</code> 是它接收的事件,<code>calls:</code> 是它调用的方法。读写环境变量会多出 <code>env reads:</code> / <code>env writes:</code> 行。写法让这条命令读不出来的 Mod,Claude Code 会拒绝加载。</p>
+
+    <h3>calls 行里要留意的调用 <span class="tag tag-official">官方文档</span></h3>
+    <div class="grid">
+      <div class="card"><h4><code>$.fs.read</code> / <code>$.fs.write</code></h4><p>读写该用户能碰到的任何文件。即使 <code>Read(.env)</code> 被 deny,Mod 仍能用 <code>$.fs.read</code> 读它。</p></div>
+      <div class="card"><h4><code>$.process.run</code> / <code>$.process.spawn</code></h4><p>以该用户身份启动程序,沙箱和网络策略都不覆盖这些程序。</p></div>
+      <div class="card"><h4><code>$.http.fetch</code></h4><p>发网络请求。组织关闭 web fetch 时会被拒。</p></div>
+      <div class="card"><h4><code>$.env.get</code> / <code>$.settings.read</code></h4><p>读环境变量与设置,里面可能有 API key。</p></div>
+      <div class="card"><h4><code>$.env.set</code></h4><p>给 Claude Code 及其之后启动的每个命令、MCP server 设环境变量,能改变那些程序的行为。</p></div>
+      <div class="card"><h4><code>$.mcp.call</code></h4><p>调用已连接 MCP server 的工具,受会话权限规则约束。</p></div>
+      <div class="card"><h4><code>$.model.complete</code></h4><p>用你的套餐或 API key 调模型,会产生用量。</p></div>
+      <div class="card"><h4><code>$.prompt.submit</code></h4><p>提交提示词,而且可以当成你本人说的话发出。</p></div>
+      <div class="card"><h4><code>$.session.send</code></h4><p>发消息给另一个会话或子 Agent 的 Claude。</p></div>
+    </div>
+
+    <h3>hooks 行里要留意的事件 <span class="tag tag-official">官方文档</span></h3>
+    <ul>
+      <li><code>tool.call</code>、<code>prompt.submit</code>:看得到每一次工具调用和每一条提示词,并且能改。</li>
+      <li><code>tool.check</code>:能在权限弹窗出现前批准或拒绝调用。</li>
+      <li><code>session.append</code>:能在对话每一行落盘前改写它。</li>
+      <li><code>ui.render{component=AskUserQuestion}</code>:能重画 Claude 向你提问的对话框。</li>
+    </ul>
+
+    <h3>安装前七项检查 <span class="tag tag-infer">编辑推导</span></h3>
+    <p>下面每一条都由上文的官方事实推出,顺序是我排的。</p>
+    <ol>
+      <li><strong>版本</strong>:<code>claude --version</code> 不低于 2.1.287,否则装了也不加载。</li>
+      <li><strong>拿到源码目录再跑 validate</strong>:看 <code>hooks:</code> 与 <code>calls:</code> 两行,和它自称的功能对不对得上。一个「只显示 token 用量」的 Mod 不该出现 <code>$.process.run</code>。</li>
+      <li><strong>有没有 <code>tool.check</code></strong>:有的话,它能替你批准调用。个人环境没有内置守卫,连 deny 规则都可能被它推翻。</li>
+      <li><strong>有没有不调 <code>next</code> 就返回结果的 <code>tool.call</code> hook</strong>:这类 hook 会让非托管的 PreToolUse hook 不再运行,Claude 只看得到它给的结果。</li>
+      <li><strong>拦截类 hook 是否带 <code>.catch</code></strong>:没有的话,它出错时就等于不存在。</li>
+      <li><strong>作者是否写明测试过的 Claude Code 版本</strong>:官方要求作者在 README 里写;事件和方法会随版本变。</li>
+      <li><strong>先想好怎么关</strong>:确认下面的停用方式在你的环境里可用,再装。</li>
+    </ol>
+
+    <h3>停用方式各自管到哪</h3>
+    <div class="grid wide">
+      <div class="card">
+        <h4>关一个 Mod</h4>
+        <p><code>/plugin</code> → Installed 页里关闭。</p>
+      </div>
+      <div class="card">
+        <h4>本次会话全部不加载</h4>
+        <p><code>claude --safe-mode</code>。所有已安装的 Mod(含组织的)和其他自定义项都不加载;内置 Mod 照跑。适合判断问题是不是某个 Mod 引起的。</p>
+      </div>
+      <div class="card">
+        <h4>所有会话全部停用</h4>
+        <p>在 <code>~/.claude/settings.json</code> 写 <code>"disableAllHooks": true</code>。副作用:settings hook 和自定义状态栏一起停。组织托管的 Mod 照跑,内置 Mod 照跑,插件里的 skill、命令、agent、MCP server 照常加载。</p>
+      </div>
+      <div class="card">
+        <h4>内置 Mod</h4>
+        <p>每个有自己的开关,在 <code>/plugin</code> → Installed → Built-in 里看。<code>cc-plugin-sec-default</code> 不能关。</p>
+      </div>
+      <div class="card warn">
+        <h4>已失效的开关</h4>
+        <p><code>CLAUDE_CODE_ENABLE_FUNCTION_HOOKS</code> 从 v2.1.287 起被忽略,设成 <code>0</code> 也关不掉 Mod。</p>
+      </div>
+      <div class="card note">
+        <h4>你控制不了的一种停用</h4>
+        <p>Anthropic 可以远程关闭已安装的 Mod,此时本机没有任何设置能重新打开。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 安装 ============ -->
+<section id="install">
+  <div class="wrap">
+    <h2>安装、加载与首次验收</h2>
+    <p class="section-lede">得到一个 Mod 有三条路:用内置的、装别人的、自己做。这一节讲前两条。</p>
+
+    <h3>从 marketplace 安装</h3>
+    <span class="code-label">局部片段 · 在 Claude Code 提示符里</span>
+    <pre><code>/plugin marketplace add your-org/my-mods
+/plugin install token-weather@my-mods
+/reload-plugins</code></pre>
+    <span class="code-label">局部片段 · 在 shell 里</span>
+    <pre><code>claude plugin install token-weather@my-mods --scope user</code></pre>
+    <p>在 shell 里安装后,已经开着的会话要执行 <code>/reload-plugins</code>,否则下次启动才加载。 <span class="tag tag-official">官方文档</span></p>
+    <p>Anthropic 另有一个社区插件市场的只读镜像仓库 <code>anthropics/claude-plugins-community</code>,安装写法是 <code>claude plugin install &lt;插件名&gt;@claude-community</code>。README 称其中的插件经 claude.ai 提交、通过自动安全扫描并获批分发。 <span class="tag tag-official">源码仓库</span> 自动扫描不等于有人逐行审过代码,安装前七项检查照做。 <span class="tag tag-infer">编辑推导</span></p>
+
+    <h3>不安装,只在一次会话里加载</h3>
+    <span class="code-label">局部片段</span>
+    <pre><code>claude --plugin-dir ./first-mod</code></pre>
+    <p>这样加载的目录会被监视,保存文件即热重载。开发时一直用这种方式,不要改已安装的副本(原因见<a href="#ship">分发</a>一节)。</p>
+
+    <h3>首次验收</h3>
+    <ol>
+      <li>第一次打开的目录,先在交互会话里回答 trust 提示,否则任何 Mod 都不加载。</li>
+      <li>运行 <code>/plugin</code>:顶部会有一行暗色文字,如 <code>1 mod active · first-mod</code>。这一行不含内置 Mod。</li>
+      <li>用一下它声称的功能(命令、面板、信息带)。</li>
+      <li>没反应时,带 <code>--debug</code> 重开会话,在调试日志里找这样的加载行:</li>
+    </ol>
+    <span class="code-label">调试日志示例 · 官方 troubleshoot 页</span>
+    <pre><code>hooks module first-mod@inline loaded (worker, environment 2, tier user); events: session.start,tool.call,command.run,ui.render</code></pre>
+
+    <h3>先确认环境允许 Mod 加载</h3>
+    <p>在一个不含 Mod 的目录里运行 <code>claude plugin test</code>,不需要会话。看它打印的消息:</p>
+    <div class="grid">
+      <div class="card"><h4><code>no hooks module to load</code></h4><p>Mod 可以加载,只是当前目录没有可测的 Mod。</p></div>
+      <div class="card"><h4><code>hooks modules are turned off here</code></h4><p>有设置挡住了:你自己的 <code>disableAllHooks</code>,或组织策略。</p></div>
+      <div class="card"><h4><code>hooks modules are turned off in this process</code></h4><p>Anthropic 远程关闭了已安装的 Mod。</p></div>
+    </div>
+    <p>组织设了 <code>allowManagedModsOnly</code> 的情况,这条命令不会报告。</p>
+
+    <h3>内置条目一览 <span class="tag tag-official">官方文档</span></h3>
+    <p>官方表里有六个内置条目,其中 plugin-authoring 只有 skill、没有 Mod 代码,所以不宜说成「六个内置 Mod」。</p>
+    <div class="grid">
+      <div class="card"><h4>cc-plugin-agents-md</h4><p>读取 <code>AGENTS.md</code>。除了读不到该文件的会话,每个会话都开。源码公开,带一个 <code>userConfig</code> 选项。</p></div>
+      <div class="card"><h4>cc-plugin-diff</h4><p><code>/diff</code> 现在由它实现,交互式终端会话里开启;关掉后由内置的 <code>/diff</code> 接手。源码公开。</p></div>
+      <div class="card"><h4>cc-plugin-plugin-authoring</h4><p>只含一个 skill,教 Claude 怎么写 Mod。除非 Anthropic 远程关闭已安装 Mod,否则开启。</p></div>
+      <div class="card"><h4>cc-plugin-sec-default</h4><p>内置守卫,不能关。只在有托管设置的机器或 Team/Enterprise 登录时加载。源码公开。</p></div>
+      <div class="card"><h4>cc-plugin-telemetry</h4><p>开了分析的地方就开;可用 <code>DISABLE_TELEMETRY</code> 关。它给其他 Mod 提供可调用的方法和类型。源码公开。</p></div>
+      <div class="card"><h4>cc-plugin-you-should-know</h4><p>默认关闭;组织可用时出现在 <code>/plugin</code> → Installed → Show disabled。启用:<code>/plugin enable cc-plugin-you-should-know@builtin</code>。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 第一个 Mod ============ -->
+<section id="first-mod">
+  <div class="wrap">
+    <h2>写第一个 Mod</h2>
+    <p class="section-lede">不需要 Node.js、打包器或构建步骤,Claude Code 直接加载 <code>.js</code> 和 <code>.ts</code>。下面是官方教程的 <code>first-mod</code>:数工具调用次数,显示在 spinner 旁,并加一个 <code>/tally</code> 命令。</p>
+
+    <h3>三个文件</h3>
+    <span class="code-label">目录结构</span>
+    <pre><code>first-mod/
+├── .claude-plugin/
+│   └── plugin.json
+└── hooks/
+    ├── hooks.json
+    └── register.js</code></pre>
+    <span class="code-label">完整示例 · first-mod/.claude-plugin/plugin.json</span>
+    <pre><code>{
+  "name": "first-mod",
+  "version": "0.1.0",
+  "description": "Counts Claude's tool calls, shows the count beside the spinner, and adds a /tally command",
+  "author": { "name": "Your Name" }
+}</code></pre>
+    <span class="code-label">完整示例 · first-mod/hooks/hooks.json(<code>modules</code> 只列一个路径,有它才算 Mod)</span>
+    <pre><code>{
+  "description": "The first-mod hooks module",
+  "modules": ["./register.js"]
+}</code></pre>
+    <span class="code-label">完整示例 · first-mod/hooks/register.js(官方教程代码,注释为中文转写) · v2.1.287 文档</span>
+    <pre><code>// 计数器,下面几个 hook 共用
+let calls = 0
+
+// Mod 加载时 Claude Code 调用一次
+export function register(on) {
+  // 会话开始时(以及每次重载时)运行
+  on('session.start', async ($, e, next) =&gt; {
+    await $.command.register({
+      name: 'tally',
+      description: 'Show how many tool calls Claude has made',
+    })
+    return next(e)            // 观察:原样放行
+  })
+
+  // Claude 每次要用工具之前运行
+  on('tool.call', async ($, e, next) =&gt; {
+    calls += 1
+    $.ui.invalidate('ui.render')   // 请求重画界面
+    return next(e)            // 观察:原样放行
+  })
+
+  // 只有输入 /tally 时运行(第二个参数是 matcher)
+  on('command.run', { command: 'tally' }, async () =&gt; {
+    // 代答:不调 next,自己给结果
+    return { text: 'Claude has made ' + calls + ' tool calls since this mod loaded' }
+  })
+
+  // 每次画 spinner 时运行
+  on('ui.render', { component: 'Spinner' }, async ($, e, next) =&gt; {
+    // 改写:把带新 suffix 的事件副本交给 next
+    return next({ ...e, props: { ...e.props, suffix: ' · tool calls: ' + calls + '…' } })
+  })
+}</code></pre>
+
+    <h3>跑起来</h3>
+    <span class="code-label">局部片段</span>
+    <pre><code>claude --plugin-dir ./first-mod          # 交互会话:spinner 显示 Thinking · tool calls: 2…
+claude -p "/tally" --plugin-dir ./first-mod   # 非交互:输出 first-mod: Claude has made 0 tool calls since this mod loaded</code></pre>
+    <p>第二条命令本身就说明:用 <code>--plugin-dir</code> 或安装方式加载的 Mod,在 <code>claude -p</code> 里 hook 照常执行。保存 <code>register.js</code> 后,transcript 会出现一行说明 <code>first-mod</code> 已重载并列出它的 hook;每次重载都会重新执行 <code>register</code>,所以 <code>calls</code> 归零。</p>
+    <p>这个计数记的是「经过这个 hook 的 <code>tool.call</code> 次数」,不是成功执行的工具数:hook 在调用被权限检查之前就加了一,被拒绝的调用也算在内。 <span class="tag tag-infer">编辑推导</span></p>
+
+    <h3>三种处理方式</h3>
+    <div class="grid">
+      <div class="card accent"><h4>观察 Observe</h4><p>做完自己的事,<code>return next(e)</code>。要在事件之后做事,就 <code>const r = await next(e)</code>,处理完再 <code>return r</code>。</p></div>
+      <div class="card accent"><h4>改写 Rewrite</h4><p>事件对象是深度冻结的,赋值会抛错。把改过的副本传给 <code>next</code>;也可以改 <code>next</code> 返回的结果再交回去。</p></div>
+      <div class="card accent"><h4>代答 Answer</h4><p>不调 <code>next</code> 直接返回结果,链条就此短路:后面的 Mod 和 Claude Code 自己的行为都不再运行。</p></div>
+    </div>
+    <p>官方介绍里也用过「watch the event, change it, or take it over」的说法,所以把 Answer 译成「接管」不算错;文档里的正式名称是 Observe / Rewrite / Answer。</p>
+
+    <h3>matcher:只处理一部分事件</h3>
+    <span class="code-label">局部片段 · 官方 events 页</span>
+    <pre><code>on('tool.call', { tool: 'Bash' }, hook)             // 字符串:只匹配一个值
+on('tool.call', { tool: ['Edit', 'Write'] }, hook)  // 数组:匹配其中任意一个
+on('tool.call', { tool: /^mcp__github__/ }, hook)   // 正则:按模式匹配</code></pre>
+    <p>事件名可用通配:<code>'classic.*'</code> 匹配所有 settings hook 事件;<code>'*'</code> 匹配除 telemetry 之外的所有事件。同一个事件、同一个 matcher 只能注册一次,无 matcher 地给 <code>session.start</code> 注册两次会导致模块加载失败。</p>
+
+    <h3>写完先过静态检查</h3>
+    <span class="code-label">命令与输出节选 · 官方 create 页</span>
+    <pre><code>claude plugin validate ./first-mod
+
+  ❯ ./register.js hooks: session.start, tool.call, command.run{command=tally}, ui.render{component=Spinner}
+  ❯ ./register.js calls: $.command.register, $.ui.invalidate
+
+✔ Validation passed</code></pre>
+    <p>想挂的事件没出现在 <code>hooks:</code> 行,Claude Code 就不会调用它,常见原因是事件名拼错,报错形如 <code>"tool.calls" is not an event</code>。为了让静态分析读得出来,要遵守这些写法规则: <span class="tag tag-official">官方文档</span></p>
+    <ul>
+      <li>每个 mods API 调用写全:<code>$.store.get('notes')</code>。可以把 <code>$</code> 传给同文件顶层声明的函数;不能把 <code>$</code> 或它的命名空间赋给变量、解构,或用计算出来的名字取成员。<code>const ui = $.ui</code> 会报 <code>$.ui is used as a value</code>。</li>
+      <li><code>on</code> 的事件名必须是字符串字面量,不能用变量或循环。</li>
+      <li><code>register</code> 里不能再声明名为 <code>on</code> 的变量或参数。</li>
+      <li>只能用相对路径导入插件目录内的文件;唯一允许的裸导入是 <code>claude-code</code>。</li>
+      <li>不能用动态 <code>import()</code>;每个文件都写成 ES module,不用 <code>require</code>。</li>
+    </ul>
+
+    <h3>类型声明:你这个版本的权威参考</h3>
+    <p>从 <code>--plugin-dir</code> 目录加载或重载 Mod 时(Claude 代写的也一样),Claude Code 会在 Mod 目录的 <code>.claude-plugin/types/</code> 下写入 <code>.d.ts</code> 文件:<code>claude-code/index.d.ts</code>(全部事件、方法和可画元素,每个方法带注释和示例)、<code>claude-code-tools/index.d.ts</code>(内置工具的输入输出)、<code>claude-code-mcp/index.d.ts</code>(已连接 MCP 工具的输入),以及一个 <code>tsconfig.json</code>。在线版本是仓库里的 <code>mods/types/claude-code.d.ts</code>,首行写着生成它的版本。</p>
+
+    <h3>让 Claude 代写</h3>
+    <p>Claude 靠内置 skill <code>plugin-authoring</code> 来写 Mod,可以让它自动加载,也可以自己输入 <code>/plugin-authoring</code>。流程如下: <span class="tag tag-official">官方文档</span></p>
+    <ol class="seq">
+      <li><strong>描述需求</strong>,例如「做一个在输入框上方显示当前 git 分支的 mod」。Claude 把文件写进 <code>~/.claude/dev-mods/&lt;会话ID&gt;/&lt;mod名&gt;/</code>。在 <code>default</code> 和 <code>acceptEdits</code> 模式下,<code>~/.claude</code> 是受保护路径,每个文件都要你批准。</li>
+      <li><strong>选择是否热重载</strong>。第一个文件保存时会问:选 Enable for this session,Mod 在本回合结束时加载,之后每个改动它的回合结束时重载;选 Not now 则暂不加载,文件保留,该会话下次启动时才加载。</li>
+      <li><strong>确认已加载</strong>:<code>/plugin</code> 的 Installed 页里能看到它,也能在那里关掉。</li>
+      <li><strong>试用并迭代</strong>:不满意就告诉 Claude 改什么。</li>
+      <li><strong>想留下就拷走</strong>:这样写出来的 Mod 只在创建它的会话里加载,会话的 mods 文件夹超过 <code>cleanupPeriodDays</code> 后会被删除。拷到自己的目录,再用 <code>--plugin-dir</code> 加载或放进 marketplace。</li>
+    </ol>
+    <div class="card note block">
+      <h4>哪些会话里 Claude 代写的 Mod 不加载</h4>
+      <p>没人能批准的会话(<code>claude -p</code>、<code>dontAsk</code> 模式)、目录未被信任、Mod 被停用(<code>--safe-mode</code>、<code>--bare</code>、<code>disableAllHooks</code> 或组织策略)。这份清单只针对 Claude 当场写的 Mod,不是对所有 Mod 的限制。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 按任务扩展 ============ -->
+<section id="tasks">
+  <div class="wrap">
+    <h2>按任务扩展能力</h2>
+    <p class="section-lede">想做某件事时,该挂哪个事件、调哪个方法。代码均取自官方 events 页,注释为中文转写。</p>
+
+    <h3>拒绝某类工具调用</h3>
+    <span class="code-label">局部片段(放在 register 内)</span>
+    <pre><code>on('tool.call', { tool: 'Bash' }, async ($, e, next) =&gt; {
+  if (/git push .*--force/.test(e.command)) {
+    // 不调 next:命令不执行,也不出现权限弹窗
+    return { deny: 'Force pushes are not allowed in this repository. Push to a new branch instead.' }
+  }
+  return next(e)   // 其他命令继续走权限检查,然后执行
+})</code></pre>
+    <p><code>tool.call</code> 覆盖子 Agent 的调用和 MCP 工具。<code>deny</code> 的文字会作为工具结果交给 Claude,所以要写成 Claude 能照做的指令。想自己给结果而不跑工具,返回 <code>{ result: '...' }</code>;想重试,就再调一次 <code>next(e)</code>。</p>
+
+    <h3>执行前先问用户</h3>
+    <span class="code-label">局部片段(据官方示例缩写,匹配规则只留了强制推送一种)</span>
+    <pre><code>on('tool.call', { tool: 'Bash' }, async ($, e, next) =&gt; {
+  if (!/\bgit\s+push\b.*--force/.test(e.command)) return next(e)
+  let answer = 'Refuse'            // 默认答案是拒绝
+  try {
+    // 工具调用停在这里,直到用户选一项
+    answer = await $.ui.ask('Run this command? ' + e.command, ['Run it', 'Refuse'])
+  } catch {
+    // 用户关掉了提问,或这是没人可问的 claude -p
+  }
+  if (answer !== 'Run it') {
+    return { deny: 'The user declined this command. Ask before trying a different approach.' }
+  }
+  return next(e)                   // 用户同意后,常规权限检查照样进行
+})</code></pre>
+    <p><code>$.ui.ask</code> 用的是 Claude 向你提问的那个对话框,选项之后还会多出「输入其他答案」和 Chat about this 两行。等待时间放在 mods API 调用里不计入 10 秒限制;自己 await 的 promise 会计入,而超时的 hook 会被跳过,被按住的命令就会执行。</p>
+
+    <h3>按当时的状态决定权限</h3>
+    <span class="code-label">局部片段</span>
+    <pre><code>on('tool.check', { tool: 'Bash' }, async ($, e, next) =&gt; {
+  // 权限规则和 settings hook 已经得出的决定:'allow'、'ask' 或 'deny'
+  const decided = await next(e)
+  if (!e.input.command.includes('git push')) return decided
+  const branch = await $.process.run(['git', 'branch', '--show-current'])
+  if (branch.stdout.trim() !== 'main') return decided
+  // reason 是写给 Claude 的指令:改从 main 以外的分支推送
+  return { decision: 'deny', reason: 'Push from a branch other than main' }
+})</code></pre>
+    <p>这段代码只在当前分支是 <code>main</code> 时拒绝;<code>reason</code> 保留官方原文,它是一句祈使句,意思是「请从 main 以外的分支推送」。官方自己的提醒:这个 hook 只是匹配命令文本,应把它当成给 Claude 的提醒;要对所有人禁止推 <code>main</code>,去 Git 托管平台上保护分支。</p>
+
+    <h3>改写或补充提示词</h3>
+    <div class="grid">
+      <div class="card"><h4>改写提示词</h4><p><code>next({ ...e, text: newText })</code>,transcript 里显示新文本。</p></div>
+      <div class="card"><h4>追加只给 Claude 看的文字</h4><p><code>next({ ...e, context: [...(e.context ?? []), extraText] })</code></p></div>
+      <div class="card"><h4>阻止发送</h4><p><code>{ drop: 'the reason' }</code></p></div>
+    </div>
+    <p>其余 Claude 会读到的内容由别的事件管:<code>prompt.section</code>(系统提示词的每一段)、<code>prompt.context</code>(随第一条消息发送的上下文)、<code>skill.prompt</code>(skill 的正文)。这些 hook 产出的文字如果每次请求都变,会让 prompt cache 失效。</p>
+
+    <h3>跟踪回合、读用量、换模型</h3>
+    <span class="code-label">局部片段 · <code>turn.step</code> 是流式事件,hook 要写成异步生成器</span>
+    <pre><code>on('turn.step', async function* ($, e, next) {
+  const result = yield* next(e)    // 发出请求,边流边转发,拿到最终结果
+  if (result.usage) {
+    $.ui.log('cache read ' + result.usage.cache_read_input_tokens + ' · wrote ' + result.usage.cache_creation_input_tokens)
+  }
+  return result
+})</code></pre>
+    <p>一个带工具调用的回合有多次请求,每次都触发 <code>turn.step</code>,子 Agent 的请求也算(看 <code>e.agentId</code>)。把某次请求发给别的模型:<code>next({ ...e, model })</code>;也可以不调模型直接代答。<code>turn.complete</code> 里返回 <code>{ text: '...' }</code> 会在回答下方显示一行。</p>
+
+    <h3>其他常见任务</h3>
+    <div class="grid">
+      <div class="card"><h4>加一个命令</h4><p>在 <code>session.start</code> 里 <code>$.command.register(...)</code>,再用带 matcher 的 <code>command.run</code> 代答。</p></div>
+      <div class="card"><h4>画面板或信息带</h4><p>挂 <code>ui.render</code> 并指定渲染位(如 <code>Pane</code>、<code>AbovePrompt</code>),用 <code>$.ui.open</code> 打开面板,数据变了调 <code>$.ui.invalidate</code>。</p></div>
+      <div class="card"><h4>改内置界面</h4><p>对 <code>Spinner</code>、<code>ToolUse</code>、<code>AskUserQuestion</code> 等渲染位挂 <code>ui.render</code>,把改过 props 的事件交给 <code>next</code>。</p></div>
+      <div class="card"><h4>自己调一次模型</h4><p><code>$.model.complete({ model, system, prompt })</code>,<code>maxTokens</code> 默认 1024。</p></div>
+      <div class="card"><h4>定时任务</h4><p><code>$.clock.every</code>、<code>$.clock.after</code>。hooks module 里没有 <code>setTimeout</code>。</p></div>
+      <div class="card"><h4>不打扰回合地显示信息</h4><p><code>$.ui.log</code>(transcript 里的暗色行,Claude 不读)、<code>$.ui.toast</code>(默认 4 秒)、<code>$.ui.status</code>。</p></div>
+      <div class="card"><h4>接 settings hook 的事件</h4><p>每个 settings hook 事件都有对应的 <code>classic.&lt;事件名&gt;</code>,如 <code>classic.Stop</code>;<code>e</code> 就是 settings hook 从 stdin 读到的 JSON。</p></div>
+    </div>
+
+    <h3>官方教程的三个示例 Mod <span class="tag tag-official">官方博客</span></h3>
+    <div class="grid">
+      <div class="card"><h4>Token Weather</h4><p>把上下文占用画成「天气」信息带,阈值为 25%、50%、75%、90%。</p></div>
+      <div class="card"><h4>Blast Radius</h4><p>在递归强制删除、git 硬重置、git clean、强制推送、数据库迁移这类命令执行前先做 dry run,再让用户选 Proceed 或 Cancel。教程原话是「安全网,不是权限系统」:命令替换、别名、脚本都能绕过。</p></div>
+      <div class="card"><h4>Replay Theater</h4><p>记录 Edit 和 Write 并支持回放,只观察,不改任何东西。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 多 Mod 与权限 ============ -->
+<section id="chain">
+  <div class="wrap">
+    <h2>多 Mod 组合与权限裁决</h2>
+    <p class="section-lede">同一个事件上的所有 hook 串成一条中间件链。谁在外层、谁的决定是终局,决定了你的守卫到底有没有用。</p>
+
+    <h3>洋葱链:四层顺序</h3>
+    <div class="onion" role="img" aria-label="四层嵌套的洋葱链示意:事件由外向内依次经过组织前置层、用户安装层、组织后置层、其他内置层,最后到达 Claude Code 自身行为,结果再由内向外返回">
+      <div class="layer">
+        <div class="layer-title">第一层:组织前置</div>
+        <div class="layer-note">内置守卫 <code>sec-default@builtin</code>(加载时)、<code>prependPlugins</code> 列出的 Mod、其他算作组织的 Mod</div>
+        <div class="layer">
+          <div class="layer-title">第二层:你安装的 Mod</div>
+          <div class="layer-note">一个 Mod 排在它 <code>dependencies</code> 列出的 Mod 之前;同一模块内按 <code>on</code> 的调用顺序</div>
+          <div class="layer">
+            <div class="layer-title">第三层:组织的 <code>appendPlugins</code></div>
+            <div class="layer">
+              <div class="layer-title">第四层:其他内置 Mod</div>
+              <div class="core">
+                <div class="layer-title">Claude Code 自身行为</div>
+                <div class="layer-note">最后一个 <code>next</code> 到达这里</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>事件由外向内传,结果由内向外回。最外层的 Mod 最先看到事件、最后看到结果,并决定里面的要不要运行;靠后的 Mod 无法阻止靠前的 Mod 看到事件。 <span class="tag tag-official">官方文档</span></p>
+
+    <h3>一次工具调用的裁决时序</h3>
+    <ol class="seq">
+      <li><strong>Claude 发出工具调用</strong>。</li>
+      <li><strong>托管设置里的 PreToolUse hook 先跑</strong>。
+        <span class="stop">终止分支:这里的 block 是终局,任何 Mod 都看不到这次调用。Mod 之后改写了调用的话,托管 hook 会对改写后的调用再跑一遍。</span></li>
+      <li><strong>各 Mod 的 <code>tool.call</code> hook 按四层顺序运行</strong>。
+        <span class="stop">终止分支:任何一个 hook 不调 <code>next</code> 就返回 <code>{ deny }</code> 或 <code>{ result }</code>,后面的 Mod、非托管 PreToolUse hook、权限检查和工具本身都不再运行,也不出现权限弹窗。</span></li>
+      <li><strong>最后一个 Mod 调了 <code>next</code></strong>,进入 Claude Code 自身行为:其他 settings 文件和插件 <code>hooks/hooks.json</code> 里的 PreToolUse hook 运行,权限规则给出 allow、ask 或 deny。</li>
+      <li><strong><code>tool.check</code> 链运行</strong>,<code>next(e)</code> 拿到上一步的决定,hook 可以原样返回,也可以换成另一个决定。</li>
+      <li><strong>按最终决定处理</strong>:allow 直接执行;ask 弹出权限框(Mod 改不了它的样子);deny 把理由交给 Claude。auto 模式下,Mod 批准的调用不再经过分类器。</li>
+      <li><strong>工具执行</strong>,结果沿 <code>tool.call</code> 链由内向外返回,每个 <code>await next(e)</code> 的 hook 都能看到并改写结果。</li>
+    </ol>
+
+    <h3>Mod 的 <code>tool.check</code> 能推翻什么 <span class="tag tag-official">官方文档</span></h3>
+    <div class="grid wide">
+      <div class="card"><h4>ask 规则</h4><p>能。Mod 可以直接批准本该弹窗询问的调用。</p></div>
+      <div class="card"><h4>非托管 PreToolUse hook 的 block</h4><p>能。包括你自己在 <code>settings.json</code> 里写的 hook。</p></div>
+      <div class="card"><h4>托管 PreToolUse hook 的 block</h4><p>不能,它是终局。</p></div>
+      <div class="card"><h4>auto 模式分类器</h4><p>Mod 批准的调用不经分类器检查就执行。</p></div>
+      <div class="card warn"><h4>deny 规则</h4><p>有托管设置的机器,或用 Team/Enterprise 登录时:deny 规则默认压过 Mod,组织可用 <code>allowModsToOverrideDenyRules</code> 放开。<strong>其他任何环境:Mod 可以批准 deny 规则拒绝的调用。</strong></p></div>
+      <div class="card"><h4>Mod 自己的 <code>$.fs</code> / <code>$.process</code></h4><p>deny 规则和托管 hook 只管 Claude 的工具调用,管不到 Mod 自己发起的文件和进程操作。</p></div>
+    </div>
+
+    <h3>auto 模式下改写输入会被拒</h3>
+    <p>auto 模式里,如果 hook 在分类器审过之后又改了工具调用的输入,调用会被拒,理由是 <code>a hook changed this call's input after the model wrote it</code>。改输入的可能是 Mod 的 <code>tool.call</code>、<code>turn.step</code> hook,也可能是 PreToolUse settings hook,消息不会说是哪一个。 <span class="tag tag-official">官方文档</span></p>
+
+    <h3>写守卫类 Mod 的七条注意</h3>
+    <ol>
+      <li><strong>固定的命令或路径用权限规则</strong>,不写代码。<code>tool.check</code> 留给「取决于当时状态」的判断。 <span class="tag tag-official">官方文档</span></li>
+      <li><strong>文本匹配只是提醒</strong>。官方示例自己就说明它会漏掉 <code>git push -f</code> 这样的写法。真正的边界放在 Git 托管平台的分支保护、托管设置这类 Mod 之外的地方。 <span class="tag tag-official">官方文档</span></li>
+      <li><strong>加 <code>.catch</code> 让它失败时拒绝</strong>,否则 hook 一出错就被跳过。</li>
+      <li><strong>等用户决定时,等待放在 <code>$.ui.ask</code> 里</strong>,并把默认答案设成拒绝。</li>
+      <li><strong><code>deny</code> 文案写给 Claude 看</strong>:说清不能做什么、该改做什么。</li>
+      <li><strong>知道自己在链上的位置</strong>:排在你前面的 Mod 代答后,你的 hook 根本不运行。 <span class="tag tag-infer">编辑推导</span></li>
+      <li><strong>守卫可能不在场</strong>:<code>--safe-mode</code>、worker 崩溃三次、Anthropic 远程关闭、hook 被跳过,都会让它消失。<code>.catch</code> 只保护那一个 hook,不是系统级保证。 <span class="tag tag-infer">编辑推导</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 状态、预算与失败 ============ -->
+<section id="state">
+  <div class="wrap">
+    <h2>状态、预算与失败恢复</h2>
+
+    <h3>三层状态,寿命各不相同</h3>
+    <div class="grid">
+      <div class="card accent"><h4>模块变量</h4><p>写法最简单(如 <code>let calls = 0</code>)。每次重载都重新初始化,热重载、<code>/reload-plugins</code> 后归零。</p></div>
+      <div class="card accent"><h4><code>$.state</code></h4><p>会话内保留,重载不丢。<code>/clear</code>、<code>/resume</code>、<code>/branch</code> 会把它重置为默认值,而且 <code>session.start</code> 不会再触发,要在 <code>classic.SessionStart</code> hook 里把存过的值重新装回来。</p></div>
+      <div class="card accent"><h4><code>$.store</code></h4><p>跨会话保留,落在 <code>~/.claude/plugins/store/</code>,总量上限 4 MiB 的 JSON。超过 <code>cleanupPeriodDays</code> 没有读写会被清理。</p></div>
+    </div>
+    <p>所以「跨重载存数据」用 <code>$.state</code> 就够;「跨会话存数据」才需要 <code>$.store</code>。两者不要混为一谈。</p>
+
+    <h3>10 秒预算怎么算</h3>
+    <div class="budget">
+      <div class="counted"><strong>计入 10 秒</strong>hook 自己的代码;自己 await 的 promise;<code>$.clock.sleep</code></div>
+      <div class="free"><strong>不计入</strong><code>next(e)</code> 里花的时间;其他 mods API 调用里花的时间(如 <code>$.ui.ask</code> 等用户、<code>$.process.run</code> 跑进程)</div>
+    </div>
+    <p>另外:<code>.catch</code> 处理函数只有 1 秒;所有 <code>session.end</code> hook 合计 1.5 秒;<code>$.process.run</code> 默认 30 秒、最长 10 分钟。 <span class="tag tag-official">官方文档</span></p>
+
+    <h3>hook 失败之后发生什么</h3>
+    <p>没有 <code>.catch</code> 的 hook 抛错、超时或返回形状不对时,取决于它是否已经调过 <code>next</code>:</p>
+    <div class="grid">
+      <div class="card warn"><h4>在调 <code>next</code> 之前失败</h4><p>这个 hook 被跳过,由下一个处理者接手。对拦截类 hook 来说,这等于放行。</p></div>
+      <div class="card"><h4>在 <code>next</code> 返回之后失败</h4><p><code>next</code> 的结果照常生效,不会有任何东西再跑一遍。</p></div>
+    </div>
+    <p>会话不会因此中断,只留一行记录,如 <code>my-mod: tool.call hook skipped: threw Error: boom</code>。要注意「放行」的准确含义:是这个失败的 hook 不参与了,其余 Mod、权限规则、settings hook 仍按原样运行。</p>
+    <span class="code-label">局部片段 · 让拦截类 hook 失败时拒绝(<code>guard</code> 是你的 hook 函数)</span>
+    <pre><code>on('tool.call', { tool: 'Bash' }, guard).catch(async ($, e, next) =&gt; {
+  // next.error.kind 是 'throw' 或 'timeout'
+  return { deny: 'The command guard failed, so this command was not run: ' + next.error.kind }
+})</code></pre>
+
+    <h3>worker 崩溃</h3>
+    <p>所有已安装的 Mod 共用一个 worker 线程。 <span class="tag tag-official">官方文档</span></p>
+    <ul>
+      <li>能定位到是哪个 Mod 卡死或弄崩了 worker(比如一个从不 await 的循环):只卸载那一个,记录为 <code>first-mod was unloaded: it crashed the hooks worker</code>。</li>
+      <li>worker 停了三次又定位不到:卸载所有非内置 Mod,<strong>包括组织安装的</strong>,记录为 <code>hooks: mods that run in the hooks worker are off for this session: it crashed 3 times</code>。执行 <code>/reload-plugins</code> 恢复。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 测试与分发 ============ -->
+<section id="ship">
+  <div class="wrap">
+    <h2>测试、保留与分发</h2>
+
+    <h3>自动化测试</h3>
+    <p><code>claude plugin test</code> 在 shell 里运行,不需要会话、登录或网络。测试文件以 <code>.test.ts</code> 结尾,放在插件目录内任意位置,从 <code>claude-code/testing</code> 导入测试工具。有测试失败时退出码为 1,可以接进 CI。</p>
+    <span class="code-label">完整示例 · first-mod/tests/first-mod.test.ts(官方代码,注释为中文转写)</span>
+    <pre><code>import { expect, test } from 'claude-code/testing'
+
+test('/tally reports the tool calls the mod has seen', async ($, on) =&gt; {
+  // 替 Claude Code 回答每次工具调用,所以不会真的跑工具
+  on('tool.call', () =&gt; ({ result: 'ok' }))
+
+  // 触发两次工具调用,Mod 的 tool.call hook 会计数
+  await $.tool.call({ tool: 'Bash', command: 'ls' })
+  await $.tool.call({ tool: 'Read', file_path: 'README.md' })
+
+  // 运行 /tally,检查 hook 返回的文字
+  const answer = await $.command.run({ command: 'tally', args: '' })
+  expect(answer.text).toBe('Claude has made 2 tool calls since this mod loaded')
+})</code></pre>
+    <p>写测试时最容易踩的规则: <span class="tag tag-official">官方文档</span></p>
+    <ul>
+      <li>测试里的 <code>$</code> 站在 Claude Code 的位置上,不是 hook 拿到的那个 mods API;<code>on</code> 用来注册 stub,替 Claude Code 作答。</li>
+      <li>所有 stub 必须在第一次调用 <code>$</code> 之前注册。</li>
+      <li><code>session.start</code> 不会自动触发。hook 依赖它做的准备时,要先手动触发,并给 <code>command.register</code> 之类的调用配上 stub。</li>
+      <li>mods API 调用的 stub 返回 <code>{ value: ... }</code>;事件的 stub 返回该事件自己的结果形状,如 <code>{ result: 'ok' }</code>。让调用失败用 <code>{ deny: '原因' }</code>。</li>
+      <li>定时器用 <code>mock.clock(on)</code> 拨时间;存储和环境变量有 <code>mock.store</code>、<code>mock.env</code>。</li>
+      <li>界面用 <code>$.ui.mount</code> 画出某个渲染位,再用 <code>press</code>、<code>input</code>、<code>select</code>、<code>find</code> 操作和断言。它只检查 hook 返回的树是否合法,不检查实际画出来的样子,新布局还得进真实会话看一眼。</li>
+    </ul>
+
+    <h3>分发</h3>
+    <ul>
+      <li>Mod 就是插件:在 manifest 里写版本,别人用 <code>/plugin</code> 命令安装和更新;要给别人用就放进 marketplace。</li>
+      <li>插件名不能像 Anthropic 官方的名字,例如以 <code>claude-</code> 开头的名字过不了 <code>claude plugin validate</code>。</li>
+      <li>在 README 里写明测试过的 Claude Code 版本。</li>
+      <li>已安装的插件按版本缓存。直接改已安装副本不会生效,要提高版本号重新安装。开发始终对着 <code>--plugin-dir</code> 的工作目录。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 排错 ============ -->
+<section id="troubleshoot">
+  <div class="wrap">
+    <h2>症状驱动的排错</h2>
+    <p class="section-lede">Mod 的模块或 hook 出错时会被跳过、会话照常继续,所以「坏了」和「没反应」看起来一样。先做两个检查,再按症状找。</p>
+
+    <div class="grid wide">
+      <div class="card accent">
+        <h3 class="card-title">检查一:Claude Code 从文件里读到了什么</h3>
+        <p><code>claude plugin validate ./first-mod</code>。能查出拼错的事件名、有问题的 manifest、读不了的模块,不需要开会话。</p>
+      </div>
+      <div class="card accent">
+        <h3 class="card-title">检查二:那一行记录写在哪</h3>
+        <p>热重载插件目录的交互会话(<code>--plugin-dir</code>,或为 Claude 代写的 Mod 开了热重载):transcript 里的暗色行。其他交互会话:只在调试日志里,用 <code>claude --debug</code> 启动。<code>claude -p</code> 加 <code>--plugin-dir</code>:stderr。</p>
+      </div>
+    </div>
+
+    <h3>Mod 根本没加载</h3>
+    <div class="grid wide">
+      <div class="card"><h4>版本低于 2.1.287</h4><dl class="kv"><dt>处理</dt><dd>升级 Claude Code。</dd></dl></div>
+      <div class="card"><h4><code>mods active</code> 那一行里没有它</h4><dl class="kv"><dt>原因</dt><dd>hooks module 没加载。调试日志里找 <code>hooks module &lt;名字&gt; not loaded:</code>,冒号后面是理由。</dd><dt>处理</dt><dd>对照下面的拒绝消息。</dd></dl></div>
+      <div class="card"><h4>validate 通过,但没有 <code>hooks:</code> 行</h4><dl class="kv"><dt>原因</dt><dd><code>hooks/hooks.json</code> 没有 <code>modules</code> 键或拼错了。</dd><dt>处理</dt><dd>加上 <code>"modules": ["./register.js"]</code>。</dd></dl></div>
+      <div class="card"><h4><code>hooks module did not load:</code></h4><dl class="kv"><dt>原因</dt><dd>模块加载失败,例如顶层代码抛错;理由里有文件和行号。</dd><dt>处理</dt><dd>按理由修。</dd></dl></div>
+      <div class="card"><h4><code>options do not fit plugin.json userConfig</code></h4><dl class="kv"><dt>原因</dt><dd>某个选项不符合 <code>userConfig</code> 的定义,或必填项没填。</dd><dt>处理</dt><dd>改 <code>settings.json</code> 里对应的 <code>pluginConfigs</code> 条目。</dd></dl></div>
+      <div class="card"><h4>第一次打开的目录里什么都不加载</h4><dl class="kv"><dt>原因</dt><dd>还没回答 trust 提示。</dd><dt>处理</dt><dd>在该目录启动交互会话并接受。</dd></dl></div>
+      <div class="card"><h4>所有已安装插件都不加载</h4><dl class="kv"><dt>原因</dt><dd>用了 <code>--safe-mode</code> 启动。</dd><dt>处理</dt><dd>去掉这个参数。</dd></dl></div>
+    </div>
+
+    <h3>拒绝加载的消息</h3>
+    <div class="grid wide">
+      <div class="card"><h4><code>hooks modules are turned off for installed plugins in this process</code></h4><p>Anthropic 远程关闭,本机设置无法恢复。</p></div>
+      <div class="card"><h4><code>disableAllHooks in managed settings</code></h4><p>组织关掉了已安装插件的 hook。</p></div>
+      <div class="card"><h4><code>only managed plugins and built-in plugins run</code></h4><p>设了 <code>allowManagedHooksOnly</code>,或在托管设置之外的设置文件里设了 <code>disableAllHooks</code>。</p></div>
+      <div class="card"><h4><code>installed plugins that are not managed load no hooks module in this mode (--bare)</code></h4><p>用了 <code>--bare</code> 启动。</p></div>
+      <div class="card"><h4><code>another plugin of that name loads first</code></h4><p>两个插件重名,用的是托管的那个或先加载的那个。</p></div>
+      <div class="card"><h4><code>mods are limited to your organization's by policy (allowManagedModsOnly)</code></h4><p>内置守卫的消息:组织只允许自己的 Mod。</p></div>
+    </div>
+
+    <h3>加载了,但 hook 被跳过或 Mod 被卸载</h3>
+    <div class="grid wide">
+      <div class="card"><h4><code>hook skipped:</code></h4><dl class="kv"><dt>原因</dt><dd>hook 抛错、超过 10 秒或返回形状不对。同一事件同一类失败只在界面提示一次,调试日志里每次都有。</dd><dt>处理</dt><dd>修掉报的错。</dd></dl></div>
+      <div class="card"><h4><code>registered /tally but no command.run hook answered it</code></h4><dl class="kv"><dt>原因</dt><dd>没有 <code>command.run</code> hook、matcher 写的是别的命令、hook 返回了 <code>next(e)</code>,或 hook 被跳过。</dd><dt>处理</dt><dd>找提到 <code>command.run</code> 的 <code>hook skipped</code> 行。</dd></dl></div>
+      <div class="card"><h4><code>was unloaded: it crashed the hooks worker</code></h4><dl class="kv"><dt>原因</dt><dd>这个 Mod 卡住或弄崩了共用的 worker 线程。</dd><dt>处理</dt><dd>修掉阻塞线程的 hook。</dd></dl></div>
+      <div class="card"><h4><code>mods that run in the hooks worker are off for this session: it crashed 3 times</code></h4><dl class="kv"><dt>原因</dt><dd>worker 停了三次且定位不到元凶,所有非内置 Mod 被卸载。</dd><dt>处理</dt><dd><code>/reload-plugins</code>。</dd></dl></div>
+    </div>
+
+    <h3>工具调用被拒</h3>
+    <div class="grid wide">
+      <div class="card"><h4><code>a hook changed this call's input after the model wrote it</code></h4><dl class="kv"><dt>原因</dt><dd>auto 模式下,有 hook 在分类器审查之后改了输入。</dd><dt>处理</dt><dd>Claude 会按原样重发一次;仍被拒说明那个 hook 每次都改,关掉它,或退出 auto 模式自己批准。</dd></dl></div>
+      <div class="card"><h4><code>tried to lift a deny rule in your settings</code></h4><dl class="kv"><dt>原因</dt><dd>Mod 的 <code>tool.check</code> 批准了 deny 规则拒绝的调用,守卫保持拒绝。</dd></dl></div>
+      <div class="card"><h4><code>the deny rules in your settings could not be checked for this call, so it is refused</code></h4><dl class="kv"><dt>原因</dt><dd>守卫在检查时失败,于是拒绝了调用(守卫自身失败时拒绝)。</dd></dl></div>
+    </div>
+
+    <h3>界面不出现或没反应</h3>
+    <div class="grid wide">
+      <div class="card"><h4>面板或信息带是空的,或显示的是 Claude Code 原来的内容</h4><dl class="kv"><dt>原因</dt><dd>hook 返回的元素树没通过校验,记录形如 <code>ui.render (Pane) refused: ...; the engine drew its own</code>。</dd><dt>处理</dt><dd>常见是给了元素不接受的 prop,或用了该应用没有的元素。</dd></dl></div>
+      <div class="card"><h4><code>$.ui.open</code> 执行了但没有面板</h4><dl class="kv"><dt>原因</dt><dd>不是由用户操作触发,且终端窄于 144 列(用户自己打开过一次面板之后,门槛降到 110 列)。</dd><dt>处理</dt><dd>从命令或按钮里打开,或检查返回值的 <code>isPlaced</code>。</dd></dl></div>
+      <div class="card"><h4>快捷键没反应</h4><dl class="kv"><dt>原因</dt><dd>面板没有键盘焦点。</dd><dt>处理</dt><dd>按 Ctrl+X 再按 Tab,或点一下面板;从命令里用 <code>focus: true</code> 打开。</dd></dl></div>
+      <div class="card"><h4>终端里正常,桌面 App 里不显示</h4><dl class="kv"><dt>原因</dt><dd>那个渲染位或元素在桌面端不可用。</dd><dt>处理</dt><dd>查参考区的渲染位和元素。</dd></dl></div>
+    </div>
+
+    <h3>改动或数值丢了</h3>
+    <div class="grid wide">
+      <div class="card"><h4>改了代码不生效</h4><dl class="kv"><dt>原因</dt><dd>改的是已安装的插件,Claude Code 运行的是该版本的缓存副本。</dd><dt>处理</dt><dd>用 <code>--plugin-dir</code> 指向工作目录开发。</dd></dl></div>
+      <div class="card"><h4>模块重载后数值归零</h4><dl class="kv"><dt>原因</dt><dd>模块变量每次重载都会重新初始化。</dd><dt>处理</dt><dd>放进 <code>$.state</code> 或 <code>$.store</code>。</dd></dl></div>
+      <div class="card"><h4><code>/clear</code>、<code>/resume</code>、<code>/branch</code> 之后数值重置</h4><dl class="kv"><dt>原因</dt><dd>这些命令把 <code>$.state</code> 重置为默认值,且不再触发 <code>session.start</code>。</dd><dt>处理</dt><dd>在 <code>classic.SessionStart</code> hook 里重新装载。</dd></dl></div>
+      <div class="card"><h4>保存后出现 <code>reload failed, the previous version stays loaded:</code></h4><dl class="kv"><dt>原因</dt><dd>这次保存让模块坏了。</dd><dt>处理</dt><dd>上一个可用版本继续运行,按理由修好再保存。</dd></dl></div>
+    </div>
+
+    <h3>读调试日志</h3>
+    <span class="code-label">局部片段</span>
+    <pre><code>claude --debug-file ./mod-debug.log --plugin-dir ./first-mod
+tail -f ./mod-debug.log | grep first-mod      # 另开一个终端</code></pre>
+    <p>想往调试日志里写自己的行:<code>$.ui.log('message', { to: 'debug' })</code>。</p>
+  </div>
+</section>
+
+<!-- ============ 参考区 ============ -->
+<section id="reference">
+  <div class="wrap">
+    <h2>参考区</h2>
+    <p class="section-lede">可折叠的速查表,以 v2.1.287 文档为基线。精确字段以本机类型声明文件为准。</p>
+
+    <details>
+      <summary>hook 函数与 <code>next</code> 的附属成员</summary>
+      <div class="inner">
+        <ul>
+          <li>入口:<code>export function register(on, options)</code>;注册:<code>on(event, matcher?, hook)</code>,返回值可接 <code>.catch(handler)</code>;hook 形如 <code>async ($, e, next) =&gt; ...</code>。</li>
+          <li><code>next.signal</code>、<code>next.origin</code>(含 <code>plugin</code>、<code>tier</code>)、<code>next.budget</code>(含 <code>ms</code>、<code>remainingMs</code>)。</li>
+          <li><code>next.to(e, tier)</code>:仅 prepend / append 层的 Mod 可用。</li>
+          <li><code>next.error</code>、<code>next.called</code>:仅在 <code>.catch</code> 处理函数里有。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>事件族</summary>
+      <div class="inner">
+        <div class="grid">
+          <div class="card"><p class="card-title">工具</p><p><code>tool.call</code>、<code>tool.check</code>、<code>tool.describe</code></p></div>
+          <div class="card"><p class="card-title">提示词与 Claude 读到的内容</p><p><code>prompt.submit</code>、<code>prompt.fill</code>、<code>prompt.suggest</code>、<code>prompt.edit</code>、<code>prompt.compose</code>、<code>prompt.section</code>、<code>prompt.context</code>、<code>prompt.attachment</code>、<code>skill.prompt</code>、<code>attribution.text</code></p></div>
+          <div class="card"><p class="card-title">命令与配置</p><p><code>command.run</code>、<code>command.describe</code>、<code>config.set</code>、<code>config.describe</code></p></div>
+          <div class="card"><p class="card-title">回合</p><p><code>turn.start</code>、<code>turn.step</code>(异步生成器,可换模型)、<code>turn.complete</code></p></div>
+          <div class="card"><p class="card-title">会话</p><p><code>session.start</code>、<code>session.end</code>、<code>session.compact</code>、<code>session.receive</code>、<code>session.send</code>、<code>session.append</code>、<code>session.attach</code>、<code>session.detach</code>、<code>session.measure</code></p></div>
+          <div class="card"><p class="card-title">子 Agent</p><p><code>agent.offer</code>、<code>agent.spawn</code></p></div>
+          <div class="card"><p class="card-title">界面</p><p><code>ui.render</code>、<code>ui.resolve</code>、<code>ui.press</code>、<code>ui.input</code>、<code>ui.select</code>、<code>ui.focus</code>、<code>ui.scroll</code>、<code>ui.close</code>、<code>ui.message</code></p></div>
+          <div class="card"><p class="card-title">其他 Mod 与引擎</p><p><code>plugin.register</code>、<code>engine.create</code></p></div>
+          <div class="card"><p class="card-title">遥测</p><p><code>telemetry.log</code>、<code>telemetry.mark</code>。<code>'*'</code> 不含它们,要按名字或 <code>'telemetry.*'</code> 挂。</p></div>
+          <div class="card"><p class="card-title">settings hook 事件</p><p><code>classic.&lt;事件名&gt;</code>,如 <code>classic.Stop</code>、<code>classic.SessionStart</code>;通配 <code>'classic.*'</code>。</p></div>
+          <div class="card"><p class="card-title">每个 mods API 调用</p><p>方法名去掉 <code>$.</code> 就是事件名,如 <code>fs.write</code>。组织的策略 Mod 可以据此记录或拒绝其他 Mod 的调用。</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><code>$</code> 的 21 个命名空间</summary>
+      <div class="inner">
+        <p>下面的分组是为了方便查找做的编辑归类,不是官方分类。 <span class="tag tag-infer">编辑推导</span></p>
+        <div class="grid">
+          <div class="card"><p class="card-title">界面与交互</p><p><code>ui</code>、<code>command</code>、<code>prompt</code>、<code>audio</code></p></div>
+          <div class="card"><p class="card-title">对话与 Agent</p><p><code>turn</code>、<code>session</code>、<code>agent</code>、<code>tool</code>、<code>mcp</code></p></div>
+          <div class="card"><p class="card-title">模型</p><p><code>model</code>(<code>complete</code>、<code>fork</code>、<code>classify</code>)</p></div>
+          <div class="card"><p class="card-title">系统</p><p><code>fs</code>、<code>process</code>、<code>http</code>、<code>env</code>、<code>clock</code></p></div>
+          <div class="card"><p class="card-title">状态与配置</p><p><code>state</code>、<code>store</code>、<code>config</code>、<code>settings</code></p></div>
+          <div class="card"><p class="card-title">插件与遥测</p><p><code>plugin</code>、<code>telemetry</code></p></div>
+        </div>
+        <p>hooks module 的运行环境是受限的:没有 Node API、没有 <code>setTimeout</code>、没有自带的网络和文件访问,一切经由 <code>$</code>。这是运行环境的形态,不是安全沙箱。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>渲染位与元素</summary>
+      <div class="inner">
+        <div class="grid">
+          <div class="card"><p class="card-title">渲染位</p><p><code>Pane</code>、<code>AbovePrompt</code>、<code>UserMessage</code>、<code>AssistantMessage</code>、<code>ToolUse</code>、<code>ToolResult</code>、<code>ToolGroup</code>、<code>CommandOutput</code>、<code>AskUserQuestion</code>、<code>Spinner</code>、<code>SessionMode</code>、<code>PromptHint</code></p></div>
+          <div class="card"><p class="card-title">仅终端的渲染位</p><p><code>ToolProgress</code>、<code>TurnDuration</code>、<code>InfoNotice</code></p></div>
+          <div class="card"><p class="card-title">元素</p><p><code>Box</code>、<code>Text</code>、<code>Button</code>、<code>Link</code>、<code>Code</code>、<code>Markdown</code>、<code>Input</code>、<code>Select</code>、<code>Client</code></p></div>
+          <div class="card"><p class="card-title">平台专属元素</p><p>仅桌面:<code>Svg</code>。仅终端:<code>Raster</code>、<code>Image</code>。</p></div>
+        </div>
+        <p>权限弹窗不是渲染位,Mod 改不了。输入框本身不是「完全不能碰」:有 <code>prompt.fill</code>、<code>prompt.suggest</code> 事件,也有 <code>Input</code> 元素可画自己的输入框。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>限制速查</summary>
+      <div class="inner">
+        <div class="grid">
+          <div class="card"><p class="card-title">时间</p><p>hook 自身 10 秒;<code>.catch</code> 1 秒;<code>session.end</code> 合计 1.5 秒;<code>$.process.run</code> 默认 30 秒、最长 10 分钟;单个测试默认 5 秒、toast 默认显示 4 秒,两者都可用 <code>timeoutMs</code> 改。</p></div>
+          <div class="card"><p class="card-title">大小</p><p><code>$.fs</code> 单文件 4 MiB;<code>$.store</code> 合计 4 MiB JSON;会话消息取最新 4096 条;<code>$.model.complete</code> 的 <code>maxTokens</code> 默认 1024。</p></div>
+          <div class="card"><p class="card-title">频率</p><p>重画每秒 10 次;可见的面板和信息带每秒 30 次。</p></div>
+          <div class="card"><p class="card-title">终端宽度</p><p>自动打开面板需要至少 144 列;用户自己打开过一次之后是 110 列。这是终端列数,和本页的网页断点无关。</p></div>
+          <div class="card"><p class="card-title">命名</p><p>命令、工具、子 Agent 类型和面板的名称不超过 64 个字符,只能用字母、数字、<code>_</code> 和 <code>-</code>。这条不针对插件名。</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>组织管控设置</summary>
+      <div class="inner">
+        <div class="grid wide">
+          <div class="card"><p class="card-title"><code>allowManagedModsOnly</code></p><p>内置守卫的选项,写在托管设置的 <code>pluginConfigs["cc-plugin-sec-default@builtin"].options</code> 下。用户自带的 Mod(安装的、<code>--plugin-dir</code> 的、Claude 代写的)都不加载;他们的 settings hook、状态栏、<code>/goal</code> 不受影响。</p></div>
+          <div class="card"><p class="card-title"><code>allowModsToOverrideDenyRules</code></p><p>内置守卫的选项。不设时 deny 规则压过用户的 Mod;设为 <code>true</code> 后用户的 Mod 可以批准 deny 规则拒绝的调用。</p></div>
+          <div class="card"><p class="card-title"><code>allowManagedHooksOnly</code></p><p>范围更大:只有组织的 Mod 和内置 Mod 加载,同时挡掉用户自己设置文件里的 hook。</p></div>
+          <div class="card"><p class="card-title"><code>disableAllHooks</code></p><p>范围最大:写在托管设置里时,停掉所有已安装插件的 Mod(含组织自己的)和所有 settings hook,托管的 PreToolUse hook 也不再拦截;自定义状态栏和 <code>/goal</code> 一起停。</p></div>
+          <div class="card"><p class="card-title"><code>disableSideloadFlags</code></p><p>启动时拒绝 <code>--plugin-dir</code>、<code>--plugin-url</code>,并阻止 Claude 代写的 Mod 加载;同时拒绝 <code>--agents</code> 和 <code>--mcp-config</code>。</p></div>
+          <div class="card"><p class="card-title"><code>prependPlugins</code> / <code>appendPlugins</code></p><p>决定组织 Mod 在链上的位置。设了 <code>prependPlugins</code> 就要把 <code>sec-default@builtin</code> 也列进去,否则守卫不加载。只从托管设置读取;仓库的设置文件无效。</p></div>
+          <div class="card"><p class="card-title">什么算「组织的 Mod」</p><p>三个条件同时满足:托管的 <code>enabledPlugins</code> 启用了它;托管设置把它的 marketplace 指到本机一个绝对路径的目录;marketplace 用相对路径列出它(就地加载)。从 GitHub、git、URL、npm 拷进缓存的插件一律算用户的。</p></div>
+          <div class="card"><p class="card-title">守卫保护的内容</p><p>用户的 Mod 改不了:托管 hook 收到和决定的内容、系统提示词、托管的 <code>CLAUDE.md</code> 等指令、任何 Mod 读到的设置、托管 MCP server 的工具与描述。除此之外不加限制。守卫读不到托管设置时会拒绝所有用户 Mod。</p></div>
+          <div class="card"><p class="card-title">策略 Mod</p><p>放在 <code>prependPlugins</code> 的 Mod 可以挂 <code>plugin.register</code>:每个 Mod 加载前都会把 validate 那份清单(<code>e.uses.calls</code>、<code>e.tier</code>)交给它,返回 <code>{ refuse: '理由' }</code> 即可拒绝加载。这个检查同样要加 <code>.catch</code>,否则出错时放行。</p></div>
+        </div>
+        <p>环境变量与其他设置名:<code>CLAUDE_CODE_PLUGIN_DIRS</code>、<code>CLAUDE_CODE_PLUGIN_DIR_WATCH</code>、<code>pluginConfigs</code>。具体取值见官方 reference 页的 Settings and environment variables 一节。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>命令速查</summary>
+      <div class="inner">
+        <ul>
+          <li><code>claude plugin validate &lt;目录&gt;</code>(可加 <code>--strict</code>、<code>--json</code>):静态检查并列出 hooks 与 calls。</li>
+          <li><code>claude plugin test [目录]</code>:跑测试;在无 Mod 的目录里可用来判断 Mod 能否加载。</li>
+          <li><code>claude --plugin-dir &lt;目录&gt;</code>(可重复):本次会话加载,保存即重载。</li>
+          <li><code>/reload-plugins</code>:重新加载插件。</li>
+          <li><code>/plugin</code>:查看、启用、停用;显示 <code>mods active</code> 行。</li>
+          <li><code>claude --debug</code>、<code>claude --debug-file &lt;路径&gt;</code>:写调试日志。</li>
+          <li><code>claude --safe-mode</code>:不加载已安装的 Mod 和其他自定义项。</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 附录 ============ -->
+<section id="appendix">
+  <div class="wrap">
+    <h2>更正记录、时间线与来源</h2>
+    <p class="section-lede">这次研究的起点是一篇流传较广的中文解读(公众号文章的 AI 摘要笔记)。下面逐条对照官方资料。每条标两个维度:依据的来源类型,和结论状态。</p>
+
+    <h3 id="corrections">更正记录</h3>
+    <div class="grid wide">
+      <div class="card">
+        <h4>「旧 hook 只能拦截」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>settings hook 还能改工具调用的参数和结果、给 Claude 追加上下文。Mod 多出来的是画界面、自定义命令、改回合与模型请求。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-conflict">与文档冲突</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「内置 Mod 源码在 mods/ 目录下全部公开」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>公开的是四个:diff、agents-md、sec-default、telemetry,外加类型文件。plugin-authoring 只有 skill;you-should-know 不在其中。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-official">源码仓库</span> <span class="tag tag-conflict">与文档冲突</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「<code>claude -p</code>、<code>dontAsk</code> 等情况下不加载」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>这份清单只针对 Claude 当场写的 Mod(没人批准)。已安装或 <code>--plugin-dir</code> 的 Mod 在 <code>claude -p</code> 和 Agent SDK 里 hook 照常执行,只是不画界面。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-conflict">与文档冲突</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「2.1.287 提示词 token 减少 8328 个(-26.6%),提示词文件少 13 个」</h4>
+        <dl class="kv"><dt>核对结果</dt><dd>数字出自第三方账号的统计,官方 changelog 没有这一条;把它归因于 Mods 是文章作者自己的猜测。不能说它是假的,只能说未经官方证实。</dd><dt>来源与状态</dt><dd><span class="tag tag-relay">二手转述</span> <span class="tag tag-open">待核实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「没有沙箱」与教程里的「sandbox of its own」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>两句话说的是两回事。模块的运行环境受限(无 DOM、无 Node API);但 <code>$.fs</code>、<code>$.process</code>、<code>$.http</code> 以用户权限执行,没有安全沙箱。「没有沙箱」的结论正确。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-official">已证实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「Blast Radius 用接管模式,直接返回 deny」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>它先按住调用、做 dry run、问用户,用户选 Cancel 才拒绝,选 Proceed 就继续。教程强调它是安全网而不是权限系统。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方博客</span> <span class="tag tag-conflict">表述不完整</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「sec-default 保护 deny 规则」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>只在守卫加载的环境成立(托管设置或 Team/Enterprise 登录),且组织可以放开。其他环境里 Mod 可以批准 deny 规则拒绝的调用。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-conflict">缺少前提</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「跨重载存数据用 <code>$.state</code>」</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>成立,但要补一句:<code>$.state</code> 是会话级的,<code>/clear</code>、<code>/resume</code>、<code>/branch</code> 会重置它;跨会话要用 <code>$.store</code>。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-official">已证实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「接管」这个译名</h4>
+        <dl class="kv"><dt>官方实际</dt><dd>文档的正式名称是 Answer;官方介绍里也有 take it over 的说法,译成「接管」可以接受。</dd><dt>来源与状态</dt><dd><span class="tag tag-official">官方文档</span> <span class="tag tag-official">已证实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「issue 标题是 Mods - make Claude 10x more extensible」「两百多条讨论」及团队成员引言</h4>
+        <dl class="kv"><dt>核对结果</dt><dd>提案 issue #91870 存在(2026-09-03 提出,09-09 更名 Claude Mods,10-01 回复已上线)。具体标题措辞、讨论数和引自 X 的发言,这次没有逐条打开一手出处。</dd><dt>来源与状态</dt><dd><span class="tag tag-relay">二手转述</span> <span class="tag tag-open">待核实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「plan mode 也将改成 Mod」「分叉子 Agent」「自定义记忆系统」</h4>
+        <dl class="kv"><dt>核对结果</dt><dd>官方博客的口径只有:计划把更多内置功能迁成 Mod,把 Claude Code 缩成一个小内核。具体到哪个功能,未见一手出处。</dd><dt>来源与状态</dt><dd><span class="tag tag-relay">二手转述</span> <span class="tag tag-open">待核实</span></dd></dl>
+      </div>
+      <div class="card">
+        <h4>「官方演示都录于早期版本」</h4>
+        <dl class="kv"><dt>核对结果</dt><dd>文章作者的说法,没有找到官方表述。</dd><dt>来源与状态</dt><dd><span class="tag tag-relay">二手转述</span> <span class="tag tag-open">待核实</span></dd></dl>
+      </div>
+    </div>
+
+    <h3>仍未解决的问题 <span class="tag tag-open">待核实</span></h3>
+    <p>下面这些在这次打开的官方页面里没有找到明确答案,不要当成事实使用:</p>
+    <ul>
+      <li>卸载一个 Mod 后,它在 <code>$.store</code> 里的数据是否立即清除。</li>
+      <li>已安装 Mod 的版本锁定与回滚的推荐做法(组织侧有 update policy,个人侧未查)。</li>
+      <li>同一层里互不依赖的多个用户 Mod,先后顺序由什么决定。</li>
+      <li>hook 是否可能并发重入,<code>next.signal</code> 在链上如何传播。</li>
+      <li>marketplace 上的插件是否有签名校验。</li>
+    </ul>
+
+    <h3>时间线</h3>
+    <ul class="timeline">
+      <li><time datetime="2026-09-03">2026-09-03</time>GitHub issue #91870 提出提案。 <span class="tag tag-official">源码仓库</span></li>
+      <li><time datetime="2026-09-09">2026-09-09</time>提案更名为 Claude Mods。 <span class="tag tag-official">源码仓库</span></li>
+      <li><time datetime="2026-10-01">2026-10-01</time>v2.1.287 发布,changelog 写道「Added Claude Mods: plugins may now modify deeper behavior」;同版加入内置条目 You should know。官方博客与入门教程同日发布。 <span class="tag tag-official">发布说明</span></li>
+      <li><time datetime="2026-10-02">2026-10-02</time>本页核验官方资料;v2.1.287 仍是最新版本。</li>
+    </ul>
+
+    <h3 id="sources">来源清单</h3>
+    <div class="grid wide">
+      <div class="card"><h4>官方博客</h4><p><a href="https://claude.com/blog/claude-code-mods">Claude Code Mods 发布文章</a>(2026-10-01)</p><p><a href="https://claude.dev/blog/getting-started-with-claude-code-mods/">Getting started with Claude Code Mods</a>(入门教程,2026-10-01)</p></div>
+      <div class="card"><h4>官方文档:入门</h4><p><a href="https://code.claude.com/docs/en/plugins/mods/overview">Mods overview</a></p><p><a href="https://code.claude.com/docs/en/plugins/mods/create">Create a mod</a></p><p><a href="https://code.claude.com/docs/en/plugins/mods/events">React to events with a mod</a></p></div>
+      <div class="card"><h4>官方文档:进阶</h4><p><a href="https://code.claude.com/docs/en/plugins/mods/api">Use the mods API</a></p><p><a href="https://code.claude.com/docs/en/plugins/mods/interface">Draw in the interface</a></p><p><a href="https://code.claude.com/docs/en/plugins/mods/test">Test a mod</a></p></div>
+      <div class="card"><h4>官方文档:参考与管理</h4><p><a href="https://code.claude.com/docs/en/plugins/mods/reference">Mods reference</a>(as of v2.1.287)</p><p><a href="https://code.claude.com/docs/en/plugins/mods/troubleshoot">Troubleshoot a mod</a></p><p><a href="https://code.claude.com/docs/en/plugins/mods/admin">Manage mods for your organization</a></p><p><a href="https://code.claude.com/docs/en/permissions">Configure permissions</a>(Extend permissions with hooks 一节)</p></div>
+      <div class="card"><h4>发布说明与源码</h4><p><a href="https://code.claude.com/docs/en/changelog">Changelog</a>(2.1.287,2026-10-01)</p><p><a href="https://github.com/anthropics/claude-code/tree/main/mods">anthropics/claude-code 的 mods 目录</a></p><p><a href="https://github.com/anthropics/claude-code/issues/91870">Issue #91870</a></p><p><a href="https://github.com/anthropics/claude-plugins-community">anthropics/claude-plugins-community</a></p></div>
+      <div class="card"><h4>二手来源(被核对的对象)</h4><p><a href="https://mp.weixin.qq.com/s/guoG9O02Ryza01Im2cVTVw">公众号文章</a>(2026-10-01)及其 AI 摘要笔记</p></div>
+    </div>
+
+    <h3>这份资料是怎么做的</h3>
+    <p>事实部分全部来自 2026-10-02 实际打开的官方页面;代码示例取自官方文档,只把注释转写成中文,个别做了缩写并已注明。标「编辑推导」的内容是基于官方事实做的归纳,标「二手转述」「待核实」的没有一手出处。全文没有在真实会话里跑过任何一个 Mod。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Claude Code Mods 完整指南 · 基线 v2.1.287 · 资料核验 2026-10-02 · 未做运行实测。事件和方法可能随版本变化,动手前以本机类型声明文件和官方文档为准。</p>
+  </div>
+</footer>
+
+</body>
+</html>

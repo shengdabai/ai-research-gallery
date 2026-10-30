@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 是放大器，谁在挑歌？——「钱和注意力」视频拆解与实践</title>
+<style>
+/* ===== Primitive tokens ===== */
+:root{
+  --p-ink-950:#0f1726; --p-ink-800:#24314a; --p-ink-600:#4a5873; --p-ink-400:#8792a8;
+  --p-slate-200:#d9dee8; --p-slate-100:#e9edf3; --p-slate-50:#f3f5f9; --p-white:#ffffff;
+  --p-blue-700:#1d4fd7; --p-blue-100:#e3ebff;
+  --p-green-700:#13795b; --p-green-100:#dcf3ea;
+  --p-amber-700:#9a5b00; --p-amber-100:#fdf0d5;
+  --p-red-700:#b42333; --p-red-100:#fbe3e6;
+  --p-violet-700:#5b3cc4; --p-violet-100:#ece6ff;
+  --p-space-1:4px; --p-space-2:8px; --p-space-3:12px; --p-space-4:16px; --p-space-5:24px; --p-space-6:32px; --p-space-7:48px;
+  --p-radius-1:6px; --p-radius-2:10px; --p-radius-3:14px;
+  --p-font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --p-size-1:13px; --p-size-2:14px; --p-size-3:16px; --p-size-4:18px; --p-size-5:22px; --p-size-6:28px; --p-size-7:36px;
+  --p-line-tight:1.3; --p-line-body:1.75;
+  --p-weight-regular:400; --p-weight-medium:600; --p-weight-bold:700;
+  --p-shadow-1:0 1px 2px rgba(15,23,38,.06),0 4px 16px rgba(15,23,38,.06);
+  --p-border-1:1px; --p-border-3:3px; --p-border-4:4px;
+  --p-measure:1080px; --p-track-h:10px; --p-thumb:22px; --p-bar-h:28px; --p-check:20px;
+  --p-dur-fast:.2s;
+}
+/* ===== Semantic tokens ===== */
+:root{
+  --color-bg:var(--p-slate-50); --color-surface:var(--p-white); --color-surface-alt:var(--p-slate-100);
+  --color-text:var(--p-ink-950); --color-text-soft:var(--p-ink-600); --color-text-faint:var(--p-ink-400);
+  --color-border:var(--p-slate-200); --color-hero-bg:var(--p-ink-950); --color-hero-text:var(--p-white); --color-hero-soft:var(--p-slate-200);
+  --color-accent:var(--p-blue-700); --color-accent-soft:var(--p-blue-100);
+  --color-ok:var(--p-green-700); --color-ok-soft:var(--p-green-100);
+  --color-warn:var(--p-amber-700); --color-warn-soft:var(--p-amber-100);
+  --color-bad:var(--p-red-700); --color-bad-soft:var(--p-red-100);
+  --color-info:var(--p-violet-700); --color-info-soft:var(--p-violet-100);
+  --space-xs:var(--p-space-1); --space-sm:var(--p-space-2); --space-md:var(--p-space-4); --space-lg:var(--p-space-5); --space-xl:var(--p-space-6); --space-2xl:var(--p-space-7); --space-gap:var(--p-space-3);
+  --radius-sm:var(--p-radius-1); --radius-md:var(--p-radius-2); --radius-lg:var(--p-radius-3);
+  --font-body:var(--p-font-sans);
+  --text-xs:var(--p-size-1); --text-sm:var(--p-size-2); --text-md:var(--p-size-3); --text-lg:var(--p-size-4); --text-xl:var(--p-size-5); --text-2xl:var(--p-size-6); --text-3xl:var(--p-size-7);
+  --leading-tight:var(--p-line-tight); --leading-body:var(--p-line-body);
+  --weight-regular:var(--p-weight-regular); --weight-medium:var(--p-weight-medium); --weight-bold:var(--p-weight-bold);
+  --shadow-card:var(--p-shadow-1);
+  --border-thin:var(--p-border-1); --border-accent:var(--p-border-4); --border-bar:var(--p-border-3);
+  --layout-max:var(--p-measure); --slider-track:var(--p-track-h); --slider-thumb:var(--p-thumb); --bar-height:var(--p-bar-h); --check-size:var(--p-check);
+  --motion-fast:var(--p-dur-fast);
+}
+/* 断点字面量：720px = 手机/平板竖屏分界。CSS 媒体查询不能读取自定义属性，所以这里写字面量。 */
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:var(--text-md);line-height:var(--leading-body);overflow-wrap:anywhere}
+a{color:var(--color-accent)}
+.wrap{max-width:var(--layout-max);margin:0 auto;padding:0 var(--space-md)}
+header.hero{background:var(--color-hero-bg);color:var(--color-hero-text);padding:var(--space-2xl) 0 var(--space-xl)}
+.hero h1{font-size:var(--text-3xl);line-height:var(--leading-tight);margin:0 0 var(--space-md);font-weight:var(--weight-bold)}
+.hero .lede{color:var(--color-hero-soft);font-size:var(--text-lg);margin:0 0 var(--space-lg)}
+.hero .meta{color:var(--color-hero-soft);font-size:var(--text-xs);margin:var(--space-lg) 0 0}
+.verdict{background:var(--color-surface);color:var(--color-text);border-radius:var(--radius-lg);padding:var(--space-lg);border-left:var(--border-accent) solid var(--color-accent)}
+.verdict h2{margin:0 0 var(--space-sm);font-size:var(--text-xl);line-height:var(--leading-tight)}
+.verdict ul{margin:0;padding-left:var(--space-lg)}
+nav.toc{background:var(--color-surface);border-bottom:var(--border-thin) solid var(--color-border);position:sticky;top:0;z-index:5}
+nav.toc .wrap{display:flex;gap:var(--space-md);overflow-x:auto;padding-top:var(--space-sm);padding-bottom:var(--space-sm);white-space:nowrap;font-size:var(--text-sm)}
+nav.toc a{text-decoration:none;color:var(--color-text-soft)}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--color-accent)}
+section{padding:var(--space-xl) 0 var(--space-sm)}
+section h2{font-size:var(--text-2xl);line-height:var(--leading-tight);margin:0 0 var(--space-sm)}
+section h3{font-size:var(--text-lg);line-height:var(--leading-tight);margin:var(--space-lg) 0 var(--space-sm)}
+.sub{color:var(--color-text-soft);margin:0 0 var(--space-lg)}
+.card{background:var(--color-surface);border:var(--border-thin) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-card);min-width:0}
+.card h3{margin-top:0}
+.grid{display:grid;gap:var(--space-gap);grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid>*{min-width:0}
+.badge{display:inline-block;font-size:var(--text-xs);font-weight:var(--weight-medium);padding:0 var(--space-sm);border-radius:var(--radius-sm);line-height:var(--leading-body)}
+td .badge{white-space:nowrap}
+.b-ok{background:var(--color-ok-soft);color:var(--color-ok)}
+.b-warn{background:var(--color-warn-soft);color:var(--color-warn)}
+.b-bad{background:var(--color-bad-soft);color:var(--color-bad)}
+.b-info{background:var(--color-info-soft);color:var(--color-info)}
+.claims{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-gap)}
+.claims li{background:var(--color-surface);border:var(--border-thin) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg)}
+.claims .q{font-weight:var(--weight-medium)}
+.claims .a{color:var(--color-text-soft);font-size:var(--text-sm);margin-top:var(--space-xs)}
+.table-scroll{overflow-x:auto;border:var(--border-thin) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface)}
+table{border-collapse:collapse;width:100%;font-size:var(--text-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--space-sm) var(--space-md);border-bottom:var(--border-thin) solid var(--color-border)}
+th{background:var(--color-surface-alt);font-weight:var(--weight-medium);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.callout{border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin:var(--space-md) 0}
+.callout.warn{background:var(--color-warn-soft)}
+.callout.info{background:var(--color-accent-soft)}
+.callout p{margin:0}
+.pop{display:grid;gap:var(--space-sm)}
+.pop .row{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr);gap:var(--space-md);align-items:start}
+.pop .who{font-weight:var(--weight-medium)}
+/* 交互工具 */
+.tool .controls{display:grid;gap:var(--space-md)}
+.tool label{display:block;font-weight:var(--weight-medium);font-size:var(--text-sm)}
+.tool output{font-weight:var(--weight-bold);color:var(--color-accent)}
+.presets{display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-bottom:var(--space-md)}
+button.btn{font:inherit;font-size:var(--text-sm);border:var(--border-thin) solid var(--color-accent);color:var(--color-accent);background:var(--color-surface);border-radius:var(--radius-sm);padding:var(--space-xs) var(--space-md);cursor:pointer;transition:background var(--motion-fast)}
+button.btn[aria-pressed="true"]{background:var(--color-accent);color:var(--color-hero-text)}
+button.btn:focus-visible{outline:var(--border-bar) solid var(--color-accent);outline-offset:var(--space-xs)}
+input[type=range]{width:100%;accent-color:var(--color-accent);height:var(--slider-thumb)}
+.bars{display:grid;gap:var(--space-sm);margin-top:var(--space-md)}
+.bar{display:grid;grid-template-columns:minmax(0,7em) minmax(0,1fr) minmax(0,4.5em);gap:var(--space-sm);align-items:center;font-size:var(--text-sm)}
+.bar .track{background:var(--color-surface-alt);border-radius:var(--radius-sm);height:var(--bar-height);overflow:hidden}
+.bar .fill{height:100%;background:var(--color-accent);transition:width var(--motion-fast)}
+.bar .fill.alt{background:var(--color-info)}
+.bar .num{text-align:right;font-weight:var(--weight-medium)}
+.formula{background:var(--color-surface-alt);border-radius:var(--radius-sm);padding:var(--space-sm) var(--space-md);font-size:var(--text-sm);margin-top:var(--space-md)}
+/* 清单 */
+.checklist{list-style:none;padding:0;margin:var(--space-md) 0 0;display:grid;gap:var(--space-sm)}
+.checklist label{display:flex;gap:var(--space-sm);align-items:flex-start;font-weight:var(--weight-regular);cursor:pointer}
+.checklist input{width:var(--check-size);height:var(--check-size);flex:0 0 auto;margin-top:var(--space-xs);accent-color:var(--color-ok)}
+.count{font-weight:var(--weight-bold);color:var(--color-ok)}
+details{background:var(--color-surface-alt);border-radius:var(--radius-sm);padding:var(--space-sm) var(--space-md);margin-top:var(--space-md)}
+summary{cursor:pointer;font-weight:var(--weight-medium)}
+.steps{margin:0;padding-left:var(--space-lg)}
+.steps li{margin-bottom:var(--space-xs)}
+.criteria{border-left:var(--border-bar) solid var(--color-ok);padding-left:var(--space-md);margin-top:var(--space-md);font-size:var(--text-sm)}
+.sources{font-size:var(--text-sm)}
+.sources li{margin-bottom:var(--space-sm)}
+footer{color:var(--color-text-soft);font-size:var(--text-xs);padding:var(--space-xl) 0 var(--space-2xl)}
+@media (max-width:720px){
+  .hero h1{font-size:var(--text-2xl)}
+  section h2{font-size:var(--text-xl)}
+  .grid,.grid.three{grid-template-columns:minmax(0,1fr)}
+  .pop .row{grid-template-columns:minmax(0,1fr);gap:var(--space-xs)}
+  .card{padding:var(--space-md)}
+  .bar{grid-template-columns:minmax(0,5.5em) minmax(0,1fr) minmax(0,4em)}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>AI 是放大器，谁在挑歌？</h1>
+    <p class="lede">一段「钱和注意力决定 AI 繁荣什么」的短视频，逐条核对、批判，再变成一人企业能用的决策练习。</p>
+    <div class="verdict">
+      <h2>结论：视角有用，证据链不成立</h2>
+      <ul>
+        <li>「看钱和注意力流向哪里」是有解释力的观察视角，Sora 停服和海外短剧收入都支持它。</li>
+        <li>视频把三组不同总体的数据拼成「中国做短剧、美国做编程」：中国一方是单一利益方披露的「全国 Token」，美国一方是全球平台 OpenRouter 和 OpenAI 企业客户。这三组数字不能直接比较。</li>
+        <li>Token 是计量单位，不是价值单位。视频生成和智能体长任务都会推高 Token，所以 55% 和 64% 都要打折看。</li>
+      </ul>
+    </div>
+    <p class="meta">核对日期 2026-10-19 · 数据来自公开报道与披露，标注了出处级别 · 交互工具里的数字是假设演示，不是行业事实</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="页面目录">
+  <div class="wrap">
+    <a href="#claims">视频说了什么</a><a href="#matrix">证据矩阵</a><a href="#gaps">三处错位</a><a href="#tool">Token→价值</a><a href="#cases">补充案例</a><a href="#metaphor">比喻升级</a><a href="#angles">检验角度</a><a href="#practice">学习实践</a><a href="#sources">来源</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="claims">
+  <h2>视频说了什么</h2>
+  <p class="sub">7 个论点按视频顺序排列。标签表示本页核对后的判定。</p>
+  <ol class="claims">
+    <li><div class="q">AI 是放大器，像功放不挑歌；挑歌的是钱和注意力。 <span class="badge b-warn">比喻有局限</span></div><div class="a">AI 不只放大，也改变成本结构。挑歌的还有平台分发、政策和补贴。</div></li>
+    <li><div class="q">国内 Token 消耗：短剧与视频生成 55%，电商营销 24%，软件开发 15%。 <span class="badge b-warn">原文属实，方法未公开</span></div><div class="a">出自中文在线投资者关系活动记录表。原文没有写数据来源、统计期和方法。中文在线持有 ReelShort 运营方 49% 股份，是利益相关方。</div></li>
+    <li><div class="q">红果短剧 7 月日活 1.68 亿，人均每天 125 分钟；海外收入前十的短剧平台都有中国背景。 <span class="badge b-warn">部分支持</span></div><div class="a">1.68 亿出自 QuestMobile 7 月监测。125 分钟的月份口径不一致。海外中国厂商约占内购收入 93%（第三方口径），「前十全部」本页没有逐一核实。</div></li>
+    <li><div class="q">今年一季度国内每天新增 AI 短剧约 1500 部。 <span class="badge b-warn">单一来源</span></div><div class="a">同一份中文在线记录表写了「单日新增约 1,500 部，月度上新超 4 万部」。这个数字说明供给扩张，不说明需求同步增长。</div></li>
+    <li><div class="q">信通院：AI 算力需求 +417%，有效供给 +128%；先拿到算力的是付得起钱、马上能变现的。 <span class="badge b-info">二手引用</span></div><div class="a">多家媒体把这组数字归给信通院，本页没有找到原始报告。「先给马上变现的」是视频作者的推论。抖音端 AI 短剧样本的播放达标率（1.3%）不能验证「马上变现」，也不能确定实际盈利比例。</div></li>
+    <li><div class="q">OpenRouter 上编程占比从 11% 涨到约 50%；OpenAI 企业客户输出 Token 中 64% 来自 Codex。 <span class="badge b-bad">数字接近，口径被改</span></div><div class="a">OpenRouter 超过一半使用量来自美国以外，不是「美国数据」。64% 的分母只是企业客户的 Codex+ChatGPT 输出 Token。</div></li>
+    <li><div class="q">美国的钱在软件和云，工程师贵，所以 AI 写代码的账好算；想让什么繁荣，先看钱和注意力。 <span class="badge b-ok">方向成立</span></div><div class="a">作为观察方法成立。但美国的注意力和钱也流向短剧：ReelShort 主要收入来自美国用户。</div></li>
+  </ol>
+</section>
+
+<section id="matrix">
+  <h2>证据矩阵：每条证据能撑多少</h2>
+  <p class="sub">把支持和反对的证据放在同一张表里，分别判断它们对主论点「钱和注意力决定 AI 繁荣什么」的支持强度。</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>证据</th><th>来源与口径</th><th>核实状态</th><th>对主论点</th><th>它不能证明什么</th></tr></thead>
+    <tbody>
+      <tr><td>Token 55/24/15</td><td>中文在线 IR 记录表 2026-004（2026-06-03）；「国内所有 Token」，无方法</td><td><span class="badge b-warn">原文属实</span></td><td>弱支持</td><td>不能证明短剧创造了 55% 的价值；不能和美国平台数据对比</td></tr>
+      <tr><td>红果 1.68 亿日活</td><td>QuestMobile 2026 年 7 月，媒体转述</td><td><span class="badge b-ok">已核实</span></td><td>支持（注意力）</td><td>日活含签到领金币等激励打开；不等于付费</td></tr>
+      <tr><td>人均 125 分钟</td><td>多家媒体转述，月份口径不一</td><td><span class="badge b-warn">口径不清</span></td><td>弱支持</td><td>不能确定是 7 月数据</td></tr>
+      <tr><td>海外短剧内购约 12.7 亿美元</td><td>DataEye，2026 上半年；中国厂商约 93%（第三方，内购口径）</td><td><span class="badge b-ok">已核实</span></td><td>支持（钱）</td><td>不含广告收入；「前十全部」未逐一核实</td></tr>
+      <tr><td>每天新增约 1500 部</td><td>中文在线记录表，一季度</td><td><span class="badge b-warn">单一来源</span></td><td>支持供给扩张</td><td>不能证明需求或收益同步增长</td></tr>
+      <tr><td>算力需求 +417%，供给 +128%</td><td>媒体引「信通院」，原始报告未找到</td><td><span class="badge b-info">二手引用</span></td><td>弱支持</td><td>不能说明紧缺落在哪类算力；另有观点认为是高端智算偏紧、通用算力相对过剩</td></tr>
+      <tr><td>OpenRouter 编程 11%→50%+</td><td>a16z × OpenRouter《State of AI》，2025 年 12 月，平台级观察</td><td><span class="badge b-ok">已核实</span></td><td>支持（编程需求）</td><td>超过一半使用量来自美国以外；不是美国数据</td></tr>
+      <tr><td>Codex 64%</td><td>OpenAI Enterprise Signals，截至 2026 年 6 月；分母是企业客户 Codex+ChatGPT 输出 Token</td><td><span class="badge b-ok">已核实</span></td><td>支持（编程需求）</td><td>Token 是使用深度代理，OpenAI 自己说明不代表质量或商业价值</td></tr>
+      <tr><td>Sora 停服</td><td>OpenAI 2026-03-24 宣布；App 4 月 26 日、API 9 月 24 日关闭；媒体报道原因是把算力转向编程与企业客户</td><td><span class="badge b-ok">已核实</span></td><td>与「商业优先级影响算力分配」的解释一致</td><td>原因说明来自媒体报道，不能证明完整的资源分配原因</td></tr>
+      <tr><td>抖音 AI 短剧 1.3% 达标</td><td>DataEye-ADX，2026 上半年，以 5000 万播放为盈亏线</td><td><span class="badge b-ok">已核实</span></td><td>不能验证「马上变现」</td><td>只覆盖抖音端 AI 短剧样本；播放量是代理指标，不能据此判断实际盈利比例，也不能证明短剧没有商业价值</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="gaps">
+  <h2>三处关键错位</h2>
+  <div class="grid three">
+    <div class="card">
+      <h3>分母不同</h3>
+      <p>中国一方是「国内所有 Token」，由一家短剧利益方披露，没有方法。美国一方是两个更窄的总体。</p>
+      <div class="pop">
+        <div class="row"><span class="who">中文在线 55%</span><span>全国口径，来源和统计期未公开</span></div>
+        <div class="row"><span class="who">OpenRouter 50%+</span><span>一个全球开发者平台，过半使用来自美国以外</span></div>
+        <div class="row"><span class="who">OpenAI 64%</span><span>企业客户的 Codex+ChatGPT 输出 Token</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>单位不等价</h3>
+      <p>凤凰网的反方文章估算：720p 下一条 5 秒镜头约 10 万 Token，和一部十万字剧本相当；视频侧与文本侧差三到四个数量级。一部 90 分钟 AI 短剧约 1.1 亿 Token。</p>
+      <p>同样道理，智能体编程会多轮调用工具、反复读写代码，也推高 Token。所以两边的占比都要打折。</p>
+    </div>
+    <div class="card">
+      <h3>国家标签被贴错</h3>
+      <p>OpenRouter 的报告作者明确说结论是平台级观察，不是全生态结论；亚洲支出占比升到约 31%。同一份报告里，开源模型使用量有一半以上是角色扮演。</p>
+      <p>所以「美国在用 AI 写代码」这个标签，不能从 OpenRouter 数据直接得出。</p>
+    </div>
+  </div>
+  <div class="callout warn"><p>应保留的限定语：「在中文在线披露的口径下」「在 OpenRouter 平台观察到」「在 OpenAI 统计的企业客户中」「这些数据提供方向性线索，但不能直接比较国家整体产业结构」。</p></div>
+</section>
+
+<section id="tool">
+  <h2>交互：Token 占比怎样变成价值占比</h2>
+  <p class="sub">调整的是假设权重。这个工具演示「Token 占比」和「价值占比」之间缺少的那个换算环节，不还原真实产业价值。</p>
+  <div class="card tool">
+    <div class="presets" role="group" aria-label="选择数据">
+      <button class="btn" type="button" data-share="55" data-name="短剧与视频" aria-pressed="true">中文在线：视频 55%</button>
+      <button class="btn" type="button" data-share="64" data-name="Codex" aria-pressed="false">OpenAI 企业：Codex 64%</button>
+    </div>
+    <div class="controls">
+      <div>
+        <label for="share">该场景的 Token 占比：<output id="shareOut">55%</output></label>
+        <input id="share" type="range" min="1" max="99" step="1" value="55">
+      </div>
+      <div>
+        <label for="ratio">该场景每单位 Token 的价值 ÷ 其他场景每单位 Token 的价值（r）：<output id="ratioOut">1</output></label>
+        <input id="ratio" type="range" min="-3" max="1" step="0.05" value="0" aria-describedby="ratioHint">
+        <p id="ratioHint" class="sub" style="margin:var(--space-xs) 0 0;font-size:var(--text-xs)">滑块按 10 的幂变化，从 0.001 到 10。r=0.001 相当于「同样价值，这个场景要多花 1000 倍 Token」。</p>
+      </div>
+    </div>
+    <div class="bars" aria-live="polite">
+      <div class="bar"><span id="labelA">Token 占比</span><div class="track"><div class="fill" id="barToken"></div></div><span class="num" id="numToken">55%</span></div>
+      <div class="bar"><span>推算价值占比</span><div class="track"><div class="fill alt" id="barValue"></div></div><span class="num" id="numValue">55%</span></div>
+    </div>
+    <div class="formula">推算价值占比 = s × r ÷ (s × r + (1 − s))，其中 s 是 Token 占比。<span id="explain"></span></div>
+    <div class="callout info"><p>读法（纯假设示例）：如果视频 Token 密度比文本高三个数量级（凤凰网的估算方向），每份产出的价值相同，再假设其他全部场景的平均每 Token 价值等于文本场景，那么 r 接近 0.001，55% 的 Token 只对应约 0.1% 的价值。这不是行业估值结果。反过来，如果编程产出比其他场景更值钱，64% 也可能低估价值。真实场景的价值未必能用统一的「每 Token 价值」衡量，所以这里只看方向。</p></div>
+  </div>
+</section>
+
+<section id="cases">
+  <h2>补充案例：用事实检验视频</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Sora 停服：算力会被重新分配 <span class="badge b-ok">支持视频</span></h3>
+      <p>OpenAI 在 2026 年 3 月 24 日宣布停掉 Sora，App 在 4 月 26 日关闭，API 在 9 月 24 日关闭。媒体报道的原因是把算力集中到编程工具和企业客户。</p>
+      <p>中文在线的记录表也拿 Sora 停服和字节 Seedance 2.0 做对比。这个案例与「商业优先级影响算力分配」的解释一致：在美国，视频生成也有人做，但 OpenAI 停掉了它。停服的完整原因，现有材料不足以确定。</p>
+    </div>
+    <div class="card">
+      <h3>ReelShort 在美国：美国的注意力也给了短剧 <span class="badge b-warn">修正视频</span></h3>
+      <p>Sherwood News 在 2024 年引 Sensor Tower 数据称，ReelShort 超过 70% 的内购收入来自美国。Sensor Tower 自己的报告说，2024 年美国贡献了全球短剧 App 收入的 60%。DataEye 统计 2026 上半年海外短剧 App 内购约 12.7 亿美元，DramaBox、ReelShort、NetShort 领跑。</p>
+      <p>所以这些数据不能把两国概括成两种单一的用户偏好：美国用户同样为短剧付费。更接近的说法是：中国公司把短剧做成了出海产业，美国是它最大的收入市场。</p>
+    </div>
+    <div class="card">
+      <h3>1.3% 达标：供给爆炸不等于马上变现 <span class="badge b-warn">修正视频</span></h3>
+      <p>投资界 2026 年 10 月引 DataEye-ADX：2026 上半年抖音端 AI 短剧，以 5000 万播放为盈亏线，达标的只有 1.3%。掌阅 CEO 说爆款跑出率从 10–20% 降到不足 0.5%。</p>
+      <p>短剧拿到算力，可能与预期回报、大厂扶持有关，现有材料不足以确定各因素的作用。这个样本只说明 1.3% 达到报道采用的播放门槛，不能据此判断实际盈利比例。</p>
+    </div>
+    <div class="card">
+      <h3>红果的时长：注意力也被平台激励塑造 <span class="badge b-info">补充角度</span></h3>
+      <p>红果 7 月日活 1.68 亿（QuestMobile）。有媒体报道，长视频四家合计日活约 1.55 亿。同时有评论指出部分用户为签到领金币打开 App。</p>
+      <p>所以日活和时长要结合留存、有效观看和付费行为看。注意力流向不完全由用户偏好决定，免费模式和激励机制也在挑歌。</p>
+    </div>
+    <div class="card">
+      <h3>豆包 180 万亿 Token：大厂也是挑歌人 <span class="badge b-info">补充角度</span></h3>
+      <p>火山引擎总裁谭待在 2026 年 6 月 23 日的大会上说，豆包大模型日均 Token 调用量达到 180 万亿。豆包没有公开这些 Token 按场景的结构。</p>
+      <p>中文在线记录表也提到「大厂算力扶持以及官方政策支持」。在中国，价格补贴和平台战略也在决定 Token 流向哪里。</p>
+    </div>
+    <div class="card">
+      <h3>OpenRouter 的角色扮演：娱乐需求不分国界 <span class="badge b-info">补充角度</span></h3>
+      <p>同一份 OpenRouter 报告里，开源模型使用量有一半以上是角色扮演。娱乐、陪伴类需求在全球平台上同样巨大。</p>
+      <p>如果只挑编程数据讲美国、只挑短剧数据讲中国，就会把两边都讲成单一画像。</p>
+    </div>
+  </div>
+</section>
+
+<section id="metaphor">
+  <h2>比喻升级：放大器之外还有什么</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>视频的说法</h3>
+      <p>AI 是放大器，功放不挑歌；钱和注意力挑歌。</p>
+    </div>
+    <div class="card">
+      <h3>更准确的说法</h3>
+      <p>AI 是能力放大器，也是成本结构改变器。它把生产门槛降下来，供给就会爆炸，例如每天约 1500 部新短剧。钱、注意力、平台分发、政策和补贴共同决定放大什么。</p>
+    </div>
+  </div>
+  <div class="table-scroll" style="margin-top:var(--space-md)">
+  <table>
+    <thead><tr><th>挑歌人</th><th>它怎样影响 AI 流向</th><th>本页例子</th></tr></thead>
+    <tbody>
+      <tr><td>钱</td><td>付费能力和预期回报可能影响资源分配</td><td>Sora 停服；媒体报道算力转向编程与企业，完整原因不能确定</td></tr>
+      <tr><td>注意力</td><td>用户时间流向哪里，内容就往哪里做</td><td>红果日活 1.68 亿</td></tr>
+      <tr><td>平台分发</td><td>推荐算法、签到激励、免费模式塑造注意力</td><td>签到领金币打开 App</td></tr>
+      <tr><td>政策与补贴</td><td>大厂算力扶持、官方政策降低某一赛道的成本</td><td>中文在线记录表提到的扶持</td></tr>
+      <tr><td>成本结构</td><td>生产成本骤降，供给先于需求扩张</td><td>单日新增约 1500 部；抖音端样本 1.3% 达到报道采用的播放门槛（不能据此判断实际盈利比例）</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="angles">
+  <h2>四个检验角度：下次自己去查</h2>
+  <p class="sub">这些是研究方向。相关数据本页没有核实，查到后再下结论。</p>
+  <div class="grid">
+    <div class="card"><h3>从 Token 转向算力成本</h3><p>比较不同任务的 GPU 时长、推理成本和延迟要求。因为 Token 数量不能完整反映算力占用，真正的瓶颈可能是高端芯片、内存、带宽或特定时段的推理能力。</p></div>
+    <div class="card"><h3>从内容产量转向有效需求</h3><p>检验 AI 短剧从生成、发布到有效观看、付费、复购的转化漏斗。因为生产成本下降带来内容爆发，不一定带来更多有效注意力。要区分「生产繁荣」和「需求繁荣」。</p></div>
+    <div class="card"><h3>从行业热度转向单位经济</h3><p>比较短剧、AI 编程和自己的内容生产在单位成本、获客成本、付费转化、毛利上的差别。因为资本追逐的是风险调整后的回报，不是 Token 消耗。</p></div>
+    <div class="card"><h3>从用户选择转向平台机制</h3><p>检验推荐算法、签到激励、免费额度和广告机制对时长和付费的影响。因为注意力不完全由用户偏好决定，也可能由平台激励塑造。</p></div>
+  </div>
+</section>
+
+<section id="practice">
+  <h2>学习实践：把观点变成决策工具</h2>
+  <p class="sub">三个练习，每个都有步骤、交付物和判定标准。本页勾选状态只保存在当前打开的页面里，刷新后会清空。</p>
+
+  <div class="card">
+    <h3>练习 A：数据审查卡（15 分钟）</h3>
+    <p>选一组数据，逐项回答下面 6 个问题。三组数据各做一次。</p>
+    <div class="presets" role="group" aria-label="选择要审查的数据">
+      <button class="btn ds" type="button" data-ds="0" aria-pressed="true">55/24/15</button>
+      <button class="btn ds" type="button" data-ds="1" aria-pressed="false">OpenRouter 编程占比</button>
+      <button class="btn ds" type="button" data-ds="2" aria-pressed="false">Codex 64%</button>
+    </div>
+    <p>已完成：<span class="count" id="checkCount">0/6</span></p>
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox"> 发布者是谁？有没有利益关系？</label></li>
+      <li><label><input type="checkbox"> 统计总体、分母和统计时期是什么？</label></li>
+      <li><label><input type="checkbox"> Token 怎样定义、怎样计量？不同场景单位能否比较？</label></li>
+      <li><label><input type="checkbox"> 数据来源和方法是否公开？</label></li>
+      <li><label><input type="checkbox"> 它能支持什么结论？不能支持什么结论？</label></li>
+      <li><label><input type="checkbox"> 需要哪份证据来交叉验证？对照组是谁？</label></li>
+    </ul>
+    <details><summary>参考答案（先自己写再看）</summary><p id="dsAnswer"></p></details>
+    <div class="criteria"><strong>判定标准：</strong>每组数据都能写出一句「它支持什么」和一句「它不支持什么」。如果缺分母、来源或方法，就标「无法独立验证」，不自己补齐。</div>
+  </div>
+
+  <div class="card" style="margin-top:var(--space-gap)">
+    <h3>练习 B：一人企业的注意力与预算审计（每周 20 分钟）</h3>
+    <ol class="steps">
+      <li>连续 7 天，记录花在 AI 工具、内容制作、产品开发、营销、客户沟通和学习上的实际时间。</li>
+      <li>同时记录现金支出、产出物、可观察结果，以及结果出现的时间。</li>
+      <li>给每项任务设一个结果指标，例如有效线索、付费转化、交付时间或客户问题解决率。</li>
+      <li>周末把任务分成三类：继续投入、小规模实验、暂停观察。</li>
+    </ol>
+    <div class="table-scroll" style="margin-top:var(--space-md)">
+    <table>
+      <thead><tr><th>任务</th><th>本周时间</th><th>本周花费</th><th>结果指标</th><th>本周结果</th><th>分类</th></tr></thead>
+      <tbody>
+        <tr><td>示例：AI 写短视频脚本</td><td>6 小时</td><td>工具费</td><td>有效线索数</td><td>记录实际数</td><td>小规模实验</td></tr>
+        <tr><td>示例：给老客户做定制服务</td><td>4 小时</td><td>0</td><td>付费转化</td><td>记录实际数</td><td>继续投入</td></tr>
+        <tr><td>（填你自己的任务）</td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="criteria"><strong>判定标准：</strong>不按 Token 消耗或内容产量排名。优先保留结果可追踪、成本可接受、和当前业务目标相关的任务。样本不足时标「待验证」，不因一周没有收入就判定长期没价值。</div>
+  </div>
+
+  <div class="card" style="margin-top:var(--space-gap)">
+    <h3>练习 C：给自己的 AI 选「歌」（每两周一次）</h3>
+    <p>选三个候选任务，例如写销售邮件、做短视频、开发产品功能。每项写清楚：</p>
+    <ol class="steps">
+      <li>目标结果和衡量方式。</li>
+      <li>当前不用 AI 时的人工基线：花多少时间、多少钱、质量怎样。</li>
+      <li>加入 AI 后的总成本，包括人工审核、返工和工具费。</li>
+      <li>失败风险和质量门槛。</li>
+      <li>下一轮继续或停止的条件。</li>
+    </ol>
+    <div class="criteria"><strong>判定标准：</strong>先选结果可衡量、失败成本低、能快速验证的任务。只有质量达标、同时总成本或交付时间有改善，才扩大投入。品牌建设、探索性研究这类延迟回报的任务单独评估，不用短期指标淘汰。</div>
+  </div>
+
+  <div class="callout info"><p>中心命题：观察 AI 产业，要区分资源消耗、资本选择、用户注意力和最终价值。做一人企业，要把这四样区分落实到自己的成本、时间和可验证结果上。</p></div>
+</section>
+
+<section id="sources">
+  <h2>来源</h2>
+  <ul class="sources">
+    <li>中文在线投资者关系活动记录表 2026-004（2026-06-03，一手披露）：<a href="http://static.cninfo.com.cn/finalpage/2026-06-03/1225350332.PDF">巨潮资讯 PDF</a></li>
+    <li>凤凰网科技，Token 占比与价值的反方分析（2026-10-13，媒体评论）：<a href="https://tech.ifeng.com/c/8xBZHQ9IuqC">tech.ifeng.com</a></li>
+    <li>新浪财经，55% 数据的媒体转述（2026-10-16）：<a href="https://finance.sina.com.cn/tech/roll/2026-10-16/doc-inivksmv8327579.shtml">finance.sina.com.cn</a></li>
+    <li>红果日活 1.68 亿（QuestMobile 数据，媒体转述）：<a href="https://www.worldjournal.com/wj/story/121617/9820777">世界日报</a>；<a href="https://news.qq.com/rain/a/20260909A05H9S00">腾讯新闻</a></li>
+    <li>海外短剧 2026 上半年内购（DataEye，媒体转述）：<a href="https://www.baijing.cn/article/56268">白鲸出海</a></li>
+    <li>算力需求 +417% / 供给 +128%（媒体引信通院，原始报告未找到）：<a href="https://www.21jingji.com/article/20260507/herald/f046b8fb2733f3fc82d33bc90571c660.html">21 经济网</a></li>
+    <li>a16z × OpenRouter《State of AI》（2025 年 12 月，一手报告）：<a href="https://arxiv.org/html/2601.10088v1">arXiv 2601.10088</a></li>
+    <li>OpenAI Enterprise Signals（2026 年 8 月，一手披露）：<a href="https://openai.com/signals/enterprise-data/">openai.com/signals</a>；媒体转述：<a href="https://www.digitaltoday.co.kr/en/view/92763/">Digital Today</a></li>
+    <li>Sora 分两阶段停服（2026-03-28，媒体报道）：<a href="https://the-decoder.com/openai-sets-two-stage-sora-shutdown-with-app-closing-april-2026-and-api-following-in-september/">The Decoder</a></li>
+    <li>ReelShort 美国收入占比（Sensor Tower 数据，媒体转述，2024）：<a href="https://sherwood.news/tech/soapy-short-form-web-novels-are-taking-over-tiktok-fueling-a-usd4-4-billion/">Sherwood News</a>；美国占全球短剧 App 收入 60%（一手报告）：<a href="https://sensortower.com/blog/short-drama-redefines-mobile-entertainment-and-challenges-games">Sensor Tower</a></li>
+    <li>豆包日均 Token 180 万亿（2026-06-23，媒体报道）：<a href="https://finance.sina.com.cn/tech/digi/2026-06-23/doc-iniekeez8901754.shtml">新浪科技</a></li>
+    <li>AI 短剧 1.3% 达标与跑出率（2026-10-16，媒体报道）：<a href="https://news.pedaily.cn/202610/570376.shtml">投资界</a></li>
+  </ul>
+</section>
+
+</main>
+<footer><div class="wrap">本页用于学习与讨论，不构成投资建议。标「二手引用」「单一来源」「口径不清」的数字，引用前请回到原始出处核对。</div></footer>
+
+<script>
+(function(){
+  var share=document.getElementById('share'), ratio=document.getElementById('ratio');
+  var shareOut=document.getElementById('shareOut'), ratioOut=document.getElementById('ratioOut');
+  var barT=document.getElementById('barToken'), barV=document.getElementById('barValue');
+  var numT=document.getElementById('numToken'), numV=document.getElementById('numValue');
+  var explain=document.getElementById('explain'), labelA=document.getElementById('labelA');
+  var sceneName='短剧与视频';
+  function fmt(x){ if(x>=10) return x.toFixed(0)+'%'; if(x>=1) return x.toFixed(1)+'%'; return x.toFixed(2)+'%'; }
+  function fmtR(r){ return r>=1 ? r.toFixed(r>=10?0:1) : (r>=0.01 ? r.toFixed(2) : r.toFixed(3)); }
+  function update(){
+    var s=share.value/100, r=Math.pow(10,parseFloat(ratio.value));
+    var v=s*r/(s*r+(1-s))*100;
+    shareOut.textContent=share.value+'%'; ratioOut.textContent=fmtR(r);
+    ratio.setAttribute('aria-valuetext','倍率 r 为 '+fmtR(r)); share.setAttribute('aria-valuetext','Token 占比 '+share.value+'%');
+    barT.style.width=share.value+'%'; barV.style.width=v+'%';
+    numT.textContent=share.value+'%'; numV.textContent=fmt(v);
+    labelA.textContent='Token 占比';
+    explain.textContent=' 当前：'+sceneName+'占 '+share.value+'% 的 Token，r = '+fmtR(r)+'，推算价值占比约 '+fmt(v)+'。';
+  }
+  share.addEventListener('input',update); ratio.addEventListener('input',update);
+  document.querySelectorAll('.tool .presets .btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.tool .presets .btn').forEach(function(o){o.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); share.value=b.dataset.share; sceneName=b.dataset.name; ratio.value=0; update();
+    });
+  });
+  update();
+
+  var answers=[
+    '发布者中文在线持有 ReelShort 运营方 49% 股份，是利益相关方；原文是向投资者论证短剧赛道价值。分母写的是「国内所有 Token」，没有统计期、来源和方法。视频 Token 密度比文本高几个数量级，不同场景单位不能直接比较。它支持「视频生成在 Token 计量上可能占比很高」；它不支持「短剧创造了一半以上的 AI 价值」，也不支持和美国数据做国家对比。交叉验证可以找豆包、各云厂商的 Token 结构披露（目前未公开），或第三方监测。',
+    '发布者是 OpenRouter 与 a16z，平台方有自己的商业立场但公开了方法。分母是 OpenRouter 平台上的 Token，报告期到 2025 年 12 月；超过一半使用量来自美国以外。它支持「在这个开发者平台上编程需求增长很快」；它不支持「美国 AI 用途以编程为主」。作者自己说是平台级观察。对照组可以是同期其他平台或云厂商的用途结构。',
+    '发布者是 OpenAI，Codex 是它自己的产品。分母是截至 2026 年 6 月企业客户的 Codex+ChatGPT 合计输出 Token，只包括这两个产品。智能体长任务会推高输出 Token。OpenAI 说明 Token 是使用深度的代理指标，不是质量或商业价值。它支持「OpenAI 企业客户里编程用得很深」；它不支持「美国企业 64% 的 AI 价值来自编程」。对照组可以是企业自己披露的提效或节省成本数据。'
+  ];
+  var list=document.getElementById('checklist'), count=document.getElementById('checkCount'), ans=document.getElementById('dsAnswer');
+  var state=[[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]], cur=0;
+  var boxes=list.querySelectorAll('input');
+  function render(){
+    boxes.forEach(function(b,i){b.checked=!!state[cur][i];});
+    count.textContent=state[cur].reduce(function(a,b){return a+b;},0)+'/6';
+    ans.textContent=answers[cur];
+  }
+  boxes.forEach(function(b,i){ b.addEventListener('change',function(){ state[cur][i]=b.checked?1:0; render(); }); });
+  document.querySelectorAll('.btn.ds').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.btn.ds').forEach(function(o){o.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); cur=parseInt(b.dataset.ds,10); render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

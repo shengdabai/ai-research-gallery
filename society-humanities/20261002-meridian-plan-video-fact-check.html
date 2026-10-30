@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「子午线计划」视频拆解:哪些是文件原话,哪些是讲述者的推演</title>
+<style>
+/* 设计 token:所有设计值只在这里定义。
+   断点(媒体查询不能读自定义属性,集中注明):窄屏 ≤ 720px;宽屏 ≥ 1000px。 */
+:root {
+  --c-bg: #eef1f5;
+  --c-surface: #ffffff;
+  --c-surface-alt: #f5f7fa;
+  --c-ink: #17202e;
+  --c-ink-soft: #4a5668;
+  --c-ink-faint: #6b7789;
+  --c-line: #d5dbe4;
+  --c-line-strong: #aeb8c6;
+  --c-hero-bg: #14233b;
+  --c-hero-ink: #f2f5f9;
+  --c-hero-soft: #b9c5d6;
+  --c-hero-line: #3a4d6b;
+  --c-accent: #1f5fa8;
+  --c-accent-soft: #e3edf8;
+  --c-ok: #1d6b4a;
+  --c-ok-bg: #e2f1ea;
+  --c-warn: #8a4b00;
+  --c-warn-bg: #e9ecf1;
+  --c-infer: #5a3d9a;
+  --c-infer-bg: #ece8f6;
+  --c-unk: #4a5668;
+  --c-unk-bg: #e4e8ee;
+  --c-sun: #e0a526;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: clamp(1.6rem, 1.1rem + 2.4vw, 2.5rem);
+  --fs-stat: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+  --lh-tight: 1.3;
+  --lh-body: 1.75;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  --w-page: 68rem;
+  --w-text: 46rem;
+  --w-col-min: 15rem;
+  --w-col-min-wide: 19rem;
+  --w-label: 7.5em;
+  --w-stat-min: 8.5rem;
+  --w-bar-min: 0.1875rem;
+  --w-arc: 16rem;
+  --w-claim: 30%;
+  --radius-round: 50%;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --bw: 1px;
+  --bw-thick: 3px;
+  --bw-accent: 4px;
+  --h-bar: 0.875rem;
+  --dot: 0.75rem;
+  --shadow: 0 1px 2px rgba(23, 32, 46, 0.06);
+  --arc-stroke: 2;
+  --arc-dash: 4 4;
+  --clip-hidden: inset(50%);
+  --px-1: 1px;
+  --skip-off: -200%;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere;
+}
+a { color: var(--c-accent); }
+p { margin: 0 0 var(--sp-4); }
+p:last-child { margin-bottom: 0; }
+h1, h2, h3, h4 { line-height: var(--lh-tight); margin: 0; font-weight: var(--fw-bold); }
+ul, ol { margin: 0; padding-left: var(--sp-5); }
+li { margin-bottom: var(--sp-2); }
+.sr { position: absolute; width: var(--px-1); height: var(--px-1); overflow: hidden; clip-path: var(--clip-hidden); white-space: nowrap; }
+
+.skip { position: absolute; left: var(--sp-2); top: var(--sp-2); padding: var(--sp-2) var(--sp-3); background: var(--c-surface); color: var(--c-accent); border: var(--bw) solid var(--c-accent); border-radius: var(--radius-sm); transform: translateY(var(--skip-off)); }
+.skip:focus { transform: none; }
+
+.wrap { max-width: var(--w-page); margin: 0 auto; padding: 0 var(--sp-4); }
+
+/* 顶部 */
+.hero { background: var(--c-hero-bg); color: var(--c-hero-ink); padding: var(--sp-7) 0 var(--sp-6); }
+.hero-grid { display: grid; gap: var(--sp-5); align-items: center; }
+.hero h1 { font-size: var(--fs-xl); max-width: var(--w-text); }
+.hero .kicker { color: var(--c-hero-soft); font-size: var(--fs-sm); margin-bottom: var(--sp-3); }
+.hero .lead { color: var(--c-hero-soft); font-size: var(--fs-md); max-width: var(--w-text); margin-top: var(--sp-4); }
+.arc { width: 100%; max-width: var(--w-arc); height: auto; display: block; }
+.arc path, .arc line { fill: none; stroke: var(--c-hero-line); stroke-width: var(--arc-stroke); }
+.arc .dash { stroke-dasharray: var(--arc-dash); }
+.arc circle { fill: var(--c-sun); }
+.arc text { fill: var(--c-hero-soft); font-size: var(--fs-xs); font-family: var(--font-body); }
+
+.nav { background: var(--c-surface); border-bottom: var(--bw) solid var(--c-line); }
+.nav ul { list-style: none; padding: var(--sp-3) 0; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+.nav li { margin: 0; font-size: var(--fs-sm); }
+.nav a { text-decoration: none; }
+.nav a:hover, .nav a:focus { text-decoration: underline; }
+
+section { padding: var(--sp-7) 0 0; }
+section > .wrap > h2 { font-size: var(--fs-lg); margin-bottom: var(--sp-2); }
+.sec-note { color: var(--c-ink-soft); max-width: var(--w-text); margin-bottom: var(--sp-5); }
+
+.card { background: var(--c-surface); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); padding: var(--sp-5); box-shadow: var(--shadow); }
+.card h3 { font-size: var(--fs-md); margin-bottom: var(--sp-3); }
+.card h4 { font-size: var(--fs-sm); color: var(--c-ink-soft); margin: var(--sp-4) 0 var(--sp-2); }
+.grid { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(var(--w-col-min), 1fr)); }
+.grid.wide { grid-template-columns: repeat(auto-fit, minmax(var(--w-col-min-wide), 1fr)); }
+
+/* 判定标签:小圆角方块,不用胶囊形 */
+.tag { display: inline-block; font-size: var(--fs-xs); font-weight: var(--fw-bold); padding: var(--sp-1) var(--sp-2); border-radius: var(--radius-sm); line-height: var(--lh-tight); white-space: nowrap; }
+.tag.ok { color: var(--c-ok); background: var(--c-ok-bg); }
+.tag.warn { color: var(--c-warn); background: var(--c-warn-bg); }
+.tag.infer { color: var(--c-infer); background: var(--c-infer-bg); }
+.tag.unk { color: var(--c-unk); background: var(--c-unk-bg); }
+
+/* 结论 */
+.verdict { border-left: var(--bw-accent) solid var(--c-accent); }
+.verdict p { font-size: var(--fs-md); }
+.stats { margin: var(--sp-4) 0; grid-template-columns: repeat(auto-fit, minmax(var(--w-stat-min), 1fr)); }
+.stat { background: var(--c-surface); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); padding: var(--sp-4); border-top: var(--bw-thick) solid var(--c-line-strong); }
+.stat.ok { border-top-color: var(--c-ok); }
+.stat.warn { border-top-color: var(--c-warn); }
+.stat.infer { border-top-color: var(--c-infer); }
+.stat.unk { border-top-color: var(--c-unk); }
+.stat b { display: block; font-size: var(--fs-stat); line-height: var(--lh-tight); }
+.stat span { color: var(--c-ink-soft); font-size: var(--fs-sm); }
+
+/* 事实清单 */
+.facts { display: grid; gap: var(--sp-3); margin: 0; }
+.facts div { display: grid; grid-template-columns: var(--w-label) 1fr; gap: var(--sp-3); padding-bottom: var(--sp-3); border-bottom: var(--bw) solid var(--c-line); }
+.facts div:last-child { border-bottom: 0; padding-bottom: 0; }
+.facts dt { color: var(--c-ink-faint); font-size: var(--fs-sm); }
+.facts dd { margin: 0; }
+
+/* 组织关系 */
+.chain { list-style: none; padding: 0; display: grid; gap: var(--sp-5); }
+.chain li { margin: 0; position: relative; background: var(--c-surface-alt); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4); }
+.chain li + li::before { content: "↓"; position: absolute; top: calc(var(--sp-5) * -1); left: var(--sp-4); height: var(--sp-5); display: flex; align-items: center; color: var(--c-ink-faint); line-height: var(--lh-tight); }
+.chain b { display: block; }
+.chain span { color: var(--c-ink-soft); font-size: var(--fs-sm); }
+
+/* 时间线 */
+.timeline { list-style: none; padding: 0; border-left: var(--bw-thick) solid var(--c-line-strong); margin-left: var(--sp-2); }
+.timeline li { position: relative; padding: 0 0 var(--sp-5) var(--sp-5); margin: 0; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before { content: ""; position: absolute; left: calc((var(--dot) + var(--bw-thick)) / -2); top: var(--sp-2); width: var(--dot); height: var(--dot); border-radius: var(--radius-round); background: var(--c-accent); }
+.timeline li.future::before { background: var(--c-surface); border: var(--bw-thick) solid var(--c-accent); }
+.timeline time { font-weight: var(--fw-bold); display: block; }
+.timeline span { color: var(--c-ink-soft); font-size: var(--fs-sm); }
+
+/* 六项举措 */
+.six { list-style: none; padding: 0; display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(var(--w-col-min), 1fr)); }
+.six li { margin: 0; background: var(--c-surface); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); padding: var(--sp-4); }
+.six li.hit { border-color: var(--c-accent); background: var(--c-accent-soft); }
+.six b { display: block; }
+.six span { font-size: var(--fs-sm); color: var(--c-ink-soft); }
+
+/* 核对表 */
+.check { width: 100%; border-collapse: collapse; background: var(--c-surface); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); }
+.check th, .check td { text-align: left; vertical-align: top; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--c-line); }
+.check thead th { background: var(--c-surface-alt); font-size: var(--fs-sm); color: var(--c-ink-soft); }
+.check tbody th { font-weight: var(--fw-medium); width: var(--w-claim); }
+.check caption { text-align: left; color: var(--c-ink-soft); font-size: var(--fs-sm); padding-bottom: var(--sp-3); }
+.check td.v { width: var(--w-label); }
+.check .q { color: var(--c-ink-soft); font-size: var(--fs-sm); display: block; margin-top: var(--sp-1); }
+
+/* 三层 */
+.layer { border-top: var(--bw-accent) solid var(--c-line-strong); }
+.layer.l1 { border-top-color: var(--c-ok); }
+.layer.l2 { border-top-color: var(--c-accent); }
+.layer.l3 { border-top-color: var(--c-infer); }
+.layer .who { font-size: var(--fs-sm); color: var(--c-ink-faint); margin-bottom: var(--sp-2); }
+
+/* 成本条 */
+.bars { display: grid; gap: var(--sp-4); margin: var(--sp-4) 0; }
+.bar-row .lab { display: flex; justify-content: space-between; gap: var(--sp-3); font-size: var(--fs-sm); flex-wrap: wrap; }
+.bar-row .lab b { font-weight: var(--fw-medium); }
+.bar-track { background: var(--c-surface-alt); border: var(--bw) solid var(--c-line); border-radius: var(--radius-sm); height: var(--h-bar); margin-top: var(--sp-1); }
+.bar-fill { height: 100%; width: var(--w); min-width: var(--w-bar-min); background: var(--c-accent); border-radius: var(--radius-sm); }
+.bar-fill.cheap { background: var(--c-warn); }
+.ratio { background: var(--c-surface-alt); border: var(--bw) solid var(--c-line); border-radius: var(--radius-md); padding: var(--sp-4); }
+.ratio b { font-size: var(--fs-lg); display: block; line-height: var(--lh-tight); }
+.ratio span { font-size: var(--fs-sm); color: var(--c-ink-soft); }
+
+.quote { border-left: var(--bw-thick) solid var(--c-line-strong); padding-left: var(--sp-4); color: var(--c-ink-soft); margin: var(--sp-3) 0; }
+.quote cite { display: block; font-style: normal; font-size: var(--fs-xs); color: var(--c-ink-faint); margin-top: var(--sp-1); }
+
+.form h3 { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+.note { background: var(--c-warn-bg); color: var(--c-ink); border-radius: var(--radius-md); padding: var(--sp-4); border-left: var(--bw-accent) solid var(--c-warn); }
+.note b { color: var(--c-warn); }
+
+.safer { border-top: var(--bw) solid var(--c-line); margin-top: var(--sp-4); padding-top: var(--sp-3); }
+.safer b { color: var(--c-accent); }
+.terms { grid-template-columns: repeat(auto-fit, minmax(var(--w-col-min-wide), 1fr)); gap: var(--sp-3) var(--sp-5); }
+
+.gap { margin-top: var(--sp-4); }
+.card h3.gap-h { margin-top: var(--sp-5); }
+.sources { font-size: var(--fs-sm); }
+.sources li { margin-bottom: var(--sp-3); }
+.sources a { word-break: break-all; }
+
+footer { padding: var(--sp-7) 0; color: var(--c-ink-soft); font-size: var(--fs-sm); }
+
+@media (min-width: 1000px) {
+  .hero-grid { grid-template-columns: 1fr auto; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); align-items: start; }
+}
+@media (max-width: 720px) {
+  section { padding-top: var(--sp-6); }
+  .card { padding: var(--sp-4); }
+  .two > * + * { margin-top: var(--sp-4); }
+  .check, .check tbody, .check tr, .check th, .check td { display: block; width: 100%; }
+  .check thead { position: absolute; width: var(--px-1); height: var(--px-1); overflow: hidden; clip-path: var(--clip-hidden); }
+  .check tr { border-bottom: var(--bw-thick) solid var(--c-line); padding: var(--sp-3) 0; }
+  .check th, .check td { border: 0; padding: var(--sp-1) var(--sp-4); }
+  .check tbody th, .check td.v { width: 100%; }
+  .check td::before { content: attr(data-label); display: block; font-size: var(--fs-xs); color: var(--c-ink-faint); }
+  .facts div { grid-template-columns: 1fr; gap: var(--sp-1); }
+}
+@media (min-width: 721px) and (max-width: 999px) {
+  .two > * + * { margin-top: var(--sp-4); }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">视频逐字稿拆解 · 资料核对日 2026 年 10 月 2 日</p>
+      <h1>「子午线计划」:研究是真的,司令部还没成立,四种战争不是官方结论</h1>
+      <p class="lead">美国战争部 9 月 30 日宣布让马斯克等三人牵头,用 120 天研究未来战场。这一页把视频里的说法逐条对回官方文件和演讲原文,分清哪些是原话、哪些是讲述者自己的推演,再补上视频没讲的部分。</p>
+    </div>
+    <svg class="arc" viewBox="0 0 260 150" role="img" aria-label="示意图:太阳经过子午线时位于一天中的最高点">
+      <line x1="10" y1="130" x2="250" y2="130"/>
+      <path d="M 20 130 A 110 110 0 0 1 240 130"/>
+      <line x1="130" y1="130" x2="130" y2="20" class="dash"/>
+      <circle cx="130" cy="20" r="8"/>
+      <text x="138" y="46">正午 · 过子午线</text>
+      <text x="14" y="146">日出</text>
+      <text x="222" y="146">日落</text>
+    </svg>
+  </div>
+</header>
+
+<nav class="nav" aria-label="页内导航">
+  <div class="wrap">
+    <ul>
+      <li><a href="#verdict">结论</a></li>
+      <li><a href="#event">事件速览</a></li>
+      <li><a href="#terms">术语</a></li>
+      <li><a href="#layers">三层来源</a></li>
+      <li><a href="#check">逐条核对</a></li>
+      <li><a href="#forms">四种战争形态</a></li>
+      <li><a href="#missing">视频没讲的</a></li>
+      <li><a href="#brake">「刹车」现状</a></li>
+      <li><a href="#china">对我们的含义</a></li>
+      <li><a href="#next">接下来看什么</a></li>
+      <li><a href="#sources">存疑与来源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+<section id="verdict">
+  <div class="wrap">
+    <h2>结论</h2>
+    <div class="card verdict">
+      <p>子午线计划确实宣布了:三人共同牵头,120 天,2027 年 1 月 28 日前交报告。这些都能在官方文件和演讲里对上。视频的问题出在三个地方。</p>
+      <ul>
+        <li><b>把还没发生的事说成已经发生。</b>自主作战司令部只是宣布要建,目标成立日是 2027 年 10 月 1 日,还需要国会立法。子午线交出的是一份建议,不会「直接开发装备」。</li>
+        <li><b>把同一场演讲里的不同项目拼成了一个计划。</b>「雷雨」比喻出自讲自主作战司令部的段落,基地自己发电和物资回流属于另一项本土防御举措。它们都不是子午线计划的任务。</li>
+        <li><b>把自己的推演讲得像官方结论。</b>四种战争形态、「伦理禁区重新打开」、子午线的寓意,官方文件里都没有。「几百美元换几千万美元」的价差,也比能查到的公开数字大了两个数量级左右。</li>
+      </ul>
+      <p class="gap">视频完全没提的一件事同样重要:三位牵头人中有两位的公司正拿着美军的大额合同。</p>
+    </div>
+    <div class="grid stats">
+      <div class="stat ok"><b>14 项</b><span>属实,能对上原文</span></div>
+      <div class="stat warn"><b>9 项</b><span>有偏差,或只对了一部分</span></div>
+      <div class="stat infer"><b>2 项</b><span>是讲述者的推演,文件里没有</span></div>
+      <div class="stat unk"><b>1 项</b><span>本次只核对到一部分</span></div>
+    </div>
+    <p class="sec-note">以上是把视频里 26 条可核对的说法逐条对照后的计数,明细见「逐条核对」。「属实」只表示官方确实这样说过或写过,不表示事情已经做成。四种战争形态单独放在后面分析,不计入这 26 条。</p>
+  </div>
+</section>
+
+<section id="event">
+  <div class="wrap">
+    <h2>事件速览</h2>
+    <p class="sec-note">先把事情本身讲清楚。除时间线里 2012 年那一条外,以下内容都来自官方演讲全文、两份备忘录和官方新闻稿。</p>
+    <div class="two">
+      <div class="card">
+        <h3>发生了什么</h3>
+        <dl class="facts">
+          <div><dt>时间地点</dt><dd>2026 年 9 月 30 日,战争部长赫格塞思在弗吉尼亚州匡提科海军陆战队基地发表「State of the Force」演讲(北京时间已是 10 月 1 日)</dd></div>
+          <div><dt>计划名称</dt><dd>Project Meridian,新华社译作「子午线计划」</dd></div>
+          <div><dt>要做什么</dt><dd>研究未来战场,找出作战人员需要的武器和技术,提出可以马上开始研发、测试、列装的方案</dd></div>
+          <div><dt>重点领域</dt><dd>人工智能、自主系统、定向能、机器人、生物技术,「以及其他关键高技术领域」</dd></div>
+          <div><dt>范围</dt><dd>演讲原话是「从地下到月球以外」;新闻稿的说法是「从地下深处到地月空间」</dd></div>
+          <div><dt>不做什么</dt><dd>演讲明说:不是制定新战略,也不是制定新政策</dd></div>
+          <div><dt>交付</dt><dd>宣布后 120 天内,即 2027 年 1 月 28 日前提交;公开发布,另附机密附录</dd></div>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>谁在做</h3>
+        <ol class="chain">
+          <li><b>赫格塞思(Pete Hegseth)</b><span>战争部长,签发委托备忘录</span></li>
+          <li><b>埃米尔·迈克尔(Emil Michael)</b><span>战争部首席技术官,计划在他领导下进行</span></li>
+          <li><b>一家「合作机构」</b><span>备忘录写明通过合作机构委托,没有写机构名称</span></li>
+          <li><b>三位共同牵头人</b><span>马斯克;帕尔默·勒基(Palmer Luckey,安杜里尔创始人);纽特·金里奇(前众议院议长)</span></li>
+          <li><b>专家团队</b><span>演讲说是「亲自挑选的」私营部门负责人和领域专家,名单未公布</span></li>
+        </ol>
+        <p class="sec-note">备忘录本身没有点三位牵头人的名字,三人是部长在演讲里宣布的。</p>
+      </div>
+    </div>
+
+    <h3 class="sr">同一场演讲的六项宣布</h3>
+    <div class="card gap">
+      <h3>它只是同一天六项宣布里的一项</h3>
+      <p>官方新闻稿列了六项举措。视频讲到了其中三项(蓝色),并把它们串成了一个故事。「雷雨」比喻和「十年前就该想到」属于自主作战司令部,基地自发电和物资回流属于 FORTRESS America,都不在子午线计划的任务里。</p>
+      <ul class="six">
+        <li class="hit"><b>子午线计划</b><span>120 天的未来战场研究</span></li>
+        <li class="hit"><b>自主作战司令部</b><span>四星级职能司令部,目标 2027 年 10 月 1 日成立</span></li>
+        <li class="hit"><b>FORTRESS America</b><span>本土韧性:基地自发电、关键物资回流、战略储备</span></li>
+        <li><b>America's Corps of Cadets</b><span>扩大军官培养来源</span></li>
+        <li><b>Next Great American Base</b><span>从零新建一座大型基地</span></li>
+        <li><b>宗教事务办公室</b><span>直接向部长汇报</span></li>
+      </ul>
+    </div>
+
+    <div class="card gap">
+      <h3>时间线</h3>
+      <ol class="timeline">
+        <li><time datetime="2012-01-25">2012 年 1 月</time><span>金里奇竞选总统时在佛罗里达承诺:第二个任期结束前在月球建成永久基地。视频提到的就是这件事。</span></li>
+        <li><time datetime="2026-09-30">2026 年 9 月 30 日</time><span>匡提科演讲,宣布六项举措;子午线计划和「阿金库尔计划」(筹建自主作战司令部的过渡项目)两份备忘录同日发布。部长说子午线的首次会议在演讲结束后立刻召开。</span></li>
+        <li class="future"><time>备忘录签发后 30 天内</time><span>司令部这条线:阿金库尔计划要交出行动计划与里程碑。</span></li>
+        <li class="future"><time datetime="2027-01-28">2027 年 1 月 28 日</time><span>子午线这条线:研究报告截止日。120 天是交报告的期限,不是造出装备的期限。</span></li>
+        <li class="future"><time datetime="2027-10-01">2027 年 10 月 1 日</time><span>司令部这条线:自主作战司令部的目标成立日,前提是国会完成必要立法。</span></li>
+      </ol>
+    </div>
+
+    <div class="card gap" id="terms">
+      <h3>后文会用到的几个词</h3>
+      <dl class="facts terms">
+        <div><dt>自主系统</dt><dd>不需要人逐步操控、能自己完成一部分任务的无人机、无人艇、机器人等。</dd></div>
+        <div><dt>可消耗</dt><dd>成本和数量设计得能承受一定损失的装备。不等于一次性武器,也不等于注定被摧毁。</dd></div>
+        <div><dt>定向能</dt><dd>用激光、微波这类能量束而不是弹药去打目标的武器。</dd></div>
+        <div><dt>杀伤链</dt><dd>从发现目标、确认、下决定到打击、评估效果的整个流程。</dd></div>
+        <div><dt>成本交换</dt><dd>打掉对方一件东西,自己花的钱和对方损失的钱相比谁更划算。</dd></div>
+        <div><dt>高低搭配</dt><dd>少量昂贵的高端武器,加上大量便宜的装备,两种一起用。</dd></div>
+        <div><dt>职能司令部</dt><dd>按任务类型而不是按地区划分的美军最高一级作战司令部,例如网络司令部。</dd></div>
+        <div><dt>类似军种的权限</dt><dd>官方的提法。大意是让它承担一部分通常由陆军、海军这类军种负责的需求、装备和训练工作;具体有哪些权限,还要等立法和后续文件确定。</dd></div>
+        <div><dt>列装</dt><dd>装备通过测试后,正式配发到部队使用。</dd></div>
+        <div><dt>频谱</dt><dd>通信、导航、遥控用到的无线电频率。干扰和抗干扰就是在争它。</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="layers">
+  <div class="wrap">
+    <h2>三层来源要分开看</h2>
+    <p class="sec-note">视频把三种分量不同的东西混在一起讲。备忘录是规定任务和期限的正式文件,演讲是部长的口头表态,推演是讲述者的个人判断。</p>
+    <div class="grid wide">
+      <div class="card layer l1">
+        <p class="who">第一层 · 备忘录写了什么</p>
+        <h3>一份委托研究的文件</h3>
+        <ul>
+          <li>通过合作机构委托一项研究</li>
+          <li>五个领域,加「其他关键高技术领域」</li>
+          <li>研究未来战场,提出可执行的方案</li>
+          <li>不晚于 2027 年 1 月 28 日</li>
+        </ul>
+        <p>备忘录里没有三位牵头人的名字,也没有「不受创意限制」。</p>
+      </div>
+      <div class="card layer l2">
+        <p class="who">第二层 · 部长演讲说了什么</p>
+        <h3>人选、口号和比喻</h3>
+        <ul>
+          <li>三位共同牵头人</li>
+          <li>「不受任何创意限制」「从地下到月球以外」</li>
+          <li>「十年前就该想到」</li>
+          <li>「雷雨」比喻和「高低搭配」</li>
+          <li>公开发布加机密附录</li>
+        </ul>
+        <p>演讲的听众是基层骨干,措辞带有动员色彩。</p>
+      </div>
+      <div class="card layer l3">
+        <p class="who">第三层 · 讲述者自己的推演</p>
+        <h3>四种战争和伦理担忧</h3>
+        <ul>
+          <li>四种战争形态的命名和大部分细节</li>
+          <li>伦理禁区里的武器「重新摆上桌」</li>
+          <li>战争对发动者变便宜、门槛变低</li>
+          <li>「子午线」的寓意</li>
+        </ul>
+        <p>这一层可以讨论,但不能当作美方的官方计划来引用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="check">
+  <div class="wrap">
+    <h2>逐条核对</h2>
+    <p class="sec-note">每条先列视频的说法,再列我在原文里找到的内容,最后是判定。视频里的人名是语音转写,这里按原意对照。</p>
+    <table class="check">
+      <caption>视频里 26 条可核对的说法与原文对照</caption>
+      <thead>
+        <tr><th scope="col">视频的说法</th><th scope="col">核对到的内容</th><th scope="col">判定</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">国庆期间美国战争部启动「子午线」</th><td data-label="核对到的内容">美国时间 9 月 30 日宣布,北京时间为 10 月 1 日。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">要回答「二三十年后仗怎么打」</th><td data-label="核对到的内容">演讲说的是「我们的子女和孙辈一生中需要的武器和系统」,并说「它是有意面向未来的」。「二三十年」是讲述者的概括,方向一致。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">回答问题的不是将军,是马斯克</th><td data-label="核对到的内容">三人共同牵头,加一支专家团队,由战争部首席技术官领导。官方给的理由是「最好的预测者不只在五角大楼里」「自己出题自己答有偏见」。</td><td class="v" data-label="判定"><span class="tag warn">有偏差</span></td></tr>
+        <tr><th scope="row">牵头的是马斯克、「帕里莫·拉奇」、金里奇</th><td data-label="核对到的内容">三人属实。第二位是 Palmer Luckey,新华社译作帕尔默·勒基。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">安杜里尔造无人机、无人潜艇和战场指挥软件,是最火的新军工公司</th><td data-label="核对到的内容">Fox 的描述是「专做自主武器和其他先进军事系统」。无人潜艇和指挥软件这两项,本次没有逐项找来源核对;「最火」是评价。</td><td class="v" data-label="判定"><span class="tag unk">部分核对</span></td></tr>
+        <tr><th scope="row">金里奇 2012 年竞选时承诺建月球永久基地</th><td data-label="核对到的内容">NPR 和《卫报》当时都有报道,原话是「到我第二个任期结束时,我们将在月球上拥有第一个永久基地」。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">由首席技术官「迈克尔」统筹</th><td data-label="核对到的内容">Emil Michael,演讲原话是「在首席技术官领导下」。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">研究未来战场、需要什么武器,然后直接开发测试装备部队</th><td data-label="核对到的内容">备忘录的措辞是「提出可执行的方案,以便开始研发、测试和列装」。研究团队交出的是建议,开发、测试和列装不在这项研究之内。</td><td class="v" data-label="判定"><span class="tag warn">有偏差</span></td></tr>
+        <tr><th scope="row">五个重点领域</th><td data-label="核对到的内容">与备忘录一致;原文后面还有一句「以及其他关键高技术领域」。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">从地底下到月球以外</th><td data-label="核对到的内容">演讲原话。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">不讲眼下的战略,也不讲政策</th><td data-label="核对到的内容">演讲原话:不是为了制定新战略或新政策。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">不受任何创意上的限制</th><td data-label="核对到的内容">是原话,但出自演讲,备忘录里没有这句。视频说「备忘录里写得很清楚」,出处说错了。原话限定在发现、开发、部署武器系统的创意上。</td><td class="v" data-label="判定"><span class="tag warn">出处有偏差</span></td></tr>
+        <tr><th scope="row">不用先问合不合规矩、预算够不够;被伦理挡在门外的武器可能重新摆上桌</th><td data-label="核对到的内容">两份备忘录和演讲里都没有这些话。这是讲述者对「不受创意限制」的引申。</td><td class="v" data-label="判定"><span class="tag infer">讲述者推演</span></td></tr>
+        <tr><th scope="row">120 天,2027 年 1 月 28 日前交公开报告加机密附录</th><td data-label="核对到的内容">日期见备忘录,公开发布和机密附录见演讲。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">赫格塞思说「十年前就该想到建自主作战司令部」</th><td data-label="核对到的内容">演讲原话。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">同一天,这个司令部也宣布成立了</th><td data-label="核对到的内容">当天宣布的是创建决定和过渡项目。备忘录写明目标成立日为 2027 年 10 月 1 日,并且需要与国会合作取得立法。演讲说的是「我们很快会有一位四星指挥官」。</td><td class="v" data-label="判定"><span class="tag warn">有偏差</span></td></tr>
+        <tr><th scope="row">四星级,专管无人机、机器人和自主武器</th><td data-label="核对到的内容">演讲:新的四星级作战司令部,并将拥有类似军种的权限。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">下一场战争要按「硅谷的速度」准备</th><td data-label="核对到的内容">原话是「按商业的速度」。意思接近,「硅谷」是讲述者换的词。</td><td class="v" data-label="判定"><span class="tag warn">有偏差</span></td></tr>
+        <tr><th scope="row">过去四十年美军迷信贵而精</th><td data-label="核对到的内容">演讲原话:四十年来主要依靠把质量置于数量之上的昂贵武器。同一段紧接着说这些能力要保留。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">「雷雨」比喻:高端武器是闪电,廉价无人机是风和雨</th><td data-label="核对到的内容">原话。它出现在讲自主作战司令部的段落,落点是「质量和数量都要」。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">几百、几千美元的无人机换几千万美元的导弹</th><td data-label="核对到的内容">能查到的公开对比是 2 万到 5 万美元的无人机对约 400 万美元的拦截弹。详见下文成本对比。</td><td class="v" data-label="判定"><span class="tag warn">量级偏大</span></td></tr>
+        <tr><th scope="row">美国要求每个军事基地自己发电</th><td data-label="核对到的内容">演讲原话是「每一个大型军事设施」,独立于民用电网。</td><td class="v" data-label="判定"><span class="tag ok">属实</span></td></tr>
+        <tr><th scope="row">稀土、芯片、弹药全部回本土制造</th><td data-label="核对到的内容">回流清单是稀土、特种金属、半导体和推进剂。弹药出现在「战略储备」那一项里。</td><td class="v" data-label="判定"><span class="tag warn">有偏差</span></td></tr>
+        <tr><th scope="row">乌克兰战场上算法和抗干扰频段几个星期就要换一次</th><td data-label="核对到的内容">西点现代战争研究所刊发的一篇文章写到,电子战与反制的循环在数周内重复。同一篇文章也写到,乌克兰厂商的硬件设计一年迭代三到四次。两句讲的是不同层面:对抗手段变得快,硬件慢一些。</td><td class="v" data-label="判定"><span class="tag warn">部分属实</span></td></tr>
+        <tr><th scope="row">全世界最完整的无人机、电池、电机产业链在中国</th><td data-label="核对到的内容">欧洲政策分析中心估计中国占全球无人机市场的 80% 到 90%,并主导零部件生产。这是市场份额的估计。「最完整」没有找到直接的量化说法,电池和电机也没有单独核对。</td><td class="v" data-label="判定"><span class="tag warn">方向有据</span></td></tr>
+        <tr><th scope="row">子午线是太阳升到最高点的那条线,过了线影子变长</th><td data-label="核对到的内容">天文上没错。但官方没有解释这个名字的含义,这层寓意是讲述者加的。</td><td class="v" data-label="判定"><span class="tag infer">讲述者推演</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="forms">
+  <div class="wrap">
+    <h2>四种战争形态:哪些有依据</h2>
+    <p class="sec-note">讲述者说这是「结合公开方向的推演」。它们更像四个可以同时发生的变化方向,不是四种互相替代的战争。下面每一种都分三块:官方文本里有什么,外部证据说什么,哪里需要打折,最后给一句更稳妥的说法。标签的颜色表示依据多少,不表示对错。</p>
+
+    <div class="card form">
+      <h3>数量战争:便宜打昂贵 <span class="tag ok">依据最足</span></h3>
+      <div class="two">
+        <div>
+          <h4>官方文本</h4>
+          <blockquote class="quote">我们需要闪电,也就是现有的高端杀伤链,能够出其不意地做出决定性打击。我们也需要持续的风和雨,也就是大量无人机和其他可消耗的自主系统,它们能翻转成本交换。<cite>赫格塞思演讲,2026 年 9 月 30 日(本页译)</cite></blockquote>
+          <p>同一段还说:「今天我们质量和数量都需要」,做法叫「高低搭配」。阿金库尔备忘录也写到要站到「成本交换的有利一侧」。</p>
+          <h4>需要打折的地方</h4>
+          <ul>
+            <li>原意是在保留高端武器的前提下加上数量,不是用便宜货取代贵货。</li>
+            <li>视频给的价差比公开数字大得多(见右)。</li>
+            <li>同一份欧洲研究指出,只要几千美元的拦截无人机出现后,成本上的不对称反而可能有利于防守方。便宜的一方不一定是进攻方。</li>
+            <li>「决定胜负的是工厂一天造多少架」是讲述者的引申,与「质量数量都要」方向一致,但官方没有这样表述。</li>
+          </ul>
+        </div>
+        <div>
+          <h4>外部证据:公开的单价对比</h4>
+          <p>欧洲政策中心 2026 年 3 月的文章给出的数字,按同一比例画出来是这样:</p>
+          <div class="bars">
+            <div class="bar-row"><div class="lab"><b>THAAD 拦截弹</b><span>1200 万到 1500 万美元</span></div><div class="bar-track"><div class="bar-fill" style="--w: 100%"></div></div></div>
+            <div class="bar-row"><div class="lab"><b>爱国者拦截弹</b><span>约 400 万美元</span></div><div class="bar-track"><div class="bar-fill" style="--w: 26.7%"></div></div></div>
+            <div class="bar-row"><div class="lab"><b>Shahed-136 无人机</b><span>2 万到 5 万美元</span></div><div class="bar-track"><div class="bar-fill cheap" style="--w: 0.33%"></div></div></div>
+            <div class="bar-row"><div class="lab"><b>拦截无人机</b><span>几千美元</span></div><div class="bar-track"><div class="bar-fill cheap" style="--w: 0.03%"></div></div></div>
+          </div>
+          <p class="sec-note">条长按区间上限画;最后两条按比例细到看不见,这里给了最小可见宽度。这些是单件造价的估计,不是某一次实战里真实发生的交换比。</p>
+          <div class="grid">
+            <div class="ratio"><b>80 到 200 倍</b><span>公开数字:爱国者拦截弹对 Shahed 无人机</span></div>
+            <div class="ratio"><b>一万倍以上</b><span>视频的说法:几千万美元对几百、几千美元</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="safer"><b>更稳妥的说法:</b>数量和持续补充的重要性在上升,但它是加在高端武器之上,不是取代高端武器。</p>
+    </div>
+
+    <div class="card form gap">
+      <h3>秒级战争:人跟不上了 <span class="tag infer">主要是推演</span></h3>
+      <div class="two">
+        <div>
+          <h4>官方文本</h4>
+          <p>子午线的五个领域里有人工智能和自主系统;新司令部专管自主作战;演讲里把「廉价算力、超级智能和先进商业制造」并列为低成本精确打击扩散的原因。</p>
+          <p>「从几小时压缩到几秒」「指挥官变成盯着屏幕监督上万个 AI 的人」这两句,在我核对的官方原文里没有找到。</p>
+        </div>
+        <div>
+          <h4>需要打折的地方</h4>
+          <ul>
+            <li>官方发布站目前挂出的自主武器规定(见「刹车」一节)要求系统的设计允许人行使适当程度的判断。它没有要求每次开火都由人批准,也没有允许把人完全拿掉。</li>
+            <li>速度不只取决于算法。目标识别出错的代价、通信被干扰、交战规则都会拖慢节奏。这一条是我的分析,没有专门查证。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="safer"><b>更稳妥的推测:</b>人工智能和自主系统可能缩短一部分作战流程;人在这种速度下怎样保持有效判断,本页没有进一步核实。</p>
+    </div>
+
+    <div class="card form gap">
+      <h3>没有前线的战争 <span class="tag ok">防御一侧有依据</span></h3>
+      <div class="two">
+        <div>
+          <h4>官方文本</h4>
+          <blockquote class="quote">如果对手通过网络攻击或破坏让电网瘫痪,我们的基地依然灯火通明。<cite>赫格塞思演讲,FORTRESS America 部分(本页译)</cite></blockquote>
+          <p>这一项举措还包括:稀土、特种金属、半导体、推进剂回本土生产;弹药、燃料、药品、血液的战略储备;加固基地;保护卫星和频谱。所以,美方担心电网受攻击有直接依据;「对手会先打电网、断供应链」这个先后顺序,仍是讲述者的推演。</p>
+        </div>
+        <div>
+          <h4>需要打折的地方</h4>
+          <ul>
+            <li>「第一枪是让对手的卫星一夜全瞎」「派机器人钻进地下几百米打」是讲述者的想象。官方只给了范围(地下到月球以外)和防御措施(保护卫星与频谱),没有描述具体打法。</li>
+            <li>官方说的是美国本土怎么防,不是美军打算怎么攻。视频把两者合成了一幅图景。</li>
+            <li>这些防御措施属于 FORTRESS America,不是子午线计划的内容。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="safer"><b>更稳妥的说法:</b>前方和后方的界限在变模糊,美方已经把本土的电网、基地和供应链当成需要设防的对象。</p>
+    </div>
+
+    <div class="card form gap">
+      <h3>按周升级的战场 <span class="tag warn">部分属实</span></h3>
+      <div class="two">
+        <div>
+          <h4>官方文本与外部证据</h4>
+          <p>演讲对乌克兰的总结是:教训不在于哪一种无人机能赢,而在于需要一套能把适应能力放到最大的体系。阿金库尔备忘录写道:「我们没有十年时间。」</p>
+          <p>西点现代战争研究所刊发的一篇文章写到,电子战压制一种能力,反制手段出现,这个循环在数周内重复。这是文章作者的描述,不是军方的统计。</p>
+        </div>
+        <div>
+          <h4>需要打折的地方</h4>
+          <ul>
+            <li>几周一变的是对抗手段。同一篇文章写到,乌克兰厂商的硬件设计一年迭代三到四次。前线改得快,不等于验证、训练和大批量生产也能同样快。</li>
+            <li>文章同时指出,美国重大系统的采办常常要十二年。新司令部要拿「类似军种的权限」,可以放在这个背景下理解。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="safer"><b>更稳妥的说法:</b>战场上局部的对抗手段可以几周一变;整支军队的装备、训练和生产能不能跟上,是另一回事。</p>
+    </div>
+  </div>
+</section>
+
+<section id="missing">
+  <div class="wrap">
+    <h2>视频没讲的</h2>
+    <p class="sec-note">要全面了解这件事,下面几点和视频讲到的内容同样重要。</p>
+    <div class="grid wide">
+      <div class="card">
+        <h3>牵头人的公司正在拿军方合同</h3>
+        <p>CNBC 报道,马斯克的 SpaceX 今年 5 月拿到太空军 41.6 亿美元的卫星合同,另有一份 22.9 亿美元的军用卫星通信合同;勒基的安杜里尔 2025 年拿到海军陆战队最高 6.42 亿美元的反无人机合同。「最高」指合同上限,不等于已经付出去的钱。</p>
+        <p>CNBC 的说法是,这项任命让两人在自己公司竞争数十亿美元订单的同时,处在帮助确定军方未来技术需求的有利位置。Fox 也提到可能引发利益冲突的疑问。三方没有回应 CNBC 的置评请求。</p>
+        <p>在我核对的材料里,没有看到三人怎样披露利益、涉及自家产品时是否回避的安排。这是该追问的问题,不是已经证实的违规。</p>
+      </div>
+      <div class="card">
+        <h3>三位牵头人都没有从军经历</h3>
+        <p>这是 CNBC 报道里的原话。官方把它当优点讲:让圈外人来问圈内人不会问的问题。没当过兵不能说明研究结论会错。只是报告的建议最终要靠军方自己判断能不能落地,备忘录也要求各军种与研究团队对接。</p>
+      </div>
+      <div class="card">
+        <h3>报告只是建议</h3>
+        <p>备忘录的用词是「提出方案」。要变成装备,还要经过预算、采办和国会。自主作战司令部同样如此:备忘录写明需要国会立法。</p>
+        <p>部长自己也说,设 120 天期限是为了不让它变成「又一份没完没了的五角大楼研究」。这句话反映出他担心研究拖延或者没有结果。</p>
+      </div>
+      <div class="card">
+        <h3>合作机构是谁,没有公布</h3>
+        <p>备忘录说研究通过一家合作机构委托。机构的名称、专家名单、经费来源,在我核对的材料里都没有出现。公开报告出来之前,外界很难充分评估研究过程。</p>
+      </div>
+      <div class="card">
+        <h3>这场演讲不只讲了技术</h3>
+        <p>同一场演讲还宣布了设立宗教事务办公室、新建大型基地、扩大军官培养来源,并且有裁减两成将官、指责部分媒体等内容。子午线计划是放在一整套政治议程里推出的。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="brake">
+  <div class="wrap">
+    <h2>「最后一道刹车」现在是什么状态</h2>
+    <p class="sec-note">视频结尾担心扳机快到人来不及犹豫。这是讲述者的观点,官方文本没有谈伦理。可以核对的是美军已公开的规定怎么写。</p>
+    <div class="two">
+      <div class="card">
+        <h3>目前公开的规定:国防部第 3000.09 号指令</h3>
+        <p>官方发布站上挂的是 2023 年 1 月 25 日的版本(2026 年 10 月 1 日抓取)。三条要点:</p>
+        <ul>
+          <li>自主和半自主武器系统的设计,要让指挥官和操作员能对使用武力行使「适当程度的人类判断」。</li>
+          <li>自主武器系统在正式研发前、列装前,各需要三位高级官员批准。</li>
+          <li>在紧急军事需要的情况下,可以向副部长申请豁免。</li>
+        </ul>
+        <h4>这份规定正在被要求更新</h4>
+        <p>白宫 2026 年 6 月 5 日发布的第 11 号国家安全总统备忘录要求:战争部长在 90 天内发布这份指令的更新版,此后每年审查一次,以跟上人工智能能力的变化,并确保采用的人工智能系统尊重指挥链和作战权限。</p>
+        <p>90 天的期限在 9 月初已过。我没有找到公开的更新版,官方发布站上仍是 2023 年的文本。更新版有没有签发、改了什么,本次没有核实到。</p>
+      </div>
+      <div class="card">
+        <h3>怎么理解讲述者的担忧</h3>
+        <ul>
+          <li><b>有依据的部分:</b>规定写的是「适当程度」,没有写每一次开火都要人批准,而且留了豁免口子。白宫已经要求更新这份规定,理由是跟上人工智能的发展。一个专管自主武器的四星司令部成立后,这些条款怎么改、怎么执行,值得持续看。</li>
+          <li><b>没有依据的部分:</b>子午线的备忘录没有提到这份指令,我也没有看到它已被放宽或废除的公开文件。「伦理禁区被打开」是一种可能,不是已经核实的事。</li>
+          <li><b>没有查证的部分:</b>「机器上战场会让发动战争的门槛变低」是一个长期有争论的判断,本次没有专门去查支持和反对的研究。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="china">
+  <div class="wrap">
+    <h2>对我们意味着什么</h2>
+    <div class="grid wide">
+      <div class="card">
+        <h3>产业链这张牌:有,但别高估</h3>
+        <p>欧洲政策分析中心 2026 年 5 月的文章估计,中国占全球无人机市场的 80% 到 90%,并主导关键矿产、原材料和无人机零部件的生产。战略与国际研究中心 2024 年 12 月的文章说,大疆占全球消费级无人机约 80%,中国在小型锂电池等部件上领先。</p>
+        <p>两个数字口径不同:前一个是一个国家在整个市场里的份额,后一个是一家公司在消费级产品里的份额,不能相加或互相替代。它们说的都是民用市场和零部件供应,能说明产能和成本优势,不能直接等同于军用体系的作战能力。最后这句是我的判断。</p>
+      </div>
+      <div class="card">
+        <h3>「军民融合」的类比只对了一半</h3>
+        <p>讲述者说,把民营企业拉进国防,我们早就在做。相似之处是都想借用民用技术的速度。</p>
+        <p>不同之处在于,美方这次是请承包商的创始人来牵头回答「军队未来需要什么」。它的风险主要在利益冲突上,前面已经讲过。</p>
+      </div>
+      <div class="card">
+        <h3>120 天能说明什么</h3>
+        <p>讲述者认为期限是在逼官僚体系换节奏,这与部长「不做没完没了的研究」的说法一致。</p>
+        <p>但 120 天产出的是一份报告。真正检验速度的是后面两件事:报告里的建议有多少拿到预算,司令部能不能如期拿到立法。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <h2>接下来看什么</h2>
+    <div class="card">
+      <ul>
+        <li><b>2027 年 1 月 28 日的公开报告。</b>看它点了哪些具体技术,有没有涉及现行自主武器规定,建议里有多少直接对应牵头人自家公司的产品。</li>
+        <li><b>合作机构和专家名单是否公布。</b>这决定外界能不能评估利益冲突是怎么处理的。</li>
+        <li><b>国会对自主作战司令部的立法。</b>没有立法,2027 年 10 月 1 日的目标就落不了地。</li>
+        <li><b>第 3000.09 号指令的更新版。</b>白宫要求的更新期限已过,公开版本还没看到。如果讲述者担心的「刹车松动」真的发生,最可能先在这里看到。</li>
+        <li><b>预算。</b>廉价无人机「铺天盖地」需要的是订单和产能,看后续拨款里低成本系统占多大比重。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <h2>存疑与来源</h2>
+    <div class="note">
+      <p><b>本页的限度。</b>所有来源在 2026 年 10 月 1 日至 2 日打开核对;第 3000.09 号指令是否已有更新版,没有核实到;事件刚发生两天,后续报道可能改变细节。英文引语为本页自译。以下几处没有专门找来源:安杜里尔的具体产品线、《球状闪电》的内容、「战争门槛变低」的学术争论、中国军民融合政策的细节。讲述者的身份和视频出处未知,本页只依据逐字稿。</p>
+    </div>
+    <div class="card sources gap">
+      <h3>官方一手文件</h3>
+      <ol>
+        <li>赫格塞思「State of the Force」演讲全文(As Delivered),美国战争部,2026-09-30。<a href="https://www.war.gov/News/Speeches/Speech/Article/4616486/secretary-of-war-pete-hegseths-state-of-the-force-address-as-delivered/">war.gov/News/Speeches/…/4616486</a></li>
+        <li>Commissioning of Project Meridian 备忘录(PDF)。<a href="https://media.defense.gov/2026/Sep/30/2004009287/-1/-1/1/COMMISSIONING-OF-PROJECT-MERIDIAN.PDF">media.defense.gov/…/COMMISSIONING-OF-PROJECT-MERIDIAN.PDF</a></li>
+        <li>Project Agincourt: Pathway to the Autonomous Warfare Command 备忘录(PDF)。<a href="https://media.defense.gov/2026/Sep/30/2004009304/-1/-1/1/PROJECT-AGINCOURT-PATHWAY-TO-THE-AUTONOMOUS-WARFARE-COMMAND.PDF">media.defense.gov/…/PROJECT-AGINCOURT…PDF</a></li>
+        <li>官方新闻稿:Secretary Hegseth Announces Six Major Initiatives at Quantico Speech,2026-09-30。<a href="https://www.war.gov/News/Releases/Release/Article/4615424/secretary-hegseth-announces-six-major-initiatives-at-quantico-speech/">war.gov/News/Releases/…/4615424</a></li>
+        <li>DoD Directive 3000.09, Autonomy in Weapon Systems,2023-01-25(PDF)。<a href="https://www.esd.whs.mil/portals/54/documents/dd/issuances/dodd/300009p.pdf">esd.whs.mil/…/300009p.pdf</a></li>
+        <li>白宫:National Security Presidential Memorandum/NSPM-11,2026-06-05,要求更新第 3000.09 号指令。<a href="https://www.whitehouse.gov/presidential-actions/2026/06/national-security-presidential-memorandum-nspm-11/">whitehouse.gov/presidential-actions/2026/06/…nspm-11</a></li>
+      </ol>
+      <h3 class="gap-h">媒体报道</h3>
+      <ol start="7">
+        <li>CNBC,2026-09-30:三人背景、合同金额、无从军经历。<a href="https://www.cnbc.com/2026/09/30/musk-luckey-gingrich-pentagon-hegseth-.html">cnbc.com/2026/09/30/…</a></li>
+        <li>Fox News:利益冲突疑问、安杜里尔业务描述。<a href="https://www.foxnews.com/politics/elon-musk-lands-new-trump-admin-role-shaping-future-american-warfare">foxnews.com/politics/…</a></li>
+        <li>The Hill:演讲要点。<a href="https://thehill.com/policy/defense/6121765-pete-hegseth-takeaways-command-warfare-base/">thehill.com/policy/defense/6121765…</a></li>
+        <li>The Next Web:合作机构未具名。<a href="https://thenextweb.com/news/pentagon-project-meridian-musk-luckey-gingrich">thenextweb.com/news/pentagon-project-meridian…</a></li>
+        <li>新华网,2026-10-02:中文译名。<a href="https://www.news.cn/world/20261002/ec8cdc9827a643279cc29b1c7ce7f429/c.html">news.cn/world/20261002/…</a></li>
+        <li>NPR,2012-01-26:金里奇月球基地承诺。<a href="https://www.npr.org/2012/01/26/145882817/-president-gingrich-promises-permanent-moon-base">npr.org/2012/01/26/145882817/…</a></li>
+        <li>The Guardian,2012-01-25:同一事件。<a href="https://www.theguardian.com/world/blog/2012/jan/25/newt-gingrich-moon-base">theguardian.com/world/blog/2012/jan/25/…</a></li>
+      </ol>
+      <h3 class="gap-h">研究机构</h3>
+      <ol start="14">
+        <li>Modern War Institute at West Point:Build at Scale, Innovate at the Edge, Close the Feedback Loop Fast。<a href="https://mwi.westpoint.edu/build-at-scale-innovate-at-the-edge-close-the-feedback-loop-fast-transforming-acquisition-for-the-drone-age/">mwi.westpoint.edu/build-at-scale…</a></li>
+        <li>European Policy Centre,2026-03-09:The new economics of warfare。<a href="https://www.epc.eu/publication/the-new-economics-of-warfare/">epc.eu/publication/the-new-economics-of-warfare/</a></li>
+        <li>CEPA,2026-05-28:Breaking Free from China's Drone Ecosystem Is Harder Than You Think。<a href="https://cepa.org/article/reality-check-breaking-free-from-chinas-drone-ecosystem-is-harder-than-you-think/">cepa.org/article/reality-check…</a></li>
+        <li>CSIS,2024-12-16:Why China's UAV Supply Chain Restrictions Weaken Ukraine's Negotiating Power。<a href="https://www.csis.org/analysis/why-chinas-uav-supply-chain-restrictions-weaken-ukraines-negotiating-power">csis.org/analysis/why-chinas-uav-supply-chain…</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">依据用户提供的视频逐字稿与 17 个公开来源整理。判定只针对逐字稿里的说法,不代表对事件本身的立场。</div>
+</footer>
+
+</body>
+</html>

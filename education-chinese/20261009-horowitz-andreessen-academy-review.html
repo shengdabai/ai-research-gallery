@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Horowitz Andreessen Academy 全景研究：学校画像、七信号证据、成本权益、争议风险与待验证实验。">
+<title>Horowitz Andreessen Academy 全景研究</title>
+<style>
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --ink: #203044;
+  --muted: #536477;
+  --blue: #2a5f9e;
+  --blue-soft: #eaf1f8;
+  --blue-mid: #c4d6e9;
+  --warm: #a6532b;
+  --warm-soft: #f8ece6;
+  --verified: #27674f;
+  --verified-soft: #eaf4ee;
+  --unknown: #626d7b;
+  --unknown-soft: #edf0f4;
+  --line: #d7e0e9;
+  --transparent: transparent;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-body: 16px;
+  --fs-lg: 18px;
+  --fs-card: 20px;
+  --fs-section: 28px;
+  --fs-title: 46px;
+  --fs-number: 38px;
+  --fs-hero-number: 43px;
+  --fs-chart: 16px;
+  --fs-chart-small: 14px;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-heavy: 800;
+  --lh-body: 1.75;
+  --lh-tight: 1.22;
+  --lh-heading: 1.35;
+  --lh-small: 1.6;
+  --tracking-title: -0.025em;
+  --s0: 0;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+  --s10: 40px;
+  --s12: 48px;
+  --section-space: 56px;
+  --gutter: 24px;
+  --card-pad: 24px;
+  --hero-pad: 40px;
+  --gap: 20px;
+  --r-sm: 4px;
+  --r-card: 12px;
+  --r-hero: 16px;
+  --line-thin: 1px;
+  --line-medium: 2px;
+  --line-strong: 4px;
+  --border: 1px solid var(--line);
+  --border-blue: 1px solid var(--blue-mid);
+  --border-strong: 4px solid var(--blue);
+  --border-warm: 4px solid var(--warm);
+  --border-unknown: 1px dashed var(--unknown);
+  --focus: 2px solid var(--blue);
+  --shadow: 0 8px 28px #20304408;
+  --full: 100%;
+  --auto: auto;
+  --page-max: 1240px;
+  --min-track: 0;
+  --min-compare: 760px;
+  --hero-columns: minmax(0, 1.5fr) minmax(0, .7fr);
+  --columns-two: repeat(2, minmax(0, 1fr));
+  --columns-three: repeat(3, minmax(0, 1fr));
+  --columns-four: repeat(4, minmax(0, 1fr));
+  --columns-five: repeat(5, minmax(0, 1fr));
+  --columns-one: minmax(0, 1fr);
+  --span-all: 1 / -1;
+  --finance-share: 83.333333%;
+  --project-low: 75%;
+  --project-window: 5%;
+  --project-high: 80%;
+  --bar-height: 26px;
+  --finance-height: 54px;
+  --marker-size: 8px;
+  --marker-position: -5px;
+  --evidence-claim: 19%;
+  --evidence-proof: 43%;
+  --evidence-source: 16%;
+  --evidence-verdict: 22%;
+  --underline-offset: 3px;
+  --chart-dash: 6 6;
+  --chart-node: 7px;
+  --chart-node-small: 6px;
+  --chart-round: round;
+  --align-start: start;
+  --align-left: left;
+  --align-center: center;
+  --anchor-middle: middle;
+  --align-end: end;
+  --align-top: top;
+  --justify-between: space-between;
+  --box-border: border-box;
+  --display-block: block;
+  --display-inline: inline;
+  --display-inline-block: inline-block;
+  --display-flex: flex;
+  --display-grid: grid;
+  --display-none: none;
+  --display-table: table;
+  --display-row: table-row;
+  --display-cell: table-cell;
+  --position-relative: relative;
+  --position-absolute: absolute;
+  --wrap: wrap;
+  --wrap-anywhere: anywhere;
+  --break-normal: normal;
+  --break-avoid: avoid;
+  --collapse: collapse;
+  --table-fixed: fixed;
+  --direction-column: column;
+  --decoration-none: none;
+  --decoration-underline: underline;
+  --style-normal: normal;
+  --numeric: tabular-nums;
+  --overflow-auto: auto;
+  --overflow-visible: visible;
+  --empty: none;
+  --cursor-pointer: pointer;
+}
+*, *::before, *::after { box-sizing: var(--box-border); min-width: var(--s0); }
+html { background: var(--bg); color: var(--ink); }
+body { margin: var(--s0); font-family: var(--font); font-size: var(--fs-body); line-height: var(--lh-body); overflow-wrap: var(--wrap-anywhere); word-break: var(--break-normal); }
+h1, h2, h3, h4, p, figure, dl, dd { margin: var(--s0); }
+h1, h2, h3, h4 { font-style: var(--style-normal); line-height: var(--lh-heading); }
+h1 { font-size: var(--fs-title); font-weight: var(--fw-heavy); letter-spacing: var(--tracking-title); line-height: var(--lh-tight); }
+h2 { font-size: var(--fs-section); font-weight: var(--fw-bold); }
+h3 { font-size: var(--fs-card); font-weight: var(--fw-bold); }
+h4 { font-size: var(--fs-lg); font-weight: var(--fw-bold); }
+p + p { margin-top: var(--s3); }
+a { color: var(--blue); text-decoration: var(--decoration-underline); text-underline-offset: var(--underline-offset); }
+a:hover { color: var(--warm); }
+a:focus-visible, [tabindex]:focus-visible { outline: var(--focus); outline-offset: var(--s1); }
+strong { font-weight: var(--fw-bold); }
+time, .number, .metric { font-variant-numeric: var(--numeric); }
+svg { display: var(--display-block); width: var(--full); max-width: var(--full); height: var(--auto); font-family: var(--font); }
+.shell { width: var(--full); max-width: var(--page-max); margin-inline: var(--auto); padding-inline: var(--gutter); }
+.masthead { display: var(--display-flex); justify-content: var(--justify-between); align-items: var(--align-center); flex-wrap: var(--wrap); gap: var(--s2); padding-block: var(--s6); color: var(--muted); font-size: var(--fs-sm); }
+.brand { color: var(--blue); font-weight: var(--fw-bold); }
+.hero { padding: var(--hero-pad); background: var(--surface); border: var(--border); border-top: var(--border-strong); border-radius: var(--r-hero); box-shadow: var(--shadow); }
+.hero-grid { display: var(--display-grid); grid-template-columns: var(--hero-columns); gap: var(--s10); align-items: var(--align-center); }
+.kicker { display: var(--display-block); margin-bottom: var(--s3); color: var(--blue); font-size: var(--fs-sm); font-weight: var(--fw-bold); }
+.title-cn { display: var(--display-block); margin-top: var(--s2); color: var(--blue); }
+.lead { margin-top: var(--s6); font-size: var(--fs-lg); }
+.tags { display: var(--display-flex); flex-wrap: var(--wrap); gap: var(--s2); }
+.hero .tags { margin-top: var(--s6); }
+.tag { display: var(--display-inline-block); max-width: var(--full); padding: var(--s1) var(--s2); border-radius: var(--r-sm); font-size: var(--fs-xs); font-weight: var(--fw-semibold); line-height: var(--lh-small); vertical-align: var(--align-top); }
+.verified { color: var(--verified); background: var(--verified-soft); }
+.partial { color: var(--warm); background: var(--warm-soft); }
+.unknown { color: var(--unknown); background: var(--unknown-soft); }
+.neutral { color: var(--blue); background: var(--blue-soft); }
+.hero-note { padding: var(--s6); background: var(--blue-soft); border-left: var(--border-strong); border-radius: var(--r-sm); }
+.hero-note .metric { display: var(--display-block); margin-block: var(--s2); font-size: var(--fs-hero-number); font-weight: var(--fw-heavy); color: var(--blue); line-height: var(--lh-tight); }
+.meta, .source-note, figcaption { color: var(--muted); font-size: var(--fs-sm); line-height: var(--lh-small); }
+.hero .meta { margin-top: var(--s5); }
+.cite { font-size: var(--fs-xs); font-weight: var(--fw-medium); }
+.nav { display: var(--display-flex); flex-wrap: var(--wrap); gap: var(--s3) var(--s6); padding-block: var(--s5); margin-top: var(--s4); border-bottom: var(--border); font-size: var(--fs-sm); }
+.nav a { text-decoration: var(--decoration-none); font-weight: var(--fw-semibold); }
+.section { margin-top: var(--section-space); scroll-margin-top: var(--s6); }
+.section-head { display: var(--display-flex); justify-content: var(--justify-between); align-items: var(--align-end); flex-wrap: var(--wrap); gap: var(--s3); margin-bottom: var(--s6); }
+.section-head h2 { padding-left: var(--s3); border-left: var(--border-strong); }
+.section-intro { margin-bottom: var(--s5); color: var(--muted); }
+.grid { display: var(--display-grid); gap: var(--gap); }
+.two { grid-template-columns: var(--columns-two); }
+.three { grid-template-columns: var(--columns-three); }
+.four { grid-template-columns: var(--columns-four); }
+.five { grid-template-columns: var(--columns-five); }
+.stack { display: var(--display-grid); gap: var(--s4); }
+.space-top { margin-top: var(--s6); }
+.space-small { margin-top: var(--s3); }
+.card { padding: var(--card-pad); background: var(--surface); border: var(--border); border-radius: var(--r-card); box-shadow: var(--shadow); }
+.card > h3, .card > h4 { margin-bottom: var(--s3); }
+.card .source-note { margin-top: var(--s4); }
+.conclusion { border-top: var(--border-strong); }
+.conclusion .tag { margin-bottom: var(--s4); }
+.callout { padding: var(--s4) var(--s5); background: var(--blue-soft); border-left: var(--border-strong); border-radius: var(--r-sm); }
+.caution { background: var(--surface); border: var(--border); border-left: var(--border-warm); }
+.callout p { font-size: var(--fs-md); }
+.chart-title { display: var(--display-flex); justify-content: var(--justify-between); align-items: var(--align-start); flex-wrap: var(--wrap); gap: var(--s3); margin-bottom: var(--s4); }
+.chart-title h3 { font-size: var(--fs-card); }
+.timeline-wide { display: var(--display-block); }
+.timeline-narrow { display: var(--display-none); }
+.svg-text { fill: var(--ink); font-size: var(--fs-chart); }
+.svg-small { fill: var(--muted); font-size: var(--fs-chart-small); }
+.svg-date { fill: var(--ink); font-size: var(--fs-chart); font-weight: var(--fw-bold); }
+.svg-center { text-anchor: var(--anchor-middle); }
+.svg-middle { text-anchor: var(--anchor-middle); }
+.svg-line { stroke: var(--line); stroke-width: var(--line-medium); fill: var(--empty); }
+.svg-future { stroke: var(--line); stroke-width: var(--line-medium); stroke-dasharray: var(--chart-dash); fill: var(--empty); }
+.svg-done { fill: var(--verified); stroke: var(--verified); stroke-width: var(--line-medium); r: var(--chart-node); }
+.svg-plan { fill: var(--surface); stroke: var(--warm); stroke-width: var(--line-medium); r: var(--chart-node); }
+.svg-pending { fill: var(--unknown-soft); stroke: var(--unknown); stroke-width: var(--line-medium); }
+.svg-done-text { fill: var(--verified); font-size: var(--fs-chart-small); }
+.svg-plan-text { fill: var(--warm); font-size: var(--fs-chart-small); }
+.svg-pending-text { fill: var(--unknown); font-size: var(--fs-chart-small); }
+figcaption { margin-top: var(--s3); }
+.metric { font-size: var(--fs-number); line-height: var(--lh-tight); font-weight: var(--fw-heavy); color: var(--blue); }
+.metric-unit { font-size: var(--fs-md); font-weight: var(--fw-medium); color: var(--muted); }
+.funding-outer { margin-top: var(--s5); padding-block: var(--s2); background: var(--blue-soft); border: var(--border-blue); border-radius: var(--r-sm); }
+.funding-inner { display: var(--display-flex); align-items: var(--align-center); width: var(--finance-share); min-height: var(--finance-height); padding: var(--s3); color: var(--surface); background: var(--blue); font-size: var(--fs-md); font-weight: var(--fw-bold); }
+.range-bar { position: var(--position-relative); height: var(--bar-height); margin-block: var(--s6); background: var(--unknown-soft); border-radius: var(--r-sm); }
+.range-low { position: var(--position-absolute); height: var(--full); width: var(--project-low); background: var(--blue); }
+.range-window { position: var(--position-absolute); height: var(--full); left: var(--project-low); width: var(--project-window); background: var(--warm); }
+.range-upper { position: var(--position-absolute); height: var(--full); left: var(--project-high); border-left: var(--border-warm); }
+.legend { display: var(--display-flex); flex-wrap: var(--wrap); gap: var(--s3); font-size: var(--fs-sm); color: var(--muted); }
+.legend-item { display: var(--display-flex); align-items: var(--align-center); gap: var(--s2); }
+.swatch { display: var(--display-inline-block); width: var(--s3); height: var(--s3); border-radius: var(--r-sm); }
+.swatch-blue { background: var(--blue); }
+.swatch-warm { background: var(--warm); }
+.subheading { margin-block: var(--s8) var(--s4); }
+.trait { border-top: var(--border-strong); padding: var(--s5); }
+.term { margin-top: var(--s2); color: var(--blue); font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-small); }
+.course { padding-block: var(--s3); border-top: var(--border); }
+.course-name { font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-small); }
+.course .meta { margin-top: var(--s1); }
+.partner { padding: var(--s3); background: var(--surface); border: var(--border); border-radius: var(--r-sm); color: var(--blue); font-size: var(--fs-md); font-weight: var(--fw-bold); text-align: var(--align-center); }
+.source-count { display: var(--display-flex); align-items: var(--align-center); flex-wrap: var(--wrap); gap: var(--s3); padding: var(--s4); background: var(--blue-soft); border-radius: var(--r-sm); }
+.source-count strong { font-size: var(--fs-number); line-height: var(--lh-tight); color: var(--blue); }
+.fact-row { padding-block: var(--s3); border-top: var(--border); }
+.fact-row dt { color: var(--muted); font-size: var(--fs-sm); }
+.fact-row dd { margin-top: var(--s1); }
+.career { grid-template-columns: var(--columns-four); }
+.career-card { position: var(--position-relative); padding-top: var(--s6); border-top: var(--border-strong); }
+.career-date { display: var(--display-block); color: var(--blue); font-size: var(--fs-lg); font-weight: var(--fw-bold); margin-bottom: var(--s3); }
+.career-card h3 { font-size: var(--fs-lg); }
+.evidence-key { margin-bottom: var(--s5); }
+.evidence-key .tag { margin-right: var(--s2); }
+.table-scroll { max-width: var(--full); overflow-x: var(--overflow-auto); background: var(--surface); border: var(--border); border-radius: var(--r-card); }
+table { width: var(--full); border-collapse: var(--collapse); table-layout: var(--table-fixed); font-size: var(--fs-md); }
+caption { padding: var(--s4) var(--s5); text-align: var(--align-left); color: var(--muted); font-size: var(--fs-sm); }
+th, td { padding: var(--s5); text-align: var(--align-left); vertical-align: var(--align-top); border-bottom: var(--border); overflow-wrap: var(--wrap-anywhere); }
+thead th { background: var(--blue-soft); color: var(--blue); font-weight: var(--fw-bold); }
+tbody th { font-weight: var(--fw-semibold); }
+tbody tr:last-child > th, tbody tr:last-child > td { border-bottom: var(--empty); }
+.evidence .claim-col { width: var(--evidence-claim); }
+.evidence .proof-col { width: var(--evidence-proof); }
+.evidence .source-col { width: var(--evidence-source); }
+.evidence .verdict-col { width: var(--evidence-verdict); }
+.evidence p { font-size: var(--fs-md); }
+.evidence .verdict p, .evidence .source-cell { font-size: var(--fs-sm); }
+.evidence .tag { margin-bottom: var(--s2); }
+.mobile-label { display: var(--display-none); }
+.source-cell a { display: var(--display-inline-block); margin-bottom: var(--s2); }
+.extension h3 { margin-bottom: var(--s4); }
+.extension .card { border-left: var(--border-warm); }
+.correction { display: var(--display-flex); align-items: var(--align-center); flex-wrap: var(--wrap); gap: var(--s4); margin-block: var(--s4); font-size: var(--fs-section); font-weight: var(--fw-bold); }
+.correction del { color: var(--unknown); }
+.correction ins { color: var(--blue); text-decoration: var(--decoration-none); }
+.correction-arrow { color: var(--warm); }
+.fee-card .metric { margin-block: var(--s4) var(--s2); }
+.fee-card h3 { font-size: var(--fs-lg); }
+.fee-line { margin-block: var(--s3); font-size: var(--fs-lg); font-weight: var(--fw-bold); color: var(--blue); }
+.paid-plan { padding: var(--card-pad); background: var(--surface); border: var(--border-unknown); border-left: var(--border-warm); border-radius: var(--r-card); }
+.paid-plan .metric { margin-block: var(--s4); color: var(--warm); }
+.voice { display: var(--display-block); color: var(--blue); font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin-bottom: var(--s2); }
+.risk-item { padding: var(--s4); border-left: var(--border-warm); background: var(--surface); }
+.risk-item h4 { margin-bottom: var(--s2); }
+.compare { min-width: var(--min-compare); }
+.compare td strong { display: var(--display-block); margin-bottom: var(--s2); color: var(--blue); font-size: var(--fs-sm); }
+.compare-note { padding: var(--s4) var(--s5); border-top: var(--border); }
+.experiment { border-top: var(--border-warm); }
+.experiment .tag { display: var(--display-block); margin-bottom: var(--s4); width: var(--auto); }
+.experiment p { font-size: var(--fs-md); }
+.pending-card { border: var(--border-unknown); }
+.pending-card .tag { margin-bottom: var(--s4); }
+.source-grid { display: var(--display-grid); grid-template-columns: var(--columns-two); gap: var(--s4); }
+.source-item { padding: var(--s5); background: var(--surface); border: var(--border); border-radius: var(--r-sm); scroll-margin-top: var(--s6); }
+.source-name { font-size: var(--fs-md); font-weight: var(--fw-bold); }
+.source-item p { font-size: var(--fs-sm); }
+.source-item .meta { margin-top: var(--s2); }
+.source-wide { grid-column: var(--span-all); }
+.footer { margin-top: var(--section-space); padding-block: var(--s8) var(--s12); border-top: var(--border); color: var(--muted); font-size: var(--fs-sm); }
+.footer h2 { color: var(--ink); font-size: var(--fs-card); margin-bottom: var(--s4); }
+.footer strong { color: var(--warm); }
+@media (max-width: 1000px) {
+  :root { --fs-title: 39px; --hero-pad: 32px; --gap: 16px; --card-pad: 20px; }
+  .four, .career { grid-template-columns: var(--columns-two); }
+  th, td { padding: var(--s4); }
+}
+@media (max-width: 760px) {
+  :root { --fs-title: 33px; --fs-section: 25px; --fs-number: 34px; --fs-hero-number: 37px; --gutter: 16px; --hero-pad: 22px; --card-pad: 20px; --section-space: 40px; --gap: 16px; }
+  .hero-grid, .two, .three, .four, .five, .career, .source-grid { grid-template-columns: var(--columns-one); }
+  .hero-grid { gap: var(--s6); }
+  .masthead { align-items: var(--align-start); flex-direction: var(--direction-column); padding-block: var(--s5); }
+  .hero-note { padding: var(--s5); }
+  .nav { gap: var(--s3) var(--s4); }
+  .section-head { align-items: var(--align-start); margin-bottom: var(--s5); }
+  .timeline-wide { display: var(--display-none); }
+  .timeline-narrow { display: var(--display-block); }
+  .partner { text-align: var(--align-left); padding: var(--s3) var(--s4); }
+  .evidence-wrap { background: var(--transparent); border: var(--empty); border-radius: var(--s0); overflow-x: var(--overflow-visible); }
+  .evidence, .evidence tbody, .evidence caption { display: var(--display-block); width: var(--full); }
+  .evidence colgroup, .evidence thead { display: var(--display-none); }
+  .evidence caption { padding: var(--s0) var(--s0) var(--s4); }
+  .evidence tbody { display: var(--display-grid); gap: var(--s4); }
+  .evidence tr { display: var(--display-block); padding: var(--s5); background: var(--surface); border: var(--border); border-radius: var(--r-card); }
+  .evidence th, .evidence td { display: var(--display-block); width: var(--full); padding: var(--s4) var(--s0); border-bottom: var(--border); }
+  .evidence th { padding-top: var(--s0); }
+  .evidence td:last-child { padding-bottom: var(--s0); border-bottom: var(--empty); }
+  .evidence tbody tr:last-child > th, .evidence tbody tr:last-child > td { border-bottom: var(--border); }
+  .evidence tbody tr:last-child > td:last-child { border-bottom: var(--empty); }
+  .mobile-label { display: var(--display-block); margin-bottom: var(--s2); color: var(--blue); font-size: var(--fs-xs); font-weight: var(--fw-bold); }
+  .source-cell a { margin-right: var(--s3); }
+  .source-wide { grid-column: var(--span-all); }
+}
+@media print {
+  :root { --bg: #ffffff; --shadow: none; --section-space: 28px; }
+  .shell { max-width: var(--full); padding-inline: var(--s0); }
+  .nav { display: var(--display-none); }
+  .hero, .card, .source-item, .paid-plan { box-shadow: var(--empty); }
+  .card, .source-item, .experiment, .risk-item { break-inside: var(--break-avoid); }
+  .table-scroll { overflow-x: var(--overflow-visible); }
+  .compare { min-width: var(--s0); }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="masthead">
+    <span class="brand">HAA · 研究档案</span>
+    <span>面向一人公司经营者/教学者 · 发布于 <time datetime="2026-10-09">2026-10-09</time></span>
+  </div>
+
+  <header class="hero" id="top">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker">学校画像 / 证据核对 / 应用边界</span>
+        <h1>Horowitz Andreessen Academy <span class="title-cn">全景研究</span></h1>
+        <p class="lead">学院已有公告与融资，计划于 2027 年 9 月开学，截至本报告发布日期尚无教育结果数据。<a class="cite" href="#s-release">[新闻稿]</a></p>
+        <div class="tags" aria-label="项目状态">
+          <span class="tag verified">已公告</span>
+          <span class="tag partial">未开学</span>
+          <span class="tag unknown">无结果数据</span>
+        </div>
+        <p class="meta">发布日期：<time datetime="2026-10-09">2026-10-09</time> · 本文简称 HAA 或「学院」。</p>
+      </div>
+      <aside class="hero-note" aria-label="首届计划概览">
+        <span class="kicker">首届开学 · 计划</span>
+        <strong class="metric">2027.09</strong>
+        <p>约 50 人 · 一年制 · 免学费</p>
+        <p class="meta">Founding Class Fellowship<br>2027-09 至 2028-08<br><a class="cite" href="#s-faq">[官网 FAQ]</a> <a class="cite" href="#s-release">[新闻稿]</a></p>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="nav" aria-label="报告导航">
+    <a href="#boundaries">结论与边界</a>
+    <a href="#school">学校画像</a>
+    <a href="#signals">七信号核对</a>
+    <a href="#costs">成本与权益</a>
+    <a href="#risks">争议与风险</a>
+    <a href="#actions">读者行动</a>
+    <a href="#sources">来源列表</a>
+  </nav>
+
+  <main>
+    <section class="section" id="boundaries" aria-labelledby="boundaries-title">
+      <div class="section-head">
+        <h2 id="boundaries-title">结论与边界</h2>
+        <span class="meta">已发生的事实，不等于已实现的成效</span>
+      </div>
+      <div class="grid three">
+        <article class="card conclusion">
+          <span class="tag verified">公告与融资可核</span>
+          <h3>项目真实，结果未出</h3>
+          <p>学院是已公告的独立营利性教育公司，并非只有构想；融资总额为 4200 万美元。首届尚未开学，不能把资源、计划或讲者阵容当作教育结果。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card conclusion">
+          <span class="tag partial">逐项判断证据</span>
+          <h3>七信号需分项核对</h3>
+          <p>视频混合了制度事实、受访者观点与解说员延伸。同一信号中的子主张需分别判断；摘要转述不等于已核原音。<a class="cite" href="#signals">[证据表]</a></p>
+        </article>
+        <article class="card conclusion">
+          <span class="tag neutral">框架归属需区分</span>
+          <h3>框架归属必须分清</h3>
+          <p>「AI 正在重新给人定价」是解说员的框架，不是学院的官方表述。学院公告列出的四特质是 AI-Native Building、High Agency、Ambition、Interpersonal Skills。<a class="cite" href="#extensions">[解说员延伸]</a> <a class="cite" href="#s-release">[新闻稿]</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="school" aria-labelledby="school-title">
+      <div class="section-head">
+        <h2 id="school-title">学校画像</h2>
+        <span class="meta">招生、教学、资源与治理</span>
+      </div>
+
+      <figure class="card">
+        <div class="chart-title">
+          <h3>从公告到开学</h3>
+          <div class="tags">
+            <span class="tag verified">已发生</span>
+            <span class="tag partial">计划</span>
+            <span class="tag unknown">待批</span>
+          </div>
+        </div>
+        <svg class="timeline-wide" viewBox="0 0 1120 180" role="img" aria-labelledby="timeline-wide-title timeline-wide-desc">
+          <title id="timeline-wide-title">学院里程碑时间轴</title>
+          <desc id="timeline-wide-desc">2026年9月22日发布，已发生；2026年11月5日早申截止、2027年1月底前出结果、2027年9月开学、2028年5月海外、2028年6至8月co-op，均为计划；2028年秋两年制项目待监管批准。节点为等距排布，不表示时间长度。</desc>
+          <path class="svg-future" d="M60 72 H1056"/>
+          <circle class="svg-done" cx="60" cy="72"/>
+          <circle class="svg-plan" cx="226" cy="72"/>
+          <circle class="svg-plan" cx="392" cy="72"/>
+          <circle class="svg-plan" cx="558" cy="72"/>
+          <circle class="svg-plan" cx="724" cy="72"/>
+          <circle class="svg-plan" cx="890" cy="72"/>
+          <path class="svg-pending" d="M1056 62 L1066 72 L1056 82 L1046 72 Z"/>
+          <g class="svg-middle">
+            <text class="svg-date" x="60" y="36">2026-09-22</text>
+            <text class="svg-text" x="60" y="113">发布</text>
+            <text class="svg-done-text" x="60" y="143">已发生</text>
+            <text class="svg-date" x="226" y="36">2026-11-05</text>
+            <text class="svg-text" x="226" y="113">早申截止</text>
+            <text class="svg-plan-text" x="226" y="143">计划</text>
+            <text class="svg-date" x="392" y="36">2027-01 底</text>
+            <text class="svg-text" x="392" y="113">出结果</text>
+            <text class="svg-plan-text" x="392" y="143">计划</text>
+            <text class="svg-date" x="558" y="36">2027-09</text>
+            <text class="svg-text" x="558" y="113">首届开学</text>
+            <text class="svg-plan-text" x="558" y="143">计划</text>
+            <text class="svg-date" x="724" y="36">2028-05</text>
+            <text class="svg-text" x="724" y="113">海外学习</text>
+            <text class="svg-plan-text" x="724" y="143">计划</text>
+            <text class="svg-date" x="890" y="36">2028-06～08</text>
+            <text class="svg-text" x="890" y="113">co-op</text>
+            <text class="svg-plan-text" x="890" y="143">计划</text>
+            <text class="svg-date" x="1056" y="36">2028-秋</text>
+            <text class="svg-text" x="1056" y="113">两年制项目</text>
+            <text class="svg-pending-text" x="1056" y="143">待批</text>
+          </g>
+        </svg>
+        <svg class="timeline-narrow" viewBox="0 0 320 612" role="img" aria-labelledby="timeline-mobile-title timeline-mobile-desc">
+          <title id="timeline-mobile-title">学院时间轴手机版</title>
+          <desc id="timeline-mobile-desc">发布已发生，招生与首届学年安排为计划，2028年秋两年制项目待批准。节点等距，不表示时间长度。</desc>
+          <path class="svg-future" d="M15 44 V560"/>
+          <circle class="svg-done" cx="15" cy="44"/>
+          <circle class="svg-plan" cx="15" cy="130"/>
+          <circle class="svg-plan" cx="15" cy="216"/>
+          <circle class="svg-plan" cx="15" cy="302"/>
+          <circle class="svg-plan" cx="15" cy="388"/>
+          <circle class="svg-plan" cx="15" cy="474"/>
+          <path class="svg-pending" d="M15 550 L25 560 L15 570 L5 560 Z"/>
+          <text class="svg-date" x="40" y="38">2026-09-22</text>
+          <text class="svg-text" x="40" y="66">发布</text>
+          <text class="svg-done-text" x="262" y="49">已发生</text>
+          <text class="svg-date" x="40" y="124">2026-11-05</text>
+          <text class="svg-text" x="40" y="152">早申截止</text>
+          <text class="svg-plan-text" x="262" y="135">计划</text>
+          <text class="svg-date" x="40" y="210">2027-01 底</text>
+          <text class="svg-text" x="40" y="238">出结果</text>
+          <text class="svg-plan-text" x="262" y="221">计划</text>
+          <text class="svg-date" x="40" y="296">2027-09</text>
+          <text class="svg-text" x="40" y="324">首届开学</text>
+          <text class="svg-plan-text" x="262" y="307">计划</text>
+          <text class="svg-date" x="40" y="382">2028-05</text>
+          <text class="svg-text" x="40" y="410">海外学习</text>
+          <text class="svg-plan-text" x="262" y="393">计划</text>
+          <text class="svg-date" x="40" y="468">2028-06～08</text>
+          <text class="svg-text" x="40" y="496">co-op</text>
+          <text class="svg-plan-text" x="262" y="479">计划</text>
+          <text class="svg-date" x="40" y="554">2028-秋</text>
+          <text class="svg-text" x="40" y="582">两年制项目</text>
+          <text class="svg-pending-text" x="262" y="565">待批</text>
+        </svg>
+        <figcaption>节点等距排列，不代表时间跨度；状态截至 2026-10-09。学年为 9–4 月旧金山校区、5 月海外、6–8 月 co-op。<a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-release">[新闻稿]</a></figcaption>
+      </figure>
+
+      <div class="grid two space-top">
+        <figure class="card">
+          <div class="chart-title">
+            <h3>融资包含关系</h3>
+            <span class="tag verified">已公告融资</span>
+          </div>
+          <p class="metric">4200 <span class="metric-unit">万美元 · 总额</span></p>
+          <div class="funding-outer" role="img" aria-label="总融资4200万美元，其中包含a16z出资3500万美元；两者不能相加。">
+            <div class="funding-inner">其中 a16z：3500 万美元</div>
+          </div>
+          <figcaption>外层表示总融资，内层表示 a16z 出资；3500 万包含在 4200 万之内。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></figcaption>
+          <p class="source-note">个人投资人包括 Adam D'Angelo、Tobi Lütke、Tony Xu、Fidji Simo、Garry Tan、Joe Liemandt、Shyam Sankar。<a class="cite" href="#s-release">[新闻稿]</a></p>
+        </figure>
+        <figure class="card">
+          <div class="chart-title">
+            <h3>自主项目时间</h3>
+            <span class="tag partial">计划 · 摘要口径</span>
+          </div>
+          <p class="metric">75–80% <span class="metric-unit">学年时间</span></p>
+          <div class="range-bar" role="img" aria-label="计划将75%至80%的时间用于自主项目；蓝色至下限75%，暖色显示延伸至80%的区间，不表示精确固定比例。">
+            <span class="range-low"></span>
+            <span class="range-window"></span>
+            <span class="range-upper"></span>
+          </div>
+          <div class="legend">
+            <span class="legend-item"><span class="swatch swatch-blue" aria-hidden="true"></span>自主项目下限 75%</span>
+            <span class="legend-item"><span class="swatch swatch-warm" aria-hidden="true"></span>区间延伸至 80%</span>
+          </div>
+          <figcaption>不是已运行课程的实测比例，也不是精确饼图。Sourcery 摘要称不设考试、作业与评分，课程由从业者讲授；摘要转述，待核原音。<a class="cite" href="#s-sourcery">[Sourcery]</a> <a class="cite" href="#s-teahose">[Teahose]</a> <a class="cite" href="#s-release">[新闻稿]</a></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="subheading">招生与申请</h3>
+      <div class="grid two">
+        <article class="card">
+          <h4>材料与筛选</h4>
+          <p>申请材料包括作品集网站、短文、短视频与必须提交的成绩单；考试分数可选，不要求推荐信。官网强调作品证据，但成绩的具体权重未明。<a class="cite" href="#s-faq">[FAQ]</a></p>
+          <p class="source-note">早申截止为 2026-11-05；第二阶段滚动面试，计划于 2027 年 1 月底前给出结果。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>资格与实际限制</h4>
+          <p>无年龄下限，未满 18 岁须由监护人联署；大学读满 2 年及以上者不可申请。国际生可申请，但签证资格与获批均不保证。<a class="cite" href="#s-faq">[FAQ]</a></p>
+          <p class="source-note">不要求先有公司；申请强调已经做出的作品，不等于所有成绩信息都不看。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+      </div>
+
+      <h3 class="subheading">官方四特质</h3>
+      <div class="grid four">
+        <article class="card trait">
+          <h4>AI 原生构建</h4>
+          <p class="term">AI-Native Building</p>
+        </article>
+        <article class="card trait">
+          <h4>自主行动</h4>
+          <p class="term">High Agency</p>
+        </article>
+        <article class="card trait">
+          <h4>雄心</h4>
+          <p class="term">Ambition</p>
+        </article>
+        <article class="card trait">
+          <h4>人际能力</h4>
+          <p class="term">Interpersonal Skills</p>
+        </article>
+      </div>
+      <p class="source-note space-small">这是公告中的培养取向，不是已经验证的学习成果。<a class="cite" href="#s-release">[新闻稿]</a></p>
+
+      <h3 class="subheading">课程与主题示例</h3>
+      <p class="section-intro">官网目录列出 41 门课程与 21 条 track；以下为官网课程页示例，不能据此推定旁听或免费开放。<a class="cite" href="#s-courses">[Courses]</a></p>
+      <div class="grid three">
+        <article class="card">
+          <h4>AI 与工程</h4>
+          <div class="course">
+            <p class="course-name">AI Inference Engineering</p>
+            <p class="meta">AI 推理工程</p>
+          </div>
+          <div class="course">
+            <p class="course-name">Harness Engineering</p>
+            <p class="meta">可靠 Agent 的操作层设计</p>
+          </div>
+          <p class="source-note"><a class="cite" href="#s-courses">[Courses]</a></p>
+        </article>
+        <article class="card">
+          <h4>领导与计算史</h4>
+          <div class="course">
+            <p class="course-name">Leading Through the Hard Things</p>
+            <p class="meta">Ben Horowitz</p>
+          </div>
+          <div class="course">
+            <p class="course-name">The Next Platform Shift</p>
+            <p class="meta">Marc Andreessen</p>
+          </div>
+          <div class="course">
+            <p class="course-name">Origins and Innovations in Digital Computing 1940-2025</p>
+            <p class="meta">Steven Sinofsky</p>
+          </div>
+          <p class="source-note"><a class="cite" href="#s-courses">[Courses]</a></p>
+        </article>
+        <article class="card">
+          <h4>销售与创业</h4>
+          <div class="course"><p class="course-name">The Craft of Selling</p></div>
+          <div class="course"><p class="course-name">The Geometry of Luck</p></div>
+          <div class="course">
+            <p class="course-name">Founder-Led Sales</p>
+          </div>
+          <div class="course">
+            <p class="course-name">Startup Mechanics</p>
+          </div>
+          <p class="source-note"><a class="cite" href="#s-courses">[Courses]</a></p>
+        </article>
+      </div>
+
+      <h3 class="subheading">伙伴与导师网络</h3>
+      <p class="section-intro">创始合作伙伴共 10 家，提供的资源包括算力与硬件、课程共创、办公场地及 co-op 机会；合作名单不等于录用承诺。<a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-pymnts">[PYMNTS]</a></p>
+      <div class="grid five" aria-label="十家创始合作伙伴">
+        <div class="partner">Anduril</div>
+        <div class="partner">Anthropic</div>
+        <div class="partner">Coinbase</div>
+        <div class="partner">Google</div>
+        <div class="partner">Meta</div>
+        <div class="partner">NVIDIA</div>
+        <div class="partner">OpenAI</div>
+        <div class="partner">Palantir</div>
+        <div class="partner">Replit</div>
+        <div class="partner">Stripe</div>
+      </div>
+      <div class="grid two space-top">
+        <article class="card">
+          <h4>雇主伙伴：口径并列</h4>
+          <div class="stack space-small">
+            <div class="source-count">
+              <strong>40+</strong>
+              <span>新闻稿 / 官网 FAQ<br><a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></span>
+            </div>
+            <div class="source-count">
+              <strong>50+</strong>
+              <span>Gizmodo 引官网<br><a class="cite" href="#s-gizmodo">[Gizmodo]</a></span>
+            </div>
+          </div>
+          <p class="source-note">两者按来源并列，统计时点与范围未统一，不解释为增长。</p>
+        </article>
+        <article class="card">
+          <h4>网络的资源边界</h4>
+          <p>雇主伙伴示例包括 Applied Intuition、Cognition、Databricks、Notion、Shopify；官网列示 200+ 讲者与导师。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-home">[官网首页]</a></p>
+          <p>首届还可获得 a16z 网络资源，但学院不保证 co-op 安排或全职工作。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+      </div>
+
+      <h3 class="subheading">治理与收入模型</h3>
+      <div class="grid two">
+        <article class="card">
+          <h4>独立公司，关联紧密</h4>
+          <dl>
+            <div class="fact-row"><dt>法律形态</dt><dd>独立营利公司，非 a16z 子公司。</dd></div>
+            <div class="fact-row"><dt>CEO</dt><dd>Gagan Biyani。</dd></div>
+            <div class="fact-row"><dt>董事会</dt><dd>Marc Andreessen、Erik Torenberg、Gagan Biyani。</dd></div>
+            <div class="fact-row"><dt>公告署名</dt><dd>a16z 公告由 Erik Torenberg 署名。</dd></div>
+          </dl>
+          <p class="source-note"><a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-a16z">[a16z 公告]</a></p>
+        </article>
+        <article class="card">
+          <h4>收入表述存在待澄清点</h4>
+          <p><span class="tag partial">摘要转述，待核原音</span></p>
+          <p>Biyani 在 Sourcery 相关摘要中描述：收入以学费为主，另有企业合作与学生所创公司的股权；融资按多年跑道而非 18 个月安排。<a class="cite" href="#s-sourcery">[Sourcery]</a> <a class="cite" href="#s-teahose">[Teahose]</a> <a class="cite" href="#s-missing">[BigGo 线索]</a></p>
+          <div class="callout caution space-small">
+            <p>官网 FAQ 同时写明不收学生公司股权、无收入分成、无优先投资权。两种口径适用的项目、阶段与机制待澄清，不能擅自合并为已确定的收费安排。<a class="cite" href="#s-faq">[FAQ]</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="ceo" aria-labelledby="ceo-title">
+      <div class="section-head">
+        <h2 id="ceo-title">CEO 画像</h2>
+        <span class="meta">Gagan Biyani · 履历与自述分开</span>
+      </div>
+      <div class="card">
+        <p>Biyani 于 1987 年出生于加州 Fremont，毕业于 UC Berkeley 经济学专业，曾在 Accenture 工作，并担任 TechCrunch 记者。2009 年报道涉及 App Store 假评论，另有 Lyft 增长顾问经历。<a class="cite" href="#s-wiki">[人物履历]</a></p>
+      </div>
+      <div class="grid career space-top">
+        <article class="card career-card">
+          <span class="career-date">13 岁 · 自述</span>
+          <h3>演讲辩论夏令营</h3>
+          <p>与朋友办营，称利润率约 50%，后来每夏教 50–100 个孩子。该信息来自 Luba Show 的访谈自述，不是独立审计结果。<a class="cite" href="#s-luba">[Luba Show]</a></p>
+        </article>
+        <article class="card career-card">
+          <span class="career-date">2010</span>
+          <h3>联合创办 Udemy</h3>
+          <p>负责营销、讲师与融资工作。<a class="cite" href="#s-wiki">[人物履历]</a> <a class="cite" href="#s-release">[新闻稿]</a></p>
+        </article>
+        <article class="card career-card">
+          <span class="career-date">2013–2017</span>
+          <h3>创办并关闭 Sprig</h3>
+          <p>外卖公司 Sprig 融资 5700 万美元，员工峰值约 1300 人，于 2017 年关闭。<a class="cite" href="#s-wiki">[人物履历]</a></p>
+        </article>
+        <article class="card career-card">
+          <span class="career-date">Maven · 年份未列</span>
+          <h3>重返教育产品</h3>
+          <p>联合创办 Maven，推动 cohort-based course；a16z 领投其 2500 万美元融资。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-luba">[Luba Show]</a></p>
+        </article>
+      </div>
+      <div class="callout space-top">
+        <p><strong>作者推断：</strong>这些经历可帮助理解学院的产品与经营取向，但不能推出学院已经具备有效、可规模化的教学模式。</p>
+      </div>
+    </section>
+
+    <section class="section" id="signals" aria-labelledby="signals-title">
+      <div class="section-head">
+        <h2 id="signals-title">七信号证据表</h2>
+        <span class="meta">核对表达，不替表达证明成效</span>
+      </div>
+      <p class="section-intro">视频所引用访谈对应 Sourcery：主持 Molly O'Shea，发布于 2026-09-22，时长 1 小时 19 分；Luba Show 于 2026-10-06 发布，提供补充自述。以下结合所给研究大纲中的视频与字幕核对记录、播客页及摘要，不把摘要当作已逐句听过的原音。<a class="cite" href="#s-sourcery">[Sourcery]</a> <a class="cite" href="#s-luba">[Luba Show]</a> <a class="cite" href="#s-missing">[核对记录边界]</a></p>
+
+      <div class="card evidence-key">
+        <p><span class="tag verified">已核实</span>可对照的制度文本，或作者检索 Luba Show 自动字幕后确认的表达；不表示主张的效果成立。</p>
+        <p><span class="tag partial">部分</span>同一信号中的子主张证据强弱不同。</p>
+        <p><span class="tag unknown">摘要转述待核</span>已见摘要或摘要线索，但原音未逐句核对。<span class="tag unknown">尚未核实</span>当前材料不足，不等于已证伪。</p>
+      </div>
+
+      <div class="table-scroll evidence-wrap" role="region" aria-label="七信号证据核对表">
+        <table class="evidence">
+          <caption>判定针对各子主张；文中的时间戳用于定位摘要所指内容，不代表本轮已听原音。</caption>
+          <colgroup>
+            <col class="claim-col">
+            <col class="proof-col">
+            <col class="source-col">
+            <col class="verdict-col">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">视频说法</th>
+              <th scope="col">原话或证据</th>
+              <th scope="col">来源</th>
+              <th scope="col">判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                别急创业<br>VC 给 15–25 万美元
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>创业时机：</strong>Sourcery 页与摘要转述，只有极小比例的 builder 应立即创业，创业与接受 VC 资金意味着十年承诺；Luba 字幕核对记录也支持十年承诺的表达。</p>
+                <p><strong>金额：</strong>15–25 万美元出现在摘要文本，不能写成已核直接引语。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-sourcery">Sourcery<br>2026-09-22</a><br>
+                <a href="#s-teahose">Teahose 摘要</a><br>
+                <a href="#s-luba">Luba Show<br>2026-10-06</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag partial">部分</span>
+                <p>十年承诺：所给 Luba 字幕记录有支持。</p>
+                <p>创业比例及金额：<strong>摘要转述，待核原音</strong>；不是对所有人的创业建议。</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                先做再学<br>去真实工厂
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>教学安排：</strong>公告支持真实项目与从业者教学；75–80% 自主项目占比见 Sourcery 页与摘要，是计划而非运行数据。</p>
+                <p><strong>工厂例子：</strong>所给核对记录未在摘要中找到「去工厂看机器人」。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-release">新闻稿<br>2026-09-22</a><br>
+                <a href="#s-sourcery">Sourcery</a><br>
+                <a href="#s-teahose">Teahose 摘要</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag partial">部分</span>
+                <p><span class="tag verified">已核实</span>项目式教学方向。</p>
+                <p><span class="tag unknown">摘要转述待核</span>75–80% 原音。</p>
+                <p><span class="tag unknown">尚未核实</span>工厂机器人例子；非已证伪。</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                Proof of Work<br>「You did what?」
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>录取依据：</strong>官网 FAQ 明确强调 proof of work；成绩单仍必须提交，考试分数可选。</p>
+                <p><strong>具体措辞：</strong>「You did what?」见于 Dealroom 的播客摘要页（搜索摘要可见，原页本轮未能打开）；不能据此判定已核原音。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-faq">官网 FAQ</a><br>
+                <a href="#s-dealroom">Dealroom 摘要<br>原页未打开</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag partial">部分</span>
+                <p><span class="tag verified">已核实</span>强调作品，<strong>成绩权重未明</strong>；不支持「不看成绩」。</p>
+                <p><span class="tag unknown">摘要转述待核</span>具体感叹语及原页。</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                High Agency<br>不只做规则跟随者
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>定义：</strong>所给 Luba 自动字幕核对记录中，Biyani 将其解释为对自己及自身影响负责，进而控制或影响周围世界。</p>
+                <p><strong>学校规则：</strong>他提出学校规则可能把人训练为 rule follower；这是对教育方式的个人判断。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-luba">Luba Show<br>2026-10-06</a><br>
+                <a href="#s-luba">自动字幕（作者检索）</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag verified">已核实</span>
+                <p>依据 YouTube 自动字幕检索定位，自动字幕可能有识别误差，未与人工转录比对。</p>
+                <p><strong>受访者主张，非成效证据。</strong></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                Super IC<br>编排 30、50 个 Agent
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>角色方向：</strong>摘要定位 33:58，谈把中层经理培养成 Super IC，并将其与 Maven 的使命联系起来。</p>
+                <p><strong>Agent 编排：</strong>Sourcery 页载有同时编排 30、50 个 Agent、再由 Agent 编排 Agent 的表述。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-sourcery">Sourcery<br>2026-09-22</a><br>
+                <a href="#s-teahose">Teahose 摘要<br>33:58</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag unknown">摘要转述待核</span>
+                <p>书面页与摘要有支持，原音未逐句核对。</p>
+                <p><strong>受访者主张，非成效证据</strong>；不表示已证明相应工作产能。</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                与 AI 共生<br>理解 AI 在做什么
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>相近表述：</strong>摘要在 35:27 谈文档第一稿由自己写，在 36:22 谈能否理解事情对公司底线的影响。</p>
+                <p><strong>未找到的部分：</strong>「cohabitation」一词与「5% 转化率」未见于所给摘要核对结果。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-teahose">Teahose 摘要<br>35:27 / 36:22</a><br>
+                <a href="#s-sourcery">Sourcery</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag partial">部分</span>
+                <p><strong>仅有相近表述</strong>，不写「概念已核实」。</p>
+                <p>两处引述为摘要转述，待核原音；具体词语与数字<strong>尚未核实，非已证伪</strong>。</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                <span class="mobile-label">视频说法</span>
+                轨道被炸 / zigzag<br>观察硅谷 15 年以上
+              </th>
+              <td>
+                <span class="mobile-label">原话或证据</span>
+                <p><strong>职业路径：</strong>摘要定位 58:09，出现 zigzag 与职业轨道不断被打破的表述。</p>
+                <p><strong>观察年限：</strong>「观察硅谷 15 年以上」未被所给摘要核对记录确认；不能以履历倒推替代原话核实。</p>
+              </td>
+              <td class="source-cell">
+                <span class="mobile-label">来源</span>
+                <a href="#s-teahose">Teahose 摘要<br>58:09</a><br>
+                <a href="#s-sourcery">Sourcery</a>
+              </td>
+              <td class="verdict">
+                <span class="mobile-label">判定</span>
+                <span class="tag partial">部分</span>
+                <p>zigzag：<strong>摘要转述，待核原音</strong>；受访者主张，非成效证据。</p>
+                <p><span class="tag unknown">尚未核实</span>具体观察年限，非已证伪。</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="extension space-top" id="extensions">
+        <h3>解说员延伸</h3>
+        <p class="section-intro">以下归属于解说员，不列为 Biyani 原话，也不列为学院已经验证的能力框架。<a class="cite" href="#s-missing">[视频核对记录]</a></p>
+        <div class="grid three">
+          <article class="card">
+            <span class="tag partial">解说员框架</span>
+            <h4 class="space-small">人的价值重估</h4>
+            <p class="space-small">「AI 正在重新给人定价」。</p>
+          </article>
+          <article class="card">
+            <span class="tag partial">解说员框架</span>
+            <h4 class="space-small">判断与责任边界</h4>
+            <p class="space-small">执行可交 AI，理解不能；生成可交，判断不能；计算可交，责任不能。</p>
+          </article>
+          <article class="card">
+            <span class="tag partial">解说员框架</span>
+            <h4 class="space-small">选择先于构建</h4>
+            <p class="space-small">「创业第一能力是 choose，不是 build」。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="corrections" aria-labelledby="corrections-title">
+      <div class="section-head">
+        <h2 id="corrections-title">视频事实勘误</h2>
+        <span class="tag verified">对照官方合作名单</span>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <h3>伙伴名称误写</h3>
+          <div class="correction" aria-label="Rabbit 应更正为 Replit">
+            <del>Rabbit</del>
+            <span class="correction-arrow" aria-hidden="true">→</span>
+            <ins>Replit</ins>
+          </div>
+          <p>官方创始合作伙伴名单列的是 Replit，不是 Rabbit。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h3>名单遗漏</h3>
+          <p class="fee-line">Anduril / Coinbase / Google</p>
+          <p>按所给视频核对记录，解说遗漏了这三家；它们均在官方 10 家创始合作伙伴名单内。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-missing">[视频核对记录]</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="costs" aria-labelledby="costs-title">
+      <div class="section-head">
+        <h2 id="costs-title">成本与权益</h2>
+        <span class="meta">首届免学费 ≠ 全部费用为零</span>
+      </div>
+      <div class="callout">
+        <p><strong>首届口径：</strong>Founding Class Fellowship 为一年制免学费项目；算力额度、旅行预算、生活支出分别列示，不把非现金资源与现金成本相抵。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></p>
+      </div>
+
+      <div class="grid three space-top">
+        <article class="card fee-card">
+          <span class="tag neutral">资源额度 · 非现金</span>
+          <h3 class="space-small">算力与技术资源</h3>
+          <p class="metric">5 万+ <span class="metric-unit">美元 / 人</span></p>
+          <p>公告提供的算力与技术资源额度，不计为可自由支配的现金，也不直接抵扣住宿成本。<a class="cite" href="#s-release">[新闻稿]</a></p>
+        </article>
+        <article class="card fee-card">
+          <span class="tag neutral">专项预算</span>
+          <h3 class="space-small">旅行与探索</h3>
+          <p class="metric">5000 <span class="metric-unit">美元 / 人</span></p>
+          <p>列为旅行预算，不按无条件现金补助处理；使用范围与报销条件待查。<a class="cite" href="#s-release">[新闻稿]</a></p>
+        </article>
+        <article class="card fee-card">
+          <span class="tag partial">住宿自理</span>
+          <h3 class="space-small">旧金山住宿区间</h3>
+          <p class="fee-line">合住：1600–1800 美元 / 月</p>
+          <p class="fee-line">单人：2300–2600 美元 / 月</p>
+          <p>官网给出的月租区间，不含完整生活预算。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+      </div>
+
+      <p class="source-note space-small"><strong>作者推断：</strong>研究大纲所列住宿年化区间约 1.9–3.1 万美元，只可视为月租的全年化外推，不是首届全学年的已知账单；海外与 co-op 期间的住宿及其他生活安排待查。<a class="cite" href="#s-faq">[月租与学年依据]</a></p>
+
+      <h3 class="subheading">首届权益与限制</h3>
+      <div class="grid three">
+        <article class="card">
+          <h4>无学位与学分</h4>
+          <p>学院未认证，首届不授大学学位，也不授学分。<strong>不授学分，返校认定待查</strong>，不能直接写成「回大学从零开始」。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>公共资助不适用</h4>
+          <p>不参与联邦或州助学金项目，529 资金不能免税使用。学院另有基于需要的奖学金与生活补助；资格、额度及发放条件待查。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>不保证实习或工作</h4>
+          <p>co-op 为合作企业实习，通常有薪，但不保证每个岗位都有薪。学院也不保证实习安排或全职就业。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>知识产权归学生</h4>
+          <p>按官网 FAQ，学生拥有其创造的知识产权的 100%；学院不收收入分成、不取公司股权，也无优先投资权。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>首届免学费</h4>
+          <p>免学费适用于首届 Fellowship，不自动延伸至后续两年制项目。住宿与生活开支仍须安排，是否获得校方补助取决于资格。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="card">
+          <h4>股权口径仍需澄清</h4>
+          <p>官网「无股权」条款与收入模型摘要中的「学生公司股权」表述并存。适用项目、阶段与机制待查，不据此推断首届会被收取股权。<a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-teahose">[摘要]</a></p>
+        </article>
+      </div>
+
+      <aside class="paid-plan space-top" aria-label="单独列示的两年制付费计划">
+        <div class="chart-title">
+          <h3>两年制付费计划</h3>
+          <span class="tag unknown">待批 · 计划 2028 年秋</span>
+        </div>
+        <div class="grid two">
+          <div>
+            <p class="metric">约 6–9 万 <span class="metric-unit">美元 / 年</span></p>
+            <p class="source-note">Fortune 口径；不是首届 Fellowship 学费。<a class="cite" href="#s-fortune">[Fortune · 2026-09-22]</a></p>
+          </div>
+          <div>
+            <p>公告仅称后续学费预计与精英私立大学相当，两年制项目仍待监管批准。正式学费、适用权益与最终安排待查。<a class="cite" href="#s-release">[新闻稿]</a></p>
+            <p><strong>比较边界：</strong>Fortune 所引精英学位近 50 万美元为学位总价口径，学院约 6–9 万美元为年费口径；不可直接得出性价比结论。<a class="cite" href="#s-fortune">[Fortune]</a></p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="risks" aria-labelledby="risks-title">
+      <div class="section-head">
+        <h2 id="risks-title">争议与风险</h2>
+        <span class="meta">外部观点、公开回应与制度事实分列</span>
+      </div>
+      <div class="grid three">
+        <article class="card">
+          <span class="voice">Bryan Caplan · George Mason</span>
+          <h3>选拔与规模化</h3>
+          <p>Fortune 所引观点认为，前 50 人的模式可能可行，规模化更难；跳过大学可能带来「怪人」信号，需要极高选拔来抵消。这里记录的是质疑者判断，不是学院结果数据。<a class="cite" href="#s-fortune">[Fortune]</a></p>
+        </article>
+        <article class="card">
+          <span class="voice">Ryan Craig · Achieve Partners</span>
+          <h3>学费与助学竞争</h3>
+          <p>Fortune 所引观点把学院视为计划变成大学的训练营，并质疑不拿联邦助学金却收精英学费的替代路径。他以此前类似尝试的失败提出风险，不等于已证明学院将失败。<a class="cite" href="#s-fortune">[Fortune]</a></p>
+        </article>
+        <article class="card">
+          <span class="voice">John Friedman · Brown</span>
+          <h3>成熟学校的积累</h3>
+          <p>PYMNTS 转述 WSJ：行业大佬授课有益，但成熟学校还有过往记录、经验教师与跨学科同伴。该观点强调比较中不能遗漏的维度，不是对首届成效的测量。<a class="cite" href="#s-pymnts">[PYMNTS 转述 WSJ]</a></p>
+        </article>
+        <article class="card">
+          <span class="voice">旧金山纪事报 · 评论标题</span>
+          <h3>财富优先的争议</h3>
+          <p>搜索结果仅见标题：「科技兄弟在办以财富创造为优先的学校，这是错误」。原页本轮未能打开，仅记录标题立场，不补写文章论证；日期与全文待查。<a class="cite" href="#s-sfc">[旧金山纪事报]</a></p>
+        </article>
+        <article class="card">
+          <span class="voice">外部分析 · 原页待查</span>
+          <h3>人才漏斗说</h3>
+          <p>研究大纲收录一种解释：学院可能成为 a16z 的人才漏斗或项目源，高学费与缺少公共助学可能限制家庭可及性。这是外部观点，来源原页与论证待查，不能写成已核实的办学动机。<a class="cite" href="#s-missing">[外部分析线索]</a></p>
+        </article>
+        <article class="card">
+          <span class="voice">a16z / 学院公开说明</span>
+          <h3>a16z 回应口径</h3>
+          <p>a16z 公告强调项目、从业者教学与网络；学院 FAQ 则写明 IP 归学生、无股权、无优先投资权，并列有基于需要的生活支持。<a class="cite" href="#s-a16z">[a16z]</a> <a class="cite" href="#s-faq">[FAQ]</a></p>
+          <p class="source-note">这是公开说明，不冒充对上述批评的逐项答辩；更多直接回应待查。Torenberg 的署名文章另列于来源。<a class="cite" href="#s-fp">[The Free Press]</a></p>
+        </article>
+      </div>
+
+      <h3 class="subheading">项目自身风险</h3>
+      <div class="grid three">
+        <article class="risk-item">
+          <h4>尚无结果数据</h4>
+          <p>尚未开学，没有毕业生与教育结果数据；资源与承诺不能替代后续观察。<a class="cite" href="#s-release">[首届日期依据]</a></p>
+        </article>
+        <article class="risk-item">
+          <h4>岗位与报酬不保底</h4>
+          <p>不保证 co-op 安排、全职工作或每个 co-op 的报酬，不能把合作企业名单计为确定收入。<a class="cite" href="#s-faq">[FAQ]</a></p>
+        </article>
+        <article class="risk-item">
+          <h4>现金与路径成本</h4>
+          <p>住宿与生活仍有现金成本；公共助学不适用，返校学分认定待查，后续两年制仍待批。<a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-release">[新闻稿]</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="comparison" aria-labelledby="comparison-title">
+      <div class="section-head">
+        <h2 id="comparison-title">不同路径对比</h2>
+        <span class="meta">不做排名，也不直接比较回报</span>
+      </div>
+      <div class="callout">
+        <p><strong>学院基准：</strong>首届约 50 人、一年、免学费，不要求先有公司；Sourcery 介绍称可中途离开去融资并留在网络中，后者仍为摘要转述，待核原音。<a class="cite" href="#s-release">[新闻稿]</a> <a class="cite" href="#s-faq">[FAQ]</a> <a class="cite" href="#s-sourcery">[Sourcery]</a></p>
+      </div>
+      <div class="table-scroll space-top" tabindex="0" role="region" aria-label="四类路径对比，窄屏可在表格内横向滚动">
+        <table class="compare">
+          <caption>手机可在表格内横向滚动；没有统一来源口径的项目以「待查」保留，不补造比较项。</caption>
+          <thead>
+            <tr>
+              <th scope="col">Thiel Fellowship</th>
+              <th scope="col">YC</th>
+              <th scope="col">a16z speedrun</th>
+              <th scope="col">传统大学</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>定位与前提</strong>大纲口径：2011 年起，需退学创业；具体资格条款待查。</td>
+              <td><strong>定位与前提</strong>Sourcery 对比口径为需已有公司；正式申请门槛待查，不把访谈概括当作完整规则。</td>
+              <td><strong>定位与前提</strong>Sourcery 对比口径为需已有公司；正式申请门槛待查，不把访谈概括当作完整规则。</td>
+              <td><strong>定位与前提</strong>以学位路径作比较；具体学校的申请与转学规则待查。</td>
+            </tr>
+            <tr>
+              <td><strong>时长与金额</strong>大纲列示两年、25 万美元；具体资助条件待查。</td>
+              <td><strong>时长与金额</strong>材料未给统一口径，待查。</td>
+              <td><strong>时长与金额</strong>材料未给统一口径，待查。</td>
+              <td><strong>时长与金额</strong>Fortune 所引精英学位总价近 50 万美元；不是所有大学的统一费用。</td>
+            </tr>
+            <tr>
+              <td><strong>本次比较边界</strong>资助额与学院年费不是同一指标；不作性价比判断。</td>
+              <td><strong>本次比较边界</strong>融资、股权及参与条款未在所给材料展开，待查。</td>
+              <td><strong>本次比较边界</strong>融资、股权及参与条款未在所给材料展开，待查。</td>
+              <td><strong>本次比较边界</strong>学位、教师经验与跨学科同伴应分开比较；首届返校认定待查。</td>
+            </tr>
+            <tr>
+              <td><strong>来源</strong><a href="#s-missing">研究大纲 / 官方条款待查</a></td>
+              <td><strong>来源</strong><a href="#s-sourcery">Sourcery · 2026-09-22</a></td>
+              <td><strong>来源</strong><a href="#s-sourcery">Sourcery · 2026-09-22</a></td>
+              <td><strong>来源</strong><a href="#s-fortune">Fortune</a> / <a href="#s-pymnts">PYMNTS 转述 WSJ</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="actions" aria-labelledby="actions-title">
+      <div class="section-head">
+        <h2 id="actions-title">读者行动</h2>
+        <span class="meta">面向一人公司经营者/教学者</span>
+      </div>
+      <p class="section-intro">以下是从研究主题延伸的实验设计，不是学院方法已经有效的证明，也不构成入学或离校建议。</p>
+      <div class="grid three">
+        <article class="card experiment">
+          <h3>一页作品集</h3>
+          <p><span class="tag partial">作者推断·待验证</span>把已有项目整理成一页 Proof of Work，用作品替代简历式自述。记录对方能否理解交付内容、自己的贡献与可核对证据；没有对照记录前，不判断它优于简历。</p>
+        </article>
+        <article class="card experiment">
+          <h3>并行交付实验</h3>
+          <p><span class="tag partial">作者推断·待验证</span>做一次 30 天实验，让多个 Agent 并行参与一个真实交付。记录交付质量、返工与必须留给人的判断，而不是把 Agent 数量当作效果。</p>
+        </article>
+        <article class="card experiment">
+          <h3>任务先行教学</h3>
+          <p><span class="tag partial">作者推断·待验证</span>让学员先进入真实任务，再按需要补课。记录卡点、补课需求与作品变化，并与既有教学记录比较；适用条件与评价方法仍待验证。</p>
+        </article>
+        <article class="card experiment">
+          <h3>判断权不外包</h3>
+          <p><span class="tag partial">作者推断·待验证</span>建立关键数字核对清单，AI 产出的重要数字由自己复算后再交付。记录差错、修改与复核投入，检验这套流程是否减少错误，而非预设它已经有效。</p>
+        </article>
+        <article class="card experiment">
+          <h3>职业轨道自测</h3>
+          <p><span class="tag partial">作者推断·待验证</span>假设现在的主要收入来源明年消失，写出 30 天内可能转向的路径及所缺证据。把它当作风险自测，不因这项练习就放弃现有收入；能否转向仍需验证。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="questions" aria-labelledby="questions-title">
+      <div class="section-head">
+        <h2 id="questions-title">待查问题</h2>
+        <span class="meta">不以想象填补材料空白</span>
+      </div>
+      <div class="grid three">
+        <article class="card pending-card">
+          <span class="tag unknown">待查 · 开放范围</span>
+          <h3>不入学能用什么</h3>
+          <p>课程、讲座、导师与算力资源是否向非在校者开放？现有材料不能回答，需查旁听、公开课程与资源使用边界。</p>
+        </article>
+        <article class="card pending-card">
+          <span class="tag unknown">待查 · 完整预算</span>
+          <h3>现金与时间投入</h3>
+          <p>除月租外，完整生活预算、海外及 co-op 成本、补助资格与投入要求是什么？现有材料只能部分回答，不能把免学费推成无成本。</p>
+        </article>
+        <article class="card pending-card">
+          <span class="tag unknown">待查 · 有效性评估</span>
+          <h3>怎样判断方法有效</h3>
+          <p>哪些方法适合一人公司经营者/教学者，如何区分选拔效应与教学贡献？目前只能提出实验，需补查评估方法、适用条件与后续结果数据。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="sources" aria-labelledby="sources-title">
+      <div class="section-head">
+        <h2 id="sources-title">来源列表</h2>
+        <span class="meta">原始公告 / 官网 / 访谈与摘要 / 媒体</span>
+      </div>
+      <p class="section-intro">正文来源标记可跳转至此，来源名称可点击打开原页；未标发布日期的页面不补造日期。媒体观点按归属呈现，所给材料未附原件的核对线索单列。</p>
+
+      <div class="source-grid">
+        <article class="source-item" id="s-release">
+          <a class="source-name" href="https://www.globenewswire.com/news-release/2026/09/22/3366392/0/en/horowitz-andreessen-academy-launches-in-san-francisco-for-the-world-s-most-ambitious-young-builders.html">GlobeNewswire · 学院新闻稿</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · 机构发布</p>
+          <p>公告、融资总额、首届计划、四特质、伙伴与后续两年制计划。</p>
+        </article>
+        <article class="source-item" id="s-a16z">
+          <a class="source-name" href="https://a16z.com/announcement/incubating-horowitz-andreessen-academy/">a16z · 孵化学院公告</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · Erik Torenberg 署名</p>
+          <p>办学方公开口径；与独立效果评价区分。</p>
+        </article>
+        <article class="source-item" id="s-faq">
+          <a class="source-name" href="https://www.theacademysf.com/faq">学院官网 · FAQ</a>
+          <p class="meta">发布日期未注明 · 本轮核对：<time datetime="2026-10-09">2026-10-09</time></p>
+          <p>申请、时间安排、治理、住房、学位学分、公共资助、就业与知识产权条款。</p>
+        </article>
+        <article class="source-item" id="s-courses">
+          <a class="source-name" href="https://www.theacademysf.com/courses">学院官网 · Courses</a>
+          <p class="meta">发布日期未注明 · 本轮核对：<time datetime="2026-10-09">2026-10-09</time></p>
+          <p>课程及 track 目录；目录公开不等于课程资源开放。</p>
+        </article>
+        <article class="source-item" id="s-home">
+          <a class="source-name" href="https://theacademysf.com/">学院官网 · 首页</a>
+          <p class="meta">发布日期未注明 · 本轮核对：<time datetime="2026-10-09">2026-10-09</time></p>
+          <p>学校概览、讲者导师与合作网络的展示口径。</p>
+        </article>
+        <article class="source-item" id="s-sourcery">
+          <a class="source-name" href="https://www.sourcery.vc/p/breaking-a16z-launches-a-school">Sourcery · a16z Launches a School</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · Molly O'Shea 主持</p>
+          <p>时长 1 小时 19 分；采用播客页与摘要，Sourcery 原音未逐句核对。</p>
+          <p><a href="https://www.youtube.com/watch?v=5JEjv-JlYo8">对应 YouTube 视频</a></p>
+        </article>
+        <article class="source-item" id="s-teahose">
+          <a class="source-name" href="https://www.teahose.com/podcast/Sourcery/a16z%20Just%20Launched%20a%20School">Teahose · Sourcery 转录与摘要</a>
+          <p class="meta">第三方自动转录（含时间戳），发布日期未注明 · 对应访谈：<time datetime="2026-09-22">2026-09-22</time></p>
+          <p>用于定位收入模型、项目占比、Super IC、判断与 zigzag；转录文本未与原音逐句比对。</p>
+        </article>
+        <article class="source-item" id="s-luba">
+          <a class="source-name" href="https://thelubashow.substack.com/p/a16z-enters-the-college-business">Luba Show · 学院访谈</a>
+          <p class="meta">发布：<time datetime="2026-10-06">2026-10-06</time> · 访谈与 YouTube 自动字幕</p>
+          <p>High Agency、十年承诺与 13 岁夏令营自述；作者已取得自动字幕全文并关键词检索核对，自动字幕可能有识别误差。</p>
+          <p><a href="https://www.youtube.com/watch?v=vmprTdld5X4">对应 YouTube 视频</a></p>
+        </article>
+        <article class="source-item" id="s-fortune">
+          <a class="source-name" href="https://fortune.com/2026/09/22/a16z-horowitz-andreessen-academy-college-alternative-tuition-biyani/">Fortune · 学院与大学替代路径</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · 媒体报道</p>
+          <p>年费与学位总价的不同口径，以及 Caplan、Craig 的质疑；按研究大纲摘要转述。</p>
+        </article>
+        <article class="source-item" id="s-cbs">
+          <a class="source-name" href="https://www.cbsnews.com/news/andreessen-horowitz-ai-school-college-alternative/">CBS News · AI 学校报道</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · 媒体报道</p>
+          <p>学校公告与大学替代路径的媒体报道。</p>
+        </article>
+        <article class="source-item" id="s-gizmodo">
+          <a class="source-name" href="https://gizmodo.com/andreessen-horowitz-wants-teens-to-skip-college-for-its-new-academy-instead-2000815660">Gizmodo · 学院报道</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · 媒体报道</p>
+          <p>保留其引用官网的 50+ 雇主伙伴口径，不与 40+ 拼成增长序列。</p>
+        </article>
+        <article class="source-item" id="s-pymnts">
+          <a class="source-name" href="https://www.pymnts.com/news/investment-tracker/2026/tech-giants-back-andreessen-horowitz-alternative-tech-academy/">PYMNTS · 转述 WSJ</a>
+          <p class="meta">发布：<time datetime="2026-09-22">2026-09-22</time> · 二次转述</p>
+          <p>John Friedman 对成熟学校积累的评价；未将转述写成已直接核对 WSJ 原文。</p>
+        </article>
+        <article class="source-item" id="s-fp">
+          <a class="source-name" href="https://www.thefp.com/p/horowitz-andreessen-academy-college-silicon-valley">The Free Press · Torenberg 署名文</a>
+          <p class="meta">发布：<time datetime="2026-09-25">2026-09-25</time> · 利益相关方观点</p>
+          <p>保留办学方立场入口，不当作独立教育成效证据。</p>
+        </article>
+        <article class="source-item" id="s-wiki">
+          <a class="source-name" href="https://en.wikipedia.org/wiki/Gagan_Biyani">Wikipedia · Gagan Biyani</a>
+          <p class="meta">条目持续更新 · 本轮核对：<time datetime="2026-10-09">2026-10-09</time></p>
+          <p>人物履历的二级资料；关键教育结果不由履历推定。</p>
+        </article>
+        <article class="source-item" id="s-dealroom">
+          <a class="source-name" href="https://dealroom.co/news/talk-5JEjv-JlYo8-inside-a16zs-new-academy-40m-no-grades-and-proof-of-work/">Dealroom · Sourcery 访谈摘要</a>
+          <p class="meta">发布日期未注明 · 仅见搜索摘要，原页未能打开</p>
+          <p>「You did what?」与 proof of work 口径的出处；BigGo 的同类摘要页同样仅见搜索摘要，均不作为已核原音。</p>
+        </article>
+        <article class="source-item" id="s-sfc">
+          <a class="source-name" href="https://www.sfchronicle.com/opinion/openforum/article/horowitz-andreessen-academy-school-22449435.php">旧金山纪事报 · 评论</a>
+          <p class="meta">发布日期待查 · 原页未能打开</p>
+          <p>仅凭标题记录立场，不转述论证。</p>
+        </article>
+        <article class="source-item source-wide" id="s-missing">
+          <span class="source-name">本轮未取得的原件</span>
+          <p class="meta">材料基准日：<time datetime="2026-10-09">2026-10-09</time></p>
+          <p>中文解说视频的原视频链接与频道（逐字稿由委托方提供，片尾仅有「在这里看懂创新」）、Sourcery 原音或字幕（抓取未成功）、人才漏斗说的具体出处，均保留待查。Thiel Fellowship 等比较项目的独立官方条款也未在本报告补全。</p>
+          <p>本报告的核对记录由作者本轮完成：实际打开官网、公告、媒体报道与访谈页面，取得并检索 Luba Show 自动字幕；未取得的原件按上述说明保留边界。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <h2>核对方法与限制</h2>
+    <p>核对链条为：委托方提供的视频逐字稿 → Sourcery 播客页与 Teahose 转录 → Luba Show 自动字幕（作者取得并检索） → 官网 FAQ、课程页与新闻稿。制度事实、受访者观点、解说员框架和作者推断分别标记，不用摘要未检出证明某句话不存在。</p>
+    <p><strong>Sourcery 原音未逐句核对。</strong>相关时间戳来自第三方转录；Luba Show 依据自动字幕，可能有识别误差；表内相关判定明确保留这一边界。</p>
+    <p>状态与计划以 <time datetime="2026-10-09">2026-10-09</time> 为界；未开学不等于没有公告或融资，有公告与融资也不等于已有教育结果。本报告面向一人公司经营者/教学者。</p>
+  </footer>
+</div>
+</body>
+</html>

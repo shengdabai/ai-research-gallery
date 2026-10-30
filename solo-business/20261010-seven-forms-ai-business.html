@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 生意七种形态：谁付钱，你交付什么？</title>
+<meta name="description" content="基于一位悉尼独立开发者的「AI 七层」口播，逐条核对背书、补充公开例证，并给出自测、换层清单与小生意账。">
+<style>
+:root{
+  /* primitive */
+  --gray-0:#ffffff;
+  --gray-50:#f3f6fa;
+  --gray-100:#e7edf5;
+  --gray-200:#d3dce8;
+  --gray-500:#56657a;
+  --gray-700:#2e3b4e;
+  --gray-900:#121b2b;
+  --indigo-50:#eef0fd;
+  --indigo-100:#dde2fb;
+  --indigo-600:#3646c9;
+  --indigo-700:#2a37a3;
+  --teal-50:#e6f5f3;
+  --teal-600:#0b7268;
+  --teal-700:#085a52;
+  --amber-50:#fcebe7;
+  --amber-700:#9a4a07;
+  --violet-50:#f1edfb;
+  --violet-700:#5b3ea6;
+  --slate-50:#edf1f6;
+  --slate-700:#3d4c63;
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --size-12:0.75rem;
+  --size-14:0.875rem;
+  --size-15:0.9375rem;
+  --size-16:1rem;
+  --size-18:1.125rem;
+  --size-20:1.25rem;
+  --size-24:1.5rem;
+  --size-30:1.875rem;
+  --size-38:2.375rem;
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-bold:700;
+  --leading-tight:1.3;
+  --leading-body:1.75;
+  --space-2:0.125rem;
+  --space-4:0.25rem;
+  --space-6:0.375rem;
+  --space-8:0.5rem;
+  --space-12:0.75rem;
+  --space-16:1rem;
+  --space-20:1.25rem;
+  --space-24:1.5rem;
+  --space-32:2rem;
+  --space-48:3rem;
+  --space-64:4rem;
+  --radius-4:4px;
+  --radius-8:8px;
+  --radius-12:12px;
+  --line-1:1px;
+  --line-2:2px;
+  --line-4:4px;
+  --shadow-1:0 1px 2px rgba(18,27,43,.06),0 4px 14px rgba(18,27,43,.06);
+  --duration-fast:150ms;
+  --width-content:1080px;
+  --width-prose:720px;
+  --rotate-quarter:90deg;
+
+  /* semantic */
+  --color-bg:var(--gray-50);
+  --color-surface:var(--gray-0);
+  --color-surface-muted:var(--gray-100);
+  --color-border:var(--gray-200);
+  --color-text:var(--gray-900);
+  --color-text-muted:var(--gray-500);
+  --color-text-soft:var(--gray-700);
+  --color-accent:var(--indigo-600);
+  --color-accent-strong:var(--indigo-700);
+  --color-accent-soft:var(--indigo-50);
+  --color-accent-line:var(--indigo-100);
+  --color-support:var(--teal-600);
+  --color-support-strong:var(--teal-700);
+  --color-support-soft:var(--teal-50);
+  --color-caution:var(--amber-700);
+  --color-caution-soft:var(--amber-50);
+  --color-focus:var(--indigo-600);
+  --text-hero:var(--size-38);
+  --text-h2:var(--size-30);
+  --text-h3:var(--size-20);
+  --text-body:var(--size-16);
+  --text-small:var(--size-14);
+  --text-tag:var(--size-12);
+
+  /* evidence tags */
+  --tag-platform-fg:var(--teal-700);
+  --tag-platform-bg:var(--teal-50);
+  --tag-research-fg:var(--indigo-700);
+  --tag-research-bg:var(--indigo-50);
+  --tag-company-fg:var(--slate-700);
+  --tag-company-bg:var(--slate-50);
+  --tag-media-fg:var(--slate-700);
+  --tag-media-bg:var(--gray-100);
+  --tag-self-fg:var(--amber-700);
+  --tag-self-bg:var(--amber-50);
+  --tag-estimate-fg:var(--violet-700);
+  --tag-estimate-bg:var(--violet-50);
+  --tag-editor-fg:var(--gray-700);
+  --tag-editor-bg:var(--gray-100);
+
+  /* component */
+  --page-gutter:var(--space-20);
+  --section-gap:var(--space-64);
+  --card-padding:var(--space-24);
+  --card-radius:var(--radius-12);
+  --card-border:var(--line-1) solid var(--color-border);
+  --tag-radius:var(--radius-4);
+  --tag-padding:var(--space-2) var(--space-6);
+  --button-radius:var(--radius-8);
+  --button-padding:var(--space-8) var(--space-16);
+  --bar-height:var(--space-24);
+  --bar-label-col:9rem;
+  --path-label-col:7rem;
+  --stat-number:var(--size-30);
+  --accent-rule:var(--line-4) solid var(--color-accent);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--text-body);line-height:var(--leading-body);overflow-wrap:anywhere}
+a{color:var(--color-accent-strong);text-underline-offset:var(--space-2)}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:var(--line-2) solid var(--color-focus);outline-offset:var(--space-2)}
+.wrap{max-width:var(--width-content);margin:0 auto;padding:0 var(--page-gutter)}
+section{margin-top:var(--section-gap)}
+h1,h2,h3{line-height:var(--leading-tight);font-weight:var(--weight-bold);margin:0}
+h1{font-size:var(--text-hero)}
+h2{font-size:var(--text-h2);margin-bottom:var(--space-12)}
+h3{font-size:var(--text-h3)}
+p{margin:var(--space-12) 0}
+.lede{font-size:var(--size-18);color:var(--color-text-soft);max-width:var(--width-prose)}
+.muted{color:var(--color-text-muted);font-size:var(--text-small)}
+.prose{max-width:var(--width-prose)}
+
+/* hero */
+.hero{padding:var(--space-48) 0 var(--space-32);border-bottom:var(--card-border);background:var(--color-surface)}
+.hero .kicker{color:var(--color-accent-strong);font-weight:var(--weight-medium);font-size:var(--text-small);margin:0 0 var(--space-8)}
+.hero h1{max-width:var(--width-prose)}
+.thesis{margin-top:var(--space-24);padding:var(--space-16) var(--space-20);border-left:var(--accent-rule);background:var(--color-accent-soft);border-radius:var(--radius-4);max-width:var(--width-prose)}
+.thesis p{margin:var(--space-4) 0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-16);margin-top:var(--space-24)}
+.stat{background:var(--color-surface);border:var(--card-border);border-radius:var(--card-radius);padding:var(--space-16)}
+.stat b{display:block;font-size:var(--stat-number);line-height:var(--leading-tight);color:var(--color-text)}
+.stat>span{display:block;font-size:var(--text-small);color:var(--color-text-soft);margin-top:var(--space-4)}
+
+/* tags */
+.tag{display:inline-block;font-size:var(--text-tag);font-weight:var(--weight-medium);line-height:var(--leading-tight);padding:var(--tag-padding);border-radius:var(--tag-radius);white-space:nowrap;vertical-align:middle}
+.t-platform{color:var(--tag-platform-fg);background:var(--tag-platform-bg)}
+.t-research{color:var(--tag-research-fg);background:var(--tag-research-bg)}
+.t-company{color:var(--tag-company-fg);background:var(--tag-company-bg)}
+.t-media{color:var(--tag-media-fg);background:var(--tag-media-bg)}
+.t-self{color:var(--tag-self-fg);background:var(--tag-self-bg)}
+.t-estimate{color:var(--tag-estimate-fg);background:var(--tag-estimate-bg)}
+.t-editor{color:var(--tag-editor-fg);background:var(--tag-editor-bg)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-8);margin:var(--space-12) 0}
+
+/* table → cards on mobile */
+.check{width:100%;border-collapse:collapse;background:var(--color-surface);border:var(--card-border);border-radius:var(--card-radius);overflow:hidden;font-size:var(--size-15)}
+.check th,.check td{padding:var(--space-12) var(--space-16);text-align:left;vertical-align:top;border-bottom:var(--card-border)}
+.check th{background:var(--color-surface-muted);font-size:var(--text-small);color:var(--color-text-soft);font-weight:var(--weight-medium)}
+.check tr:last-child td{border-bottom:0}
+
+/* cards */
+.card{background:var(--color-surface);border:var(--card-border);border-radius:var(--card-radius);padding:var(--card-padding);box-shadow:var(--shadow-1)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-16)}
+
+/* overview map */
+.map{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--space-8);margin-top:var(--space-20)}
+.map a{display:block;text-decoration:none;color:var(--color-text);background:var(--color-surface);border:var(--card-border);border-top:var(--accent-rule);border-radius:var(--radius-8);padding:var(--space-12);transition:border-color var(--duration-fast)}
+.map a:hover{border-color:var(--color-accent)}
+.map .n{font-size:var(--text-small);color:var(--color-text-muted)}
+.map .s{display:block;font-weight:var(--weight-bold);font-size:var(--size-16);line-height:var(--leading-tight);margin:var(--space-4) 0}
+.map .b{display:block;font-size:var(--text-tag);color:var(--color-text-soft);line-height:var(--leading-tight)}
+
+/* form cards */
+.forms{display:grid;gap:var(--space-16);margin-top:var(--space-24)}
+.form{background:var(--color-surface);border:var(--card-border);border-radius:var(--card-radius);box-shadow:var(--shadow-1);overflow:hidden}
+.form>summary{list-style:none;cursor:pointer;padding:var(--space-20) var(--card-padding);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--space-16);align-items:center}
+.form>summary::-webkit-details-marker{display:none}
+.form .badge{width:var(--space-48);height:var(--space-48);border-radius:var(--radius-8);background:var(--color-accent-soft);color:var(--color-accent-strong);display:grid;place-items:center;font-weight:var(--weight-bold);font-size:var(--size-14);text-align:center;line-height:var(--leading-tight)}
+.form .sum-main h3{margin-bottom:var(--space-4)}
+.form .sum-main p{margin:0;font-size:var(--size-15);color:var(--color-text-soft)}
+.form .chev{color:var(--color-text-muted);font-size:var(--size-14);white-space:nowrap}
+.form[open] .chev .c-open{display:none}
+.form:not([open]) .chev .c-close{display:none}
+.form .body{padding:0 var(--card-padding) var(--card-padding);border-top:var(--card-border)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-12);margin:var(--space-16) 0}
+.facts div{background:var(--color-bg);border-radius:var(--radius-8);padding:var(--space-12)}
+.facts dt{font-size:var(--text-small);color:var(--color-text-muted);margin:0}
+.facts dd{margin:var(--space-4) 0 0;font-size:var(--size-15)}
+.facts{margin-left:0}
+.quote{border-left:var(--line-4) solid var(--color-border);padding-left:var(--space-12);color:var(--color-text-soft);font-size:var(--size-15)}
+.risk{background:var(--color-caution-soft);border-radius:var(--radius-8);padding:var(--space-12) var(--space-16);font-size:var(--size-15)}
+.risk b{color:var(--color-caution)}
+.ex{margin:var(--space-12) 0 0;padding:0;list-style:none}
+.ex li{padding:var(--space-12) 0;border-top:var(--line-1) dashed var(--color-border);font-size:var(--size-15)}
+.note{font-size:var(--text-small);color:var(--color-text-soft);background:var(--color-surface-muted);border-radius:var(--radius-8);padding:var(--space-12) var(--space-16);margin-top:var(--space-12)}
+
+/* charts */
+figure{margin:0}
+figcaption{font-size:var(--text-small);color:var(--color-text-muted);margin-top:var(--space-12)}
+.bars{display:grid;gap:var(--space-12)}
+.bar-row{display:grid;grid-template-columns:minmax(0,var(--bar-label-col)) minmax(0,1fr);gap:var(--space-12);align-items:center;font-size:var(--size-15)}
+.bar-track{background:var(--color-surface-muted);border-radius:var(--radius-4);height:var(--bar-height);position:relative}
+.bar-fill{height:100%;border-radius:var(--radius-4);background:var(--color-accent)}
+.bar-fill.alt{background:var(--color-support)}
+.bar-fill.soft{background:var(--color-accent-line)}
+.bar-val{font-size:var(--text-small);color:var(--color-text-soft);margin-top:var(--space-4)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:var(--space-12);align-items:stretch;margin-top:var(--space-20)}
+.step{background:var(--color-surface);border:var(--card-border);border-radius:var(--card-radius);padding:var(--space-16)}
+.step h3{font-size:var(--size-16);margin-bottom:var(--space-6)}
+.step p{margin:0;font-size:var(--size-15);color:var(--color-text-soft)}
+.step.hl{border-color:var(--color-support);background:var(--color-support-soft)}
+.arrow{display:grid;place-items:center;color:var(--color-text-muted);font-size:var(--size-24)}
+
+/* quiz */
+.quiz fieldset{border:0;margin:0 0 var(--space-20);padding:0}
+.quiz legend{font-weight:var(--weight-bold);margin-bottom:var(--space-8);padding:0}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8)}
+.opts label{display:flex;gap:var(--space-8);align-items:flex-start;background:var(--color-bg);border:var(--card-border);border-radius:var(--radius-8);padding:var(--space-8) var(--space-12);cursor:pointer;font-size:var(--size-15);line-height:var(--leading-tight)}
+.opts label:has(input:checked){border-color:var(--color-accent);background:var(--color-accent-soft)}
+.opts input{margin-top:var(--space-2);accent-color:var(--color-accent)}
+.btn{font:inherit;font-size:var(--size-15);font-weight:var(--weight-medium);border-radius:var(--button-radius);padding:var(--button-padding);border:var(--line-1) solid var(--color-accent);background:var(--color-accent);color:var(--color-surface);cursor:pointer}
+.btn.ghost{background:var(--color-surface);color:var(--color-accent-strong)}
+.btn-row{display:flex;flex-wrap:wrap;gap:var(--space-8)}
+.result{margin-top:var(--space-20);padding:var(--space-16) var(--space-20);border-radius:var(--radius-8);background:var(--color-support-soft);border-left:var(--line-4) solid var(--color-support)}
+.result[hidden]{display:none}
+.result.warn{background:var(--color-caution-soft);border-left-color:var(--color-caution)}
+
+/* paths */
+.path-pick{display:flex;flex-wrap:wrap;gap:var(--space-8);margin:var(--space-16) 0}
+.path-pick button{font:inherit;font-size:var(--size-15);border-radius:var(--button-radius);padding:var(--space-6) var(--space-12);border:var(--card-border);background:var(--color-surface);color:var(--color-text);cursor:pointer}
+.path-pick button[aria-selected="true"]{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-accent-strong);font-weight:var(--weight-bold)}
+.path dl{display:grid;grid-template-columns:minmax(0,var(--path-label-col)) minmax(0,1fr);gap:var(--space-8) var(--space-16);margin:var(--space-12) 0 0}
+.path dt{font-weight:var(--weight-bold);color:var(--color-text-soft)}
+.path dd{margin:0}
+.path dd.stop{color:var(--color-caution)}
+
+/* ledger */
+.ledger{list-style:none;margin:var(--space-16) 0 0;padding:0;display:grid;gap:var(--space-8)}
+.ledger label{display:flex;gap:var(--space-12);align-items:flex-start;background:var(--color-surface);border:var(--card-border);border-radius:var(--radius-8);padding:var(--space-12) var(--space-16);cursor:pointer}
+.ledger input{margin-top:var(--space-6);accent-color:var(--color-support)}
+.ledger small{display:block;color:var(--color-text-muted);font-size:var(--text-small)}
+.progress{font-weight:var(--weight-bold);color:var(--color-support-strong)}
+
+/* sources */
+.sources{padding-left:var(--space-20);font-size:var(--size-15)}
+.sources li{margin-bottom:var(--space-8)}
+footer{margin:var(--section-gap) 0 0;padding:var(--space-32) 0 var(--space-48);border-top:var(--card-border);background:var(--color-surface)}
+
+@media (max-width:900px){
+  .map{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .arrow{transform:rotate(var(--rotate-quarter))}
+}
+@media (max-width:640px){
+  :root{--text-hero:var(--size-30);--text-h2:var(--size-24);--card-padding:var(--space-16);--section-gap:var(--space-48);--page-gutter:var(--space-16);--stat-number:var(--size-24)}
+  .stats{grid-template-columns:minmax(0,1fr)}
+  .grid2,.facts,.opts{grid-template-columns:minmax(0,1fr)}
+  .map{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form>summary{grid-template-columns:auto minmax(0,1fr)}
+  .form .chev{grid-column:2}
+  .bar-row{grid-template-columns:minmax(0,1fr)}
+  .path dl{grid-template-columns:minmax(0,1fr)}
+  .path dt{margin-top:var(--space-8)}
+  .check thead{display:none}
+  .check,.check tbody,.check tr,.check td{display:block;width:100%}
+  .check tr{border-bottom:var(--card-border);padding:var(--space-8) 0}
+  .check tr:last-child{border-bottom:0}
+  .check td{border:0;padding:var(--space-4) var(--space-16)}
+  .check td::before{content:attr(data-label);display:block;font-size:var(--text-tag);color:var(--color-text-muted)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">口播整理 · 背书核对 · 公开例证 · 自测与换层清单</p>
+    <h1>AI 生意七种形态：谁付钱，你交付什么？</h1>
+    <p class="lede">不是升级打怪，而是选择你能兑现的付费承诺。</p>
+    <div class="thesis">
+      <p><b>讲者的核心命题：</b>七层之间只变一样东西——你卖的是什么。学再多 AI 工具，只是在原来那层干得更快；想换层，得先换掉你卖的东西。</p>
+      <p><b>本页的补充：</b>工具熟练本身不足以完成迁移。换层还要同步改变对客户的承诺、交付方式、验收标准和你承担的责任。编号沿用讲者口播，不代表高低或收入大小；七种形态可以重叠、并行。</p>
+    </div>
+    <p class="muted">讲者：悉尼华人独立开发者，X 账号 @jamesai（「在悉尼和稀泥」）。以下三个数字来自 TrustMRR 公开页面，2026-10-09 检索；TrustMRR 通过支付后台核对的是<b>收入</b>，不是利润。</p>
+    <div class="stats">
+      <div class="stat"><b>$1,677,974</b><span>讲者名下 4 个产品累计已验证收入 <span class="tag t-platform">平台核对</span></span></div>
+      <div class="stat"><b>$22,731</b><span>4 个产品合计 MRR（月经常性收入） <span class="tag t-platform">平台核对</span></span></div>
+      <div class="stat"><b>第 1、第 3</b><span>TrustMRR 收录的 170 个澳洲项目中，按累计收入排序的位置 <span class="tag t-platform">平台核对</span></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="credentials" aria-labelledby="h-cred">
+  <h2 id="h-cred">口播开头的背书，逐条核对</h2>
+  <p class="prose">讲者开场先展示了资历。下面把每一句说法和能公开查到的结果放在一起。「无法公开核验」不等于不真实；关注和点赞即便属实，也不等于对这套框架的认可。</p>
+  <div class="legend" aria-label="证据等级图例">
+    <span class="tag t-platform">平台核对</span><span class="tag t-research">研究结果</span><span class="tag t-company">企业披露</span><span class="tag t-media">媒体报道</span><span class="tag t-self">讲者自述</span><span class="tag t-estimate">第三方估算</span><span class="tag t-editor">编辑推断</span>
+  </div>
+  <table class="check">
+    <thead><tr><th scope="col">讲者说法</th><th scope="col">核验结果（2026-10-09/10 检索）</th><th scope="col">证据等级</th></tr></thead>
+    <tbody>
+      <tr><td data-label="讲者说法">YC 掌门人关注了我</td><td data-label="核验结果">未找到可公开核验的记录</td><td data-label="证据等级"><span class="tag t-self">讲者自述</span></td></tr>
+      <tr><td data-label="讲者说法">Pieter Levels 关注了我</td><td data-label="核验结果">未找到可公开核验的记录</td><td data-label="证据等级"><span class="tag t-self">讲者自述</span></td></tr>
+      <tr><td data-label="讲者说法">雷军给我点过赞</td><td data-label="核验结果">未找到可公开核验的记录</td><td data-label="证据等级"><span class="tag t-self">讲者自述</span></td></tr>
+      <tr><td data-label="讲者说法">X 写了三年，3 万多关注</td><td data-label="核验结果">TrustMRR 创始人页显示 X 粉丝 31.6k，近 30 天 +569（<a href="https://trustmrr.com/founder/jamesai">创始人页</a>）</td><td data-label="证据等级"><span class="tag t-platform">平台核对</span></td></tr>
+      <tr><td data-label="讲者说法">小红书 1 万多关注</td><td data-label="核验结果">本页未核验</td><td data-label="证据等级"><span class="tag t-self">讲者自述</span></td></tr>
+      <tr><td data-label="讲者说法">TrustMRR 澳洲大概收录 130 个产品</td><td data-label="核验结果">检索时澳洲页收录 170 个，与口播数字不同（<a href="https://trustmrr.com/country/au">澳洲榜</a>）</td><td data-label="证据等级"><span class="tag t-platform">平台核对</span></td></tr>
+      <tr><td data-label="讲者说法">前三名有两个是我的</td><td data-label="核验结果">按累计收入排序，「My X project 2」第 1、「My X project 1」第 3，创始人均为 @jamesai</td><td data-label="证据等级"><span class="tag t-platform">平台核对</span></td></tr>
+      <tr><td data-label="讲者说法">营收大头在第 4 层（产品）</td><td data-label="核验结果">名下 4 个产品累计已验证收入 $1,677,974（平台不显示利润）；但平台看不到讲者的其他收入，所以「大头」本身无法核对</td><td data-label="证据等级"><span class="tag t-platform">平台核对</span> <span class="tag t-self">讲者自述</span></td></tr>
+      <tr><td data-label="讲者说法">出图接口改网页版后，第二个月营收翻 5 倍</td><td data-label="核验结果">无公开数据。「My X project 1」创立于 2023-07，与「2023 年做出图接口」时间吻合，但是否同一产品无法确认</td><td data-label="证据等级"><span class="tag t-self">讲者自述</span> <span class="tag t-editor">编辑推断</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="quiz" aria-labelledby="h-quiz">
+  <h2 id="h-quiz">先自测：你现在卖的是什么？</h2>
+  <p class="prose">按一项具体收入来源作答，不要给自己整个人贴标签。结果给出「主要形态＋辅助形态」，不打总分。</p>
+  <form class="card quiz" id="quizForm">
+    <fieldset>
+      <legend>谁给你付钱？</legend>
+      <div class="opts">
+        <label><input type="radio" name="q1" value="0">还没有人付钱，或只是自己用 AI 提效</label>
+        <label><input type="radio" name="q1" value="1">个人客户或公司，按单、按小时</label>
+        <label><input type="radio" name="q1" value="2">读者、学员、广告主</label>
+        <label><input type="radio" name="q1" value="3">中小企业老板，按效果或月费</label>
+        <label><input type="radio" name="q1" value="4">自己动手用工具的终端用户</label>
+        <label><input type="radio" name="q1" value="5">大中型企业的业务部门</label>
+        <label><input type="radio" name="q1" value="6">开发者或其他 AI 公司</label>
+        <label><input type="radio" name="q1" value="7">投资方或大型资本项目</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>他们为什么付钱？</legend>
+      <div class="opts">
+        <label><input type="radio" name="q2" value="1">要有人把这件活做完</label>
+        <label><input type="radio" name="q2" value="2">想看、想学，或想触达你的受众</label>
+        <label><input type="radio" name="q2" value="3">要一个能验收的业务结果</label>
+        <label><input type="radio" name="q2" value="4">想自己用工具完成任务</label>
+        <label><input type="radio" name="q2" value="5">要一段业务流程长期稳定运行</label>
+        <label><input type="radio" name="q2" value="6">要把某种能力接进自己的产品</label>
+        <label><input type="radio" name="q2" value="7">要模型研发成果或资本回报</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>你交付的是什么？</legend>
+      <div class="opts">
+        <label><input type="radio" name="q3" value="1">一件做完的活（图、文案、方案）</label>
+        <label><input type="radio" name="q3" value="2">文章、视频、模板、课程</label>
+        <label><input type="radio" name="q3" value="3">线索、内容或自动化带来的结果</label>
+        <label><input type="radio" name="q3" value="4">软件账号、订阅或授权</label>
+        <label><input type="radio" name="q3" value="5">嵌进客户流程的系统，外加维护</label>
+        <label><input type="radio" name="q3" value="6">API 或模型接口</label>
+        <label><input type="radio" name="q3" value="7">基础模型，或投资与并购组合</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>交付以后，谁来操作？</legend>
+      <div class="opts">
+        <label><input type="radio" name="q4" value="1">我替客户做完，客户直接拿走</label>
+        <label><input type="radio" name="q4" value="2">客户只是看或学</label>
+        <label><input type="radio" name="q4" value="3">我持续替客户运营</label>
+        <label><input type="radio" name="q4" value="4">客户自己在产品里操作</label>
+        <label><input type="radio" name="q4" value="5">客户团队和我共同运行，需要交接</label>
+        <label><input type="radio" name="q4" value="6">客户的程序自动调用</label>
+        <label><input type="radio" name="q4" value="7">按股权由投资方和董事会治理</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>出了问题，谁负责？</legend>
+      <div class="opts">
+        <label><input type="radio" name="q5" value="1">我返工这一单</label>
+        <label><input type="radio" name="q5" value="2">我只对内容质量负责，不保证效果</label>
+        <label><input type="radio" name="q5" value="3">我对约定的指标负责</label>
+        <label><input type="radio" name="q5" value="4">我保证软件可用，用法由用户决定</label>
+        <label><input type="radio" name="q5" value="5">我负责上线、维护和人工接管</label>
+        <label><input type="radio" name="q5" value="6">我负责接口的可用性和稳定性</label>
+        <label><input type="radio" name="q5" value="7">我对出资方的资本回报负责</label>
+      </div>
+    </fieldset>
+    <div class="btn-row">
+      <button type="submit" class="btn">看结果</button>
+      <button type="reset" class="btn ghost">重填</button>
+    </div>
+    <div class="result" id="quizResult" role="status" aria-live="polite" hidden></div>
+  </form>
+</section>
+
+<section id="forms" aria-labelledby="h-forms">
+  <h2 id="h-forms">七种形态：卖什么、为什么有人付、最大的坑</h2>
+  <p class="prose">七个格子等宽排列，不画金字塔，避免用面积暗示人数或用高度暗示收入。点格子跳到对应卡片；卡片默认展开第一张，其余点标题展开。</p>
+  <nav class="map" aria-label="七种形态总览">
+    <a href="#f1"><span class="n">讲者第 1 层</span><span class="s">卖时间</span><span class="b">按单、按小时</span></a>
+    <a href="#f2"><span class="n">讲者第 2 层</span><span class="s">卖内容</span><span class="b">广告、课程、会员</span></a>
+    <a href="#f3"><span class="n">讲者第 3 层</span><span class="s">卖结果</span><span class="b">效果费、月费</span></a>
+    <a href="#f4"><span class="n">讲者第 4 层</span><span class="s">卖产品</span><span class="b">订阅、授权</span></a>
+    <a href="#f5"><span class="n">讲者第 5 层</span><span class="s">卖系统</span><span class="b">项目、驻场、维护</span></a>
+    <a href="#f6"><span class="n">讲者第 6 层</span><span class="s">卖底层能力</span><span class="b">按调用量</span></a>
+    <a href="#f7"><span class="n">讲者第 7 层</span><span class="s">研发与资本</span><span class="b">股权、资本回报</span></a>
+  </nav>
+
+  <div class="forms">
+
+    <details class="form" id="f1" open>
+      <summary><span class="badge">第1层</span><span class="sum-main"><h3>卖时间</h3><p>AI 让你干得更快，但收费单位仍是你的工时和单件劳动。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：设计师用 AI 出图、销售用 AI 找客户、老板用 AI 写文案回邮件，一天干完三天活，但卖的还是自己的时间，只是能多接几单。他认为这一层人数最多。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>你的工时、一件做完的活</dd></div>
+          <div><dt>付费理由</dt><dd>客户需要有人把这件事做完</dd></div>
+          <div><dt>常见收费</dt><dd>按单、按小时、按天</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>省下的时间能不能变成更多付费订单？还是被客户压价、被返工吃掉？</p>
+        <ul class="ex">
+          <li><span class="tag t-research">研究结果</span> 美国 NBER 工作论文 w31161（Brynjolfsson、Li、Raymond，2023）研究了 5,179 名客服人员：用上 AI 助手后，每小时解决的问题数平均提高 14%，新手和低技能员工提高 34%，资深员工几乎没有提升。<a href="https://www.nber.org/papers/w31161">NBER</a></li>
+        </ul>
+        <p class="note">提醒：这项研究只覆盖客服场景，「每小时解决问题数」是研究指标，不是商业收费方式；不能外推成所有职业都「一天干完三天活」。另外，老板用 AI 回邮件属于内部提效，不等于在经营一门 AI 生意。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f2">
+      <summary><span class="badge">第2层</span><span class="sum-main"><h3>卖内容</h3><p>用 AI 做视频、文章、模板，攒到注意力后接广告或卖课。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：门槛低、人挤人，人人自称 AI 专家。视频本身不值钱，值钱的是有人愿意听你说话，最后还是回到你对内容的理解。他说自己不是很会做内容，而是有一条清晰可见的脉络：在 AI 行业做出了结果，还能输出思考，于是吸引了同路人。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>文章、视频、模板、课程、会员</dd></div>
+          <div><dt>付费理由</dt><dd>读者为内容或信任付费；广告主为触达付费</dd></div>
+          <div><dt>常见收费</dt><dd>广告、赞助、单课、会员</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>有人看，是否就有人买？内容的准确性和素材授权是否清楚？</p>
+        <ul class="ex">
+          <li><span class="tag t-platform">平台核对</span> 讲者 X 粉丝 31.6k（TrustMRR 创始人页显示）。<span class="tag t-self">讲者自述</span> 小红书 1 万多关注。</li>
+          <li><span class="tag t-editor">编辑推断</span> 对讲者来说，内容更像产品的获客渠道，而不是独立的收入来源：他自己说营收大头来自第 4 层的产品。</li>
+        </ul>
+        <p class="note">提醒：内容可以只是别的生意的获客渠道，不一定要单独变现。点赞和播放量不算付费验收。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f3">
+      <summary><span class="badge">第3层</span><span class="sum-main"><h3>卖结果</h3><p>帮传统公司做获客、内容、自动化，客户只看结果，不管你用什么工具。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：类似代运营。以前要 10 个人干的活，现在两三个人就能干完。他认为 AI 改变的不是收入，而是企业的毛利和结构。本页把这句降调为：AI 可能同时改变收入、成本和交付结构。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>在约定条件下、能验收的业务结果</dd></div>
+          <div><dt>付费理由</dt><dd>老板要线索、要降本、要按时交付</dd></div>
+          <div><dt>常见收费</dt><dd>月费、基础费＋有边界的效果费</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>效果能不能归因到你？哪些结果依赖客户配合，哪些真正由你控制？</p>
+        <figure class="card" aria-labelledby="cap-klarna">
+          <div class="bars" role="img" aria-label="Klarna 客服平均解决时长：引入 AI 助手前 11 分钟，之后不到 2 分钟">
+            <div class="bar-row"><span>引入 AI 前</span><div><div class="bar-track"><div class="bar-fill soft" style="width:100%"></div></div><div class="bar-val">约 11 分钟</div></div></div>
+            <div class="bar-row"><span>AI 助手首月</span><div><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><div class="bar-val">不到 2 分钟（条长按 2 分钟画）</div></div></div>
+          </div>
+          <figcaption id="cap-klarna">Klarna 客服平均解决时长，来自公司 2024-02-27 新闻稿，属企业披露，不是独立测量。</figcaption>
+        </figure>
+        <ul class="ex">
+          <li><span class="tag t-company">企业披露</span> Klarna 2024-02-27 新闻稿：OpenAI 驱动的 AI 助手上线首月处理 230 万次对话，占客服聊天的三分之二；工作量相当于 700 名全职客服；预计 2024 年带来 4,000 万美元利润改善（预测值）。<a href="https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/">Klarna</a></li>
+          <li><span class="tag t-media">媒体报道</span> 2025 年 5 月，CEO 对 Bloomberg 表示，只靠 AI 导致服务质量下降，公司要重新招聘一部分人工客服。<a href="https://fortune.com/2025/05/09/klarna-ai-humans-return-on-investment/">Fortune 2025-05-09</a></li>
+          <li><span class="tag t-media">媒体报道</span> 同月 CEO 对 CNBC 表示，公司人数缩减约 40%，一部分归因于 AI 投入，一部分是自然流失。<a href="https://www.cnbc.com/2025/05/14/klarna-ceo-says-ai-helped-company-shrink-workforce-by-40percent.html">CNBC 2025-05-14</a></li>
+        </ul>
+        <p class="note">提醒：Klarna 是企业自己用 AI 的效果案例，不是「代运营」这种商业模式的直接证据。「相当于 700 名客服的工作量」不等于裁掉 700 人；4,000 万美元是当时的预测。后续调整说明人和 AI 的分工在变化，不是线性替换，也不能概括成「全面回归人工」。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f4">
+      <summary><span class="badge">第4层</span><span class="sum-main"><h3>卖产品</h3><p>把 AI 能力包装成软件，按月订阅或收授权。讲者自述营收大头在这里。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：这一层常被技术圈嘲笑为「套壳」「二道贩子」。但付钱的人不在乎你是不是套壳，只在乎能不能解决需求。做好它需要理解产品、用户需求和市场。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>用户自己能完成任务的软件</dd></div>
+          <div><dt>付费理由</dt><dd>省事、可重复用，不用懂技术</dd></div>
+          <div><dt>常见收费</dt><dd>订阅、买断授权、按次</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>用户会不会持续使用？重度用户的模型调用费和客服成本能不能承受？</p>
+        <ul class="ex">
+          <li><span class="tag t-platform">平台核对</span> 讲者的「My X project 2」：2024-03 创立，AI/SaaS 类，累计收入 $970,861，MRR $17,197，266 个活跃订阅。<a href="https://trustmrr.com/startup/my-x-project-2">TrustMRR</a></li>
+          <li><span class="tag t-media">二手整理</span> Pieter Levels 的 Photo AI 于 2023-02 上线，基于 Stable Diffusion XL 等开源模型，是常被举的「套壳」例子。Indie Hackers 的案例整理称它 18 个月做到约 13.2 万美元 MRR；数字来自创始人自报。<a href="https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579">Indie Hackers</a></li>
+        </ul>
+        <p class="note">提醒：有人用套壳做成，不代表套壳容易成功；这两个例子都是幸存者，不代表一般成功率。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f5">
+      <summary><span class="badge">第5层</span><span class="sum-main"><h3>卖系统</h3><p>交付嵌入业务流程、可持续运行的解决方案。FDE 是常见的实施方式。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：替一家公司把整个部门的活换掉，做 AI 落地改造，也就是当下很火的 FDE（Forward Deployed Engineer，驻场工程师）。要求对 AI 和企业业务都理解得很深。他认为很多做 AI 内容的人把自己包装成能做这一层，其实做不了——这是讲者的判断，没有数据。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>连接数据、软件、人员和异常处理的完整流程</dd></div>
+          <div><dt>付费理由</dt><dd>业务部门要一段流程长期稳定运行</dd></div>
+          <div><dt>常见收费</dt><dd>实施项目费＋维护费，常配合软件授权</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>需求会不会无限蔓延？数据权限、验收、维护和人工接管分别由谁负责？</p>
+        <ul class="ex">
+          <li><span class="tag t-media">行业观点</span> a16z 合伙人 Joe Schmidt 的文章《Trading Margin for Moat》（2025-06-04）认为，企业级 AI 需要派工程师上门实施，初期用毛利换护城河：拿到客户数据、成为客户的工作系统。<a href="https://a16z.com/services-led-growth/">a16z</a></li>
+          <li><span class="tag t-media">媒体报道</span> 据 KDnuggets 引用 Indeed 与 FT 的分析，FDE 岗位月度发布量在 2025 年 1–9 月增长 800% 以上。这是单一招聘网站、低基数的指数，不等于从业人数。<a href="https://www.kdnuggets.com/forward-deployed-engineer-ais-hottest-new-career-or-consulting-with-a-better-title">KDnuggets 2026-10-02</a></li>
+          <li><span class="tag t-media">媒体报道</span> OpenAI 于 2026-05-11 宣布独立实体 The OpenAI Deployment Company，TPG、Advent 等出资 40 亿美元，估值 140 亿美元，首笔收购英国公司 Tomoro（150 名 FDE）；Anthropic 于 2026-05-04 宣布类似的独立 FDE 公司，投资方含 Anthropic、Blackstone、Hellman &amp; Friedman、高盛，面向中型企业。<a href="https://blog.pragmaticengineer.com/the-pulse-forward-deployed-engineering-heats-up-again/">Pragmatic Engineer 2026-05-24</a></li>
+        </ul>
+        <p class="note">一个自检问题（来自 KDnuggets）：你在客户现场学到的东西，会不会改变下一步要做的产品？如果不会，「那就是换了头衔的咨询」。它检验的是反馈回路，不是能力认证；做咨询本身也有价值。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f6">
+      <summary><span class="badge">第6层</span><span class="sum-main"><h3>卖底层能力</h3><p>给别的 AI 产品供货，比如 API。买家主要是开发者。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：2023 年他上班时业余做了一个 AI 出图接口，以为买家是程序员。上线一个月后翻客户记录，发现大多是设计公司、营销公司的邮箱——愿意付钱，但不会写代码。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>可被程序调用的模型或能力</dd></div>
+          <div><dt>付费理由</dt><dd>开发者要把能力接进自己的产品</dd></div>
+          <div><dt>常见收费</dt><dd>按调用量、按算力</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>上游模型涨价、限流或故障时怎么办？收入是否依赖少数几个大客户？</p>
+        <ul class="ex">
+          <li><span class="tag t-company">投资方公告</span> 生成式媒体 API 平台 fal 于 2025-12 完成 1.4 亿美元 D 轮融资，Sequoia 领投，估值 45 亿美元。<a href="https://kindredventures.com/announcement/fal-series-d-140m/">Kindred Ventures</a></li>
+          <li><span class="tag t-estimate">第三方估算</span> Sacra 估计 fal 在 2026-02 的年化收入约 4 亿美元。<a href="https://sacra.com/c/fal-ai/">Sacra</a></li>
+        </ul>
+        <p class="note">提醒：这一层也能做大，但融资额和估值不等于收入或利润，fal 的例子也不能推出所有 API 生意都必须靠融资。</p>
+      </div>
+    </details>
+
+    <details class="form" id="f7">
+      <summary><span class="badge">第7层</span><span class="sum-main"><h3>研发与资本</h3><p>做基础大模型研发，并调动资本收购公司、投资人才。</p></span><span class="chev"><span class="c-open">展开</span><span class="c-close">收起</span></span></summary>
+      <div class="body">
+        <p class="quote">讲者原意：塔尖靠的是资源和资本调动能力，或顶尖的 AI 研发能力，全世界数得过来的几个团队。</p>
+        <dl class="facts">
+          <div><dt>卖什么</dt><dd>模型研发成果、股权与资本布局</dd></div>
+          <div><dt>付费方</dt><dd>投资方、大型企业与大型项目</dd></div>
+          <div><dt>回报形式</dt><dd>股权增值、平台收入</dd></div>
+        </dl>
+        <p class="risk"><b>首要风险：</b>资金、研发周期和商业交付如何衔接？这不是个人的必经终点。</p>
+        <ul class="ex">
+          <li><span class="tag t-media">媒体报道</span> 2025-01，OpenAI、SoftBank、Oracle、MGX 宣布 Stargate 项目，计划 4 年投入 5,000 亿美元建设 AI 基础设施（计划额，不是已完成投入）。<a href="https://www.datacenterdynamics.com/en/news/openai-announces-the-stargate-project-500bn-over-four-years-on-ai-infrastructure/">DCD</a></li>
+          <li><span class="tag t-media">媒体报道</span> 2025-06，Meta 以 143 亿美元取得 Scale AI 49% 股份（部分股权，不是全资收购），Scale AI 创始人 Alexandr Wang 加入 Meta 领导超级智能实验室。<a href="https://www.cnbc.com/2025/06/12/scale-ai-founder-wang-announces-exit-for-meta-part-of-14-billion-deal.html">CNBC 2025-06-12</a></li>
+        </ul>
+        <p class="note">提醒：这两例说明资本和人才调动的量级；它们不足以证明「研发与资本」是一种可以直接售卖的商品。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<section id="story" aria-labelledby="h-story">
+  <h2 id="h-story">反直觉：从第 6 层「退」到第 4 层，讲者说生意反而更大</h2>
+  <p class="prose">这是讲者自述的经历，他用它说明「层级不等于收入」。关键动作不是升级，而是看清付钱的人是谁、他会不会用。</p>
+  <div class="flow" role="list" aria-label="讲者从 API 到网页版的过程">
+    <div class="step" role="listitem"><h3>做了出图 API</h3><p>2023 年业余做，以为买家是会写代码的程序员。</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step" role="listitem"><h3>翻客户记录</h3><p>上线一个月，发现付费者多是设计公司、营销公司：愿意付钱，但不会写代码。</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step hl" role="listitem"><h3>补上网页版</h3><p>让不会写代码的人也能直接出图。讲者说第二个月营收翻了 5 倍。<span class="tag t-self">讲者自述</span></p></div>
+  </div>
+  <p class="note">这个故事只能说明「买家会不会用」值得最先确认。营收翻 5 倍是讲者自述，无法证明全部由网页版带来；新增网页版也不必撤掉 API，两者可以并存。</p>
+
+  <div class="grid2" style="margin-top:var(--space-24)">
+    <figure class="card" aria-labelledby="cap-prod">
+      <h3>讲者已单列的三个产品（累计收入）</h3>
+      <div class="bars" style="margin-top:var(--space-16)" role="img" aria-label="累计收入：My X project 2 为 970,861 美元，My X project 1 为 467,508 美元，My X project 3 约 23.9 万美元">
+        <div class="bar-row"><span>My X project 2</span><div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">$970,861 · MRR $17,197 · 2024-03 创立</div></div></div>
+        <div class="bar-row"><span>My X project 1</span><div><div class="bar-track"><div class="bar-fill" style="width:48.2%"></div></div><div class="bar-val">$467,508 · MRR $2,241 · 2023-07 创立</div></div></div>
+        <div class="bar-row"><span>My X project 3</span><div><div class="bar-track"><div class="bar-fill" style="width:24.6%"></div></div><div class="bar-val">约 $239k（平台页取整显示）</div></div></div>
+      </div>
+      <figcaption id="cap-prod">数据来自 TrustMRR，2026-10-09 检索。创始人页显示共 4 个产品、合计 $1,677,974；第四个产品本页未单列，也不用差额反推。累计收入只反映收入分布，不能证明换层的效果。</figcaption>
+    </figure>
+    <figure class="card" aria-labelledby="cap-nber">
+      <h3>AI 助手对客服效率的提升（第 1 层例证）</h3>
+      <div class="bars" style="margin-top:var(--space-16)" role="img" aria-label="每小时解决问题数提升：全体平均 14%，新手和低技能员工 34%，资深员工几乎无提升">
+        <div class="bar-row"><span>全体平均</span><div><div class="bar-track"><div class="bar-fill alt" style="width:41%"></div></div><div class="bar-val">+14%</div></div></div>
+        <div class="bar-row"><span>新手、低技能</span><div><div class="bar-track"><div class="bar-fill alt" style="width:100%"></div></div><div class="bar-val">+34%</div></div></div>
+        <div class="bar-row"><span>资深员工</span><div><div class="bar-val">几乎无提升（本页只采用定性结论，不画定量条形）</div></div></div>
+      </div>
+      <figcaption id="cap-nber">NBER 工作论文 w31161（2023），样本 5,179 名客服；2025 年 QJE 正式版的平均提升口径为 15%。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="paths" aria-labelledby="h-paths">
+  <h2 id="h-paths">换层清单：要换掉什么、补上什么、何时暂停</h2>
+  <p class="prose">选一条你关心的路径。这些是待检查的变化，不代表每次迁移都必须换买家；「暂停信号」是本页的编辑建议。</p>
+  <div class="path-pick" role="tablist" aria-label="选择换层路径">
+    <button type="button" role="tab" aria-selected="true" aria-controls="p12" id="t12">1 → 2</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="p13" id="t13" tabindex="-1">1 → 3</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="p24" id="t24" tabindex="-1">2 → 4</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="p34" id="t34" tabindex="-1">3 → 4</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="p35" id="t35" tabindex="-1">3 → 5</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="p64" id="t64" tabindex="-1">6 → 4</button>
+  </div>
+  <div class="card path" role="tabpanel" id="p12" aria-labelledby="t12" tabindex="0">
+    <h3>从定制劳动，到可重复消费的内容</h3>
+    <dl>
+      <dt>换掉</dt><dd>「客户派任务、我逐单完成」→ 面向明确受众持续提供内容；交付变成文章、内容包、模板或课程，收费对应销售、会员或赞助。</dd>
+      <dt>补上</dt><dd>选题、分发、事实核查、素材授权、信任积累。</dd>
+      <dt>过关信号</dt><dd>有人为内容本身付费，而不只是为你的陪伴或定制工时付费。点赞不算验收。</dd>
+      <dt>暂停信号</dt><dd class="stop">长期只有互动、没有任何付费；为了追流量开始放弃事实核查。</dd>
+    </dl>
+  </div>
+  <div class="card path" role="tabpanel" id="p13" aria-labelledby="t13" tabindex="0" hidden>
+    <h3>从完成任务，到承担可验收的结果</h3>
+    <dl>
+      <dt>换掉</dt><dd>「做了多久、做了多少」→ 在约定条件下交付什么成果。买家可以不变，但你要接触到对指标和预算负责的人。</dd>
+      <dt>补上</dt><dd>效果基线、验收标准、归因规则、客户配合项、返工和变更边界。可以用基础服务费加有边界的效果费，不必全押效果。</dd>
+      <dt>过关信号</dt><dd>付费试点能证明价值，而且兑现承诺不依赖你控制不了的因素。</dd>
+      <dt>暂停信号</dt><dd class="stop">结果主要取决于客户配合或外部因素；变更请求持续超出合同范围。</dd>
+    </dl>
+  </div>
+  <div class="card path" role="tabpanel" id="p24" aria-labelledby="t24" tabindex="0" hidden>
+    <h3>从解释方法，到交付能用的软件</h3>
+    <dl>
+      <dt>换掉</dt><dd>「让人看懂、愿意听」→ 让目标用户自己完成任务。粉丝未必是产品买家，收费也不必固定为订阅。</dd>
+      <dt>补上</dt><dd>需求验证、使用引导、计费、稳定性、客服，以及持续使用率和单位成本的检查。</dd>
+      <dt>过关信号</dt><dd>用户不靠你一对一指导也能完成任务，并愿意继续使用和付费。阅读量不能替代产品需求。</dd>
+      <dt>暂停信号</dt><dd class="stop">用户离开你的指导就用不起来；付费者几乎全是熟人粉丝，而且不续费。</dd>
+    </dl>
+  </div>
+  <div class="card path" role="tabpanel" id="p34" aria-labelledby="t34" tabindex="0" hidden>
+    <h3>从付费服务里，提取重复需求再产品化</h3>
+    <dl>
+      <dt>换掉</dt><dd>每个客户单独做一遍 → 把多个客户反复出现的同一需求做成工具。创业不一定要先攒粉丝。</dd>
+      <dt>补上</dt><dd>需求记录、标准化范围、自助使用流程、计费与客服。</dd>
+      <dt>过关信号</dt><dd>不是你现有客户的人，也愿意付费自己用。</dd>
+      <dt>暂停信号</dt><dd class="stop">每个客户都需要大量定制，工具离开你就跑不起来。</dd>
+    </dl>
+  </div>
+  <div class="card path" role="tabpanel" id="p35" aria-labelledby="t35" tabindex="0" hidden>
+    <h3>从局部成果，到可持续运行的业务流程</h3>
+    <dl>
+      <dt>换掉</dt><dd>单项交付 → 连接数据、软件、人员和异常处理的完整流程；除了效果，还要明确实施里程碑、验收和后续维护。</dd>
+      <dt>补上</dt><dd>业务负责人和技术方的协作、数据权限、流程设计、监测、培训、人工接管、交接文档。</dd>
+      <dt>过关信号</dt><dd>先让一段边界清楚的流程稳定运行并通过验收，而不是先承诺「替掉整个部门」。</dd>
+      <dt>暂停信号</dt><dd class="stop">范围持续蔓延；数据权限迟迟拿不到；上线后没人负责维护。</dd>
+    </dl>
+  </div>
+  <div class="card path" role="tabpanel" id="p64" aria-labelledby="t64" tabindex="0" hidden>
+    <h3>从可调用的能力，到非技术用户能完成的任务</h3>
+    <dl>
+      <dt>换掉</dt><dd>接口文档、参数和调用 → 可直接使用的工作流、模板、批处理和结果管理。买家可能完全不变，这正是讲者的故事。</dd>
+      <dt>补上</dt><dd>用户界面、使用引导、支付和售后；报价可以按任务或套餐，但仍要约束底层用量和成本。</dd>
+      <dt>过关信号</dt><dd>非技术用户不用你代操作就能拿到结果、愿意付费，而且重度使用不会持续侵蚀收益。</dd>
+      <dt>暂停信号</dt><dd class="stop">网页版用户的调用成本持续高于收费；大部分用户仍要你代为操作。</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="ledger" aria-labelledby="h-ledger">
+  <h2 id="h-ledger">小生意账：换层之前先算这六笔</h2>
+  <p class="prose">比再看一组成功案例更有用的，是先把下面几笔账想清楚。勾选只保存在当前页面，不上传。<span class="progress" id="ledgerCount">已想清 0 / 6</span></p>
+  <ul class="ledger" id="ledgerList">
+    <li><label><input type="checkbox">第一位付费客户从哪里来？<small>能说出具体的人或渠道，而不是「市场很大」。</small></label></li>
+    <li><label><input type="checkbox">交付一次要花哪些成本？<small>人工复核、售后、模型调用费都算上；不要用「收入减 API 费」冒充利润。</small></label></li>
+    <li><label><input type="checkbox">多久能回款？<small>先付还是后付，账期多长。</small></label></li>
+    <li><label><input type="checkbox">什么情况下客户会复购或续费？<small>说得出触发复购的具体场景。</small></label></li>
+    <li><label><input type="checkbox">上游模型涨价或限流时，价格还撑得住吗？<small>算一下重度用户的成本。</small></label></li>
+    <li><label><input type="checkbox">出了问题谁负责、怎么止损？<small>写下暂停条件：范围失控、持续亏损、无人复购。</small></label></li>
+  </ul>
+</section>
+
+<section id="sources" aria-labelledby="h-src">
+  <h2 id="h-src">来源与口径</h2>
+  <div class="prose">
+    <p>原始材料是讲者的一段中文口播。本页在 2026-10-09 至 10 检索并打开了下列页面；数字以检索时的页面为准，之后可能变化。TrustMRR 由 Marc Lou 创建，通过 Stripe、RevenueCat、Superwall、App Store、Creem 等支付后台核对收入，不接受手填截图；它不核对利润。</p>
+  </div>
+  <ol class="sources">
+    <li>TrustMRR 首页与方法说明 · 平台 · <a href="https://trustmrr.com/">trustmrr.com</a></li>
+    <li>TrustMRR 澳洲榜（170 个项目，按累计收入排序）· 平台核对 · <a href="https://trustmrr.com/country/au">trustmrr.com/country/au</a></li>
+    <li>讲者创始人页（4 个产品、累计 $1,677,974、MRR $22,731、X 粉丝 31.6k）· 平台核对 · <a href="https://trustmrr.com/founder/jamesai">trustmrr.com/founder/jamesai</a></li>
+    <li>My X project 2 产品页 · 平台核对 · <a href="https://trustmrr.com/startup/my-x-project-2">trustmrr.com/startup/my-x-project-2</a></li>
+    <li>Brynjolfsson, Li, Raymond. Generative AI at Work. NBER w31161, 2023 · 研究结果 · <a href="https://www.nber.org/papers/w31161">nber.org/papers/w31161</a></li>
+    <li>Klarna 新闻稿，2024-02-27 · 企业披露 · <a href="https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/">klarna.com</a></li>
+    <li>Fortune，2025-05-09 · 媒体报道 · <a href="https://fortune.com/2025/05/09/klarna-ai-humans-return-on-investment/">fortune.com</a></li>
+    <li>CNBC，2025-05-14 · 媒体报道 · <a href="https://www.cnbc.com/2025/05/14/klarna-ceo-says-ai-helped-company-shrink-workforce-by-40percent.html">cnbc.com</a></li>
+    <li>Indie Hackers，Photo AI 案例整理 · 二手整理（创始人自报数字）· <a href="https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579">indiehackers.com</a></li>
+    <li>a16z，Joe Schmidt，Trading Margin for Moat，2025-06-04 · 行业观点 · <a href="https://a16z.com/services-led-growth/">a16z.com</a></li>
+    <li>KDnuggets，Forward Deployed Engineer 一文，2026-10-02 · 媒体报道（转引 Indeed/FT 数据）· <a href="https://www.kdnuggets.com/forward-deployed-engineer-ais-hottest-new-career-or-consulting-with-a-better-title">kdnuggets.com</a></li>
+    <li>The Pragmatic Engineer，2026-05-24 · 媒体报道 · <a href="https://blog.pragmaticengineer.com/the-pulse-forward-deployed-engineering-heats-up-again/">blog.pragmaticengineer.com</a></li>
+    <li>Kindred Ventures，fal D 轮公告 · 投资方公告 · <a href="https://kindredventures.com/announcement/fal-series-d-140m/">kindredventures.com</a></li>
+    <li>Sacra，fal 收入估算 · 第三方估算 · <a href="https://sacra.com/c/fal-ai/">sacra.com</a></li>
+    <li>DCD，Stargate 项目 · 媒体报道 · <a href="https://www.datacenterdynamics.com/en/news/openai-announces-the-stargate-project-500bn-over-four-years-on-ai-infrastructure/">datacenterdynamics.com</a></li>
+    <li>CNBC，Meta 与 Scale AI，2025-06-12 · 媒体报道 · <a href="https://www.cnbc.com/2025/06/12/scale-ai-founder-wang-announces-exit-for-meta-part-of-14-billion-deal.html">cnbc.com</a></li>
+  </ol>
+  <div class="note prose">
+    <p><b>本页的整理判断（编辑推断）：</b>七层是按「卖什么」做的分类，分类维度并不统一——第 1 层偏收费方式，第 2–5 层偏交付物，第 6 层偏产业位置，第 7 层混入资本运作，所以它们会重叠，不是互斥的阶梯。按讲者自述，他从第 6 层退到第 4 层后收入反而更大；如果属实，也说明编号高低不对应收入高低。最值得带走的一句：先看付钱的是谁、他会不会用，再决定卖哪一种东西。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="muted">整理与核对：2026-10-10。讲者的关注、点赞、小红书粉丝和营收增长倍数属自述，本页未能公开核验。本页不构成投资或创业建议。</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var names={1:'卖时间',2:'卖内容',3:'卖结果',4:'卖产品',5:'卖系统',6:'卖底层能力',7:'研发与资本'};
+  var form=document.getElementById('quizForm');
+  var out=document.getElementById('quizResult');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var votes={},answered=0,unpaid=false;
+    ['q1','q2','q3','q4','q5'].forEach(function(q){
+      var c=form.querySelector('input[name="'+q+'"]:checked');
+      if(!c)return;
+      answered++;
+      var v=Number(c.value);
+      if(q==='q1'&&v===0){unpaid=true;return;}
+      votes[v]=(votes[v]||0)+1;
+    });
+    if(answered<5){
+      out.className='result warn';
+      out.textContent='还有 '+(5-answered)+' 题没选。每题选一个最接近的答案。';
+      out.hidden=false;return;
+    }
+    var keys=Object.keys(votes).map(Number).sort(function(a,b){return a-b;});
+    var top=0;keys.forEach(function(k){if(votes[k]>top)top=votes[k];});
+    var mains=keys.filter(function(k){return votes[k]===top;});
+    var rest=keys.filter(function(k){return votes[k]<top;});
+    var second=0;rest.forEach(function(k){if(votes[k]>=2&&(!second||votes[k]>votes[second]))second=k;});
+    var label=function(k){return '第 '+k+' 层 · '+names[k];};
+    var html='';
+    if(keys.length===0){
+      html='<b>尚未验证。</b>你还没有付费客户，暂时不属于任何一种 AI 生意形态。建议先完成本页「小生意账」的第一笔：找到第一位付费客户。';
+    }else if(top<2){
+      html='<b>暂无法定位。</b>你的答案分散在不同形态，说明这项收入的买家、交付和责任还没对齐。先按「谁付钱」那一题重新想一遍这笔收入。';
+    }else{
+      html='<b>'+(mains.length>1?'并列主要形态：':'主要形态：')+mains.map(label).join('、')+'</b>';
+      if(second){html+='<br>辅助形态：'+label(second);}
+      html+='<br>'+mains.map(function(k){return '<a href="#f'+k+'">查看'+names[k]+'的首要风险</a>';}).join('　');
+    }
+    if(unpaid&&keys.length&&top>=2){html+='<br><b>尚未验证：</b>你选了「还没有人付钱」，以上只是倾向，等出现真实付费再确认。';}
+    out.className=unpaid?'result warn':'result';
+    out.innerHTML=html;out.hidden=false;
+  });
+  form.addEventListener('reset',function(){out.hidden=true;});
+
+  var tabs=[].slice.call(document.querySelectorAll('.path-pick [role="tab"]'));
+  function select(t){
+    tabs.forEach(function(x){
+      var on=x===t;
+      x.setAttribute('aria-selected',on?'true':'false');
+      x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+    });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t);});
+    t.addEventListener('keydown',function(e){
+      var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+      if(!d)return;
+      var n=tabs[(i+d+tabs.length)%tabs.length];select(n);n.focus();e.preventDefault();
+    });
+  });
+
+  var list=document.getElementById('ledgerList');
+  var count=document.getElementById('ledgerCount');
+  list.addEventListener('change',function(){
+    var n=list.querySelectorAll('input:checked').length;
+    count.textContent='已想清 '+n+' / 6';
+  });
+
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#f"]');
+    if(!a)return;
+    var d=document.querySelector(a.getAttribute('href'));
+    if(d&&d.tagName==='DETAILS')d.open=true;
+  });
+})();
+</script>
+</body>
+</html>

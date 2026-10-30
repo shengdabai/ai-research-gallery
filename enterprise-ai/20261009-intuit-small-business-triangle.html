@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intuit 小企业铁三角:Goodarzi 访谈原稿核对与一人公司适用指南</title>
+<style>
+/* ============================================================
+   1. TOKENS(唯一权威来源)
+   命名:原始刻度 --p-xxx → 语义角色 --color-xxx、--space-xxx、--text-xxx
+   断点:720px / 1100px(媒体查询不能用 var(),字面值集中在此注释,与下方 @media 保持一致)
+   数据驱动值(柱长百分比)写在 style 属性里,属运行时数据,不是设计 token
+   ============================================================ */
+:root{
+  /* primitives: color */
+  --p-white:#ffffff;
+  --p-gray-50:#f6f7f8;
+  --p-gray-100:#eceef0;
+  --p-gray-200:#d9dde2;
+  --p-gray-400:#8a939d;
+  --p-gray-600:#4f5964;
+  --p-gray-800:#242a31;
+  --p-teal-100:#d7f1ee;
+  --p-teal-500:#1f9e93;
+  --p-teal-700:#126e66;
+  --p-amber-100:#fdf0d5;
+  --p-amber-500:#e3a21a;
+  --p-amber-700:#9a6a06;
+  --p-coral-100:#fde1dd;
+  --p-coral-500:#e2574a;
+  --p-coral-700:#9b2f25;
+  --p-violet-100:#e7e2f7;
+  --p-violet-500:#6f5bc4;
+  --p-violet-700:#45358a;
+  --p-sky-100:#dcecf9;
+  --p-sky-500:#2f7fc1;
+  --p-sky-700:#1d5583;
+  /* primitives: scales */
+  --p-space-1:4px; --p-space-2:8px; --p-space-3:12px; --p-space-4:16px;
+  --p-space-5:24px; --p-space-6:32px; --p-space-7:48px; --p-space-8:72px;
+  --p-font-xs:12px; --p-font-sm:14px; --p-font-md:16px; --p-font-lg:19px;
+  --p-font-xl:24px; --p-font-2xl:32px; --p-font-3xl:40px;
+  --p-radius-sm:6px; --p-radius-md:12px; --p-radius-pill:999px;
+  --p-line-tight:1.25; --p-line-body:1.7;
+  --p-weight-regular:400; --p-weight-semibold:600; --p-weight-bold:700;
+  --p-shadow-1:0 1px 2px rgba(36,42,49,.06),0 4px 14px rgba(36,42,49,.06);
+  --p-border-1:1px; --p-border-3:3px;
+  --p-measure:72ch;
+  --p-container:1120px;
+  --p-bar-h:14px;
+  --p-table-min-check:640px; --p-table-min-plan:720px; --p-bar-label-w:200px;
+  --p-opacity-muted:.7;
+  --p-z-sticky:10;
+
+  /* semantic: color */
+  --color-bg:var(--p-gray-50);
+  --color-surface:var(--p-white);
+  --color-surface-alt:var(--p-gray-100);
+  --color-border:var(--p-gray-200);
+  --color-text:var(--p-gray-800);
+  --color-text-muted:var(--p-gray-600);
+  --color-text-faint:var(--p-gray-400);
+  --color-accent:var(--p-teal-500);
+  --color-accent-strong:var(--p-teal-700);
+  --color-accent-soft:var(--p-teal-100);
+  --color-warn:var(--p-amber-500);
+  --color-warn-strong:var(--p-amber-700);
+  --color-warn-soft:var(--p-amber-100);
+  --color-danger:var(--p-coral-500);
+  --color-danger-strong:var(--p-coral-700);
+  --color-danger-soft:var(--p-coral-100);
+  --color-frame:var(--p-violet-500);
+  --color-frame-strong:var(--p-violet-700);
+  --color-frame-soft:var(--p-violet-100);
+  --color-host:var(--p-sky-500);
+  --color-host-strong:var(--p-sky-700);
+  --color-host-soft:var(--p-sky-100);
+  --color-link:var(--p-sky-700);
+  /* semantic: dataviz */
+  --viz-1:var(--p-teal-500);
+  --viz-2:var(--p-amber-500);
+  --viz-3:var(--p-coral-500);
+  --viz-4:var(--p-violet-500);
+  --viz-track:var(--p-gray-100);
+  /* semantic: spacing / type */
+  --space-xs:var(--p-space-1); --space-sm:var(--p-space-2); --space-md:var(--p-space-3);
+  --space-lg:var(--p-space-4); --space-xl:var(--p-space-5); --space-2xl:var(--p-space-6);
+  --space-3xl:var(--p-space-7); --space-4xl:var(--p-space-8);
+  --text-xs:var(--p-font-xs); --text-sm:var(--p-font-sm); --text-md:var(--p-font-md);
+  --text-lg:var(--p-font-lg); --text-xl:var(--p-font-xl); --text-2xl:var(--p-font-2xl); --text-3xl:var(--p-font-3xl);
+  --radius-sm:var(--p-radius-sm); --radius-md:var(--p-radius-md); --radius-pill:var(--p-radius-pill);
+  --shadow-card:var(--p-shadow-1);
+  --border-w:var(--p-border-1); --border-w-strong:var(--p-border-3);
+  --line-tight:var(--p-line-tight); --line-body:var(--p-line-body);
+  --weight-regular:var(--p-weight-regular); --weight-semibold:var(--p-weight-semibold); --weight-bold:var(--p-weight-bold);
+  --measure:var(--p-measure); --container:var(--p-container);
+  --bar-h:var(--p-bar-h); --table-min-check:var(--p-table-min-check); --table-min-plan:var(--p-table-min-plan); --bar-label-w:var(--p-bar-label-w); --opacity-muted:var(--p-opacity-muted); --z-sticky:var(--p-z-sticky);
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+}
+
+/* ============================================================
+   2. BASE / RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--text-md);line-height:var(--line-body);word-break:break-word;overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:var(--line-tight);margin:0 0 var(--space-md)}
+h1{font-size:var(--text-2xl);font-weight:var(--weight-bold)}
+h2{font-size:var(--text-xl);font-weight:var(--weight-bold);margin-top:var(--space-xl)}
+h3{font-size:var(--text-lg);font-weight:var(--weight-semibold)}
+h4{font-size:var(--text-md);font-weight:var(--weight-semibold);margin-bottom:var(--space-sm)}
+p{margin:0 0 var(--space-md);max-width:var(--measure)}
+ul,ol{margin:0 0 var(--space-md);padding-left:var(--space-xl)}
+li{margin-bottom:var(--space-xs)}
+a{color:var(--color-link)}
+strong{font-weight:var(--weight-semibold)}
+small{font-size:var(--text-sm);color:var(--color-text-muted)}
+
+/* ============================================================
+   3. LAYOUT
+   ============================================================ */
+.wrap{max-width:var(--container);margin:0 auto;padding:var(--space-xl) var(--space-lg) var(--space-4xl)}
+.section{margin-top:var(--space-3xl)}
+.mt-lg{margin-top:var(--space-lg)}
+.grid-2{display:grid;grid-template-columns:1fr;gap:var(--space-lg)}
+.grid-3{display:grid;grid-template-columns:1fr;gap:var(--space-lg)}
+@media (min-width:720px){
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr 1fr 1fr}
+  h1{font-size:var(--text-3xl)}
+}
+
+/* ============================================================
+   4. COMPONENTS
+   ============================================================ */
+/* hero */
+.hero{background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-xl);box-shadow:var(--shadow-card)}
+.hero .meta{display:flex;flex-wrap:wrap;gap:var(--space-sm);font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-md)}
+.hero .lede{font-size:var(--text-lg);max-width:var(--measure)}
+
+/* card */
+.card{background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-card);min-width:0}
+.card--accent{border-top:var(--border-w-strong) solid var(--color-accent)}
+.card--warn{border-top:var(--border-w-strong) solid var(--color-warn)}
+.card--danger{border-top:var(--border-w-strong) solid var(--color-danger)}
+.card--frame{border-top:var(--border-w-strong) solid var(--color-frame)}
+.card .num{font-size:var(--text-2xl);font-weight:var(--weight-bold);line-height:var(--line-tight);color:var(--color-accent-strong)}
+.card .num--warn{color:var(--color-warn-strong)}
+.card .num--danger{color:var(--color-danger-strong)}
+
+/* tags(口径标签) */
+.tag{display:inline-block;padding:0 var(--space-sm);border-radius:var(--radius-pill);font-size:var(--text-xs);font-weight:var(--weight-semibold);line-height:var(--line-body);white-space:nowrap;vertical-align:middle}
+.tag--quote{background:var(--color-accent-soft);color:var(--color-accent-strong)}
+.tag--part{background:var(--color-warn-soft);color:var(--color-warn-strong)}
+.tag--frame{background:var(--color-frame-soft);color:var(--color-frame-strong)}
+.tag--host{background:var(--color-host-soft);color:var(--color-host-strong)}
+.tag--ext{background:var(--color-surface-alt);color:var(--color-text-muted)}
+.tag--no{background:var(--color-danger-soft);color:var(--color-danger-strong)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-sm);margin:var(--space-md) 0}
+
+/* quote */
+.quote{border-left:var(--border-w-strong) solid var(--color-accent);background:var(--color-accent-soft);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-sm);margin:0 0 var(--space-md);max-width:var(--measure)}
+.quote cite{display:block;font-style:normal;font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-xs)}
+
+/* callout */
+.callout{border:var(--border-w) solid var(--color-border);border-left:var(--border-w-strong) solid var(--color-warn);background:var(--color-warn-soft);padding:var(--space-md) var(--space-lg);border-radius:var(--radius-sm);margin:0 0 var(--space-md)}
+.callout--danger{border-left-color:var(--color-danger);background:var(--color-danger-soft)}
+.callout--frame{border-left-color:var(--color-frame);background:var(--color-frame-soft)}
+.callout p:last-child{margin-bottom:0}
+
+/* table */
+.table-scroll{min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface)}
+table{border-collapse:collapse;width:100%;font-size:var(--text-sm)}
+th,td{padding:var(--space-sm) var(--space-md);border-bottom:var(--border-w) solid var(--color-border);text-align:left;vertical-align:top}
+th{background:var(--color-surface-alt);font-weight:var(--weight-semibold);position:sticky;top:0;z-index:var(--z-sticky)}
+tr:last-child td{border-bottom:0}
+.table-check{min-width:var(--table-min-check)}
+.table-plan{min-width:var(--table-min-plan)}
+
+/* bar chart */
+.bars{list-style:none;padding:0;margin:0}
+.bars li{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-xs);margin-bottom:var(--space-md)}
+@media (min-width:720px){.bars li{grid-template-columns:var(--bar-label-w) 1fr;align-items:center;gap:var(--space-md)}}
+.bars .label{font-size:var(--text-sm);color:var(--color-text-muted)}
+.bars .track{background:var(--viz-track);border-radius:var(--radius-pill);height:var(--bar-h);position:relative;overflow:hidden}
+.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:var(--radius-pill);background:var(--viz-1)}
+.bars .fill--2{background:var(--viz-2)}
+.bars .fill--3{background:var(--viz-3)}
+.bars .fill--4{background:var(--viz-4)}
+.bars .val{font-size:var(--text-sm);font-weight:var(--weight-semibold);margin-left:var(--space-sm)}
+.bars .row{display:flex;align-items:center;min-width:0}
+.bars .row .track{flex:1 1 auto}
+
+/* triangle(铁三角示意) */
+.tri{display:grid;grid-template-columns:1fr;gap:var(--space-md)}
+@media (min-width:720px){.tri{grid-template-columns:1fr 1fr 1fr}}
+.tri .side{border-radius:var(--radius-md);padding:var(--space-lg);border:var(--border-w) solid var(--color-border);background:var(--color-surface)}
+.tri .side h3{display:flex;align-items:center;gap:var(--space-sm)}
+.tri .idx{display:inline-flex;align-items:center;justify-content:center;width:var(--space-2xl);height:var(--space-2xl);border-radius:var(--radius-pill);color:var(--color-surface);font-size:var(--text-sm);font-weight:var(--weight-bold);flex:0 0 auto}
+.tri .idx--1{background:var(--color-accent-strong)}
+.tri .idx--2{background:var(--color-warn-strong)}
+.tri .idx--3{background:var(--color-frame-strong)}
+
+/* plan steps */
+.step{display:grid;grid-template-columns:1fr;gap:var(--space-sm);padding:var(--space-lg);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface);margin-bottom:var(--space-md)}
+@media (min-width:1100px){.step{grid-template-columns:1.1fr 1fr 1fr}}
+.step h4{margin-bottom:var(--space-xs)}
+.step .k{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:var(--space-xs);color:var(--color-text-muted);font-weight:var(--weight-semibold)}
+.step p{margin-bottom:0;font-size:var(--text-sm)}
+
+/* checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{padding:var(--space-sm) 0 var(--space-sm) var(--space-xl);position:relative;border-bottom:var(--border-w) solid var(--color-border)}
+.checklist li::before{content:"";position:absolute;left:0;top:var(--space-md);width:var(--space-lg);height:var(--space-lg);border:var(--border-w) solid var(--color-accent);border-radius:var(--radius-sm)}
+
+/* sources */
+.sources{font-size:var(--text-sm);color:var(--color-text-muted)}
+.sources li{margin-bottom:var(--space-sm)}
+footer{margin-top:var(--space-3xl);font-size:var(--text-xs);color:var(--color-text-muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="meta">
+    <span>2026-10-09</span><span>·</span><span>原稿:Sequoia Capital 播客《Long Strange Trip》2025-11-20 期,Brian Halligan 对谈 Intuit CEO Sasan Goodarzi,约 49 分钟</span>
+  </div>
+  <h1>Intuit 小企业「铁三角」:访谈原稿核对与一人公司适用指南</h1>
+  <p class="lede">视频解说把访谈整理成「像消费品一样做产品 → 靠信誉节点获客 → 替客户做完以留住」三条边。核对原稿后:三条边的核心句都在原话里;19 条说法里 <strong>10 条是原稿原话、2 条部分支持、3 条是解说员加的框架、2 条靠外部史料旁证、1 条说话人归属错、1 条夸张数字不在原稿</strong>。铁三角是一个待检验的经营假说,不是已经被 Intuit 数据证明的增长公式。</p>
+  <div class="legend">
+    <span class="tag tag--quote">原稿原话</span>
+    <span class="tag tag--part">部分支持</span>
+    <span class="tag tag--host">主持人说的</span>
+    <span class="tag tag--frame">解说员框架</span>
+    <span class="tag tag--ext">外部核实</span>
+    <span class="tag tag--no">不在原稿</span>
+  </div>
+</header>
+
+<!-- ===== 结论卡 ===== -->
+<section class="section">
+  <h2>一、先看结论</h2>
+  <div class="grid-3">
+    <div class="card card--accent">
+      <div class="num">10 / 19</div>
+      <p><strong>视频说法是原稿原话</strong>:小企业主像消费者、只解决窄问题、follow-me-home、会计师是伙伴不是渠道、200 亿条记录促成买 Mailchimp、六年半前押注数据+AI、Credit Karma 自建要五年以上、转云慢了四五年、六个月一问、三项指标。另有 2 条仅部分支持:「一个默认选项」和「SaaS 变大宗商品」是解说员的概括。</p>
+    </div>
+    <div class="card card--frame">
+      <div class="num num--warn">3 + 2 处</div>
+      <p><strong>3 处是解说员加的框架</strong>:系统一/系统二、熵与秩序、三级阶梯。<strong>2 处是外部史料,不出自本访谈</strong>:支票簿界面故事、会计师曾讨厌 QuickBooks 与 ProAdvisor 计划的来历。</p>
+    </div>
+    <div class="card card--danger">
+      <div class="num num--danger">2 处要改</div>
+      <p>「大部分收入来自会计渠道」是主持人 Halligan 的开场陈述,指 QuickBooks,Goodarzi 未复述;「流失率超过 90%」在原稿里没有,原稿只有 Halligan 提到 HubSpot 年流失约 11%。</p>
+    </div>
+  </div>
+  <div class="callout mt-lg">
+    <p><strong>最该记住的一句话</strong>:核对到原话 ≠ 验证了事实 ≠ 证明了因果。Goodarzi 说「会计师介绍的客户成交快十倍」,这是公司自述,不等于获客成本低十倍;Intuit 2026 财年付费客户存量只增 3%,也不能反过来说明「替客户做完」没用。本页把这三层分开标注。</p>
+  </div>
+</section>
+
+<!-- ===== 核对表 ===== -->
+<section class="section">
+  <h2>二、逐条核对:视频说法 vs 访谈原稿</h2>
+  <p>原稿来自 Sequoia 官网全文逐字稿(页面把姓拼成 Goodzari)。视频是中文解说员对播客的二次加工,不是逐句翻译,所以需要分清「谁说的、原稿有没有」。</p>
+  <div class="table-scroll">
+  <table class="table-check">
+    <thead><tr><th>#</th><th>视频说法</th><th>口径</th><th>原稿或外部依据</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>小企业主是消费者,不是迷你企业</td><td><span class="tag tag--quote">原稿原话</span></td><td>Goodarzi:他们「其实是消费者……行为像消费者」;Halligan 收尾再次强调</td></tr>
+      <tr><td>2</td><td>系统一 / 系统二(卡尼曼)</td><td><span class="tag tag--frame">解说员框架</span></td><td>原稿未出现</td></tr>
+      <tr><td>3</td><td>只解决窄问题:获客、哪些客户赚钱、收款、现金流</td><td><span class="tag tag--quote">原稿原话</span></td><td>原稿列的就是这四件事</td></tr>
+      <tr><td>4</td><td>翻译行话、只给一个默认选项</td><td><span class="tag tag--part">部分支持</span></td><td>原稿强调「简单、像消费品」;「一个默认选项」是解说员概括</td></tr>
+      <tr><td>5</td><td>follow-me-home 跟着用户回家</td><td><span class="tag tag--quote">原稿原话</span></td><td>Goodarzi:仍在用但「不是最主要手段」,分确认型与真观察型,「客户说的和做的不一样」,现在与云端数据结合;Halligan 讲了创始人到用户家观察的来历</td></tr>
+      <tr><td>6</td><td>支票簿界面的故事</td><td><span class="tag tag--ext">外部核实</span></td><td>不在本访谈;Intuit 官方 Quicken 史料与公开资料记载 Quicken 以支票簿为界面原则,QuickBooks 1992 年基于 Quicken 代码面向无会计训练的小企业主</td></tr>
+      <tr><td>7</td><td>会计师是枢纽节点、「批发式」获客</td><td><span class="tag tag--quote">原稿原话</span></td><td>Goodarzi:获客「非常非常难」,靠口碑与会计师;会计师「只推荐自己用过、喜欢的东西」;「不是渠道、不是经销商,是伙伴」;会计师介绍的中型客户成交快十倍、买更多服务</td></tr>
+      <tr><td>8</td><td>会计师曾讨厌 QuickBooks → ProAdvisor 计划</td><td><span class="tag tag--ext">外部核实</span></td><td>不在本访谈;公开资料记载早期会计师对缺少审计痕迹等不满;ProAdvisor 2021 年起对新订阅给 30% 分成,<strong>仅限首 12 个月</strong>;2024 年起 Payments 三年 20% 净收入分成</td></tr>
+      <tr><td>9</td><td>「大部分收入至今仍来自会计渠道」</td><td><span class="tag tag--host">主持人说的</span></td><td>Halligan 开场说 QuickBooks 多数收入经会计渠道;Goodarzi 未复述。可核实的近邻数据:FY26 会计师带来 25% 的新 IES(企业套件)合同</td></tr>
+      <tr><td>10</td><td>所有 SaaS 都会变成大宗商品 → Done For You</td><td><span class="tag tag--part">部分支持</span></td><td>原稿:「消费者和企业想要事情被替他们做完」「done for you 而不是堆更多工作流」;「大宗商品」是解说员推论</td></tr>
+      <tr><td>11</td><td>熵 / 秩序比喻</td><td><span class="tag tag--frame">解说员框架</span></td><td>原稿未出现</td></tr>
+      <tr><td>12</td><td>三级阶梯:连数据 → AI 预测 → 全自动</td><td><span class="tag tag--frame">解说员框架</span></td><td>原稿只讲「system of intelligence」、数据层、2025 年 7 月上线 AI agents 虚拟团队</td></tr>
+      <tr><td>13</td><td>200 亿条手工记录 → 买 Mailchimp</td><td><span class="tag tag--quote">原稿原话</span></td><td>客户在 QuickBooks 里为管理自己的客户建了 200 亿条记录 → 决定收购 Mailchimp</td></tr>
+      <tr><td>14</td><td>六年前押注 AI + 数据平台</td><td><span class="tag tag--quote">原稿原话</span></td><td>六年半前两大决定:成为平台;数据+AI。难在数据清洗与接入,「AI 部分反而容易」</td></tr>
+      <tr><td>15</td><td>Credit Karma 自建要五年以上</td><td><span class="tag tag--quote">原稿原话</span></td><td>原话 five-plus years;并称 Credit Karma 是「absolute home run」</td></tr>
+      <tr><td>16</td><td>流失率超过 90%</td><td><span class="tag tag--no">不在原稿</span></td><td>原稿只有 Halligan 说 HubSpot 年流失约 11%;本页不采用该数字</td></tr>
+      <tr><td>17</td><td>转云慢了四五年</td><td><span class="tag tag--quote">原稿原话</span></td><td>「four to five years too slow」,客户没要求上云;难在文化、人才、商业模式</td></tr>
+      <tr><td>18</td><td>每六个月问「如果今天入职会改什么」</td><td><span class="tag tag--quote">原稿原话</span></td><td>Goodarzi 讲六年前「question everything」;Halligan 收尾归为 Brad Smith 每六个月一问</td></tr>
+      <tr><td>19</td><td>指标:NPS + 服务数 + 留存</td><td><span class="tag tag--quote">原稿原话</span></td><td>NPS、number of services、gross retention、retention dollars</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ===== 铁三角 ===== -->
+<section class="section">
+  <h2>三、铁三角三条边:原话、例证、反例</h2>
+  <div class="tri">
+    <div class="side">
+      <h3><span class="idx idx--1">1</span>像消费品一样做产品</h3>
+      <blockquote class="quote">小企业主其实是消费者,行为像消费者;他们要的是「帮我找到客户、告诉我哪些客户赚钱、帮我收到钱、让我看懂现金流」。<cite>Goodarzi,原稿 <span class="tag tag--quote">原稿原话</span></cite></blockquote>
+      <h4>Intuit 自己的例证</h4>
+      <ul>
+        <li>follow-me-home 仍在用,但 Goodarzi 明确说「客户说的和做的不一样」,现在靠云端行为数据补足。<span class="tag tag--quote">原稿原话</span></li>
+        <li>FY26 推出 QuickBooks Free,财报称已有 2 万多客户在用或转付费,目的是降低入门门槛。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>反例</h4>
+      <ul>
+        <li>Goodarzi 承认转云「慢了四五年」,因为客户没要求上云。跟着客户走,得不到平台转型的答案。<span class="tag tag--quote">原稿原话</span></li>
+        <li>FY26 财报:DIY 报税客户流向更便宜的对手,「价格是客户离开 TurboTax 的第一原因」。这条只说 TurboTax,不能泛化到 QuickBooks。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>其他公司的对照</h4>
+      <ul>
+        <li>Calendly 允许被邀请方不注册就预约,先省操作再谈功能(公开产品页,把握度中)。</li>
+        <li>Basecamp 用固定价格、少数几档套餐,说明「清晰」不等于「只卖一种」(公开定价页,把握度中)。</li>
+      </ul>
+    </div>
+    <div class="side">
+      <h3><span class="idx idx--2">2</span>靠信誉节点获客</h3>
+      <blockquote class="quote">获客非常非常难。会计师只推荐自己用过、喜欢的东西;他们不是渠道、不是经销商,是我们的伙伴。<cite>Goodarzi,原稿 <span class="tag tag--quote">原稿原话</span></cite></blockquote>
+      <h4>Intuit 自己的例证</h4>
+      <ul>
+        <li>会计师介绍的中型客户成交快十倍、买更多服务。这是公司自述,可能有客户筛选效应,不等于获客成本低十倍。<span class="tag tag--quote">原稿原话</span></li>
+        <li>FY26 会计师带来 25% 的新 IES 合同;2026 年 9 月投资者日 Goodarzi 把会计师从「渠道/伙伴」升级为「核心客户」。<span class="tag tag--ext">外部核实</span></li>
+        <li>ProAdvisor 分成:新订阅 30%,仅首 12 个月。说明「只推荐自己喜欢的」之外,也有经济激励。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>反例 / 边界</h4>
+      <ul>
+        <li>FY26 Online 付费客户 890 万,增 3%,比上年低约 2 个点;公司承认新客目标未达。尚不能据此判断会计师渠道对客户数量的贡献。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>其他公司的对照</h4>
+      <ul>
+        <li>Xero 给事务所提供工具、认证与客户目录,伙伴先得到工作价值,再谈推荐(公开合作计划页,把握度中)。</li>
+        <li>Gusto 让会计伙伴选择「自己拿分成」或「给客户折扣」,信任与激励并存(公开合作计划页,把握度中)。</li>
+      </ul>
+    </div>
+    <div class="side">
+      <h3><span class="idx idx--3">3</span>替客户做完:留存假说</h3>
+      <blockquote class="quote">消费者和企业想要的是事情被替他们做完;是 done for you,不是堆更多工作流。<cite>Goodarzi,原稿 <span class="tag tag--quote">原稿原话</span></cite></blockquote>
+      <h4>Intuit 自己的例证</h4>
+      <ul>
+        <li>客户为管理自己的客户在 QuickBooks 里建了 200 亿条记录 → 收购 Mailchimp;六年半前决定做平台与数据+AI;「数据比 AI 难」。<span class="tag tag--quote">原稿原话</span></li>
+        <li>FY26 财报:数百万客户使用 AI 原生体验,公司称收款快 4 天、手工工作少 30%;IES 客户 75% 以上每月使用 AI agents。均为公司自报,未见样本与对照。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>反例 / 边界</h4>
+      <ul>
+        <li>Mailchimp 是「发现需求 → 收购」的样板,但 FY27 指引 Mailchimp 收入持平到下降 1%,公司预计提高有效价格以抵消增加的流失。发现需求不等于收购成功。<span class="tag tag--ext">外部核实</span></li>
+        <li>Mid-Market 客户数增 28%,其中约四分之三来自存量客户升级或桌面版迁移;TurboTax Live 新增超过四分之三来自 DIY 升级。升级与迁移占相关产品新增的大部分;Done For You 对此的贡献没有被单独隔离。<span class="tag tag--ext">外部核实</span></li>
+      </ul>
+      <h4>其他公司的对照</h4>
+      <ul>
+        <li>Pilot 由团队替客户完成月度结账与报表,卖的是交付结果;但没有公开数据证明留存更高(公开产品页,把握度中)。</li>
+        <li>Duolingo 的视频通话功能让学员自己练口语:教育里可以提供陪练,不能替用户学会(公开产品页,把握度中)。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout callout--danger mt-lg">
+    <p><strong>视频里最容易被误读的推论</strong>:「所有 SaaS 都会变成大宗商品,所以只能做 Done For You」。原稿只说客户想要事情被做完;Intuit 的数据只能看到两件事:升级与迁移占相关产品新增的大部分,Online 付费客户净增在放缓。这两件事与 Done For You 的关系,尚不能判断因果,也不能互相证明。</p>
+  </div>
+</section>
+
+<!-- ===== 数据 ===== -->
+<section class="section">
+  <h2>四、Intuit FY2026 的数据,分三类看</h2>
+  <p>来源:2026-08-25 第四财季电话会讲稿。把「新客、存量变现、留存」拆开,是理解铁三角的关键。</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3>收入增速与客户净增对照</h3>
+      <ul class="bars">
+        <li><span class="label">Mid-Market 收入(全年)</span><div class="row"><div class="track"><div class="fill" style="width:100%"></div></div><span class="val">+39%</span></div></li>
+        <li><span class="label">Online Money 收入</span><div class="row"><div class="track"><div class="fill" style="width:79%"></div></div><span class="val">+31%</span></div></li>
+        <li><span class="label">QBO Accounting 收入</span><div class="row"><div class="track"><div class="fill" style="width:59%"></div></div><span class="val">+23%</span></div></li>
+        <li><span class="label">GBS 收入(含 Mailchimp)</span><div class="row"><div class="track"><div class="fill fill--2" style="width:41%"></div></div><span class="val">+16%</span></div></li>
+        <li><span class="label">Online 付费客户数(存量 890 万)</span><div class="row"><div class="track"><div class="fill fill--3" style="width:8%"></div></div><span class="val">+3%</span></div></li>
+      </ul>
+      <small>柱长按最大值 39% 归一化。付费客户数是存量净增,不是新客增速;Mid-Market 新增约四分之三来自升级与迁移。</small>
+    </div>
+    <div class="card">
+      <h3>金蝶四条产品线的 NDR 差异</h3>
+      <ul class="bars">
+        <li><span class="label">金蝶 苍穹/星瀚(大型)</span><div class="row"><div class="track"><div class="fill fill--4" style="width:100%"></div></div><span class="val">NDR 110%</span></div></li>
+        <li><span class="label">金蝶 星空(中型)</span><div class="row"><div class="track"><div class="fill fill--4" style="width:88%"></div></div><span class="val">NDR 97%</span></div></li>
+        <li><span class="label">金蝶 星辰(小型)</span><div class="row"><div class="track"><div class="fill fill--4" style="width:85%"></div></div><span class="val">NDR 94%</span></div></li>
+        <li><span class="label">金蝶 精斗云(小微)</span><div class="row"><div class="track"><div class="fill fill--4" style="width:80%"></div></div><span class="val">NDR 88%</span></div></li>
+      </ul>
+      <small>来源:金蝶 2025 年业绩公告(2026-03-17)。NDR 是金额净留存,受增购、降配、价格影响,不是客户人数续费率;产品梯度也隔离不了客户规模本身的影响。</small>
+    </div>
+  </div>
+  <div class="grid-2 mt-lg">
+    <div class="card card--warn">
+      <h3>畅捷通 2025 年:收入、付费客户与经销商数量同步增长</h3>
+      <ul>
+        <li>收入 10.95 亿元(+14%),云订阅 7.58 亿元(+16%,占 69%)。</li>
+        <li>累计付费企业 96.1 万家,年内新增 18.6 万家(+30%);新增增值经销商 1200 多家;直销收入 +56%。</li>
+        <li>注意:累计付费数与经销商数量不能证明活跃留存或渠道效率。</li>
+      </ul>
+      <small>来源:畅捷通 2026-03-26 业绩公告与媒体转载。</small>
+    </div>
+    <div class="card card--warn">
+      <h3>行业成本结构</h3>
+      <ul>
+        <li>安永 2024 年报告:中国 SaaS 公司销售费用率约 30%,中小企业客户「预算低、留存难」;该数字缺年份样本说明,不能直接当个人获客成本基准。</li>
+        <li>信通院 2024 年引安永数据:毛利率 55–60%,销售+研发占比超 50%,净利率近三年几乎为负。</li>
+        <li>未采用:「金蝶中小客户流失率 21%」「获客成本从 0.7 万涨到 2.6 万」,均找不到原始出处。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 个性化 ===== -->
+<section class="section">
+  <h2>五、给你的五个 30 天实验</h2>
+  <p>你的处境:一人经营,收入主体是成人一对一中文教学,同时在建很多 AI 工具,成果证据薄。下面每条都给「本周动作」和「30 天后怎么检查」,只判断方向,不宣称因果。记录分子和分母,保留改动前的基线。</p>
+
+  <div class="step">
+    <div><span class="k">实验 1 · 像消费品</span><h4>主推一个套餐,不是只许一种</h4><p>对应铁三角第一边。Basecamp 的做法说明清晰不等于单一。</p></div>
+    <div><span class="k">本周动作</span><p>把现有学员最常见的目标写成一个四周主套餐,列明价格与成果样例;保留试听入口。报名页只回答「我能帮你做到什么」,不解释教学法术语。</p></div>
+    <div><span class="k">30 天检查</span><p>比较「付费人数 ÷ 有效咨询人数」和每次咨询的解释时长。转化不降、解释变短,才算有效。</p></div>
+  </div>
+  <div class="step">
+    <div><span class="k">实验 2 · 信誉节点</span><h4>先用真实口碑,再谈合作</h4><p>对应第二边。优先从满意学员试起;HR、留学中介或群主是否适合做你的「会计师」,要先验证他们接触目标学员的机会、信任程度和是否愿意承担推荐责任。</p></div>
+    <div><span class="k">本周动作</span><p>请两位满意学员把样课转给目标相近的人;若有奖励,公开写明(ProAdvisor 的分成也是公开的)。</p></div>
+    <div><span class="k">30 天检查</span><p>记录转介、到场、付费三个数;把奖励和按预定时薪折算的沟通时间计入获客成本,与其他来源比较。没人付费就不扩大。</p></div>
+  </div>
+  <div class="step">
+    <div><span class="k">实验 3 · Done For You</span><h4>代办杂务,不代练</h4><p>对应第三边。Duolingo 的边界例:可以替学员准备,不能替学员学会。</p></div>
+    <div><span class="k">本周动作</span><p>给少量学员试行课后一页复习单(含在套餐里,不单独收费),材料由 AI 生成、你核验。</p></div>
+    <div><span class="k">30 天检查</span><p>看实际使用率、同难度口语任务的表现、你的备课耗时。只多产材料不算有效;学习不退步且总工时下降才保留。</p></div>
+  </div>
+  <div class="step">
+    <div><span class="k">实验 4 · 数据先于 AI</span><h4>只记能改变教学的数据</h4><p>Goodarzi 说数据比 AI 难。你现在不需要预测模型,需要的是一张能用的表。</p></div>
+    <div><span class="k">本周动作</span><p>经学员同意,建一张去标识的表:目标、典型错误、下次练习。三列即可。</p></div>
+    <div><span class="k">30 天检查</span><p>逐项检查记录是否改变了教学安排、是否节约了备课时间;没用途的字段删掉。</p></div>
+  </div>
+  <div class="step">
+    <div><span class="k">实验 5 · 六个月自查</span><h4>暂停无证据的扩张</h4><p>Brad Smith 的问题是「如果今天入职会改什么」;对一人公司,先问「哪些投入没有付费验证」。</p></div>
+    <div><span class="k">本周动作</span><p>停止开新工具。登记各业务的已交付收入、实收、直接成本,以及销售、备课、维护工时。</p></div>
+    <div><span class="k">30 天检查</span><p>算「(已交付收入 − 直接成本)÷ 总工时」。既无付费验证又不省教学时间的工具,停止新增投入。</p></div>
+  </div>
+
+  <div class="callout callout--frame">
+    <p><strong>Intuit 的打法里,哪些不能照搬</strong>:平台并购、大规模渠道补贴、数据湖、靠免费入口再跨产品变现,都不该成为一人公司当前的投入前提。「永久续费」也不是教学服务的目标:学员学成离开不等于服务失败,该守的是学习成果、每小时贡献和交付容量。</p>
+  </div>
+</section>
+
+<!-- ===== 自查清单 ===== -->
+<section class="section">
+  <h2>六、看完视频后的自查清单</h2>
+  <ul class="checklist">
+    <li>我引用「会计渠道贡献大部分收入」时,标了这是主持人说的、指 QuickBooks 吗?</li>
+    <li>我把「成交快十倍」当成了「获客成本低十倍」吗?</li>
+    <li>我用 Intuit 付费客户 +3% 来否定 Done For You 了吗?(它是存量净增,不是新客增速。)</li>
+    <li>我把系统一/二、熵、三级阶梯当成 Goodarzi 的原话了吗?</li>
+    <li>近六个月我自己的服务流程,是加了步骤还是减了步骤?减的步骤有没有伤到练习量?</li>
+    <li>我的每个 AI 工具,有没有一个付费学员或一小时省下的备课时间作为证据?</li>
+  </ul>
+</section>
+
+<!-- ===== 来源 ===== -->
+<section class="section">
+  <h2>七、来源与证据分级</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>一级:原稿</h3>
+      <ul class="sources">
+        <li>Sequoia Capital 播客《Intuit CEO Sasan Goodarzi's Grown-Up CEO Playbook》,2025-11-20,含全文逐字稿:sequoiacap.com/podcast/intuit-ceo-sasan-goodarzis-grown-up-ceo-playbook</li>
+      </ul>
+      <h3>二级:公司官方</h3>
+      <ul class="sources">
+        <li>Intuit Q4 FY2026 电话会讲稿,2026-08-25(付费客户 890 万 +3%;Mid-Market 客户 +28%、约四分之三来自升级迁移;会计师带来 25% 新 IES 合同;TurboTax Live 新增超四分之三来自 DIY 升级;价格是 TurboTax 流失首因;Mailchimp FY27 指引持平至 −1%;收款快 4 天、手工少 30%)</li>
+        <li>Intuit 投资者日,2026-09-17(会计师升为核心客户;Accountant Suite 15 万+ 事务所;新客目标未达)</li>
+        <li>Intuit ProAdvisor 分成条款页(订阅 30% 首 12 个月;Payments 20% 三年;IES 第一年 30%、第二三年 15%)</li>
+        <li>金蝶 2025 年业绩公告,2026-03-17;畅捷通 2025 年业绩公告,2026-03-26</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>三级:媒体与行业报告</h3>
+      <ul class="sources">
+        <li>BusinessWire / SEC 8-K:Credit Karma(2020,71 亿美元)、Mailchimp(2021,120 亿美元)收购公告;CNBC 2021-09 收购报道</li>
+        <li>AccountingToday、CPA Practice Advisor:ProAdvisor 分成计划 2021 年发布报道</li>
+        <li>Fortune 2017(follow-me-home 来历)、Fortune 2025(Goodarzi 谈 done for you)</li>
+        <li>安永 2024 中国 SaaS 报告;信通院 2024 年引述</li>
+        <li>Calendly、Basecamp、Xero、Gusto、Pilot、Duolingo:公开产品或合作计划页,只用于说明做法,不作为留存或获客证据</li>
+      </ul>
+      <h3>四级:本机资料</h3>
+      <ul class="sources">
+        <li>个人过往分析:产出强、成果证据薄,建议先卖固定范围服务、按件计价;2026-05-27 笔记《SaaSpocalypse》作为「SaaS 商品化」讨论背景</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  制作说明:视频逐字稿由用户提供;原稿核对以 Sequoia 页面逐字稿为准;财务数据以 Intuit 官方讲稿为准,公司自报数据已标注;ChatGPT Pro 一轮批评用于修正口径(存量与新客、分成期限、TurboTax 限定、Mailchimp 指引),未采信其未核实内容。
+</footer>
+</div>
+</body>
+</html>

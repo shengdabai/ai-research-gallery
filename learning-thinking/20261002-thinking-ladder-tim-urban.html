@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>思维阶梯深度拆解</title>
+<style>
+/* =========================================================
+   TOKENS — 单一来源。原始色阶 → 语义角色 → 组件。
+   主题：:root 为浅色；prefers-color-scheme 与 [data-theme] 覆盖语义层。
+   断点（media query 不能用 var，集中登记于此）：--bp-md = 760px
+   ========================================================= */
+:root{
+  /* primitive */
+  --p-slate-950:#0b1422; --p-slate-900:#13203a; --p-slate-700:#34445e; --p-slate-500:#64748b;
+  --p-slate-300:#c9d2de; --p-slate-200:#dde3ea; --p-slate-100:#eef2f6; --p-slate-50:#f5f7fa; --p-white:#ffffff;
+  --p-teal-600:#0e7f74; --p-teal-100:#d8f1ee; --p-teal-300:#5fd0c2;
+  --p-blue-600:#2b63c6; --p-blue-100:#dde8fb; --p-blue-300:#8fb3f2;
+  --p-amber-600:#b26b0a; --p-amber-100:#fbecd2; --p-amber-300:#f1bd68;
+  --p-red-600:#bf3434; --p-red-100:#f9dddd; --p-red-300:#f29a9a;
+  --p-green-600:#1d7a3e; --p-green-100:#dcf2e3;
+  --p-shadow:rgba(15,27,45,.08);
+
+  /* semantic */
+  --c-bg:var(--p-slate-50); --c-surface:var(--p-white); --c-surface-2:var(--p-slate-100);
+  --c-ink:var(--p-slate-900); --c-ink-2:var(--p-slate-700); --c-ink-3:var(--p-slate-500);
+  --c-line:var(--p-slate-200); --c-line-strong:var(--p-slate-300);
+  --c-accent:var(--p-blue-600); --c-accent-soft:var(--p-blue-100);
+  --c-sci:var(--p-teal-600); --c-sci-soft:var(--p-teal-100);
+  --c-fan:var(--p-blue-600); --c-fan-soft:var(--p-blue-100);
+  --c-att:var(--p-amber-600); --c-att-soft:var(--p-amber-100);
+  --c-zea:var(--p-red-600); --c-zea-soft:var(--p-red-100);
+  --c-ok:var(--p-green-600); --c-ok-soft:var(--p-green-100);
+  --c-hero-bg:var(--p-slate-950); --c-hero-ink:var(--p-white); --c-hero-ink-2:var(--p-slate-300);
+  --c-shadow:var(--p-shadow);
+
+  /* scale */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
+  --r-1:6px; --r-2:10px; --r-3:16px;
+  --bw:1px; --bw-strong:3px;
+  --f-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --fs-xs:12px; --fs-sm:13.5px; --fs-md:15.5px; --fs-lg:18px; --fs-xl:22px; --fs-2xl:30px; --fs-3xl:clamp(34px,7vw,60px);
+  --lh-tight:1.25; --lh-body:1.75;
+  --fw-reg:400; --fw-med:600; --fw-bold:800;
+  --w-page:1080px; --w-prose:720px; --w-fig-min:600px;
+  --shadow-1:0 1px 2px var(--c-shadow),0 6px 20px var(--c-shadow);
+  --t-fast:160ms; --ease:cubic-bezier(.2,.7,.2,1);
+  --z-nav:10;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --c-bg:#0d1420; --c-surface:#152031; --c-surface-2:#1b2940;
+    --c-ink:#e7edf5; --c-ink-2:#bac6d6; --c-ink-3:#8796ab;
+    --c-line:#253650; --c-line-strong:#33496a;
+    --c-accent:var(--p-blue-300); --c-accent-soft:#1d2f4f;
+    --c-sci:var(--p-teal-300); --c-sci-soft:#123a37;
+    --c-fan:var(--p-blue-300); --c-fan-soft:#1d2f4f;
+    --c-att:var(--p-amber-300); --c-att-soft:#3a2b12;
+    --c-zea:var(--p-red-300); --c-zea-soft:#3d1c1f;
+    --c-ok:#6fd49a; --c-ok-soft:#163626;
+    --c-hero-bg:#070c15; --c-shadow:rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --c-bg:#0d1420; --c-surface:#152031; --c-surface-2:#1b2940;
+  --c-ink:#e7edf5; --c-ink-2:#bac6d6; --c-ink-3:#8796ab;
+  --c-line:#253650; --c-line-strong:#33496a;
+  --c-accent:var(--p-blue-300); --c-accent-soft:#1d2f4f;
+  --c-sci:var(--p-teal-300); --c-sci-soft:#123a37;
+  --c-fan:var(--p-blue-300); --c-fan-soft:#1d2f4f;
+  --c-att:var(--p-amber-300); --c-att-soft:#3a2b12;
+  --c-zea:var(--p-red-300); --c-zea-soft:#3d1c1f;
+  --c-ok:#6fd49a; --c-ok-soft:#163626;
+  --c-hero-bg:#070c15; --c-shadow:rgba(0,0,0,.35);
+}
+
+/* ===================== BASE ===================== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--f-sans);font-size:var(--fs-md);line-height:var(--lh-body);-webkit-text-size-adjust:100%}
+a{color:var(--c-accent);text-underline-offset:3px}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:0}
+p{margin:0 0 var(--s-3)}
+ul,ol{margin:0 0 var(--s-3);padding-left:1.3em}
+li{margin-bottom:var(--s-1)}
+strong{font-weight:var(--fw-med)}
+img,svg{max-width:100%}
+[hidden]{display:none!important} /* 例外：保证 hidden 属性优先于组件 display 规则 */
+:focus-visible{outline:var(--bw-strong) solid var(--c-accent);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ===================== LAYOUT ===================== */
+.wrap{max-width:var(--w-page);margin:0 auto;padding-inline:var(--s-4)}
+.section{padding-block:var(--s-7)}
+.section + .section{border-top:var(--bw) solid var(--c-line)}
+.sec-kicker{font-size:var(--fs-sm);color:var(--c-accent);font-weight:var(--fw-med);margin-bottom:var(--s-2);letter-spacing:.04em}
+.sec-title{font-size:var(--fs-2xl);font-weight:var(--fw-bold);margin-bottom:var(--s-3)}
+.sec-lead{color:var(--c-ink-2);max-width:var(--w-prose);margin-bottom:var(--s-5)}
+.prose{max-width:var(--w-prose)}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--s-4)}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:var(--s-4)}
+
+/* ===================== HERO ===================== */
+.hero{background:var(--c-hero-bg);color:var(--c-hero-ink);padding-block:var(--s-8) var(--s-7)}
+.hero-eyebrow{color:var(--c-hero-ink-2);font-size:var(--fs-sm);margin-bottom:var(--s-3)}
+.hero-title{font-size:var(--fs-3xl);font-weight:var(--fw-bold);letter-spacing:-.01em;margin-bottom:var(--s-3)}
+.hero-sub{font-size:var(--fs-lg);color:var(--c-hero-ink-2);max-width:var(--w-prose);margin-bottom:var(--s-5)}
+.hero-rungs{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-bottom:var(--s-6)}
+.hero-rung{display:flex;align-items:center;gap:var(--s-2);border:var(--bw) solid var(--c-line-strong);border-radius:var(--r-1);padding:var(--s-1) var(--s-3);font-size:var(--fs-sm);color:var(--c-hero-ink)}
+.dot{width:10px;height:10px;border-radius:2px;flex:none}
+.dot.sci{background:var(--p-teal-300)} .dot.fan{background:var(--p-blue-300)} .dot.att{background:var(--p-amber-300)} .dot.zea{background:var(--p-red-300)}
+.meta-card{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:var(--s-4);border-top:var(--bw) solid var(--c-line-strong);padding-top:var(--s-5)}
+.meta-k{font-size:var(--fs-xs);color:var(--c-hero-ink-2)}
+.meta-v{font-size:var(--fs-lg);font-weight:var(--fw-med)}
+.meta-v a{color:var(--c-hero-ink)}
+
+/* ===================== NAV ===================== */
+.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:var(--z-nav);background:var(--c-surface);border-bottom:var(--bw) solid var(--c-line)}
+.toc-inner{display:flex;gap:var(--s-1);overflow-x:auto;padding-block:var(--s-2);scrollbar-width:none}
+.toc-inner::-webkit-scrollbar{display:none}
+.toc a{flex:none;font-size:var(--fs-sm);color:var(--c-ink-2);text-decoration:none;padding:var(--s-1) var(--s-3);border-radius:var(--r-1)}
+.toc a:hover{background:var(--c-surface-2);color:var(--c-ink)}
+
+/* ===================== CARDS ===================== */
+.card{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-5);box-shadow:var(--shadow-1)}
+.card h3{font-size:var(--fs-lg);margin-bottom:var(--s-2)}
+.card p:last-child,.card ul:last-child{margin-bottom:0}
+.verdict{border-left:var(--bw-strong) solid var(--c-accent);background:var(--c-surface);padding:var(--s-4) var(--s-5);border-radius:var(--r-1);margin-bottom:var(--s-5);max-width:var(--w-prose)}
+.verdict b{display:block;margin-bottom:var(--s-1)}
+.take{display:grid;grid-template-columns:auto 1fr;gap:var(--s-3);align-items:start}
+.take-n{width:32px;height:32px;border-radius:var(--r-1);background:var(--c-accent-soft);color:var(--c-accent);display:grid;place-items:center;font-weight:var(--fw-bold)}
+.quote{border-left:var(--bw-strong) solid var(--c-line-strong);padding:var(--s-2) var(--s-4);color:var(--c-ink-2);margin:var(--s-4) 0;background:var(--c-surface-2);border-radius:0 var(--r-1) var(--r-1) 0}
+.quote small{display:block;color:var(--c-ink-3);font-size:var(--fs-xs);margin-top:var(--s-1)}
+.tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-med);padding:0 var(--s-2);border-radius:var(--r-1);background:var(--c-surface-2);color:var(--c-ink-2);border:var(--bw) solid var(--c-line);margin-right:var(--s-1);white-space:nowrap}
+.tag.a{background:var(--c-ok-soft);color:var(--c-ok);border-color:transparent}
+.tag.b{background:var(--c-accent-soft);color:var(--c-accent);border-color:transparent}
+.tag.c{background:var(--c-att-soft);color:var(--c-att);border-color:transparent}
+.tag.fix{background:var(--c-zea-soft);color:var(--c-zea);border-color:transparent}
+.note{font-size:var(--fs-sm);color:var(--c-ink-3)}
+
+/* ===================== OUTLINE (帖子脉络) ===================== */
+.outline{list-style:none;padding:0;margin:0;display:grid;gap:var(--s-2)}
+.outline li{display:grid;grid-template-columns:minmax(0,9.5em) 1fr;gap:var(--s-4);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-3) var(--s-4);margin:0}
+.outline .o-k{font-weight:var(--fw-med)}
+.outline .o-v{color:var(--c-ink-2);font-size:var(--fs-sm)}
+.outline .src{margin-top:var(--s-1)}
+
+/* ===================== FIGURES ===================== */
+.fig{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-4);margin:var(--s-5) 0}
+.fig-scroll{overflow-x:auto}
+.fig-scroll svg{display:block;min-width:var(--w-fig-min);height:auto}
+.fig figcaption{font-size:var(--fs-sm);color:var(--c-ink-3);margin-top:var(--s-2)}
+.svg-ink{fill:var(--c-ink)} .svg-ink2{fill:var(--c-ink-2)} .svg-ink3{fill:var(--c-ink-3)}
+.svg-line{stroke:var(--c-line-strong)} .svg-axis{stroke:var(--c-ink-2)}
+.svg-sci{fill:var(--c-sci)} .svg-fan{fill:var(--c-fan)} .svg-att{fill:var(--c-att)} .svg-zea{fill:var(--c-zea)}
+.svg-sci-s{fill:var(--c-sci-soft)} .svg-fan-s{fill:var(--c-fan-soft)} .svg-att-s{fill:var(--c-att-soft)} .svg-zea-s{fill:var(--c-zea-soft)}
+.svg-surface{fill:var(--c-surface-2)}
+.svg-zea-stroke{stroke:var(--c-zea)}
+.svg-text{font-family:var(--f-sans)}
+
+/* ===================== MIND COMPARE ===================== */
+.mind{border-top:var(--bw-strong) solid var(--c-line-strong)}
+.mind.hi{border-top-color:var(--c-sci)} .mind.lo{border-top-color:var(--c-zea)}
+.formula{font-size:var(--fs-xl);font-weight:var(--fw-bold);text-align:center;padding:var(--s-5);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);margin:var(--s-5) 0}
+.formula span{color:var(--c-zea)}
+
+/* ===================== LADDER TABS ===================== */
+.ladder{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:var(--s-5);align-items:start}
+.rung-list{display:grid;gap:var(--s-2)}
+.rung-btn{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:var(--s-3);align-items:center;padding:var(--s-3) var(--s-4);border-radius:var(--r-2);border:var(--bw) solid var(--c-line);background:var(--c-surface);transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease)}
+.rung-btn:hover{border-color:var(--c-line-strong)}
+.rung-btn .lv{font-size:var(--fs-xs);color:var(--c-ink-3)}
+.rung-btn .nm{font-weight:var(--fw-med);font-size:var(--fs-lg)}
+.rung-btn .bar{width:6px;height:40px;border-radius:var(--r-1)}
+.rung-btn[data-r="sci"] .bar{background:var(--c-sci)} .rung-btn[data-r="fan"] .bar{background:var(--c-fan)}
+.rung-btn[data-r="att"] .bar{background:var(--c-att)} .rung-btn[data-r="zea"] .bar{background:var(--c-zea)}
+.rung-btn[aria-selected="true"][data-r="sci"]{background:var(--c-sci-soft);border-color:var(--c-sci)}
+.rung-btn[aria-selected="true"][data-r="fan"]{background:var(--c-fan-soft);border-color:var(--c-fan)}
+.rung-btn[aria-selected="true"][data-r="att"]{background:var(--c-att-soft);border-color:var(--c-att)}
+.rung-btn[aria-selected="true"][data-r="zea"]{background:var(--c-zea-soft);border-color:var(--c-zea)}
+.divider-land{font-size:var(--fs-xs);color:var(--c-zea);text-align:center;border-top:var(--bw) dashed var(--c-zea);padding-top:var(--s-1)}
+.panel{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-5);box-shadow:var(--shadow-1)}
+.panel h3{font-size:var(--fs-xl);margin-bottom:var(--s-1)}
+.panel .motto{color:var(--c-ink-2);margin-bottom:var(--s-4)}
+.panel dl{display:grid;grid-template-columns:minmax(0,7em) 1fr;gap:var(--s-2) var(--s-4);margin:0 0 var(--s-4)}
+.panel dt{font-weight:var(--fw-med);color:var(--c-ink-3);font-size:var(--fs-sm)}
+.panel dd{margin:0}
+.panel .ev{background:var(--c-surface-2);border-radius:var(--r-1);padding:var(--s-3) var(--s-4);font-size:var(--fs-sm)}
+.panel .ev b{display:block;margin-bottom:var(--s-1)}
+.panel[data-r="sci"]{border-top:var(--bw-strong) solid var(--c-sci)} .panel[data-r="fan"]{border-top:var(--bw-strong) solid var(--c-fan)}
+.panel[data-r="att"]{border-top:var(--bw-strong) solid var(--c-att)} .panel[data-r="zea"]{border-top:var(--bw-strong) solid var(--c-zea)}
+
+/* ===================== TABLE ===================== */
+.tbl-wrap{overflow-x:auto;border:var(--bw) solid var(--c-line);border-radius:var(--r-2);background:var(--c-surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:var(--fs-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--s-3) var(--s-4);border-bottom:var(--bw) solid var(--c-line)}
+th{background:var(--c-surface-2);font-weight:var(--fw-med);color:var(--c-ink-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.k{font-weight:var(--fw-med);white-space:nowrap}
+.col-sci{color:var(--c-sci);font-weight:var(--fw-med)} .col-fan{color:var(--c-fan);font-weight:var(--fw-med)}
+.col-att{color:var(--c-att);font-weight:var(--fw-med)} .col-zea{color:var(--c-zea);font-weight:var(--fw-med)}
+
+/* ===================== SCENARIOS ===================== */
+.scn h3{display:flex;align-items:baseline;gap:var(--s-2)}
+.scn .row{display:grid;grid-template-columns:auto 1fr;gap:var(--s-2);margin-bottom:var(--s-2);font-size:var(--fs-sm)}
+.scn .lbl{font-weight:var(--fw-med);font-size:var(--fs-xs);padding:0 var(--s-2);border-radius:var(--r-1);align-self:start;margin-top:3px;white-space:nowrap}
+.scn .lbl.lo{background:var(--c-att-soft);color:var(--c-att)}
+.scn .lbl.hi{background:var(--c-sci-soft);color:var(--c-sci)}
+.scn .lbl.ex{background:var(--c-accent-soft);color:var(--c-accent)}
+.scn .ask{border-top:var(--bw) solid var(--c-line);padding-top:var(--s-2);margin-top:var(--s-3);font-size:var(--fs-sm);color:var(--c-ink-2)}
+
+/* ===================== QUIZ ===================== */
+.quiz{display:grid;gap:var(--s-2)}
+.q{display:grid;grid-template-columns:1fr auto;gap:var(--s-3);align-items:center;background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-3) var(--s-4)}
+.seg{display:inline-flex;border:var(--bw) solid var(--c-line-strong);border-radius:var(--r-1);overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:var(--s-1) var(--s-4);font-size:var(--fs-sm);color:var(--c-ink-2)}
+.seg button + button{border-left:var(--bw) solid var(--c-line-strong)}
+.seg button[aria-pressed="true"]{background:var(--c-ink);color:var(--c-surface)}
+.quiz-out{margin-top:var(--s-4);border-radius:var(--r-2);padding:var(--s-4) var(--s-5);background:var(--c-surface-2);border:var(--bw) solid var(--c-line)}
+.quiz-out h4{font-size:var(--fs-lg);margin-bottom:var(--s-1)}
+.btn{all:unset;cursor:pointer;display:inline-block;padding:var(--s-2) var(--s-4);border-radius:var(--r-1);border:var(--bw) solid var(--c-line-strong);font-size:var(--fs-sm);color:var(--c-ink-2);background:var(--c-surface)}
+.btn:hover{border-color:var(--c-ink-3)}
+
+/* ===================== EVIDENCE TABLE BADGES ===================== */
+.v-ok{color:var(--c-ok);font-weight:var(--fw-med);white-space:nowrap}
+.v-part{color:var(--c-att);font-weight:var(--fw-med);white-space:nowrap}
+.v-fix{color:var(--c-zea);font-weight:var(--fw-med);white-space:nowrap}
+.v-ext{color:var(--c-accent);font-weight:var(--fw-med);white-space:nowrap}
+
+/* ===================== CHECKLIST ===================== */
+.checklist{counter-reset:ck;list-style:none;padding:0;margin:0;display:grid;gap:var(--s-3)}
+.checklist li{counter-increment:ck;display:grid;grid-template-columns:auto 1fr;gap:var(--s-3);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--s-4);margin:0}
+.checklist li::before{content:counter(ck);width:28px;height:28px;border-radius:var(--r-1);background:var(--c-sci-soft);color:var(--c-sci);display:grid;place-items:center;font-weight:var(--fw-bold)}
+
+/* ===================== SOURCES ===================== */
+.sources{font-size:var(--fs-sm);color:var(--c-ink-2);padding-left:1.4em}
+.sources li{margin-bottom:var(--s-2)}
+.footer{padding-block:var(--s-6);color:var(--c-ink-3);font-size:var(--fs-sm);border-top:var(--bw) solid var(--c-line)}
+
+/* ===================== RESPONSIVE (--bp-md 760px) ===================== */
+@media (max-width:760px){
+  .section{padding-block:var(--s-6)}
+  .sec-title{font-size:var(--fs-xl)}
+  .ladder{grid-template-columns:1fr}
+  .rung-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .divider-land{grid-column:1 / -1}
+  .rung-btn{padding:var(--s-2) var(--s-3)}
+  .rung-btn .nm{font-size:var(--fs-md)}
+  .rung-btn .bar{height:32px}
+  .panel{padding:var(--s-4)}
+  .panel dl{grid-template-columns:1fr;gap:var(--s-1)}
+  .panel dt{margin-top:var(--s-2)}
+  .outline li{grid-template-columns:1fr;gap:var(--s-1)}
+  .q{grid-template-columns:1fr}
+  .card{padding:var(--s-4)}
+  .formula{font-size:var(--fs-lg);padding:var(--s-4)}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">X 长文深度拆解 · 原帖核心梳理 + 证据核验 + 补充例证</div>
+    <h1 class="hero-title">思维阶梯</h1>
+    <p class="hero-sub">Tim Urban 在《What's Our Problem?》第一章提出的模型：比“你站哪边”更要紧的，是“你怎么想”。这页把龙海的长文拆成骨架，逐条对照原书与心理学研究，补上真实案例，也指出原文说过头的地方。</p>
+    <div class="hero-rungs" aria-label="四级阶梯">
+      <span class="hero-rung"><i class="dot sci"></i>科学家</span>
+      <span class="hero-rung"><i class="dot fan"></i>体育迷</span>
+      <span class="hero-rung"><i class="dot att"></i>律师</span>
+      <span class="hero-rung"><i class="dot zea"></i>狂热者</span>
+    </div>
+    <div class="meta-card">
+      <div><div class="meta-k">原帖</div><div class="meta-v"><a href="https://x.com/longhaiqwe123/status/2105454522558792122">@longhaiqwe123（龙海）</a></div></div>
+      <div><div class="meta-k">发布时间</div><div class="meta-v">2026-10-01</div></div>
+      <div><div class="meta-k">数据（10-02 抓取）</div><div class="meta-v">5.9 万浏览 · 470 收藏</div></div>
+      <div><div class="meta-k">原书</div><div class="meta-v">2023-02 自出版 · 仅英文</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <div class="wrap toc-inner">
+    <a href="#tldr">一页结论</a><a href="#outline">帖子脉络</a><a href="#root">病根</a><a href="#axes">两条轴</a><a href="#ladder">四级阶梯</a><a href="#land">油盐不进之地</a><a href="#scenes">场景与例证</a><a href="#smart">聪明陷阱</a><a href="#cure">解药</a><a href="#quiz">自测</a><a href="#check">证据核验</a><a href="#limits">模型边界</a><a href="#family">相关模型</a><a href="#src">来源</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ===================== TLDR ===================== -->
+<section class="section" id="tldr">
+  <div class="sec-kicker">一页结论</div>
+  <h2 class="sec-title">五句话读完整篇</h2>
+  <div class="verdict">
+    <b>总体判断：值得收藏，但要分清哪些是 Tim 的原意，哪些是作者的延伸。</b>
+    四级阶梯的定义、“油盐不进之地”、高低两大阵营与原书一致。“万能元模型”的五个生活场景、“越聪明越会自欺”，以及把思想实验室改成个人心法，是作者的引申，方向大体有研究支撑，但有几处说过头了，详见<a href="#check">证据核验</a>。
+  </div>
+  <div class="grid-2">
+    <div class="card take"><div class="take-n">1</div><div><h3>病根：信念被绑在身份上</h3><p>原始心智分不清“观点被否定”和“自己被驱逐”，于是被反驳的感觉像挨了一拳。思维阶梯就是在问：此刻是高级心智还是原始心智在掌舵？</p></div></div>
+    <div class="card take"><div class="take-n">2</div><div><h3>“怎么想”比“想什么”更能说明问题</h3><p>水平轴是立场（支持 A 还是 B），垂直轴是思考方式。立场相同的两个人，可能一个在顶层，一个在底层。</p></div></div>
+    <div class="card take"><div class="take-n">3</div><div><h3>四级：科学家 › 体育迷 › 律师 › 狂热者</h3><p>前两级是高阶：在乎真相，体育迷只是带着偏好。后两级是低阶，从结论出发，任何证据都改变不了。越过中点，就进入“油盐不进之地”。</p></div></div>
+    <div class="card take"><div class="take-n">4</div><div><h3>聪明不能防偏，还可能放大偏见</h3><p>研究发现，数字能力越强的人，在涉及身份的议题上分歧越大：聪明被用来给立场找理由。高智商只是装备，用来干什么由阶梯位置决定。</p></div></div>
+    <div class="card take"><div class="take-n">5</div><div><h3>解药：把观点从身体里拿出来</h3><p>把观点放到桌子中间，当作可以拆的零件；把“我之前想错了”当成荣誉；主动去读让自己心里一沉的反例。另外，原书里的“思想实验室”本来是团队文化：尊重人，不尊重观点。</p></div></div>
+    <div class="card take"><div class="take-n">✓</div><div><h3>这篇拆解额外补了什么</h3><p>15 篇以上的研究和真实案例，包括 Odean 处置效应、意大利创业者随机对照试验、Pixar Braintrust、2024 年飞蛾新研究；还有一份逐条核验表、模型的边界和 6 道自测题。</p></div></div>
+  </div>
+</section>
+
+<!-- ===================== OUTLINE ===================== -->
+<section class="section" id="outline">
+  <div class="sec-kicker">帖子脉络</div>
+  <h2 class="sec-title">原帖七段的骨架</h2>
+  <p class="sec-lead">原帖约 1.1 万字，由作者借助 Gemini 翻译解读英文原书写成。下面按原帖顺序列出每段的核心主张，并标出它来自原书还是作者引申。</p>
+  <ol class="outline">
+    <li><div class="o-k">缘起</div><div class="o-v">Tim Urban 停更 Wait But Why，闭关 6 年写成此书。作者剥离政治部分，只取第一章的思维阶梯。用会议上被同事指出数据漏洞时的生理反应开场，列出学习、反馈、AI、伴侣、投资五个“嘴硬”场景。<div class="src"><span class="tag b">背景属实</span><span class="tag c">场景为作者举例</span></div></div></li>
+    <li><div class="o-k">飞蛾扑火效应</div><div class="o-v">现代人像飞蛾：进化来的旧软件碰上新环境。脑中住着高级心智和原始心智两个室友。原始心智的法则是：信念 = 部落身份 = 肉体生命。<div class="src"><span class="tag b">原书核心</span><span class="tag fix">飞蛾机制需更新</span></div></div></li>
+    <li><div class="o-k">思维阶梯</div><div class="o-v">水平轴“想什么”与垂直轴“怎么想”。四级的定义：科学家从 A 点出发，自下而上拼假设，再把假设送上拳击台；体育迷带着动机性推理；律师从结论 B 出发倒推；狂热者把观点当成宝贝婴儿。最后分出高低两大阵营。<div class="src"><span class="tag b">原书核心</span></div></div></li>
+    <li><div class="o-k">万能元模型</div><div class="o-v">把阶梯平移到个人成长、反馈与批评、投资、创业、职场与亲密关系五个领域。<div class="src"><span class="tag c">作者延伸</span></div></div></li>
+    <li><div class="o-k">最致命的陷阱</div><div class="o-v">越聪明的人，掉进律师思维后破坏力越大：智力成了替偏见洗地的重装军团。<div class="src"><span class="tag c">作者延伸，有研究支撑</span></div></div></li>
+    <li><div class="o-k">终极解毒剂</div><div class="o-v">建立“思想实验室”，并给出三条心法：观点是可拆卸零件；“我不知道”是荣誉；主动寻找让你心头一沉的反例。<div class="src"><span class="tag b">原书概念</span><span class="tag c">改编为个人版</span></div></div></li>
+    <li><div class="o-k">结语与清单</div><div class="o-v">引芒格名言；模型是给自己用的镜子，不是量别人的尺子。最后给出 3 秒自检清单的三个问题。<div class="src"><span class="tag c">引文为意译</span></div></div></li>
+  </ol>
+</section>
+
+<!-- ===================== ROOT ===================== -->
+<section class="section" id="root">
+  <div class="sec-kicker">病根</div>
+  <h2 class="sec-title">为什么一句反驳像一记重拳</h2>
+  <div class="prose">
+    <p>原帖抓住了一个很诡异的现象：对方的质疑没拿走你一分钱，也没碰到你一根汗毛，身体却进入了战斗或逃跑的状态。Tim Urban 的解释是：大脑里同时住着两套系统，其中一套还按远古部落的规则运转。</p>
+  </div>
+  <div class="grid-2">
+    <div class="card mind hi"><h3>高级心智 Higher Mind</h3><p>伴随抽象思维出现。清醒、好奇、有同理心，以弄清真相为目标。它能把“观点”当成可以检验的对象。</p></div>
+    <div class="card mind lo"><h3>原始心智 Primitive Mind</h3><p>为野外生存而演化。由恐惧和部族本能驱动，在它的逻辑里，离开部落就等于死。它不在乎什么是真的，只在乎“我还在不在群里”。</p></div>
+  </div>
+  <div class="formula">你的信念 = 你的部落身份 = <span>你的肉体生命</span></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>补充证据：被排斥确实会“疼”</h3>
+      <p>Eisenberger 等人 2003 年在 <em>Science</em> 发表的 Cyberball 实验中，受试者在虚拟传球游戏里被冷落，大脑前扣带皮层（dACC）的激活模式与身体疼痛有重叠。社会排斥会调动与疼痛相关的警报系统。<span class="tag a">A 级</span></p>
+      <p class="note">注：后续研究对 dACC 是否“专门”处理疼痛有争论，结论宜读作“社会痛与生理痛共享部分警报机制”。</p>
+    </div>
+    <div class="card">
+      <h3>补充证据：反驳信念时，“自我”区域会亮</h3>
+      <p>Kaplan、Gimbel、Harris 2016 年发表于 <em>Scientific Reports</em> 的研究，给 40 位自由派受试者看反驳其信念的论据。政治信念受挑战时，默认模式网络（与自我表征相关）更活跃；越不肯改主意的人，杏仁核与脑岛的反应越强。<span class="tag a">A 级</span></p>
+      <p class="note">2026 年波兰复现（43 人，预注册）：政治信念几乎不动（效应量 d≈0.06），非政治信念明显改变（d≈1.13）。不过杏仁核相关的结果没有重现。所以“政治信念格外难改”是稳的，“杏仁核在护卫信念”还要打个问号。</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:var(--s-4)">
+    <h3>飞蛾比喻需要更新，但更新后反而更贴切</h3>
+    <p>原帖沿用了经典说法：飞蛾靠月光导航，把灯泡误当成月亮。2024 年 Fabian 等人在 <em>Nature Communications</em> 发表的研究，用高速动作捕捉发现，昆虫并不是直冲光源，而是<strong>把背部朝向最亮的地方</strong>（背光反射，Dorsal Light Response）。在自然界，最亮的永远是天空，这条规则用来判断“哪边是上”。人造光源出现在侧面或下方时，它们就开始绕圈、失速、翻转。<span class="tag a">A 级</span></p>
+    <p>比喻的核心仍然成立，甚至更准确了：<strong>一条在原环境里百分之百可靠的简单规则，被放进新环境后，让当事者很确定地做错事。</strong>原始心智里“和部落保持一致 = 活下去”的规则，也是这样。</p>
+  </div>
+</section>
+
+<!-- ===================== AXES ===================== -->
+<section class="section" id="axes">
+  <div class="sec-kicker">两条轴</div>
+  <h2 class="sec-title">“想什么”是水平轴，“怎么想”是垂直轴</h2>
+  <p class="sec-lead">我们平时争论只看立场：支持还是反对，看好还是唱衰。Tim 加了一条垂直轴，衡量一个信念是怎么形成、又怎么被守住的。同一立场上，可以站着顶层的人，也可以站着底层的人。</p>
+  <figure class="fig">
+    <div class="fig-scroll">
+    <svg viewBox="0 0 720 380" width="720" role="img" aria-label="水平轴表示立场，垂直轴表示思考方式；同一立场的两个人可以处于不同高度" class="svg-text">
+      <rect x="0" y="0" width="720" height="190" class="svg-sci-s" opacity=".55"/>
+      <rect x="0" y="190" width="720" height="190" class="svg-zea-s" opacity=".55"/>
+      <line x1="40" y1="190" x2="690" y2="190" class="svg-axis" stroke-width="2"/>
+      <line x1="360" y1="20" x2="360" y2="360" class="svg-axis" stroke-width="2"/>
+      <polygon points="690,184 702,190 690,196" class="svg-ink2"/>
+      <polygon points="354,22 360,10 366,22" class="svg-ink2"/>
+      <text x="600" y="214" class="svg-ink2" font-size="14">立场 B →</text>
+      <text x="50" y="214" class="svg-ink2" font-size="14">← 立场 A</text>
+      <text x="372" y="34" class="svg-ink" font-size="15" font-weight="700">高阶：以真相为目标</text>
+      <text x="372" y="352" class="svg-ink" font-size="15" font-weight="700">低阶：以赢为目标</text>
+      <text x="40" y="30" class="svg-ink3" font-size="13">垂直轴 = 你怎么想</text>
+      <text x="40" y="48" class="svg-ink3" font-size="13">水平轴 = 你想什么</text>
+      <circle cx="170" cy="90" r="11" class="svg-sci"/><text x="188" y="95" class="svg-ink" font-size="14">甲：支持 A，能说出 B 方最强论据</text>
+      <circle cx="170" cy="300" r="11" class="svg-zea"/><text x="188" y="305" class="svg-ink" font-size="14">乙：也支持 A，认为 B 方都是坏人</text>
+      <circle cx="550" cy="110" r="11" class="svg-sci"/><text x="430" y="145" class="svg-ink" font-size="14">丙：支持 B，随时准备改</text>
+      <line x1="170" y1="104" x2="170" y2="286" class="svg-line" stroke-width="2" stroke-dasharray="5 5"/>
+      <text x="180" y="250" class="svg-ink3" font-size="12">同一立场，不同高度</text>
+    </svg>
+    </div>
+    <figcaption>示意图（手机上可左右滑动）：甲和丙立场相反，却能对话；甲和乙立场相同，却很难讲到一起。很多争吵其实发生在垂直轴上，参与者却以为分歧在水平轴上。</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== LADDER ===================== -->
+<section class="section" id="ladder">
+  <div class="sec-kicker">四级阶梯</div>
+  <h2 class="sec-title">点每一级，看它怎么收集、评估和检验信息</h2>
+  <p class="sec-lead">四级的区别不在于聪不聪明，而在于高级心智和原始心智谁占上风：高级心智全面掌控、高级心智占优、原始心智占优、原始心智全面掌控。</p>
+  <div class="ladder">
+    <div class="rung-list" role="tablist" aria-label="思维阶梯四级">
+      <button class="rung-btn" role="tab" data-r="sci" aria-selected="true" aria-controls="p-sci" id="t-sci"><i class="bar"></i><span><span class="lv">第一级 · 高阶</span><br><span class="nm">科学家</span></span></button>
+      <button class="rung-btn" role="tab" data-r="fan" aria-selected="false" aria-controls="p-fan" id="t-fan" tabindex="-1"><i class="bar"></i><span><span class="lv">第二级 · 高阶</span><br><span class="nm">体育迷</span></span></button>
+      <div class="divider-land">越过中点 → 油盐不进之地</div>
+      <button class="rung-btn" role="tab" data-r="att" aria-selected="false" aria-controls="p-att" id="t-att" tabindex="-1"><i class="bar"></i><span><span class="lv">第三级 · 低阶</span><br><span class="nm">律师</span></span></button>
+      <button class="rung-btn" role="tab" data-r="zea" aria-selected="false" aria-controls="p-zea" id="t-zea" tabindex="-1"><i class="bar"></i><span><span class="lv">第四级 · 低阶</span><br><span class="nm">狂热者</span></span></button>
+    </div>
+    <div>
+      <article class="panel" data-r="sci" role="tabpanel" id="p-sci" aria-labelledby="t-sci">
+        <h3>科学家 Scientist</h3>
+        <p class="motto">从 A 点（我不知道）出发，跟着证据走，走到哪里算哪里。</p>
+        <dl>
+          <dt>起点</dt><dd>默认立场是“我不知道”。</dd>
+          <dt>收集</dt><dd>主动搜集整个观点光谱，包括看起来很可能错的观点。</dd>
+          <dt>评估</dt><dd>用“信任过滤器”：按信源过往的准确记录动态调整松紧。全都信太天真，全都不信寸步难行。</dd>
+          <dt>检验</dt><dd>把假设送上拳击台，邀请最强的反对者出重拳。没打过比赛的拳手不能叫冠军。</dd>
+          <dt>结论</dt><dd>结论旁永远加个星号，始终贴着“我知道什么 / 不知道什么”的认知边界。</dd>
+        </dl>
+        <div class="ev"><b>补充例证：Kahneman 的“对抗式合作”</b>Daniel Kahneman 与直觉派代表 Gary Klein 观点对立，两人没有打笔仗，而是一起设计研究，2009 年联名发表论文《Conditions for Intuitive Expertise: A Failure to Disagree》，结论是：直觉在规律稳定、反馈及时的环境里可靠，反之不可靠。这正是邀请对手上拳台的学术版本。</div>
+      </article>
+      <article class="panel" data-r="fan" role="tabpanel" id="p-fan" aria-labelledby="t-fan" hidden>
+        <h3>体育迷 Sports Fan</h3>
+        <p class="motto">希望比赛公平，但打心底盼着主队赢。</p>
+        <dl>
+          <dt>心理机制</dt><dd>动机性推理与确认偏见上场，原帖比作“酒后驾驶”。</dd>
+          <dt>收集</dt><dd>偏向挑支持自己的信源。</dd>
+          <dt>评估</dt><dd>标准悄悄换了：不看信源是否可靠，而看它在多大程度上认同我。</dd>
+          <dt>检验</dt><dd>占上风时喊“我们赢了”，被驳倒时觉得“对方耍花招、裁判偏心”。</dd>
+          <dt>底线</dt><dd>证据足够硬、终场哨响时，会不情愿地接受现实。心底最在乎的仍是事实。</dd>
+        </dl>
+        <div class="ev"><b>补充例证：敌意媒体效应</b>Vallone、Ross、Lepper（1985）给亲以色列和亲阿拉伯两派学生看同一段关于 1982 年贝鲁特难民营屠杀的电视报道，<strong>两派都认为报道偏向对方</strong>。原帖说“真正中立的人在你看来偏向对方”，就是这个效应。Lord、Ross、Lepper（1979）发现，支持和反对死刑的人读同两份研究，都觉得支持自己的那份更严谨，读完后分歧反而更大。</div>
+        <p class="note" style="margin-top:var(--s-3)">Tim 在演讲中特别强调：体育迷属于高阶。团队一起执行一个已定的计划时，体育迷式的投入是有用的。</p>
+      </article>
+      <article class="panel" data-r="att" role="tabpanel" id="p-att" aria-labelledby="t-att" hidden>
+        <h3>律师 Attorney</h3>
+        <p class="motto">“我的当事人绝对无罪。”从结论 B 出发，倒着找证据。</p>
+        <dl>
+          <dt>心理机制</dt><dd>动机性推理升级成“义务性推理”（obligated reasoning）。所谓形成假设，其实是在不断强化信念。</dd>
+          <dt>收集</dt><dd>只为结论服务，挑对自己有利的证据。</dd>
+          <dt>评估</dt><dd>有用就是真的。</dd>
+          <dt>检验</dt><dd>拒绝认真听不同意见。跟他辩论，像对着一面花岗岩墙说话。</dd>
+          <dt>后果</dt><dd>大脑的学习和反思功能被关闭。</dd>
+        </dl>
+        <div class="ev"><b>补充例证：推理本来就是为了辩论演化出来的？</b>认知科学家 Mercier 与 Sperber 2011 年提出“论证理论”：人类推理能力的主要功能，可能不是独自求真，而是在社会中说服别人、为自己辩护。所以我们给自己的立场找理由时又快又好，挑自己论证的毛病时却很懒。律师模式不是故障，而是推理能力的默认用法。Haidt 的比喻是：理性常常是情绪的“新闻发言人”。</div>
+      </article>
+      <article class="panel" data-r="zea" role="tabpanel" id="p-zea" aria-labelledby="t-zea" hidden>
+        <h3>狂热者 Zealot</h3>
+        <p class="motto">观点不是拿来折腾的实验品，而是必须捧在怀里保护的宝贝婴儿。</p>
+        <dl>
+          <dt>起点</dt><dd>不需要从 A 走到 B，100% 确信就行。</dd>
+          <dt>评价他人</dt><dd>夸我宝宝的是挚友，说我宝宝不好的是恶人。</dd>
+          <dt>反驳的代价</dt><dd>等于当面揍了他孩子一拳，争论变成圣战。</dd>
+          <dt>世界观</dt><dd>Tim 原话的大意：科学家清醒的头脑看到的是充满迷雾、复杂而微妙的世界；狂热者混沌的头脑看到的却是清晰简单、非黑即白的世界。</dd>
+        </dl>
+        <div class="ev"><b>补充例证：塞麦尔维斯反射</b>1847 年，维也纳医生塞麦尔维斯发现，医生接生前用漂白粉溶液洗手，产褥热死亡率会大幅下降。当时医学界的主流反应是愤怒和排斥：说“医生的手是脏的”，冒犯的是整个职业的身份。他本人被排挤，最后死在精神病院。后人用“塞麦尔维斯反射”指代因为新证据冲撞既有范式而本能地否定它。</div>
+      </article>
+    </div>
+  </div>
+
+  <h3 style="margin:var(--s-6) 0 var(--s-3);font-size:var(--fs-xl)">四级横向对照</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>维度</th><th class="col-sci">科学家</th><th class="col-fan">体育迷</th><th class="col-att">律师</th><th class="col-zea">狂热者</th></tr></thead>
+      <tbody>
+        <tr><td class="k">谁在掌舵</td><td>高级心智全面掌控</td><td>高级心智占优</td><td>原始心智占优</td><td>原始心智全面掌控</td></tr>
+        <tr><td class="k">动机</td><td>求真</td><td>求真 + 盼赢</td><td>赢</td><td>捍卫神圣</td></tr>
+        <tr><td class="k">出发点</td><td>A 点：我不知道</td><td>A 点，但带偏好</td><td>B 点：结论已定</td><td>无需出发，已知</td></tr>
+        <tr><td class="k">信源标准</td><td>过往准确率</td><td>有多认同我</td><td>有多好用</td><td>是不是自己人</td></tr>
+        <tr><td class="k">面对反证</td><td>修正，并感谢对方</td><td>不情愿地接受</td><td>反驳到底</td><td>视为攻击</td></tr>
+        <tr><td class="k">自信与知识</td><td>大致匹配</td><td>自信高于知识</td><td>自信远高于知识</td><td>100% 确信</td></tr>
+        <tr><td class="k">阵营</td><td colspan="2">高阶：智识谦逊，大脑像可渗透的过滤器</td><td colspan="2">低阶：傲慢与恐惧，大脑像橡胶外壳</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== LAND ===================== -->
+<section class="section" id="land">
+  <div class="sec-kicker">油盐不进之地</div>
+  <h2 class="sec-title">越过中点，忠诚就压过了诚实</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>原书怎么说</h3>
+      <div class="quote">“Unconvinceable Land 是一个……住着一群无论多少证据都动摇不了其信念的人的世界。当你到了这里，说明你已经成了某种思想路线的信徒，无论是宗教、政治意识形态，还是某个亚文化的教条。无论哪种，你的智识诚实（intellectual integrity）都已让位于智识忠诚（intellectual loyalty）。”<small>Tim Urban,《What's Our Problem?》（中文为本页转译）</small></div>
+      <p>判断标准很简单：你想要某个结论成立的动机，已经超过了你对真相的兴趣。</p>
+    </div>
+    <div class="card">
+      <h3>原帖漏掉的一半：群体版阶梯</h3>
+      <p>原书把阶梯也用在群体上，这正是这本书叫“社会自助书”的原因：</p>
+      <ul>
+        <li><strong>思想实验室（Idea Lab）</strong>：高阶文化。鼓励异议，<strong>人永远被尊重，观点不享受尊重</strong>，可以随便拆。</li>
+        <li><strong>回音室（Echo Chamber）</strong>：低阶文化。偏离主流叙事会受罚，独立思考的人只好闭嘴。</li>
+      </ul>
+      <p class="note">原帖把“思想实验室”改编成了个人内心的练习，这样改是合理的。但用到团队、公司、家庭时，要记得它本来是一种需要大家共同维护的文化。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCENES ===================== -->
+<section class="section" id="scenes">
+  <div class="sec-kicker">场景与例证</div>
+  <h2 class="sec-title">五个生活场景，补上真实证据</h2>
+  <p class="sec-lead">这部分是原帖作者的延伸。下面每个场景保留原帖的对照，再补一条研究或真实案例，加一句可以随身带的自检问题。</p>
+  <div class="grid-2">
+    <div class="card scn">
+      <h3>个人成长：越学越狭隘</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>读书是派律师去采购弹药：认同的狂划线，不认同的斥为“纸上谈兵”。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>读书是去找能打碎自己偏见的证据。“我之前想错了”值得开香槟。</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span>Lord、Ross、Lepper（1979）：立场相反的两组人读<strong>同样两份</strong>研究，读完分歧更大。信息量增加不会自动减少偏见，处理信息的方式才是关键。<span class="tag a">A</span></span></div>
+      <div class="ask">自检：最近一次因为读到东西而改变看法，是什么时候？</div>
+    </div>
+    <div class="card scn">
+      <h3>面对反馈：自尊保卫战</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>把“这件事没做好”等同于“否定我这个人”，九成脑力花在找借口上。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>把批评者当免费质检员：“谢谢你帮我在上真战场之前砸碎它。”</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span>Pixar 的 Braintrust 会（Ed Catmull,《Creativity, Inc.》）：导演定期把半成品放给同行毒舌挑刺。规则是意见只针对电影、不针对人，而且建议没有强制力，由导演自己决定改不改。这是公司级的思想实验室。<span class="tag b">B</span></span></div>
+      <div class="ask">自检：我此刻在反驳的是论据，还是“被评价”这件事？</div>
+    </div>
+    <div class="card scn">
+      <h3>投资：死扛亏损</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>爱上持仓。下跌时只看利好贴，把提醒风险的人打成“唱空狗”。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>买入只是一次下注假设。逻辑被证伪就止损，保住本金比保住面子重要。</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span><strong>处置效应</strong>：Odean（1998,《Journal of Finance》）分析一万个美国券商账户，发现投资者兑现盈利股的倾向约为兑现亏损股的 1.5 倍，而他们卖掉的盈利股后来的表现反而好过留着的亏损股。不肯认错是有真金白银代价的。<span class="tag a">A</span></span></div>
+      <div class="ask">自检：买入时，我写下过“出现什么情况就说明我错了”吗？</div>
+    </div>
+    <div class="card scn">
+      <h3>创业：把产品当亲骨肉</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>数据很差，却坚信是用户太蠢、投资人不懂，一路扛到现金流断裂。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>把产品当成供用户拆卸的小白鼠，每排除一个错误假设都值得庆祝。</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span>Camuffo 等（2020,《Management Science》）对 116 家意大利初创公司做随机对照试验：被教会“把商业想法当假设去检验”的那组，更懂得在该放弃时放弃、该转向时转向，营收也更高。反面例子：柯达工程师 1975 年就发明了数码相机，公司却守着胶片的身份，2012 年申请破产。<span class="tag a">A</span><span class="tag b">B</span></span></div>
+      <div class="ask">自检：什么样的数据会让我放弃这个方向？我敢提前写下来吗？</div>
+    </div>
+    <div class="card scn">
+      <h3>职场协作：部门 KPI 的辩护律师</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>跨部门会议上，人人替自己部门辩护，没人替全局求真。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>讨论时做科学家，拍板后做体育迷。</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span>Amazon 领导力准则 “Have Backbone; Disagree and Commit”：决策前必须说出异议，哪怕让人不舒服；一旦拍板，就全力投入。这正好对应 Tim 说的“科学家适合头脑风暴，体育迷适合团队执行”。Bezos 也说过：“经常正确的人，听得多，也经常改主意。”<span class="tag b">B</span></span></div>
+      <div class="ask">自检：我在维护公司的结果，还是维护自己部门的面子？</div>
+    </div>
+    <div class="card scn">
+      <h3>亲密关系：赢了官司，输了感情</h3>
+      <div class="row"><span class="lbl lo">低阶</span><span>“为什么又忘了倒垃圾”三句话后就变成“你根本不在乎这个家”，翻旧账，求法庭宣判。</span></div>
+      <div class="row"><span class="lbl hi">高阶</span><span>把问题放到桌子中间，两个人并肩看它，而不是隔着桌子对轰。</span></div>
+      <div class="row"><span class="lbl ex">例证</span><span>婚姻研究者 John Gottman 把“防御”（defensiveness）列为预测关系破裂的“末日四骑士”之一，另外三个是批评、轻蔑、筑墙。防御本质上就是律师模式：把对方的抱怨当成起诉书来反驳。他给的解药是：先承认自己那部分责任，哪怕只是一小部分。<span class="tag b">B</span></span></div>
+      <div class="ask">自检：我想解决这个问题，还是想被判“我是对的”？</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SMART ===================== -->
+<section class="section" id="smart">
+  <div class="sec-kicker">聪明陷阱</div>
+  <h2 class="sec-title">聪明不能防偏，在身份议题上还会放大偏见</h2>
+  <p class="sec-lead">原帖说“越聪明的人，自欺欺人的能力越强”。这句话有研究支撑，但说得太满。更准确的说法是：<strong>聪明不能让人免于偏见；在牵动身份的议题上，聪明还可能被拿来给偏见找理由。</strong></p>
+  <div class="grid-3">
+    <div class="card">
+      <h3>同一组数据，换个标签</h3>
+      <p>Kahan 等（2017,《Behavioural Public Policy》）给受试者一道需要从 2×2 数据表推断因果的题。数据讲的是<strong>护肤霜疗效</strong>时，数字能力越强的人答得越准；同一组数字换成<strong>控枪效果</strong>后，答案按政治立场两极分化，<strong>而且数字能力最强的人分化最严重</strong>。<span class="tag a">A</span></p>
+      <p class="note">2024 年 PLOS ONE 的复现结果参半：以政治身份分组时没有重现，以事前态度分组时重现了。</p>
+    </div>
+    <div class="card">
+      <h3>我方偏差和智商关系不大</h3>
+      <p>Stanovich、West、Toplak（2013）汇总多项研究发现：“我方偏差”（myside bias，偏向自己一方评估证据）与认知能力的相关性很低。高智商的人照样偏，只是理由编得更漂亮。<span class="tag a">A</span></p>
+      <p class="note">还有“偏见盲点”（Pronin 等，2002）：人们普遍认为自己比别人更少偏见。</p>
+    </div>
+    <div class="card">
+      <h3>柯南·道尔与小仙子</h3>
+      <p>写出福尔摩斯这个理性推理化身的柯南·道尔，1920 年在《The Strand》杂志公开力挺两名少女拍的“科汀利仙子”照片，还写了一本书为它们辩护。几十年后，当事人承认照片里的仙子是剪纸。一个推理大师在自己信仰的议题上，做了一辈子律师。<span class="tag b">B</span></p>
+    </div>
+  </div>
+  <div class="quote">“智力，在很多时候并没有帮我们看清真理，反而给我们的傲慢与偏见，配上了一支威力巨大的重装军团。”<small>原帖第四段</small></div>
+</section>
+
+<!-- ===================== CURE ===================== -->
+<section class="section" id="cure">
+  <div class="sec-kicker">解药</div>
+  <h2 class="sec-title">原帖三条心法，加五个可操作的工具</h2>
+  <div class="grid-3">
+    <div class="card"><h3>心法一：观点是桌上的零件</h3><p>争论前先把方案从身体里“掏出来”放在桌子中间。你和对方是并肩的研究搭档，一起拿锤子敲它。方案被否决了，你毫发无损，还换到一个更结实的零件。</p></div>
+    <div class="card"><h3>心法二：“我想错了”是荣誉</h3><p>“昨天根据旧数据，我持那个观点；今天看到新证据，我的观点变了。”认错不是软弱，而是智识上的自律。</p></div>
+    <div class="card"><h3>心法三：追着让你“咯噔”的反例</h3><p>如果看什么都顺、频频点头，那很可能是律师在饱餐。读到让自己心里一沉的反驳时，别急着关掉：盲区就在那里。</p></div>
+  </div>
+  <h3 style="margin:var(--s-6) 0 var(--s-3);font-size:var(--fs-xl)">补充：五个能落地的工具</h3>
+  <div class="grid-2">
+    <div class="card"><h3>给信念写置信度</h3><p>把原帖说的“星号”量化：“我七成把握这个方案能过 A 轮。”Tetlock 研究的超级预测者就是这样做的，他们把信念当作“待检验的假设，而不是要守护的宝藏”。有了数字，修正就是调参数，不是认输。</p></div>
+    <div class="card"><h3>预先写证伪条件</h3><p>做决定时，同时写下“出现 X 就说明我错了”。投资写止损逻辑，产品写放弃指标。等原始心智上头时，按事先的约定执行，不用再现场辩论。</p></div>
+    <div class="card"><h3>事前验尸 Pre-mortem</h3><p>心理学家 Gary Klein 的方法（HBR 2007）：项目开始前，假设它一年后已经彻底失败，让每个人写下失败原因。这样提出风险就从“唱反调”变成了“完成任务”，绕开了原始心智的部落压力。</p></div>
+    <div class="card"><h3>钢人论证（Rapoport 规则）</h3><p>哲学家 Dennett 总结的反驳顺序：先把对方观点复述到对方说“我都没说得这么好”，再列出你同意的部分和从对方那里学到的，最后才批评。芒格那句话也是这个意思：说不出对方最强的论据，就没资格持有这个观点。</p></div>
+    <div class="card"><h3>给情绪命名</h3><p>Lieberman 等（2007）的实验显示，用词语描述自己的情绪（affect labeling），能降低杏仁核的反应。原帖那句“看，我的原始小怪兽又被踩到尾巴了”，正好是一次给情绪命名，有实验依据。</p></div>
+    <div class="card"><h3>让身份小一点</h3><p>Paul Graham 的《Keep Your Identity Small》（2009）：一件事一旦成为你身份的一部分，你就很难再理性地讨论它。少给自己贴“某某派”的标签，可以讨论的领域就更多。</p></div>
+  </div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section class="section" id="quiz">
+  <div class="sec-kicker">自测</div>
+  <h2 class="sec-title">挑一个你最近在争的话题，回答 6 个问题</h2>
+  <p class="sec-lead">阶梯位置是<strong>状态</strong>，不是人格。同一个人谈不同话题、处在不同情绪下，会在阶梯上上下跳动。所以只针对一个具体话题作答。</p>
+  <div class="quiz" id="quizBox">
+    <div class="q" data-w-yes="0" data-w-no="2"><span>我能说出对方立场里<strong>最强</strong>的一条论据，而且对方会认可我的复述。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+    <div class="q" data-w-yes="0" data-w-no="2"><span>我说得出什么样的证据会让我改主意。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+    <div class="q" data-w-yes="1" data-w-no="0"><span>最近看到的相关信息，几乎都在支持我。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+    <div class="q" data-w-yes="1" data-w-no="0"><span>那些自称中立的人，在我看来其实偏向对方。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+    <div class="q" data-w-yes="2" data-w-no="0"><span>被反驳时，我的第一反应是找对方的漏洞，而不是核对事实。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+    <div class="q" data-w-yes="3" data-w-no="0"><span>我觉得持相反观点的人不只是错了，而是蠢或者坏。</span><span class="seg"><button type="button" data-v="yes" aria-pressed="false">是</button><button type="button" data-v="no" aria-pressed="false">否</button></span></div>
+  </div>
+  <div class="quiz-out" id="quizOut" aria-live="polite">
+    <h4 id="quizTitle">还差 6 题</h4>
+    <p id="quizText" style="margin:0">全部回答后显示你在这个话题上大致处于哪一级。</p>
+  </div>
+  <p style="margin-top:var(--s-3)"><button type="button" class="btn" id="quizReset">重新作答</button></p>
+
+  <h3 style="margin:var(--s-6) 0 var(--s-3);font-size:var(--fs-xl)">原帖的 3 秒自检清单</h3>
+  <ol class="checklist">
+    <li><span>我现在是在追求客观事实（科学家），还是在拼死捍卫面子（律师）？</span></li>
+    <li><span>如果把这个观点从我身上“拔出来”放在桌上，它还经得起推敲吗？</span></li>
+    <li><span>面对相反的新证据，我敢不敢坦荡地说一句：“关于这点，原来是我之前想错了”？</span></li>
+  </ol>
+</section>
+
+<!-- ===================== CHECK ===================== -->
+<section class="section" id="check">
+  <div class="sec-kicker">证据核验</div>
+  <h2 class="sec-title">原帖关键说法逐条对照</h2>
+  <p class="sec-lead">核验时间：2026-10-02。等级说明：<span class="tag a">A</span>同行评审研究或原始文献，<span class="tag b">B</span>原书、官方或当事人著作，<span class="tag c">C</span>二手综述或转述。</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>原帖说法</th><th>核验</th><th>依据与说明</th></tr></thead>
+      <tbody>
+        <tr><td>Tim 闭关 6 年写成《What's Our Problem?》</td><td class="v-ok">成立</td><td>2016 年前后开始研究，2019 年在 Wait But Why 连载《The Story of Us》，2023-02-21 自出版电子书。<span class="tag b">B</span></td></tr>
+        <tr><td>只有英文版，国内不太可能引入</td><td class="v-ok">检索范围内成立</td><td>未检索到正式中文译本，“我们的问题是什么”只是读者笔记用的译名。“国内不太可能引入”是作者推测。<span class="tag c">C</span></td></tr>
+        <tr><td>马斯克主动联系 Tim，邀请他写 SpaceX、Tesla</td><td class="v-part">基本成立，有笔误</td><td>Tim 在 2015 年写了 Tesla 与 SpaceX 长文系列，2017 年写了 Neuralink。原文“XSpace”应为 SpaceX。<span class="tag b">B</span></td></tr>
+        <tr><td>四级阶梯、油盐不进之地、高低两阵营</td><td class="v-ok">与原书一致</td><td>Scientist / Sports Fan / Attorney / Zealot；Unconvinceable Land；High-rung / Low-rung。<span class="tag b">B</span></td></tr>
+        <tr><td>飞蛾靠月光导航，把灯当月亮</td><td class="v-fix">需更新</td><td>2024 年 Nature Communications 研究显示，机制是背光反射：把背部朝向最亮处。比喻的核心（旧规则错配新环境）仍然成立。<span class="tag a">A</span></td></tr>
+        <tr><td>“前额叶会在 0.1 秒内调动所有修辞”</td><td class="v-fix">文学修辞</td><td>不是科学描述。神经影像研究里与信念防御相关的是默认模式网络、杏仁核和脑岛，“0.1 秒”没有出处。<span class="tag a">A</span></td></tr>
+        <tr><td>大脑分不清观点与肉身</td><td class="v-part">比喻成立，不宜当定律</td><td>社会痛与生理痛共享部分机制（Eisenberger 2003），政治信念受挑战会激活自我相关网络（Kaplan 2016）。但 Wood 与 Porter（2019，10,100 人，52 个议题）发现，大多数人面对事实纠正会小幅更新，“越纠正越固执”的回火效应很少见。<span class="tag a">A</span></td></tr>
+        <tr><td>Adam Grant《Think Again》引文</td><td class="v-part">意译，大体准确</td><td>原话是“great scientists and superforecasters… comfortable being wrong… terrified of being wrong”，主语是“伟大科学家与超级预测者”。<span class="tag b">B</span></td></tr>
+        <tr><td>芒格：“比全世界最聪明的反对者更好地反驳自己”</td><td class="v-part">意译</td><td>常见版本是“I never allow myself to have an opinion on anything that I don't know the other side's argument better than they do”，原帖用词接近李录转述的版本。确切的原始出处没有查到。<span class="tag c">C</span></td></tr>
+        <tr><td>越聪明的人自欺能力越强</td><td class="v-part">部分支持</td><td>Kahan 2017 支持“能力越强，在身份议题上越两极”，2024 年复现结果参半；Stanovich 2013 支持“聪明不防偏”。准确说法是“聪明不防偏，可能放大偏见”。<span class="tag a">A</span></td></tr>
+        <tr><td>思想实验室是个人心法</td><td class="v-ext">作者改编</td><td>原书中 Idea Lab 与 Echo Chamber 是一对群体文化概念。改成个人版合理，但丢掉了群体这一半。<span class="tag b">B</span></td></tr>
+        <tr><td>五大生活场景</td><td class="v-ext">作者延伸</td><td>原书主要讲政治与社会。延伸方向与投资、创业、关系方面的研究一致，见<a href="#scenes">场景与例证</a>。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== LIMITS ===================== -->
+<section class="section" id="limits">
+  <div class="sec-kicker">模型边界</div>
+  <h2 class="sec-title">这套模型不能怎么用</h2>
+  <div class="grid-2">
+    <div class="card"><h3>它是状态，不是人格标签</h3><p>Tim 反复强调：每个人都会在阶梯上上下移动，跟话题、情绪、利害关系有关。原帖结尾也说，它是照自己的镜子，不是量别人的尺子。一旦用来给别人贴“你就是律师思维”的标签，它本身就成了部落武器，这正好是低阶行为。</p></div>
+    <div class="card"><h3>“油盐不进”比想象中少</h3><p>Nyhan 与 Reifler 2010 年报告的“回火效应”（纠正反而让人更信）曾广为流传，但 Wood 与 Porter 2019 年的大样本研究几乎没能重现。现实中更常见的问题是更新太少、太慢，而不是死不更新。所以别对说服别人过度悲观，也别把对方轻易归进狂热者。</p></div>
+    <div class="card"><h3>不可能事事做科学家</h3><p>精力有限，大部分知识只能借用别人的。原书给的办法是信任过滤器：根据信源的历史记录决定信多少。对不重要的事，借用可靠信源的结论就够了，不必每件都从 A 点重新拼。</p></div>
+    <div class="card"><h3>执行需要承诺，创业需要“不讲理”</h3><p>完全的科学家可能永远在验证、从不出手。Bezos 的说法是“在愿景上固执，在细节上灵活”；Paul Saffo 的说法是“强观点，弱持有”。要警惕的是对<strong>具体假设</strong>的固执，而不是对方向的坚持。</p></div>
+    <div class="card"><h3>两个心智是比喻，不是脑区</h3><p>“高级心智 / 原始心智”是叙事上的二分，和 Kahneman 的系统 1 / 系统 2 类似，但都不对应某个具体脑区。情绪也不全是敌人：没有情绪带来的警觉，人也不会去在意真相。</p></div>
+    <div class="card"><h3>原书后半部分有政治争议</h3><p>原书大量篇幅批评美国左翼中的“社会正义原教旨主义”，有评论认为批评力度左右不对称。原帖刻意绕开了这部分，读原书时要知道作者自己也有立场，同样适合用阶梯去检验。</p></div>
+  </div>
+</section>
+
+<!-- ===================== FAMILY ===================== -->
+<section class="section" id="family">
+  <div class="sec-kicker">相关模型</div>
+  <h2 class="sec-title">同一件事，不同的人怎么讲</h2>
+  <p class="sec-lead">思维阶梯不是孤立的发明，许多学者从不同角度描述过“求真”与“护己”的张力。放在一起看，更容易记住，也更容易发现它独特的地方：<strong>把立场和思考方式拆成两条独立的轴。</strong></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>提出者</th><th>求真的一端</th><th>护己的一端</th><th>与阶梯的关系</th></tr></thead>
+      <tbody>
+        <tr><td class="k">侦察兵心态</td><td>Julia Galef（2021）</td><td>侦察兵：想看清地形</td><td>士兵：要守住阵地</td><td>二分版本，更强调校准置信度</td></tr>
+        <tr><td class="k">四种思维模式</td><td>Adam Grant（2021）</td><td>科学家</td><td>传教士、检察官、政客</td><td>“检察官”接近律师，“传教士”接近狂热者</td></tr>
+        <tr><td class="k">象与骑象人</td><td>Jonathan Haidt（2012）</td><td>骑象人偶尔掌舵</td><td>理性当情绪的新闻发言人</td><td>解释为什么律师模式是默认状态</td></tr>
+        <tr><td class="k">论证理论</td><td>Mercier &amp; Sperber（2011）</td><td>群体内互相挑错</td><td>个人为己方辩护</td><td>给“思想实验室要靠群体”提供理论依据</td></tr>
+        <tr><td class="k">狐狸与刺猬</td><td>Philip Tetlock（2005）</td><td>狐狸：多视角，随时调整</td><td>刺猬：一个大理论套万物</td><td>用预测准确率实证了科学家更准</td></tr>
+        <tr><td class="k">让身份小一点</td><td>Paul Graham（2009）</td><td>身份小，可讨论的多</td><td>身份大，讨论变宗教战争</td><td>对应“信念 = 身份”的病根</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== SOURCES ===================== -->
+<section class="section" id="src">
+  <div class="sec-kicker">来源</div>
+  <h2 class="sec-title">参考资料</h2>
+  <ol class="sources">
+    <li>龙海（@longhaiqwe123）,《Tim Urban 花了 6 年总结出的顶级思维模型》, X Article, 2026-10-01. <a href="https://x.com/longhaiqwe123/status/2105454522558792122">原帖</a></li>
+    <li>Tim Urban, <em>What's Our Problem? A Self-Help Book for Societies</em>, Wait But Why, 2023. 概念摘要见 <a href="https://davidhartsough.com/snippets/thinking-ladder/">davidhartsough.com</a>、<a href="https://www.sloww.co/whats-our-problem-tim-urban/">sloww.co</a>；中文读书笔记见 <a href="https://book.douban.com/annotation/123901719/">豆瓣</a></li>
+    <li>Fabian, S. T. et al. (2024). Why flying insects gather at artificial light. <em>Nature Communications</em> 15, 689. <a href="https://www.nature.com/articles/d41586-024-00261-y">Nature 新闻</a></li>
+    <li>Kaplan, J. T., Gimbel, S. I., &amp; Harris, S. (2016). Neural correlates of maintaining one's political beliefs in the face of counterevidence. <em>Scientific Reports</em> 6, 39589. <a href="https://www.nature.com/articles/srep39589">原文</a></li>
+    <li>Neural correlates of belief change in political and non-political domains among left-wing individuals confronted with counterarguments (2026). <em>Scientific Reports</em>. <a href="https://www.nature.com/articles/s41598-026-35397-6">原文</a></li>
+    <li>Eisenberger, N. I., Lieberman, M. D., &amp; Williams, K. D. (2003). Does rejection hurt? An fMRI study of social exclusion. <em>Science</em> 302, 290–292.</li>
+    <li>Kahan, D. M., Peters, E., Dawson, E. C., &amp; Slovic, P. (2017). Motivated numeracy and enlightened self-government. <em>Behavioural Public Policy</em> 1(1), 54–86. <a href="https://www.cambridge.org/core/journals/behavioural-public-policy/article/abs/motivated-numeracy-and-enlightened-selfgovernment/EC9F2410D5562EF10B7A5E2539063806">原文</a>；复现：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11478866/">PLOS ONE 2024</a></li>
+    <li>Stanovich, K. E., West, R. F., &amp; Toplak, M. E. (2013). Myside bias, rational thinking, and intelligence. <em>Current Directions in Psychological Science</em> 22(4).</li>
+    <li>Lord, C. G., Ross, L., &amp; Lepper, M. R. (1979). Biased assimilation and attitude polarization. <em>JPSP</em> 37(11).</li>
+    <li>Vallone, R. P., Ross, L., &amp; Lepper, M. R. (1985). The hostile media phenomenon. <em>JPSP</em> 49(3).</li>
+    <li>Pronin, E., Lin, D. Y., &amp; Ross, L. (2002). The bias blind spot. <em>PSPB</em> 28(3).</li>
+    <li>Mercier, H., &amp; Sperber, D. (2011). Why do humans reason? Arguments for an argumentative theory. <em>Behavioral and Brain Sciences</em> 34(2).</li>
+    <li>Odean, T. (1998). Are investors reluctant to realize their losses? <em>Journal of Finance</em> 53(5).</li>
+    <li>Camuffo, A., Cordova, A., Gambardella, A., &amp; Spina, C. (2020). A scientific approach to entrepreneurial decision making: Evidence from a randomized control trial. <em>Management Science</em> 66(2).</li>
+    <li>Wood, T., &amp; Porter, E. (2019). The elusive backfire effect. <em>Political Behavior</em> 41.</li>
+    <li>Kahneman, D., &amp; Klein, G. (2009). Conditions for intuitive expertise: A failure to disagree. <em>American Psychologist</em> 64(6).</li>
+    <li>Lieberman, M. D. et al. (2007). Putting feelings into words. <em>Psychological Science</em> 18(5).</li>
+    <li>Klein, G. (2007). Performing a project premortem. <em>Harvard Business Review</em>.</li>
+    <li>Adam Grant, <em>Think Again</em> (2021)；Julia Galef, <em>The Scout Mindset</em> (2021)；Philip Tetlock &amp; Dan Gardner, <em>Superforecasting</em> (2015)；Ed Catmull, <em>Creativity, Inc.</em> (2014)；Jonathan Haidt, <em>The Righteous Mind</em> (2012)；Daniel Dennett, <em>Intuition Pumps</em> (2013)；Paul Graham, <a href="http://www.paulgraham.com/identity.html">Keep Your Identity Small</a> (2009)</li>
+    <li>芒格名言出处讨论：<a href="https://fs.blog/the-work-required-to-have-an-opinion/">Farnam Street</a>、<a href="https://theweek.com/articles/460784/how-develop-defend-smart-opinions">The Week</a>；Grant 原句：<a href="https://www.goodreads.com/author/quotes/6583155.Adam_M_Grant?page=3">Goodreads</a></li>
+  </ol>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    制作：2026-10-02 · 原帖正文经 fxtwitter API 抓取，关键论断经检索核验。原帖插图为 Tim Urban 原书插画，本页未转载，图示均为重绘示意。<br>
+    设计 token 集中在 &lt;style&gt; 顶部 TOKENS 段：原始色阶 → 语义角色，深色主题只覆盖语义层；唯一例外是 [hidden] 的 !important（已注释）。
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- Ladder tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.rung-btn'));
+  function select(t){
+    tabs.forEach(function(x){
+      var on = x === t;
+      x.setAttribute('aria-selected', on ? 'true' : 'false');
+      x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ select(t); });
+    t.addEventListener('keydown', function(e){
+      var d = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : (e.key === 'ArrowUp' || e.key === 'ArrowLeft') ? -1 : 0;
+      if(!d) return;
+      e.preventDefault();
+      var n = tabs[(i + d + tabs.length) % tabs.length];
+      select(n); n.focus();
+    });
+  });
+
+  /* ---------- Quiz ---------- */
+  var qs = Array.prototype.slice.call(document.querySelectorAll('#quizBox .q'));
+  var title = document.getElementById('quizTitle'), text = document.getElementById('quizText');
+  var RESULTS = [
+    {max:1, t:'科学家区：保持住', d:'你在这个话题上能看到对方最强的论据，也知道自己什么时候该改主意。下一步：给你的结论写一个置信度，并约一位最强的反对者聊一次。'},
+    {max:3, t:'体育迷区：在乎真相，但有主队', d:'你仍然在乎事实，只是信息来源和评判标准在悄悄偏向己方。试着去读一篇立场相反、但论证严谨的文章，并写下它最有力的一点。'},
+    {max:6, t:'律师区：在为结论辩护', d:'你可能是从结论出发、倒着找证据。先做一件事：写下“出现什么证据就说明我错了”。写不出来，本身就是信号。'},
+    {max:99, t:'狂热者区：观点成了宝贝婴儿', d:'这个话题已经和你的身份绑在一起了。先别急着争论，给情绪命个名（“我被冒犯了”），再试着复述对方的观点，直到对方点头。'}
+  ];
+  function update(){
+    var answered = 0, score = 0;
+    qs.forEach(function(q){
+      var on = q.querySelector('button[aria-pressed="true"]');
+      if(!on) return;
+      answered++;
+      score += Number(q.getAttribute(on.dataset.v === 'yes' ? 'data-w-yes' : 'data-w-no'));
+    });
+    if(answered < qs.length){
+      title.textContent = '还差 ' + (qs.length - answered) + ' 题';
+      text.textContent = '全部回答后显示你在这个话题上大致处于哪一级。';
+      return;
+    }
+    var r = RESULTS.filter(function(x){ return score <= x.max; })[0];
+    title.textContent = r.t + '（偏离分 ' + score + ' / 11）';
+    text.textContent = r.d + ' 记住：这只是你在这一个话题上的状态，换个话题、换个心情，结果可能完全不同。';
+  }
+  qs.forEach(function(q){
+    q.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        q.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        update();
+      });
+    });
+  });
+  document.getElementById('quizReset').addEventListener('click', function(){
+    qs.forEach(function(q){ q.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed','false'); }); });
+    update();
+  });
+})();
+</script>
+</body>
+</html>

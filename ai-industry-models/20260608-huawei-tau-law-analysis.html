@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="华为「韬定律」全面分析 · 从摩尔定律到时间缩微">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260608-1616-华为「韬定律」全面分析 · 从摩尔定律到时间缩微</title>
+<style>
+  /* ============ Design tokens ============ */
+  :root{
+    --bg:        #16130f;        /* warm near-black, tinted toward amber */
+    --bg-2:      #1e1a14;
+    --panel:     #221d16;
+    --ink:       #f0e9dd;        /* warm off-white */
+    --ink-soft:  #b9ad99;
+    --ink-faint: #7c7363;
+    --line:      #352d22;
+    --line-soft: #2a241b;
+    --accent:    #d8392b;        /* restrained Huawei red */
+    --accent-2:  #e8a13c;        /* amber — "time/tau" */
+    --accent-3:  #5b8c7e;        /* desaturated teal — neutral data */
+    --nvidia:    #76b900;        /* nvidia green, used sparingly for compare */
+    --warn:      #c77b3a;
+    --maxw: 1180px;
+    --serif: "Songti SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
+    --sans:  ui-sans-serif,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); line-height:1.7;
+    font-size:clamp(15px,1vw + 12px,17px);
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent);color:#fff}
+
+  /* ============ Layout primitives ============ */
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(20px,4vw,56px)}
+  section{padding:clamp(48px,7vw,92px) 0; border-top:1px solid var(--line-soft)}
+  h1,h2,h3{font-family:var(--serif); font-weight:600; letter-spacing:.01em; line-height:1.15}
+  a{color:var(--accent-2);text-underline-offset:3px}
+
+  /* ============ Hero ============ */
+  .hero{
+    position:relative; overflow:hidden;
+    padding:clamp(64px,11vw,150px) 0 clamp(48px,7vw,90px);
+    border-top:none;
+    background:
+      radial-gradient(120% 90% at 88% 8%, rgba(216,57,43,.16), transparent 60%),
+      radial-gradient(90% 70% at 8% 100%, rgba(232,161,60,.10), transparent 55%);
+  }
+  .hero .tau-bg{
+    position:absolute; right:-4vw; top:-6vw; font-family:var(--serif);
+    font-size:min(48vw,720px); line-height:.8; color:transparent;
+    -webkit-text-stroke:1.5px rgba(232,161,60,.14);
+    pointer-events:none; user-select:none; z-index:0; font-weight:700;
+  }
+  .hero .wrap{position:relative; z-index:1}
+  .eyebrow{
+    font-family:var(--sans); font-size:.74rem; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--accent-2); margin:0 0 22px;
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+  }
+  .eyebrow::before{content:""; width:42px; height:1px; background:var(--accent-2); display:inline-block}
+  .hero h1{
+    font-size:clamp(2.4rem,6vw,4.6rem); margin:0 0 8px; max-width:18ch;
+  }
+  .hero h1 .em{color:var(--accent)}
+  .hero .sub{
+    font-family:var(--serif); font-size:clamp(1.05rem,2vw,1.5rem);
+    color:var(--ink-soft); font-style:italic; margin:14px 0 0; max-width:46ch;
+  }
+  .hero-meta{
+    display:flex; gap:clamp(20px,4vw,56px); flex-wrap:wrap; margin-top:44px;
+    padding-top:26px; border-top:1px solid var(--line);
+  }
+  .hero-meta div{min-width:120px}
+  .hero-meta .k{font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-faint)}
+  .hero-meta .v{font-family:var(--serif); font-size:1.5rem; color:var(--ink); margin-top:4px}
+  .hero-meta .v small{font-size:.9rem; color:var(--ink-soft); font-family:var(--sans)}
+
+  /* ============ TL;DR ============ */
+  .tldr{background:linear-gradient(180deg,var(--bg-2),var(--bg))}
+  .tldr-grid{display:grid; gap:18px}
+  .tldr-card{
+    border:1px solid var(--line); border-left:3px solid var(--accent);
+    background:var(--panel); padding:24px 26px; border-radius:2px;
+  }
+  .tldr-card:nth-child(2){border-left-color:var(--accent-2)}
+  .tldr-card:nth-child(3){border-left-color:var(--accent-3)}
+  .tldr-card .lab{
+    font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:10px;
+  }
+  .tldr-card p{margin:0; color:var(--ink-soft); font-size:.97rem}
+  .tldr-card strong{color:var(--ink); font-weight:600}
+
+  /* ============ Section headers ============ */
+  .sec-head{display:flex; align-items:baseline; gap:18px; margin-bottom:14px}
+  .sec-head .num{
+    font-family:var(--serif); font-size:clamp(2.2rem,5vw,3.4rem);
+    color:var(--accent); line-height:1; font-weight:700; opacity:.9;
+  }
+  .sec-head h2{font-size:clamp(1.5rem,3.2vw,2.3rem); margin:0}
+  .sec-lead{color:var(--ink-soft); max-width:62ch; margin:0 0 38px; font-size:1.02rem}
+
+  /* ============ Tables ============ */
+  .table-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:3px; margin:26px 0}
+  table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:560px}
+  th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--line-soft); vertical-align:top}
+  thead th{
+    background:var(--bg-2); color:var(--accent-2); font-weight:600;
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    position:sticky; top:0; border-bottom:1px solid var(--line);
+  }
+  tbody tr:hover{background:rgba(232,161,60,.04)}
+  td strong{color:var(--ink)}
+  .num-cell{font-variant-numeric:tabular-nums; color:var(--accent-2)}
+
+  /* ============ Comparison split ============ */
+  .versus{
+    display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch;
+    border:1px solid var(--line); border-radius:3px; overflow:hidden; margin:30px 0;
+  }
+  .versus .col{padding:28px 30px}
+  .versus .col.moore{background:linear-gradient(180deg,rgba(91,140,126,.08),transparent)}
+  .versus .col.tau{background:linear-gradient(180deg,rgba(216,57,43,.10),transparent)}
+  .versus .vs{
+    display:flex; align-items:center; justify-content:center; padding:0 6px;
+    font-family:var(--serif); font-style:italic; color:var(--ink-faint);
+    border-left:1px solid var(--line); border-right:1px solid var(--line);
+    writing-mode:vertical-rl; letter-spacing:.3em; font-size:.8rem;
+  }
+  .versus h3{margin:0 0 4px; font-size:1.25rem}
+  .versus .moore h3{color:var(--accent-3)}
+  .versus .tau h3{color:var(--accent)}
+  .versus .tag{font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-faint)}
+  .versus dl{margin:18px 0 0; display:grid; gap:13px}
+  .versus dt{font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint)}
+  .versus dd{margin:2px 0 0; color:var(--ink-soft); font-size:.92rem}
+
+  /* ============ Timeline (SVG-ish CSS) ============ */
+  .timeline{position:relative; margin:38px 0 10px; padding-left:6px}
+  .tl-row{
+    display:grid; grid-template-columns:96px 1fr; gap:22px; position:relative;
+    padding-bottom:26px;
+  }
+  .tl-row::before{
+    content:""; position:absolute; left:107px; top:8px; bottom:-4px; width:2px;
+    background:linear-gradient(var(--line),var(--line-soft));
+  }
+  .tl-row:last-child::before{display:none}
+  .tl-row .yr{
+    font-family:var(--serif); font-size:1.05rem; color:var(--accent-2);
+    text-align:right; font-variant-numeric:tabular-nums; padding-top:1px;
+  }
+  .tl-row .body{position:relative; padding-left:26px}
+  .tl-row .body::before{
+    content:""; position:absolute; left:-4px; top:6px; width:11px; height:11px;
+    border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--bg);
+  }
+  .tl-row.alt .body::before{background:var(--accent-2)}
+  .tl-row .t{font-weight:600; color:var(--ink); display:block; margin-bottom:3px}
+  .tl-row .d{color:var(--ink-soft); font-size:.9rem}
+
+  /* ============ Bar chart (density) ============ */
+  .chart{margin:30px 0; border:1px solid var(--line); border-radius:3px; padding:28px 30px; background:var(--panel)}
+  .chart .ch-title{font-family:var(--serif); font-size:1.15rem; margin:0 0 4px}
+  .chart .ch-sub{color:var(--ink-faint); font-size:.82rem; margin:0 0 24px}
+  .bar-row{display:grid; grid-template-columns:130px 1fr 84px; align-items:center; gap:16px; margin-bottom:14px}
+  .bar-row .bl{font-size:.84rem; color:var(--ink-soft)}
+  .bar-track{height:22px; background:var(--bg-2); border-radius:2px; overflow:hidden; position:relative}
+  .bar-fill{height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width 1s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .bv{font-variant-numeric:tabular-nums; font-size:.84rem; color:var(--accent-2); text-align:right}
+
+  /* ============ Faction map ============ */
+  .factions{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin:30px 0}
+  .faction{border:1px solid var(--line); border-radius:3px; padding:22px 22px 18px; background:var(--panel); position:relative; overflow:hidden}
+  .faction::after{content:""; position:absolute; inset:0 0 auto 0; height:3px}
+  .faction.f1::after{background:var(--nvidia)}
+  .faction.f2::after{background:var(--accent-2)}
+  .faction.f3::after{background:var(--accent-3)}
+  .faction.f4::after{background:var(--accent)}
+  .faction h4{font-family:var(--serif); margin:6px 0 4px; font-size:1.15rem}
+  .faction .chips{display:flex; flex-wrap:wrap; gap:6px; margin:12px 0}
+  .faction .chip{font-size:.7rem; padding:3px 9px; border:1px solid var(--line); border-radius:99px; color:var(--ink-soft)}
+  .faction .who{font-size:.8rem; color:var(--ink-faint); margin-top:8px}
+
+  /* ============ Callouts ============ */
+  .callout{border:1px solid var(--line); border-left:3px solid var(--warn); background:rgba(199,123,58,.06); padding:18px 22px; border-radius:2px; margin:22px 0; font-size:.92rem; color:var(--ink-soft)}
+  .callout.disp{border-left-color:var(--accent)}
+  .callout .ct{font-weight:600; color:var(--ink); letter-spacing:.04em; display:block; margin-bottom:4px; font-size:.78rem; text-transform:uppercase}
+  .callout.disp .ct{color:var(--accent)}
+
+  .lead-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden; margin:28px 0}
+  .lead-grid .cell{background:var(--bg-2); padding:22px 24px}
+  .lead-grid .big{font-family:var(--serif); font-size:2.1rem; color:var(--accent-2); line-height:1; font-variant-numeric:tabular-nums}
+  .lead-grid .lab2{font-size:.78rem; color:var(--ink-soft); margin-top:8px}
+
+  /* ============ TOC nav ============ */
+  nav.toc{position:sticky; top:0; z-index:20; background:rgba(22,19,15,.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  nav.toc .wrap{display:flex; gap:6px; overflow-x:auto; padding-top:12px; padding-bottom:12px; scrollbar-width:none}
+  nav.toc .wrap::-webkit-scrollbar{display:none}
+  nav.toc a{color:var(--ink-soft); text-decoration:none; font-size:.78rem; padding:6px 13px; border-radius:99px; white-space:nowrap; border:1px solid transparent; transition:.2s}
+  nav.toc a:hover{color:var(--ink); border-color:var(--line); background:var(--panel)}
+
+  footer{padding:54px 0 70px; color:var(--ink-faint); font-size:.82rem; border-top:1px solid var(--line)}
+  footer .wrap{display:flex; flex-wrap:wrap; gap:30px; justify-content:space-between; align-items:flex-end}
+  .prose p{color:var(--ink-soft)}
+  .prose strong{color:var(--ink)}
+  .pill{display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; padding:3px 10px; border:1px solid var(--accent); color:var(--accent); border-radius:99px; margin-left:8px; vertical-align:middle}
+
+  @media(max-width:680px){
+    .versus{grid-template-columns:1fr}
+    .versus .vs{writing-mode:horizontal-tb; padding:10px; border:none; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+    .tl-row::before{left:11px}
+    .tl-row{grid-template-columns:1fr; gap:6px}
+    .tl-row .yr{text-align:left}
+    .bar-row{grid-template-columns:90px 1fr 60px; gap:9px}
+  }
+  /* reveal on load */
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0; transform:translateY(14px); animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="tau-bg" aria-hidden="true">τ</div>
+  <div class="wrap reveal">
+    <p class="eyebrow">深度分析报告 · 系统级算力的中国答卷</p>
+    <h1>华为<span class="em">「韬定律」</span>全面分析</h1>
+    <p class="sub">从摩尔定律到时间缩微——当几何缩微撞上物理极限,华为选择不在被锁住的赛道上竞速。</p>
+    <div class="hero-meta">
+      <div><div class="k">提出者 / 场合</div><div class="v">何庭波<small> · ISCAS 2026</small></div></div>
+      <div><div class="k">发布日期</div><div class="v">2026·05·25</div></div>
+      <div><div class="k">量产验证</div><div class="v">381<small> 款芯片</small></div></div>
+      <div><div class="k">2031 目标</div><div class="v">≈1.4nm<small> 等效密度</small></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ TOC ============ -->
+<nav class="toc">
+  <div class="wrap">
+    <a href="#tldr">TL;DR</a>
+    <a href="#m1">① 核心内涵</a>
+    <a href="#m2">② vs 摩尔定律</a>
+    <a href="#m3">③ 技术迭代</a>
+    <a href="#m4">④ 国际对比</a>
+    <a href="#m5">⑤ 制程科普</a>
+    <a href="#m6">⑥ 战略解读</a>
+    <a href="#rec">决策建议</a>
+    <a href="#caveat">警示</a>
+  </div>
+</nav>
+
+<!-- ============ TL;DR ============ -->
+<section id="tldr" class="tldr">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">TL</span><h2>三句话看懂</h2></div>
+    <div class="tldr-grid">
+      <div class="tldr-card">
+        <div class="lab">何为韬定律</div>
+        <p><strong>「韬(τ)定律」</strong>由华为半导体业务部总裁<strong>何庭波</strong>于 2026 年 5 月 25 日在上海 ISCAS 2026 正式提出,核心是以<strong>「时间常数 τ 缩微」替代摩尔定律的「几何缩微」</strong>——不死磕晶体管尺寸,而通过<strong>逻辑折叠(LogicFolding)</strong>贯穿器件—电路—芯片—系统四级,压缩信号传播时延。基于此六年已量产 381 款芯片,目标 2031 年实现等效 1.4nm 密度。
+        <br><br>⚠️ 用户问题中「徐直军在 HC 2025 提出韬定律」是<strong>相关但不同的事件</strong>:徐直军 2025-09-18 提出的是配套的「超节点+集群」系统战略,正式命名出自 2026 年 5 月。</p>
+      </div>
+      <div class="tldr-card">
+        <div class="lab">战略本质</div>
+        <p>用<strong>工程系统创新对冲先进制程封锁</strong>。Atlas 950 SuperPoD(8192 卡 / 8 FP8 EFLOPS)与 Atlas 960(15488 卡 / 30 EFLOPS)在<strong>系统级指标上对标并明显大于</strong> NVIDIA Vera Rubin NVL144 / NVL576。代价是物理规模:占地 ~1000–2200 m²、单 NPU 能效落后。<span class="pill">争议</span>「系统级超越 NVIDIA」是有争议的——单芯片仍落后约一代,CUDA 护城河十年内难撼。</p>
+      </div>
+      <div class="tldr-card">
+        <div class="lab">给决策者</div>
+        <p>这是<strong>「双轨现实」</strong>:中国数据中心 / 受管制负载应认真评估 Ascend 910C/950 + 灵衢 UB 超节点;追求生态成熟度、单卡能效、全球部署的负载,NVIDIA Blackwell/Rubin 仍是默认。三个关键阈值:<strong>(1)</strong> 950PR/DT 实际量产规模与 yield;<strong>(2)</strong> 中芯 5nm yield 能否 2027 前破 60%;<strong>(3)</strong> 灵衢 2.0 能否吸引海光/寒武纪/平头哥加入。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KEY FINDINGS ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="num">◆</span><h2>关键发现速览</h2></div>
+    <p class="sec-lead">跨 30+ 信源交叉验证的核心数据与论断。带 <span class="pill">争议</span> 标记者口径存在分歧。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">主题</th><th scope="col">关键数据 / 论断</th><th scope="col">来源与日期</th></tr></thead>
+        <tbody>
+          <tr><td><strong>韬定律提出</strong></td><td>何庭波,ISCAS 2026,主题《半导体新路径探索与实践》;论文《A Time Scaling Theory for Multi-Layer Electronic Systems》</td><td>华为官网 / 观察者网 2026·5·25</td></tr>
+          <tr><td><strong>命名来源</strong></td><td>τ = 时间常数;中文音译「韬」取「韬光养晦」之意;跨 12 个数量级的统一优化目标</td><td>21 世纪经济报道 2026·5·26</td></tr>
+          <tr><td><strong>量产验证</strong></td><td class="num-cell">381 款芯片(2020·5–2026·5),覆盖移动/AI/车载/工业/基础设施</td><td>华为新闻稿 2026·5·25</td></tr>
+          <tr><td><strong>麒麟 2026</strong></td><td>制程不变,密度 155 → <span class="num-cell">238 MTr/mm²(+53.5%)</span>,P 核能效 +41%,频率 2.75→3.1 GHz</td><td>何庭波 ISCAS PPT</td></tr>
+          <tr><td><strong>2031 目标</strong></td><td>等效 1.4nm 密度(>400 MTr/mm²),频率 5.0 GHz;2035 AI 硬件集成度 +100×</td><td>华为论文</td></tr>
+          <tr><td><strong>Atlas 950 SuperPoD</strong></td><td class="num-cell">8192×950DT · 8 FP8 EFLOPS · 1152 TB · 16 PB/s · 1000 m²</td><td>华为 HC 2025 / Tom's Hardware</td></tr>
+          <tr><td><strong>Atlas 960 SuperPoD</strong></td><td class="num-cell">15488 卡 · 30 FP8 EFLOPS · 4460 TB · 34 PB/s · 2200 m²</td><td>华为 HC 2025</td></tr>
+          <tr><td><strong>NVIDIA NVL144</strong></td><td class="num-cell">144 GPU dies · 3.6 NVFP4 EFLOPS · 75 TB · 2026 H2</td><td>GTC Washington 2025</td></tr>
+          <tr><td><strong>NVIDIA NVL576</strong></td><td class="num-cell">576 dies · 15 FP4 EFLOPS · 600 kW/机柜 · 2027 H2</td><td>TweakTown / Introl 2026</td></tr>
+          <tr><td><strong>制程现实(SMIC)</strong></td><td>7nm N+2 yield ~40–50%(2025);5nm 级 ~20%;目标 2026 高端逻辑 die 1.6M</td><td>EE Times / AEI 2026·4</td></tr>
+          <tr><td><strong>N2 晶圆成本</strong></td><td class="num-cell">~$30,000/片(约 N4/N5 两倍)</td><td>中国时报 / Tom's Hardware 2025·6·4</td></tr>
+          <tr><td><strong>CUDA 护城河</strong></td><td>Ascend 训练 LLM 比 NVIDIA 贵 30–50%;CANN 开发者活跃度约 CUDA 的 1/10</td><td>ainvest / ChinaTalk 2025</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 1 ============ -->
+<section id="m1">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">01</span><h2>「韬(τ)定律」的核心内涵</h2></div>
+    <p class="sec-lead">两个相关但不同的事件,常被混为一谈。先厘清归属,再看四级协同体系。</p>
+
+    <div class="versus">
+      <div class="col moore">
+        <span class="tag">事件 A · 系统战略</span>
+        <h3>徐直军 · HC 2025</h3>
+        <dl>
+          <div><dt>日期</dt><dd>2025·09·18,上海华为全联接大会</dd></div>
+          <div><dt>主题</dt><dd>《以开创的超节点互联技术,引领 AI 基础设施新范式》</dd></div>
+          <div><dt>内容</dt><dd>「超节点+集群」算力战略 · 昇腾/鲲鹏三年路标 · 开放灵衢 2.0 规范</dd></div>
+          <div><dt>金句</dt><dd>「用非摩尔补摩尔、用数学补物理,不是什么伟大的事情」</dd></div>
+          <div><dt>关键</dt><dd>未使用「韬定律」一词</dd></div>
+        </dl>
+      </div>
+      <div class="vs">命名归属</div>
+      <div class="col tau">
+        <span class="tag">事件 B · 理论命名</span>
+        <h3>何庭波 · ISCAS 2026</h3>
+        <dl>
+          <div><dt>日期</dt><dd>2026·05·25,IEEE 国际电路与系统研讨会</dd></div>
+          <div><dt>主题</dt><dd>《半导体新路径探索与实践》</dd></div>
+          <div><dt>内容</dt><dd>正式发布「韬(τ)定律」+ 同日提交 ChinaXiv 论文</dd></div>
+          <div><dt>定位</dt><dd>「自 Dennard scaling 以来第一个为整个计算堆栈提供共享优化目标的缩放原则」</dd></div>
+          <div><dt>关键</dt><dd>正式命名出自此处,根植于徐直军一年前的战略</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <h3 style="margin-top:46px">四级协同优化体系</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">层级</th><th scope="col">核心动作</th><th scope="col">关键技术示例</th></tr></thead>
+        <tbody>
+          <tr><td><strong>器件层</strong></td><td>从晶体管电阻、寄生电容入手,物理底层压缩 τ</td><td>材料 / 晶体管沟道工程</td></tr>
+          <tr><td><strong>电路层</strong></td><td>突破平面布局,逻辑折叠将电路从单层折至多层</td><td>LogicFolding · SkyBridge(布线面积 −60%)· SkyClock(性能 +5%)</td></tr>
+          <tr><td><strong>芯片层</strong></td><td>软件/架构/芯片全栈协同,按负载调配指令流</td><td>软硬芯协同 · 近存计算</td></tr>
+          <tr><td><strong>系统层</strong></td><td>定义灵衢总线,重构互联协议,统一内存编址</td><td>UnifiedBus · Hi-ONE 近封装光学 · 背面供电</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lead-grid">
+      <div class="cell"><div class="big">数百 μs → 数百 ns</div><div class="lab2">统一总线 + Hi-ONE 压缩通信延迟</div></div>
+      <div class="cell"><div class="big">500×</div><div class="lab2">系统互连端到端延迟压缩</div></div>
+      <div class="cell"><div class="big">100×+</div><div class="lab2">2035 AI 硬件集成度提升</div></div>
+      <div class="cell"><div class="big">5.0 GHz</div><div class="lab2">2031 CPU 核心目标频率</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 2 ============ -->
+<section id="m2">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">02</span><h2>韬定律 vs 摩尔定律</h2></div>
+    <p class="sec-lead">不是敌人,更像接班。一个把晶体管做小,一个让信号跑得更快、绕得更短。</p>
+
+    <div class="versus">
+      <div class="col moore">
+        <span class="tag">Moore</span><h3>几何缩微</h3>
+        <dl>
+          <div><dt>优化目标</dt><dd>单芯片晶体管数翻倍(每 18–24 月)</dd></div>
+          <div><dt>核心机制</dt><dd>把晶体管做小</dd></div>
+          <div><dt>实现路径</dt><dd>制程节点演进(EUV / High-NA)</dd></div>
+          <div><dt>物理极限</dt><dd>原子尺寸 · 量子隧穿漏电</dd></div>
+          <div><dt>经济极限</dt><dd>$200 亿+ 晶圆厂 · 3–4 家垄断</dd></div>
+          <div><dt>节奏</dt><dd>明确可量化(每 18–24 月翻倍)</dd></div>
+        </dl>
+      </div>
+      <div class="vs">范式对立</div>
+      <div class="col tau">
+        <span class="tag">τ</span><h3>时间缩微</h3>
+        <dl>
+          <div><dt>优化目标</dt><dd>时间常数 τ 最小化(全栈)</dd></div>
+          <div><dt>核心机制</dt><dd>让信号跑得更快、绕得更短</dd></div>
+          <div><dt>实现路径</dt><dd>互联 + 封装 + 3D 逻辑折叠 + 系统架构</dd></div>
+          <div><dt>物理极限</dt><dd>光速 · 热密度</dd></div>
+          <div><dt>经济极限</dt><dd>中小厂可参与封装 / EDA / 互联</dd></div>
+          <div><dt>节奏</dt><dd><span style="color:var(--warn)">尚无统一定量节奏(方向性指导)</span></dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- density bar chart -->
+    <div class="chart">
+      <p class="ch-title">晶体管密度路线(同制程下的「时间缩微」增益)</p>
+      <p class="ch-sub">MTr/mm² · 基于何庭波论文披露,2031 为等效 1.4nm 目标</p>
+      <div class="bar-row"><span class="bl">2025 麒麟9030Pro</span><div class="bar-track"><div class="bar-fill" style="width:38%"></div></div><span class="bv">155</span></div>
+      <div class="bar-row"><span class="bl">2026 麒麟2026</span><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div><span class="bv">238</span></div>
+      <div class="bar-row"><span class="bl">2031 目标(≈1.4nm)</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bv">>400</span></div>
+    </div>
+
+    <div class="callout disp">
+      <span class="ct">争议 / 质疑派</span>
+      知乎技术社区指出:「自约 7nm 起,纳米数字已不再对应物理栅极长度」,质疑 1.4nm 等效的物理含义;且「摩尔定律之所以能成产业指南针,是因为给出可量化节奏。韬(τ)定律目前还没有类似的定量目标函数」——更像一面旗号,能否升级为产业级共同目标,取决于能否吸引 EDA/封装/设备认领自己那段 τ 预算。
+    </div>
+    <div class="callout">
+      <span class="ct">市场反应(≠技术验证)</span>
+      发布当日:中芯国际涨 <strong>18.78%</strong> 创历史新高,华虹 <strong>20% 涨停</strong>,科创 50 涨 <strong>5.88%</strong>,近 60 只概念股涨停或涨超 10%。短期情绪,非技术兑现。
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 3 ============ -->
+<section id="m3">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">03</span><h2>技术更新迭代历程</h2></div>
+    <p class="sec-lead">昇腾 / 鲲鹏 / Atlas 超节点 / 灵衢互联——四条主线的演进时间轴。</p>
+
+    <div class="timeline">
+      <div class="tl-row"><div class="yr">2019</div><div class="body"><span class="t">Ascend 910A · Kunpeng 920</span><span class="d">TSMC 7nm,256 TFLOPS FP16,32 GB HBM2;鲲鹏 64C ARM v8.2 起点</span></div></div>
+      <div class="tl-row alt"><div class="yr">2023</div><div class="body"><span class="t">Ascend 910B</span><span class="d">SMIC N+1 (~7nm),320 TFLOPS FP16,64 GB HBM2e/3,约 H100 的 60%</span></div></div>
+      <div class="tl-row"><div class="yr">2025 Q1</div><div class="body"><span class="t">Ascend 910C · CloudMatrix 384(Atlas 900 A3)</span><span class="d">SMIC N+2,双 die 53B 晶体管,~800 TFLOPS,约 H100 的 80%;384 卡超节点累计部署 300+ 套服务 20+ 客户</span></div></div>
+      <div class="tl-row alt"><div class="yr">2026 Q1</div><div class="body"><span class="t">Ascend 950PR · Kunpeng 950 · 麒麟2026</span><span class="d">自研 HBM 首发(HiBL 1.0 · 128 GB · 1.6 TB/s);鲲鹏首款机密计算;麒麟搭载逻辑折叠 —— 韬定律工程验证关键节点</span></div></div>
+      <div class="tl-row"><div class="yr">2026 Q4</div><div class="body"><span class="t">Ascend 950DT · Atlas 950 SuperPoD</span><span class="d">144 GB HiZQ 2.0 @ 4 TB/s;8192 卡 / 8 FP8 EFLOPS / 16 PB/s —— 真正的「超节点对超节点」对决期</span></div></div>
+      <div class="tl-row alt"><div class="yr">2027 Q4</div><div class="body"><span class="t">Ascend 960 · Atlas 960 SuperPoD</span><span class="d">算力翻倍至 2 PFLOPS FP8/卡;15488 卡 / 30 FP8 EFLOPS —— 对标 NVL576,决定 2027–2030 制程 vs 系统胜负</span></div></div>
+      <div class="tl-row"><div class="yr">2028 Q4</div><div class="body"><span class="t">Ascend 970 · Kunpeng 960</span><span class="d">4 PFLOPS FP8/卡;鲲鹏单核 +50%,≥256C/512T 高密度版</span></div></div>
+      <div class="tl-row alt"><div class="yr">2030–2031</div><div class="body"><span class="t">昇腾 990 · 等效 1.4nm</span><span class="d">首次将逻辑折叠引入 AI 加速器领域;3D 折叠成为性能扩展因子 α 的主要载体</span></div></div>
+    </div>
+
+    <h3 style="margin-top:44px">自研 HBM:破除卡脖子</h3>
+    <div class="lead-grid">
+      <div class="cell"><div class="big">HiBL 1.0</div><div class="lab2">128 GB · 1.6 TB/s → Ascend 950PR</div></div>
+      <div class="cell"><div class="big">HiZQ 2.0</div><div class="lab2">144 GB · 4 TB/s → Ascend 950DT</div></div>
+      <div class="cell"><div class="big">打破垄断</div><div class="lab2">绕开 SK Hynix + Samsung + Micron,非标准化自定义设计</div></div>
+    </div>
+
+    <h3 style="margin-top:44px">Atlas / CloudMatrix 超节点 vs NVIDIA(系统对系统)</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">系统</th><th scope="col">时间</th><th scope="col">卡数</th><th scope="col">算力(FP8/FP16)</th><th scope="col">内存</th><th scope="col">互联带宽</th><th scope="col">占地</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CloudMatrix 384</strong></td><td>2025 Q1</td><td class="num-cell">384×910C</td><td>300 PFLOPS BF16</td><td>49.2 TB</td><td>1229 TB/s</td><td>16 机柜</td></tr>
+          <tr><td>NVIDIA GB200 NVL72</td><td>2024–25</td><td class="num-cell">72 B200</td><td>~180 PFLOPS BF16</td><td>13.8 TB</td><td>576 TB/s</td><td>1 机柜</td></tr>
+          <tr><td><strong>Atlas 950 SuperPoD</strong></td><td>2026 Q4</td><td class="num-cell">8192</td><td>8 / 16 EFLOPS</td><td>1152 TB</td><td>16.3 PB/s</td><td>1000 m²</td></tr>
+          <tr><td>NVIDIA NVL144</td><td>2026 H2</td><td class="num-cell">144 dies</td><td>1.2 / 3.6 EFLOPS</td><td>75 TB</td><td>260 TB/s</td><td>1 机柜</td></tr>
+          <tr><td><strong>Atlas 960 SuperPoD</strong></td><td>2027 Q4</td><td class="num-cell">15488</td><td>30 / 60 EFLOPS</td><td>4460 TB</td><td>34 PB/s</td><td>2200 m²</td></tr>
+          <tr><td>NVIDIA NVL576</td><td>2027 H2</td><td class="num-cell">576 dies</td><td>5 / 15 EFLOPS</td><td>365 TB</td><td>1.5 PB/s</td><td>600 kW/机柜</td></tr>
+          <tr><td><strong>Atlas 950 SuperCluster</strong></td><td>2026</td><td class="num-cell">>520,000</td><td>524 EFLOPS FP8</td><td>—</td><td>—</td><td>10,000+ 机柜</td></tr>
+          <tr><td><strong>Atlas 960 SuperCluster</strong></td><td>2027</td><td class="num-cell">>1,000,000</td><td>2 / 4 ZettaFLOPS</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout disp">
+      <span class="ct">争议 · 对比口径</span>
+      徐直军称 Atlas 950 SuperPoD 相比 NVL144「卡规模 56.8×、总算力 6.7×、内存 15×、互联带宽 62×」。但这是<strong>系统对系统(rack-to-rack)</strong>比较而非单芯片;华为系统功耗、占地、单卡能效均显著落后。SemiAnalysis 测算 CloudMatrix 384 以 ~5× 芯片数、~16× 占地、~4× 功耗换取系统级胜利,每 FLOP 能效仅 GB200 NVL72 的 43%。
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 4 ============ -->
+<section id="m4">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">04</span><h2>国际主流架构全面对比</h2></div>
+    <p class="sec-lead">单芯片华为仍落后约一代;互联与生态是真正的胜负手。</p>
+
+    <h3>单芯片对比(2026 代际)</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">厂商 / 芯片</th><th scope="col">工艺</th><th scope="col">FP4</th><th scope="col">FP8</th><th scope="col">HBM</th><th scope="col">带宽</th><th scope="col">TDP</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Huawei Ascend 950PR/DT</strong></td><td>SMIC</td><td>2 PFLOPS</td><td>1 PFLOPS</td><td>128/144 GB 自研</td><td>1.6/4 TB/s</td><td>600W</td></tr>
+          <tr><td><strong>Huawei Ascend 960</strong></td><td>—</td><td>4 PFLOPS</td><td>2 PFLOPS</td><td>翻倍</td><td>翻倍</td><td>—</td></tr>
+          <tr><td>NVIDIA Rubin R200(die)</td><td>TSMC 3nm</td><td>~25 PFLOPS</td><td>~8 PFLOPS</td><td>144 GB HBM4</td><td>20.5 TB/s</td><td>—</td></tr>
+          <tr><td>NVIDIA Rubin Ultra(4-die)</td><td>TSMC 3nm</td><td>100 PFLOPS</td><td>—</td><td>1 TB HBM4e</td><td>—</td><td>—</td></tr>
+          <tr><td>AMD MI455X</td><td>N2 + N3</td><td>40 PFLOPS</td><td>20 PFLOPS</td><td>432 GB HBM4</td><td>19.6 TB/s</td><td>—</td></tr>
+          <tr><td>Google TPU v7 Ironwood</td><td>—</td><td>—</td><td>4.614 PFLOPS</td><td>192 GB HBM3e</td><td>7.37 TB/s</td><td>~1 kW</td></tr>
+          <tr><td>AWS Trainium 3</td><td>3nm</td><td>—</td><td>2.52 PFLOPS</td><td>144 GB HBM3e</td><td>4.9 TB/s</td><td>—</td></tr>
+          <tr><td>Intel Gaudi 3</td><td>TSMC 5nm</td><td>—</td><td>1.835 PFLOPS</td><td>128 GB HBM2e</td><td>3.67 TB/s</td><td>900–1200W</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:38px">互联架构对比</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">协议</th><th scope="col">主推方</th><th scope="col">scale-up 上限</th><th scope="col">状态</th></tr></thead>
+        <tbody>
+          <tr><td><strong>NVLink 5 / Fusion</strong></td><td>NVIDIA</td><td class="num-cell">NVL576(576 dies)</td><td>量产 · 仅部分授权</td></tr>
+          <tr><td><strong>UALink 1.0/2.0</strong></td><td>AMD/Intel/Google/MS/Meta/Broadcom…</td><td class="num-cell">1024 加速器</td><td>2026 H2 入实验室,2027 出产品(联盟自承认非完全竞品)</td></tr>
+          <tr><td><strong>灵衢 UnifiedBus 2.0</strong></td><td>Huawei</td><td class="num-cell">8192 卡 / 集群 524,288</td><td>已商用 · 与 NVLink 并列「唯二真正商用」</td></tr>
+          <tr><td>Google ICI(TPU)</td><td>Google</td><td class="num-cell">9216 chips/Pod</td><td>量产 · 3D torus + OCS</td></tr>
+          <tr><td>AWS NeuronLink</td><td>AWS</td><td class="num-cell">UltraServer 64/144</td><td>量产</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:38px">全球 AI 算力四大派系</h3>
+    <div class="factions">
+      <div class="faction f1">
+        <h4>NVIDIA 派</h4>
+        <div class="chips"><span class="chip">Blackwell</span><span class="chip">Rubin</span><span class="chip">NVLink</span></div>
+        <div class="who">NVL72/144/576 · OpenAI · Meta · xAI · Microsoft · Oracle</div>
+      </div>
+      <div class="faction f3">
+        <h4>UALink 联盟</h4>
+        <div class="chips"><span class="chip">AMD MI400</span><span class="chip">Intel Jaguar</span><span class="chip">UALink</span></div>
+        <div class="who">Helios(72 GPU · 2.9 ExaFLOPS FP4)· Meta · OpenAI(部分)</div>
+      </div>
+      <div class="faction f2">
+        <h4>超大规模自研派</h4>
+        <div class="chips"><span class="chip">TPU v7</span><span class="chip">Trainium 3</span><span class="chip">ICI</span></div>
+        <div class="who">Google 自用 · Anthropic(~100 万 TPU / 接近 50 万 Trn2)· Apple</div>
+      </div>
+      <div class="faction f4">
+        <h4>华为灵衢派</h4>
+        <div class="chips"><span class="chip">Ascend 950/960/970</span><span class="chip">UnifiedBus 2.0</span></div>
+        <div class="who">Atlas SuperPoD 8192–15488 / 百万卡 · 中国政企 · 运营商 · 互联网大厂</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="ct">Intel 故事的转折</span>
+      Falcon Shores 2025·1·30 由临时联席 CEO Holthaus 宣布<strong>取消</strong>(「作为内部测试芯片」),改由 Jaguar Shores(2027)+ Crescent Island 推理 GPU 接棒。战略不连贯削弱了 Intel,反而巩固了华为「中国市场默认选项」地位。
+    </div>
+    <div class="callout disp">
+      <span class="ct">殊途同归</span>
+      美国头部 AI 公司(Anthropic 用 ~100 万 TPU + 接近 50 万 Trainium)正大规模脱离 NVIDIA 转向 ASIC 自研——与中国「超节点+集群」脱离单芯片依赖的路径,战略上殊途同归。
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 5 ============ -->
+<section id="m5">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">05</span><h2>2nm/3nm 制程科普</h2></div>
+    <p class="sec-lead">关键事实:自约 7nm 起,「纳米」数字已不再对应任何物理栅极长度——这是营销节点命名。</p>
+
+    <div class="prose">
+      <p><strong>晶体管架构演进:</strong>FinFET(22/16nm 起,栅极环绕鳍三面)→ <strong>GAA Nanosheet</strong>(栅极完全环绕水平堆叠纳米片,改善静电控制、降低漏电)。GAA 是 TSMC N2(2025 Q4 量产)、Samsung 3nm、Intel 18A 的共同选择。相对 N3E,N2 同功耗 +10–15% 性能,或同性能 −25–30% 功耗。</p>
+    </div>
+
+    <h3 style="margin-top:30px">工艺路线图(2025–2029)</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">厂商</th><th scope="col">节点</th><th scope="col">时间</th><th scope="col">关键特征</th></tr></thead>
+        <tbody>
+          <tr><td>TSMC</td><td>N2</td><td>2025 Q4 量产</td><td>第一代 GAA nanosheet</td></tr>
+          <tr><td>TSMC</td><td>A16(1.6nm)</td><td>2027 量产(从 2026 推迟)</td><td>N2P + Super Power Rail 背面供电</td></tr>
+          <tr><td>TSMC</td><td>A13/A12</td><td>2029</td><td>1.3/1.2nm 级 · 不用 High-NA EUV</td></tr>
+          <tr><td>Samsung</td><td>3nm GAA</td><td>2022</td><td>业界首个 GAA 量产但良率被诟病</td></tr>
+          <tr><td>Intel</td><td>18A</td><td>2025 量产</td><td>RibbonFET(GAA)+ PowerVia 背面供电</td></tr>
+          <tr><td><strong>SMIC</strong></td><td>7nm N+1/N+2</td><td>2023–2025</td><td>DUV 多重曝光(34 步 vs EUV 9 步)· yield ~40–50%</td></tr>
+          <tr><td><strong>SMIC</strong></td><td>5nm 级</td><td>2025 试产</td><td>yield ~20% · 成本比 TSMC EUV 高 50%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lead-grid">
+      <div class="cell"><div class="big">EUV</div><div class="lab2">13.5nm 波长 · ASML 独家 · 中国大陆受管制无法获得</div></div>
+      <div class="cell"><div class="big">~50K WSPM</div><div class="lab2">SMIC 先进节点产能(2025 末),足够 100 万+ Ascend die</div></div>
+      <div class="cell"><div class="big">HBM 才是瓶颈</div><div class="lab2">而非 SMIC 晶圆产能 —— 这正是华为自研 HBM 的战略原因</div></div>
+    </div>
+
+    <div class="callout">
+      <span class="ct">突破制程的封装路线</span>
+      华为<strong>无法获取 TSMC CoWoS</strong>,Ascend 910C 特意选用 <strong>monolithic die 而非 chiplet MCM</strong> 以规避 CoWoS 依赖,转而依赖国内长电/通富。全球先进封装市场 2025 ~$531 亿 → 2030 ~$794 亿;2.5D/3D 封装 2023–29 CAGR 高达 37%。背面供电(BSPDN):Intel PowerVia 已量产,TSMC A16(2027)跟进。
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE 6 ============ -->
+<section id="m6">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">06</span><h2>战略意义与深层解读</h2></div>
+    <p class="sec-lead">非对称突围:用系统级算力总量,换被剥夺的单芯片制程。</p>
+
+    <div class="prose">
+      <p><strong>核心逻辑 ——</strong> 在被剥夺 TSMC 3/2nm 与 EUV 设备的现实下,华为选择不在被锁住的赛道竞速:单芯片落后 2–3 代,但通过 8192–15488 卡超节点 + 万卡–百万卡集群,在系统级总量上反超。</p>
+      <p><strong>可行性前提 ——</strong> 中国电力成本下降(2022 $90.7/MWh → 2025 部分地区 $56/MWh)· 东数西算国家工程 · 政府指令(2025·9 停止采购 NVIDIA GPU)创造的 captive 市场。</p>
+    </div>
+
+    <h3 style="margin-top:30px">国内厂商协同与差异</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">厂商</th><th scope="col">路线</th><th scope="col">关键产品(2025)</th><th scope="col">与华为关系</th></tr></thead>
+        <tbody>
+          <tr><td><strong>华为(海思)</strong></td><td>全栈自研(芯片+CANN+MindSpore+灵衢+鸿蒙)</td><td>Ascend 910C · Atlas 900 A3</td><td>主导者 · 目标灵衢生态盟主</td></tr>
+          <tr><td>寒武纪</td><td>ASIC 专用 · Neuware</td><td>思元 590(7nm · 512 TOPS)</td><td>字节重要客户 · 2025 Q1 营收 +4347%</td></tr>
+          <tr><td>海光信息</td><td>x86 CPU + GPGPU · 兼容 ROCm</td><td>海光 DCU(FP64 强)</td><td>金融电信主战场 · 差异化</td></tr>
+          <tr><td>壁仞科技</td><td>通用 GPU · Chiplet</td><td>BR100(770 亿晶体管)</td><td>AI 实验室 · 运营商</td></tr>
+          <tr><td>摩尔线程</td><td>MUSA · 兼容 CUDA</td><td>S5000 · 已万卡集群</td><td>2026「花港」十万卡级</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart">
+      <p class="ch-title">中国 AI 加速芯片市场份额(2024 · Bernstein)</p>
+      <p class="ch-sub">2025·9 政府指令「停止采购 NVIDIA GPU」后,结构正快速变化 — <span style="color:var(--accent)">争议</span></p>
+      <div class="bar-row"><span class="bl">NVIDIA</span><div class="bar-track"><div class="bar-fill" style="width:66%;background:linear-gradient(90deg,#5b8c7e,#76b900)"></div></div><span class="bv">66%</span></div>
+      <div class="bar-row"><span class="bl">华为 Ascend</span><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div><span class="bv">23%</span></div>
+      <div class="bar-row"><span class="bl">AMD</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--ink-faint)"></div></div><span class="bv">5%</span></div>
+      <div class="bar-row"><span class="bl">寒武纪 / 沐曦</span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--ink-faint)"></div></div><span class="bv">~2%</span></div>
+    </div>
+
+    <h3 style="margin-top:30px">五大长期挑战</h3>
+    <div class="factions">
+      <div class="faction f4"><h4>HBM 产能</h4><div class="who">真正约束性瓶颈;即便自研,DRAM die 供应链仍落后业界</div></div>
+      <div class="faction f4"><h4>先进制程</h4><div class="who">5nm DUV multipatterning yield ~20%,成本高 50%;1.4nm 依赖逻辑折叠而非缩微</div></div>
+      <div class="faction f4"><h4>CUDA 护城河</h4><div class="who">18 年的库/文档/社区;CANN 开源必要非充分;能否复制「CUDA 之下榨 GPU」工程文化是关键</div></div>
+      <div class="faction f4"><h4>能效</h4><div class="who">CloudMatrix 每 FLOP 能效仅 GB200 NVL72 的 43%;加剧电力基础设施压力</div></div>
+      <div class="faction f4"><h4>国际推广</h4><div class="who">美及盟友市场不会采用;生态注定「中国+第三世界」为主,限制开发者池</div></div>
+    </div>
+
+    <h3 style="margin-top:34px">战略时间窗口</h3>
+    <div class="timeline">
+      <div class="tl-row"><div class="yr">2025 Q4</div><div class="body"><span class="t">系统级首胜</span><span class="d">TSMC N2 量产;Atlas 900 A3 部署突破 300 套</span></div></div>
+      <div class="tl-row alt"><div class="yr">2026 Q1</div><div class="body"><span class="t">韬定律工程验证</span><span class="d">950PR 量产 · Kunpeng 950 · 麒麟2026 搭载逻辑折叠</span></div></div>
+      <div class="tl-row"><div class="yr">2026 Q4</div><div class="body"><span class="t">超节点对超节点</span><span class="d">Atlas 950 SuperPoD vs NVIDIA NVL144 同期对决</span></div></div>
+      <div class="tl-row alt"><div class="yr">2027 Q4</div><div class="body"><span class="t">制程 vs 系统胜负手</span><span class="d">Atlas 960 vs NVL576;TSMC A16 量产</span></div></div>
+      <div class="tl-row"><div class="yr">2029–2031</div><div class="body"><span class="t">能否升级为对称突围</span><span class="d">SMIC EUV 国产化预期;华为目标 1.4nm 等效</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECOMMENDATIONS ============ -->
+<section id="rec">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">▸</span><h2>决策建议</h2></div>
+    <div class="tldr-grid">
+      <div class="tldr-card">
+        <div class="lab">国内政企 / 运营商</div>
+        <p>明确采用 <strong>「超节点+集群」为主力</strong>,尤其金融/政务/能源/电信。训练 >1T 模型的客户<strong>预订 Atlas 950 SuperPoD 2026 Q4 窗口</strong>(规划 1000 m² 电力/制冷)。推理走多元路线(海光/寒武纪/摩尔线程),避免单一锁定。<strong>CANN 生态要早投</strong>:2–3 年内建「CANN below CUDA」调优能力。</p>
+      </div>
+      <div class="tldr-card">
+        <div class="lab">跨国 / 有海外业务</div>
+        <p><strong>双栈不可避免</strong>:国内用 Ascend/灵衢,海外用 NVIDIA/AMD;短期内不赌任何一方「统一胜利」。关注 UALink 2.0(2027 才交付)作为对冲——但它不会成为 NVLink 的完全竞品。</p>
+      </div>
+      <div class="tldr-card">
+        <div class="lab">投资者 · 关键阈值</div>
+        <p><strong>看多触发:</strong>中芯(2027 前 5nm yield 破 60%)· 华虹 · 长电/通富(2.5D/3D)· 华大九天/概伦(EDA)· 中微/北方华创(设备)。<strong>谨慎:</strong>仅做 CUDA 兼容路线者风险更高;寒武纪 +4347% 高增长需观察可持续性。<strong>监测:</strong>① 950 实际出货 vs 1.6M 目标 ② HBM 国产化 ③ CANN 活跃开发者 ④ 灵衢是否真吸引外部部件商。</p>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="ct">改变建议的关键阈值</span>
+      • SMIC 5nm yield 2027 前无法破 50% → 韬定律「工艺底」失守,需重评 1.4nm 目标。<br>
+      • UALink 2027 真商用且达 NVLink 5 的 80%+ → 灵衢「开放生态」叙事被边缘化。<br>
+      • NVIDIA 获准恢复对华销售 H200/B200 → 华为系「被锁定市场」优势快速削弱。
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAVEATS ============ -->
+<section id="caveat">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">!</span><h2>重要警示</h2></div>
+    <div class="prose">
+      <p><strong>1. 命名与归属 ——</strong> 「韬(τ)定律」由<strong>何庭波于 2026·5·25 ISCAS 提出</strong>,而非徐直军;但战略框架根植于徐直军一年前的「超节点+集群」。</p>
+      <p><strong>2. 未来规格不确定 ——</strong> Atlas 960(2027)、Ascend 970(2028)、麒麟2031 等均<strong>尚未量产、未经第三方验证</strong>;NVIDIA NVL576、AMD Helios 同理。所有「未来对比」应理解为路线图意向。</p>
+      <p><strong>3. <span style="color:var(--accent)">争议</span> 对比口径 ——</strong> 华为通常是系统对系统、常用 FP4 低精度;NVIDIA 单芯片性能/内存带宽/能效仍领先。独立分析确认 CloudMatrix 384 以 ~5× 芯片、~16× 占地、~4× 功耗换系统级胜利。</p>
+      <p><strong>4. SMIC 数据多为外部估算 ——</strong> 7nm yield 在不同来源 20%/40%/60–70% 间矛盾(TD Cowen / TechInsights / EE Times 各异)。</p>
+      <p><strong>5. CUDA 生态评估有主观性 ——</strong>「CANN ≈ CUDA 的 1/10」来自第三方观察,非官方统计。</p>
+      <p><strong>6. 逻辑折叠机制未完全公开 ——</strong> 核心专有技术;SkyBridge/SkyClock 命名出自 PPT,EDA 工具/混合键合参数/yield 仍是黑盒。</p>
+      <p><strong>7. 股价 ≠ 技术验证 ——</strong> 发布当日中芯 +18.78%、华虹 20% 涨停反映短期情绪。</p>
+      <p><strong>8. 政治变量决定上限 ——</strong> 出口管制可进一步收紧(ASML DUV、HBM3e);所有预测均假设当前管制框架不发生根本变化。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div style="font-family:var(--serif);font-size:1.3rem;color:var(--ink)">华为「韬定律」全面分析报告</div>
+      <div style="margin-top:6px">从摩尔定律到时间缩微 · 系统级算力的中国答卷</div>
+    </div>
+    <div style="text-align:right">
+      <div>跨 30+ 信源交叉验证 · <span class="pill" style="margin:0">争议</span> 标记口径分歧项</div>
+      <div style="margin-top:6px">报告日期 2026·05·26 · 仅供研究参考</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // staggered reveal on scroll
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal');io.unobserve(e.target)}})
+  },{threshold:.08});
+  document.querySelectorAll('section .wrap > *, .tl-row, .faction, .tldr-card').forEach((el,i)=>{
+    el.style.animationDelay=(Math.min(i%8,8)*40)+'ms'; io.observe(el);
+  });
+  // animate bars when chart enters
+  const bio=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill').forEach(b=>{const w=b.style.width;b.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>b.style.width=w))});
+      bio.unobserve(e.target);
+    }})
+  },{threshold:.3});
+  document.querySelectorAll('.chart').forEach(c=>bio.observe(c));
+</script>
+</body>
+</html>

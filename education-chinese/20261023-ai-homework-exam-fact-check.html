@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 让作业涨 18%、考试掉 20%：口播逐条核对与全面分析</title>
+<meta name="description" content="核对一段教育口播：26,811 名中国中学生 30 个月研究、PISA 2025、智能辅导系统元分析，逐条判定说法成立程度，并给出家长可操作的检查方法。">
+<style>
+/* ==========================================================
+   1. 设计令牌（唯一权威来源）
+   命名：--color-* 语义色 / --space-* 间距 / --font-* 字号 / --radius-* 圆角
+   断点：CSS 无法在 @media 里用 var()，断点字面值集中记在此处：
+   BREAKPOINT_MOBILE = 640px（单列、表格转卡片）
+   BREAKPOINT_TABLET = 900px（双列转单列）
+   ========================================================== */
+:root{
+  color-scheme: light;
+  /* 色板（原始值只在这一段出现） */
+  --color-surface-page:#f4f6f9;
+  --color-surface-card:#ffffff;
+  --color-surface-muted:#eef1f5;
+  --color-surface-inset:#f9fafb;
+  --color-border:#d9dee6;
+  --color-border-strong:#b8c0cc;
+  --color-text-primary:#111827;
+  --color-text-secondary:#4b5563;
+  --color-text-muted:#6b7280;
+  --color-text-inverse:#ffffff;
+  --color-accent:#2a78d6;           /* 数据系列 1：蓝 */
+  --color-accent-strong:#1c5cab;
+  --color-accent-soft:#cde2fb;
+  --color-series-gain:#2a78d6;      /* 极性：上升 */
+  --color-series-loss:#e34948;      /* 极性：下降（系列红，非状态色） */
+  --color-series-loss-soft:#fbe3e3;
+  --color-series-2:#eb6834;         /* 数据系列 2：橙 */
+  --color-series-3:#1baf7a;         /* 数据系列 3：青绿 */
+  --color-status-good:#0ca30c;
+  --color-status-warning:#fab219;
+  --color-status-serious:#ec835a;
+  --color-status-critical:#d03b3b;
+  --color-status-good-bg:#e9f7e9;
+  --color-status-warning-bg:#fff4dc;
+  --color-status-serious-bg:#fdeae2;
+  --color-status-critical-bg:#fbe3e3;
+  --color-status-neutral-bg:#e8ecf1;
+  --color-grid:#e5e9ef;
+  --color-axis:#9aa3b0;
+  --color-focus:#1c5cab;
+  /* 字体 */
+  --font-family-base:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --font-size-xs:0.75rem;
+  --font-size-sm:0.875rem;
+  --font-size-base:1rem;
+  --font-size-md:1.125rem;
+  --font-size-lg:1.375rem;
+  --font-size-xl:1.75rem;
+  --font-size-hero:2.75rem;
+  --font-weight-regular:400;
+  --font-weight-medium:500;
+  --font-weight-bold:700;
+  --line-height-tight:1.25;
+  --line-height-base:1.65;
+  /* 间距 */
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
+  --space-4:1rem;
+  --space-5:1.5rem;
+  --space-6:2rem;
+  --space-7:3rem;
+  /* 形状与层次 */
+  --radius-sm:4px;
+  --radius-md:8px;
+  --radius-lg:12px;
+  --border-width:1px;
+  --border-width-strong:2px;
+  --shadow-card:0 1px 2px rgba(17,24,39,0.06);
+  /* 布局 */
+  --layout-max-width:1080px;
+  --layout-gutter:var(--space-4);
+  --layout-grid-2:1fr 1fr;
+  --layout-grid-3:repeat(3,1fr);
+  --layout-grid-tile:repeat(auto-fit,minmax(200px,1fr));
+  /* 图表 */
+  --chart-bar-radius:4px;
+  --chart-gap:2px;
+  --chart-line-width:2px;
+  --chart-label-size:14px;
+  --chart-min-width:480px;
+  --size-swatch:12px;
+  --layout-waffle-max:420px;        /* 窄屏下图表最小宽度，超出容器时局部横滑 */
+  --chart-height-bars:260px;
+  --chart-height-hbars:200px;
+  --chart-opacity-avg:0.45;        /* 「平均」口径的柱子比「峰值」淡 */
+  /* 动效 */
+  --motion-fast:150ms;
+  --motion-ease:ease-out;
+  /* 层级 */
+  --z-nav:10;
+  --z-tooltip:20;
+}
+
+/* ==========================================================
+   2. 基础样式
+   ========================================================== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-surface-page);color:var(--color-text-primary);font-family:var(--font-family-base);font-size:var(--font-size-base);line-height:var(--line-height-base);overflow-x:hidden}
+a{color:var(--color-accent-strong);text-decoration:underline;text-underline-offset:0.15em;overflow-wrap:anywhere}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:var(--border-width-strong) solid var(--color-focus);outline-offset:2px}
+h1,h2,h3,h4{line-height:var(--line-height-tight);margin:0}
+p{margin:0 0 var(--space-3)}
+ul,ol{margin:0 0 var(--space-3);padding-left:1.25em}
+li{margin-bottom:var(--space-1)}
+strong{font-weight:var(--font-weight-bold)}
+img,svg{max-width:100%}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ==========================================================
+   3. 布局组件
+   ========================================================== */
+.page{max-width:var(--layout-max-width);margin:0 auto;padding:var(--space-5) var(--layout-gutter) var(--space-7)}
+.hero{background:var(--color-surface-card);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6) var(--space-5);box-shadow:var(--shadow-card)}
+.hero__kicker{font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:var(--space-2)}
+.hero h1{font-size:var(--font-size-xl);margin-bottom:var(--space-3)}
+.hero__lead{font-size:var(--font-size-md);color:var(--color-text-secondary);max-width:46em}
+.hero__meta{font-size:var(--font-size-sm);color:var(--color-text-muted);margin-top:var(--space-3)}
+.tiles{display:grid;grid-template-columns:var(--layout-grid-tile);gap:var(--space-3);margin-top:var(--space-5)}
+.tile{background:var(--color-surface-inset);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4)}
+.tile__label{font-size:var(--font-size-sm);color:var(--color-text-secondary)}
+.tile__value{font-size:var(--font-size-hero);font-weight:var(--font-weight-bold);line-height:var(--line-height-tight);margin:var(--space-1) 0}
+.tile__value--gain{color:var(--color-series-gain)}
+.tile__value--loss{color:var(--color-series-loss)}
+.tile__note{font-size:var(--font-size-xs);color:var(--color-text-muted)}
+
+.toc{display:flex;flex-wrap:wrap;gap:var(--space-2);margin:var(--space-5) 0 0;padding:0;list-style:none}
+.toc a{display:inline-block;padding:var(--space-1) var(--space-3);background:var(--color-surface-card);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--font-size-sm);text-decoration:none;color:var(--color-text-primary)}
+.toc a:hover{border-color:var(--color-border-strong)}
+
+.section{margin-top:var(--space-6)}
+.section>h2{font-size:var(--font-size-lg);margin-bottom:var(--space-2);padding-bottom:var(--space-2);border-bottom:var(--border-width-strong) solid var(--color-border)}
+.section__intro{color:var(--color-text-secondary);max-width:52em}
+.card{background:var(--color-surface-card);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);box-shadow:var(--shadow-card)}
+.card h3{font-size:var(--font-size-md);margin-bottom:var(--space-2)}
+.card--muted{background:var(--color-surface-inset)}
+.grid-2{display:grid;grid-template-columns:var(--layout-grid-2);gap:var(--space-4)}
+.grid-2>*,.grid-3>*,.card{min-width:0}
+.grid-3{display:grid;grid-template-columns:var(--layout-grid-3);gap:var(--space-4)}
+.stack>*+*{margin-top:var(--space-4)}
+.callout{border-left:var(--border-width-strong) solid var(--color-accent);background:var(--color-surface-card);padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm)}
+.callout--loss{border-left-color:var(--color-series-loss)}
+.small{font-size:var(--font-size-sm);color:var(--color-text-secondary)}
+.muted{color:var(--color-text-muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:var(--space-1) var(--space-3);margin:0}
+.kv dt{color:var(--color-text-muted);font-size:var(--font-size-sm)}
+.kv dd{margin:0}
+
+/* 判定标签：颜色 + 文字 + 符号三重编码 */
+.verdict{display:inline-block;padding:0 var(--space-2);border-radius:var(--radius-sm);font-size:var(--font-size-sm);font-weight:var(--font-weight-medium);white-space:nowrap;border:var(--border-width) solid transparent}
+.verdict--yes{background:var(--color-status-good-bg);border-color:var(--color-status-good);color:var(--color-text-primary)}
+.verdict--part{background:var(--color-status-warning-bg);border-color:var(--color-status-warning);color:var(--color-text-primary)}
+.verdict--view{background:var(--color-status-neutral-bg);border-color:var(--color-border-strong);color:var(--color-text-primary)}
+.verdict--no{background:var(--color-status-critical-bg);border-color:var(--color-status-critical);color:var(--color-text-primary)}
+
+/* 表格 */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:var(--font-size-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--space-2) var(--space-3);border-bottom:var(--border-width) solid var(--color-border)}
+th{background:var(--color-surface-muted);font-weight:var(--font-weight-medium);color:var(--color-text-secondary)}
+tbody tr:hover{background:var(--color-surface-inset)}
+.col-num{width:2.5em;color:var(--color-text-muted)}
+.col-verdict{width:7em}
+
+/* 图表容器 */
+.figure{margin:0}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:var(--chart-min-width);height:auto}
+.figure figcaption{font-size:var(--font-size-sm);color:var(--color-text-secondary);margin-top:var(--space-2)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-3);font-size:var(--font-size-sm);color:var(--color-text-secondary);margin:var(--space-2) 0}
+.legend__item{display:inline-flex;align-items:center;gap:var(--space-1)}
+.swatch{width:var(--size-swatch);height:var(--size-swatch);border-radius:var(--radius-sm);display:inline-block}
+.swatch--gain{background:var(--color-series-gain)}
+.swatch--loss{background:var(--color-series-loss)}
+.swatch--s2{background:var(--color-series-2)}
+.swatch--s3{background:var(--color-series-3)}
+.swatch--accent{background:var(--color-accent)}
+.chart-grid line{stroke:var(--color-grid);stroke-width:1}
+.chart-axis{stroke:var(--color-axis);stroke-width:1}
+.chart-label--strong{font-weight:var(--font-weight-bold)}
+.chart-label{font-size:var(--chart-label-size);fill:var(--color-text-secondary);font-family:var(--font-family-base)}
+.chart-value{font-size:var(--chart-label-size);fill:var(--color-text-primary);font-weight:var(--font-weight-medium);font-family:var(--font-family-base)}
+.bar--gain{fill:var(--color-series-gain)}
+.bar--loss{fill:var(--color-series-loss)}
+.bar--accent{fill:var(--color-accent)}
+.bar--s2{fill:var(--color-series-2)}
+.bar--s3{fill:var(--color-series-3)}
+.bar--soft{fill:var(--color-accent-soft)}
+.bar--avg{opacity:var(--chart-opacity-avg)}
+.swatch.bar--avg{opacity:var(--chart-opacity-avg)}
+.bar{transition:opacity var(--motion-fast) var(--motion-ease)}
+.bar:hover{opacity:0.8}
+details.table-view{margin-top:var(--space-2)}
+details.table-view summary{cursor:pointer;font-size:var(--font-size-sm);color:var(--color-accent-strong)}
+
+/* 时间线 */
+.timeline{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:var(--layout-grid-3);gap:var(--space-3)}
+.timeline li{background:var(--color-surface-inset);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);border-top:var(--border-width-strong) solid var(--color-accent)}
+.timeline__when{font-size:var(--font-size-sm);color:var(--color-text-muted)}
+.timeline__what{font-weight:var(--font-weight-medium);margin:var(--space-1) 0}
+
+/* 华夫图：10 格代表 AI 用户 */
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:var(--chart-gap);max-width:var(--layout-waffle-max)}
+.waffle span{aspect-ratio:1/1;border-radius:var(--radius-sm);background:var(--color-series-loss)}
+.waffle span.is-keep{background:var(--color-series-gain)}
+
+/* 三关检查表 */
+.gate{border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-card);padding:var(--space-4)}
+.gate h3{font-size:var(--font-size-md);margin-bottom:var(--space-2)}
+.gate__tag{font-size:var(--font-size-xs);color:var(--color-text-muted);display:block;margin-bottom:var(--space-1)}
+
+.sources ol{padding-left:1.5em}
+.sources li{margin-bottom:var(--space-2);font-size:var(--font-size-sm)}
+footer{margin-top:var(--space-7);font-size:var(--font-size-xs);color:var(--color-text-muted)}
+
+/* ==========================================================
+   4. 响应式（断点字面值见令牌段说明）
+   ========================================================== */
+@media (max-width:900px){
+  .grid-3,.timeline{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .page{padding:var(--space-4) var(--space-3) var(--space-6)}
+  .hero{padding:var(--space-5) var(--space-4)}
+  .hero h1{font-size:var(--font-size-lg)}
+  .tile__value{font-size:var(--font-size-xl)}
+  .grid-2{grid-template-columns:1fr}
+  /* 判定表转卡片 */
+  table.stack-table thead{display:none}
+  table.stack-table,table.stack-table tbody,table.stack-table tr,table.stack-table td{display:block;width:100%}
+  table.stack-table tr{border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-3);background:var(--color-surface-card);padding:var(--space-2) var(--space-3)}
+  table.stack-table td{border:0;padding:var(--space-1) 0}
+  table.stack-table td::before{content:attr(data-label);display:block;font-size:var(--font-size-xs);color:var(--color-text-muted)}
+  table.stack-table td.col-num{width:auto;color:var(--color-text-primary);font-weight:var(--font-weight-medium)}
+  table.stack-table td.col-num::before{content:"条目"}
+}
+@media (prefers-reduced-motion:reduce){
+  .bar{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <p class="hero__kicker">口播核对 · 教育与 AI · 2026-10-23</p>
+  <h1>「用了 AI，作业涨 18%，考试掉 20%」——这段口播说对了多少？</h1>
+  <p class="hero__lead">口播引用的核心研究是真的：三位经济学家追踪了中国中部一个县 26,811 名初高中生 30 个月。核心数字基本准确，但 +18% 与 −20% 都是采纳后约 6 个月的峰值，不是所有学生的平均效应。本页逐条核对 21 条说法：7 条成立，8 条部分成立（方向对、程度说满或口径没说），6 条是作者的观点或演绎（其中 1 段把想象当成研究发现），0 条找不到来源。最后补上口播没讲的关键限定，把「三关」改成家长能检验的做法。</p>
+  <p class="hero__meta">主研究：Strömberg、Lei、Wu《The Generative AI Learning Penalty》，CEPR 讨论论文 DP21577（2026-06-02），工作论文，尚未经同行评审。</p>
+  <div class="tiles" aria-label="核心数字">
+    <div class="tile"><div class="tile__label">作业分数（采纳 AI 后 6 个月）</div><div class="tile__value tile__value--gain">+18%</div><div class="tile__note">全部采纳后月份平均 +11%</div></div>
+    <div class="tile"><div class="tile__label">闭卷月考（采纳后 6 个月）</div><div class="tile__value tile__value--loss">−20%</div><div class="tile__note">全部采纳后月份平均 −13%</div></div>
+    <div class="tile"><div class="tile__label">每份作业用时</div><div class="tile__value">64 → 45 分钟</div><div class="tile__note">作者标注：这一项是相关性描述</div></div>
+    <div class="tile"><div class="tile__label">呈「外包」模式的 AI 用户</div><div class="tile__value tile__value--loss">约 4/5</div><div class="tile__note">使用 6 个月后；其余 1/5 考试成绩与不用 AI 者相近</div></div>
+  </div>
+  <nav aria-label="目录">
+    <ul class="toc">
+      <li><a href="#s-verdict">总判定</a></li>
+      <li><a href="#s-study">研究是什么</a></li>
+      <li><a href="#s-charts">数据图</a></li>
+      <li><a href="#s-table">21 条逐条核对</a></li>
+      <li><a href="#s-parallel">平行证据</a></li>
+      <li><a href="#s-missing">口播没讲的</a></li>
+      <li><a href="#s-gates">三关怎么落地</a></li>
+      <li><a href="#s-limits">证据边界</a></li>
+      <li><a href="#s-sources">来源</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="section" id="s-verdict">
+  <h2>总判定</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>说对的部分</h3>
+      <ul>
+        <li>研究存在，样本（26,811 人）、时长（30 个月）、作业 +18%、用时 64→45 分钟、月考 −20% 全部与论文一致。</li>
+        <li>「损失最大的是作业做得最快、分数窜得最高的学生」符合论文的「作业外包」机制。</li>
+        <li>「保持作业时间的那群学生几乎不受影响」在考试成绩上符合论文：这约五分之一的 AI 用户考试成绩与不用 AI 的同学相近（口播说成「真实能力」略宽）。</li>
+        <li>PISA 2025 的「约 20 分、约一年差距」是 OECD 教育主管 Schleicher 的原话。</li>
+        <li>智能辅导系统元分析（50 项研究、从第 50 百分位到第 75 百分位）是 Kulik 与 Fletcher 2016 年的真实结论。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>说过头或演绎的部分</h3>
+      <ul>
+        <li><strong>「中考高考降幅更大」</strong>：只有使用 AI 两年以上的学生才有中考 −24%、高考 −18%，高考并没有比月考的 −20% 更大；全样本平均约 −7%。</li>
+        <li><strong>「他们是这么用的：不要直接给答案……」</strong>：论文只记录作业时间和分数，没有学生对话记录。这段是口播作者的想象，接近另一项研究（Bastani 等）里带护栏的 AI 导师。</li>
+        <li><strong>「训练孩子反问 AI，思维能力反而更强」</strong>：OECD 说的是在校学过评估 AI 信息的学生科学成绩略高，而且是相关性，没有测「思维能力」。</li>
+        <li><strong>+18% 与 −20% 都是峰值</strong>：全部采纳后月份的平均值是 +11% 与 −13%。口播没说明口径。</li>
+        <li><strong>「50 多项实验……拉进前 25 名」</strong>：0.66 个标准差换算成百分位只是统计上的直观说法，不是每项研究都做到了；而且研究的是传统智能辅导系统，不能直接等同于生成式 AI。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:var(--space-4)">
+    <p><strong>一句话结论：</strong>口播的「方向」有一流证据支持，「程度」在几处被说满。对家长最有用的，不是口播的比喻，而是论文作者自己给的两条建议：<strong>看孩子花在作业上的时间（输入），而不是看作业分（输出）；用频繁的、合上屏幕的小测来检查学没学会。</strong></p>
+    <p class="small">一条总限定：以下所有百分比都是<strong>群体估计</strong>，随使用强度、任务类型、学科和学习方式而变化，不是对某个孩子未来成绩的预测。中国县域研究与 PISA 的样本、指标和设计都不同，本页把它们并列，不把它们拼成同一条因果链。</p>
+  </div>
+</section>
+
+<section class="section" id="s-study">
+  <h2>这项研究到底是什么</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>样本与设计</h3>
+      <p class="small"><span class="verdict verdict--part">△ 证据地位</span> 工作论文，尚未同行评审；单县观察研究，学生不是随机分配去用 AI 的。作者用准实验方法估计因果效应，但结论依赖「未采纳者走势可比」这类识别假设。</p>
+      <dl class="kv">
+        <dt>论文</dt><dd>The Generative AI Learning Penalty: Evidence from Chinese Secondary Education</dd>
+        <dt>作者</dt><dd>David Strömberg（斯德哥尔摩大学）、Victor Lei、Yanhui Wu（香港大学）</dd>
+        <dt>发布</dt><dd>CEPR 讨论论文 DP21577，2026-06-02；SSRN 6868618；作者 VoxEU 专栏 2026-09-04</dd>
+        <dt>地点</dt><dd>中国中部一个县，人口超过 100 万，人均 GDP 略低于 6,000 美元；5 所初中、4 所高中，约占全县中学在校生 90%</dd>
+        <dt>样本</dt><dd>26,811 名 7–12 年级学生，约 524 个班；526,120 条「学生—月」考试观测</dd>
+        <dt>时间</dt><dd>2022-09 至 2025-06，共 30 个月</dd>
+        <dt>数据</dt><dd>9 门学科的每周作业分与完成时间、每月闭卷考试、全县统考、中考与高考成绩</dd>
+        <dt>AI 采纳</dt><dd>自报，由老师发问卷让学生查注册日期；从接近 0 升到 2025-06 的约 80%；工具以豆包（47%）、DeepSeek（36%）为主，都是通用工具</dd>
+        <dt>方法</dt><dd>交错采纳的双重差分（Callaway–Sant'Anna 估计量），用「还没开始用」的同学做对照；采纳前两组成绩与趋势几乎相同</dd>
+      </dl>
+    </div>
+    <div class="card card--muted">
+      <h3>作者怎么解释机制</h3>
+      <p>在不用 AI 的学生里，作业分高通常意味着考试分也高。在 AI 用户里，这个关系反过来了：作业分越高，越可能考得差。作者的原话大意是——对 AI 用户来说，作业分不再能衡量学习；作业分突然蹿高，反而是学习下滑的警报。</p>
+      <p>作者观察到两种用法：使用 6 个月后，约五分之四的 AI 用户 50 分钟内就写完作业（比最快的非 AI 学生还快），作业分异常高，考试明显更差；剩下五分之一花的时间与非 AI 学生差不多，考试成绩也差不多。</p>
+      <p class="small">作者同时提醒：这不等于「强制多花时间就能恢复学习」。选择不同用法的学生，动机、信息和 AI 技能本来就可能不同。有效干预要把<strong>有监督的作业时间</strong>、<strong>正确用法的指导</strong>和<strong>告知外包的代价</strong>结合起来。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s-charts">
+  <h2>数据图</h2>
+  <p class="section__intro">以下数字全部来自论文摘要与作者 VoxEU 专栏，以及 ppc.land 对论文正文的整理。标「峰值」的是采纳后约 6 个月的效应，标「平均」的是所有采纳后月份的平均效应。</p>
+
+  <div class="stack">
+  <div class="card">
+    <h3>作业分涨、考试分跌：峰值与平均两种口径</h3>
+    <div class="legend" aria-hidden="true"><span class="legend__item"><span class="swatch swatch--gain"></span>上升</span><span class="legend__item"><span class="swatch swatch--loss"></span>下降</span><span class="legend__item"><span class="swatch swatch--gain"></span>实色 = 6 个月峰值</span><span class="legend__item"><span class="swatch swatch--gain bar--avg"></span>浅色 = 采纳后平均</span></div>
+    <figure class="figure">
+      <svg viewBox="0 0 640 260" role="img" aria-labelledby="c1-title c1-desc">
+        <title id="c1-title">作业分与月考分相对采纳前均值的变化</title>
+        <desc id="c1-desc">作业分峰值上升 18%，平均上升 11%；月考分峰值下降 20%，平均下降 13%。</desc>
+        <!-- 坐标：零线 y=130，每 1% = 4px -->
+        <g class="chart-grid">
+          <line x1="60" x2="620" y1="50" y2="50"/><line x1="60" x2="620" y1="90" y2="90"/>
+          <line x1="60" x2="620" y1="170" y2="170"/><line x1="60" x2="620" y1="210" y2="210"/>
+        </g>
+        <text class="chart-label" x="52" y="54" text-anchor="end">+20%</text>
+        <text class="chart-label" x="52" y="94" text-anchor="end">+10%</text>
+        <text class="chart-label" x="52" y="134" text-anchor="end">0</text>
+        <text class="chart-label" x="52" y="174" text-anchor="end">−10%</text>
+        <text class="chart-label" x="52" y="214" text-anchor="end">−20%</text>
+        <!-- 作业 峰值 +18 -->
+        <rect class="bar bar--gain" x="110" y="58" width="80" height="72" rx="4"><title>作业分（6 个月峰值）：+18%</title></rect>
+        <text class="chart-value" x="150" y="50" text-anchor="middle">+18%</text>
+        <!-- 作业 平均 +11 -->
+        <rect class="bar bar--gain bar--avg" x="212" y="86" width="80" height="44" rx="4"><title>作业分（采纳后平均）：+11%</title></rect>
+        <text class="chart-value" x="252" y="78" text-anchor="middle">+11%</text>
+        <!-- 考试 峰值 -20 -->
+        <rect class="bar bar--loss" x="372" y="130" width="80" height="80" rx="4"><title>月考分（6 个月峰值）：−20%</title></rect>
+        <text class="chart-value" x="412" y="226" text-anchor="middle">−20%</text>
+        <!-- 考试 平均 -13 -->
+        <rect class="bar bar--loss bar--avg" x="474" y="130" width="80" height="52" rx="4"><title>月考分（采纳后平均）：−13%</title></rect>
+        <text class="chart-value" x="514" y="198" text-anchor="middle">−13%</text>
+        <line class="chart-axis" x1="60" x2="620" y1="130" y2="130"/>
+        <text class="chart-label" x="150" y="248" text-anchor="middle">作业分·峰值</text>
+        <text class="chart-label" x="252" y="248" text-anchor="middle">作业分·平均</text>
+        <text class="chart-label" x="412" y="248" text-anchor="middle">月考分·峰值</text>
+        <text class="chart-label" x="514" y="248" text-anchor="middle">月考分·平均</text>
+      </svg>
+      <figcaption>相对采纳前均值的百分比变化。峰值出现在采纳后约 6 个月；数学月考 6 个月时 −22%。来源：论文摘要、VoxEU 专栏、ppc.land 整理。</figcaption>
+    </figure>
+    <details class="table-view"><summary>查看数据表</summary>
+      <table><thead><tr><th>指标</th><th>6 个月峰值</th><th>采纳后平均</th></tr></thead>
+      <tbody><tr><td>作业分</td><td>+18%（1.9 SD）</td><td>+11%</td></tr><tr><td>闭卷月考</td><td>−20%（1.4 SD）</td><td>−13%</td></tr><tr><td>作业用时</td><td>64 → 45 分钟（约 −30%）</td><td>—</td></tr></tbody></table>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>损失不是立刻出现：三个时间点</h3>
+    <ol class="timeline">
+      <li><div class="timeline__when">采纳 AI 之初</div><div class="timeline__what">月考效应很小</div><p class="small">作者解释：学生还不熟练，采纳后新学的内容也还少。</p></li>
+      <li><div class="timeline__when">约 6 个月后</div><div class="timeline__what">月考罚分达到 −20%，之后持平</div><p class="small">月考主要考近期内容，所以罚分很快「成熟」。</p></li>
+      <li><div class="timeline__when">约 2 年后</div><div class="timeline__what">中考 −24%、高考 −18%（使用两年以上者）</div><p class="small">升学考试综合几年所学，罚分慢慢累积。全样本平均约 −7%，因为很多学生采纳得晚。</p></li>
+    </ol>
+    <p class="small" style="margin-top:var(--space-3)">作者由此推断：现有的短期研究可能系统性低估了生成式 AI 的长期学习代价。</p>
+  </div>
+
+  <div class="card">
+    <h3>谁掉得最多</h3>
+    <p class="small">月考分数相对采纳前均值的下降幅度，按分组。单一指标、单一颜色，长度即大小。</p>
+    <figure class="figure">
+      <svg viewBox="0 0 640 400" role="img" aria-labelledby="c3-title c3-desc">
+        <title id="c3-title">各分组的月考下降幅度</title>
+        <desc id="c3-desc">社科 27%，STEM 22%，英语 17%，语文 9%；初中 24%，高中 17%；男生 21.6%，女生 18.4%；成绩前三分之一 24%，后三分之一 16%；每周用 0 到 1 小时约 5%，每周 5 小时以上约 30%。</desc>
+        <!-- 每 1% = 12px，起点 x=200 -->
+        <g class="chart-label">
+          <text x="10" y="22" class="chart-label--strong">学科</text>
+          <text x="190" y="42" text-anchor="end">社会科学（政史地）</text>
+          <text x="190" y="66" text-anchor="end">STEM</text>
+          <text x="190" y="90" text-anchor="end">英语</text>
+          <text x="190" y="114" text-anchor="end">语文</text>
+          <text x="10" y="146" class="chart-label--strong">学段</text>
+          <text x="190" y="166" text-anchor="end">初中</text>
+          <text x="190" y="190" text-anchor="end">高中</text>
+          <text x="10" y="222" class="chart-label--strong">性别</text>
+          <text x="190" y="242" text-anchor="end">男生</text>
+          <text x="190" y="266" text-anchor="end">女生</text>
+          <text x="10" y="298" class="chart-label--strong">采纳前成绩</text>
+          <text x="190" y="318" text-anchor="end">前三分之一</text>
+          <text x="190" y="342" text-anchor="end">后三分之一</text>
+          <text x="10" y="374" class="chart-label--strong">每周使用时长</text>
+          <text x="190" y="394" text-anchor="end">0–1 小时 / 5 小时以上</text>
+        </g>
+        <g class="bar bar--accent">
+          <rect x="200" y="30" width="324" height="16" rx="4"><title>社会科学：−27%</title></rect>
+          <rect x="200" y="54" width="264" height="16" rx="4"><title>STEM：−22%</title></rect>
+          <rect x="200" y="78" width="204" height="16" rx="4"><title>英语：−17%</title></rect>
+          <rect x="200" y="102" width="108" height="16" rx="4"><title>语文：−9%</title></rect>
+          <rect x="200" y="154" width="288" height="16" rx="4"><title>初中：−24%</title></rect>
+          <rect x="200" y="178" width="204" height="16" rx="4"><title>高中：−17%</title></rect>
+          <rect x="200" y="230" width="259" height="16" rx="4"><title>男生：−21.6%</title></rect>
+          <rect x="200" y="254" width="221" height="16" rx="4"><title>女生：−18.4%</title></rect>
+          <rect x="200" y="306" width="288" height="16" rx="4"><title>采纳前成绩前三分之一：−24%</title></rect>
+          <rect x="200" y="330" width="192" height="16" rx="4"><title>采纳前成绩后三分之一：−16%</title></rect>
+          <rect x="200" y="382" width="60" height="7" rx="3"><title>每周 0–1 小时：约 −5%</title></rect>
+          <rect x="200" y="391" width="360" height="7" rx="3"><title>每周 5 小时以上：约 −30%</title></rect>
+        </g>
+        <g class="chart-value">
+          <text x="530" y="43">27%</text><text x="470" y="67">22%</text><text x="410" y="91">17%</text><text x="314" y="115">9%</text>
+          <text x="494" y="167">24%</text><text x="410" y="191">17%</text>
+          <text x="465" y="243">21.6%</text><text x="427" y="267">18.4%</text>
+          <text x="494" y="319">24%</text><text x="398" y="343">16%</text>
+          <text x="266" y="390">约 5%</text><text x="566" y="398">约 30%</text>
+        </g>
+      </svg>
+      <figcaption>作者称之为「从顶端压缩」：损失落在成绩本来更好、年级更低、用得更多的学生身上。性别差距的 3.2 个百分点里，2.7 个点能用男生用得更多来解释。注意：各组是不同样本、不同条件下的点估计，本页没有各组置信区间，组间差异不应当成确定排名。来源：VoxEU 专栏与 ppc.land 对论文正文的整理。</figcaption>
+    </figure>
+    <details class="table-view"><summary>查看数据表</summary>
+      <table><thead><tr><th>分组</th><th>月考下降</th></tr></thead>
+      <tbody>
+        <tr><td>社会科学 / STEM / 英语 / 语文</td><td>27% / 22% / 17% / 9%</td></tr>
+        <tr><td>初中 / 高中</td><td>24% / 17%</td></tr>
+        <tr><td>男生 / 女生</td><td>21.6% / 18.4%（采纳率 82% / 80%）</td></tr>
+        <tr><td>采纳前成绩前 1/3 / 后 1/3</td><td>24% / 16%</td></tr>
+        <tr><td>每周 0–1 小时 / 5 小时以上</td><td>约 5% / 约 30%</td></tr>
+      </tbody></table>
+    </details>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>两种用法，两种结局</h3>
+      <div class="legend" aria-hidden="true"><span class="legend__item"><span class="swatch swatch--loss"></span>外包型（约 4/5）</span><span class="legend__item"><span class="swatch swatch--gain"></span>保持作业时间（约 1/5）</span></div>
+      <div class="waffle" role="img" aria-label="10 格中 8 格代表外包型用户，2 格代表保持作业时间的用户">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="is-keep"></span><span class="is-keep"></span>
+      </div>
+      <p class="small" style="margin-top:var(--space-3)"><strong>外包型</strong>：按论文的操作性定义识别——50 分钟内完成作业、作业分异常高（接近 AI 工具的水平），这类学生考试明显更差。按 50 分钟切，全部 AI 用户中 58% 符合，使用超过 5 个月的用户中 81%；按 45 分钟切则是 34% 与 50%。两个比例分母不同，不是前后对比。「外包」是作者对这一模式的解释，论文没有直接观察到学生把思考交给了 AI。</p>
+      <p class="small"><strong>保持作业时间</strong>（50–65 分钟）：作业分也更高，但考试成绩与不用 AI 的同学「基本相同」。作者原话：花同样多的时间，学到的也同样多。</p>
+    </div>
+    <div class="card card--muted">
+      <h3>口播对这两群人的描述，哪些是论文里的</h3>
+      <ul class="small">
+        <li><span class="verdict verdict--yes">✓ 成立</span> 损失最大的是作业最快、分数最高的那群人。</li>
+        <li><span class="verdict verdict--yes">✓ 成立</span> 作业时间没有大幅缩短的那群人，考试几乎不受影响。</li>
+        <li><span class="verdict verdict--view">◇ 演绎</span> 「他会拿着草稿问 AI：不要直接给答案，提示我错在哪」——论文没有任何对话记录，只有时间与分数。这是口播作者对「为什么他们没掉」的想象。</li>
+        <li><span class="verdict verdict--part">△ 部分</span> 「真实能力几乎没受影响」可以说，但作者特别提醒：这两群人本来就可能动机不同，不能直接推出「逼孩子多花时间就能恢复」。</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section class="section" id="s-table">
+  <h2>21 条说法逐条核对</h2>
+  <p class="section__intro">判定口径：<span class="verdict verdict--yes">✓ 成立</span> 与来源一致；<span class="verdict verdict--part">△ 部分成立</span> 方向对但有一处说过头、口径未说明或数字不准；<span class="verdict verdict--view">◇ 观点/演绎</span> 作者自己的比喻、框架或想象，不是研究发现；<span class="verdict verdict--no">✕ 未证实</span> 找不到支持来源。</p>
+  <div class="table-wrap">
+  <table class="stack-table">
+    <thead><tr><th class="col-num">#</th><th>口播说法</th><th class="col-verdict">判定</th><th>依据与口径</th></tr></thead>
+    <tbody>
+      <tr><td class="col-num" data-label="#">1</td><td data-label="口播说法">针对国内一个县 26,811 名中学生，跟踪两年半</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">中国中部一县 9 所中学、7–12 年级、2022-09 至 2025-06 共 30 个月。补充：这是 CEPR 讨论论文 / SSRN 工作论文，尚未同行评审。</td></tr>
+      <tr><td class="col-num" data-label="#">2</td><td data-label="口播说法">作业分数高了 18%</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">数字对，但这是采纳后 6 个月的峰值；全部采纳后月份平均 +11%。口播未说明口径。</td></tr>
+      <tr><td class="col-num" data-label="#">3</td><td data-label="口播说法">一份作业从平均 64 分钟降到 45 分钟，省近三分之一</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">VoxEU 专栏原文：64 → 约 45 分钟。作者标注完成时间这项是相关性描述。</td></tr>
+      <tr><td class="col-num" data-label="#">4</td><td data-label="口播说法">几个月之后闭卷考试成绩平均暴跌 20%</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">6 个月时达到 −20% 属实，但这是峰值；全部采纳后月份平均 −13%。「暴跌」描述的是峰值。</td></tr>
+      <tr><td class="col-num" data-label="#">5</td><td data-label="口播说法">到了中考高考这种大考，降幅更大</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">只有使用两年以上的学生：中考 −24%（比 20% 大），高考 −18%（并不比 20% 大）。全样本双重差分平均约 −7%。作者说法是「大致和月考一样大」。</td></tr>
+      <tr><td class="col-num" data-label="#">6</td><td data-label="口播说法">能力退化不是马上看到，完整影响两年后才爆发</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">论文摘要原文：完整罚分约两年后才显现（the full penalty emerging only after about two years）。但不是「两年后才开始」：月考罚分 6 个月就已完整，升学考试罚分是逐步累积到两年。「爆发」是口播用词。</td></tr>
+      <tr><td class="col-num" data-label="#">7</td><td data-label="口播说法">学习损失最大的恰恰是作业做得最快、卷面分窜得最高的学生</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">论文观察到的模式：作业时间异常短 + 作业分高的学生，考试更差；使用 6 个月后约 4/5 的 AI 用户符合。描述成立；「外包」是作者的解释，论文没有直接观察到认知过程。</td></tr>
+      <tr><td class="col-num" data-label="#">8</td><td data-label="口播说法">另一群学生作业时间没有断崖式缩短，真实能力几乎没受影响</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">约 1/5 用户保持 50–65 分钟作业时间，<strong>考试成绩</strong>与非用户基本相同——这部分成立。但考试成绩不等于全部「真实能力」，不能扩大；作者也提醒这两群人动机可能本来不同。</td></tr>
+      <tr><td class="col-num" data-label="#">9</td><td data-label="口播说法">他们是这么用的：「不要直接给答案，提示我错在哪」「换个条件出题考我」</td><td data-label="判定"><span class="verdict verdict--view">◇ 演绎</span></td><td data-label="依据">论文没有对话记录，不知道这群学生怎么提问。最接近的证据是 Bastani 等（PNAS 2025）里只给提示不给答案的 GPT Tutor。</td></tr>
+      <tr><td class="col-num" data-label="#">10</td><td data-label="口播说法">「这到底是孩子的认知还是显卡的算力」</td><td data-label="判定"><span class="verdict verdict--view">◇ 观点</span></td><td data-label="依据">修辞。论文的对应表述：作业分突然蹿高是学习下滑的警报。</td></tr>
+      <tr><td class="col-num" data-label="#">11</td><td data-label="口播说法">OECD 最新 PISA 覆盖几十个国家和地区、几十万学生</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">PISA 2025（2026-09-08 发布）覆盖 91 个国家与经济体、超过 76 万名 15 岁学生。口语的「几十个」可以涵盖 91，这里只补精确数字。</td></tr>
+      <tr><td class="col-num" data-label="#">12</td><td data-label="口播说法">习惯用 AI 起草作业、搜资料提炼观点的孩子，科学成绩平均落后 20 分，相当于一年学业差距</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">Schleicher 博客（2026-10-13）原话：用 AI 总结阅读材料、预研主题、起草写作的学生，比不用者平均低约 20 分，约等于一年学业。OECD 同时声明不代表因果。</td></tr>
+      <tr><td class="col-num" data-label="#">13</td><td data-label="口播说法">学校专门训练他们反问 AI（论据有没有硬伤、反例在哪），这些孩子思维能力反而更强</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">OECD：在校学过「评估 AI 生成信息」的高频用户，科学成绩略高于不用或少用者（媒体报道约 13–14 分）。测的是科学成绩不是「思维能力」，且是相关性；「论据硬伤、反例」是口播的具体化。</td></tr>
+      <tr><td class="col-num" data-label="#">14</td><td data-label="口播说法">大模型出来之前，认知科学界用「脚手架式智能辅导系统」做过对照研究：不甩答案，卡壳给线索，算错反问</td><td data-label="判定"><span class="verdict verdict--yes">✓ 成立</span></td><td data-label="依据">智能辅导系统（ITS）研究自 1980 年代起，Kulik 与 Fletcher 2016 年综述收录的多为分步提示、即时反馈的系统。「认知科学界」更准确说是教育技术与学习科学。</td></tr>
+      <tr><td class="col-num" data-label="#">15</td><td data-label="口播说法">汇总 50 多项实验发现，这种模式能把排 50 的中等生拉进前 25 名</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">Kulik &amp; Fletcher 2016：50 项受控评估，<strong>中位</strong>效应 0.66 个标准差，统计上相当于第 50 → 第 75 百分位。三处限定被省略：这是中位数不是每项研究都做到；效应大小高度取决于用本地自编测验还是标准化测验；研究的是传统智能辅导系统，不能直接等同于生成式 AI。</td></tr>
+      <tr><td class="col-num" data-label="#">16</td><td data-label="口播说法">productive struggle（有产出的挣扎）是教育学术语，能力从挣扎里长出来</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">术语真实；最接近的量化证据是 Kapur 的「productive failure」元分析（53 项研究，g = 0.36）。但有边界：2–5 年级学生和通用技能学习，先讲授再练习效果更好。OECD 前言也用了「productive cognitive struggle」。</td></tr>
+      <tr><td class="col-num" data-label="#">17</td><td data-label="口播说法">计算器让心算退化但人心里有数；AI 会制造「AI 会了 = 我会了」的幻觉</td><td data-label="判定"><span class="verdict verdict--part">△ 部分成立</span></td><td data-label="依据">后半句有证据：阿尔托大学 2025（约 500 人做 LSAT 逻辑题，用 ChatGPT 者普遍高估自己）、arXiv 2505.01106（63 名 14–15 岁初中生：对 AI 态度越积极，提问质量越低）。前半句是比喻，没有数据；转写里还有一句与之矛盾的话。</td></tr>
+      <tr><td class="col-num" data-label="#">18</td><td data-label="口播说法">判断标准：关掉屏幕你还会不会？换个数字能不能从头推导一遍</td><td data-label="判定"><span class="verdict verdict--view">◇ 观点</span></td><td data-label="依据">作者提出的检验方法，与论文作者建议的「频繁、简短的课堂小测」方向一致，但不是研究结论。</td></tr>
+      <tr><td class="col-num" data-label="#">19</td><td data-label="口播说法">每个人有两套能力：我 + AI 的上限，剥离 AI 的下限</td><td data-label="判定"><span class="verdict verdict--view">◇ 观点</span></td><td data-label="依据">思考框架。主研究观察了用 AI 时的作业表现和闭卷考试成绩，但没有测量任何人的「我 + AI」上限或「剥离 AI」下限，这两套能力是口播的概念，不是研究变量。</td></tr>
+      <tr><td class="col-num" data-label="#">20</td><td data-label="口播说法">AI 给孩子建了一个无摩擦的温室；现实能力要在摩擦中长出来</td><td data-label="判定"><span class="verdict verdict--view">◇ 观点</span></td><td data-label="依据">比喻。本页未找到直接检验「与 AI 聊天替代真人社交会削弱社交能力」的中学生研究。</td></tr>
+      <tr><td class="col-num" data-label="#">21</td><td data-label="口播说法">先考驾照再上路：抓虫、脱稿复述、留白底线三关</td><td data-label="判定"><span class="verdict verdict--view">◇ 建议</span></td><td data-label="依据">作者的方案，没有研究直接检验「三关」。但每一关都能找到旁证，见下文「三关怎么落地」。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="section" id="s-parallel">
+  <h2>平行证据：口播没引、但更能说明机制的研究</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Bastani 等（PNAS 2025）：有没有护栏，差别有多大</h3>
+      <p class="small">土耳其一所高中约 1,000 名学生的随机对照实验。三组：只有课本与笔记；标准 GPT-4 界面（GPT Base）；只给提示、不给答案的 GPT Tutor。先用 AI 做练习，再闭卷考试。</p>
+      <div class="legend" aria-hidden="true"><span class="legend__item"><span class="swatch swatch--s2"></span>GPT Base（直接给答案）</span><span class="legend__item"><span class="swatch swatch--s3"></span>GPT Tutor（只给提示）</span></div>
+      <figure class="figure">
+        <svg viewBox="0 0 640 300" role="img" aria-labelledby="c5-title c5-desc">
+          <title id="c5-title">GPT Base 与 GPT Tutor 相对对照组的表现</title>
+          <desc id="c5-desc">练习题：GPT Base 高 48%，GPT Tutor 高 127%。闭卷考试：GPT Base 低 17%；GPT Tutor 与对照组未检出显著差异，图中不画柱。</desc>
+          <!-- 零线 y=200，每 1% = 1px -->
+          <g class="chart-grid"><line x1="60" x2="620" y1="73" y2="73"/><line x1="60" x2="620" y1="100" y2="100"/><line x1="60" x2="620" y1="150" y2="150"/><line x1="60" x2="620" y1="250" y2="250"/></g>
+          <text class="chart-label" x="52" y="77" text-anchor="end">+127%</text>
+          <text class="chart-label" x="52" y="104" text-anchor="end">+100%</text>
+          <text class="chart-label" x="52" y="154" text-anchor="end">+50%</text>
+          <text class="chart-label" x="52" y="204" text-anchor="end">0</text>
+          <text class="chart-label" x="52" y="254" text-anchor="end">−50%</text>
+          <rect class="bar bar--s2" x="120" y="152" width="70" height="48" rx="4"><title>GPT Base 练习题：+48%</title></rect>
+          <text class="chart-value" x="155" y="144" text-anchor="middle">+48%</text>
+          <rect class="bar bar--s3" x="192" y="73" width="70" height="127" rx="4"><title>GPT Tutor 练习题：+127%</title></rect>
+          <text class="chart-value" x="227" y="65" text-anchor="middle">+127%</text>
+          <rect class="bar bar--s2" x="400" y="200" width="70" height="17" rx="4"><title>GPT Base 闭卷考试：−17%（显著）</title></rect>
+          <text class="chart-value" x="435" y="232" text-anchor="middle">−17%</text>
+          <text class="chart-value" x="507" y="192" text-anchor="middle">未检出</text>
+          <text class="chart-value" x="507" y="232" text-anchor="middle">显著差异</text>
+          <line class="chart-axis" x1="60" x2="620" y1="200" y2="200"/>
+          <text class="chart-label" x="191" y="285" text-anchor="middle">用 AI 做练习题</text>
+          <text class="chart-label" x="471" y="285" text-anchor="middle">之后的闭卷考试</text>
+        </svg>
+        <figcaption>相对对照组的表现差异。聊天记录显示 GPT Base 组学生绝大多数直接要答案、抄答案。注意：GPT Tutor 组的闭卷考试「未检出显著差异」，既没有显著负向、也没有显著正向效果，不能据此认定为零效应或确认无害。来源：PNAS 122(26)，Knowledge at Wharton 报道。</figcaption>
+      </figure>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <h3>OECD PISA 2025（2026-09 发布）</h3>
+        <ul class="small">
+          <li>91 个国家与经济体、约 76 万名 15 岁学生；科学是本轮主测领域。</li>
+          <li>用 AI 做「具体任务」（总结阅读、预研、起草写作）的学生比不用者科学成绩低约 20 分 ≈ 一年学业。加拿大、新西兰的差距分别达 29、36 分。</li>
+          <li>媒体整理的分数：几乎每天用 AI 起草作业 481 分，从不用 509 分。</li>
+          <li>每周 1–2 次「用 AI 帮助学习」的学生，成绩与不用者相近；在校学过评估 AI 信息的高频用户成绩略高。</li>
+          <li>OECD 原话：这些发现「不一定代表因果关系」，成绩差的学生可能本来就更依赖 AI。</li>
+          <li>Schleicher 的比喻：AI 应当是「脚手架，不是拐杖」；学习是心智与新材料的「有产出的认知挣扎」。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Kulik &amp; Fletcher（2016）：智能辅导系统元分析</h3>
+        <p class="small">50 项受控评估，中位效应 0.66 个标准差（第 50 → 第 75 百分位）。两个口播没讲的限定：用本地自编测验的研究效应大、用标准化测验的小；另有 10 项设计有缺陷的评估效应很小，说明实施质量决定结果。</p>
+      </div>
+      <div class="card">
+        <h3>「以为自己会了」的证据</h3>
+        <p class="small">阿尔托大学 2025（Computers in Human Behavior）：约 500 人做 LSAT 逻辑题，用 ChatGPT 的人分数更高，却普遍高估自己；自认 AI 熟练的人更过度自信，Dunning–Kruger 效应反转。多数人每题只问一次，直接接受答案。研究者建议：AI 应反问用户「你能解释一下你的推理吗」。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s-missing">
+  <h2>口播没讲、但家长应该知道的六件事</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>作者自己给的两条建议</h3>
+      <p class="small">口播引用了数据却没引用作者的对策。VoxEU 专栏里作者写得很具体：<strong>看「输入」而不是「输出」</strong>——盯孩子真正花在作业上的时间，而不是作业分；<strong>用频繁、简短的课堂小测</strong>来检验作业内容学没学会。因为在 AI 用户里，作业分已经不再反映学习。</p>
+    </div>
+    <div class="card">
+      <h3>好学生掉得最多</h3>
+      <p class="small">采纳前成绩前三分之一的学生月考掉 24%，后三分之一掉 16%。这与职场研究相反（AI 通常让低技能者提升更多）。作者称之为「从顶端压缩」。家长不能因为孩子成绩好就放心。</p>
+    </div>
+    <div class="card">
+      <h3>剂量反应</h3>
+      <p class="small">每周用 0–1 小时约 −5%，5 小时以上约 −30%。用得越多掉得越多，这比「用不用」更能预测损失。</p>
+    </div>
+    <div class="card">
+      <h3>好工具存在，孩子不用</h3>
+      <p class="small">作者指出：中国和很多国家早有设计良好、几乎免费的辅导工具，但多数学生选择豆包、DeepSeek 这类直接给答案的通用工具。另一项两年校内实验（Oreopoulos &amp; Low 2026，Khanmigo）发现，学生对「只教不答」的 AI 导师缺乏参与。作者的结论：问题不是技术问题，是激励与制度问题。</p>
+    </div>
+    <div class="card">
+      <h3>社科掉得比理科多</h3>
+      <p class="small">政史地约 −27%，STEM −22%，英语 −17%，语文 −9%。口播用数学题、作文举例，但论文里损失最大的是需要记忆与论述的社科。</p>
+    </div>
+    <div class="card">
+      <h3>这是一项观察研究</h3>
+      <p class="small">学生不是被随机分配去用 AI 的，采纳时间靠自报。作者用了严格的双重差分设计并做了平行趋势与安慰剂检验，但仍是单县数据、工作论文。结论需要在其他地区复制。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s-gates">
+  <h2>口播的「三关」怎么改成能检验的做法</h2>
+  <p class="section__intro">「三关」是口播作者的方案，没有研究直接验证。但每一关都对应一条有证据的原则。下面把它改成家长能执行、能看出结果的版本。</p>
+  <div class="grid-3">
+    <div class="gate">
+      <span class="gate__tag">口播第一关：抓虫</span>
+      <h3>让孩子核验 AI，而不是找「故意留的错」</h3>
+      <p class="small"><strong>对应证据</strong>：PISA 2025 发现在校学过评估 AI 信息的学生成绩略高（相关性）；阿尔托研究建议让用户解释自己的推理。</p>
+      <p class="small"><strong>可执行版</strong>：每周挑一段 AI 的解答或文字，让孩子核对其中的事实、论据和来源，并说出判断依据。不要预设「AI 一定故意犯错」——模型未必有错，专找「故意错误」反而可能让孩子过度怀疑正确答案。</p>
+    </div>
+    <div class="gate">
+      <span class="gate__tag">口播第二关：脱稿复述</span>
+      <h3>合上屏幕讲一遍，再做一道变式题</h3>
+      <p class="small"><strong>对应证据</strong>：论文作者建议用频繁、简短、闭卷的小测检验作业内容；Bastani 的闭卷考试正是这样暴露了差距。</p>
+      <p class="small"><strong>可执行版</strong>：作业做完后关掉 AI，让孩子用自己的话讲解题过程；再随机选一题，换一组数字或换一个条件，在纸上独立重做。分别记下「讲得对不对」和「变式题做得对不对」。做不出来，这题就算没学会。</p>
+    </div>
+    <div class="gate">
+      <span class="gate__tag">口播第三关：留白底线</span>
+      <h3>先自己想，卡住了再问</h3>
+      <p class="small"><strong>对应证据</strong>：论文里保持作业时间的学生考试成绩与非用户相近；productive failure 元分析支持先尝试再讲解（低年级除外）。</p>
+      <p class="small"><strong>可执行版</strong>：定一个「先自己做」的最短时间（例如每道难题 10 分钟），写下初步思路；之后允许把草稿给 AI 并要求「只指出哪一步错」。卡壳后求助是允许的，不把「禁止 AI」当普遍原则。家长看的是作业用时，不是作业分。</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:var(--space-4)">
+    <h3>怎么知道「三关」在你家有没有用</h3>
+    <p class="small">只看作业分会再次奖励 AI 帮出来的高产出。建议对同一个知识点记四样东西：独立作答正确率、一两周后的延迟小测成绩、变式题表现、讲解质量；同时记 AI 使用频率和作业用时。坚持四到六周再比较前后，不要凭一次考试下结论，也不要把「作业时间长」本身当成学会了。</p>
+  </div>
+  <div class="callout callout--loss" style="margin-top:var(--space-4)">
+    <p class="small"><strong>两个提醒。</strong>第一，作者明确说「不能从数据直接推出强制多花时间就能恢复学习」，所以上面的做法是有依据的尝试，不是被验证过的疗法。第二，productive failure 的证据对 2–5 年级学生是反的——小学低年级先把方法讲清楚再练，效果更好；「留白」更适合初中以上。</p>
+  </div>
+</section>
+
+<section class="section" id="s-limits">
+  <h2>证据边界</h2>
+  <div class="grid-2">
+    <div class="card card--muted">
+      <h3>主研究的限制（作者自己列的）</h3>
+      <ul class="small">
+        <li>单县样本，不能直接外推到其他地区或职场。</li>
+        <li>AI 采纳时间靠学生事后自报，是否真的核对了注册日期无法观察。</li>
+        <li>作业完成时间的变化是相关性描述，不是因果估计。</li>
+        <li>中考高考每人只观测一两次，识别力弱于月考。</li>
+        <li>30 个月里 AI 工具本身变化很大（DeepSeek V2.5、R1 发布带来两次采纳高峰）。</li>
+        <li>工作论文，尚未同行评审。</li>
+      </ul>
+    </div>
+    <div class="card card--muted">
+      <h3>本页的限制</h3>
+      <ul class="small">
+        <li>论文正文细节（异质性、外包比例、剂量反应）取自作者 VoxEU 专栏和 ppc.land 对正文的整理；本页未逐页核对 58 页原文。</li>
+        <li>PISA 的 481 / 509 分与「训练后高 13–14 分」来自媒体对 OECD 报告的转述；Schleicher 博客只说「略高」。</li>
+        <li>口播是口语转写，个别句子（计算器那段）有矛盾，本页按前后文取其本意。</li>
+        <li>「三关可执行版」是依据研究方向改写的建议，没有被实验验证。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section sources" id="s-sources">
+  <h2>来源</h2>
+  <ol>
+    <li>Strömberg, Lei &amp; Wu (2026). The Generative AI Learning Penalty: Evidence from Chinese Secondary Education. CEPR DP21577. <a href="https://cepr.org/publications/dp21577">cepr.org/publications/dp21577</a>；SSRN：<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6868618">papers.ssrn.com/abstract=6868618</a></li>
+    <li>作者 VoxEU 专栏（2026-09-04）：The generative AI learning penalty in secondary school. <a href="https://cepr.org/voxeu/columns/generative-ai-learning-penalty-secondary-school">cepr.org/voxeu/…</a>（本页「两种用法」「监控输入」「从顶端压缩」等表述出自此文）</li>
+    <li>ppc.land（2026-08-19）：Students who use AI for homework lose 20% of their exam scores. <a href="https://ppc.land/students-who-use-ai-for-homework-lose-20-of-their-exam-scores/">ppc.land/…</a>（论文正文数字整理）</li>
+    <li>Fortune（2026-07-21）：Study finds AI boosted homework scores 18%—then tanked exam results 20%. <a href="https://fortune.com/2026/07/21/gen-z-cheating-homework-school-exam-scores-crash-post-literate-society-incentives/">fortune.com/…</a></li>
+    <li>澎湃新闻转载：追踪 2.6 万中学生后发现，使用 AI 会让考试成绩大幅下滑。<a href="https://m.thepaper.cn/baijiahao_33980010">m.thepaper.cn/baijiahao_33980010</a></li>
+    <li>OECD (2026). PISA 2025 Results (Volume I): Future-Ready Students. <a href="https://www.oecd.org/en/publications/2026/09/pisa-2025-results-volume-i_5265bfb1.html">oecd.org/…/pisa-2025-results-volume-i</a>；前言：<a href="https://www.oecd.org/en/publications/pisa-2025-results-volume-i_73451bc5-en/full-report/foreword_785d12f3.html">foreword</a></li>
+    <li>Schleicher, A.（2026-10-13）. Generative AI and student learning: What the PISA data reveal. OECD Education and Skills Today. <a href="https://oecdedutoday.com/generative-ai-and-student-learning-what-the-pisa-data-reveal/">oecdedutoday.com/…</a></li>
+    <li>Statista（2026-09-08）：PISA Links Frequent AI Use With Lower Science Scores. <a href="https://www.statista.com/chart/36591/impact-of-ai-use-on-science-scores-in-pisa-2025/">statista.com/chart/36591</a>；Business Standard 对 481/509 分的报道：<a href="https://www.business-standard.com/industry/news/ai-helps-students-with-work-but-more-use-doesn-t-mean-better-scores-126091400473_1.html">business-standard.com/…</a></li>
+    <li>Bastani, H. 等 (2025). Generative AI without guardrails can harm learning: Evidence from high school mathematics. PNAS 122(26). <a href="https://www.pnas.org/doi/10.1073/pnas.2422633122">doi:10.1073/pnas.2422633122</a>；Knowledge at Wharton 报道：<a href="https://knowledge.wharton.upenn.edu/article/without-guardrails-generative-ai-can-harm-education/">knowledge.wharton.upenn.edu/…</a></li>
+    <li>Kulik, J. A. &amp; Fletcher, J. D. (2016). Effectiveness of Intelligent Tutoring Systems: A Meta-Analytic Review. Review of Educational Research 86(1). <a href="https://journals.sagepub.com/doi/abs/10.3102/0034654315581420">doi:10.3102/0034654315581420</a>；ERIC：<a href="https://eric.ed.gov/?id=EJ1090502">EJ1090502</a></li>
+    <li>Sinha, T. &amp; Kapur, M. (2021). When Problem Solving Followed by Instruction Works: Evidence for Productive Failure. Review of Educational Research 91(5). <a href="https://journals.sagepub.com/doi/10.3102/00346543211019105">doi:10.3102/00346543211019105</a></li>
+    <li>Aalto University（2025-10-28）. AI makes you smarter but none the wiser（Computers in Human Behavior）. EurekAlert：<a href="https://www.eurekalert.org/news-releases/1103616">eurekalert.org/news-releases/1103616</a></li>
+    <li>The Illusion of Understanding: How Middle-Schoolers Fail to Regulate Inquiry with ChatGPT. arXiv 2505.01106. <a href="https://arxiv.org/abs/2505.01106">arxiv.org/abs/2505.01106</a></li>
+  </ol>
+  <p class="small">来源分级：1、2、6、7、9、10、11、12、13 为一手（论文、作者专栏、官方报告与博客、机构新闻稿）；3、4、5、8 为媒体转述。本页正文中标「媒体整理」「媒体报道」的数字均来自二手来源。</p>
+</section>
+
+<footer>
+  <p>本页由本机模型整理于 2026-10-23，供家长与教育从业者阅读。口播原文为口语转写，本页只核对其事实与推断，不评价表达风格。主研究的效应百分比（+18%、−20% 等）均为相对采纳前均值的变化，不是百分点；用户比例（4/5、58%、81%）是按论文定义识别出的占比；Bastani 研究的百分比是相对对照组的差异。三种口径不能混读。</p>
+</footer>
+</div>
+</body>
+</html>

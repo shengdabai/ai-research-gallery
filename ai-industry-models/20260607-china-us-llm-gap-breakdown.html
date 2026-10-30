@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>20260607-2146-中美大模型差距全景拆解</title>
+  <style>
+    :root {
+      --ink:#16211f;
+      --muted:#5f6f6b;
+      --paper:#f8f5ec;
+      --band:#fffdf7;
+      --line:#d9d2c3;
+      --cn:#0f8b8d;
+      --us:#b9472f;
+      --gold:#c7902b;
+      --green:#3f7d3a;
+      --blue:#315f9f;
+      --shadow:0 18px 45px rgba(29, 31, 25, .10);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.65;
+      letter-spacing:0;
+    }
+    a { color:#126c74; text-decoration-thickness:1px; text-underline-offset:3px; }
+    .hero {
+      min-height:92vh;
+      display:grid;
+      align-items:end;
+      background:
+        linear-gradient(180deg, rgba(12,20,18,.12), rgba(12,20,18,.76)),
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,.14), transparent 18%),
+        linear-gradient(135deg, #0f312f 0%, #244541 35%, #6d4430 68%, #d7b56b 100%);
+      color:white;
+      padding:42px 5vw 56px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after {
+      content:"";
+      position:absolute;
+      inset:auto 4vw 4vw auto;
+      width:min(42vw,520px);
+      aspect-ratio:1.5;
+      border:1px solid rgba(255,255,255,.38);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px) 0 0/48px 48px,
+        linear-gradient(0deg, rgba(255,255,255,.12) 1px, transparent 1px) 0 0/48px 48px;
+      clip-path:polygon(0 8%, 100% 0, 92% 100%, 8% 92%);
+      opacity:.8;
+    }
+    .hero-inner { max-width:1120px; position:relative; z-index:1; }
+    .eyebrow { text-transform:uppercase; font-size:13px; letter-spacing:.08em; opacity:.86; }
+    h1 { font-size:clamp(40px, 7vw, 88px); line-height:1.02; margin:18px 0 22px; max-width:980px; letter-spacing:0; }
+    .subtitle { font-size:clamp(18px, 2.4vw, 28px); max-width:860px; color:#f3ebd7; }
+    .hero-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+    .pill { border:1px solid rgba(255,255,255,.34); padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.10); backdrop-filter:blur(10px); }
+    nav {
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(248,245,236,.94);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(14px);
+      overflow:auto;
+      white-space:nowrap;
+      padding:9px 5vw;
+    }
+    nav a { display:inline-block; margin-right:18px; color:#243633; font-size:14px; text-decoration:none; }
+    section { padding:58px 5vw; }
+    section:nth-of-type(even) { background:var(--band); }
+    .wrap { max-width:1180px; margin:0 auto; min-width:0; }
+    h2 { font-size:clamp(28px, 4vw, 48px); line-height:1.1; margin:0 0 18px; letter-spacing:0; }
+    .lead { font-size:19px; color:#40504d; max-width:920px; }
+    .kpis { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px; margin-top:28px; }
+    .kpi { background:white; border:1px solid var(--line); border-radius:8px; padding:18px; box-shadow:var(--shadow); min-height:128px; }
+    .kpi strong { display:block; font-size:30px; line-height:1.1; color:#0f5e62; }
+    .kpi span { color:var(--muted); font-size:14px; }
+    .split { display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:start; }
+    .split > * { min-width:0; }
+    .panel { background:white; border:1px solid var(--line); border-radius:8px; padding:24px; box-shadow:var(--shadow); min-width:0; }
+    .verdict { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:28px; }
+    .verdict article { border-top:5px solid var(--gold); background:#fffaf0; padding:20px; border-radius:8px; min-height:180px; }
+    .verdict article:nth-child(2) { border-color:var(--cn); background:#effafa; }
+    .verdict article:nth-child(3) { border-color:var(--us); background:#fff2ee; }
+    .flow { font-family:"SFMono-Regular",Consolas,Menlo,monospace; white-space:pre; overflow:auto; max-width:100%; background:#16211f; color:#f6ecd8; padding:22px; border-radius:8px; line-height:1.45; font-size:14px; }
+    .section-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; }
+    .section-card { display:grid; grid-template-columns:58px 1fr; gap:16px; background:white; border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .section-no { width:46px; height:46px; display:grid; place-items:center; background:#182c29; color:#f6ecd8; border-radius:50%; font-weight:700; }
+    .section-card h3 { margin:0 0 6px; font-size:20px; }
+    .section-card p { margin:0 0 10px; color:#40504d; }
+    dl { margin:0; display:grid; grid-template-columns:76px 1fr; gap:4px 10px; }
+    dt { color:#7a6431; font-weight:700; }
+    dd { margin:0; color:#374744; }
+    .bar-row { display:grid; grid-template-columns:156px 1fr; gap:10px 16px; margin:16px 0; align-items:center; }
+    .bar-label { font-weight:700; }
+    .bar-track { grid-column:2; position:relative; height:34px; background:#ede6d8; border-radius:6px; overflow:hidden; display:flex; }
+    .bar { height:100%; display:flex; align-items:center; padding-left:8px; color:white; font-size:12px; min-width:42px; }
+    .bar.cn { background:var(--cn); }
+    .bar.us { background:var(--us); justify-content:flex-end; padding-left:0; padding-right:8px; }
+    .bar-note { grid-column:2; color:var(--muted); font-size:14px; }
+    .radar-wrap { position:relative; min-height:390px; }
+    .radar { width:100%; max-width:460px; display:block; margin:auto; }
+    .radar-labels span { position:absolute; left:50%; top:50%; transform:
+      rotate(calc(var(--i) * 45deg)) translateY(-180px) rotate(calc(var(--i) * -45deg));
+      transform-origin:0 0; font-size:12px; color:#40504d; width:92px; text-align:center;
+    }
+    table { width:100%; border-collapse:collapse; background:white; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    th, td { padding:12px 13px; border-bottom:1px solid #ece5d7; text-align:left; vertical-align:top; }
+    th { background:#182c29; color:#f6ecd8; font-weight:650; position:sticky; top:39px; }
+    tr:last-child td { border-bottom:0; }
+    .score { display:inline-block; min-width:42px; text-align:center; border-radius:999px; padding:3px 8px; color:white; font-weight:700; }
+    .cn-score { background:var(--cn); }
+    .us-score { background:var(--us); }
+    .filters { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+    .filters button { border:1px solid var(--line); background:white; border-radius:6px; padding:8px 11px; cursor:pointer; color:#233; }
+    .filters button.active { background:#182c29; color:#f6ecd8; }
+    .timeline { list-style:none; padding:0; margin:26px 0 0; position:relative; }
+    .timeline::before { content:""; position:absolute; left:104px; top:0; bottom:0; width:2px; background:var(--line); }
+    .timeline li { display:grid; grid-template-columns:88px 1fr; gap:34px; padding:0 0 26px; position:relative; }
+    .timeline li::before { content:""; position:absolute; left:97px; top:8px; width:16px; height:16px; background:var(--gold); border-radius:50%; border:3px solid var(--paper); }
+    .timeline time { font-weight:700; color:#775a1c; }
+    .timeline strong { display:block; font-size:19px; }
+    .timeline span { color:#40504d; }
+    .opp-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; }
+    .opp { background:white; border:1px solid var(--line); border-radius:8px; padding:20px; min-height:220px; }
+    .opp h3 { margin:0; font-size:21px; }
+    .tag { color:white; background:#315f9f; display:inline-block; padding:4px 8px; border-radius:5px; font-size:13px; }
+    .callout { background:#182c29; color:#f6ecd8; padding:26px; border-radius:8px; font-size:20px; }
+    .callout b { color:#ffd36c; }
+    .source-table td:nth-child(2) { min-width:230px; }
+    .small { color:var(--muted); font-size:14px; }
+    .two-col { columns:2; column-gap:32px; }
+    .two-col li { break-inside:avoid; margin-bottom:10px; }
+    .compare-lanes { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .lane { border-radius:8px; padding:22px; border:1px solid var(--line); background:white; }
+    .lane.cn { border-top:6px solid var(--cn); }
+    .lane.us { border-top:6px solid var(--us); }
+    .lane h3 { margin-top:0; }
+    footer { padding:38px 5vw; background:#111b19; color:#eadfca; }
+    @media (max-width: 900px) {
+      .split, .compare-lanes { grid-template-columns:1fr; }
+      .kpis, .verdict, .opp-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .section-grid { grid-template-columns:1fr; }
+      .bar-row { grid-template-columns:1fr; }
+      .bar-track, .bar-note { grid-column:1; }
+      th { position:static; }
+    }
+    @media (max-width: 620px) {
+      .hero { min-height:86vh; padding:32px 18px 44px; }
+      section { padding:42px 18px; }
+      .kpis, .verdict, .opp-grid { grid-template-columns:1fr; }
+      .timeline::before, .timeline li::before { display:none; }
+      .timeline li { grid-template-columns:1fr; gap:4px; }
+      .two-col { columns:1; }
+      table { display:block; overflow:auto; max-width:100%; }
+      .panel { padding:18px; }
+      .flow { font-size:12px; padding:16px; }
+      .radar-labels { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">AI Industry Research · generated 2026-06-07 21:46</div>
+      <h1>中美大模型差距全景拆解</h1>
+      <p class="subtitle">基于微信长文《别再问追没追上：中美大模型的真实差距在这里（1.5万字）》的逐环节拆解，并补充开放模型、消费应用、国内 App、API 成本、Agent 工具链与视频生成的外部核验。</p>
+      <div class="hero-meta">
+        <span class="pill">原文约 525 段 / 16023 字抽取文本</span>
+        <span class="pill">结论：场景分裂，不是单一追上或落后</span>
+        <span class="pill">信息截至：2026-06-07</span>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a href="#summary">总览</a>
+    <a href="#article-map">原文拆解</a>
+    <a href="#matrix">差距矩阵</a>
+    <a href="#evidence">证据链</a>
+    <a href="#cost">成本</a>
+    <a href="#timeline">时间线</a>
+    <a href="#strategy">机会</a>
+    <a href="#sources">来源</a>
+  </nav>
+
+  <section id="summary">
+    <div class="wrap">
+      <h2>一句话结论</h2>
+      <p class="lead">中国大模型已经在开放权重、成本效率、本地部署、中文场景、OCR/文档和视频生成上进入全球第一梯队；美国/西方头部体系仍在高稳定长程 Agent、复杂工具调用、企业级低故障率、全球信任、产品生态闭环上更强。</p>
+      <div class="kpis">
+        <div class="kpi"><strong>41%</strong><span>Hugging Face 报告称，过去一年中国模型占开放模型下载的复数份额。</span></div>
+        <div class="kpi"><strong>2.7x</strong><span>a16z 称 ChatGPT 网页流量仍约为 Gemini 的 2.7 倍。</span></div>
+        <div class="kpi"><strong>4.4亿</strong><span>QuestMobile 称 2026 年 3 月中国 AI 原生 App 月活规模达到约 4.4 亿。</span></div>
+        <div class="kpi"><strong>1M</strong><span>DeepSeek 与 Claude 新一代模型都强调百万级上下文，但价格和产品定位不同。</span></div>
+      </div>
+      <div class="verdict">
+        <article><h3>不是全面追平</h3><p>如果任务是跨文件、多工具、多小时的工作流，闭源前沿模型加成熟产品壳仍更稳。</p></article>
+        <article><h3>也不是落后一代</h3><p>开源、小模型、本地化、中文、成本和部分多模态已经不是“追赶者姿态”。</p></article>
+        <article><h3>真实答案是场景分裂</h3><p>用“任务风险 × 成本 × 合规 × 稳定性”选模型，而不是用国别标签选模型。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <div>
+        <h2>核心逻辑图</h2>
+        <p class="lead">原文最重要的贡献，是把“模型智商竞赛”改写成“真实采用与产品化稳定性”的比较。</p>
+        <div class="flow">[单点 Benchmark]
+      |
+      v
+[真实使用任务] ---> [短程问答/中文/本地部署] ---> 中国接近或局部领先
+      |
+      +-------> [长程 Agent/工具链/企业低故障] ---> 美国/西方仍领先
+      |
+      +-------> [视频/OCR/文档] ---> 双方接近，局部互有领先
+      |
+      v
+[最终判断] = 场景分裂 + 产品化差距 + 信任差距</div>
+      </div>
+      <div class="panel">
+        <h2>读报告前先校准</h2>
+        <ul>
+          <li><b>开放模型下载</b>衡量开发者扩散，不等于企业付费采用。</li>
+          <li><b>消费 App 月活</b>衡量入口，不等于底层模型能力。</li>
+          <li><b>Benchmark</b>衡量标准任务表现，不等于真实 agent 稳定性。</li>
+          <li><b>API 价格</b>衡量调用成本，不等于总拥有成本，后者还包含监控、失败重试、合规和工程维护。</li>
+          <li><b>全球信任</b>不是抽象政治词，而是采购、审计、数据驻留、法律责任和供应商风险的总和。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="article-map">
+    <div class="wrap">
+      <h2>原文 14 个环节逐段拆解</h2>
+      <p class="lead">以下不是全文复刻，而是按原文章节把论证链拆成“主张、层级、中美差异、读法”。</p>
+      <div class="section-grid">
+            <article class="section-card" data-layer="方法论">
+              <div class="section-no">01</div>
+              <div>
+                <h3>证据边界</h3>
+                <p>作者先限定证据来源：更看重真实采用、社区反馈、部署披露，而非单一 benchmark。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>中国数据的公开评论粒度较弱；海外开发者社区更容易查证。</dd>
+                  <dt>读法</dt><dd>读这类文章，先看证据口径，不要先站队。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="总论">
+              <div class="section-no">02</div>
+              <div>
+                <h3>核心判断</h3>
+                <p>不是一代差，也不是全面追平，而是不同场景出现不同领先者。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>开放模型与本地场景中国强；闭源前沿和产品闭环美国强。</dd>
+                  <dt>读法</dt><dd>用场景拆问题：谁在什么任务里更可靠。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="Agent">
+              <div class="section-no">03</div>
+              <div>
+                <h3>真正代差</h3>
+                <p>差距主要不是单题聪明度，而是长程任务里的稳定性、状态管理、工具循环。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>短程任务差距小；跨文件、多小时、复杂工具链差距大。</dd>
+                  <dt>读法</dt><dd>评估模型时要跑真实工作流，不只问几道题。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="框架">
+              <div class="section-no">04</div>
+              <div>
+                <h3>全局表</h3>
+                <p>原文用表格拆分普通聊天、小模型、编程、开源、企业、多模态等场景。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>每个格子都需要独立证据，不能用一个榜单覆盖全部。</dd>
+                  <dt>读法</dt><dd>报告后面把这张表扩展成可视化矩阵。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="模型层">
+              <div class="section-no">05</div>
+              <div>
+                <h3>小模型</h3>
+                <p>中国小模型、本地模型已进入全球第一梯队，尤其适合私有部署、低成本和中文任务。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>美国不弱，但中国在尺寸、量化、端侧部署扩散上非常快。</dd>
+                  <dt>读法</dt><dd>小模型是中国优势最容易转化成产品的层。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="生态层">
+              <div class="section-no">06</div>
+              <div>
+                <h3>开放权重</h3>
+                <p>Qwen、DeepSeek 等形成下载、微调、量化、再分发的社区飞轮。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>开放下载领先不等于全球企业和消费者采用领先。</dd>
+                  <dt>读法</dt><dd>开源是扩散优势，不自动等于商业控制力。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="工程层">
+              <div class="section-no">07</div>
+              <div>
+                <h3>工具链</h3>
+                <p>模型外的 harness、IDE、监控、回滚、权限、安全策略，是实用代差的一部分。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>美国头部产品在稳定 agent 包装上更成熟。</dd>
+                  <dt>读法</dt><dd>产品化差距往往藏在模型之外。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="多模态">
+              <div class="section-no">08</div>
+              <div>
+                <h3>多模态</h3>
+                <p>中国在 OCR、文档理解、部分视觉理解很强；GUI 自动化仍考验长期状态和低错误率。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>文档任务接近或局部领先；复杂屏幕操作仍落后。</dd>
+                  <dt>读法</dt><dd>多模态也要分 OCR、视觉问答、GUI、视频理解。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="内容生成">
+              <div class="section-no">09</div>
+              <div>
+                <h3>视频生成</h3>
+                <p>视频生成是中国最接近无代差的方向之一，Kling、Seedance、MiniMax、Vidu 都进入全球竞争。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>Google/Runway/OpenAI 在专业流程、生态入口和版权治理上仍强。</dd>
+                  <dt>读法</dt><dd>短视频创作会最早看到中美能力收敛。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="判断校准">
+              <div class="section-no">10</div>
+              <div>
+                <h3>常见叙事</h3>
+                <p>逐条反驳四种极端说法：已 good enough、全球领先、benchmark 证明追上、仍落后一代。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>这些说法各有适用范围，但单独使用都会误导。</dd>
+                  <dt>读法</dt><dd>最好的判断是条件句，不是口号。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="因果">
+              <div class="section-no">11</div>
+              <div>
+                <h3>差距成因</h3>
+                <p>中国侧重效率、开源、价格战和快速扩散；美国侧重闭环后训练、产品打磨、企业生态。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>出口管制、监管、商业模式和人才结构共同影响路线。</dd>
+                  <dt>读法</dt><dd>差距来自制度化工程能力，不只是参数量。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="预测">
+              <div class="section-no">12</div>
+              <div>
+                <h3>追平时间表</h3>
+                <p>原文按普通对话、小模型、视频、复杂 agent、全球企业采用给出不同追平周期。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>普通任务已接近；企业级全球稳定采用最慢。</dd>
+                  <dt>读法</dt><dd>时间表只能按场景，不宜给单一日期。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="监控指标">
+              <div class="section-no">13</div>
+              <div>
+                <h3>未来观察</h3>
+                <p>看模型发布之外，更应看真实代理失败率、工具生态、企业采购、隐形采用和价格变化。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>发布会信号弱，长期留存和付费更强。</dd>
+                  <dt>读法</dt><dd>建立指标仪表盘，比追新闻更有效。</dd>
+                </dl>
+              </div>
+            </article>
+            
+
+            <article class="section-card" data-layer="结论">
+              <div class="section-no">14</div>
+              <div>
+                <h3>最终判断</h3>
+                <p>中国已在开放模型和成本效率进入第一梯队；美国仍掌握高稳定 agent、产品闭环、全球信任。</p>
+                <dl>
+                  <dt>中美差异</dt><dd>这不是民族叙事，而是产品与产业链分工问题。</dd>
+                  <dt>读法</dt><dd>选型时按任务风险和合规要求选，而不是按国别选。</dd>
+                </dl>
+              </div>
+            </article>
+            </div>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="wrap">
+      <h2>中美差距矩阵</h2>
+      <p class="lead">分数是本报告为帮助阅读而做的定性量化，表示相对实用成熟度，不是官方 benchmark。重点看方向和原因。</p>
+      <div class="split">
+        <div class="panel">
+          <h3>前 8 个关键维度对比</h3>
+          
+    <div class="bar-row">
+      <div class="bar-label">开放模型采用</div>
+      <div class="bar-track" aria-label="开放模型采用 中国 92 美国 70">
+        <span class="bar cn" style="width:92%"><b>中国 92</b></span>
+        <span class="bar us" style="width:70%"><b>美国 70</b></span>
+      </div>
+      <div class="bar-note">Hugging Face/ATOM 均显示中国开放模型下载和衍生模型强势。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">全球消费者产品</div>
+      <div class="bar-track" aria-label="全球消费者产品 中国 58 美国 93">
+        <span class="bar cn" style="width:58%"><b>中国 58</b></span>
+        <span class="bar us" style="width:93%"><b>美国 93</b></span>
+      </div>
+      <div class="bar-note">ChatGPT 仍是全球默认入口；Gemini 追赶，但头部仍集中在美国生态。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">中国本土入口</div>
+      <div class="bar-track" aria-label="中国本土入口 中国 94 美国 44">
+        <span class="bar cn" style="width:94%"><b>中国 94</b></span>
+        <span class="bar us" style="width:44%"><b>美国 44</b></span>
+      </div>
+      <div class="bar-note">豆包、千问、DeepSeek 借移动互联网和春节场景快速放大。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">小模型/本地部署</div>
+      <div class="bar-track" aria-label="小模型/本地部署 中国 88 美国 76">
+        <span class="bar cn" style="width:88%"><b>中国 88</b></span>
+        <span class="bar us" style="width:76%"><b>美国 76</b></span>
+      </div>
+      <div class="bar-note">Qwen、DeepSeek、Kimi、GLM 在端侧、本地、低成本部署中很有竞争力。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">长程 Agentic Coding</div>
+      <div class="bar-track" aria-label="长程 Agentic Coding 中国 62 美国 90">
+        <span class="bar cn" style="width:62%"><b>中国 62</b></span>
+        <span class="bar us" style="width:90%"><b>美国 90</b></span>
+      </div>
+      <div class="bar-note">闭源模型+IDE+harness+订阅产品的稳定性仍领先。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">复杂工具调用</div>
+      <div class="bar-track" aria-label="复杂工具调用 中国 65 美国 88">
+        <span class="bar cn" style="width:65%"><b>中国 65</b></span>
+        <span class="bar us" style="width:88%"><b>美国 88</b></span>
+      </div>
+      <div class="bar-note">不只是函数调用能力，还包括失败恢复、权限、状态和监控。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">OCR/文档理解</div>
+      <div class="bar-track" aria-label="OCR/文档理解 中国 87 美国 80">
+        <span class="bar cn" style="width:87%"><b>中国 87</b></span>
+        <span class="bar us" style="width:80%"><b>美国 80</b></span>
+      </div>
+      <div class="bar-note">中文文档、票据、表格和本地办公场景里中国模型很强。</div>
+    </div>
+    
+
+    <div class="bar-row">
+      <div class="bar-label">GUI 自动化</div>
+      <div class="bar-track" aria-label="GUI 自动化 中国 58 美国 86">
+        <span class="bar cn" style="width:58%"><b>中国 58</b></span>
+        <span class="bar us" style="width:86%"><b>美国 86</b></span>
+      </div>
+      <div class="bar-note">跨应用、多步 UI 操作仍依赖强视觉、状态和低错误率。</div>
+    </div>
+    
+        </div>
+        <div class="panel radar-wrap">
+          <h3>雷达图：优势不是同一个方向</h3>
+          <svg class="radar" viewBox="0 0 100 100" role="img" aria-label="中美大模型维度雷达图">
+            <g fill="none" stroke="#d9d2c3" stroke-width=".45">
+              <polygon points="50,12 76.9,23.1 88,50 76.9,76.9 50,88 23.1,76.9 12,50 23.1,23.1"/>
+              <polygon points="50,24 68.4,31.6 76,50 68.4,68.4 50,76 31.6,68.4 24,50 31.6,31.6"/>
+              <polygon points="50,36 59.9,40.1 64,50 59.9,59.9 50,64 40.1,59.9 36,50 40.1,40.1"/>
+              <line x1="50" y1="50" x2="50" y2="12"/><line x1="50" y1="50" x2="76.9" y2="23.1"/><line x1="50" y1="50" x2="88" y2="50"/><line x1="50" y1="50" x2="76.9" y2="76.9"/><line x1="50" y1="50" x2="50" y2="88"/><line x1="50" y1="50" x2="23.1" y2="76.9"/><line x1="50" y1="50" x2="12" y2="50"/><line x1="50" y1="50" x2="23.1" y2="23.1"/>
+            </g>
+            <polygon points="50.0,11.4 67.2,32.8 89.5,50.0 76.1,76.1 50.0,76.0 30.7,69.3 13.5,50.0 32.8,32.8" fill="rgba(15,139,141,.28)" stroke="#0f8b8d" stroke-width="1.6"/>
+            <polygon points="50.0,20.6 77.6,22.4 68.5,50.0 72.6,72.6 50.0,87.8 23.9,76.1 16.4,50.0 24.5,24.5" fill="rgba(185,71,47,.22)" stroke="#b9472f" stroke-width="1.6"/>
+            <circle cx="50" cy="50" r="1.3" fill="#16211f"/>
+          </svg>
+          <div class="radar-labels"><span style="--i:0">开放模型采用</span>
+<span style="--i:1">全球消费者产品</span>
+<span style="--i:2">中国本土入口</span>
+<span style="--i:3">小模型/本地部署</span>
+<span style="--i:4">长程 Agentic Coding</span>
+<span style="--i:5">复杂工具调用</span>
+<span style="--i:6">OCR/文档理解</span>
+<span style="--i:7">GUI 自动化</span></div>
+          <p class="small">青色：中国侧优势；红色：美国/西方侧优势。</p>
+        </div>
+      </div>
+      <div class="filters" aria-label="筛选矩阵">
+        <button class="active" data-filter="all">全部</button>
+        <button data-filter="cn">中国领先</button>
+        <button data-filter="us">美国领先</button>
+        <button data-filter="tie">接近</button>
+      </div>
+      <table id="dimension-table">
+        <thead><tr><th>维度</th><th>中国</th><th>美国/西方</th><th>判断</th><th>解释</th></tr></thead>
+        <tbody>
+            <tr data-state="cn">
+              <td>开放模型采用</td>
+              <td><span class="score cn-score">92</span></td>
+              <td><span class="score us-score">70</span></td>
+              <td>中国</td>
+              <td>Hugging Face/ATOM 均显示中国开放模型下载和衍生模型强势。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>全球消费者产品</td>
+              <td><span class="score cn-score">58</span></td>
+              <td><span class="score us-score">93</span></td>
+              <td>美国</td>
+              <td>ChatGPT 仍是全球默认入口；Gemini 追赶，但头部仍集中在美国生态。</td>
+            </tr>
+            
+
+            <tr data-state="cn">
+              <td>中国本土入口</td>
+              <td><span class="score cn-score">94</span></td>
+              <td><span class="score us-score">44</span></td>
+              <td>中国</td>
+              <td>豆包、千问、DeepSeek 借移动互联网和春节场景快速放大。</td>
+            </tr>
+            
+
+            <tr data-state="cn">
+              <td>小模型/本地部署</td>
+              <td><span class="score cn-score">88</span></td>
+              <td><span class="score us-score">76</span></td>
+              <td>中国略优</td>
+              <td>Qwen、DeepSeek、Kimi、GLM 在端侧、本地、低成本部署中很有竞争力。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>长程 Agentic Coding</td>
+              <td><span class="score cn-score">62</span></td>
+              <td><span class="score us-score">90</span></td>
+              <td>美国</td>
+              <td>闭源模型+IDE+harness+订阅产品的稳定性仍领先。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>复杂工具调用</td>
+              <td><span class="score cn-score">65</span></td>
+              <td><span class="score us-score">88</span></td>
+              <td>美国</td>
+              <td>不只是函数调用能力，还包括失败恢复、权限、状态和监控。</td>
+            </tr>
+            
+
+            <tr data-state="tie">
+              <td>OCR/文档理解</td>
+              <td><span class="score cn-score">87</span></td>
+              <td><span class="score us-score">80</span></td>
+              <td>中国略优</td>
+              <td>中文文档、票据、表格和本地办公场景里中国模型很强。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>GUI 自动化</td>
+              <td><span class="score cn-score">58</span></td>
+              <td><span class="score us-score">86</span></td>
+              <td>美国</td>
+              <td>跨应用、多步 UI 操作仍依赖强视觉、状态和低错误率。</td>
+            </tr>
+            
+
+            <tr data-state="tie">
+              <td>视频生成</td>
+              <td><span class="score cn-score">86</span></td>
+              <td><span class="score us-score">90</span></td>
+              <td>接近</td>
+              <td>Kling/Seedance 与 Veo/Runway/Sora 已在同一竞争层。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>企业级合规信任</td>
+              <td><span class="score cn-score">55</span></td>
+              <td><span class="score us-score">92</span></td>
+              <td>美国</td>
+              <td>数据驻留、审计、SOC、采购、法务和地缘风险决定全球企业采用。</td>
+            </tr>
+            
+
+            <tr data-state="cn">
+              <td>成本效率</td>
+              <td><span class="score cn-score">94</span></td>
+              <td><span class="score us-score">62</span></td>
+              <td>中国</td>
+              <td>DeepSeek/Qwen 价格和开源可控性带来强成本优势。</td>
+            </tr>
+            
+
+            <tr data-state="us">
+              <td>产品生态闭环</td>
+              <td><span class="score cn-score">70</span></td>
+              <td><span class="score us-score">95</span></td>
+              <td>美国</td>
+              <td>ChatGPT、Claude、Gemini、Cursor 等把模型能力封装成稳定工作流。</td>
+            </tr>
+            </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <div class="wrap">
+      <h2>证据链拆解</h2>
+      <div class="compare-lanes">
+        <div class="lane cn">
+          <h3>中国侧强信号</h3>
+          <ul>
+            <li>Hugging Face 2026 春季报告显示，中国模型在过去一年开放模型下载中占 41%。</li>
+            <li>Qwen 相关衍生模型超过 11.3 万，带 Qwen 标签的模型仓库超过 20 万，说明社区复用不是一次性热度。</li>
+            <li>QuestMobile 显示中国 AI 原生 App 规模已过 4 亿月活，豆包、千问、DeepSeek 成为大众入口。</li>
+            <li>DeepSeek 与 Qwen 官方 API 价格显著低于 GPT/Claude 高端模型，适合高吞吐任务。</li>
+            <li>Kling、Seedance 等视频模型进入全球竞争，短视频生态也更贴近中国应用场景。</li>
+          </ul>
+        </div>
+        <div class="lane us">
+          <h3>美国/西方侧强信号</h3>
+          <ul>
+            <li>a16z 消费 AI 榜显示 ChatGPT 仍是最大消费 AI 产品，网页和移动端都显著领先第二名。</li>
+            <li>Claude、GPT、Gemini 与 Cursor、Codex、Claude Code 等产品结合，形成更成熟的长程 agent 使用体验。</li>
+            <li>企业采购需要 SOC、审计、数据驻留、合同责任、合规文档和全球支持，这些不是裸模型能力能立即补齐的。</li>
+            <li>Veo、Runway、Sora 等在创作工作流、专业生态、版权治理和全球商业客户方面仍强。</li>
+            <li>闭源前沿模型的后训练、工具调用和安全策略迭代，仍由美国头部实验室主导。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:24px">关键分歧不是“谁更聪明”，而是：<b>谁能在复杂真实任务里更久地保持低错误率</b>。这也是原文说“稳定性，不是聪明度”的核心。</div>
+    </div>
+  </section>
+
+  <section id="cost">
+    <div class="wrap">
+      <h2>成本与产品化：便宜不是全部，但便宜会改变架构</h2>
+      <p class="lead">价格按官方公开页面摘取，单位为每 100 万 tokens 输入 / 输出。不同区域、缓存、批处理、长上下文、优先级会改变实际账单。</p>
+      <table>
+        <thead><tr><th>模型</th><th>厂商</th><th>价格</th><th>能力/口径</th><th>解读</th></tr></thead>
+        <tbody><tr><td>DeepSeek V4 Flash</td><td>DeepSeek</td><td>$0.14 / $0.28</td><td>1M 上下文，工具调用，缓存命中极低价</td><td>成本效率强，适合大规模后台任务</td></tr>
+<tr><td>DeepSeek V4 Pro</td><td>DeepSeek</td><td>$0.435 / $0.87</td><td>1M 上下文，工具调用，较强推理</td><td>相对西方前沿 API 明显便宜</td></tr>
+<tr><td>Qwen3.5 Plus Global</td><td>Alibaba Cloud</td><td>$0.115 起 / $0.688 起</td><td>按上下文长度分层，全球部署模式</td><td>成本与区域部署灵活</td></tr>
+<tr><td>Qwen3 Max Global</td><td>Alibaba Cloud</td><td>$0.359 起 / $1.434 起</td><td>旗舰模型，区域/国际价格不同</td><td>适合比较高质量中文与通用任务</td></tr>
+<tr><td>GPT-5.5</td><td>OpenAI</td><td>$2.50 / $15.00</td><td>短上下文标准价，长上下文更高</td><td>强闭源生态和工具链，成本更高</td></tr>
+<tr><td>Claude Sonnet 4.6</td><td>Anthropic</td><td>$3.00 / $15.00</td><td>1M 上下文标准价，缓存和批处理可降本</td><td>强代码与 agent 生态</td></tr></tbody>
+      </table>
+      <ul class="two-col">
+        <li>低价模型会让企业愿意把更多“低风险、高频、可校验”的任务交给 AI。</li>
+        <li>高价模型会留在“高风险、长程、需要强推理和强工具链”的任务里。</li>
+        <li>最合理的架构不是单模型，而是模型路由：便宜模型做初筛、强模型做关键决策。</li>
+        <li>总成本还包括失败重试、人工复核、日志、权限、数据安全、供应商风险和工程维护。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="wrap">
+      <h2>时间线：为什么 2025-2026 是拐点</h2>
+      <ul class="timeline"><li><time>2025-01</time><strong>DeepSeek R1 带动全球讨论</strong><span>中国开放模型路线进入主流视野，价格与开源策略被重新定价。</span></li>
+<li><time>2025 全年</time><strong>Qwen/DeepSeek 衍生生态爆发</strong><span>Hugging Face 上量化、微调、衍生模型形成社区飞轮。</span></li>
+<li><time>2026-01</time><strong>a16z 消费 AI 统计口径</strong><span>ChatGPT 仍以显著量级领先 Gemini，全球默认入口仍偏美国。</span></li>
+<li><time>2026-03</time><strong>QuestMobile Q1 中国 AI App 数据</strong><span>中国 AI 原生 App 月活过 4 亿，豆包/千问/DeepSeek 进入大众入口战。</span></li>
+<li><time>2026-03</time><strong>Hugging Face 春季开源报告</strong><span>中国模型在过去一年开放模型下载中占 41%，开放生态重心变化明显。</span></li>
+<li><time>2026-04</time><strong>ATOM Report</strong><span>开放模型下载、衍生、OpenRouter 推理数据共同显示中国模型扩散强。</span></li>
+<li><time>未来 6-12 月</time><strong>看 agent 稳定性和企业采购</strong><span>关键不是谁发新模型，而是谁能长期低故障运行真实工作流。</span></li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>按使用场景选型</h2>
+      <table>
+        <thead><tr><th>任务</th><th>优先选择</th><th>原因</th><th>风险控制</th></tr></thead>
+        <tbody>
+          <tr><td>中文客服、知识库、摘要</td><td>中国模型优先，可混合闭源</td><td>中文语境、成本、私有部署优势明显</td><td>抽样复核、敏感问答白名单</td></tr>
+          <tr><td>企业合同/票据/OCR</td><td>Qwen/DeepSeek/专用 OCR 模型</td><td>文档理解强，低成本高频</td><td>关键字段规则校验，人工确认金额和主体</td></tr>
+          <tr><td>多小时代码修改</td><td>Claude/GPT/Gemini/Cursor/Codex 类体系</td><td>长程工具链、补丁生成、上下文管理更稳</td><td>测试门禁、分支隔离、权限限制</td></tr>
+          <tr><td>低成本批量生成</td><td>DeepSeek/Qwen 等低价 API</td><td>吞吐和成本更优</td><td>自动评分、去重、毒性与版权检查</td></tr>
+          <tr><td>全球企业工作流</td><td>美国/西方成熟云和模型平台</td><td>采购、审计、合规、数据驻留配套成熟</td><td>合同、DPA、日志留存、供应商评估</td></tr>
+          <tr><td>短视频营销</td><td>Kling/Seedance/Veo/Runway 混合</td><td>中美都强，按风格、价格和分发渠道选择</td><td>版权素材库、肖像授权、平台审核</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="strategy">
+    <div class="wrap">
+      <h2>创业与产品机会地图</h2>
+      <p class="lead">真正有价值的机会，不是再做一个通用聊天框，而是把中美差异转化成具体工作流优势。</p>
+      <div class="opp-grid">
+        <article class="opp">
+          <h3>ToB 文档/OCR 自动化</h3>
+          <p class="tag">中国优势</p>
+          <p><b>场景：</b>合同、发票、报销、质检、知识库</p>
+          <p><b>打法：</b>用 Qwen/DeepSeek 做低成本私有部署，外加人工审核闭环。</p>
+        </article>
+        
+
+        <article class="opp">
+          <h3>Agent 测试与可靠性平台</h3>
+          <p class="tag">美国优势处的补位</p>
+          <p><b>场景：</b>企业怕 agent 出错</p>
+          <p><b>打法：</b>做失败率监控、回放、权限、回滚、灰度，把模型差距转化成工程产品。</p>
+        </article>
+        
+
+        <article class="opp">
+          <h3>中西模型路由网关</h3>
+          <p class="tag">中间层机会</p>
+          <p><b>场景：</b>成本、合规、质量三者难兼得</p>
+          <p><b>打法：</b>按任务敏感度自动路由：低风险走低价模型，高风险走闭源强模型。</p>
+        </article>
+        
+
+        <article class="opp">
+          <h3>短视频工作流工具</h3>
+          <p class="tag">接近无代差</p>
+          <p><b>场景：</b>电商、教育、营销、IP 二创</p>
+          <p><b>打法：</b>围绕脚本、分镜、素材版权、批量生成、审核发布做闭环。</p>
+        </article>
+        
+
+        <article class="opp">
+          <h3>本地小模型行业盒子</h3>
+          <p class="tag">中国强项</p>
+          <p><b>场景：</b>医院、律所、制造、政府内网</p>
+          <p><b>打法：</b>把模型压到本地设备，卖部署、评测、维护和数据安全。</p>
+        </article>
+        
+
+        <article class="opp">
+          <h3>AI 信源/GEO 优化服务</h3>
+          <p class="tag">中国入口机会</p>
+          <p><b>场景：</b>品牌要被 AI 推荐</p>
+          <p><b>打法：</b>结构化内容、权威信源、问答覆盖、模型引用监控。</p>
+        </article>
+        </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>未来 6-12 个月重点观察指标</h2>
+      <div class="flow">[新模型发布]    权重较低：容易被营销包装影响
+      |
+      v
+[真实采用]       下载 / API 调用 / 付费 / 留存 / 企业采购
+      |
+      v
+[Agent 稳定性]   多小时运行失败率 / 工具调用恢复率 / 回滚能力
+      |
+      v
+[生态闭环]       IDE / 云 / 应用商店 / Skill / 安全审计 / 合规文档
+      |
+      v
+[商业结果]       单任务成本下降 / 人效提升 / 错误赔付下降 / 可复用资产增长</div>
+      <p class="lead">如果中国模型在复杂 agent harness、企业合规材料、全球渠道和多模态 GUI 自动化上连续出现真实客户案例，差距会继续缩小；如果美国厂商持续把模型能力封装进默认入口和企业平台，产品生态优势会继续放大。</p>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="wrap">
+      <h2>来源与置信度</h2>
+      <p class="lead">本报告把原文作为分析对象，把外部来源作为事实核验。价格、榜单、月活这类数据会变化，后续使用前应重新核对。</p>
+      <table class="source-table">
+        <thead><tr><th>#</th><th>来源</th><th>用途</th><th>置信度</th></tr></thead>
+        <tbody><tr><td>1</td><td><a href="https://mp.weixin.qq.com/s/CdPqzFpqfmNX-r8A1VPeYA" target="_blank" rel="noreferrer">微信原文</a></td><td>原文观点、章节结构、作者结论</td><td>原始材料</td></tr>
+<tr><td>2</td><td><a href="https://huggingface.co/blog/huggingface/state-of-os-hf-spring-2026" target="_blank" rel="noreferrer">Hugging Face: State of Open Source on Hugging Face Spring 2026</a></td><td>开放模型下载、地区结构、Qwen 衍生模型、开源生态</td><td>高</td></tr>
+<tr><td>3</td><td><a href="https://a16z.com/100-gen-ai-apps-6/" target="_blank" rel="noreferrer">a16z: Top 100 Gen AI Consumer Apps, 6th Edition</a></td><td>全球消费者 AI 产品采用、ChatGPT 与 Gemini 量级差异</td><td>中高，依赖 SimilarWeb/Sensor Tower 口径</td></tr>
+<tr><td>4</td><td><a href="https://www.questmobile.com.cn/research/report/2046482337382842370/" target="_blank" rel="noreferrer">QuestMobile 2026 Q1 AI 应用洞察</a></td><td>中国 AI 原生 App 月活、豆包/千问/DeepSeek 国内格局</td><td>中高，商业数据口径</td></tr>
+<tr><td>5</td><td><a href="https://atomproject.ai/atom_report.pdf" target="_blank" rel="noreferrer">ATOM Report: Measuring the Open Language Model Ecosystem</a></td><td>开放模型下载、衍生、OpenRouter 推理用量的补充证据</td><td>中高，研究报告口径</td></tr>
+<tr><td>6</td><td><a href="https://openrouter.ai/rankings" target="_blank" rel="noreferrer">OpenRouter Rankings</a></td><td>模型路由真实用量的方向性证据</td><td>中，网页动态加载导致具体排名需实时查看</td></tr>
+<tr><td>7</td><td><a href="https://www.swebench.com/" target="_blank" rel="noreferrer">SWE-bench Official Leaderboards</a></td><td>软件工程任务评测定义与 Verified 子集口径</td><td>高，具体分数随榜单更新</td></tr>
+<tr><td>8</td><td><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noreferrer">DeepSeek API Docs: Models &amp; Pricing</a></td><td>DeepSeek V4 Flash/Pro 上下文、工具调用、API 价格</td><td>高，官方价格页</td></tr>
+<tr><td>9</td><td><a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing" target="_blank" rel="noreferrer">Alibaba Cloud Model Studio Pricing</a></td><td>Qwen 系列 API 价格、区域部署口径</td><td>高，官方价格页</td></tr>
+<tr><td>10</td><td><a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noreferrer">OpenAI API Pricing</a></td><td>GPT 系列 API 价格、视频/图像价格口径</td><td>高，官方价格页</td></tr>
+<tr><td>11</td><td><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noreferrer">Anthropic Claude API Pricing</a></td><td>Claude Sonnet/Opus 价格、长上下文和数据驻留口径</td><td>高，官方价格页</td></tr>
+<tr><td>12</td><td><a href="https://blog.google/innovation-and-ai/technology/ai/veo-3-1-ingredients-to-video/" target="_blank" rel="noreferrer">Google: Veo 3.1 update</a></td><td>Veo 视频生成产品化入口</td><td>高，官方博客</td></tr>
+<tr><td>13</td><td><a href="https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-launches-30-model-ushering-era-where-everyone-can-be" target="_blank" rel="noreferrer">Kuaishou: Kling AI 3.0 launch</a></td><td>Kling 3.0 视频生成能力与产品化</td><td>高，官方新闻稿</td></tr>
+<tr><td>14</td><td><a href="https://seed.bytedance.com/blog/seedance-2-0-official-launch" target="_blank" rel="noreferrer">ByteDance Seed: Seedance 2.0 launch</a></td><td>Seedance 2.0 视频生成能力</td><td>高，官方博客</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p><b>未做事项：</b>没有全文转载微信原文，没有抓取登录态评论，没有把动态榜单的具体实时排名写死为永久事实。</p>
+      <p><b>验收建议：</b>打开本 HTML 后，从“原文拆解”看论证链，从“差距矩阵”看场景分裂，从“成本”看架构选择，从“机会地图”看可执行方向。</p>
+    </div>
+  </footer>
+  <script>
+    const buttons = document.querySelectorAll('.filters button');
+    const rows = document.querySelectorAll('#dimension-table tbody tr');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.remove('active'));
+        button.classList.add('active');
+        const filter = button.dataset.filter;
+        rows.forEach((row) => {
+          row.style.display = filter === 'all' || row.dataset.state === filter ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

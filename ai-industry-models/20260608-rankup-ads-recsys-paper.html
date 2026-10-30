@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="RankUp:面向大规模广告推荐系统的高排名表示(腾讯)">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260608-1616-RankUp - 面向大规模广告推荐系统的高排名表示(腾讯)</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2a3340;
+    --ink:#e6edf3; --muted:#8b98a8; --accent:#4f9cff; --accent2:#2ee6a6;
+    --warn:#ffb454; --pink:#ff6b9d; --code:#0a0e14;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Noto Sans SC",Segoe UI,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+
+  header{padding:60px 0 44px;border-bottom:1px solid var(--line);background:radial-gradient(1200px 400px at 20% -10%,rgba(79,156,255,.18),transparent),radial-gradient(900px 360px at 90% 0%,rgba(46,230,166,.12),transparent)}
+  .badge{display:inline-block;font-size:12px;letter-spacing:1.5px;color:var(--accent2);border:1px solid rgba(46,230,166,.4);background:rgba(46,230,166,.07);padding:5px 12px;border-radius:20px;margin-bottom:20px}
+  header h1{font-size:34px;font-weight:800;line-height:1.25;letter-spacing:-.5px;background:linear-gradient(90deg,#fff,#9fc7ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
+  header .sub{font-size:16px;color:var(--muted);margin-bottom:22px}
+  .authors{font-size:13.5px;color:var(--muted);line-height:1.9}
+  .authors b{color:var(--ink)}
+  .pillrow{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
+  .pill{font-size:12.5px;background:var(--panel2);border:1px solid var(--line);padding:6px 13px;border-radius:6px;color:var(--muted)}
+  .pill b{color:var(--accent)}
+
+  main{padding:44px 0 80px}
+  section{margin-bottom:40px}
+  h2{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:24px;height:2px;background:var(--accent);display:inline-block}
+  h3{font-size:18px;margin:18px 0 10px;color:#fff}
+  p{margin-bottom:14px;color:#d3dae3}
+  .lead{font-size:16px;color:#cfd8e3}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  .kpi{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center}
+  .kpi .n{font-size:32px;font-weight:800;color:var(--accent2);line-height:1}
+  .kpi .l{font-size:13px;color:var(--muted);margin-top:10px}
+
+  .problem{border-left:3px solid var(--warn);background:rgba(255,180,84,.06)}
+  .insight{border-left:3px solid var(--accent);background:rgba(79,156,255,.06)}
+
+  .mech{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;position:relative;overflow:hidden}
+  .mech .idx{position:absolute;top:-8px;right:10px;font-size:54px;font-weight:800;color:rgba(255,255,255,.04)}
+  .mech h4{font-size:16px;color:#fff;margin-bottom:8px}
+  .mech .en{font-size:12px;color:var(--accent);font-family:"SF Mono",monospace;margin-bottom:10px}
+  .mech p{font-size:13.5px;color:var(--muted);margin-bottom:0}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  th{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--panel2)}
+  td.num{font-family:"SF Mono",monospace;color:var(--accent2);text-align:right}
+  tr:last-child td{border-bottom:none}
+  tr.total td{font-weight:700;color:#fff;background:rgba(79,156,255,.08)}
+  caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px}
+  @media(max-width:720px){table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+
+  .eq{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:14px 18px;font-family:"SF Mono",monospace;font-size:13.5px;color:var(--accent2);overflow-x:auto;margin:10px 0}
+  .eq .c{color:var(--muted)}
+
+  ul.clean{list-style:none}
+  ul.clean li{position:relative;padding:8px 0 8px 24px;font-size:14px;color:#d3dae3}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--accent)}
+
+  .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:8px 0}
+  .flow .b{background:var(--panel2);border:1px solid var(--line);padding:7px 12px;border-radius:6px;color:var(--ink)}
+  .flow .arr{color:var(--accent)}
+
+  footer{border-top:1px solid var(--line);padding:26px 0;font-size:12px;color:var(--muted);text-align:center}
+  .note{font-size:12.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:13px 16px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">arXiv:2604.17878v3 [cs.IR] · 2026-05-12 · Tencent Inc.</span>
+    <h1>RankUp:面向大规模广告推荐系统的高排名表示</h1>
+    <div class="sub">RankUp: Towards High-rank Representations for Large Scale Advertising Recommender Systems</div>
+    <div class="authors">
+      <b>Jin Chen*、Shangyu Zhang*、Bin Hu*、Chao Zhou*†</b>(*共同一作,†通讯作者)、Junwei Pan、Gengsheng Xue、Wentao Ning、Gengyu Weng、Wang Zheng、Shaohua Liu、Zeen Xu、Chengyuan Mai、Shijie Quan、Tingyu Jiang、Lifeng Wang、Shudong Huang、Chengguo Yin、Haijie Gu、Jie Jiang<br>
+      机构:腾讯(Tencent Inc.)
+    </div>
+    <div class="pillrow">
+      <span class="pill">关键词:<b>Recommender Systems</b></span>
+      <span class="pill">关键词:<b>Dimensional Collapse</b></span>
+      <span class="pill">部署:<b>微信视频号 / 公众号 / 朋友圈</b></span>
+      <span class="pill">论文:<b>9 页</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- 摘要 KPI -->
+  <section>
+    <h2>核心成果(线上全量部署)</h2>
+    <div class="grid3">
+      <div class="kpi"><div class="n">+3.41%</div><div class="l">微信视频号 GMV</div></div>
+      <div class="kpi"><div class="n">+4.81%</div><div class="l">微信公众号 GMV</div></div>
+      <div class="kpi"><div class="n">+2.12%</div><div class="l">微信朋友圈 GMV</div></div>
+    </div>
+    <p style="margin-top:16px" class="lead">RankUp 已在腾讯微信(视频号、公众号、朋友圈)的 pCVR 模型中<b>全量部署,服务 100% 线上流量</b>。论文估计带来的提升对应每年<b>数亿美元的营收增长</b>。</p>
+  </section>
+
+  <!-- 摘要 -->
+  <section>
+    <h2>摘要 Abstract</h2>
+    <div class="card">
+      <p>推荐系统的 Scaling Laws 已被反复验证——基于 MetaFormer 的架构持续受益于增加模型深度、隐藏维度与用户行为序列长度。<b>然而,表示能力(representation capacity)是否随参数增长成比例提升,仍未被探索。</b></p>
+      <p>此前对 RankMixer 的研究揭示:token 表示的<b>有效秩(effective rank)在各层间呈现"阻尼振荡"轨迹</b>——不随深度持续增长,在更深层甚至退化。受此启发,本文提出 <b>RankUp</b>:一种通过对稀疏特征做随机排列拆分、多嵌入范式、全局 token 整合、交叉预训练嵌入 token 来缓解表示坍缩、增强表达能力的架构。</p>
+      <p>RankUp 已在微信视频号、公众号、朋友圈大规模生产环境中全量部署,GMV 分别提升 <b>3.41%、4.81%、2.12%</b>。</p>
+    </div>
+  </section>
+
+  <!-- 问题 -->
+  <section>
+    <h2>问题:为什么参数变大≠表示变好</h2>
+    <div class="card problem">
+      <h3>表示坍缩 / 维度坍缩(Representation Collapse)</h3>
+      <p>现有方法大多假设"模型越大表示越好",却忽视了内在的结构性约束。仅靠 scaling 常出现<b>收益递减</b>,额外参数对有效容量贡献甚微,甚至在深层加剧表示坍缩——学到的表示集中在低维子空间,降低模型区分用户与物品的能力。</p>
+      <ul class="clean">
+        <li><b>有效秩阻尼振荡</b>:随深度增加,token 表示的有效秩不单调增长,初期扩张后停滞甚至在深层下降。</li>
+        <li><b>理论根因</b>:Token Mixer 只能提供<b>有界的秩扩张</b>,而 FFN 沿通道维度表现出<b>秩收缩(rank-contractive)</b>行为,二者共同阻止了表示多样性随深度持续增长。</li>
+        <li><b>工业数据加剧</b>:极端稀疏 + 幂律分布,长尾物品嵌入更新不足,头部物品主导嵌入空间。</li>
+      </ul>
+    </div>
+    <div class="card insight">
+      <h3>核心洞察</h3>
+      <p>与其设计更复杂的 token mixing(它们只在已受限的表示空间内增强特征交互),不如<b>直接提升潜在空间的表达多样性</b>——这能直接增加表示本身的容量,让模型在各层都保留更丰富、更可区分的 token 表示。</p>
+    </div>
+  </section>
+
+  <!-- 前置:有效秩定义 -->
+  <section>
+    <h2>关键度量:有效秩 Effective Rank</h2>
+    <div class="card">
+      <p>对每层隐藏表示矩阵 H<sub>l</sub> ∈ ℝ<sup>T×D</sup>,用奇异值分解(SVD)得到奇异值 σ₁…σₖ(k=min(T,D))。有效秩定义为归一化奇异值分布的香农熵的指数:</p>
+      <div class="eq">erank(H<sub>l</sub>) = exp( −Σ<sub>i=1..k</sub> p<sub>i</sub> ln p<sub>i</sub> ) <span class="c">,&nbsp; p<sub>i</sub> = σ<sub>i</sub> / Σσ<sub>j</sub></span></div>
+      <p style="font-size:13.5px;color:var(--muted)">取值范围 1 ~ k。<b>接近 1</b> → 表示坍缩到单一主导维度;<b>接近 k</b> → 信息均匀分布于所有正交维度。MetaFormer 骨干由 L 个堆叠层组成,每层含 Token Mixer + Per-token FFN(残差连接):</p>
+      <div class="eq">H′<sub>l</sub> = TokenMixer(LN(H<sub>l-1</sub>)) + H<sub>l-1</sub><br>h<sub>l,i</sub> = FFN(LN(h′<sub>l,i</sub>)) + h′<sub>l,i</sub>&nbsp;&nbsp;<span class="c">, i = 1…T</span></div>
+    </div>
+  </section>
+
+  <!-- 方法:五大机制 -->
+  <section>
+    <h2>RankUp 方法:五大机制</h2>
+    <div class="grid2">
+      <div class="mech"><span class="idx">1</span>
+        <h4>随机排列拆分</h4>
+        <div class="en">Randomized Permutation Splitting</div>
+        <p>用随机置换算子 σ 打乱稀疏特征索引,把高度相关的特征<b>分散</b>到不同 token,而非按预定义语义分组。降低 token 间相关性与共线性,扩展初始表示矩阵 H₀ 的几何基,鼓励学习高秩潜在流形。</p>
+      </div>
+      <div class="mech"><span class="idx">2</span>
+        <h4>多嵌入表示范式</h4>
+        <div class="en">Multi-embedding Paradigm</div>
+        <p>不再用单一嵌入表,而是用 <b>K 个独立嵌入表</b> ψ₁…ψ_K 表示特征。同一类别信号从多个几何视角被表示,提升 H₀ 的多样性,缓解单嵌入系统的早期瓶颈,更好捕捉稀疏场景下的稀有信号。</p>
+      </div>
+      <div class="mech"><span class="idx">3</span>
+        <h4>全局 Token 整合</h4>
+        <div class="en">Global Token Integration</div>
+        <p>引入一个<b>全局 token g</b>,通过聚合函数 A(可为 MLP、FM、DCNv2)从所有特征 f₁…f_M 汇聚信息:g = func(Pool({Embed(f_i)}))。提供全局上下文,稳定深层动态。</p>
+      </div>
+      <div class="mech"><span class="idx">4</span>
+        <h4>交叉整合预训练嵌入</h4>
+        <div class="en">Cross Integration of Pre-trained Embeddings</div>
+        <p>双塔检索学到的用户/物品嵌入偏全局相似度。用<b>逐元素乘</b>计算交互:e<sub>cross</sub> = Proj(z<sub>ue</sub> ⊙ z<sub>ie</sub>),作为软特征级交互注入 token 序列,补充下游稀疏特征交互的先验。</p>
+      </div>
+      <div class="mech" style="grid-column:1/-1"><span class="idx">5</span>
+        <h4>任务专属 Token 解耦</h4>
+        <div class="en">Task-Specific Token Decoupling</div>
+        <p>多目标训练下,异质信号在统一潜在空间竞争,主导任务会把表示空间压向任务专属方向,降低整体表达力。RankUp 引入 K 个可学习<b>任务 token</b> {x<sub>task</sub><sup>(k)</sup>},与共享 token 联合处理但保持任务专属表示,直接送入对应任务塔:y<sup>(k)</sup> = Tower<sup>(k)</sup>(x<sub>task</sub><sup>(k)</sup>, Pool(H′<sub>L</sub>))。减少异质学习信号间的干扰。</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:8px">整体框架(Figure 1):输入特征 → 嵌入层(全局/分组/子集 + 稠密 + 序列编码器)→ 堆叠 Block(Token Mixing + Per-token FFN/SwiGLU,PreNorm)→ 多任务塔。采用 Pre-LayerNorm 稳定深层梯度,SwiGLU 增强复杂特征交互建模。</p>
+      <div class="flow">
+        <span class="b">输入特征</span><span class="arr">→</span>
+        <span class="b">嵌入层(多表)</span><span class="arr">→</span>
+        <span class="b">随机排列 + 全局Token</span><span class="arr">→</span>
+        <span class="b">堆叠 Block ×L</span><span class="arr">→</span>
+        <span class="b">任务专属 Token</span><span class="arr">→</span>
+        <span class="b">多任务塔</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 实验:消融 -->
+  <section>
+    <h2>实验:离线消融(Realtime AUC 提升)</h2>
+    <div class="card">
+      <table>
+        <caption>Table 1:各组件在 Top-3 任务上对 Realtime AUC 的提升(微信视频号广告系统,2 层骨干)</caption>
+        <thead><tr><th scope="col">组件 / 变体</th><th scope="col" style="text-align:right">Order</th><th scope="col" style="text-align:right">Book</th><th scope="col" style="text-align:right">Add Service</th></tr></thead>
+        <tbody>
+          <tr><td>Randomized Permutation Split</td><td class="num">+0.06%</td><td class="num">+0.06%</td><td class="num">+0.08%</td></tr>
+          <tr><td>w/ Global Token + Multi-Emb</td><td class="num">+0.21%</td><td class="num">+0.18%</td><td class="num">+0.13%</td></tr>
+          <tr><td>w/ Cross Embedding</td><td class="num">+0.22%</td><td class="num">+0.10%</td><td class="num">+0.03%</td></tr>
+          <tr><td>w/ Task Token</td><td class="num">+0.09%</td><td class="num">+0.02%</td><td class="num">+0.02%</td></tr>
+          <tr class="total"><td>RankUp(完整)</td><td class="num">+0.41%</td><td class="num">+0.23%</td><td class="num">+0.25%</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;font-size:13.5px;color:var(--muted)">数据集:微信视频号广告真实工业数据,<b>2000 万日样本、1200+ 稀疏特征</b>,时间跨度 2024.07–2026.03,聚合 <b>32 个线上优化目标</b>的 CVR 预测任务。基线为 RankMixer(SOTA MetaFormer 架构)。</p>
+    </div>
+  </section>
+
+  <!-- 实验:分析 -->
+  <section>
+    <h2>实验分析:各机制如何影响有效秩</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>① Token 独立性(互信息 MI)</h3>
+        <p>用 k-means 把嵌入聚成 K 个簇,计算 token 间成对互信息矩阵,定义差异矩阵 ΔM = M<sub>Randomized</sub> − M<sub>Semantic</sub>。<b>负值</b>表示随机分配降低了 token 间冗余。在 K=48 与 K=64 下结果一致:稀疏 token(0–31)在随机策略下 MI 始终更低,跨组冗余也显著降低。</p>
+      </div>
+      <div class="card">
+        <h3>② 有效秩对比(Figure 3)</h3>
+        <p>随机拆分下,全部 <b>32 个稀疏 token</b> 的有效秩始终更高且更均匀。语义分组中聚合长尾特征的 token(如 Token 12、29、31 <b>低于 20</b>)出现秩坍缩;随机策略把长尾特征分散到不同 token,缓解了长尾集中导致的秩坍缩。</p>
+      </div>
+    </div>
+    <div class="card insight" style="margin-top:16px">
+      <h3>③ 有效秩动态(Figure 4):各组件分工明确</h3>
+      <ul class="clean">
+        <li><b>多嵌入范式</b>:主要改善早期表示多样性,防止早期压缩,促进更各向同性的潜在空间。</li>
+        <li><b>全局 Token</b>:稳定深层动态,缓解子集变体中观察到的有效秩随深度退化(如 40→38)。</li>
+        <li><b>交叉预训练嵌入</b>:主要贡献在初始阶段,移除它会导致 Block 0 有效秩急剧下降——外部语义先验对形成丰富的初始化空间至关重要。</li>
+        <li><b>随机排列拆分 + 交叉嵌入交互</b>:进一步降低特征相关性、强化跨特征交互,使秩在各层间更平滑传播。</li>
+      </ul>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>④ 任务 Token 效果(Figure 5)</h3>
+      <p>用表示与下游标签 Y∈{0,1} 的互信息 I(Z;Y) 衡量对齐度。带任务 token 的 RankUp 在 book 与 order 任务上 MI 始终更高,且<b>聚类粒度越细(8→64 簇),MI 差距越大</b>——说明任务 token 不仅提升粗粒度任务感知,也提升对细微任务结构的捕捉能力。</p>
+    </div>
+  </section>
+
+  <!-- 线上部署 -->
+  <section>
+    <h2>线上部署与 A/B 测试</h2>
+    <div class="card">
+      <p>在 <b>20% 生产流量</b>上进行大规模 A/B 测试,覆盖微信视频号、公众号、朋友圈三大场景,每个实验<b>持续 14 天</b>,所有提升均统计显著。报告 Realtime AUC、CTCVR、GMV。</p>
+      <table>
+        <caption>Table 2:线上性能提升</caption>
+        <thead><tr><th scope="col">场景</th><th scope="col" style="text-align:right">Δ AUC</th><th scope="col" style="text-align:right">CTCVR</th><th scope="col" style="text-align:right">GMV</th></tr></thead>
+        <tbody>
+          <tr><td>微信视频号 Weixin Video Accounts</td><td class="num">+0.367%</td><td class="num">+1.41%</td><td class="num">+3.41%</td></tr>
+          <tr><td>微信公众号 Weixin Official Accounts</td><td class="num">+0.331%</td><td class="num">+0.21%</td><td class="num">+4.81%</td></tr>
+          <tr><td>微信朋友圈 Weixin Moments</td><td class="num">+0.269%</td><td class="num">+0.87%</td><td class="num">+2.12%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <table>
+          <caption>Table 3:新广告(冷启动)GMV 提升</caption>
+          <thead><tr><th scope="col">场景</th><th scope="col" style="text-align:right">GMV</th></tr></thead>
+          <tbody>
+            <tr><td>微信视频号</td><td class="num">+5.83%</td></tr>
+            <tr><td>微信公众号</td><td class="num">+9.67%</td></tr>
+            <tr><td>微信朋友圈</td><td class="num">+2.84%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted);margin-top:10px">公众号新广告首日 GMV 提升 <b>9.67%</b>,显著改善新广告在极端数据稀疏冷启动阶段的可发现性。</p>
+      </div>
+      <div class="card">
+        <table>
+          <caption>Table 4:Order Task(平台最大广告消耗占比)GMV 提升</caption>
+          <thead><tr><th scope="col">场景</th><th scope="col" style="text-align:right">GMV</th></tr></thead>
+          <tbody>
+            <tr><td>微信视频号</td><td class="num">5.18%</td></tr>
+            <tr><td>微信公众号</td><td class="num">7.18%</td></tr>
+            <tr><td>微信朋友圈</td><td class="num">4.79%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted);margin-top:10px">Order Task 是转化质量的主优化目标,公众号 GMV 提升 <b>7.18%</b>。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 部署细节 -->
+  <section>
+    <h2>部署细节</h2>
+    <div class="grid3">
+      <div class="kpi"><div class="n">10M→100M</div><div class="l">每场景参数量<br>放大一个数量级</div></div>
+      <div class="kpi"><div class="n">23% MFU</div><div class="l">模型 FLOPs 利用率<br>(硬件效率提升)</div></div>
+      <div class="kpi"><div class="n">~70 GFLOPs</div><div class="l">每 batch(batch=300)<br>满足实时服务约束</div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <ul class="clean">
+        <li>所有变体均<b>从零训练</b>,不从历史 checkpoint 初始化;训练数据为 <b>18 个月</b>真实生产流量的用户–广告交互日志。</li>
+        <li>部署于视频号、公众号、朋友圈三大高流量场景,每个模型为<b>联合优化 32 个预测任务</b>的多任务预测器。</li>
+        <li>输入层覆盖 <b>1000+ 特征字段</b>:领域类别特征 + 序列行为 token + 多个预训练语义嵌入。</li>
+        <li>采用 <b>2 层 MetaFormer 骨干</b>;尽管计算复杂度增加,系统仍在严格工业延迟约束内,完全兼容实时服务。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 相关工作 + 结论 -->
+  <section>
+    <h2>相关工作 & 结论</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>相关工作脉络</h3>
+        <p style="font-size:13.5px"><b>推荐中的稠密 Scaling Laws</b>:AutoInt(多头自注意力建模高阶交互)→ Hiformer(异质注意力)→ Wukong(首次证明稠密组件清晰 scaling law)→ InterFormer(双向信息流)→ <b>RankMixer</b>(硬件感知,MFU 从 4.5%→45%,支持 100× 参数扩展)→ MixFormer(统一序列与稠密建模)。</p>
+        <p style="font-size:13.5px"><b>表示坍缩</b>:在自监督/对比学习中被广泛研究,源于 alignment 与 uniformity 失衡;LLM 中也发现注意力输出有效秩随层波动,MLP 与残差连接对防坍缩起关键作用。</p>
+      </div>
+      <div class="card insight">
+        <h3>结论</h3>
+        <p style="font-size:14px">本文从<b>表示容量</b>视角重审现代推荐架构的 scaling 行为,指出<b>参数增长不必然带来表达力的成比例增益</b>——深层架构常受表示坍缩、有效秩提升受限之困。</p>
+        <p style="font-size:14px">RankUp 通过随机排列拆分、多嵌入表示、全局 token 整合、交叉预训练嵌入 token、任务专属 token 解耦,持续提升有效秩与推荐性能,并已在腾讯多个广告场景全量部署,带来显著 GMV 收益。<b>核心启示:推荐模型的 scaling 不应只强调参数增长,更要强调表示空间的有效利用。</b></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">说明:本页为腾讯论文《RankUp: Towards High-rank Representations for Large Scale Advertising Recommender Systems》(arXiv:2604.17878v3)的中文结构化整理,涵盖摘要、问题、五大方法机制、有效秩度量、离线消融与线上 A/B(Table 1–4)、部署细节、相关工作与结论。公式与数据均取自原文;图(Figure 1–5)以文字描述呈现。</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">Tencent · RankUp(arXiv:2604.17878v3,2026-05-12)&nbsp;|&nbsp;中文结构化整理&nbsp;|&nbsp;源文件:腾讯论文面向大规模广告推荐系统的高排名表示.pdf</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>费利克斯·里泽贝格访谈口播核对 · 2026-10-23</title>
+<style>
+/* ===== 1. Tokens（唯一设计值来源。颜色、字号、间距、圆角、阴影、宽度、动效都从这里取；
+   断点用 @media 字面量，与 --bp-* 注释保持一致：bp-md = 720px，bp-sm = 600px） ===== */
+:root {
+  --c-bg: #ffffff;
+  --c-surface: #f4f6f8;
+  --c-surface-strong: #e8ecf0;
+  --c-border: #d6dce3;
+  --c-text: #1c2430;
+  --c-text-muted: #596573;
+  --c-accent: #1d5fa6;
+  --c-accent-bg: #e4eefa;
+  --c-focus: #1d5fa6;
+  /* 判定四色（语义角色） */
+  --c-verbatim: #1f7a4d;
+  --c-verbatim-bg: #e3f3ea;
+  --c-para: #1d5fa6;
+  --c-para-bg: #e4eefa;
+  --c-extend: #9a5b00;
+  --c-extend-bg: #fdf1dc;
+  --c-author: #6b3fa0;
+  --c-author-bg: #efe7f8;
+  --c-stop: #a12f2f;
+  --c-stop-bg: #fbe5e5;
+  --fs-base: 17px;
+  --fs-small: 15px;
+  --fs-tiny: 13px;
+  --fs-h1: 28px;
+  --fs-h2: 22px;
+  --fs-h3: 18px;
+  --fs-stat: 34px;
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --lh: 1.65;
+  --lh-tight: 1.3;
+  --sp-1: 6px;
+  --sp-2: 10px;
+  --sp-3: 16px;
+  --sp-4: 24px;
+  --sp-5: 36px;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --bw: 1px;
+  --bw-strong: 2px;
+  --bw-accent: 4px;
+  --shadow-card: 0 1px 2px rgba(28, 36, 48, 0.06);
+  --w-max: 1040px;
+  --w-table-min: 720px;
+  --w-card-min: 240px;
+  --w-step-min: 150px;
+  --w-bar-h: 12px;
+  --zero: 0;
+  --col-fill: 1fr;
+  --col-auto: max-content;
+  --size-full: 100%;
+  --dur: 160ms;
+  --ease: ease-out;
+  --font: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* --bp-md: 720px; --bp-sm: 600px;（文档用，媒体查询不能读 var） */
+}
+/* ===== 2. Base ===== */
+* { box-sizing: border-box; }
+html { color-scheme: light; scroll-behavior: smooth; }
+body { margin: var(--zero); background: var(--c-bg); color: var(--c-text); font: var(--fs-base)/var(--lh) var(--font); padding: var(--sp-4) var(--sp-3); }
+main { max-width: var(--w-max); margin: var(--zero) auto; }
+h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); margin: var(--zero) var(--zero) var(--sp-2); }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); margin: var(--sp-5) var(--zero) var(--sp-3); padding-bottom: var(--sp-1); border-bottom: var(--bw-strong) solid var(--c-border); }
+h3 { font-size: var(--fs-h3); margin: var(--sp-4) var(--zero) var(--sp-2); }
+p, ul, ol { margin: var(--zero) var(--zero) var(--sp-3); }
+li { margin-bottom: var(--sp-1); }
+a { color: var(--c-accent); }
+code { font-family: var(--font-code); font-size: var(--fs-small); background: var(--c-surface); padding: var(--zero) var(--sp-1); border-radius: var(--radius-sm); word-break: break-all; }
+q { quotes: "“" "”"; }
+.meta { color: var(--c-text-muted); font-size: var(--fs-small); margin-bottom: var(--sp-4); }
+.en { color: var(--c-text-muted); }
+button:focus-visible, summary:focus-visible { outline: var(--bw-strong) solid var(--c-focus); outline-offset: var(--bw-strong); }
+/* ===== 3. Components ===== */
+.summary { background: var(--c-accent-bg); border-left: var(--bw-accent) solid var(--c-accent); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius); margin-bottom: var(--sp-4); }
+.summary p:last-child { margin-bottom: var(--zero); }
+.note { background: var(--c-surface); border: var(--bw) solid var(--c-border); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius); margin-bottom: var(--sp-3); }
+.note p:last-child, .note ul:last-child { margin-bottom: var(--zero); }
+.toc { display: flex; flex-wrap: wrap; gap: var(--sp-2); padding: var(--zero); margin: var(--zero) var(--zero) var(--sp-4); list-style: none; font-size: var(--fs-small); }
+.toc a { text-decoration: none; border: var(--bw) solid var(--c-border); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-2); background: var(--c-surface); color: var(--c-text); }
+.tag { display: inline-block; font-size: var(--fs-small); padding: var(--zero) var(--sp-2); border-radius: var(--radius-sm); white-space: nowrap; font-weight: var(--fw-semibold); }
+.tag-verbatim { background: var(--c-verbatim-bg); color: var(--c-verbatim); }
+.tag-para { background: var(--c-para-bg); color: var(--c-para); }
+.tag-extend { background: var(--c-extend-bg); color: var(--c-extend); }
+.tag-author { background: var(--c-author-bg); color: var(--c-author); }
+/* 统计条 */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-card-min), var(--col-fill))); gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.stat { background: var(--c-surface); border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-3); box-shadow: var(--shadow-card); }
+.stat .num { font-size: var(--fs-stat); font-weight: var(--fw-bold); line-height: var(--lh-tight); }
+.stat .lbl { font-size: var(--fs-small); color: var(--c-text-muted); margin-bottom: var(--sp-2); }
+.stat .bar { height: var(--w-bar-h); background: var(--c-surface-strong); border-radius: var(--radius-sm); overflow: hidden; }
+.stat .bar span { display: block; height: var(--size-full); width: var(--zero); transition: width var(--dur) var(--ease); }
+.stat-verbatim .num { color: var(--c-verbatim); } .stat-verbatim .bar span { background: var(--c-verbatim); }
+.stat-para .num { color: var(--c-para); } .stat-para .bar span { background: var(--c-para); }
+.stat-extend .num { color: var(--c-extend); } .stat-extend .bar span { background: var(--c-extend); }
+.stat-author .num { color: var(--c-author); } .stat-author .bar span { background: var(--c-author); }
+.stat .def { font-size: var(--fs-tiny); color: var(--c-text-muted); margin-top: var(--sp-1); }
+/* 卡片 */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-card-min), var(--col-fill))); gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.card { background: var(--c-surface); border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-3); }
+.card h3 { margin-top: var(--zero); }
+.card p:last-child, .card ul:last-child { margin-bottom: var(--zero); }
+.kv { display: grid; grid-template-columns: var(--col-auto) var(--col-fill); gap: var(--sp-1) var(--sp-3); font-size: var(--fs-small); margin: var(--zero); }
+.kv dt { color: var(--c-text-muted); }
+.kv dd { margin: var(--zero); }
+/* 筛选按钮 */
+.filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+.filters button { font: inherit; font-size: var(--fs-small); border: var(--bw) solid var(--c-border); background: var(--c-bg); color: var(--c-text); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-3); cursor: pointer; transition: background var(--dur) var(--ease); }
+.filters button[aria-pressed="true"] { background: var(--c-text); color: var(--c-bg); border-color: var(--c-text); }
+.filter-count { font-size: var(--fs-small); color: var(--c-text-muted); margin-bottom: var(--sp-2); }
+/* 核对表 */
+.table-wrap { overflow-x: auto; margin-bottom: var(--sp-3); border: var(--bw) solid var(--c-border); border-radius: var(--radius); }
+table { border-collapse: collapse; width: var(--size-full); min-width: var(--w-table-min); font-size: var(--fs-small); }
+th, td { text-align: left; vertical-align: top; padding: var(--sp-2); border-bottom: var(--bw) solid var(--c-border); }
+th { background: var(--c-surface-strong); position: sticky; top: var(--zero); white-space: nowrap; }
+tr:last-child td { border-bottom: var(--zero); }
+td.id { white-space: nowrap; font-weight: var(--fw-semibold); }
+td.ev .t { font-weight: var(--fw-semibold); color: var(--c-text-muted); }
+tr[hidden] { display: none; }
+/* 小表（不横滑） */
+.table-plain { border-collapse: collapse; width: var(--size-full); font-size: var(--fs-small); margin-bottom: var(--sp-3); }
+.table-plain th, .table-plain td { text-align: left; vertical-align: top; padding: var(--sp-2); border-bottom: var(--bw) solid var(--c-border); }
+.table-plain th { background: var(--c-surface-strong); }
+/* 图：流程列 */
+.flowcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-card-min), var(--col-fill))); gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.flowcol { border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-3); background: var(--c-bg); }
+.flowcol h4 { margin: var(--zero) var(--zero) var(--sp-2); font-size: var(--fs-h3); }
+.flowcol ol { list-style: none; padding: var(--zero); margin: var(--zero); counter-reset: step; }
+.flowcol li { counter-increment: step; position: relative; padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-5); margin-bottom: var(--sp-2); background: var(--c-surface); border-radius: var(--radius-sm); font-size: var(--fs-small); }
+.flowcol li::before { content: counter(step); position: absolute; left: var(--sp-2); top: var(--sp-2); width: var(--sp-4); height: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-text); color: var(--c-bg); text-align: center; line-height: var(--sp-4); font-weight: var(--fw-semibold); font-size: var(--fs-tiny); }
+.flowcol.now li::before { background: var(--c-verbatim); }
+.flowcol .who { display: inline-block; font-size: var(--fs-tiny); color: var(--c-text-muted); margin-right: var(--sp-1); }
+/* 图：线程 */
+.threads { display: grid; grid-template-columns: var(--col-fill); gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.threads .stage { border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); background: var(--c-surface); }
+.threads .stage strong { display: block; margin-bottom: var(--sp-1); }
+.threads .fan { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-step-min), var(--col-fill))); gap: var(--sp-2); }
+.threads .fan div { background: var(--c-extend-bg); color: var(--c-extend); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-2); font-size: var(--fs-small); text-align: center; }
+.threads .judge { background: var(--c-para-bg); }
+.threads .evidence { background: var(--c-verbatim-bg); }
+.threads .src { font-size: var(--fs-tiny); color: var(--c-text-muted); }
+/* 图：戏服 vs 工具 */
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-card-min), var(--col-fill))); gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.compare .side { border-radius: var(--radius); padding: var(--sp-3); border: var(--bw) solid var(--c-border); }
+.compare .bad { background: var(--c-stop-bg); border-color: var(--c-stop); }
+.compare .good { background: var(--c-verbatim-bg); border-color: var(--c-verbatim); }
+.compare h4 { margin: var(--zero) var(--zero) var(--sp-2); font-size: var(--fs-h3); }
+.compare .prompt { font-family: var(--font-code); font-size: var(--fs-small); background: var(--c-bg); padding: var(--sp-2); border-radius: var(--radius-sm); margin-bottom: var(--sp-2); word-break: break-word; }
+.compare ul { margin: var(--zero); padding-left: var(--sp-4); font-size: var(--fs-small); }
+/* 图：四维度 */
+.dims { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--w-step-min), var(--col-fill))); gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.dim { border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-small); background: var(--c-bg); }
+.dim strong { display: block; margin-bottom: var(--sp-1); }
+.dim.covered { border-color: var(--c-verbatim); background: var(--c-verbatim-bg); }
+.dim .cov { font-size: var(--fs-tiny); color: var(--c-text-muted); }
+.legend { font-size: var(--fs-tiny); color: var(--c-text-muted); margin-bottom: var(--sp-3); }
+.quote { border-left: var(--bw-accent) solid var(--c-border); padding: var(--sp-1) var(--sp-3); margin: var(--zero) var(--zero) var(--sp-3); color: var(--c-text-muted); font-size: var(--fs-small); }
+details { border: var(--bw) solid var(--c-border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-2); background: var(--c-bg); }
+summary { cursor: pointer; font-weight: var(--fw-semibold); }
+/* ===== 4. Responsive（bp-md 720px：核对表改纵向堆叠；bp-sm 600px：字号与内边距） ===== */
+@media (max-width: 720px) {
+  .table-wrap { border: var(--zero); overflow: visible; }
+  table { min-width: var(--zero); }
+  table thead { display: none; }
+  table, table tbody, table tr, table td { display: block; width: var(--size-full); }
+  table tr { border: var(--bw) solid var(--c-border); border-radius: var(--radius); margin-bottom: var(--sp-2); padding: var(--sp-1) var(--zero); }
+  table td { border-bottom: var(--zero); padding: var(--sp-1) var(--sp-2); }
+  table td::before { content: attr(data-label); display: block; font-size: var(--fs-tiny); color: var(--c-text-muted); }
+  td.id { white-space: normal; }
+}
+@media (max-width: 600px) {
+  :root { --fs-h1: 24px; --fs-h2: 20px; --fs-stat: 28px; }
+  body { padding: var(--sp-3); }
+  .kv { grid-template-columns: var(--col-fill); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .stat .bar span, .filters button { transition: none; }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>「Skill 越多 AI 越笨」口播核对：费利克斯·里泽贝格到底说了什么</h1>
+<p class="meta">2026-10-23 · 口播 33 条说法 × 两场访谈逐字稿 + 本人博客 · 判定只针对「访谈有没有这么说」，不评价说法本身对不对</p>
+
+<ul class="toc">
+<li><a href="#s1">结论</a></li>
+<li><a href="#s2">来源与身份</a></li>
+<li><a href="#s3">逐条核对表</a></li>
+<li><a href="#s4">他真正说的工作法</a></li>
+<li><a href="#s5">口播没说的</a></li>
+<li><a href="#s6">给读者的三条建议</a></li>
+<li><a href="#s7">方法与局限</a></li>
+</ul>
+
+<section id="s1">
+<h2>1. 结论</h2>
+<div class="summary">
+<p><strong>口播的主干方法都能在访谈里找到出处，但四个最有传播力的词全是作者自己造的。</strong>按行计数，33 条说法里 7 条是原话、11 条是转述、6 条是引申、9 条是作者自有判断。「Skills 有时删掉更好」「不要按岗位切 Agent」「不穿戏服要工具」「传送带」「不让当前会话自评」「一两个人的公司」「更少按钮」「前 iPhone 时代」这 8 个核心观点，访谈里有原句或对应段落。</p>
+<p><strong>作者自造的词：</strong>「智能负债」「部门墙」「运动员与裁判」「AI 时代的诺基亚」。访谈与博客都没有这四个说法。把它们当成费利克斯的原话转述，会出错。</p>
+<p><strong>两处需要降档：</strong>①标题句「Skill 越多，AI 可能反而越笨」。原话是「有时完全删掉 Skill 反而输出更好」，而且他紧接着说这招「对有评估手段的人最有用」。②头衔。主持人介绍他「负责 Claude 的工程」，另一场访谈介绍他是「工程经理」，他本人说每场会议介绍的头衔都不一样。正式职级与管理范围本页未能核实。</p>
+</div>
+
+<div class="stats" id="stats">
+<div class="stat stat-verbatim"><div class="lbl">原话</div><div class="num" data-count="7">7</div><div class="bar"><span></span></div><div class="def">访谈有对应原句，意思一致</div></div>
+<div class="stat stat-para"><div class="lbl">转述</div><div class="num" data-count="11">11</div><div class="bar"><span></span></div><div class="def">意思来自访谈，措辞、举例或程度被改写</div></div>
+<div class="stat stat-extend"><div class="lbl">引申</div><div class="num" data-count="6">6</div><div class="bar"><span></span></div><div class="def">在访谈观点上向外推一步，访谈没说</div></div>
+<div class="stat stat-author"><div class="lbl">作者自有</div><div class="num" data-count="9">9</div><div class="bar"><span></span></div><div class="def">访谈没有，是口播作者的判断或命名</div></div>
+</div>
+<p class="legend">计数单位是核对表的「行」：口播的 9 个主题各拆成 1 个主句加若干子句，共 33 行；一行只给一个判定。条形长度 = 该类行数 ÷ 33。</p>
+</section>
+
+<section id="s2">
+<h2>2. 来源与身份</h2>
+<div class="cards">
+<div class="card"><h3>S1 主访谈</h3><dl class="kv"><dt>频道</dt><dd>Silicon Valley Girl（YouTube）</dd><dt>标题</dt><dd class="en">Claude Engineering Lead: "Stop Using Claude Like It's 2024"</dd><dt>发布</dt><dd>2026-10-20</dd><dt>时长</dt><dd>49 分 23 秒（字幕最后一段 49:19）</dd><dt>用途</dt><dd>口播里与访谈有关的说法，主要用它核对</dd></dl></div>
+<div class="card"><h3>S2 次访谈</h3><dl class="kv"><dt>节目</dt><dd>MTS 播客（YouTube）</dd><dt>标题</dt><dd class="en">Use AI Like It's Already Superhuman | Felix Rieseberg</dd><dt>发布</dt><dd>2026-10-19</dd><dt>时长</dt><dd>28 分 31 秒</dd><dt>用途</dt><dd>补充身份口径、Blender 细节、招人标准</dd></dl></div>
+<div class="card"><h3>S3 本人博客</h3><dl class="kv"><dt>标题</dt><dd class="en">How to be more ambitious: A tutorial for humans with models</dd><dt>站点</dt><dd>felixrieseberg.com</dd><dt>发布</dt><dd>2026-10-13</dd><dt>用途</dt><dd>旁证与补充。S1 里他说「今早写的博客」即此文。博客内容不算访谈原话</dd></dl></div>
+<div class="card"><h3>S4 第三方摘要</h3><dl class="kv"><dt>来源</dt><dd>note.com 日文摘要</dd><dt>发布</dt><dd>2026-10-21</dd><dt>用途</dt><dd>只用来确认访谈已被二次传播，不作判定依据</dd></dl></div>
+</div>
+
+<h3>身份：三种口径并列，正式职级未核实</h3>
+<table class="table-plain">
+<thead><tr><th>谁说的</th><th>怎么说的</th><th>位置</th></tr></thead>
+<tbody>
+<tr><td>口播</td><td>「Anthropic 的 Claude 工程负责人」</td><td>开头</td></tr>
+<tr><td>S1 主持人</td><td class="en">Now he leads engineering for Claude at Anthropic</td><td>0:06</td></tr>
+<tr><td>S2 主持人</td><td class="en">member of technical staff and engineering manager at Anthropic where he works on Claude products including Claude Cowork desktop app</td><td>0:01</td></tr>
+<tr><td>本人（S2）</td><td class="en">every single conference introduces me as a slightly different job role… Felix PM. Engineering manager, engineer.</td><td>25:22</td></tr>
+</tbody>
+</table>
+<p>这些材料足以说明头衔存在口径差异，但不足以确认他的正式职级、汇报关系和管理范围。本页写法：「主持人称其负责 Claude 工程；另一场访谈介绍为工程经理，参与 Claude Cowork、桌面端等产品工作。」不把「Claude 工程负责人」当成已确认的事实。</p>
+</section>
+
+<section id="s3">
+<h2>3. 逐条核对表</h2>
+<p>编号按口播顺序。主句用数字，子句加字母。引文是 YouTube 自动英文字幕原文，人名与产品名按字幕原样修正（Reeseberg 改 Rieseberg，claw 改 Claude）。</p>
+<div class="filters" role="group" aria-label="按判定筛选">
+<button type="button" data-filter="all" aria-pressed="true">全部</button>
+<button type="button" data-filter="verbatim" aria-pressed="false">原话</button>
+<button type="button" data-filter="para" aria-pressed="false">转述</button>
+<button type="button" data-filter="extend" aria-pressed="false">引申</button>
+<button type="button" data-filter="author" aria-pressed="false">作者自有</button>
+</div>
+<p class="filter-count" id="filterCount" aria-live="polite">显示 33 / 33 行</p>
+<div class="table-wrap">
+<table id="claims">
+<thead><tr><th>编号</th><th>口播说法</th><th>判定</th><th>原文依据与说明</th></tr></thead>
+<tbody>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">1</td><td data-label="口播说法">Anthropic 内部仍经常用 Skills，有些 Skill 完全删除后 AI 反而表现更好</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 21:33–21:59</span> <q class="en">We do use skills quite a bit still. Although our official Anthropic guidance as well as my personal guidance is be really careful with skills… the half-life of a good skill is very short and sometimes what we see is if you completely remove the skill you actually get better output.</q> 口播的「有些」对应 sometimes。被压缩掉的限定（要谨慎、要有评估手段）见 1a。</td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">1a</td><td data-label="口播说法">Skill 越多，AI 可能反而越笨</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">原句是「有时完全删掉反而更好」，不是「越多越笨」。他紧接着说 <span class="t">22:06</span> <q class="en">This is obviously most useful to people who have some kind of eval and have an idea of what good and bad looks like.</q> 口播没有这个前提。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">1b</td><td data-label="口播说法">过去模型不会规划，我们替它规划……这些曾是最佳实践</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 21:47</span> <q class="en">We often tell models things that were sort of relevant for the last generation of models.</q> 三条具体例子是口播补的。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">1c</td><td data-label="口播说法">「智能负债」</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">口播自己说「我把这种现象叫做」。两场访谈与博客都没有这个词。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">1d</td><td data-label="口播说法">专业知识、工具能力、安全边界依然重要</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">访谈没有这个三分法。S3 博客强调模型需要电脑、能装软件、能拿数据，方向相近，但不是这句话。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">2</td><td data-label="口播说法">把 Agent 设计成数字员工团队可能是过度设计</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 17:49</span> <q class="en">I think we're kind of over rotating on this agents thing… I think models are really good generalists.</q> 原话是 over rotating（用过头），「过度设计」是口播用词。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">2a</td><td data-label="口播说法">顶级模型具备跨领域能力，不必切成狭窄岗位</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 18:24–18:47</span> <q class="en">if we sort of put on a little hat like you're a data scientist… that same data scientist has all the intelligence as a field-leading biologist or mathematician… I don't really have any agents who are being told who they are.</q> 口播把几句话归纳成一句结论，不是原文的完整表述。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">2b</td><td data-label="口播说法">产品 Agent 看不到销售数据、开发 Agent 不了解客户反馈</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 19:05</span> <q class="en">the right approach here is not to make these slices of data and then give every single agent the slice… You give them tools and you document really well what kind of data is behind this tool.</q> 例子是口播改写的。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">2c</td><td data-label="口播说法">「部门墙」；人类组织架构不等于智能架构</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">比喻与结论句都是口播的。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">2d</td><td data-label="口播说法">分工应围绕任务和责任，而不是复制人类岗位</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 24:58</span> <q class="en">I do have projects so I do think about the different work items but I don't think about different roles.</q> S3 的 Range 一节让 Claude 带入多个领域甚至组「红队」，但要求「做专家做的事，不是写得像专家」。</td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">3</td><td data-label="口播说法">「你是世界顶级专家」容易陷入角色扮演；他关心专家用什么工具和方法</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 25:05–25:48</span> <q class="en">I never tell Claude you're an excellent whatever… this was very in vogue sort of like 2024… they engage in a little bit of role play and role play is not really what we're going for. We want the techniques, the tools, the knowledge that a professional would use.</q> <span class="t">26:00</span> <q class="en">I don't need to put on a costume.</q> 旁证 S3：<q class="en">models often switch vocabulary without actually switching methods</q>（博客，不计入原话依据）。</td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">3a</td><td data-label="口播说法">做 3D 动画时让 AI 真正用 Blender</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 10:34</span> <q class="en">Claude, please use the same tools that professional animators use. And now the results are quite good.</q> S2 7:44–7:48 补充：Claude 实际是写 Python 脚本，把 Blender 当库调用。</td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">3b</td><td data-label="口播说法">专业能力正在重新定价；未来比的是方法、品位、判断标准</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">访谈没有谈「知识贬值」。S2 25:44 他说招 PM 和设计师更看 taste and intuition，方向相近。</td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">4</td><td data-label="口播说法">他成了 Claude 的「传送带」：先自己查崩溃再交 Claude 修，后来让 Claude 直接访问数据、自己判断修什么</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 22:46–23:12</span> <q class="en">even a year and a half ago, I was… telling Claude, I found another crash, please go and fix the crash… I'm just a conveyor belt for Claude. Claude needs to have access to all the crash data and then needs to figure out itself what it needs to fix, what it doesn't need to fix.</q> 前后两段都在原句里。S3 博客另外写了接入三个操作系统的机器让 Claude 自己复现和验证，那是补充，不算这句的依据。</td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">4a</td><td data-label="口播说法">人类转向目标、边界和监督</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">S3 的 Altitude 一节讲「目标背后的目标」，方向一致；「边界、监督」是口播补的。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">4b</td><td data-label="口播说法">最值得自动化的是「分配重复劳动」这件事本身</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">访谈没有。口播也没提他紧接着说的 <span class="t">23:12</span> <q class="en">The upfront cost is really worth it, but… there is upfront cost.</q></td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">5</td><td data-label="口播说法">很少让同一会话评价自己刚做的工作</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 26:29</span> <q class="en">I rarely want the current session to judge itself. That I think is still really iffy.</q></td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">5a</td><td data-label="口播说法">另开独立会话找错、攻击结论；再由独立评审判断；尽量找外部证据</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据">三层各有原句，但原文没有「独立」这个条件：<span class="t">13:19</span> <q class="en">spin off another 10 that try to break this down… the same concept as red teaming or short selling</q>；<span class="t">14:12</span> <q class="en">fire off five threads</q>；<span class="t">14:57–15:10</span> <q class="en">something we call a judge… you use yet another Claude and their job is… to validate and verify</q>；<span class="t">26:56</span> <q class="en">my preference is to find some hard outside evidence.</q> 他没说另一个会话在信息、提示词或模型上与被评对象隔离。S3：<q class="en">Do not ask the model to judge itself… insist on outside validation.</q></td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">5b</td><td data-label="口播说法">AI 最危险的是对错误充满信心</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据">这句来自主持人的提问 <span class="t">12:55</span> <q class="en">confidently presenting mistakes</q>；费利克斯回答 <q class="en">it still happens to a lot of us</q>，认可现象存在。判断句不是他提出的。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">5c</td><td data-label="口播说法">「不要让 AI 既当运动员又当裁判」</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">比喻是口播的。</td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">5c′</td><td data-label="口播说法">AI 之间达成共识不等于事实成立</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">与 26:56「优先要硬的外部证据」一致，但他没说过这句。两条相关限定：<span class="t">13:48</span> 评审方可以 <q class="en">take a step down in intelligence and still get very good results</q>；<span class="t">17:13–17:30</span> 对「编辑式事实核查、给每个数字找一手来源」这类单一任务，他说 <q class="en">I really trust one agent… I fully trust that 100%</q>。他在 <span class="t">26:24</span> 说「不信任单个会话去做的事」清单更长，自评只是其中最主要的例子；上面的事实核查任务则是他明确说信任的例子。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">5d</td><td data-label="口播说法">做得快不等于做得对，做得对不等于有价值；执行越便宜，错误方向越彻底</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">访谈没有。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">6</td><td data-label="口播说法">未来一两个人就能建立过去需要庞大团队的公司；最重要的能力是理解用户</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 32:02</span> <q class="en">single person teams or two person teams can build billion dollar companies. But… the secret to building a good product is actually not changed. And I believe it's empathy. Empathy for the user, empathy for the use case.</q> 口播把 billion dollar（十亿美元级）改成「庞大团队」，把 empathy（同理心）译成「理解用户」，两处都弱化了原意。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">6a</td><td data-label="口播说法">AI 可以生成一千个方案，人只能认真评估几个</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 5:01–5:08</span> <q class="en">I can probably show you maybe one thing a day. I can easily build a thousand. I can't show you a thousand.</q> 原话说的是「一天只能给你看一个」，口播概括成「认真评估几个」，所以算转述。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">6b</td><td data-label="口播说法">过去好产品难做，是因为开发成本高</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 4:31 起</span> <q class="en">we always made implicit cost decisions… can I build this? What is the maintenance cost</q>；<span class="t">31:41 起</span> <q class="en">the upfront capital cost was much higher.</q></td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">6c</td><td data-label="口播说法">代码便宜了，信任不会；做出产品不等于做成生意</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">访谈没有。最接近的原句是 <span class="t">37:07–37:18</span> <q class="en">execution has become extremely cheap… we need to… really double down on empathy.</q></td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">7</td><td data-label="口播说法">AI 能快速制造大量按钮，好产品需要更少按钮</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 5:29</span> <q class="en">we can make as many buttons as you want us to, but I think good products actually have fewer buttons.</q> S2 2:07 <q class="en">just make a button for it… do you want to find a planet today?</q></td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">7a</td><td data-label="口播说法">因为人的注意力没有随生产能力增长</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">注意力有限在原文（5:08）解释「一天只能看一个原型」，他没有把它作为「按钮更少」的原因。</td></tr>
+<tr data-verdict="verbatim"><td class="id" data-label="编号">8</td><td data-label="口播说法">访谈最后：今天的 AI 产品处在「前 iPhone 时代」</td><td data-label="判定"><span class="tag tag-verbatim">原话</span></td><td class="ev" data-label="原文依据"><span class="t">S1 48:16</span> <q class="en">all the AI products we use today are roughly in the same phase as all the funny phones that we had right before the smartphone came along. So I think we're still in the pre iPhone era.</q> 位置在 49:23 全片的最后一分钟。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">8a</td><td data-label="口播说法">我们在用「AI 时代的诺基亚」</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">他说的是 funny phones，没提诺基亚。另一细节：<span class="t">33:56</span> 他承认当年写过博客说 iPhone 很蠢，因为没有键盘。</td></tr>
+<tr data-verdict="para"><td class="id" data-label="编号">8b</td><td data-label="口播说法">今天大量产品是旧软件加聊天框、侧边栏</td><td data-label="判定"><span class="tag tag-para">转述</span></td><td class="ev" data-label="原文依据"><span class="t">S1 36:30</span> <q class="en">not just here's a sidebar with a chatbot in it. I think we've permeated the entire industry with low intelligence cheap models that operate at the level of I've read the FAQ page.</q> 「侧边栏加聊天机器人」是原话，「旧软件」是口播加的概括。</td></tr>
+<tr data-verdict="extend"><td class="id" data-label="编号">8c</td><td data-label="口播说法">为什么软件还要人点每个按钮、告诉每一步</td><td data-label="判定"><span class="tag tag-extend">引申</span></td><td class="ev" data-label="原文依据">访谈没有这组反问。</td></tr>
+<tr data-verdict="author"><td class="id" data-label="编号">9</td><td data-label="口播说法">结语「AI 越强，执行越便宜，真正昂贵的是判断什么值得执行」</td><td data-label="判定"><span class="tag tag-author">作者自有</span></td><td class="ev" data-label="原文依据">前半句有 37:13 <q class="en">execution has become extremely cheap</q> 支撑，后半句是口播的结论。</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. 他真正说的工作法（四张图）</h2>
+
+<h3>图一 传送带：一年半前与现在</h3>
+<div class="flowcols">
+<div class="flowcol"><h4>一年半前</h4><ol>
+<li><span class="who">人</span>看崩溃报告，发现一个崩溃</li>
+<li><span class="who">人</span>告诉 Claude「我又发现一个崩溃，去修」</li>
+<li><span class="who">Claude</span>修这一个崩溃</li>
+<li><span class="who">人</span>回到第 1 步。他的原话：我只是 Claude 的传送带</li>
+</ol></div>
+<div class="flowcol now"><h4>现在</h4><ol>
+<li><span class="who">人</span>一次性接好数据：让 Claude 能访问全部崩溃数据（S3 补充：崩溃报告、版本映射、三个操作系统的机器）</li>
+<li><span class="who">Claude</span>自己判断哪些该修、哪些不该修</li>
+<li><span class="who">Claude</span>复现、修复、验证（S3）</li>
+<li><span class="who">人</span>看结果。他的原话：前期成本更高，但值得</li>
+</ol></div>
+</div>
+<p class="legend">依据：S1 22:46–23:18；S3 Altitude 一节。口播说对了「传送带」和「自己判断」，没说「前期成本更高」。</p>
+
+<h3>图二 攻击与评审：他怎么防止 AI 自信地犯错</h3>
+<div class="threads">
+<div class="stage"><strong>第一步 产出</strong>一个会话写出结论、文章或方案。<span class="src">S1 13:19</span></div>
+<div class="stage"><strong>第二步 攻击</strong>另开多个线程，任务只有一个：证明它是错的。他的类比是红队和做空。
+<div class="fan"><div>线程 1</div><div>线程 2</div><div>线程 3</div><div>线程 4</div><div>线程 5</div></div>
+<span class="src">S1 13:19「spin off another 10」、14:12「fire off five threads」。13:48：攻击方可以降一档智能，结果仍然很好。</span></div>
+<div class="stage judge"><strong>第三步 评审</strong>再由一个 Claude 做 judge，看攻击成立不成立。<span class="src">S1 14:57–15:10「something we call a judge… yet another Claude… validate and verify」</span></div>
+<div class="stage evidence"><strong>第四步 外部证据</strong>他更偏好找到硬的外部证据，而不是只靠模型之间互评。<span class="src">S1 26:56；S3「insist on outside validation」</span></div>
+</div>
+<div class="note"><p><strong>口播与原文的差别：</strong>口播把这套流程概括成「独立会话、独立评审」，并加了「运动员与裁判」的比喻。原文只说「另开线程」「另一个 Claude」，没有说评审方在信息和提示词上隔离。原文还有一条口播没提的例外：对「给每个数字找一手来源」这类编辑式事实核查，他信任单个会话 100%（17:13）。他重点质疑的是当前会话评价自己刚做的工作，但他也说过不信任单个会话的事项清单更长（26:24）。</p></div>
+
+<h3>图三 戏服与工具：他怎么写提示词</h3>
+<div class="compare">
+<div class="side bad"><h4>他不这样写（2024 年流行）</h4><div class="prompt">You're an excellent engineer, please go fix whatever problems are here.</div><ul><li>模型会进入角色扮演</li><li>换了词汇，没换方法（S3）</li><li>他的说法：我不需要它穿戏服</li></ul></div>
+<div class="side good"><h4>他这样写</h4><div class="prompt">Please use the same tools that professional animators use.</div><ul><li>要的是专业人员的技术、工具、知识</li><li>例子：3D 动画让 Claude 真的用 Blender，结果「相当好」（10:34）</li><li>S2 补充：Claude 是写 Python 脚本把 Blender 当库调用</li></ul></div>
+</div>
+<p class="legend">依据：S1 25:05–26:00、10:34；S2 7:44。这一组口播基本忠实。</p>
+
+<h3>图四 博客的四个维度：口播只取了两个</h3>
+<div class="dims">
+<div class="dim"><strong>Speed 速度</strong>同样的事做得更快。<span class="cov">口播未涉及</span></div>
+<div class="dim covered"><strong>Altitude 高度</strong>从「修这个崩溃」升到「让应用保持无崩溃」。<span class="cov">口播的「传送带」对应这里</span></div>
+<div class="dim covered"><strong>Depth 深度</strong>让模型用专家真正用的工具和方法。<span class="cov">口播的「Blender」「不穿戏服」对应这里</span></div>
+<div class="dim"><strong>Range 广度</strong>让模型带入多个领域，组一支「船员」互相挑战。<span class="cov">口播未涉及；与「不按岗位分 Agent」并不矛盾，博客要求的是「做专家做的事」</span></div>
+</div>
+<p class="legend">依据：S3 博客 2026-10-13。绿色为口播覆盖到的维度。</p>
+</section>
+
+<section id="s5">
+<h2>5. 口播没说、但会改变理解的内容</h2>
+<p>分三类。第一类会改变原意，第二类帮助理解，第三类是额外的操作建议。</p>
+<div class="cards">
+<div class="card"><h3>一、影响原意的限定</h3><ul>
+<li><strong>Skills 的前提：</strong>「删掉反而更好」这招对有评估手段的人最有用（22:06）。没有评估手段，删了也不知道好坏。</li>
+<li><strong>评审的边界：</strong>攻击方可以用更弱的模型（13:48）；编辑式事实核查他信任单个会话 100%（17:13）。他重点质疑的是当前会话评价自己的工作（26:29），同时他说「不信任单个会话去做的事」清单更长（26:24）。</li>
+<li><strong>公司的量级：</strong>原话是「十亿美元级公司」和「同理心」，不是「庞大团队」和「理解用户」（32:02）。</li>
+<li><strong>发言主体：</strong>「AI 对错误充满信心」是主持人的提问（12:55），他只是认可现象存在。</li>
+</ul></div>
+<div class="card"><h3>二、有助理解的背景</h3><ul>
+<li><strong>前期成本：</strong>让 Claude 自己拿数据，前期搭建成本更高（23:12）。</li>
+<li><strong>自动化与增强：</strong>他说 AI 的经济价值目前主要在自动化，但他更感兴趣的是「增强」，即做以前做不到的事（5:58–6:28）。</li>
+<li><strong>博客四维度：</strong>速度、高度、深度、广度；口播只取了高度和深度（见图四）。</li>
+<li><strong>行星案例：</strong>他本人说「apparently it is not confirmed yet. NASA is working on actually confirming it」（2:21）。博客用的也是「可能帮助发现」的谨慎措辞。</li>
+<li><strong>保质期：</strong>「今天给的所有建议，大约 10 周后可能全部改版」（48:51）；「对你有效就有效，不必改」（20:42）。</li>
+</ul></div>
+<div class="card"><h3>三、额外的操作建议</h3><ul>
+<li><strong>起步方式：</strong>先下载桌面端，让 Claude 用浏览器操作你现有的系统，之后再考虑连接器和数据导入（24:05–24:18）。</li>
+</ul></div>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. 给读者的三条建议（按原文重写）</h2>
+<ol>
+<li><strong>先有评估手段，再决定删不删 Skill。</strong>他说这招对「有评估手段、知道什么叫好什么叫坏」的人最有用（22:06）。本页据此建议先建立评估方法，否则删掉 Skill 后的「更好」只是感觉。</li>
+<li><strong>会话按任务分，不按岗位分。</strong>他自己有「项目」和「工作项」，没有「角色」。给每个会话工具和文档，不给它切好的数据片。</li>
+<li><strong>自评换成攻击加外部证据。</strong>做完的会话不评自己；另开线程只负责找错，攻击方可以用更弱的模型；最后尽量找一手证据，而不是让几个模型达成一致。</li>
+</ol>
+<p>这三条是对访谈的整理，不是费利克斯列的清单。他自己给的保质期是大约 10 周。</p>
+</section>
+
+<section id="s7">
+<h2>7. 方法与局限</h2>
+<ul>
+<li><strong>逐字稿来源：</strong>本页未取得官方逐字稿，两场访谈都用 YouTube 自动英文字幕。自动字幕的人名与产品名有拼写错误，本页按原音修正；时间码按字幕段落起点，前后可能差几秒。</li>
+<li><strong>时长口径：</strong>S1 页面标注 49:23，字幕最后一段在 49:19，二者一致。外部审稿曾提出 S1 页面章节可能延伸到 50:06，本页未核实视频页的章节列表，以字幕为准。</li>
+<li><strong>博客与访谈分开计：</strong>S3 博客只作旁证或补充，不计入「原话」依据。</li>
+<li><strong>未核实：</strong>费利克斯的正式职级与管理范围；S4 日文摘要的转述准确性。</li>
+<li><strong>判定只看「有没有说」：</strong>本页不评价「Skill 删掉更好」「不按岗位分 Agent」这些方法本身是否正确。</li>
+<li><strong>审核记录：</strong>ChatGPT Pro 文字审稿 15 条，采纳 11 条（统计口径、头衔、5a/5b/2a/6 降为转述、48:16 时间码、漏项分类等），驳回 4 条（1、3、7、4 保留原话判定，理由写在表内）。Codex 只读交叉审核第一轮提出 7 条（6a、8b 降为转述，三处时间码，三处措辞，零值 token），全部采纳；最终结论见交付消息。</li>
+</ul>
+</section>
+</main>
+<script>
+(function () {
+  var total = 33;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#claims tbody tr'));
+  if (rows.length !== total) { total = rows.length; }
+  // 统计条宽度 = 该类行数 ÷ 总行数（数据驱动的运行时值，不是设计常量）
+  var counts = {};
+  rows.forEach(function (r) { var v = r.getAttribute('data-verdict'); counts[v] = (counts[v] || 0) + 1; });
+  Array.prototype.forEach.call(document.querySelectorAll('#stats .stat'), function (el) {
+    var key = (el.className.match(/stat-(\w+)/) || [])[1];
+    var n = counts[key];
+    if (!Number.isFinite(n)) { n = Number(el.querySelector('.num').getAttribute('data-count')); }
+    if (!Number.isFinite(n) || !Number.isFinite(total) || total <= 0) { return; }
+    el.querySelector('.num').textContent = String(n);
+    el.querySelector('.bar span').style.width = (n / total * 100).toFixed(1) + '%';
+  });
+  var buttons = document.querySelectorAll('.filters button');
+  var countEl = document.getElementById('filterCount');
+  Array.prototype.forEach.call(buttons, function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-filter');
+      Array.prototype.forEach.call(buttons, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      var shown = 0;
+      rows.forEach(function (r) {
+        var on = f === 'all' || r.getAttribute('data-verdict') === f;
+        if (on) { r.removeAttribute('hidden'); shown++; } else { r.setAttribute('hidden', ''); }
+      });
+      if (countEl) { countEl.textContent = '显示 ' + shown + ' / ' + total + ' 行'; }
+    });
+  });
+})();
+</script>
+</body>
+</html>

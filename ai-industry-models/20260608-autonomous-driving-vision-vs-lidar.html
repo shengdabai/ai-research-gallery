@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="自动驾驶：纯视觉 vs 激光雷达专业分析">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>20260608-1616-自动驾驶：纯视觉 vs 激光雷达专业分析</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #65758b;
+      --line: #d7dde6;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #0f8f72;
+      --amber: #b7791f;
+      --red: #c24135;
+      --slate: #43546a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.62;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .top {
+      background: #111827;
+      color: #fff;
+      padding: 40px 28px 34px;
+      border-bottom: 5px solid #22c55e;
+    }
+    .top .inner, .main-content { max-width: 1180px; margin: 0 auto; }
+    .eyebrow { color: #a7f3d0; font-size: 14px; margin-bottom: 8px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 58px); line-height: 1.08; letter-spacing: 0; }
+    .subtitle { max-width: 880px; color: #dbeafe; font-size: 18px; margin: 18px 0 0; }
+    .main-content { padding: 28px; }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 18px 0;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+    h2 { font-size: 24px; margin: 0 0 16px; }
+    h3 { font-size: 18px; margin: 22px 0 10px; }
+    .grid { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcfe;
+      min-height: 120px;
+    }
+    .metric .num { font-size: 30px; font-weight: 760; line-height: 1.15; color: #0f172a; }
+    .metric .label { margin-top: 8px; color: var(--muted); font-size: 14px; }
+    .callout {
+      border-left: 5px solid var(--green);
+      background: #ecfdf5;
+      padding: 16px 18px;
+      border-radius: 6px;
+      font-size: 17px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 11px 10px; vertical-align: top; }
+    th { text-align: left; background: #f2f5f9; font-weight: 700; }
+    tr:hover td { background: #fbfdff; }
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .vision { background: #dbeafe; color: #1d4ed8; }
+    .fusion { background: #dcfce7; color: #047857; }
+    .mixed { background: #fef3c7; color: #92400e; }
+    .risk { background: #fee2e2; color: #b91c1c; }
+    .barrow { display: grid; grid-template-columns: 180px 1fr 70px; gap: 10px; align-items: center; margin: 12px 0; }
+    .bar {
+      height: 22px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #d1d5db;
+    }
+    .fill { height: 100%; background: var(--blue); }
+    .fill.green { background: var(--green); }
+    .fill.amber { background: var(--amber); }
+    .matrix {
+      display: grid;
+      grid-template-columns: 170px repeat(4, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .matrix div { padding: 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 74px; }
+    .matrix div:nth-child(5n) { border-right: 0; }
+    .matrix .head { background: #f2f5f9; font-weight: 700; min-height: auto; }
+    .matrix .rowhead { background: #fbfcfe; font-weight: 700; }
+    .score {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 3px;
+      background: #d1d5db;
+    }
+    .s1 { background: #fee2e2; }
+    .s2 { background: #fed7aa; }
+    .s3 { background: #fef08a; }
+    .s4 { background: #bbf7d0; }
+    .s5 { background: #22c55e; }
+    .timeline { border-left: 3px solid var(--line); padding-left: 20px; margin-left: 8px; }
+    .event { margin: 0 0 18px; position: relative; }
+    .event:before {
+      content: "";
+      position: absolute;
+      left: -29px;
+      top: 5px;
+      width: 13px;
+      height: 13px;
+      background: var(--blue);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 1px var(--blue);
+    }
+    .flow {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 18px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .note { color: var(--muted); font-size: 13px; }
+    .source-list li { margin: 8px 0; }
+    @media (max-width: 860px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .barrow { grid-template-columns: 1fr; }
+      .matrix { grid-template-columns: 1fr; }
+      .matrix div { border-right: 0; }
+      .section { padding: 18px; }
+      .main-content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="inner">
+      <div class="eyebrow">专业研究报告 · 更新日期 2026-05-23</div>
+      <h1>自动驾驶：纯视觉方案 vs 激光雷达方案</h1>
+      <p class="subtitle">覆盖技术优劣、市场数据、中美欧日韩主流车企路线，以及未来 3-5 年主导模式判断。</p>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="section">
+      <h2>核心结论</h2>
+      <div class="callout">
+        未来不会是简单的“纯视觉淘汰激光雷达”或“激光雷达淘汰纯视觉”。L2/L2+ 量产辅助驾驶会以视觉和毫米波雷达为底座，并在中国中高端车型上快速加入低成本激光雷达；L3/L4 和 Robotaxi 的主流仍会是摄像头、激光雷达、毫米波雷达、定位和冗余计算的多传感器融合。
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>关键数据看板</h2>
+      <div class="grid grid-3">
+        <div class="metric">
+          <div class="num">324 万颗</div>
+          <div class="label">中国乘用车 2025 年标配激光雷达装车量，约同比 +112.07%。</div>
+        </div>
+        <div class="metric">
+          <div class="num">&gt;20%</div>
+          <div class="label">中国新能源/乘用车激光雷达渗透率已进入两位数后段，正从高端向主流价格带下探。</div>
+        </div>
+        <div class="metric">
+          <div class="num">$200 以下</div>
+          <div class="label">禾赛 ATX 目标价格区间，意味着单颗前向 LiDAR 有机会进入 15 万元级车型。</div>
+        </div>
+        <div class="metric">
+          <div class="num">41.5%</div>
+          <div class="label">2025 年中国激光雷达供应商份额中，华为位居第一；禾赛约 33.8%。</div>
+        </div>
+        <div class="metric">
+          <div class="num">85.12%</div>
+          <div class="label">汽车激光雷达市场中 ADAS 应用占主导，说明当前主要市场是量产辅助驾驶，不只是 Robotaxi。</div>
+        </div>
+        <div class="metric">
+          <div class="num">41.75%</div>
+          <div class="label">2025 年亚太占全球汽车激光雷达收入份额，中国是核心增量来源。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>两种技术路线的本质差异</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>纯视觉 / 视觉为主</th>
+            <th>激光雷达 / 多传感器融合</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>感知原理</td>
+            <td>通过摄像头捕捉图像，再由神经网络估计语义、深度、运动和可行驶空间。</td>
+            <td>LiDAR 主动发射激光并返回点云，直接提供距离和几何结构，再与摄像头、雷达融合。</td>
+          </tr>
+          <tr>
+            <td>优势</td>
+            <td>成本低、可规模化、外观集成简单、与人类驾驶感知方式接近，数据闭环强。</td>
+            <td>距离测量强、夜间几何感知强、对静态障碍物和复杂空间结构更稳，便于安全冗余论证。</td>
+          </tr>
+          <tr>
+            <td>短板</td>
+            <td>深度估计依赖模型；逆光、雨雪雾、污渍遮挡、低纹理场景风险更高。</td>
+            <td>成本、标定、清洁、功耗、集成和供应链复杂；恶劣天气下也会退化。</td>
+          </tr>
+          <tr>
+            <td>商业适配</td>
+            <td>适合 L2/L2+、高速 NOA、成本敏感车型和大规模 OTA 数据闭环。</td>
+            <td>适合 L3/L4、高端车、城市 Robotaxi、监管需要冗余证明的场景。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>能力矩阵</h2>
+      <p class="note">评分为研究判断，5 分代表该路线天然更适配该维度。实际效果取决于算法、算力、数据、标定和安全工程。</p>
+      <div class="matrix">
+        <div class="head">能力维度</div>
+        <div class="head">纯视觉</div>
+        <div class="head">视觉 + 雷达</div>
+        <div class="head">单激光雷达融合</div>
+        <div class="head">多传感器冗余</div>
+
+        <div class="rowhead">量产成本</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><br>最低</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s4"></span><br>低</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s3"></span><span class="score s3"></span><br>中</div>
+        <div><span class="score s5"></span><span class="score s3"></span><span class="score s3"></span><span class="score s2"></span><span class="score s1"></span><br>高</div>
+
+        <div class="rowhead">远距几何感知</div>
+        <div><span class="score s3"></span><span class="score s3"></span><span class="score s2"></span><span class="score s2"></span><span class="score s2"></span><br>依赖模型估计</div>
+        <div><span class="score s4"></span><span class="score s3"></span><span class="score s3"></span><span class="score s3"></span><span class="score s2"></span><br>雷达补速度和距离</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s4"></span><span class="score s4"></span><span class="score s3"></span><br>前向强</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s4"></span><br>全向强</div>
+
+        <div class="rowhead">低能见度鲁棒性</div>
+        <div><span class="score s3"></span><span class="score s2"></span><span class="score s2"></span><span class="score s2"></span><span class="score s1"></span><br>弱项</div>
+        <div><span class="score s4"></span><span class="score s4"></span><span class="score s3"></span><span class="score s3"></span><span class="score s2"></span><br>雷达补强</div>
+        <div><span class="score s5"></span><span class="score s4"></span><span class="score s4"></span><span class="score s3"></span><span class="score s3"></span><br>夜间更强</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s4"></span><span class="score s4"></span><br>冗余最高</div>
+
+        <div class="rowhead">L3/L4 法规论证</div>
+        <div><span class="score s3"></span><span class="score s2"></span><span class="score s2"></span><span class="score s1"></span><span class="score s1"></span><br>难</div>
+        <div><span class="score s3"></span><span class="score s3"></span><span class="score s2"></span><span class="score s2"></span><span class="score s2"></span><br>中等</div>
+        <div><span class="score s5"></span><span class="score s4"></span><span class="score s4"></span><span class="score s3"></span><span class="score s3"></span><br>较强</div>
+        <div><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s5"></span><span class="score s4"></span><br>最强</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>市场数据可视化</h2>
+      <h3>中国激光雷达供应商份额，2025 年</h3>
+      <div class="barrow"><div>华为</div><div class="bar"><div class="fill green" style="width:41.5%"></div></div><div>41.5%</div></div>
+      <div class="barrow"><div>禾赛</div><div class="bar"><div class="fill" style="width:33.8%"></div></div><div>33.8%</div></div>
+      <div class="barrow"><div>其他</div><div class="bar"><div class="fill amber" style="width:24.7%"></div></div><div>24.7%</div></div>
+      <p class="note">来源：Gasgoo 2025 年中国 ADAS 部件供应商榜单。</p>
+
+      <h3>激光雷达成本下探趋势</h3>
+      <div class="barrow"><div>早期 L4 研究/测试级</div><div class="bar"><div class="fill" style="width:100%"></div></div><div>高</div></div>
+      <div class="barrow"><div>2022-2024 高端量产级</div><div class="bar"><div class="fill" style="width:55%"></div></div><div>中高</div></div>
+      <div class="barrow"><div>2025-2026 中国 ADAS 级</div><div class="bar"><div class="fill green" style="width:25%"></div></div><div>&lt;$200*</div></div>
+      <p class="note">* 指禾赛 ATX 被媒体转述的目标价格，不代表所有车规级 LiDAR 成本。</p>
+    </div>
+
+    <div class="section">
+      <h2>各国与车企路线</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>地区</th>
+            <th>企业 / 系统</th>
+            <th>公开路线</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>美国</td>
+            <td>Tesla Autopilot / FSD Supervised</td>
+            <td>摄像头 Tesla Vision 为核心，部分市场 Model 3/Y 不配雷达；官方仍强调驾驶员必须监督。</td>
+            <td><span class="pill vision">视觉路线</span></td>
+          </tr>
+          <tr>
+            <td>美国</td>
+            <td>Waymo Driver</td>
+            <td>6th-gen Driver 使用高分辨率视觉、LiDAR、雷达；明确强调 LiDAR/radar 在摄像头受限时提供冗余。</td>
+            <td><span class="pill fusion">L4 融合</span></td>
+          </tr>
+          <tr>
+            <td>欧洲 / 美国</td>
+            <td>Mercedes-Benz DRIVE PILOT</td>
+            <td>L3 系统使用 LiDAR、摄像头、雷达、超声波、后窗摄像头、湿度传感器、HD Map 和高精定位。</td>
+            <td><span class="pill fusion">L3 融合</span></td>
+          </tr>
+          <tr>
+            <td>欧洲</td>
+            <td>Volkswagen ID. Buzz AD / Mobileye</td>
+            <td>L4 服务车，13 摄像头、9 LiDAR、5 雷达和双高性能计算平台。</td>
+            <td><span class="pill fusion">L4 融合</span></td>
+          </tr>
+          <tr>
+            <td>欧洲</td>
+            <td>BMW Neue Klasse / Snapdragon Ride Pilot</td>
+            <td>强调集中式计算、视觉感知、OTA、全球验证；公开资料未将 LiDAR 作为核心卖点。</td>
+            <td><span class="pill mixed">视觉/雷达 ADAS</span></td>
+          </tr>
+          <tr>
+            <td>中国</td>
+            <td>XPeng P7+ / AI Hawkeye</td>
+            <td>双 8MP 摄像头、毫米波雷达、超声波雷达，官方称可替代此前依赖昂贵 LiDAR 和 HD Map 的方案。</td>
+            <td><span class="pill vision">视觉化</span></td>
+          </tr>
+          <tr>
+            <td>中国</td>
+            <td>BYD DiPilot / 天神之眼</td>
+            <td>DiPilot 600 三 LiDAR，DiPilot 300 单 LiDAR，DiPilot 100 三目视觉，形成价格带分层。</td>
+            <td><span class="pill mixed">分层路线</span></td>
+          </tr>
+          <tr>
+            <td>中国</td>
+            <td>NIO NAD / Aquila</td>
+            <td>33 个感知单元，含超远距高分辨率 LiDAR、7 个 8MP 摄像头、毫米波雷达、超声波、GPS/IMU/V2X。</td>
+            <td><span class="pill fusion">融合路线</span></td>
+          </tr>
+          <tr>
+            <td>中国</td>
+            <td>Li Auto AD Max / AD Pro</td>
+            <td>2025 后新车型大量标配 ATL 全天候 LiDAR，强调视觉 + LiDAR 和主动安全。</td>
+            <td><span class="pill fusion">融合路线</span></td>
+          </tr>
+          <tr>
+            <td>日本</td>
+            <td>Honda Sensing / Sensing Elite</td>
+            <td>下一代 Sensing 强调 LiDAR、radar、cameras；Honda Legend L3 曾使用 Valeo 5 个 LiDAR。</td>
+            <td><span class="pill fusion">稳健融合</span></td>
+          </tr>
+          <tr>
+            <td>韩国</td>
+            <td>Hyundai / Motional IONIQ 5 Robotaxi</td>
+            <td>L4 Robotaxi，30+ 传感器，摄像头、雷达、LiDAR 组合。</td>
+            <td><span class="pill fusion">L4 融合</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>地区格局</h2>
+      <div class="grid grid-2">
+        <div>
+          <h3>中国</h3>
+          <p>路线最分化：小鹏向视觉和端到端大模型靠拢，比亚迪用 A/B/C 三档覆盖全价格带，蔚来、理想、华为系继续重视 LiDAR。由于中国 LiDAR 供应链成本下降快，单颗前向激光雷达正在下探到中端车型。</p>
+        </div>
+        <div>
+          <h3>美国</h3>
+          <p>乘用车侧以 Tesla 纯视觉路线最有代表性；Robotaxi 侧 Waymo 坚持多传感器冗余。美国呈现“低成本监督式 ADAS”和“高冗余 L4 服务运营”两条路径并行。</p>
+        </div>
+        <div>
+          <h3>欧洲</h3>
+          <p>欧洲更强调法规、安全责任和系统冗余。Mercedes L3、VW/Mobileye L4 都使用 LiDAR；BMW 新 ADAS 平台更强调软件栈、集中计算和全球适配。</p>
+        </div>
+        <div>
+          <h3>日本 / 韩国</h3>
+          <p>日本 Honda 和韩国 Hyundai/Motional 在高等级自动驾驶上都采用多传感器融合。两地更偏稳健工程路线，尤其在 L3/L4 场景中不押注单一传感器。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>路线演进时间线</h2>
+      <div class="timeline">
+        <div class="event"><strong>2021</strong>：Honda Legend 获得全球首批 L3 商用认证之一，使用多 LiDAR 和融合感知。</div>
+        <div class="event"><strong>2022</strong>：Mercedes DRIVE PILOT 在德国推出 L3，后进入美国部分州，采用 LiDAR + 雷达 + 摄像头 + HD Map。</div>
+        <div class="event"><strong>2024</strong>：Tesla FSD Supervised 和中国城市 NOA 竞争加速，端到端模型成为行业关键词。</div>
+        <div class="event"><strong>2025</strong>：比亚迪发布 DiPilot A/B/C 分层方案；小鹏 P7+ 推 AI Hawkeye 视觉方案；中国 LiDAR 装车量进入百万级。</div>
+        <div class="event"><strong>2026</strong>：Waymo 6th-gen Driver 继续强调高分辨率视觉、LiDAR、radar 冗余；中国 LiDAR 厂商规模化和成本优化成为市场主线。</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>未来 3-5 年判断</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>自动驾驶等级 / 场景</th>
+            <th>最可能主流模式</th>
+            <th>原因</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>L2 基础辅助驾驶</td>
+            <td>视觉 + 毫米波雷达，部分低成本纯视觉</td>
+            <td>成本敏感，法规要求仍是驾驶员监督。</td>
+          </tr>
+          <tr>
+            <td>L2+ / 高速 NOA</td>
+            <td>视觉为主，雷达补强；中国中高配常加 1 颗 LiDAR</td>
+            <td>既要成本，也要主动安全卖点。</td>
+          </tr>
+          <tr>
+            <td>城市 NOA</td>
+            <td>中国市场：视觉端到端与 LiDAR 融合并存</td>
+            <td>小鹏代表视觉化趋势，理想/蔚来/华为系代表融合趋势。</td>
+          </tr>
+          <tr>
+            <td>L3 eyes-off</td>
+            <td>多传感器融合 + 冗余 + HD Map / 高精定位</td>
+            <td>需要责任转移和安全论证，单一视觉路线压力大。</td>
+          </tr>
+          <tr>
+            <td>L4 Robotaxi</td>
+            <td>多 LiDAR + 摄像头 + radar + 远程运营平台</td>
+            <td>无人化运营容错要求最高，Waymo、VW/Mobileye、Motional 都采用融合路线。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>结论：谁会成为主要模式？</h2>
+      <div class="flow">[低成本 L2]
+   -> 摄像头 + 毫米波雷达
+
+[L2+ / 城市 NOA]
+   -> 视觉端到端 与 单 LiDAR 融合并存
+
+[L3 eyes-off]
+   -> 摄像头 + LiDAR + radar + HD Map/定位 + 冗余
+
+[L4 Robotaxi]
+   -> 多 LiDAR + 多摄像头 + 多 radar + 远程运营 + 安全冗余</div>
+      <p><strong>最终判断：</strong>在“消费者能买到的辅助驾驶”里，视觉为核心的方案会是基础盘；在“法律意义上的自动驾驶和无人化运营”里，激光雷达不会被纯视觉替代，多传感器融合会是主流。</p>
+    </div>
+
+    <div class="section">
+      <h2>风险与不确定性</h2>
+      <table>
+        <thead><tr><th>风险</th><th>影响</th><th>观察指标</th></tr></thead>
+        <tbody>
+          <tr><td>法规审批慢</td><td>L3/L4 商业化慢于宣传</td><td>各国 L3/L4 准入、事故责任规则</td></tr>
+          <tr><td>纯视觉事故或调查</td><td>影响公众信任和监管态度</td><td>NHTSA/各国监管调查、召回、保险数据</td></tr>
+          <tr><td>LiDAR 价格战</td><td>利于装车，但可能牺牲供应商利润和长期质量</td><td>ASP、毛利率、售后故障率</td></tr>
+          <tr><td>地缘政治</td><td>中国 LiDAR 供应链进入欧美可能受限</td><td>关税、出口管制、OEM 供应商替换</td></tr>
+          <tr><td>端到端模型突破</td><td>视觉路线继续上攻复杂场景</td><td>接管率、事故率、低能见度表现、监管批准</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>资料来源</h2>
+      <ul class="source-list">
+        <li><a href="https://www.tesla.com/en_gb/support/autopilot">Tesla Support：Autopilot and Full Self-Driving Capability</a></li>
+        <li><a href="https://waymo.com/blog/2026/02/ro-on-6th-gen-waymo-driver/">Waymo：6th-generation Waymo Driver</a></li>
+        <li><a href="https://group.mercedes-benz.com/technology/autonomous-driving/driving/drive-pilot-nevada.html">Mercedes-Benz：DRIVE PILOT L3</a></li>
+        <li><a href="https://www.xpeng.com/news/01928d0d528e92323be38a0282ad0191">XPeng：P7+ AI Hawkeye Visual Solution</a></li>
+        <li><a href="https://www.byd.com/sc/news-list/byd-dipilot-intelligent-driving-assistance">BYD：DiPilot / God’s Eye</a></li>
+        <li><a href="https://www.nio.ae/en/nio-assisted-and-intelligent-driving-nad">NIO：NAD / Aquila Super Sensing</a></li>
+        <li><a href="https://ir.mobileye.com/news-releases/news-release-details/volkswagen-admt-announces-agreement-mobileye-autonomous-driving">Mobileye / Volkswagen：ID. Buzz AD L4</a></li>
+        <li><a href="https://motional.com/technology">Motional：IONIQ 5 Robotaxi Technology</a></li>
+        <li><a href="https://global.honda/en/safety/ITS/2025/pdf/01_Honda-SENSING_2.pdf">Honda：Next-Generation Honda SENSING</a></li>
+        <li><a href="https://www.valeo.com/en/valeo-receives-honda-supplier-award-in-the-development-category-for-its-contribution-to-the-worlds-first-sae-level-3-automated-driving-system-authorized-for-commercial-use/">Valeo：Honda Legend L3 LiDAR</a></li>
+        <li><a href="https://global.chinadaily.com.cn/a/202604/20/WS69e58402a310d6866eb4458b.html">China Daily：China lidar makers scaling up production</a></li>
+        <li><a href="https://autonews.gasgoo.com/articles/market-industry/rankings-of-adas-component-suppliers-in-china-jan-dec-2025-lidar-market-surges-2026961525657333761">Gasgoo：China ADAS suppliers ranking 2025</a></li>
+        <li><a href="https://www.grandviewresearch.com/industry-analysis/automotive-lidar-market">Grand View Research：Automotive LiDAR Market</a></li>
+        <li><a href="https://www.mordorintelligence.com/industry-reports/automotive-lidar-market">Mordor Intelligence：Automotive LiDAR Market</a></li>
+        <li><a href="https://technode.com/2024/12/06/chinese-auto-startup-hesai-to-supply-1-5-million-lidar-units-to-ford-partner/">TechNode / Reuters：Hesai ATX cost target</a></li>
+        <li><a href="https://www.nhtsa.gov/vehicle-safety/automated-vehicles-safety">NHTSA：Automated Vehicle Safety</a></li>
+        <li><a href="https://arxiv.org/abs/2004.08467">LiDAR for Autonomous Driving review</a></li>
+        <li><a href="https://arxiv.org/abs/2509.10139">Camera-radar fusion baseline</a></li>
+        <li><a href="https://arxiv.org/abs/2205.13790">BEVFusion</a></li>
+      </ul>
+      <p class="note">说明：报告使用公开资料和行业研究数据，车企技术路线可能随 OTA、车型年款和地区法规变化而调整。</p>
+    </div>
+  </div>
+</body>
+</html>

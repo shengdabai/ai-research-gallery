@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>信源平台是 AI 的下一个风口吗？视频拆解、证据核对与 30 天验证方案</title>
+<style>
+/* ==========================================================================
+   DESIGN TOKENS
+   第一层 primitive：原始色值、尺寸。第二层 semantic：页面只引用这一层。
+   断点（媒体查询阈值不能用 var()，在此集中登记）：
+     --bp-narrow 720px：小于此宽度，表格改为纵向卡片、流程图改为纵向排列
+   已登记例外：grid 轨道里与 minmax()/max-content 组合使用的 1fr 是布局关键字，保留在结构样式中。
+   ========================================================================== */
+:root {
+  /* primitive · 颜色 */
+  --p-slate-950: #0f172a;
+  --p-slate-800: #1e293b;
+  --p-slate-700: #334155;
+  --p-slate-600: #475569;
+  --p-slate-500: #64748b;
+  --p-slate-300: #cbd5e1;
+  --p-slate-200: #e2e8f0;
+  --p-slate-100: #eef2f6;
+  --p-slate-50: #f6f8fb;
+  --p-white: #ffffff;
+  --p-teal-800: #115e59;
+  --p-teal-700: #0f766e;
+  --p-teal-100: #d5f2ee;
+  --p-blue-800: #1e40af;
+  --p-blue-100: #dbe6fe;
+  --p-green-800: #166534;
+  --p-green-100: #d9f5e1;
+  --p-amber-800: #92400e;
+  --p-amber-100: #fcefcf;
+  --p-red-800: #9f1239;
+  --p-red-100: #fde2e7;
+  --p-gray-700: #4b5563;
+  --p-gray-150: #e8eaee;
+
+  /* primitive · 尺寸 */
+  --p-space-1: 4px;
+  --p-space-2: 8px;
+  --p-space-3: 12px;
+  --p-space-4: 16px;
+  --p-space-5: 24px;
+  --p-space-6: 32px;
+  --p-space-7: 48px;
+  --p-space-8: 64px;
+  --p-radius-1: 4px;
+  --p-radius-2: 8px;
+  --p-font-xs: 0.78rem;
+  --p-font-sm: 0.875rem;
+  --p-font-md: 1rem;
+  --p-font-lg: 1.15rem;
+  --p-font-xl: 1.4rem;
+  --p-font-2xl: clamp(1.6rem, 4.2vw, 2.4rem);
+  --p-line-tight: 1.35;
+  --p-line-body: 1.75;
+
+  /* semantic · 颜色 */
+  --color-bg: var(--p-slate-50);
+  --color-surface: var(--p-white);
+  --color-surface-muted: var(--p-slate-100);
+  --color-border: var(--p-slate-200);
+  --color-border-strong: var(--p-slate-300);
+  --color-text: var(--p-slate-800);
+  --color-text-strong: var(--p-slate-950);
+  --color-text-muted: var(--p-slate-600);
+  --color-text-faint: var(--p-slate-500);
+  --color-accent: var(--p-teal-700);
+  --color-accent-strong: var(--p-teal-800);
+  --color-accent-soft: var(--p-teal-100);
+  --color-hero-bg: var(--p-slate-950);
+  --color-hero-text: var(--p-slate-100);
+  --color-hero-muted: var(--p-slate-300);
+  --color-on-accent: var(--p-white);
+
+  /* semantic · 判定与证据等级标签 */
+  --tag-support-fg: var(--p-green-800);
+  --tag-support-bg: var(--p-green-100);
+  --tag-cond-fg: var(--p-blue-800);
+  --tag-cond-bg: var(--p-blue-100);
+  --tag-weak-fg: var(--p-amber-800);
+  --tag-weak-bg: var(--p-amber-100);
+  --tag-risk-fg: var(--p-red-800);
+  --tag-risk-bg: var(--p-red-100);
+  --tag-none-fg: var(--p-gray-700);
+  --tag-none-bg: var(--p-gray-150);
+
+  /* semantic · 间距、圆角、字号 */
+  --space-xs: var(--p-space-1);
+  --space-sm: var(--p-space-2);
+  --space-md: var(--p-space-4);
+  --space-lg: var(--p-space-5);
+  --space-xl: var(--p-space-6);
+  --space-2xl: var(--p-space-7);
+  --space-3xl: var(--p-space-8);
+  --gap-inline: var(--p-space-3);
+  --radius-card: var(--p-radius-2);
+  --radius-tag: var(--p-radius-1);
+  --font-caption: var(--p-font-xs);
+  --font-small: var(--p-font-sm);
+  --font-body: var(--p-font-md);
+  --font-h3: var(--p-font-lg);
+  --font-h2: var(--p-font-xl);
+  --font-h1: var(--p-font-2xl);
+  --line-heading: var(--p-line-tight);
+  --line-body: var(--p-line-body);
+  --font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 600;
+  --weight-bold: 700;
+
+  /* semantic · 布局 */
+  --layout-max: 1080px;
+  --layout-gutter: var(--p-space-5);
+  --border-width: 1px;
+  --border-accent-width: 4px;
+  --grid-min-card: 260px;
+  --flow-arrow-size: 18px;
+  --grid-min-stat: 200px;
+  --link-underline-offset: 2px;
+  --center-offset: 50%;
+  --center-shift: -50%;
+  --compare-columns: 1fr 2fr;
+  --cols-3: repeat(3, 1fr);
+  --cols-4: repeat(4, 1fr);
+  --cols-1: 1fr;
+  --fields-columns-narrow: 1fr;
+  --fields-columns-mode: var(--fields-label-width) 1fr;
+  --fields-label-width: 7.5em;
+  --line-tag: 1.9;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --hero-panel-bg: rgba(255, 255, 255, 0.06);
+  --hero-panel-border: rgba(255, 255, 255, 0.14);
+  --color-hero-title: var(--p-white);
+}
+
+/* ===================== 结构样式 ===================== */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-body);
+  line-height: var(--line-body);
+  overflow-wrap: anywhere;
+}
+a { color: var(--color-accent); text-underline-offset: var(--link-underline-offset); }
+a:hover { color: var(--color-accent-strong); }
+.wrap { max-width: var(--layout-max); margin: 0 auto; padding: 0 var(--layout-gutter); }
+header.hero { background: var(--color-hero-bg); color: var(--color-hero-text); padding: var(--space-2xl) 0 var(--space-xl); }
+.hero h1 { font-size: var(--font-h1); line-height: var(--line-heading); margin: 0 0 var(--space-md); color: var(--color-hero-title); font-weight: var(--weight-bold); }
+.hero .lead { font-size: var(--font-h3); margin: 0 0 var(--space-md); }
+.hero .meta { font-size: var(--font-small); color: var(--color-hero-muted); margin: 0; }
+.verdict-box {
+  margin-top: var(--space-lg);
+  border-left: var(--border-accent-width) solid var(--color-accent);
+  background: var(--hero-panel-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-card);
+}
+.verdict-box p { margin: 0 0 var(--space-sm); }
+.verdict-box p:last-child { margin-bottom: 0; }
+nav.toc { background: var(--color-surface); border-bottom: var(--border-width) solid var(--color-border); }
+nav.toc ul { list-style: none; margin: 0; padding: var(--space-sm) 0; display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); }
+nav.toc a { font-size: var(--font-small); text-decoration: none; color: var(--color-text-muted); }
+nav.toc a:hover { color: var(--color-accent); }
+main section { padding: var(--space-xl) 0 var(--space-sm); }
+h2 { font-size: var(--font-h2); line-height: var(--line-heading); color: var(--color-text-strong); margin: 0 0 var(--space-sm); padding-bottom: var(--space-sm); border-bottom: var(--border-width) solid var(--color-border); }
+h3 { font-size: var(--font-h3); line-height: var(--line-heading); color: var(--color-text-strong); margin: 0 0 var(--space-sm); }
+.section-intro { color: var(--color-text-muted); margin: 0 0 var(--space-lg); }
+p { margin: 0 0 var(--space-md); }
+ul, ol { padding-left: var(--space-lg); margin: 0 0 var(--space-md); }
+li { margin-bottom: var(--space-xs); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min-card)), 1fr)); gap: var(--space-md); }
+.card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
+.card p:last-child, .card ul:last-child { margin-bottom: 0; }
+.card .src { font-size: var(--font-caption); color: var(--color-text-faint); margin-top: var(--space-sm); }
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min-stat)), 1fr)); gap: var(--space-md); margin-top: var(--space-lg); }
+.stat { background: var(--hero-panel-bg); border: var(--border-width) solid var(--hero-panel-border); border-radius: var(--radius-card); padding: var(--space-md); }
+.stat .num { font-size: var(--font-h2); font-weight: var(--weight-bold); color: var(--color-hero-title); line-height: var(--line-heading); }
+.stat .lbl { font-size: var(--font-small); color: var(--color-hero-muted); line-height: var(--line-heading); margin-top: var(--space-xs); }
+.tag { display: inline-block; font-size: var(--font-caption); font-weight: var(--weight-medium); padding: 0 var(--space-sm); border-radius: var(--radius-tag); line-height: var(--line-tag); white-space: nowrap; }
+.t-support { color: var(--tag-support-fg); background: var(--tag-support-bg); }
+.t-cond { color: var(--tag-cond-fg); background: var(--tag-cond-bg); }
+.t-weak { color: var(--tag-weak-fg); background: var(--tag-weak-bg); }
+.t-risk { color: var(--tag-risk-fg); background: var(--tag-risk-bg); }
+.t-none { color: var(--tag-none-fg); background: var(--tag-none-bg); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm); }
+
+/* 表格：宽屏为表格，窄屏改纵向卡片 */
+table.rt { width: 100%; border-collapse: collapse; background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-card); overflow: hidden; font-size: var(--font-small); }
+table.rt th, table.rt td { text-align: left; vertical-align: top; padding: var(--space-sm) var(--space-md); border-bottom: var(--border-width) solid var(--color-border); }
+table.rt th { background: var(--color-surface-muted); color: var(--color-text-strong); font-weight: var(--weight-medium); }
+table.rt tr:last-child td { border-bottom: 0; }
+
+/* 流程图 */
+.flow { display: flex; align-items: stretch; gap: var(--flow-arrow-size); margin: var(--space-md) 0; }
+.flow .step { flex: 1 1 0; position: relative; background: var(--color-surface); border: var(--border-width) solid var(--color-border-strong); border-radius: var(--radius-card); padding: var(--space-sm) var(--space-md); font-size: var(--font-small); min-width: 0; }
+.flow .step strong { display: block; color: var(--color-text-strong); font-size: var(--font-body); margin-bottom: var(--space-xs); }
+.flow .step + .step::before { content: "→"; position: absolute; left: calc(-1 * var(--flow-arrow-size)); top: var(--center-offset); width: var(--flow-arrow-size); text-align: center; transform: translateY(var(--center-shift)); color: var(--color-accent); font-weight: var(--weight-bold); }
+.flow .step.hl { border-color: var(--color-accent); background: var(--color-accent-soft); }
+.layer-row { display: grid; grid-template-columns: var(--cols-3); gap: var(--space-md); margin-top: var(--space-md); }
+.layer { border-top: var(--border-accent-width) solid var(--color-accent); }
+.note { font-size: var(--font-small); color: var(--color-text-muted); background: var(--color-surface-muted); border-radius: var(--radius-card); padding: var(--space-sm) var(--space-md); margin: var(--space-md) 0; }
+
+/* 好坏对照 */
+.compare { display: grid; grid-template-columns: var(--compare-columns); gap: var(--space-md); }
+.bad { border-left: var(--border-accent-width) solid var(--tag-risk-fg); }
+.good { border-left: var(--border-accent-width) solid var(--tag-support-fg); }
+dl.fields { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-xs) var(--space-md); margin: 0; font-size: var(--font-small); }
+dl.fields dt { color: var(--color-text-muted); font-weight: var(--weight-medium); }
+dl.fields dd { margin: 0; }
+
+/* 收费模式卡 */
+.mode h3 { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; }
+.mode dl.fields { grid-template-columns: var(--fields-columns-mode); }
+.mode .counter { margin-top: var(--space-md); padding-top: var(--space-sm); border-top: var(--border-width) dashed var(--color-border-strong); font-size: var(--font-small); }
+
+/* 时间线 */
+.phases { display: grid; grid-template-columns: var(--cols-4); gap: var(--space-md); }
+.phase .when { font-size: var(--font-small); font-weight: var(--weight-bold); color: var(--color-accent); }
+.tiers { display: grid; grid-template-columns: var(--cols-3); gap: var(--space-md); }
+.tier .lv { font-size: var(--font-small); font-weight: var(--weight-bold); color: var(--color-accent-strong); }
+h3.sub { margin-top: var(--space-lg); }
+ol.sources { font-size: var(--font-small); padding-left: var(--space-lg); }
+ol.sources li { margin-bottom: var(--space-sm); }
+footer { padding: var(--space-xl) 0 var(--space-2xl); color: var(--color-text-faint); font-size: var(--font-small); }
+
+@media (max-width: 720px) { /* --bp-narrow */
+  :root { --layout-gutter: var(--p-space-4); }
+  header.hero { padding: var(--space-xl) 0 var(--space-lg); }
+  .flow { flex-direction: column; gap: var(--flow-arrow-size); }
+  .flow .step + .step::before { content: "↓"; left: var(--center-offset); top: calc(-1 * var(--flow-arrow-size)); transform: translateX(var(--center-shift)); }
+  .layer-row, .compare, .phases, .tiers { grid-template-columns: var(--cols-1); }
+  .mode dl.fields, dl.fields { grid-template-columns: var(--fields-columns-narrow); }
+  dl.fields dd { margin-bottom: var(--space-sm); }
+  table.rt, table.rt tbody, table.rt tr, table.rt td { display: block; width: 100%; }
+  table.rt thead { display: none; }
+  table.rt tr { border-bottom: var(--border-width) solid var(--color-border-strong); padding: var(--space-sm) 0; }
+  table.rt td { border-bottom: 0; padding: var(--space-xs) var(--space-md); }
+  table.rt td::before { content: attr(data-label); display: block; font-size: var(--font-caption); color: var(--color-text-faint); font-weight: var(--weight-medium); }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>信源平台是 AI 的下一个风口吗？</h1>
+    <p class="lead">一段短视频的主张拆解、公开证据核对，以及个人创业者可以照做的 30 天验证方案。</p>
+    <p class="meta">核查日期：2026-10-20 ｜ 证据分四级：一手原文、媒体报道、营销性质稿件、检索摘要（原文本次未打开）</p>
+    <div class="verdict-box">
+      <p><strong>结论：</strong>视频说的引用现象有证据支持：联网 AI 回答确实大量引用第三方页面，市场上也已经有影响这些引用的软件和服务在出售。但是独立信源平台的付费需求仍待验证，“信源平台一定是下一个风口”目前没有证据支持，应当把它当作一个待验证的商业假设。</p>
+      <p><strong>对个人的建议：</strong>先不要做平台。先用人工交付卖一个范围固定的小服务，例如一个品类的产品资料核验和 AI 回答抽样监测，拿到付费试点和真实工时数据，再决定是否做平台。</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num">7.8%</div><div class="lbl">ChatGPT 引用中维基百科占全部引用的比例（Profound，6.8 亿次引用样本）</div></div>
+      <div class="stat"><div class="num">43.8%</div><div class="lbl">在 Ahrefs 的“best X”提示词样本中，榜单类页面占被引用页面类型的比例</div></div>
+      <div class="stat"><div class="num">43%</div><div class="lbl">引用了自家推广页的 AI 回答里，完全没提自家活动的比例（Ahrefs 自测实验）</div></div>
+      <div class="stat"><div class="num">3 天 11 篇</div><div class="lbl">315 晚会实验：虚构产品的软文发布量，之后两个大模型开始推荐它</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <div class="wrap">
+    <ul>
+      <li><a href="#claims">视频主张逐条判定</a></li>
+      <li><a href="#flow">AI 怎样选来源</a></li>
+      <li><a href="#concepts">三个不同的生意</a></li>
+      <li><a href="#evidence">证据卡</a></li>
+      <li><a href="#sample">合格信源长什么样</a></li>
+      <li><a href="#modes">四种收费模式评估</a></li>
+      <li><a href="#fail">为什么可能做不成</a></li>
+      <li><a href="#plan">30 天验证方案</a></li>
+      <li><a href="#sell">先卖什么</a></li>
+      <li><a href="#open">未核实事项</a></li>
+      <li><a href="#sources">来源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="claims">
+  <h2>视频主张逐条判定</h2>
+  <p class="section-intro">视频的核心说法是：AI 回答需要参考来源，所以专门整理品牌和产品资料、并写清出处的“信源平台”会成为风口。下表把这个说法拆成 7 条，逐条给出判定。</p>
+  <table class="rt">
+    <thead><tr><th>视频里的说法</th><th>判定</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td data-label="视频里的说法">AI 回答会参考品牌官网、产品资料、测评文章</td><td data-label="判定"><span class="tag t-support">有支持</span></td><td data-label="依据">多项引用统计显示，联网 AI 产品会大量引用第三方页面；不同产品偏好的网站差别很大（见证据卡 A）。</td></tr>
+      <tr><td data-label="视频里的说法">合格的信源要写清型号、使用条件、标定数值、参数来源和更新时间</td><td data-label="判定"><span class="tag t-support">有支持</span></td><td data-label="依据">方向合理。这是可核验内容的基本要求，不是 AI 专属技巧。Google 的官方指南说，为生成式 AI 搜索做优化仍然是 SEO，不需要专门的 AI 文件或标记。</td></tr>
+      <tr><td data-label="视频里的说法">信源平台“一定会是”下一个风口</td><td data-label="判定"><span class="tag t-weak">证据不足</span></td><td data-label="依据">“AI 会引用来源”不等于“需要一个独立的信源平台”，也不等于“品牌愿意持续付费”。本次没有找到独立信源平台规模化盈利的公开证据。</td></tr>
+      <tr><td data-label="视频里的说法">收费模式一：帮品牌搭建品牌数据库，按项目或年费收费</td><td data-label="判定"><span class="tag t-cond">有条件成立</span></td><td data-label="依据">风险最低。但品牌已有官网、电商详情页等替代品，需要证明第三方整理有额外价值。</td></tr>
+      <tr><td data-label="视频里的说法">收费模式二：做 GEO 上游，服务商在平台发文章、维护品牌信息，按篇或按项目收费</td><td data-label="判定"><span class="tag t-risk">风险高</span></td><td data-label="依据">如果出现虚构内容、冒充独立测评或批量操纵排名，就和 315 晚会曝光的“AI 投毒”手法相同；即使内容真实，也涉及广告标识、利益披露和搜索平台规则；还会和“中立可信”的定位冲突。</td></tr>
+      <tr><td data-label="视频里的说法">收费模式三：行业报告、竞品分析、AI 引用监测</td><td data-label="判定"><span class="tag t-cond">有条件成立</span></td><td data-label="依据">市场上已有 Profound、Ahrefs Brand Radar 等监测产品在销售，说明已有产品供给和竞争；实际客户数量和续费情况本次未核实。个人需要找到细分品类。</td></tr>
+      <tr><td data-label="视频里的说法">能否持续盈利，要看客户是否付费、收入能否覆盖资料和长期维护成本</td><td data-label="判定"><span class="tag t-support">有支持</span></td><td data-label="依据">这是视频里最可靠的一句话。下文的 30 天方案就是为了测这两件事。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="flow">
+  <h2>AI 怎样选来源：一个简化示意</h2>
+  <p class="section-intro">图题：具备联网检索或来源引用功能的 AI 系统：简化工作流。具体流程因产品、问题类型和检索设置而异；有些回答只用模型已有知识，不做检索，也不给引用。</p>
+  <div class="flow" role="list">
+    <div class="step" role="listitem"><strong>用户提问</strong>例如“跑步手表哪款续航长”</div>
+    <div class="step" role="listitem"><strong>检索候选页面</strong>来自搜索引擎、第三方搜索服务或自有索引</div>
+    <div class="step hl" role="listitem"><strong>选取来源</strong>信源平台想影响的就是这一步</div>
+    <div class="step" role="listitem"><strong>生成回答</strong>可能附引用链接，也可能不附</div>
+    <div class="step" role="listitem"><strong>用户决定</strong>继续追问、点开来源，或直接下单</div>
+  </div>
+  <div class="note">两个容易混淆的点：第一，被检索到不等于被引用；第二，被引用不等于被推荐。Ahrefs 的实验里，引用了自家推广页的回答中有 43% 完全没提自家活动（见证据卡 B）。Pew 的调查里，出现 AI 摘要的搜索页面上，用户只有 1% 的访问点了摘要里的来源链接。</div>
+</section>
+
+<section id="concepts">
+  <h2>“信源平台”其实是三个不同的生意</h2>
+  <p class="section-intro">视频把三件事放在一个名字下面。它们的客户、交付物和风险都不一样，不需要由同一家公司来做。</p>
+  <div class="layer-row">
+    <div class="card layer">
+      <h3>信源建设</h3>
+      <p>整理并维护可核验的信息：型号、参数、使用条件、来源链接、更新时间、纠错记录。</p>
+      <p><strong>谁付钱：</strong>品牌方。<br><strong>主要风险：</strong>品牌觉得官网已经够用；维护成本被低估。</p>
+    </div>
+    <div class="card layer">
+      <h3>信源分发</h3>
+      <p>把信息发到官网、媒体、社区或测评网站，让检索系统更容易找到。</p>
+      <p><strong>谁付钱：</strong>品牌方或 GEO 服务商。<br><strong>主要风险：</strong>变成付费软文；广告标识与平台政策风险；和“中立”定位冲突。</p>
+    </div>
+    <div class="card layer">
+      <h3>信源效果监测</h3>
+      <p>追踪 AI 回答是否提到品牌、是否引用相关内容、说的参数是否正确。</p>
+      <p><strong>谁付钱：</strong>品牌市场部、代理商。<br><strong>主要风险：</strong>同一问题多次提问结果不同，测量误差大；已有成熟工具竞争。</p>
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <h2>证据卡</h2>
+  <p class="section-intro">每张卡标出日期、统计口径和证据等级。不同研究的产品、时间、样本和口径都不同，数字不能直接拼成一个统一排名。</p>
+
+  <h3>A. AI 到底引用谁</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">2025-06 发布，2025-08 更新</span></div>
+      <p><strong>Profound：6.8 亿次引用统计。</strong>样本期 2024-08 至 2025-06，口径是“某域名占全部引用的比例”。ChatGPT 引用最多的是维基百科（7.8%），其次 Reddit 1.8%、Forbes 1.1%、G2 1.1%。Google AI Overviews 前几位是 Reddit 2.2%、YouTube 1.9%、Quora 1.5%。Perplexity 前几位是 Reddit 6.6%、YouTube 2.0%。</p>
+      <p><strong>含义：</strong>单一网站的占比都不高，来源很分散；不同 AI 产品偏好差别很大。新平台要进入这些名单，没有捷径。</p>
+      <p class="src">来源 [1]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">2025-12</span></div>
+      <p><strong>Ahrefs：“best X”榜单研究。</strong>750 个提示词、26,283 个被引用 URL；“best X”类榜单页面占来源页面类型的 43.8%。</p>
+      <p><strong>含义：</strong>在这个“best X”提示词样本里，榜单类页面是被引用最多的一类。这和视频说的“测评文章”对应，也是软文最容易冒充的形式。其他类型的问题是否同样如此，这项研究没有回答。</p>
+      <p class="src">来源 [2]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-cond">媒体报道 + 营销性质</span><span class="tag t-none">2026-09</span></div>
+      <p><strong>国内参照：什么值得买。</strong>一篇宣传性质的报道援引 QuestMobile 数据：豆包回答“手机推荐”类问题时，单次平均引用 40.8 篇内容；报道称该站在多个品类的 AI 回答中被高频引用。</p>
+      <p><strong>含义：</strong>国内已经有一个现成的、被报道为高频引用的内容平台，它有多年积累的用户测评和商品库。被引用的具体原因报道没有证明；新建平台要达到类似位置，至少要面对这种积累差距。这篇报道有宣传性质，数字未见原始报告。</p>
+      <p class="src">来源 [9]</p>
+    </div>
+  </div>
+
+  <h3 class="sub">B. 被引用不等于被推荐，更不等于成交</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-weak">单家公司小规模实验</span><span class="tag t-none">2026-07</span></div>
+      <p><strong>Ahrefs 自我推广内容实验。</strong>在 5 个域名发布 34 个推广自家活动的页面，2026-02-07 至 05-31 采集 ChatGPT、Gemini、Perplexity、Copilot 的 9,886 个回答。</p>
+      <ul>
+        <li>页面上线后，自家活动进入了 72 个原本没有它的回答位置，其中 82% 出现在引用了这些页面之一的回答里。</li>
+        <li>但在引用了推广页的回答中，43% 完全没提自家活动，反而推荐了竞争对手。</li>
+        <li>一个页面从首次被引用到最后一次被引用之间，只有约三分之一的日子被引用。</li>
+      </ul>
+      <p><strong>含义：</strong>页面上线后，观察到自家活动被提及的次数增加，但这项单家公司的小实验不能确定原因，也不能推广为普遍效果。被引用的日子不稳定；引用了推广页的回答，有时反而推荐竞争对手。作者本人说这不是定论。</p>
+      <p class="src">来源 [3]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">2025-07</span></div>
+      <p><strong>Pew：900 名美国成年人的真实浏览记录（2025-03）。</strong>出现 AI 摘要的搜索页面上，用户点击传统结果链接的比例是 8%；没有 AI 摘要时是 15%。AI 摘要里的来源链接只有 1% 的访问被点击。</p>
+      <p><strong>含义：</strong>“被 AI 引用”带来的点击可能很少。如果品牌按流量算回报，信源服务很难证明价值。</p>
+      <p class="src">来源 [4]</p>
+    </div>
+  </div>
+
+  <h3 class="sub">C. 平台规则：不需要特殊技术，但不能靠铺量</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">2026-07 更新</span></div>
+      <p><strong>Google 生成式 AI 搜索优化指南。</strong>官方说法：为生成式 AI 搜索做优化仍然是 SEO；不需要新的机器可读文件、AI 专用文本文件或特殊标记；不需要把内容切成小块。结构化数据不是生成式 AI 搜索的必要条件，但仍推荐用于常规 SEO。</p>
+      <p><strong>关于 llms.txt：</strong>本次未发现它是 Google 搜索必要要求的依据。这不代表其他 AI 系统都不读它。</p>
+      <p class="src">来源 [5]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">政策页 2026-08 更新</span></div>
+      <p><strong>Google 站点声誉政策与规模化内容滥用。</strong>站点声誉政策针对的是：第三方页面发布在主站上，目的是利用主站已有的排名信号来操纵搜索排名。官方举的违规例子包括教育网站托管第三方的发薪日贷款评测。新闻稿分发服务、用户论坛等不属于违规。2024-11 的说明补充：无论主站参与或监督多少，都不改变内容的第三方性质。另一条规则是规模化内容滥用：主要为操纵排名、而不是为帮助用户，大量生成没有价值的页面。</p>
+      <p><strong>含义：</strong>第三方付费内容不是一概违规。但“平台替品牌批量发文、按篇收费”的模式，如果目的是借平台排名信号推高品牌，或主要为操纵排名而批量生成不帮助用户的低价值页面，就会落在这两条规则的范围里。</p>
+      <p class="src">来源 [6] [7]</p>
+    </div>
+  </div>
+
+  <h3 class="sub">D. 数据授权已有平台级案例，小规模数据的采购需求待验证</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="tags"><span class="tag t-support">一手原文</span><span class="tag t-none">2024-02</span></div>
+      <p><strong>Reddit 上市文件（S-1）。</strong>原文：2024 年 1 月签订若干数据授权协议，合同总价值 2.03 亿美元，期限 2 到 3 年。媒体报道其中与 Google 的协议约每年 6000 万美元，这个数字不在上市文件里。</p>
+      <p><strong>含义：</strong>数据授权确实能卖钱，但这是平台级案例。小规模但独特的专业数据能否卖出、卖给谁，本次没有找到公开证据，需要单独验证。</p>
+      <p class="src">来源 [8]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-cond">媒体报道</span><span class="tag t-none">2025-08</span></div>
+      <p><strong>Perplexity 给内容方分成。</strong>2024-07 推出发布者分成计划。2025-08 推出每月 5 美元的 Comet Plus 订阅，宣布把 80% 收入分给参与的内容方，初始资金池 4250 万美元（据《华尔街日报》）。</p>
+      <p><strong>含义：</strong>AI 公司开始为内容付钱，但这是 2025-08 的公告口径。参与资格、结算规则和现行状态本次未核实，不能当作普遍机制。</p>
+      <p class="src">来源 [10]</p>
+    </div>
+  </div>
+
+  <h3 class="sub">E. 中国现场：已经出现“投毒”，监管在跟进</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="tags"><span class="tag t-cond">媒体报道</span><span class="tag t-none">2026-03</span></div>
+      <p><strong>315 晚会曝光“AI 投毒”。</strong>记者在电商平台买到一套 GEO 优化软件，虚构了一款智能手环，生成十余篇软文。两篇发布后约两小时，AI 开始复述其中编造的卖点；三天发布 11 篇（8 篇专家测评、2 篇行业排名、1 篇用户测评）后，两个大模型推荐了这款不存在的产品，而且排名靠前。</p>
+      <p><strong>含义：</strong>视频里的收费模式二用的是同一类发布渠道。它要和这种手法划清界限，至少要做到：内容真实可核验、公开付费关系、不冒充独立测评、不为操纵排名批量发文，并且能拒绝没有依据的客户主张。</p>
+      <p class="src">来源 [11]</p>
+    </div>
+    <div class="card">
+      <div class="tags"><span class="tag t-cond">媒体报道</span><span class="tag t-weak">法规原文本次未打开</span></div>
+      <p><strong>监管与行业自律。</strong>同一篇报道提到：2026 年 1 月市场监管总局在年度广告监管工作要点中提出整治 AI 生成广告；2025-11 有 14 家 GEO 企业发出行业倡议；2026-03 信通院启动 GEO 可信要求的首轮评测。受访律师认为，GEO 公司投喂内容影响 AI 输出是否构成广告，目前法律没有明确规定。</p>
+      <p><strong>广告标识：</strong>据检索摘要，《互联网广告管理办法》（2023-05-01 施行）第九条要求互联网广告具有可识别性；以知识介绍、体验分享、消费测评等形式推销商品并附购物链接的，应显著标明“广告”。法规原文站点本次未能打开，具体业务请以原文和专业意见为准。</p>
+      <p class="src">来源 [11] [12]</p>
+    </div>
+  </div>
+</section>
+
+<section id="sample">
+  <h2>合格信源长什么样：跑步手表续航示例</h2>
+  <p class="section-intro">视频用跑步手表举例：不要只写“续航很强”。下面把这个例子做成一张档案卡。<strong>卡片里的型号和数值都是示意数据，不对应任何真实产品。</strong></p>
+  <div class="compare">
+    <div class="card bad">
+      <h3>不合格写法</h3>
+      <p>“这款手表续航超强，跑马拉松完全没压力，强烈推荐！”</p>
+      <p><strong>问题：</strong>没有型号、没有使用条件、没有数值、没有来源、没有日期，也没有说明写作者和品牌的关系。AI 引用它，也无法让用户核对。</p>
+    </div>
+    <div class="card good">
+      <h3>合格档案卡（示意数据）</h3>
+      <dl class="fields">
+        <dt>型号</dt><dd>示例品牌 A 运动手表 X1（2026 款）</dd>
+        <dt>使用模式</dt><dd>全星座 GPS 持续开启、心率常开、屏幕常亮关闭</dd>
+        <dt>标定时长</dt><dd>品牌标称 XX 小时（品牌官网规格页，访问日期 YYYY-MM-DD）</dd>
+        <dt>第三方实测</dt><dd>某测评站实测 XX 小时；测试条件：室外 XX℃，固件版本 X.X</dd>
+        <dt>差异说明</dt><dd>两者测试条件不同，数字不能直接比较</dd>
+        <dt>更新时间</dt><dd>YYYY-MM-DD；固件更新后需复核</dd>
+        <dt>利益关系</dt><dd>本档案是否由品牌付费建立，在此写明</dd>
+        <dt>纠错记录</dt><dd>发现错误的日期、改了什么、由谁核对</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="note">“利益关系”和“纠错记录”两栏是视频没有提到的。如果平台向品牌收费，这两栏是维持可信度的最低要求。</div>
+</section>
+
+<section id="modes">
+  <h2>四种收费模式评估</h2>
+  <p class="section-intro">视频给了三种收费模式，这里补充第四种：向 AI 公司授权数据。没有真实报价、交付成本和客户反馈时，打综合分数会制造虚假的精确感，所以每项只标“已验证 / 初步迹象 / 待验证”，并给出“关键反证”：出现什么事实，就应该下调这种模式的优先级。</p>
+  <div class="grid">
+    <div class="card mode">
+      <h3>① 品牌数据库建设 <span class="tag t-cond">低风险切入</span></h3>
+      <dl class="fields">
+        <dt>付费客户</dt><dd><span class="tag t-weak">待验证</span> 品牌市场部或电商运营；谁拍板需访谈确认</dd>
+        <dt>现有替代</dt><dd><span class="tag t-support">已验证</span> 官网规格页、电商详情页、企业内部产品资料系统</dd>
+        <dt>交付成果</dt><dd><span class="tag t-weak">待验证</span> 结构化档案、来源链接、更新记录</dd>
+        <dt>付费触发</dt><dd><span class="tag t-cond">初步迹象</span> AI 回答说错自家参数，或推荐了竞品</dd>
+        <dt>交付成本</dt><dd><span class="tag t-weak">待验证</span> 首次建档加每次型号、固件更新后的复核</dd>
+        <dt>续费可能</dt><dd><span class="tag t-weak">待验证</span> 一次性建库容易，持续维护是否付费未知</dd>
+        <dt>合规风险</dt><dd><span class="tag t-support">相对较低</span> 以品牌自有资料为主；仍需确认资料使用权限，核对真实性，并按要求披露利益关系</dd>
+        <dt>可信度影响</dt><dd><span class="tag t-support">较小</span> 资料属于品牌自己，身份清楚</dd>
+      </dl>
+      <p class="counter"><strong>关键反证：</strong>品牌说“官网已经有了”，并且不愿为持续更新付费。</p>
+    </div>
+    <div class="card mode">
+      <h3>② GEO 上游内容发布 <span class="tag t-risk">风险最高</span></h3>
+      <dl class="fields">
+        <dt>付费客户</dt><dd><span class="tag t-cond">初步迹象</span> GEO 服务商和品牌；315 报道中记者能在电商平台买到相关软件，说明有供给，买家规模未知</dd>
+        <dt>现有替代</dt><dd><span class="tag t-support">已验证</span> 新闻稿分发、测评媒体、自媒体投放</dd>
+        <dt>交付成果</dt><dd><span class="tag t-weak">待验证</span> 发布的文章和维护的品牌页</dd>
+        <dt>付费触发</dt><dd><span class="tag t-cond">初步迹象</span> 品牌想“让 AI 推荐自己”</dd>
+        <dt>交付成本</dt><dd><span class="tag t-weak">待验证</span> 内容核实成本高；不核实则成本低但风险高</dd>
+        <dt>续费可能</dt><dd><span class="tag t-weak">待验证</span> 效果不稳定时续费难</dd>
+        <dt>合规风险</dt><dd><span class="tag t-risk">高</span> 广告标识义务、搜索平台规则、虚假宣传</dd>
+        <dt>可信度影响</dt><dd><span class="tag t-risk">直接冲突</span> 收品牌钱发内容，又自称中立信源</dd>
+      </dl>
+      <p class="counter"><strong>关键反证：</strong>AI 平台开始识别并降权这类内容，或监管明确把它认定为广告。</p>
+    </div>
+    <div class="card mode">
+      <h3>③ 数据研究与引用监测 <span class="tag t-cond">已有供给，有竞争</span></h3>
+      <dl class="fields">
+        <dt>付费客户</dt><dd><span class="tag t-cond">初步迹象</span> 海外已有 Profound、Ahrefs Brand Radar 等付费产品在售；实际客户与续费证据未核实</dd>
+        <dt>现有替代</dt><dd><span class="tag t-support">已验证</span> 上述工具；品牌自己手动提问</dd>
+        <dt>交付成果</dt><dd><span class="tag t-cond">初步迹象</span> 提及率、引用率、参数错误清单、改进建议</dd>
+        <dt>付费触发</dt><dd><span class="tag t-weak">待验证</span> 新品发布、竞品对比、负面回答</dd>
+        <dt>交付成本</dt><dd><span class="tag t-weak">待验证</span> 每轮提问、记录、人工核对的工时</dd>
+        <dt>续费可能</dt><dd><span class="tag t-weak">待验证</span> 定期报告还是一次性报告</dd>
+        <dt>合规风险</dt><dd><span class="tag t-cond">中</span> 大规模自动提问可能受 AI 平台服务条款限制</dd>
+        <dt>可信度影响</dt><dd><span class="tag t-support">较小</span> 只要方法公开、可重复</dd>
+      </dl>
+      <p class="counter"><strong>关键反证：</strong>重复测试的自然波动大于改动带来的变化，报告无法支持决策。</p>
+    </div>
+    <div class="card mode">
+      <h3>④ 向 AI 公司授权数据 <span class="tag t-weak">采购需求待验证</span></h3>
+      <dl class="fields">
+        <dt>付费客户</dt><dd><span class="tag t-support">已验证</span> 平台级案例存在：Reddit 2.03 亿美元合同</dd>
+        <dt>现有替代</dt><dd><span class="tag t-support">已验证</span> AI 公司直接抓取公开网页或买大平台数据</dd>
+        <dt>交付成果</dt><dd><span class="tag t-weak">待验证</span> 有合法授权链、持续更新的独特数据集</dd>
+        <dt>付费触发</dt><dd><span class="tag t-weak">待验证</span> 需验证数据的独特性、覆盖范围和买方的采购要求</dd>
+        <dt>交付成本</dt><dd><span class="tag t-weak">待验证</span> 授权、清洗、更新都需要成本，规模未知</dd>
+        <dt>续费可能</dt><dd><span class="tag t-weak">待验证</span> Reddit 案例合同期 2 到 3 年，续约情况未核实</dd>
+        <dt>合规风险</dt><dd><span class="tag t-cond">中</span> 数据来源授权与个人信息保护</dd>
+        <dt>可信度影响</dt><dd><span class="tag t-cond">中</span> 需说明数据卖给了谁</dd>
+      </dl>
+      <p class="counter"><strong>关键反证：</strong>数据不独特，或拿不到 AI 公司采购部门的接触渠道。</p>
+    </div>
+  </div>
+</section>
+
+<section id="fail">
+  <h2>为什么信源平台可能做不成</h2>
+  <p class="section-intro">视频没有讲反方理由。下面 6 条是做这件事前必须先回答的问题。</p>
+  <div class="grid">
+    <div class="card"><h3>平台没有分发权</h3><p>数据质量再高，也不能保证 AI 系统收录、检索或引用。没有独特数据、合作渠道或技术优势时，它只是一个需要持续运营的普通数据库。</p></div>
+    <div class="card"><h3>品牌官网可能已经够用</h3><p>品牌可以在官网、说明书和公开测试报告里写清参数。第三方平台必须证明自己提供了额外价值，而不只是重复整理。</p></div>
+    <div class="card"><h3>引用不等于转化</h3><p>AI 提到品牌的次数增加，不一定带来点击、询盘和成交。Pew 的数据显示 AI 摘要里的来源链接点击很少。可见度、访问量、线索和成交要分开计量。</p></div>
+    <div class="card"><h3>维护成本容易被低估</h3><p>型号迭代、参数变更、产品下架、测评更新、链接失效，都会产生持续成本。要先定好谁核验、多久更新、错误由谁改。</p></div>
+    <div class="card"><h3>利益冲突和责任风险</h3><p>收品牌的钱以后，平台会倾向于突出付费客户。如果同时自称独立客观，就必须公开利益关系、证据标准和纠错机制。</p></div>
+    <div class="card"><h3>效果测量本身有误差</h3><p>同一个问题在不同时间、地区、账号、模型版本和联网设置下，答案可能不同。一次出现或没出现引用，都不能证明效果。</p></div>
+  </div>
+</section>
+
+<section id="plan">
+  <h2>30 天验证方案</h2>
+  <p class="section-intro">目标不是证明“风口”，而是在 30 天内回答两个问题：有没有人愿意付钱；收入能不能覆盖交付和维护成本。</p>
+  <div class="phases">
+    <div class="card phase"><div class="when">第 1–7 天</div><h3>选品类，建基线</h3><p>选一个参数可以核验、购买决策依赖产品信息的垂直品类。定 20 个产品和一组固定问题，记录各 AI 是否提到品牌、引用了哪些来源、参数是否正确。保存日期、模型版本、联网状态和回答截图。</p></div>
+    <div class="card phase"><div class="when">第 8–14 天</div><h3>建最小档案</h3><p>为 20 个产品建统一字段：型号、参数、适用条件、来源链接、更新时间、利益关系、纠错记录。关键参数人工复核。缺的数据标“缺失”，不用推测补齐。</p></div>
+    <div class="card phase"><div class="when">第 15–21 天</div><h3>测效果和重复性</h3><p>用相同问题、相同设置重复测试。若要测档案的效果，先记录改动前结果，并留一组不改动的对照产品，避免把模型的自然波动当成档案的贡献。</p></div>
+    <div class="card phase"><div class="when">第 22–30 天</div><h3>验证付费意愿</h3><p>访谈潜在客户，展示真实交付样例，给出范围固定的付费试点报价。建库、持续维护、监测报告分开报价。“有兴趣”不算购买证据，以签单和回款为准。</p></div>
+  </div>
+
+  <h3 class="sub">要记录的指标</h3>
+  <table class="rt">
+    <thead><tr><th>指标</th><th>计算方法</th></tr></thead>
+    <tbody>
+      <tr><td data-label="指标">品牌提及率</td><td data-label="计算方法">含目标品牌的有效回答数 ÷ 有效测试回答数</td></tr>
+      <tr><td data-label="指标">来源引用率</td><td data-label="计算方法">引用目标档案或其原始来源的回答数 ÷ 有效测试回答数；直接引用档案和引用原始来源分开记</td></tr>
+      <tr><td data-label="指标">引用正确率</td><td data-label="计算方法">经核验确实支持对应说法的引用数 ÷ 抽查引用数</td></tr>
+      <tr><td data-label="指标">参数准确率</td><td data-label="计算方法">与权威来源和测试条件一致的参数项数 ÷ 已核验参数项数</td></tr>
+      <tr><td data-label="指标">交付成本</td><td data-label="计算方法">建档、核验、沟通、修订、更新的全部工时和直接费用</td></tr>
+      <tr><td data-label="指标">商业转化</td><td data-label="计算方法">合格客户数、正式报价数、付费试点数、实际回款</td></tr>
+      <tr><td data-label="指标">预期毛利</td><td data-label="计算方法">收入减直接交付和维护成本；获客和管理成本另记</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">提前写好的停止条件</h3>
+  <div class="grid">
+    <div class="card"><h3>停止扩展品类</h3><p>如果关键参数找不到可靠依据，或合法获取和维护数据的成本明显超过客户能接受的价格，就缩小范围或换品类。</p></div>
+    <div class="card"><h3>停止效果承诺</h3><p>如果重复测试没有稳定、可解释的改善，或引用正确率下降，就不要宣传“提高 AI 引用率”。</p></div>
+    <div class="card"><h3>停止当前销售假设</h3><p>如果完成一轮合格客户访谈和正式报价后，没有客户愿意进入付费试点，就重新审视客户、交付物和价格，不要扩大建库规模。</p></div>
+    <div class="card"><h3>停止当前模式</h3><p>如果按真实工时算，收入不能覆盖交付和维护成本，客户又不接受调价或缩小范围，就暂停这种模式。</p></div>
+  </div>
+  <div class="note">本方案不预设“引用率必须提高多少”或“访谈多少家才够”。先用第 15–21 天的重复测试估出自然波动有多大，再定最低可接受的效果和成本上限。</div>
+</section>
+
+<section id="sell">
+  <h2>个人创业者应该先卖什么</h2>
+  <p class="section-intro">把“平台型创业”和“服务型创业”分开。先用人工交付验证需求和单位经济，通常比一开始开发完整平台更容易控制风险。这是建议，不是成功保证。</p>
+  <div class="tiers">
+    <div class="card tier"><div class="lv">先做：低风险切入</div><h3>资料核验与结构化建档</h3><p>为一个品类的品牌整理可核验的产品资料、校对参数、建结构化档案。交付物清楚，合规风险低。</p></div>
+    <div class="card tier"><div class="lv">再做：进一步验证</div><h3>AI 回答抽样监测</h3><p>定期抽样 AI 回答，找出参数错误和来源问题，给出内容改进建议。方法要公开、可重复。</p></div>
+    <div class="card tier"><div class="lv">谨慎：依赖外部条件</div><h3>平台、分发与数据授权</h3><p>依赖外部平台分发、承诺引用效果或卖数据授权的业务，等前两步有付费客户和成本数据后再考虑。</p></div>
+  </div>
+</section>
+
+<section id="open">
+  <h2>本次未核实事项</h2>
+  <ul>
+    <li>《互联网广告管理办法》第九条：只看到检索摘要，政府和法规站点本次连接失败，原文未打开。</li>
+    <li>315 相关报道中的 GEO 软件售价和年费套餐数字：只见于转载和检索摘要，本页未采用。</li>
+    <li>什么值得买相关的 QuestMobile、新榜数据：来自宣传性质报道，未见原始报告。</li>
+    <li>Perplexity 分成计划的现行状态、参与资格和结算规则：只核对到 2025-08 的报道。</li>
+    <li>Reddit 与 Google 每年约 6000 万美元：来自媒体报道，上市文件只披露合同总额。</li>
+    <li>国内是否已有独立信源平台规模化盈利的案例：本次没有找到公开证据，也不能排除存在未公开的案例。</li>
+  </ul>
+</section>
+
+<section id="sources">
+  <h2>来源</h2>
+  <ol class="sources">
+    <li>Profound, AI Platform Citation Patterns（2025-06 发布，2025-08 更新）：<a href="https://www.tryprofound.com/blog/ai-platform-citation-patterns">tryprofound.com/blog/ai-platform-citation-patterns</a></li>
+    <li>Ahrefs, best lists research（2025-12-04）：<a href="https://ahrefs.com/blog/best-lists-research/">ahrefs.com/blog/best-lists-research</a></li>
+    <li>Ahrefs, Self-Promotional Content Works—Until It Backfires（2026-07）：<a href="https://ahrefs.com/blog/self-promotional-content-ai-seo-experiment/">ahrefs.com/blog/self-promotional-content-ai-seo-experiment</a></li>
+    <li>Pew Research Center（2025-07-22）：<a href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/">pewresearch.org/short-reads/2025/07/22/…</a></li>
+    <li>Google Search Central, AI optimization guide（2026-07-10 更新）：<a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide">developers.google.com/search/docs/fundamentals/ai-optimization-guide</a></li>
+    <li>Google Search Central, Spam policies（2026-08-28 更新）：<a href="https://developers.google.com/search/docs/essentials/spam-policies">developers.google.com/search/docs/essentials/spam-policies</a></li>
+    <li>Google Search Central Blog, site reputation abuse（2024-11）与 policy update（2026-08）：<a href="https://developers.google.com/search/blog/2024/11/site-reputation-abuse">2024/11</a>、<a href="https://developers.google.com/search/blog/2026/08/update-site-reputation-policy">2026/08</a></li>
+    <li>Reddit S-1（SEC，2024-02-22）：<a href="https://www.sec.gov/Archives/edgar/data/1713445/000162828024006294/reddits-1q423.htm">sec.gov/…/reddits-1q423.htm</a>；年约 6000 万美元见 <a href="https://techcrunch.com/2024/02/22/reddit-says-its-made-203m-so-far-licensing-its-data">TechCrunch</a></li>
+    <li>中国消费导报相关报道（2026-09-11，宣传性质）：<a href="https://news.qq.com/rain/a/20260911A0BKNG00">news.qq.com/rain/a/20260911A0BKNG00</a></li>
+    <li>Engadget, Perplexity Comet Plus 分成（2025-08-25）：<a href="https://www.engadget.com/ai/perplexity-has-cooked-up-a-new-way-to-pay-publishers-for-their-content-204255019.html">engadget.com/ai/…</a></li>
+    <li>21 世纪经济报道，315 晚会“AI 投毒”报道（2026-03-16）：<a href="https://www.21jingji.com/article/20260316/herald/8cf9afdb3bc8ba06b10b2f89aef3bc17.html">21jingji.com/article/20260316/…</a></li>
+    <li>《互联网广告管理办法》（国家市场监督管理总局令第 72 号，2023-02-25 公布，2023-05-01 施行）：原文站点本次未能打开，内容据检索摘要。</li>
+  </ol>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>制作说明：内容基于用户提供的视频逐字稿，结合公开资料核对。内容审稿参考了 ChatGPT Pro 意见，成稿经 Codex 只读交叉审核。核查日期 2026-10-20。本页不构成法律或投资意见。</p>
+  </div>
+</footer>
+
+</body>
+</html>

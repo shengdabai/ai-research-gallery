@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>用排除法找赚钱赛道，究竟能排除什么？</title>
+  <style>
+    /* 响应式断点：1080px 与 760px。断点规则写在 :root 后的 @media :root 覆盖块；三层 token：primitive → semantic → component。 */
+    :root {
+      /* primitive */
+      --p-white: #ffffff;
+      --p-ink: #142332;
+      --p-slate: #526578;
+      --p-line: #d7e1e8;
+      --p-surface: #edf2f6;
+      --p-paper: #f5f8fb;
+      --p-teal: #07594d;
+      --p-teal-soft: #e3f3ed;
+      --p-blue: #204da2;
+      --p-blue-soft: #eaf0fc;
+      --p-purple: #5c427c;
+      --p-purple-soft: #f0ecf7;
+      --p-red: #963b3b;
+      --p-red-soft: #faeded;
+      --p-transparent: transparent;
+      --p-font: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      --p-zero: 0;
+      --p-one: 1;
+      --p-two: 2;
+      --p-three: 3;
+      --p-four: 4;
+      --p-full: 100%;
+      --p-half: 50%;
+      --p-fr: 1fr;
+      --p-fr-wide: 1.6fr;
+      --p-fr-narrow: 0.9fr;
+      --p-pixel: 1px;
+      --p-rule: 2px;
+      --p-focus: 3px;
+      --p-base: 16px;
+      --p-xs: 0.25rem;
+      --p-sm: 0.5rem;
+      --p-md: 0.75rem;
+      --p-lg: 1rem;
+      --p-xl: 1.25rem;
+      --p-2xl: 1.5rem;
+      --p-3xl: 2rem;
+      --p-4xl: 2.5rem;
+      --p-5xl: 3rem;
+      --p-6xl: 4rem;
+      --p-7xl: 5rem;
+      --p-corner-small: 0.125rem;
+      --p-corner: 0.5rem;
+      --p-small: 0.875rem;
+      --p-body: 1.0625rem;
+      --p-h3: 1.375rem;
+      --p-h2: 1.75rem;
+      --p-title-min: 2.25rem;
+      --p-title-max: 4rem;
+      --p-title-fluid: 4.8vw;
+      --p-stat: 2.75rem;
+      --p-fluid-space: 3vw;
+      --p-measure: 88rem;
+      --p-rail: 11rem;
+      --p-bar-label: 4rem;
+      --p-bar-number: 4.5rem;
+      --p-bar-height: 0.625rem;
+      --p-field-height: 12rem;
+      --p-field-mobile-height: 7rem;
+      --p-line-tight: 1.15;
+      --p-line-heading: 1.4;
+      --p-line-copy: 1.75;
+      --p-weight-normal: 400;
+      --p-weight-medium: 500;
+      --p-weight-bold: 700;
+      --p-tracking-title: -0.035em;
+      --p-tracking-label: 0.04em;
+      --p-hidden-shift: -200%;
+      --p-column-claim: 18%;
+      --p-column-verdict: 22%;
+      --p-column-source: 22%;
+      --p-column-boundary: 38%;
+      --p-rate-a1: 79.7%;
+      --p-rate-a5: 50.8%;
+      --p-rate-a10: 34.9%;
+      --p-rate-b1: 79.6%;
+      --p-rate-b5: 50.2%;
+      --p-rate-b10: 34.7%;
+      --p-rate-cash: 70%;
+      --p-rate-market: 43%;
+      --p-rate-timing: 29%;
+      --p-rate-economics: 19%;
+
+      /* semantic */
+      --s-background: var(--p-paper);
+      --s-surface: var(--p-white);
+      --s-muted-surface: var(--p-surface);
+      --s-text: var(--p-ink);
+      --s-muted-text: var(--p-slate);
+      --s-link: var(--p-blue);
+      --s-accent: var(--p-teal);
+      --s-border: var(--p-pixel) solid var(--p-line);
+      --s-strong-border: var(--p-rule) solid var(--p-ink);
+      --s-focus: var(--p-focus) solid var(--p-blue);
+      --s-quote-ink: var(--p-teal);
+      --s-quote-fill: var(--p-teal-soft);
+      --s-external-ink: var(--p-blue);
+      --s-external-fill: var(--p-blue-soft);
+      --s-inference-ink: var(--p-purple);
+      --s-inference-fill: var(--p-purple-soft);
+      --s-unverified-ink: var(--p-red);
+      --s-unverified-fill: var(--p-red-soft);
+      --s-font: var(--p-font);
+      --s-base-size: var(--p-base);
+      --s-body-size: var(--p-body);
+      --s-small-size: var(--p-small);
+      --s-table-size: var(--p-lg);
+      --s-title-size: clamp(var(--p-title-min), var(--p-title-fluid), var(--p-title-max));
+      --s-heading-size: var(--p-h2);
+      --s-subheading-size: var(--p-h3);
+      --s-zero: var(--p-zero);
+      --s-full: var(--p-full);
+      --s-unit: var(--p-one);
+      --s-space-xs: var(--p-xs);
+      --s-space-sm: var(--p-sm);
+      --s-space-md: var(--p-md);
+      --s-space-lg: var(--p-lg);
+      --s-space-xl: var(--p-xl);
+      --s-space-2xl: var(--p-2xl);
+      --s-space-3xl: var(--p-3xl);
+      --s-space-4xl: var(--p-4xl);
+      --s-space-5xl: var(--p-5xl);
+      --s-space-6xl: var(--p-6xl);
+      --s-page-padding: clamp(var(--p-lg), var(--p-fluid-space), var(--p-5xl));
+      --s-measure: var(--p-measure);
+      --s-grid-one: minmax(var(--p-zero), var(--p-fr));
+      --s-grid-two: repeat(var(--p-two), minmax(var(--p-zero), var(--p-fr)));
+      --s-grid-three: repeat(var(--p-three), minmax(var(--p-zero), var(--p-fr)));
+      --s-grid-four: repeat(var(--p-four), minmax(var(--p-zero), var(--p-fr)));
+      --s-split-grid: minmax(var(--p-zero), var(--p-fr-wide)) minmax(var(--p-zero), var(--p-fr-narrow));
+      --s-content-grid: var(--p-rail) minmax(var(--p-zero), var(--p-fr));
+      --s-radius: var(--p-corner);
+      --s-label-radius: var(--p-corner-small);
+      --s-normal: var(--p-weight-normal);
+      --s-medium: var(--p-weight-medium);
+      --s-bold: var(--p-weight-bold);
+      --s-copy-leading: var(--p-line-copy);
+      --s-heading-leading: var(--p-line-heading);
+      --s-display-leading: var(--p-line-tight);
+      --s-title-tracking: var(--p-tracking-title);
+      --s-label-tracking: var(--p-tracking-label);
+      --s-stat-size: var(--p-stat);
+      --s-quote-rule: var(--p-rule) solid var(--s-quote-ink);
+      --s-inference-rule: var(--p-rule) solid var(--s-inference-ink);
+      --s-col-claim: var(--p-column-claim);
+      --s-col-verdict: var(--p-column-verdict);
+      --s-col-source: var(--p-column-source);
+      --s-col-boundary: var(--p-column-boundary);
+      --s-bar-grid: var(--p-bar-label) minmax(var(--p-zero), var(--p-fr)) var(--p-bar-number);
+      --s-bar-height: var(--p-bar-height);
+      --s-field-height: var(--p-field-height);
+      --s-field-mobile-height: var(--p-field-mobile-height);
+      --s-hidden-shift: var(--p-hidden-shift);
+      --s-hidden-pixel: var(--p-pixel);
+      --s-hidden-clip: inset(var(--p-half));
+      --s-underline-size: var(--p-pixel);
+      --s-underline-strong: var(--p-rule);
+      --s-rate-a1: var(--p-rate-a1);
+      --s-rate-a5: var(--p-rate-a5);
+      --s-rate-a10: var(--p-rate-a10);
+      --s-rate-b1: var(--p-rate-b1);
+      --s-rate-b5: var(--p-rate-b5);
+      --s-rate-b10: var(--p-rate-b10);
+      --s-rate-cash: var(--p-rate-cash);
+      --s-rate-market: var(--p-rate-market);
+      --s-rate-timing: var(--p-rate-timing);
+      --s-rate-economics: var(--p-rate-economics);
+
+      /* component */
+      --c-zero: var(--s-zero);
+      --c-full: var(--s-full);
+      --c-unit: var(--s-unit);
+      --c-font: var(--s-font);
+      --c-base-size: var(--s-base-size);
+      --c-body-size: var(--s-body-size);
+      --c-small-size: var(--s-small-size);
+      --c-table-size: var(--s-table-size);
+      --c-title-size: var(--s-title-size);
+      --c-h2-size: var(--s-heading-size);
+      --c-h3-size: var(--s-subheading-size);
+      --c-text: var(--s-text);
+      --c-muted: var(--s-muted-text);
+      --c-background: var(--s-background);
+      --c-surface: var(--s-surface);
+      --c-soft-surface: var(--s-muted-surface);
+      --c-link: var(--s-link);
+      --c-accent: var(--s-accent);
+      --c-border: var(--s-border);
+      --c-strong-border: var(--s-strong-border);
+      --c-focus: var(--s-focus);
+      --c-radius: var(--s-radius);
+      --c-label-radius: var(--s-label-radius);
+      --c-weight: var(--s-normal);
+      --c-medium: var(--s-medium);
+      --c-bold: var(--s-bold);
+      --c-leading: var(--s-copy-leading);
+      --c-heading-leading: var(--s-heading-leading);
+      --c-title-leading: var(--s-display-leading);
+      --c-xs: var(--s-space-xs);
+      --c-sm: var(--s-space-sm);
+      --c-md: var(--s-space-md);
+      --c-lg: var(--s-space-lg);
+      --c-xl: var(--s-space-xl);
+      --c-2xl: var(--s-space-2xl);
+      --c-3xl: var(--s-space-3xl);
+      --c-4xl: var(--s-space-4xl);
+      --c-5xl: var(--s-space-5xl);
+      --c-6xl: var(--s-space-6xl);
+      --c-page-width: var(--s-measure);
+      --c-page-padding: var(--s-page-padding);
+      --c-section-gap: var(--s-space-6xl);
+      --c-hero-grid: var(--s-split-grid);
+      --c-content-grid: var(--s-content-grid);
+      --c-card-grid: var(--s-grid-three);
+      --c-flow-grid: var(--s-grid-four);
+      --c-pair-grid: var(--s-grid-two);
+      --c-source-grid: var(--s-grid-two);
+      --c-nav-grid: var(--s-grid-one);
+      --c-toc-position: sticky;
+      --c-toc-display: block;
+      --c-title-tracking: var(--s-title-tracking);
+      --c-label-tracking: var(--s-label-tracking);
+      --c-stat-size: var(--s-stat-size);
+      --c-quote-ink: var(--s-quote-ink);
+      --c-quote-fill: var(--s-quote-fill);
+      --c-external-ink: var(--s-external-ink);
+      --c-external-fill: var(--s-external-fill);
+      --c-inference-ink: var(--s-inference-ink);
+      --c-inference-fill: var(--s-inference-fill);
+      --c-unverified-ink: var(--s-unverified-ink);
+      --c-unverified-fill: var(--s-unverified-fill);
+      --c-quote-rule: var(--s-quote-rule);
+      --c-inference-rule: var(--s-inference-rule);
+      --c-table-display: table;
+      --c-caption-display: table-caption;
+      --c-tbody-display: table-row-group;
+      --c-row-display: table-row;
+      --c-cell-display: table-cell;
+      --c-colgroup-display: table-column-group;
+      --c-cell-label-display: none;
+      --c-head-position: static;
+      --c-head-size: auto;
+      --c-head-clip: none;
+      --c-head-overflow: visible;
+      --c-row-border: none;
+      --c-row-margin: var(--s-zero);
+      --c-row-radius: var(--s-zero);
+      --c-table-frame: var(--s-border);
+      --c-col-claim: var(--s-col-claim);
+      --c-col-verdict: var(--s-col-verdict);
+      --c-col-source: var(--s-col-source);
+      --c-col-boundary: var(--s-col-boundary);
+      --c-bar-grid: var(--s-bar-grid);
+      --c-bar-height: var(--s-bar-height);
+      --c-bar-a-fill: var(--s-accent);
+      --c-bar-b-fill: var(--s-link);
+      --c-bar-a1: var(--s-rate-a1);
+      --c-bar-a5: var(--s-rate-a5);
+      --c-bar-a10: var(--s-rate-a10);
+      --c-bar-b1: var(--s-rate-b1);
+      --c-bar-b5: var(--s-rate-b5);
+      --c-bar-b10: var(--s-rate-b10);
+      --c-bar-cash: var(--s-rate-cash);
+      --c-bar-market: var(--s-rate-market);
+      --c-bar-timing: var(--s-rate-timing);
+      --c-bar-economics: var(--s-rate-economics);
+      --c-input-height: var(--s-field-height);
+      --c-skip-shift: var(--s-hidden-shift);
+      --c-hidden-pixel: var(--s-hidden-pixel);
+      --c-underline-size: var(--s-underline-size);
+      --c-underline-strong: var(--s-underline-strong);
+
+
+    }
+    @media (max-width: 1080px) {
+      :root {
+        --c-hero-grid: var(--s-grid-one);
+        --c-content-grid: var(--s-grid-one);
+        --c-flow-grid: var(--s-grid-two);
+        --c-nav-grid: var(--s-grid-three);
+        --c-toc-position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --s-small-size: var(--p-lg);
+        --c-card-grid: var(--s-grid-one);
+        --c-flow-grid: var(--s-grid-one);
+        --c-pair-grid: var(--s-grid-one);
+        --c-source-grid: var(--s-grid-one);
+        --c-nav-grid: var(--s-grid-two);
+        --c-section-gap: var(--s-space-5xl);
+        --c-table-display: block;
+        --c-caption-display: block;
+        --c-tbody-display: block;
+        --c-row-display: block;
+        --c-cell-display: block;
+        --c-colgroup-display: none;
+        --c-cell-label-display: block;
+        --c-head-position: absolute;
+        --c-head-size: var(--s-hidden-pixel);
+        --c-head-clip: var(--s-hidden-clip);
+        --c-head-overflow: hidden;
+        --c-row-border: var(--s-border);
+        --c-row-margin: var(--s-space-lg);
+        --c-row-radius: var(--s-radius);
+        --c-table-frame: none;
+        --c-input-height: var(--s-field-mobile-height);
+      }
+    }
+
+    @media print {
+      :root {
+        --s-background: var(--p-white);
+        --c-content-grid: var(--s-grid-one);
+        --c-hero-grid: var(--s-grid-one);
+        --c-toc-display: none;
+        --c-section-gap: var(--s-space-3xl);
+      }
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: var(--c-base-size);
+      scroll-padding-block-start: var(--c-2xl);
+    }
+
+    body {
+      margin: var(--c-zero);
+      background: var(--c-background);
+      color: var(--c-text);
+      font-family: var(--c-font);
+      font-size: var(--c-body-size);
+      font-weight: var(--c-weight);
+      line-height: var(--c-leading);
+    }
+
+    h1, h2, h3, h4, p, ul, ol, dl, figure, blockquote {
+      margin: var(--c-zero);
+    }
+
+    h1, h2, h3, h4 {
+      font-style: normal;
+      font-weight: var(--c-bold);
+      line-height: var(--c-heading-leading);
+      text-wrap: pretty;
+    }
+
+    h1 {
+      font-size: var(--c-title-size);
+      line-height: var(--c-title-leading);
+      letter-spacing: var(--c-title-tracking);
+    }
+
+    h2 {
+      font-size: var(--c-h2-size);
+    }
+
+    h3 {
+      font-size: var(--c-h3-size);
+    }
+
+    h4 {
+      font-size: var(--c-body-size);
+    }
+
+    a {
+      color: var(--c-link);
+      text-underline-offset: var(--c-xs);
+      text-decoration-thickness: var(--c-underline-size);
+    }
+
+    a:hover {
+      text-decoration-thickness: var(--c-underline-strong);
+    }
+
+    a:focus-visible,
+    summary:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: var(--c-focus);
+      outline-offset: var(--c-xs);
+    }
+
+    strong {
+      font-weight: var(--c-bold);
+    }
+
+    input, textarea, select {
+      font: inherit;
+      color: var(--c-text);
+    }
+
+    section, article, aside, div {
+      min-inline-size: var(--c-zero);
+    }
+
+    section[id], li[id] {
+      scroll-margin-block-start: var(--c-2xl);
+    }
+
+    p + p {
+      margin-block-start: var(--c-md);
+    }
+
+    .frame {
+      max-inline-size: var(--c-page-width);
+      margin-inline: auto;
+      padding-inline: var(--c-page-padding);
+    }
+
+    .skip-link {
+      position: absolute;
+      inset-block-start: var(--c-lg);
+      inset-inline-start: var(--c-lg);
+      z-index: var(--c-unit);
+      transform: translateY(var(--c-skip-shift));
+      padding: var(--c-md) var(--c-lg);
+      background: var(--c-surface);
+      border: var(--c-strong-border);
+    }
+
+    .skip-link:focus {
+      transform: translateY(var(--c-zero));
+    }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--c-md);
+      padding-block: var(--c-2xl);
+      border-block-end: var(--c-strong-border);
+    }
+
+    .brand {
+      font-weight: var(--c-bold);
+      letter-spacing: var(--c-label-tracking);
+    }
+
+    .edition, .eyebrow, .caption, .cite {
+      font-size: var(--c-small-size);
+    }
+
+    .edition, .caption {
+      color: var(--c-muted);
+    }
+
+    .eyebrow {
+      color: var(--c-accent);
+      font-weight: var(--c-bold);
+      letter-spacing: var(--c-label-tracking);
+      margin-block-end: var(--c-lg);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: var(--c-hero-grid);
+      gap: var(--c-3xl);
+      align-items: start;
+      padding-block: var(--c-5xl) var(--c-3xl);
+    }
+
+    .hero-copy {
+      margin-block-start: var(--c-2xl);
+    }
+
+    .hero-aside {
+      padding: var(--c-2xl);
+      border: var(--c-border);
+      border-block-start: var(--c-strong-border);
+      background: var(--c-surface);
+    }
+
+    .hero-aside h2 {
+      margin-block: var(--c-lg);
+    }
+
+    .hero-aside .caption {
+      margin-block-start: var(--c-lg);
+      padding-block-start: var(--c-lg);
+      border-block-start: var(--c-border);
+    }
+
+    .cite {
+      color: var(--c-link);
+      overflow-wrap: anywhere;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: var(--c-xs) var(--c-sm);
+      border-radius: var(--c-label-radius);
+      font-size: var(--c-small-size);
+      font-weight: var(--c-medium);
+      line-height: var(--c-heading-leading);
+      vertical-align: middle;
+    }
+
+    .badge--quote {
+      color: var(--c-quote-ink);
+      background: var(--c-quote-fill);
+    }
+
+    .badge--external {
+      color: var(--c-external-ink);
+      background: var(--c-external-fill);
+    }
+
+    .badge--inference {
+      color: var(--c-inference-ink);
+      background: var(--c-inference-fill);
+    }
+
+    .badge--unverified {
+      color: var(--c-unverified-ink);
+      background: var(--c-unverified-fill);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: var(--c-card-grid);
+      gap: var(--c-lg);
+    }
+
+    .stat-card {
+      padding: var(--c-2xl);
+      background: var(--c-surface);
+      border: var(--c-border);
+      border-radius: var(--c-radius);
+    }
+
+    .stat-value {
+      display: block;
+      margin-block: var(--c-md);
+      font-size: var(--c-stat-size);
+      font-weight: var(--c-bold);
+      line-height: var(--c-title-leading);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-card h3 {
+      font-size: var(--c-body-size);
+      margin-block-end: var(--c-md);
+    }
+
+    .stat-note {
+      margin-block: var(--c-md) var(--c-3xl);
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: var(--c-content-grid);
+      gap: var(--c-3xl);
+      align-items: start;
+    }
+
+    .toc {
+      display: var(--c-toc-display);
+      position: var(--c-toc-position);
+      inset-block-start: var(--c-2xl);
+      padding-block: var(--c-lg);
+      border-block-start: var(--c-strong-border);
+    }
+
+    .toc h2 {
+      font-size: var(--c-body-size);
+      margin-block-end: var(--c-md);
+    }
+
+    .toc ul {
+      display: grid;
+      grid-template-columns: var(--c-nav-grid);
+      gap: var(--c-sm);
+      padding: var(--c-zero);
+      list-style: none;
+    }
+
+    .toc a {
+      display: block;
+      padding-block: var(--c-sm);
+      font-size: var(--c-small-size);
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .section {
+      padding-block-end: var(--c-section-gap);
+    }
+
+    .section-head {
+      padding-block-start: var(--c-2xl);
+      margin-block-end: var(--c-2xl);
+      border-block-start: var(--c-strong-border);
+    }
+
+    .section-head p {
+      margin-block-start: var(--c-md);
+      color: var(--c-muted);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: var(--c-flow-grid);
+      gap: var(--c-lg);
+      padding: var(--c-zero);
+      list-style: none;
+    }
+
+    .flow li {
+      padding: var(--c-xl);
+      background: var(--c-surface);
+      border: var(--c-border);
+    }
+
+    .flow h3 {
+      font-size: var(--c-body-size);
+      margin-block-end: var(--c-md);
+    }
+
+    .flow blockquote {
+      margin-block-start: var(--c-md);
+      padding-inline-start: var(--c-md);
+      border-inline-start: var(--c-quote-rule);
+    }
+
+    .flow .caption {
+      margin-block-start: var(--c-md);
+    }
+
+    .note {
+      margin-block-start: var(--c-xl);
+      padding: var(--c-xl);
+      border-inline-start: var(--c-inference-rule);
+      background: var(--c-surface);
+    }
+
+    .note .badge {
+      margin-block-end: var(--c-sm);
+    }
+
+    .evidence-key {
+      display: grid;
+      grid-template-columns: var(--c-pair-grid);
+      gap: var(--c-lg);
+      margin-block-end: var(--c-xl);
+    }
+
+    .evidence-key dt {
+      margin-block-end: var(--c-sm);
+    }
+
+    .evidence-key dd {
+      margin: var(--c-zero);
+      font-size: var(--c-small-size);
+      color: var(--c-muted);
+    }
+
+    .table-wrap {
+      min-inline-size: var(--c-zero);
+    }
+
+    .responsive-table {
+      display: var(--c-table-display);
+      inline-size: var(--c-full);
+      border-collapse: collapse;
+      border: var(--c-table-frame);
+      background: var(--c-surface);
+      font-size: var(--c-table-size);
+      table-layout: fixed;
+    }
+
+    .responsive-table caption {
+      display: var(--c-caption-display);
+      padding-block-end: var(--c-md);
+      text-align: start;
+      color: var(--c-muted);
+      font-size: var(--c-small-size);
+    }
+
+    .responsive-table colgroup {
+      display: var(--c-colgroup-display);
+    }
+
+    .responsive-table thead {
+      position: var(--c-head-position);
+      inline-size: var(--c-head-size);
+      block-size: var(--c-head-size);
+      clip-path: var(--c-head-clip);
+      overflow: var(--c-head-overflow);
+    }
+
+    .responsive-table tbody {
+      display: var(--c-tbody-display);
+    }
+
+    .responsive-table tr {
+      display: var(--c-row-display);
+    }
+
+    .responsive-table tbody tr {
+      border: var(--c-row-border);
+      margin-block-end: var(--c-row-margin);
+      border-radius: var(--c-row-radius);
+      overflow: hidden;
+    }
+
+    .responsive-table th,
+    .responsive-table td {
+      padding: var(--c-lg);
+      border-block-end: var(--c-border);
+      text-align: start;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    .responsive-table thead th {
+      background: var(--c-soft-surface);
+      font-weight: var(--c-bold);
+    }
+
+    .responsive-table tbody th,
+    .responsive-table tbody td {
+      display: var(--c-cell-display);
+    }
+
+    .responsive-table tbody th {
+      font-weight: var(--c-medium);
+    }
+
+    .responsive-table tbody th::before,
+    .responsive-table tbody td::before {
+      content: attr(data-label);
+      display: var(--c-cell-label-display);
+      margin-block-end: var(--c-sm);
+      color: var(--c-muted);
+      font-size: var(--c-small-size);
+      font-weight: var(--c-bold);
+    }
+
+    .col-claim {
+      inline-size: var(--c-col-claim);
+    }
+
+    .col-verdict {
+      inline-size: var(--c-col-verdict);
+    }
+
+    .col-source {
+      inline-size: var(--c-col-source);
+    }
+
+    .col-boundary {
+      inline-size: var(--c-col-boundary);
+    }
+
+    .claim-id {
+      display: block;
+      color: var(--c-accent);
+      font-weight: var(--c-bold);
+      margin-block-end: var(--c-sm);
+    }
+
+    .cell-stack > * + * {
+      margin-block-start: var(--c-md);
+    }
+
+    .data-grid, .pair-grid {
+      display: grid;
+      grid-template-columns: var(--c-pair-grid);
+      gap: var(--c-xl);
+    }
+
+    .panel {
+      padding: var(--c-2xl);
+      border: var(--c-border);
+      background: var(--c-surface);
+      border-radius: var(--c-radius);
+    }
+
+    .panel > .badge {
+      margin-block-end: var(--c-md);
+    }
+
+    .panel h3 {
+      margin-block-end: var(--c-md);
+    }
+
+    .wide-panel {
+      margin-block: var(--c-xl);
+    }
+
+    .cohort-grid {
+      display: grid;
+      grid-template-columns: var(--c-pair-grid);
+      gap: var(--c-2xl);
+      margin-block: var(--c-xl);
+    }
+
+    .cohort-grid h4 {
+      margin-block-end: var(--c-md);
+    }
+
+    .bars {
+      padding: var(--c-zero);
+      list-style: none;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: var(--c-bar-grid);
+      align-items: center;
+      gap: var(--c-sm);
+      margin-block-end: var(--c-md);
+    }
+
+    .bar-row:last-child {
+      margin-block-end: var(--c-zero);
+    }
+
+    .bar-label, .bar-number {
+      font-size: var(--c-table-size);
+    }
+
+    .bar-number {
+      text-align: end;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bar-track {
+      display: block;
+      inline-size: var(--c-full);
+      block-size: var(--c-bar-height);
+      background: var(--c-soft-surface);
+    }
+
+    .bar-fill {
+      display: block;
+      block-size: var(--c-full);
+      background: var(--c-bar-a-fill);
+    }
+
+    .bar-fill--b {
+      background: var(--c-bar-b-fill);
+    }
+
+    .bar--a1 {
+      inline-size: var(--c-bar-a1);
+    }
+
+    .bar--a5 {
+      inline-size: var(--c-bar-a5);
+    }
+
+    .bar--a10 {
+      inline-size: var(--c-bar-a10);
+    }
+
+    .bar--b1 {
+      inline-size: var(--c-bar-b1);
+    }
+
+    .bar--b5 {
+      inline-size: var(--c-bar-b5);
+    }
+
+    .bar--b10 {
+      inline-size: var(--c-bar-b10);
+    }
+
+    .bar--cash {
+      inline-size: var(--c-bar-cash);
+    }
+
+    .bar--market {
+      inline-size: var(--c-bar-market);
+    }
+
+    .bar--timing {
+      inline-size: var(--c-bar-timing);
+    }
+
+    .bar--economics {
+      inline-size: var(--c-bar-economics);
+    }
+
+    .reason-list {
+      display: grid;
+      gap: var(--c-lg);
+      padding: var(--c-zero);
+      margin-block: var(--c-xl);
+      list-style: none;
+    }
+
+    .reason-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--c-lg);
+      margin-block-end: var(--c-sm);
+    }
+
+    .reason-heading strong {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .definition-list {
+      margin-block-start: var(--c-lg);
+    }
+
+    .definition-list dt {
+      font-weight: var(--c-bold);
+    }
+
+    .definition-list dd {
+      margin: var(--c-xs) var(--c-zero) var(--c-lg);
+    }
+
+    .gap-block + .gap-block {
+      margin-block-start: var(--c-3xl);
+      padding-block-start: var(--c-3xl);
+      border-block-start: var(--c-border);
+    }
+
+    .gap-title {
+      margin-block-end: var(--c-lg);
+    }
+
+    .case-card {
+      margin-block-start: var(--c-xl);
+    }
+
+    .case-card h4 {
+      margin-block: var(--c-sm) var(--c-md);
+    }
+
+    .research-list {
+      display: grid;
+      gap: var(--c-lg);
+      margin-block-start: var(--c-xl);
+    }
+
+    .research-item {
+      padding: var(--c-xl);
+      background: var(--c-surface);
+      border: var(--c-border);
+    }
+
+    .research-item h4 {
+      margin-block: var(--c-sm) var(--c-md);
+    }
+
+    .record-meta {
+      display: grid;
+      grid-template-columns: var(--c-pair-grid);
+      gap: var(--c-lg);
+      margin-block: var(--c-xl);
+    }
+
+    .field-label {
+      display: block;
+      font-weight: var(--c-bold);
+    }
+
+    input, select, textarea {
+      display: block;
+      inline-size: var(--c-full);
+      min-inline-size: var(--c-zero);
+      border: var(--c-border);
+      border-radius: var(--c-label-radius);
+      padding: var(--c-md);
+      background: var(--c-surface);
+      margin-block-start: var(--c-sm);
+    }
+
+    textarea {
+      min-block-size: var(--c-input-height);
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--c-muted);
+      opacity: var(--c-unit);
+    }
+
+    .workbook-table th,
+    .workbook-table td {
+      padding: var(--c-md);
+    }
+
+    .workbook-table textarea {
+      margin-block-start: var(--c-zero);
+    }
+
+    .workbook-controls {
+      margin-block: var(--c-xl);
+    }
+
+    .workbook-controls p {
+      margin-block-start: var(--c-md);
+    }
+
+    .review-list {
+      padding-inline-start: var(--c-xl);
+      margin-block-start: var(--c-md);
+    }
+
+    .review-list li + li {
+      margin-block-start: var(--c-md);
+    }
+
+    .questions {
+      margin-block-start: var(--c-xl);
+      padding: var(--c-zero);
+      list-style: none;
+    }
+
+    .questions li {
+      padding-block: var(--c-lg);
+      border-block-start: var(--c-border);
+    }
+
+    .questions h4 {
+      margin-block-end: var(--c-sm);
+    }
+
+    .closing-rule {
+      margin-block-start: var(--c-xl);
+      padding: var(--c-xl);
+      background: var(--c-inference-fill);
+      color: var(--c-inference-ink);
+      font-weight: var(--c-bold);
+    }
+
+    details {
+      border: var(--c-border);
+      background: var(--c-surface);
+      padding: var(--c-xl);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: var(--c-bold);
+    }
+
+    details[open] > summary {
+      margin-block-end: var(--c-xl);
+    }
+
+    .source-heading {
+      margin-block: var(--c-3xl) var(--c-lg);
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: var(--c-source-grid);
+      gap: var(--c-xl);
+      padding: var(--c-zero);
+      margin-block-start: var(--c-xl);
+      list-style: none;
+    }
+
+    .source-list li {
+      padding-block-start: var(--c-lg);
+      border-block-start: var(--c-border);
+      overflow-wrap: anywhere;
+    }
+
+    .source-list h4 {
+      margin-block-end: var(--c-sm);
+    }
+
+    .source-list p {
+      font-size: var(--c-small-size);
+    }
+
+    .footer {
+      padding-block: var(--c-2xl) var(--c-3xl);
+      border-block-start: var(--c-strong-border);
+    }
+
+    .footer p {
+      font-size: var(--c-small-size);
+      color: var(--c-muted);
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <div class="frame">
+    <header class="masthead" id="top">
+      <p class="brand">研究编辑 · 创业口述拆解</p>
+      <p class="edition">修订版｜证据、推断与选择分开看</p>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">从“我不擅长”到“这行不适合我”，中间缺了什么？</p>
+          <h1 id="page-title">用排除法找赚钱赛道，究竟能排除什么？</h1>
+
+          <div class="hero-copy">
+            <p>
+              <strong>实践反馈值得参考，但整套“排除法”未被现有材料验证。</strong>
+              用具体任务校准自评，与只做一次就永久排除一个行业，不是同一个命题。
+              <span class="cite"><a class="cite" href="#s5">S5</a> <a class="cite" href="#s6">S6</a> <a class="cite" href="#s15">S15</a></span>
+            </p>
+            <p>
+              “90%”只找到一处特定语境的相近说法（“超过 90%”）；把失败归因于“死磕短板”，未获直接支持。合作是可能路径，性格研究也不是个人适配证明。
+              <span class="cite"><a class="cite" href="#s4">S4</a> <a class="cite" href="#s12">S12</a> <a class="cite" href="#s7">S7</a> <a class="cite" href="#s16">S16</a></span>
+            </p>
+          </div>
+        </div>
+
+        <aside class="hero-aside" aria-label="编辑结论与材料边界">
+          <span class="badge badge--inference">推断</span>
+          <h2>优先排除当前方案，<br>不要急着排除一生。</h2>
+          <p>
+            把结论收窄到具体任务、资源条件与个人意愿。留下复核条件，而不是用一次结果给自己贴终身标签。
+          </p>
+          <p class="caption">
+            <span class="badge badge--unverified">未能独立核验</span><br>
+            分析依据用户提供的口述转写；原帖与录制时间未确认。“今年五月”不换算年份；未提供的后续内容不在本页判断范围内。
+          </p>
+        </aside>
+      </section>
+
+      <section aria-label="关键数字及各自口径">
+        <div class="stat-grid">
+          <article class="stat-card">
+            <span class="badge badge--external">外部来源</span>
+            <strong class="stat-value">34.9%</strong>
+            <h3>同一开设批次的十年存活率</h3>
+            <p class="caption">
+              分母：BLS 的 2014 年度开设批次机构；统计单位是机构，不是创业者。
+              <span class="cite"><a class="cite" href="#s1">S1</a></span>
+            </p>
+          </article>
+
+          <article class="stat-card">
+            <span class="badge badge--external">外部来源</span>
+            <strong class="stat-value">.29</strong>
+            <h3>自评能力与实际表现的平均相关</h3>
+            <p class="caption">
+              覆盖 22 项元分析、33 万余人；这是中等相关，不是“准确率 29%”，也不按成功人数计算。
+              <span class="cite"><a class="cite" href="#s6">S6</a></span>
+            </p>
+          </article>
+
+          <article class="stat-card">
+            <span class="badge badge--external">外部来源</span>
+            <strong class="stat-value">超过 90%</strong>
+            <h3>讲者引的“90%”能追到的一处相近说法</h3>
+            <p class="caption">
+              2011 年伯克利哈斯商学院报道里，对“获投资初创”的前提说法，不是对所有生意的测量。
+              <span class="cite"><a class="cite" href="#s4">S4</a></span>
+            </p>
+          </article>
+        </div>
+
+        <p class="caption stat-note">
+          这些数字分别描述存续、相关程度与一句流传说法的出处，不共享分母，不构成可排名的成绩单。
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <aside class="toc">
+          <nav aria-label="页面目录">
+            <h2>阅读路径</h2>
+            <ul>
+              <li><a href="#speaker">讲者说了什么</a></li>
+              <li><a href="#audit">论点核验</a></li>
+              <li><a href="#numbers">数字与口径</a></li>
+              <li><a href="#gaps">两个推理缺口</a></li>
+              <li><a href="#record">项目—任务记录</a></li>
+              <li><a href="#appendix">框架与来源</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <div class="content">
+          <section class="section" id="speaker" aria-labelledby="speaker-title">
+            <header class="section-head">
+              <h2 id="speaker-title">讲者说了什么</h2>
+              <p>
+                以下流程标题是编辑归纳；引文来自所提供的口述转写，不代表其中的经营事实已被核实。
+              </p>
+            </header>
+
+            <ol class="flow">
+              <li>
+                <h3>先粗分赚钱选项</h3>
+                <span class="badge badge--quote">口述原文</span>
+                <blockquote>
+                  <p>所以想先要粗分行业。</p>
+                </blockquote>
+                <p class="caption">讲者列出六类选项：消费品、服务行业、精神产品、投资、中介性质、打工皇帝，作为筛选起点。</p>
+              </li>
+
+              <li>
+                <h3>亲自尝试一个项目</h3>
+                <span class="badge badge--quote">口述原文</span>
+                <blockquote>
+                  <p>只有你真的干了，你才知道自己擅长什么，不擅长什么。</p>
+                </blockquote>
+                <p class="caption">本段讲述的是服装品牌经历。</p>
+              </li>
+
+              <li>
+                <h3>拆开看单项能力</h3>
+                <span class="badge badge--quote">口述原文</span>
+                <blockquote>
+                  <p>你要非常冷静地分析你自己的单项能力。</p>
+                </blockquote>
+                <p class="caption">自评擅长攒局与营销，不擅长供应链。</p>
+              </li>
+
+              <li>
+                <h3>按自述性格继续排除</h3>
+                <span class="badge badge--quote">口述原文</span>
+                <blockquote>
+                  <p>排除掉我天生性格中不擅长的东西。</p>
+                </blockquote>
+                <p class="caption">由此排除服务业与“打工皇帝”等选项。</p>
+              </li>
+            </ol>
+
+            <div class="note">
+              <span class="badge badge--inference">推断</span>
+              <p>
+                <strong>这里审查的是推理跨度，而不是替讲者决定职业。</strong>
+                个人可以因意愿与代价退出；但个人退出的合理性，不会自动变成面向所有人的行业选择规律。
+              </p>
+            </div>
+          </section>
+
+          <section class="section" id="audit" aria-labelledby="audit-title">
+            <header class="section-head">
+              <h2 id="audit-title">论点核验：结论与来源状态分开</h2>
+              <p>
+                “未获支持”不等于“已被证伪”；“外部来源”也不自动等于独立研究或因果证据。
+              </p>
+            </header>
+
+            <dl class="evidence-key">
+              <div>
+                <dt><span class="badge badge--quote">口述原文</span></dt>
+                <dd>标识所提供转写中的直接引文，不为内容真实性背书。</dd>
+              </div>
+              <div>
+                <dt><span class="badge badge--external">外部来源</span></dt>
+                <dd>口述之外的材料；仍需区分研究、管理建议、企业自述与二手概述。</dd>
+              </div>
+              <div>
+                <dt><span class="badge badge--inference">推断</span></dt>
+                <dd>编辑的逻辑分析、综合解释或工具设计，不作为新增证据。</dd>
+              </div>
+              <div>
+                <dt><span class="badge badge--unverified">未能独立核验</span></dt>
+                <dd>现有材料没有完成独立核验，不代表已经证伪或永远不可查。</dd>
+              </div>
+            </dl>
+
+            <div class="table-wrap">
+              <table class="responsive-table audit-table" role="table">
+                <caption>
+                  判定依据现有材料，结论限定在来源实际覆盖的对象与结果。
+                </caption>
+
+                <colgroup>
+                  <col class="col-claim">
+                  <col class="col-verdict">
+                  <col class="col-source">
+                  <col class="col-boundary">
+                </colgroup>
+
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th scope="col" role="columnheader">论点</th>
+                    <th scope="col" role="columnheader">论点判定</th>
+                    <th scope="col" role="columnheader">来源状态</th>
+                    <th scope="col" role="columnheader">最多能支持／不能推出</th>
+                  </tr>
+                </thead>
+
+                <tbody role="rowgroup">
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C1</span>
+                      90% 失败，以及“死磕短板”的归因
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>失败率范围未明；单一归因未获直接支持。</strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <div class="cell-stack">
+                        <p>
+                          <span class="badge badge--unverified">未能独立核验</span><br>
+                          投资人说法没有可追溯出处。
+                        </p>
+                        <p>
+                          <span class="badge badge--external">外部来源</span><br>
+                          S4 为传播记录；S2 为限定失败样本的归因记录。
+                          <span class="cite"><a class="cite" href="#s4">S4</a> <a class="cite" href="#s2">S2</a></span>
+                        </p>
+                      </div>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        “超过 90%”曾出现在“获投资初创”的语境，且是前提说法。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        推出全体创业者的失败率、讲者说法的原始出处或单一因果解释。
+                        S2 未列“不擅长”，也不等于排除了它的作用。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C2</span>
+                      六大赚钱赛道
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>启发式清单，不支持机械连续排除。</strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <span class="badge badge--inference">推断</span>
+                      <p>
+                        六类由讲者提出；“维度混合、类别重叠”是编辑分析，现金流象限仅有二手概述作对照。
+                        <span class="cite"><a class="cite" href="#s14">S14</a></span>
+                      </p>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        帮助列出初步选项。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        当作统一、互斥且穷尽的行业分类。交付内容、收益方式和职业身份混用，类别重叠；排掉某个名称，不代表其余选项不含相同任务。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C3</span>
+                      实践反馈能否识别擅长之处
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>
+                        校准自评有间接支持；“必须创业、一次就够”未获支持。
+                      </strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <span class="badge badge--external">外部来源</span>
+                      <p>
+                        管理建议、自评研究与创业决策试验，所回答的问题不同。
+                        <span class="cite"><a class="cite" href="#s5">S5</a> <a class="cite" href="#s6">S6</a> <a class="cite" href="#s15">S15</a></span>
+                      </p>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        用具体任务、事前预期与反馈更新判断。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        推出只有亲自创业才能认识能力，或一次尝试足以排除整个行业。
+                        .29 是相关，不是准确率。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C4</span>
+                      服装品牌的经营经历
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>
+                        自述未独立核验；合作方背景不为经营结果背书。
+                      </strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <div class="cell-stack">
+                        <p>
+                          <span class="badge badge--unverified">未能独立核验</span><br>
+                          粉丝、销量、合作条件与盈亏。
+                        </p>
+                        <p>
+                          <span class="badge badge--external">外部来源</span><br>
+                          企业官网与赞助内容只提供背景。
+                          <span class="cite"><a class="cite" href="#s10">S10</a> <a class="cite" href="#s11">S11</a></span>
+                        </p>
+                      </div>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        作为一段待核的个人经历讨论。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        以一次销售证明持续需求或品牌能力，也不能反推“只有流量没品牌”。“没亏钱”与“品牌没做好”并不冲突，需分别说明标准。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C5</span>
+                      供应链短板 → 永久排除消费品
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>
+                        个人退出可成立；全行业永久排除依据不足。
+                      </strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <span class="badge badge--inference">推断</span>
+                      <p>
+                        结合分工案例和外包风险分析；并非同一短板被代工解决的严格反例。
+                        <span class="cite"><a class="cite" href="#s12">S12</a> <a class="cite" href="#s13">S13</a></span>
+                      </p>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        将学习、合作或调整分工作为待验证路径。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        把代工等同于无需供应链管理。按讲者自述，他已有制造合作方；还需知道短板在哪、为什么没有覆盖、补足是否值得。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C6</span>
+                      自述性格 → 长期职业不适合
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>
+                        偏好可尊重；宽泛标签不能直接完成行业判断。
+                      </strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <span class="badge badge--external">外部来源</span>
+                      <p>
+                        人格干预综述与特定销售研究均有外推边界。
+                        <span class="cite"><a class="cite" href="#s7">S7</a> <a class="cite" href="#s16">S16</a></span>
+                      </p>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        限制“完全不可变”的假设，提醒按具体任务判断。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        证明讲者能改善某项能力，或适合全部服务工作。“性格完全不可变”是对其推理的解读，不是口述原话。
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr role="row">
+                    <th scope="row" role="rowheader" data-label="论点">
+                      <span class="claim-id">C7</span>
+                      隐含假设：按优势选赛道 → 更可能成功
+                    </th>
+                    <td role="cell" data-label="论点判定">
+                      <strong>
+                        待检验的决策假设，不是已证实的必要条件。
+                      </strong>
+                    </td>
+                    <td role="cell" data-label="来源状态">
+                      <span class="badge badge--external">外部来源</span>
+                      <p>
+                        Gallup 为厂商自家研究：常有机会发挥优势的人，工作投入的可能性约为 6 倍，自评生活质量优秀约为 3 倍。
+                        <span class="cite"><a class="cite" href="#s8">S8</a></span>
+                      </p>
+                    </td>
+                    <td role="cell" data-label="最多能支持／不能推出">
+                      <p>
+                        <strong>最多：</strong>
+                        把优势使用作为值得继续检验的因素。
+                      </p>
+                      <p>
+                        <strong>不能：</strong>
+                        把工作投入换成创业成功率，或宣称优势匹配是“必要不充分条件”。先说明成功指存续、盈利、收入还是满意度。
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="numbers" aria-labelledby="numbers-title">
+            <header class="section-head">
+              <h2 id="numbers-title">数字为什么不能直接比</h2>
+              <p>
+                先辨认国家、统计单位、观察年限与结果定义，再看大小。以下分面展示，不作跨口径排名。
+              </p>
+            </header>
+
+            <figure class="panel" aria-labelledby="bls-title">
+              <span class="badge badge--external">外部来源</span>
+              <h3 id="bls-title">BLS：同一开设批次的机构存活率</h3>
+              <p class="caption">
+                美国私营机构；截至 3 月的年度开设批次。
+                2014 批指 2013-04 至 2014-03 开设，条长表示“自开设以来存活率”，不是创业者成功率。
+                <span class="cite"><a class="cite" href="#s1">S1</a></span>
+              </p>
+
+              <div class="cohort-grid">
+                <div>
+                  <h4>2014 开设批次</h4>
+                  <ul class="bars" aria-label="2014 批次存活率">
+                    <li class="bar-row">
+                      <span class="bar-label">1 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar--a1"></span>
+                      </span>
+                      <span class="bar-number">79.7%</span>
+                    </li>
+                    <li class="bar-row">
+                      <span class="bar-label">5 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar--a5"></span>
+                      </span>
+                      <span class="bar-number">50.8%</span>
+                    </li>
+                    <li class="bar-row">
+                      <span class="bar-label">10 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar--a10"></span>
+                      </span>
+                      <span class="bar-number">34.9%</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4>2015 开设批次</h4>
+                  <ul class="bars" aria-label="2015 批次存活率">
+                    <li class="bar-row">
+                      <span class="bar-label">1 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar-fill--b bar--b1"></span>
+                      </span>
+                      <span class="bar-number">79.6%</span>
+                    </li>
+                    <li class="bar-row">
+                      <span class="bar-label">5 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar-fill--b bar--b5"></span>
+                      </span>
+                      <span class="bar-number">50.2%</span>
+                    </li>
+                    <li class="bar-row">
+                      <span class="bar-label">10 年</span>
+                      <span class="bar-track" aria-hidden="true">
+                        <span class="bar-fill bar-fill--b bar--b10"></span>
+                      </span>
+                      <span class="bar-number">34.7%</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <figcaption class="caption">
+                每个百分比的分母是相应年度开设批次的机构。统计单位 establishment 不是创业者；这里也没有测量“死磕短板”的作用。
+                <span class="cite"><a class="cite" href="#s1">S1</a></span>
+              </figcaption>
+            </figure>
+
+            <div class="data-grid wide-panel">
+              <article class="panel">
+                <span class="badge badge--external">外部来源</span>
+                <h3>中国工商资料：年龄结构与退出者寿命</h3>
+                <dl class="definition-list">
+                  <dt>49.4%：现存企业中不足 5 年的比例</dt>
+                  <dd>
+                    观察的是现存企业的年龄结构，不是同一开设批次五年内的失败率。
+                  </dd>
+                  <dt>6.09 年：特定退出企业的平均寿命</dt>
+                  <dd>
+                    对象为 2008–2012 退出企业，不是所有企业的平均寿命。
+                  </dd>
+                </dl>
+                <p class="caption">
+                  国家：中国；单位：企业；结果分别是存量年龄占比与退出者平均寿命。不能与 BLS 的批次存活率直接比较。
+                  <span class="cite"><a class="cite" href="#s3">S3</a></span>
+                </p>
+              </article>
+
+              <article class="panel">
+                <span class="badge badge--external">外部来源</span>
+                <h3>90%：找到一处传播记录，不等于找到总体测量</h3>
+                <p>
+                  Berkeley Haas 关于 Startup Genome 的报道，在“获投资初创”语境中把超过 90% 失败作为前提说法，而不是对所有生意测量所得的结论。
+                  <span class="cite"><a class="cite" href="#s4">S4</a></span>
+                </p>
+                <p class="caption">
+                  该数字的可追溯测量分母、地理范围、观察期限与失败定义：待核。不能把报道中提到的调查规模自动当作这一说法的分母。
+                </p>
+                <p class="caption">
+                  这是找到的一处传播记录，不是已经确认的最早出处，也不为讲者的失败归因提供证明。
+                </p>
+              </article>
+            </div>
+
+            <figure class="panel" aria-labelledby="cb-title">
+              <span class="badge badge--external">外部来源</span>
+              <h3 id="cb-title">CB Insights：限定失败样本中的原因记录</h3>
+              <p class="caption">
+                报告收集 431 家 2023 年以来关闭的获 VC 投资初创企业，其中 385 家可识别原因。以下比例只描述原因可识别的样本，不是全体创业者的失败概率。
+                <span class="cite"><a class="cite" href="#s2">S2</a></span>
+              </p>
+
+              <ul class="reason-list" aria-label="失败原因记录比例，可多选">
+                <li>
+                  <div class="reason-heading">
+                    <span>钱烧完</span>
+                    <strong>70%</strong>
+                  </div>
+                  <span class="bar-track" aria-hidden="true">
+                    <span class="bar-fill bar--cash"></span>
+                  </span>
+                </li>
+                <li>
+                  <div class="reason-heading">
+                    <span>产品市场不匹配</span>
+                    <strong>43%</strong>
+                  </div>
+                  <span class="bar-track" aria-hidden="true">
+                    <span class="bar-fill bar--market"></span>
+                  </span>
+                </li>
+                <li>
+                  <div class="reason-heading">
+                    <span>时机差</span>
+                    <strong>29%</strong>
+                  </div>
+                  <span class="bar-track" aria-hidden="true">
+                    <span class="bar-fill bar--timing"></span>
+                  </span>
+                </li>
+                <li>
+                  <div class="reason-heading">
+                    <span>单位经济不可持续</span>
+                    <strong>19%</strong>
+                  </div>
+                  <span class="bar-track" aria-hidden="true">
+                    <span class="bar-fill bar--economics"></span>
+                  </span>
+                </li>
+              </ul>
+
+              <figcaption class="caption">
+                <strong>
+                  分母：385 家原因可识别的关闭公司；可多选，不是互斥份额。
+                </strong>
+                地理覆盖范围待核；关闭发生在 2023 年以来，不是统一的企业年龄观察窗。高频记录不能直接升级为全体创业失败的主要原因。
+                <span class="cite"><a class="cite" href="#s2">S2</a></span>
+              </figcaption>
+            </figure>
+
+            <div class="note">
+              <span class="badge badge--inference">推断</span>
+              <p>
+                分类中没有“不擅长”，并不等于它不发挥作用。能力、市场与现金也未必是彼此排斥的解释；现有材料不足以替它们排出统一的因果顺序。
+              </p>
+            </div>
+          </section>
+
+          <section class="section" id="gaps" aria-labelledby="gaps-title">
+            <header class="section-head">
+              <h2 id="gaps-title">两个推理缺口</h2>
+              <p>
+                案例用来检验推理能否成立，不用来保证别人可以复制结果。
+              </p>
+            </header>
+
+            <article class="gap-block" aria-labelledby="team-title">
+              <h3 class="gap-title" id="team-title">
+                个人短板，是否等于团队无法补足的短板？
+              </h3>
+
+              <div class="pair-grid">
+                <div class="panel">
+                  <span class="badge badge--unverified">未能独立核验</span>
+                  <h4>讲者案例：先把结果与贡献拆开</h4>
+                  <p>
+                    讲者自述有 7 万粉丝，一个短视频卖出 400 件 T 恤，从一开始没亏钱，却认为品牌没做好；合作对象包括面料、制造和运营资源。
+                  </p>
+                  <p class="caption">
+                    待核：合作是否成立及具体条件、销售与退货记录、成本范围、统计期间，以及“品牌没做好”的判断标准。
+                  </p>
+                </div>
+
+                <div class="panel">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>合作方背景：不能跨过核验边界</h4>
+                  <p>
+                    迪尚官网自述 1993 年成立、员工超过 5 万名、年均营收超过 150 亿元；东丽在赞助内容中自述 1990 年代末起为优衣库供应纤维，
+                    2006 年签署战略合作，HEATTECH（2003）与 AIRism（2012）出自双方合作。这些只能核到相关企业背景，不能据此确认讲者与其合作的真实性、形式或条件。
+                    <span class="cite"><a class="cite" href="#s10">S10</a> <a class="cite" href="#s11">S11</a></span>
+                  </p>
+                  <p class="caption">
+                    即使合作自述属实，接触到合作方的能力，也不等于这些能力已完整转移到讲者的项目中。
+                  </p>
+                </div>
+              </div>
+
+              <div class="note">
+                <span class="badge badge--inference">推断</span>
+                <p>
+                  按讲者自述，他的案例已包含制造合作方，问题不是简单地“再找一家工厂”。需要追问：供应链短板具体落在哪个环节，现有合作为什么没覆盖，补足的代价是否值得。一次销售既不能独立证明持续需求，也不能反推没有品牌能力。
+                </p>
+              </div>
+
+              <div class="pair-grid">
+                <article class="panel case-card">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>完美日记相关例证：必须回到逸仙集团口径</h4>
+                  <p>
+                    逸仙控股 F-1/A 显示，集团依赖第三方 ODM/OEM 配方与生产；
+                    2020 年前三季度，集团销售及营销费用占总净收入 62.2%。这不是完美日记单品牌数字，也不只是广告费用。
+                    <span class="cite"><a class="cite" href="#s12">S12</a></span>
+                  </p>
+                  <p>
+                    同一文件还披露全流程质量保证、对第三方工厂和包材供应商的现场检查与审计，以及按季度评价供应商、不达标终止合作的安排。
+                    <span class="cite"><a class="cite" href="#s12">S12</a></span>
+                  </p>
+                  <p class="caption">
+                    产能、规格、质控、配方与交付风险属于风险披露，不表示已经发生。外包生产与自行管理供应链可以同时存在。
+                  </p>
+                </article>
+
+                <article class="panel case-card">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Spanx：分工路径，不是短板已经被证明的反例</h4>
+                  <p>
+                    Sara Blakely 曾在 Danka 上门推销传真机，用约 5,000 美元积蓄起步；多家袜厂拒绝后，北卡罗来纳州一家袜厂同意生产。
+                    2021 年黑石收购多数股权，公司估值约 12 亿美元。这提示消费品创业可以包含制造合作，而不必由创始人亲自完成所有环节。
+                    <span class="cite"><a class="cite" href="#s13">S13</a></span>
+                  </p>
+                  <p class="caption">
+                    销售背景不等于缺乏供应链能力；寻找代工也不等于无需管理供应链。因此，不能把这个故事写成“与讲者相同的短板被代工解决”。
+                  </p>
+                </article>
+              </div>
+
+              <p class="closing-rule">
+                合作是需要验证的备选方案，不是“供应链短板必然可补”的保证。
+              </p>
+            </article>
+
+            <article class="gap-block" aria-labelledby="time-title">
+              <h3 class="gap-title" id="time-title">
+                短期表现与宽泛性格标签，是否等于长期不适合？
+              </h3>
+              <p>
+                “擅长攒局”与“不擅长和人打交道”未必矛盾，却提醒我们拆开情境。情绪识别、人际偏好、细致服务和组织适应，不能只用一个标签代替。
+              </p>
+
+              <div class="research-list">
+                <article class="research-item">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Drucker：记录预期，不只做事后自评</h4>
+                  <p>
+                    他写道：“多数人以为自己知道擅长什么，通常是错的。”反馈分析要求在关键决定时写下预期，
+                    9–12 个月后对照实际；他也区分优势与通常可以补足的知识缺口：“数学家是天生的，但人人都能学会三角函数。”
+                    <span class="cite"><a class="cite" href="#s5">S5</a></span>
+                  </p>
+                  <p class="caption">
+                    边界：这是管理建议，不是对整套创业排除法的试验。讲者未展示事前预期，不能仅凭事后复盘就认定已完成反馈分析。
+                  </p>
+                </article>
+
+                <article class="research-item">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Zell &amp; Krizan：把评价落到具体技能</h4>
+                  <p>
+                    自评能力与实际表现平均相关为 .29；技能越具体、测量越明确，自评越准确。
+                    <span class="cite"><a class="cite" href="#s6">S6</a></span>
+                  </p>
+                  <p class="caption">
+                    边界：这提示自评值得用具体反馈校准，不证明只有创业才能获得反馈，更不能把相关系数改写为“准确率”。
+                  </p>
+                </article>
+
+                <article class="research-item">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Roberts 等：人格测量并非完全不变</h4>
+                  <p>
+                    综述纳入 207 项研究；以临床为主的干预，平均 24 周伴随明显的人格测量变化，情绪稳定性变化最大，其次是外向性。
+                    <span class="cite"><a class="cite" href="#s7">S7</a></span>
+                  </p>
+                  <p class="caption">
+                    边界：不能直接外推到讲者的“眼力见”，不能保证他能以可接受代价改变，也不构成要求他改变偏好的理由。
+                  </p>
+                </article>
+
+                <article class="research-item">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Grant：特定销售场景中的倒 U 型关系</h4>
+                  <p>
+                    在 340 名外呼销售的研究中，外向性与销售收入呈倒 U 型，中间性格者的收入更高。
+                    <span class="cite"><a class="cite" href="#s16">S16</a></span>
+                  </p>
+                  <p class="caption">
+                    边界：提示宽泛性格标签不能单独完成绩效判断；这不是对讲者的直接反例，也不适用于全部服务业。
+                  </p>
+                </article>
+
+                <article class="research-item">
+                  <span class="badge badge--external">外部来源</span>
+                  <h4>Camuffo 等：更新创意，不是测出天赋</h4>
+                  <p>
+                    4 个随机对照试验覆盖 759 家企业；接受科学式决策训练的企业更多放弃创意，做少量而非零次或反复的大转向。
+                    <span class="cite"><a class="cite" href="#s15">S15</a></span>
+                  </p>
+                  <p class="caption">
+                    边界：支持明确假设、收集证据并更新决定；不验证“测天赋排除行业”，也不能把更多终止创意本身当作创业成功。
+                  </p>
+                </article>
+              </div>
+
+              <div class="note">
+                <span class="badge badge--inference">推断</span>
+                <p>
+                  <strong>
+                    不能从“完全不可变”跳到“人人都应该改变”。
+                  </strong>
+                  一个人可以不愿承担某类工作的代价，而无需先证明自己天生做不到。讨论能力可变性与尊重个人偏好，可以同时成立。
+                </p>
+              </div>
+            </article>
+          </section>
+
+          <section class="section" id="record" aria-labelledby="record-title">
+            <header class="section-head">
+              <h2 id="record-title">项目—任务适配记录</h2>
+              <p>
+                <span class="badge badge--inference">推断</span>
+                编辑设计的决策模板，不是经过验证的测评，也不预测创业成功。目标是决定下一步验证什么，而不是计算天赋总分。
+              </p>
+            </header>
+
+            <p>
+              每次只记录一个项目中的一项具体任务。没有证据时记“未知”，不记零分；表现、资源条件与个人意愿分开填写。
+            </p>
+            <p class="caption" id="record-help">
+              下方可临时填写，也可打印记录。页面不提供提交或保存功能；离开前请自行留存。作品、交付记录和具体外部反馈可以作为表现材料，不必先有收入。
+            </p>
+
+            <div class="record-meta">
+              <label class="field-label" for="project-name">
+                项目／当前方案
+                <input
+                  id="project-name"
+                  type="text"
+                  placeholder="填写本次讨论的具体方案"
+                  aria-describedby="record-help">
+              </label>
+              <label class="field-label" for="task-name">
+                本次要验证的任务
+                <input
+                  id="task-name"
+                  type="text"
+                  placeholder="把行业名称改写成具体任务"
+                  aria-describedby="record-help">
+              </label>
+            </div>
+
+            <div class="table-wrap">
+              <table class="responsive-table workbook-table" role="table">
+                <caption>
+                  六栏记录：保留原始预期，避免事后按结果重写标准。
+                </caption>
+
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th scope="col" role="columnheader">任务与标准</th>
+                    <th scope="col" role="columnheader">事前预期</th>
+                    <th scope="col" role="columnheader">本人贡献</th>
+                    <th scope="col" role="columnheader">表现证据</th>
+                    <th scope="col" role="columnheader">意愿与代价</th>
+                    <th scope="col" role="columnheader">下一步决定</th>
+                  </tr>
+                </thead>
+
+                <tbody role="rowgroup">
+                  <tr role="row">
+                    <td role="cell" data-label="任务与标准">
+                      <textarea
+                        aria-label="任务与标准"
+                        placeholder="做什么、交付给谁？达到什么结果才满足本项目要求？"></textarea>
+                    </td>
+                    <td role="cell" data-label="事前预期">
+                      <textarea
+                        aria-label="事前预期"
+                        placeholder="开始前预期会怎样？什么结果会让我改变判断？"></textarea>
+                    </td>
+                    <td role="cell" data-label="本人贡献">
+                      <textarea
+                        aria-label="本人贡献"
+                        placeholder="哪些由我完成？哪些来自同伴、工具、渠道或既有资源？"></textarea>
+                    </td>
+                    <td role="cell" data-label="表现证据">
+                      <textarea
+                        aria-label="表现证据"
+                        placeholder="记录作品、交付结果、过程材料和具体外部反馈。"></textarea>
+                    </td>
+                    <td role="cell" data-label="意愿与代价">
+                      <textarea
+                        aria-label="意愿与代价"
+                        placeholder="是否愿意持续做？需要多少时间、学习、资金或合作成本？"></textarea>
+                    </td>
+                    <td role="cell" data-label="下一步决定">
+                      <textarea
+                        aria-label="下一步决定"
+                        placeholder="继续、学习、合作、换任务或暂缓？何时停止或重新评估？"></textarea>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="workbook-controls">
+              <label class="field-label" for="evidence-status">
+                当前证据状态
+              </label>
+              <select id="evidence-status" aria-describedby="status-help">
+                <option>未知</option>
+                <option>有协助时达标</option>
+                <option>独立达标</option>
+                <option>多次稳定达标</option>
+              </select>
+              <p class="caption" id="status-help">
+                这些是描述性状态，不加总、不折算成能力排名。“有协助时达标”记录的是协作条件，不等于失败；擅长与愿意长期做，也不是同一栏。
+              </p>
+            </div>
+
+            <div class="pair-grid">
+              <article class="panel">
+                <span class="badge badge--inference">推断</span>
+                <h3>分层复盘</h3>
+                <ul class="review-list">
+                  <li>
+                    <strong>每次交付后：</strong>
+                    对照原始标准，记录任务是否完成及反馈。
+                  </li>
+                  <li>
+                    <strong>重要反馈出现时：</strong>
+                    区分任务表现、需求判断、资源不足与尚未成熟的结果。
+                  </li>
+                  <li>
+                    <strong>预算触发点：</strong>
+                    按事先写明的停止或调整条件复核，不把继续投入当作能力证明。
+                  </li>
+                  <li>
+                    <strong>长期回顾：</strong>
+                    9–12 个月可作为选项，不是必须等待到此时才能纠偏。
+                    <span class="cite"><a class="cite" href="#s5">S5</a></span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="panel">
+                <span class="badge badge--inference">推断</span>
+                <h3>小实验：只回答一个明确问题</h3>
+                <p>
+                  先写出要减少的不确定性，优先用资料核查、模拟任务或小范围反馈。不必为了“下场”就开店、备货或作出不可逆投入。
+                </p>
+                <p>
+                  先定可承受的资金与时间上限，再看合作方能作出什么具体承诺。合作意愿、用户兴趣、实际购买与交付结果分开记录；同时写清返工、退款及对他人的承诺边界。
+                  <span class="cite"><a class="cite" href="#s9">S9</a></span>
+                </p>
+                <p class="caption">
+                  可承受损失与伙伴承诺借鉴 S9；具体记录规则是编辑设计。不以借债或杠杆来证明能力，也不把合作承诺当作市场已经验证。
+                </p>
+              </article>
+            </div>
+
+            <h3 class="source-heading">排除前，先回答这些问题</h3>
+            <ol class="questions">
+              <li>
+                <h4>排除的到底是什么层级？</h4>
+                <p>
+                  一项任务、一种获客方式、当前资源下的方案，还是整个行业？证据支持到哪一层，结论就先停在哪一层。
+                </p>
+              </li>
+              <li>
+                <h4>问题属于表现、资源，还是意愿？</h4>
+                <p>
+                  学习、合作或调整分工是否值得再检验？也允许答案是“不愿承担这项工作的代价”，不必把偏好包装成天生无能。
+                </p>
+              </li>
+              <li>
+                <h4>为什么现在停止，什么情况下重开？</h4>
+                <p>
+                  把继续与暂缓条件写出来，区分能力证据和商业可行性证据。任务做得好不自动证明项目值得做；项目不值得做也不自动证明本人没有能力。
+                </p>
+              </li>
+            </ol>
+
+            <p class="closing-rule">
+              最终输出：在这些条件下，下一步验证什么、由谁做、何时停止或重评。不是“我这辈子不能做哪一行”。
+            </p>
+          </section>
+
+          <section class="section" id="appendix" aria-labelledby="appendix-title">
+            <header class="section-head">
+              <h2 id="appendix-title">附录：分类框架与来源</h2>
+              <p>
+                框架帮助组织问题；来源帮助约束答案。二者不能互相替代。
+              </p>
+            </header>
+
+            <details open>
+              <summary>六赛道与现金流象限：只作框架对照</summary>
+
+              <div class="table-wrap">
+                <table class="responsive-table" role="table">
+                  <caption>
+                    不做逐项映射；两者都是个人框架，不是本页验证过的行业选择模型。
+                  </caption>
+
+                  <thead role="rowgroup">
+                    <tr role="row">
+                      <th scope="col" role="columnheader">比较维度</th>
+                      <th scope="col" role="columnheader">讲者的六赛道</th>
+                      <th scope="col" role="columnheader">现金流象限</th>
+                    </tr>
+                  </thead>
+
+                  <tbody role="rowgroup">
+                    <tr role="row">
+                      <th scope="row" role="rowheader" data-label="比较维度">
+                        类别
+                      </th>
+                      <td role="cell" data-label="讲者的六赛道">
+                        消费品、服务行业、精神产品、投资、中介性质、打工皇帝。
+                      </td>
+                      <td role="cell" data-label="现金流象限">
+                        E / S / B / I；本页未直接核原书，术语释义待核。
+                        <span class="cite"><a class="cite" href="#s14">S14</a></span>
+                      </td>
+                    </tr>
+                    <tr role="row">
+                      <th scope="row" role="rowheader" data-label="比较维度">
+                        划分重心
+                      </th>
+                      <td role="cell" data-label="讲者的六赛道">
+                        交付内容、收益方式与职业身份混合；类别重叠，未证明穷尽。
+                      </td>
+                      <td role="cell" data-label="现金流象限">
+                        按收入方式划分；这里仅依据二手概述作对照。
+                        <span class="cite"><a class="cite" href="#s14">S14</a></span>
+                      </td>
+                    </tr>
+                    <tr role="row">
+                      <th scope="row" role="rowheader" data-label="比较维度">
+                        使用边界
+                      </th>
+                      <td role="cell" data-label="讲者的六赛道">
+                        可用来列选项，不能机械连续排除。
+                      </td>
+                      <td role="cell" data-label="现金流象限">
+                        不能作为科学分类基准，也不因分类不同就证明更适合创业选择。
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <h3 class="source-heading" id="sources-title">来源列表</h3>
+            <p class="caption">
+              正文的 <a class="cite" href="#s1">S1</a> 等标记对应以下编号。口述引文另以用户提供的转写为依据。
+            </p>
+
+            <ol class="source-list" aria-labelledby="sources-title">
+              <li id="s1">
+                <h4>S1 · BLS Business Employment Dynamics，Table 7</h4>
+                <p>
+                  <a href="https://www.bls.gov/bdm/us_age_naics_00_table7.txt">
+                    查看 BLS 原表
+                  </a>
+                </p>
+                <p>
+                  按截至 3 月的年度开设批次读取自开设以来存活率；单位为机构。
+                  2014 批为 79.7% / 50.8% / 34.9%；
+                  2015 批为 79.6% / 50.2% / 34.7%，分别对应 1 / 5 / 10 年。
+                </p>
+              </li>
+
+              <li id="s2">
+                <h4>S2 · CB Insights，Top reasons startups fail</h4>
+                <p>
+                  <a href="https://www.cbinsights.com/research/report/startup-failure-reasons-top/">
+                    查看失败原因报告
+                  </a>
+                </p>
+                <p>
+                  2023 年以来关闭的获 VC 投资初创企业；
+                  431 家中 385 家可识别原因。原因记录可多选，不能外推到全体创业；地理覆盖范围待核。
+                </p>
+              </li>
+
+              <li id="s3">
+                <h4>S3 · 中新网转述原国家工商总局报告</h4>
+                <p>
+                  <a href="https://www.chinanews.com/gn/2013/07-30/5100481.shtml">
+                    查看报告新闻转述
+                  </a>
+                </p>
+                <p>
+                  49.4% 是现存企业中不足 5 年的比例；
+                  6.09 年是 2008–2012 退出企业的平均寿命。不是五年内失败率，也不是所有企业平均寿命。
+                </p>
+              </li>
+
+              <li id="s4">
+                <h4>S4 · Berkeley Haas，Startup Genome 报道</h4>
+                <p>
+                  <a href="https://newsroom.haas.berkeley.edu/phd-student-helps-launch-startup-genome-project/">
+                    查看传播记录
+                  </a>
+                </p>
+                <p>
+                  超过 90% 失败出现在“获投资初创”语境，属于前提说法。该记录不证明讲者的原始出处，不是对全部生意的失败率测量。
+                </p>
+              </li>
+
+              <li id="s5">
+                <h4>S5 · Drucker，Managing Oneself</h4>
+                <p>
+                  <a href="https://hbr.org/2005/01/managing-oneself">
+                    查看 HBR 页面
+                  </a>
+                  ·
+                  <a href="https://www.semisrc.org/uploads/9/5/4/7/9547971/managingoneself.pdf">
+                    正文核对副本
+                  </a>
+                </p>
+                <p>
+                  管理建议：关键决定前记录预期，9–12 个月后对照；从优势出发，同时承认知识缺口通常可补。不能视作人格不可变或创业成功率的实证证明。
+                </p>
+              </li>
+
+              <li id="s6">
+                <h4>S6 · Zell &amp; Krizan，自评能力研究综述</h4>
+                <p>
+                  <a href="https://doi.org/10.1177/1745691613518075">
+                    查看论文 DOI
+                  </a>
+                  ·
+                  <a href="https://www.sciencedaily.com/releases/2014/04/140402095056.htm">
+                    已核对的研究报道
+                  </a>
+                </p>
+                <p>
+                  22 项元分析、33 万余人；自评与表现平均相关 .29。技能更具体、测量更明确时，自评更准；相关不是准确率。
+                </p>
+              </li>
+
+              <li id="s7">
+                <h4>S7 · Roberts 等，人格干预研究综述</h4>
+                <p>
+                  <a href="https://doi.org/10.1037/bul0000088">
+                    查看论文 DOI
+                  </a>
+                </p>
+                <p>
+                  207 项研究，干预以临床为主，平均 24 周伴随人格测量变化。不能直接外推到讲者的具体能力或改善成本。
+                </p>
+              </li>
+
+              <li id="s8">
+                <h4>S8 · Gallup，Science of CliftonStrengths</h4>
+                <p>
+                  <a href="https://www.gallup.com/cliftonstrengths/en/253790/science-of-cliftonstrengths.aspx">
+                    查看厂商研究页面
+                  </a>
+                </p>
+                <p>
+                  厂商自家研究；涉及优势使用、工作投入与自评生活质量，不是按优势选择创业赛道的成功率验证。
+                </p>
+              </li>
+
+              <li id="s9">
+                <h4>S9 · Effectuation，五项原则</h4>
+                <p>
+                  <a href="https://effectuation.org/the-five-principles-of-effectuation">
+                    查看原则说明
+                  </a>
+                </p>
+                <p>
+                  从已有身份、知识与关系出发，限定可承受损失，争取伙伴预先承诺。这里借鉴决策框架，不把它当作随意试一次就能测出天赋的证明。
+                </p>
+              </li>
+
+              <li id="s10">
+                <h4>S10 · 迪尚集团官网</h4>
+                <p>
+                  <a href="https://www.dishang.com/">查看企业官网</a>
+                </p>
+                <p>
+                  企业背景自述；不证明讲者与其合作的真实性、具体条件或项目经营表现。
+                </p>
+              </li>
+
+              <li id="s11">
+                <h4>S11 · Toray × UNIQLO 赞助内容</h4>
+                <p>
+                  <a href="https://partners.wsj.com/toray/the-fabric-of-innovation/rewriting-the-rules-of-fashion-discover-the-partnership-reshaping-modern-clothing/">
+                    查看 WSJ Paid Program 内容
+                  </a>
+                </p>
+                <p>
+                  Toray 赞助，按企业自述理解。可用于相关合作背景，不为讲者自己的合作关系背书。
+                </p>
+              </li>
+
+              <li id="s12">
+                <h4>S12 · 逸仙控股 F-1/A</h4>
+                <p>
+                  <a href="https://www.sec.gov/Archives/edgar/data/1819580/000119312520292635/d57580df1a.htm">
+                    查看 SEC 文件，2020-11-13
+                  </a>
+                </p>
+                <p>
+                  集团销售及营销费用占总净收入：
+                  2018 年 48.7%、2019 年 41.3%、
+                  2020 前三季度 62.2%。合并口径，不是完美日记单品牌，也不只是广告；外包生产仍需要企业自行开展质量控制和供应商管理。风险披露不等于风险已发生。
+                </p>
+              </li>
+
+              <li id="s13">
+                <h4>S13 · Sara Blakely / Spanx 案例</h4>
+                <p>
+                  <a href="https://en.wikipedia.org/wiki/Sara_Blakely">
+                    查看 Wikipedia 条目
+                  </a>
+                  ·
+                  <a href="https://fortune.com/2024/02/27/sara-blakely-spanx-billion-dollar-idea-oprah-5000-savings-billionaire">
+                    查看 Fortune 报道
+                  </a>
+                </p>
+                <p>
+                  销售背景与寻找袜厂代工的经历，用于提示分工路径。不能由职业背景推断她没有供应链能力，也不构成与讲者同一短板的严格反例。
+                </p>
+              </li>
+
+              <li id="s14">
+                <h4>S14 · Kiyosaki 现金流象限二手概述</h4>
+                <p>
+                  <a href="https://www.shortform.com/blog/esbi-quadrant/">
+                    查看 Shortform 概述
+                  </a>
+                </p>
+                <p>
+                  E / S / B / I，仅作个人框架对照；未直接核原书，不作为科学分类或方法有效性的依据。
+                </p>
+              </li>
+
+              <li id="s15">
+                <h4>S15 · Camuffo 等，2024</h4>
+                <p>
+                  <a href="https://doi.org/10.1002/smj.3580">
+                    Strategic Management Journal 45(6):1209–1237
+                  </a>
+                </p>
+                <p>
+                  已核到原始摘要：
+                  4 个随机对照试验、759 家企业；科学式决策训练与创意终止及大转向模式有关。支持更新决定，不验证测天赋或排除行业。
+                </p>
+              </li>
+
+              <li id="s16">
+                <h4>S16 · Grant，2013</h4>
+                <p>
+                  <a href="https://doi.org/10.1177/0956797612463706">
+                    Psychological Science 24(6):1024–1030
+                  </a>
+                </p>
+                <p>
+                  已核到原始摘要：
+                  340 名外呼销售，外向性与销售收入呈倒 U 型。研究情境有限，不是对讲者的直接反例，不外推到全部服务业。
+                </p>
+              </li>
+            </ol>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>经两个独立 AI 模型多轮交叉复核,复核不替代来源核验</p>
+    </footer>
+  </div>
+</body>
+</html>

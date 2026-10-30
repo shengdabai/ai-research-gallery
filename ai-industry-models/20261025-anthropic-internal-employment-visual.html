@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic 内部就业怎么变：原文拆解与可视化</title>
+<style>
+/* ============================================================
+   TOKENS — 本页唯一设计值来源
+   层级：原始色阶(--p-*) → 语义角色(--c-*, --s*) → 组件直接消费角色。
+   断点：唯一阈值 720px（媒体查询不能用 var()，所有 @media 都写这一个值）。
+   例外（已记录）：SVG 图表几何由 JS 按容器像素实时计算——绘图区内边距、行高、标记半径 4–5px、
+   条形圆角 4px（与 --r-sm 同值）、点击热区半径 10px、窗口缩放重绘防抖 150ms（行为参数）。
+   这些写在 JS 中，没有经过 token；颜色、字号、线宽、虚线全部经 CSS 类消费 token。
+   扩展：新颜色先加原始色阶，再映射到语义角色；组件不直接写色值。
+   ============================================================ */
+:root{
+  /* primitives */
+  --p-white:#ffffff; --p-slate-50:#f4f6f9; --p-slate-100:#e9edf3; --p-slate-200:#d5dbe4;
+  --p-slate-500:#5b6577; --p-slate-700:#3b4658; --p-slate-900:#0f172a;
+  --p-navy-900:#0f2342; --p-navy-50:#f3f6fb; --p-navy-200:#b9c6dc;
+  --p-blue:#256abf; --p-orange:#d95926; --p-aqua:#159c6c;
+  --p-blue-50:#e8f1fc; --p-orange-50:#fdf0ea; --p-aqua-50:#e6f6f0; --p-gray-50:#eef0f3;
+  --p-blue-ink:#1c5cab; --p-orange-ink:#a8401a; --p-aqua-ink:#0d6b49; --p-gray-ink:#4a5263;
+  --p-dk-bg:#11151c; --p-dk-surface:#1a1f28; --p-dk-surface-2:#242b37; --p-dk-line:#364152;
+  --p-dk-ink:#eef1f6; --p-dk-ink-2:#c3cad6; --p-dk-ink-3:#9aa4b5;
+  --p-dk-blue:#3987e5; --p-dk-orange:#d95926; --p-dk-aqua:#199e70;
+  --p-dk-blue-50:#1b2b42; --p-dk-orange-50:#3a2419; --p-dk-aqua-50:#15322a; --p-dk-gray-50:#2a303b;
+  --p-dk-blue-ink:#9ec5f4; --p-dk-orange-ink:#f3a982; --p-dk-aqua-ink:#7fd8b5; --p-dk-gray-ink:#c3cad6;
+
+  /* semantic roles */
+  --c-bg:var(--p-white); --c-surface:var(--p-slate-50); --c-surface-2:var(--p-slate-100);
+  --c-line:var(--p-slate-200); --c-grid:var(--p-slate-100);
+  --c-ink:var(--p-slate-900); --c-ink-2:var(--p-slate-700); --c-ink-3:var(--p-slate-500);
+  --c-hero-bg:var(--p-navy-900); --c-hero-ink:var(--p-navy-50); --c-hero-ink-2:var(--p-navy-200);
+  --c-link:var(--p-blue-ink); --c-focus:var(--p-blue);
+  --s1:var(--p-blue); --s2:var(--p-orange); --s3:var(--p-aqua); --s4:var(--p-slate-500); /* s4 = 较早时期的中性灰 */
+  --c-ref:var(--p-slate-500);
+  /* 证据等级徽章：文字标签 + 底色，不靠颜色单独传义 */
+  --c-tag-a-bg:var(--p-blue-50); --c-tag-a-ink:var(--p-blue-ink);
+  --c-tag-b-bg:var(--p-aqua-50); --c-tag-b-ink:var(--p-aqua-ink);
+  --c-tag-c-bg:var(--p-orange-50); --c-tag-c-ink:var(--p-orange-ink);
+  --c-tag-d-bg:var(--p-gray-50); --c-tag-d-ink:var(--p-gray-ink);
+  --c-warn-bg:var(--p-orange-50); --c-warn-line:var(--p-orange);
+  --c-tip-bg:var(--p-slate-900); --c-tip-ink:var(--p-white);
+
+  /* spacing */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:72px;
+  /* type */
+  --font-body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  --fs-xs:12px; --fs-sm:14px; --fs-md:16px; --fs-lg:19px; --fs-xl:24px; --fs-2xl:32px; --fs-3xl:40px;
+  --lh-tight:1.3; --lh-body:1.75; --fw-reg:400; --fw-med:600; --fw-bold:750;
+  /* shape */
+  --r-sm:4px; --r-md:8px; --r-lg:14px; --bw:1px; --bw-strong:3px;
+  --sh-1:0 1px 2px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+  /* layout */
+  --w-content:1080px; --w-text:760px; --col-min:240px; --col-min-sm:150px;
+  /* chart */
+  --chart-stroke:2px; --chart-stroke-ref:1.5px; --chart-grid:1px; --chart-dash:5 4;
+  --chart-h:280px; --chart-h-sm:240px; --chart-fill-op:.35;
+  /* motion & layers */
+  --dur-fast:120ms; --ease:ease-out; --z-tip:50;
+  /* misc */
+  --link-offset:3px; --focus-offset:2px; --tip-gap:12px; --tip-edge:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --c-bg:var(--p-dk-bg); --c-surface:var(--p-dk-surface); --c-surface-2:var(--p-dk-surface-2);
+    --c-line:var(--p-dk-line); --c-grid:var(--p-dk-surface-2);
+    --c-ink:var(--p-dk-ink); --c-ink-2:var(--p-dk-ink-2); --c-ink-3:var(--p-dk-ink-3);
+    --c-hero-bg:var(--p-dk-surface); --c-link:var(--p-dk-blue-ink); --c-focus:var(--p-dk-blue);
+    --s1:var(--p-dk-blue); --s2:var(--p-dk-orange); --s3:var(--p-dk-aqua); --s4:var(--p-dk-ink-3);
+    --c-ref:var(--p-dk-ink-3);
+    --c-tag-a-bg:var(--p-dk-blue-50); --c-tag-a-ink:var(--p-dk-blue-ink);
+    --c-tag-b-bg:var(--p-dk-aqua-50); --c-tag-b-ink:var(--p-dk-aqua-ink);
+    --c-tag-c-bg:var(--p-dk-orange-50); --c-tag-c-ink:var(--p-dk-orange-ink);
+    --c-tag-d-bg:var(--p-dk-gray-50); --c-tag-d-ink:var(--p-dk-gray-ink);
+    --c-warn-bg:var(--p-dk-orange-50); --c-warn-line:var(--p-dk-orange);
+    --c-tip-bg:var(--p-dk-ink); --c-tip-ink:var(--p-dk-bg);
+  }
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--font-body);font-size:var(--fs-md);line-height:var(--lh-body)}
+a{color:var(--c-link);text-underline-offset:var(--link-offset)}
+a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:var(--bw-strong) solid var(--c-focus);outline-offset:var(--focus-offset)}
+h1,h2,h3{line-height:var(--lh-tight);margin:0}
+h2{font-size:var(--fs-xl);font-weight:var(--fw-bold);margin-bottom:var(--sp-3)}
+h3{font-size:var(--fs-lg);font-weight:var(--fw-med);margin-bottom:var(--sp-2)}
+p{margin:0 0 var(--sp-3)}
+ul,ol{margin:0 0 var(--sp-3);padding-left:var(--sp-5)}
+li{margin-bottom:var(--sp-1)}
+strong{font-weight:var(--fw-med)}
+.wrap{max-width:var(--w-content);margin:0 auto;padding:0 var(--sp-5)}
+.text{max-width:var(--w-text)}
+.muted{color:var(--c-ink-3)}
+.small{font-size:var(--fs-sm)}
+.xs{font-size:var(--fs-xs)}
+
+/* ============ HERO ============ */
+.hero{background:var(--c-hero-bg);color:var(--c-hero-ink);padding:var(--sp-8) 0 var(--sp-7)}
+.hero h1{font-size:var(--fs-3xl);font-weight:var(--fw-bold);margin-bottom:var(--sp-4)}
+.hero .lede{font-size:var(--fs-lg);color:var(--c-hero-ink);max-width:var(--w-text)}
+.hero .meta{color:var(--c-hero-ink-2);font-size:var(--fs-sm);margin-top:var(--sp-4)}
+.hero .meta a{color:var(--c-hero-ink)}
+
+/* ============ LAYOUT BLOCKS ============ */
+section.block{padding:var(--sp-7) 0;border-bottom:var(--bw) solid var(--c-line)}
+.kicker{font-size:var(--fs-sm);font-weight:var(--fw-med);color:var(--c-ink-3);margin-bottom:var(--sp-2)}
+.grid{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),1fr))}
+.grid.tiles{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-sm),1fr))}
+.card{background:var(--c-surface);border-radius:var(--r-lg);padding:var(--sp-5)}
+.card.plain{background:var(--c-bg);border:var(--bw) solid var(--c-line)}
+.card h3{margin-bottom:var(--sp-2)}
+.note{border-left:var(--bw-strong) solid var(--c-warn-line);background:var(--c-warn-bg);padding:var(--sp-3) var(--sp-4);border-radius:var(--r-sm);font-size:var(--fs-sm);margin:var(--sp-4) 0}
+.quote{border-left:var(--bw-strong) solid var(--c-line);padding-left:var(--sp-4);color:var(--c-ink-2);margin:var(--sp-4) 0}
+
+/* ============ STAT TILE ============ */
+.tile{background:var(--c-surface);border-radius:var(--r-md);padding:var(--sp-4)}
+.tile .num{font-size:var(--fs-xl);font-weight:var(--fw-bold);line-height:var(--lh-tight)}
+.tile .lab{font-size:var(--fs-sm);color:var(--c-ink-2);margin-top:var(--sp-1)}
+.tile .src{font-size:var(--fs-xs);color:var(--c-ink-3);margin-top:var(--sp-2)}
+
+/* ============ FINDINGS ============ */
+.finding{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-3);align-items:start}
+.finding .dot{width:var(--sp-3);height:var(--sp-3);border-radius:50%;margin-top:var(--sp-2);background:var(--s1)}
+.finding.f2 .dot{background:var(--s2)} .finding.f3 .dot{background:var(--s3)}
+
+/* ============ TAGS ============ */
+.tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-med);padding:0 var(--sp-2);border-radius:var(--r-sm);white-space:nowrap}
+.tag.a{background:var(--c-tag-a-bg);color:var(--c-tag-a-ink)}
+.tag.b{background:var(--c-tag-b-bg);color:var(--c-tag-b-ink)}
+.tag.c{background:var(--c-tag-c-bg);color:var(--c-tag-c-ink)}
+.tag.d{background:var(--c-tag-d-bg);color:var(--c-tag-d-ink)}
+
+/* ============ MECHANISM MAP ============ */
+.mech{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);align-items:stretch}
+.mnode{background:var(--c-bg);border:var(--bw) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3);font-size:var(--fs-sm)}
+.mnode b{display:block;font-size:var(--fs-md);font-weight:var(--fw-med);margin-bottom:var(--sp-1)}
+.mlink{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-xs);color:var(--c-ink-3);grid-column:1/-1;padding-left:var(--sp-3)}
+.mlink .ln{flex:0 0 var(--sp-7);border-top:var(--bw-strong) solid var(--c-ink-2)}
+.mlink .ln.dash{border-top-style:dashed;border-top-color:var(--c-ink-3)}
+.legend-row{display:flex;flex-wrap:wrap;gap:var(--sp-4);font-size:var(--fs-sm);color:var(--c-ink-2);margin:var(--sp-3) 0}
+.legend-row span{display:inline-flex;align-items:center;gap:var(--sp-2)}
+.sw{display:inline-block;width:var(--sp-4);height:var(--sp-3);border-radius:var(--r-sm)}
+.sw.s1{background:var(--s1)} .sw.s2{background:var(--s2)} .sw.s3{background:var(--s3)} .sw.s4{background:var(--s4)}
+.sw.line{height:0;border-top:var(--bw-strong) solid var(--c-ink-2);border-radius:0}
+.sw.line.dash{border-top-style:dashed;border-top-color:var(--c-ink-3)}
+
+/* ============ CHART ============ */
+figure.chart{margin:var(--sp-5) 0;background:var(--c-bg);border:var(--bw) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-4)}
+figure.chart figcaption{font-size:var(--fs-md);font-weight:var(--fw-med);margin-bottom:var(--sp-1)}
+figure.chart .sub{font-size:var(--fs-sm);color:var(--c-ink-3);margin-bottom:var(--sp-3)}
+.cv{width:100%;min-height:var(--chart-h)}
+.cv.sm{min-height:var(--chart-h-sm)}
+.cv svg{display:block;width:100%;overflow:visible}
+.cv text{fill:var(--c-ink-2);font-size:var(--fs-xs);font-family:var(--font-body)}
+.cv text.lab{fill:var(--c-ink);font-weight:var(--fw-med)}
+.cv text.inv{fill:var(--c-bg);font-weight:var(--fw-med)}
+.cv text.ttl{fill:var(--c-ink);font-size:var(--fs-sm);font-weight:var(--fw-med)}
+.cv .grid-l{stroke:var(--c-grid);stroke-width:var(--chart-grid)}
+.cv .axis{stroke:var(--c-line);stroke-width:var(--chart-grid)}
+.cv .ref{stroke:var(--c-ref);stroke-width:var(--chart-stroke-ref);stroke-dasharray:var(--chart-dash);fill:none}
+.cv .ln{fill:none;stroke-width:var(--chart-stroke);stroke-linejoin:round;stroke-linecap:round}
+.cv .k1{stroke:var(--s1);fill:var(--s1)} .cv .k2{stroke:var(--s2);fill:var(--s2)} .cv .k3{stroke:var(--s3);fill:var(--s3)} .cv .k4{stroke:var(--s4);fill:var(--s4)}
+.cv .ln.k1,.cv .ln.k2,.cv .ln.k3,.cv .ln.k4{fill:none}
+.cv .mk{stroke:var(--c-bg);stroke-width:var(--chart-stroke)}
+.cv .ci{stroke-width:var(--chart-stroke);fill:none}
+.cv .bub{fill-opacity:var(--chart-fill-op);stroke-width:var(--chart-grid)}
+.cv .bar-cut{stroke:var(--c-bg);stroke-width:var(--bw-strong)}
+.cv .hit{fill:transparent;stroke:none;cursor:pointer}
+.cv .hit:focus{outline:none}
+.cv .hit:focus-visible{stroke:var(--c-focus);stroke-width:var(--chart-stroke)}
+.cv .shade{fill:var(--c-surface)}
+details.data{margin-top:var(--sp-3);font-size:var(--fs-sm)}
+details.data summary{cursor:pointer;color:var(--c-link)}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-sm)}
+th,td{border-bottom:var(--bw) solid var(--c-line);padding:var(--sp-2) var(--sp-3);text-align:left;vertical-align:top}
+th{font-weight:var(--fw-med);color:var(--c-ink-2);background:var(--c-surface)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tip{position:fixed;z-index:var(--z-tip);pointer-events:none;background:var(--c-tip-bg);color:var(--c-tip-ink);font-size:var(--fs-xs);line-height:var(--lh-tight);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);opacity:0;transition:opacity var(--dur-fast) var(--ease);max-width:var(--col-min)}
+.tip.on{opacity:1}
+
+/* ============ CASES ============ */
+.case{background:var(--c-bg);border:var(--bw) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4)}
+.case h3{font-size:var(--fs-md)}
+.case .meta{font-size:var(--fs-xs);color:var(--c-ink-3);margin-bottom:var(--sp-2)}
+.case .rel{font-size:var(--fs-sm);color:var(--c-ink-2);border-top:var(--bw) solid var(--c-line);padding-top:var(--sp-2);margin-top:var(--sp-2)}
+.group-h{margin:var(--sp-6) 0 var(--sp-3)}
+
+/* ============ ACTIONS ============ */
+.act{counter-reset:act;list-style:none;padding:0}
+.act li{background:var(--c-surface);border-radius:var(--r-md);padding:var(--sp-4);margin-bottom:var(--sp-3)}
+.act li b{display:block;font-size:var(--fs-md);margin-bottom:var(--sp-1)}
+
+footer{padding:var(--sp-7) 0;color:var(--c-ink-3);font-size:var(--fs-sm)}
+footer li{word-break:break-word}
+
+@media (max-width:720px){
+  .wrap{padding:0 var(--sp-4)}
+  .hero{padding:var(--sp-7) 0 var(--sp-6)}
+  .hero h1{font-size:var(--fs-2xl)}
+  h2{font-size:var(--fs-lg)}
+  .mech{grid-template-columns:1fr}
+  section.block{padding:var(--sp-6) 0}
+  .card{padding:var(--sp-4)}
+  figure.chart{padding:var(--sp-3)}
+}
+@media (prefers-reduced-motion: reduce){.tip{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker" style="color:var(--c-hero-ink-2)">原文拆解 · 可视化 · 外部对照</div>
+    <h1>Anthropic 内部就业怎么变</h1>
+    <p class="lede">Anthropic Institute 用公司内部的人事、代理日志、产出、问卷、日历和招聘记录，给自己做了一次“AI 重度使用后的组织体检”。本页逐段读完 20 页原文，把核心数据重画成图，标出哪些能归因于 AI、哪些还不能，并补充外部研究与企业案例。</p>
+    <p class="meta">原文：<a href="https://www.anthropic.com/research/employment-at-anthropic">How Employment is Changing at Anthropic</a>（技术报告，2026-10-16，作者 Nathan Wilmers、Regina Catipon、Maxim Massenkoff、Peter McCrory）· 定量数据 + 17 位员工访谈 · 本页制作于 2026-10-25</p>
+  </div>
+</header>
+
+<main>
+<!-- ============ 结论 ============ -->
+<section class="block">
+  <div class="wrap">
+    <h2>先看结论</h2>
+    <p class="text"><strong>一句话：</strong>在 Anthropic，AI 代理承担了越来越多的执行工作，各类岗位的人均产出指标在上升；同时，技术岗的初级招聘明显收缩，人的注意力、判断和协调成了新的约束。初级招聘收缩有多少是 AI 造成的，原文没有给出因果证明。</p>
+    <div class="grid" style="margin-top:var(--sp-5)">
+      <div class="card"><div class="finding"><span class="dot" aria-hidden="true"></span><div><h3>组织：初级技术岗在变少</h3><p class="small">技术部门新招中初级占比 27%→9%，在岗初级占比 21%→14%。非技术部门初级占比基本稳定在约 25%。技术招聘的绝对人数仍在增长。</p></div></div></div>
+      <div class="card"><div class="finding f2"><span class="dot" aria-hidden="true"></span><div><h3>执行：代理工时与产出指标上升</h3><p class="small">员工指挥的代理工时在 2026 年 8 月约为人类工时的 6 倍。工程师人均代码提交 6 个月约 5.1 倍。同期业务高速增长，这些是观测到的指标，不等于“效率提升 5 倍”。</p></div></div></div>
+      <div class="card"><div class="finding f3"><span class="dot" aria-hidden="true"></span><div><h3>瓶颈：人的注意力与判断</h3><p class="small">交互会话约 80% 的时间在等人。“管理 Claude”的元工作占比 10%→22%。会议时间 +20%。招聘评语更看重自主性和判断，更少看领域专长和执行。</p></div></div></div>
+    </div>
+    <div class="note"><strong>不要这样读：</strong>①“AI 已经让 Anthropic 裁掉了初级员工”——原文讲的是招聘与人员结构变化，不是裁员，也没有证明 AI 是唯一原因；②“代理 6 倍工时 = 一个员工顶 6 个人”——代理运行时长不等于同等质量的人类劳动；③“Anthropic 的情况会照搬到所有公司”——它是 AI 原生公司，作者自己也说很多做法不能复制。</div>
+
+    <div class="grid tiles" style="margin-top:var(--sp-5)">
+      <div class="tile"><div class="num">27%→9%</div><div class="lab">技术岗新招中的初级占比</div><div class="src">图 1 · 2025 年初→2026 年中</div></div>
+      <div class="tile"><div class="num">约 6×</div><div class="lab">代理小时 ÷ 人类工时（员工指挥的交互会话）</div><div class="src">图 2 · 2026 年 8 月</div></div>
+      <div class="tile"><div class="num">5.1×</div><div class="lab">工程师人均代码提交（2025-12=1）</div><div class="src">图 3 · 约 6 个月</div></div>
+      <div class="tile"><div class="num">约 80%</div><div class="lab">交互会话里代理在等人回复的时间</div><div class="src">正文 · 代理日志</div></div>
+      <div class="tile"><div class="num">10%→22%</div><div class="lab">元工作占交互会话的比例</div><div class="src">图 7 · 2025 秋→2026 春</div></div>
+      <div class="tile"><div class="num">+20%</div><div class="lab">中位员工会议时间（技术个人贡献者 +16%）</div><div class="src">正文 · 日历数据</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 机制假说 ============ -->
+<section class="block">
+  <div class="wrap">
+    <h2>机制假说图：哪些环节有直接观测，哪些只是推测</h2>
+    <p class="text">原文的各项证据来自不同指标、样本和方法，不能连成一条已经证明的因果链。下图实线表示原文直接观测到的同期变化，虚线表示作者提出或可能成立的关联。</p>
+    <div class="legend-row"><span><i class="sw line" aria-hidden="true"></i>实线：直接观测</span><span><i class="sw line dash" aria-hidden="true"></i>虚线：推测关联，无因果证明</span></div>
+    <div class="mech" role="list">
+      <div class="mnode" role="listitem"><b>模型变强、代理扩散</b>代理工时 2 月约 0.13 倍人类工时 → 8 月约 6 倍；新模型上线后难任务占比 10%→13%</div>
+      <div class="mnode" role="listitem"><b>产出指标上升</b>提交 5.1×、合同 3.1×、成交 1.7×；采用者分析显示采用后代码增量与成交数上升</div>
+      <div class="mnode" role="listitem"><b>人成为瓶颈</b>80% 会话时间在等人；读完输出的理论负荷 12–424 小时/周</div>
+      <div class="mnode" role="listitem"><b>工作内容转向</b>元工作 10%→22%；常驻指令几百份→8,500 份；会议 +20%；跨部门流动 +50%</div>
+      <div class="mlink" role="listitem"><i class="ln" aria-hidden="true"></i>同期观测：代理越多，产出指标越高；但同期业务爆发，采用也不是随机的</div>
+      <div class="mnode" role="listitem"><b>招聘标准变化</b>评语提到 AI 工具使用：技术岗约 3 倍、非技术岗约 4 倍；自主性与判断上升</div>
+      <div class="mnode" role="listitem"><b>初级技术岗收缩</b>新招初级占比 27%→9%；职位发布 2025-12 后骤降</div>
+      <div class="mnode" role="listitem"><b>复杂任务岗位初级增长更低</b>岗位级散点的加权回归向下（描述性）</div>
+      <div class="mnode" role="listitem"><b>经理自述</b>约 1/3 ML 经理、1/5 SWE 经理说因 AI 少招</div>
+      <div class="mlink" role="listitem"><i class="ln dash" aria-hidden="true"></i>推测：AI 承担了初级执行任务 → 少招初级。证据是经理自述 + 描述性相关，原文没有因果估计</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A 组织与初级招聘 ============ -->
+<section class="block" id="sec-a">
+  <div class="wrap">
+    <div class="kicker">主线一</div>
+    <h2>组织与初级招聘：技术岗变“老”，非技术岗没变</h2>
+    <p class="text">2026 年 1 月，重度使用 Claude 的核心技术团队开始讨论“初级技术岗需求下降”；到 4 月，工程与研究团队已经不再重点招低职级技术岗。一位经理说，新模型对性能工程师的提升“几乎一夜之间改变了我们要找的人”。</p>
+
+    <figure class="chart">
+      <figcaption>图 A1　初级员工占比：技术部门 vs 非技术部门</figcaption>
+      <div class="sub">三条线：新招、在岗人数、开放职位中初级的占比。2025-03 至 2026-06，按月。</div>
+      <div class="legend-row"><span><i class="sw s1" aria-hidden="true"></i>新招中初级占比</span><span><i class="sw s2" aria-hidden="true"></i>在岗人数中初级占比</span><span><i class="sw s3" aria-hidden="true"></i>开放职位中初级占比</span></div>
+      <div class="grid">
+        <div><div class="cv sm" id="c-a1t" role="img" aria-label="技术部门初级占比折线图：新招从约28%降到9%，在岗从21%降到14%，开放职位从约11%先升到21%再降到6%"></div></div>
+        <div><div class="cv sm" id="c-a1n" role="img" aria-label="非技术部门初级占比折线图：新招与在岗基本在25%上下，开放职位从约32%降到13%"></div></div>
+      </div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-a1"></div></details>
+      <p class="xs muted">数据来源：原文图 1。端点（9%、14%、6%、26%、25%、13%）为原图标注；中间各点为本页按原图目测读数，属近似值。</p>
+    </figure>
+
+    <div class="grid tiles">
+      <div class="tile"><div class="num">61%→56%</div><div class="lab">技术部门占总人数（过去一年）</div><div class="src">销售、财务、招聘扩张更快</div></div>
+      <div class="tile"><div class="num">2→90</div><div class="lab">非技术员工每月编码代理会话（2025-08→2026-05）</div><div class="src">基线无代码提交者，不含新员工</div></div>
+      <div class="tile"><div class="num">约 17:1</div><div class="lab">工程师 : 产品经理，且 2025 年以来在上升</div><div class="src">经理代码提交量翻倍</div></div>
+      <div class="tile"><div class="num">+50%</div><div class="lab">入职满一年员工每月跨部门流动概率（2026 vs 2025）</div><div class="src">整组团队也在调岗</div></div>
+    </div>
+
+    <figure class="chart">
+      <figcaption>图 A2　Claude 任务越复杂的岗位，初级人数增长越低</figcaption>
+      <div class="sub">每个点是一个岗位。横轴：该岗位 Claude 任务的复杂度百分位（2025-10~12 代理日志）。纵轴：2026-01→07 初级人数增长（对数点）。点越大，1 月初级人数越多。虚线为加权回归线。</div>
+      <div class="cv" id="c-a2" role="img" aria-label="散点图：复杂度越高，初级人数增长越低，回归线从左上约1.0降到右下约负0.25，约在第78百分位处过零"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-a2"></div></details>
+      <p class="xs muted">数据来源：原文图 5，点位为目测读数。原文称这是描述性结果，不是因果估计。</p>
+    </figure>
+
+    <div class="grid">
+      <div class="card plain"><h3>行政岗几乎没随公司变大</h3><p class="small">代理助手、自动审核和工单外包让公司“文员很少”。一位行政助理自己搭了排程与邮件分拣代理，说“Claude 已经替掉了真正入门级的行政岗”，自己转做“幕僚长”式工作。</p></div>
+      <div class="card plain"><h3>一个文案团队整体转岗</h3><p class="small">写 Claude.ai 问候语（如 “Hello night owl”）的产品设计团队，2026 年春做出一张能指导代理写文案的“上下文图谱”。之后团队转去写模型评测和 prompt：“过去用语言驱动人的行为，现在用语言驱动 Claude 的行为。”</p></div>
+      <div class="card plain"><h3>销售自己做工具</h3><p class="small">一位销售代表用三四个小时迭代出定制看板和销售管线：“这种东西以前完全超出我的能力，尤其是界面、连接各种工具和 MCP。”</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B 代理执行与注意力 ============ -->
+<section class="block" id="sec-b">
+  <div class="wrap">
+    <div class="kicker">主线二</div>
+    <h2>代理执行与人的注意力：代理越多，人越像“经理”</h2>
+
+    <figure class="chart">
+      <figcaption>图 B1　代理小时 ÷ 人类工时（对数轴）</figcaption>
+      <div class="sub">只算员工指挥的交互会话（含子代理）；代理时间 = 推理与工具调用时间，单次等待超过 30 分钟不计；人类工时 = 人数 × 每周 40 小时。</div>
+      <div class="legend-row"><span><i class="sw s1" aria-hidden="true"></i>研究部门</span><span><i class="sw s2" aria-hidden="true"></i>全体员工</span><span><i class="sw line dash" aria-hidden="true"></i>持平线 = 1</span></div>
+      <div class="cv" id="c-b1" role="img" aria-label="对数折线图：全体员工从2月约0.13倍升到8月约6倍，约5月上旬与人类工时持平；研究部门约4月初持平，8月约19倍"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-b1"></div></details>
+      <p class="xs muted">数据来源：原文图 2。6×、19× 为原图标注，各月初数值为目测读数。正文另说：把自主代理也算上，代理工时在 2026 年 3 月就首次超过人类工时。两种口径不同，不要混用。</p>
+    </figure>
+
+    <figure class="chart">
+      <figcaption>图 B2　读完 Claude 交互会话的全部输出，每人每周要多少小时</figcaption>
+      <div class="sub">2026 年 5 月，按 0.75 词/token、每分钟读 250 词推算。这是理论阅读负荷，不是实测阅读时间。</div>
+      <div class="legend-row"><span><i class="sw s1" aria-hidden="true"></i>理论阅读小时/周</span><span><i class="sw line dash" aria-hidden="true"></i>20 小时（半周）与 40 小时（全周）</span></div>
+      <div class="cv sm" id="c-b2" role="img" aria-label="条形图：工程与研究424小时（截断显示），财务43，销售35，其他非工程27，法务26，营销12"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-b2"></div></details>
+      <p class="xs muted">数据来源：原文图 6，各组端点为原图标注。工程与研究的条形被截断。原文说“即使非技术组也超过半周”，但营销组 12 小时低于 20 小时，更准确的说法是“多数非技术组的理论负荷超过半周”。</p>
+    </figure>
+
+    <figure class="chart">
+      <figcaption>图 B3　“管理 Claude”的元工作占比</figcaption>
+      <div class="sub">元工作 = 给代理写技能、计划和评审，搭监控看板，记录工作方法，而不是做事本身。按 2,000 条一行会话摘要自动编码。</div>
+      <div class="legend-row"><span><i class="sw s4" aria-hidden="true"></i>2025-08~10</span><span><i class="sw s1" aria-hidden="true"></i>2026-04~06</span></div>
+      <div class="cv" id="c-b3" role="img" aria-label="哑铃图：全部职能从约10%升到22%；基础设施约5%到29%，开发工具约5%到26%，销售约15%到15%，财务法务营销约6%到12%"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-b3"></div></details>
+      <p class="xs muted">数据来源：原文图 7。右端百分比为原图标注；左端为目测读数。</p>
+    </figure>
+
+    <div class="grid tiles">
+      <div class="tile"><div class="num">几百→8,500</div><div class="lab">写给代理的常驻指令（2025-07→一年后）</div><div class="src">有人给代理配“幕僚长”分拣请求</div></div>
+      <div class="tile"><div class="num">10%→13%</div><div class="lab">新模型上线后，超过旧模型难度 90 分位的任务占比</div><div class="src">简单任务端变化很小</div></div>
+      <div class="tile"><div class="num">20%</div><div class="lab">2026-04 问卷中说“角色从做事变成管 Claude”的员工</div><div class="src">27% 描述了提效</div></div>
+      <div class="tile"><div class="num">近一半</div><div class="lab">有代理出现的活跃公开 Slack 频道</div><div class="src">人与人的回复数没有减少</div></div>
+    </div>
+
+    <div class="grid" style="margin-top:var(--sp-5)">
+      <div class="card"><h3>会议更多了，不是更少</h3><p class="small">中位员工会议时间比一年前多 20%，技术个人贡献者也多 16%。部分原因是公司扩张、会议密集的非技术岗变多。员工反复说面对面协调不可替代：追 bug 最后常常追到“需要人来召集、决策和治理”的组织问题上。</p></div>
+      <div class="card"><h3>决策要写在代理看得见的地方</h3><p class="small">线下会议没有记录，代理就拿不到更新的上下文。一位员工的名字挂在几个月前的周边礼品文档上，代理一直把 T 恤和杯子的请求转给他。原文结论：AI 重度组织需要“公开地工作和决策”。可迁移的做法是可检索的决策记录、明确的任务上下文和可复用流程。</p></div>
+      <div class="card"><h3>单一部门的 Slack 网络</h3><p class="small">原文图 8 画了一个大部门的公开频道网络：代理节点（橙点）大量出现，但多在专门的人机频道里；人与人的线程保持同样的人类回复数，代理是叠加的。代理更像“一个人的团队”，不是连接很多人的枢纽。该图只覆盖一个部门，不宜外推。</p></div>
+    </div>
+    <p class="quote">“它们就像：我的果汁盒需要打开，这是紧急情况。语气和那个割破手指正在流血的孩子一样……照看孩子时，每个孩子都要求你同等的注意力，各个 Claude 也是这样。” —— 一位工程师</p>
+  </div>
+</section>
+
+<!-- ============ C 产出与采用 ============ -->
+<section class="block" id="sec-c">
+  <div class="wrap">
+    <div class="kicker">主线三</div>
+    <h2>产出指标与采用效果：上升是真的，归因要打折</h2>
+
+    <figure class="chart">
+      <figcaption>图 C1　各职能人均产出指标，2026 年中相对 2025-12 的倍数</figcaption>
+      <div class="sub">每个职能的产出单位不同（提交、查询、合同、成交、录用、发票），只能看各自的变化，不能横向比较“谁效率更高”。</div>
+      <div class="cv sm" id="c-c1" role="img" aria-label="条形图：工程师人均提交5.1倍，数据科学家查询3.1倍，法务合同3.1倍，销售成交1.7倍，招聘官录用1.4倍，应付账款发票1.4倍"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-c1"></div></details>
+      <p class="xs muted">数据来源：原文图 3（倍数为原图标注，Loess 平滑）。同期公司业务爆发式增长，原文自己也说“卖一个强模型时更容易成交”。</p>
+    </figure>
+
+    <p class="text">为了把 AI 的作用和业务增长分开，作者比较了同一个月里“已采用编码代理”和“尚未采用”的员工（人和月份双向固定效应）：<strong>192 名采用者</strong> vs <strong>74 名未采用工程师</strong>，采用月 = 第一次单月 ≥5 次代理会话的月份。</p>
+
+    <div class="grid">
+      <figure class="chart" style="margin:0">
+        <figcaption>图 C2　工程师：代码增量（相对采用前 1 个月）</figcaption>
+        <div class="sub">点 = 估计值，竖线 = 95% 置信区间；灰底为采用前。单位为原文的“对数点”，原文未换算成倍数。</div>
+        <div class="cv sm" id="c-c2" role="img" aria-label="事件研究图：采用前各月接近0，采用当月约0.98，第2个月约1.86，第3个月约1.0，置信区间较宽"></div>
+        <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-c2"></div></details>
+      </figure>
+      <figure class="chart" style="margin:0">
+        <figcaption>图 C3　销售：多成交的客户数（相对采用前 1 个月）</figcaption>
+        <div class="sub">点 = 估计值，竖线 = 95% 置信区间；灰底为采用前。</div>
+        <div class="cv sm" id="c-c3" role="img" aria-label="事件研究图：采用前各月接近0，采用后第1个月约多3个客户，第2个月约5.6个，第3个月约6.7个"></div>
+        <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-c3"></div></details>
+      </figure>
+    </div>
+
+    <figure class="chart">
+      <figcaption>图 C4　代码质量：AI 写的代码 − 同一人亲手写的代码（百分点）</figcaption>
+      <div class="sub">同一员工、同一月、同一代码目录内比较。六项质量代理指标的 95% 置信区间都包含 0。</div>
+      <div class="cv sm" id="c-c4" role="img" aria-label="森林图：六项指标的估计值都在0附近，置信区间都跨过0"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-c4"></div></details>
+      <p class="xs muted">数据来源：原文图 4，目测读数。</p>
+    </figure>
+
+    <div class="note"><strong>三个必须保留的限定：</strong>①采用不是随机的。原文举例：准备启动大项目的人可能会先“装备起来”，这会高估效果。②全自动代理的采用者在采用前就已经在加速（原文图 4 左下），说明有选择效应。③质量区间含 0 只表示“这套代理指标没有识别出差异”，不等于“AI 代码质量和人一样”；作者也说 AI 的错误可能更难发现。</div>
+
+    <div class="grid">
+      <div class="card plain"><h3>销售</h3><p class="small">一位客户经理说 Claude 自动化接手了写邮件和 CRM 集成，约占原来 20% 的工作；另一位说因此能多见 30% 的客户：“任何事做第二遍时，就想想怎么用 Claude 让我不用做第三遍。”</p></div>
+      <div class="card plain"><h3>法务与招聘</h3><p class="small">一位律师搭了扫描风险、分拣法律问题、初审对外文案的自动化；一位招聘官用 Claude 做候选人搜寻和申请跟踪，省下“大概几周”的分析时间，用来重写过时的面试题、见更多候选人。</p></div>
+      <div class="card plain"><h3>“20% 变 90%”</h3><p class="small">非技术员工说，原来只占 20% 的战略性工作现在变成 90%。但很多非技术岗的核心执行本来就是人际的：销售电话、面试、跨团队对齐，这些仍由人做。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D 招聘标准 ============ -->
+<section class="block" id="sec-d">
+  <div class="wrap">
+    <h2>招聘标准：从“会做”转向“会判断、会用 AI”</h2>
+    <figure class="chart">
+      <figcaption>图 D1　面试评语中提到候选人 AI 工具使用的比例</figcaption>
+      <div class="sub">自动编码 2024 年以来数千名最终获聘员工的面试评分卡（不含落选候选人）。2026 年数值按原文“约 3 倍 / 约 4 倍”推算，原文没有给出精确值。</div>
+      <div class="legend-row"><span><i class="sw s4" aria-hidden="true"></i>2024</span><span><i class="sw s1" aria-hidden="true"></i>2026（推算）</span></div>
+      <div class="cv sm" id="c-d1" role="img" aria-label="分组条形图：技术岗从约5%到约15%，非技术岗从约7%到约28%"></div>
+      <details class="data"><summary>查看数据表</summary><div class="tscroll" id="t-d1"></div></details>
+    </figure>
+    <div class="grid">
+      <div class="card"><h3>技术岗</h3><p class="small">评语里增幅最大的是“自主性”和“判断”；“领域专长”在评价中的占比下降。一位经理说：“我预计模型会一直参差不齐，所以我希望团队成员能在不同领域之间互换。”</p></div>
+      <div class="card"><h3>非技术岗</h3><p class="small">“客户导向”和“使命认同”上升，“执行能力”的讨论下降。总体上，经理越来越按判断力和投入程度评价候选人，而不是按 AI 已经能自动化的专项技能与执行。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ E 雇主回应 ============ -->
+<section class="block" id="sec-e">
+  <div class="wrap">
+    <h2>Anthropic 的回应，以及它没解决的问题</h2>
+    <div class="grid">
+      <div class="card"><h3>① 员工广泛持股</h3><p class="small">作者类比 1950 年代美国汽车、钢铁工会与管理层的协议：工会接受管理层重组工作，换取与生产率挂钩的加薪和福利。作者的判断是：要求个人贡献者“管理代理、做 VP 级决策”，就要有分享收益的机制。也承认这对估值大涨的公司很容易，对很多公司不够或不可取。</p></div>
+      <div class="card"><h3>② 岗位风险早期预警</h3><p class="small">把岗位级的需求和产出指标与 AI 能力、使用量对照，提前标出工作正在转移的岗位，再把受影响员工调到技能匹配、短期风险较低的岗位。</p></div>
+      <div class="card"><h3>③ 优先内部再部署</h3><p class="small">好处：逼公司去想 AI 能创造哪些新任务，避免“勉强划算的自动化”（替掉人却几乎不提效）。代价：承诺安置老员工，可能让公司更不敢招新人；在竞争激烈时成本很高。</p></div>
+    </div>
+    <div class="note"><strong>作者原话的意思：</strong>这些措施都不能阻止强大 AI 冲击工作，也都没有直接解决本报告记录的初级招聘下降——对在职者的保护，帮不到那些一开始就没被招进来的人。雇主行动需要配合政府的再培训与收入支持政策。</div>
+    <p class="small muted">另一组对照：2026 年 8 月，Anthropic 员工预期到 2030 年 AI 能做自己 75% 的工作，其他美国人的预期是 28%。这是主观预期，不是对自动化比例的测量。</p>
+  </div>
+</section>
+
+<!-- ============ 证据分级 ============ -->
+<section class="block" id="sec-evidence">
+  <div class="wrap">
+    <h2>证据强弱：每个结论靠什么撑着</h2>
+    <div class="legend-row"><span><span class="tag a">A 准实验</span>有对照组的采用者分析</span><span><span class="tag b">B 描述性</span>内部行政数据的趋势或相关</span><span><span class="tag c">C 自述</span>问卷、访谈、经理说法</span><span><span class="tag d">D 推算</span>基于假设换算</span></div>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>结论</th><th>证据</th><th>主要限制</th></tr></thead>
+        <tbody>
+          <tr><td>技术岗初级招聘占比下降（27%→9%）</td><td><span class="tag b">B 描述性</span></td><td>是占比不是人数；技术招聘绝对数仍在增长；未证明由 AI 导致</td></tr>
+          <tr><td>经理因 AI 少招（约 1/3 ML、1/5 SWE）</td><td><span class="tag c">C 自述</span></td><td>经理的主观归因</td></tr>
+          <tr><td>复杂任务岗位初级增长更低</td><td><span class="tag b">B 描述性</span></td><td>岗位级加权相关，原文明说非因果</td></tr>
+          <tr><td>代理工时约 6 倍人类工时</td><td><span class="tag b">B 描述性</span></td><td>特定口径的运行时长，不等于等量劳动</td></tr>
+          <tr><td>各职能人均产出指标上升</td><td><span class="tag b">B 描述性</span></td><td>与业务爆发同期；产出单位各不相同；不是质量调整后的生产率</td></tr>
+          <tr><td>采用编码代理后代码增量、成交数上升</td><td><span class="tag a">A 准实验</span></td><td>采用非随机；全自动代理有采用前加速；置信区间宽</td></tr>
+          <tr><td>AI 代码质量无可识别差异</td><td><span class="tag a">A 准实验</span></td><td>只用 6 项代理指标；“未识别出差异”≠“无差异”</td></tr>
+          <tr><td>读完输出需 12–424 小时/周</td><td><span class="tag d">D 推算</span></td><td>依赖 0.75 词/token、250 词/分钟的假设</td></tr>
+          <tr><td>元工作 10%→22%</td><td><span class="tag b">B 描述性</span></td><td>自动编码 2,000 条一行摘要</td></tr>
+          <tr><td>招聘评语转向自主性、判断与 AI 使用</td><td><span class="tag b">B 描述性</span></td><td>只覆盖最终获聘者的评分卡；主题由自动编码判定</td></tr>
+          <tr><td>人均收入是 Meta、Google 同龄期 2–4 倍</td><td><span class="tag b">B 描述性</span></td><td>跨时代比较；不能直接归因于 AI</td></tr>
+          <tr><td>代理叠加而非替代人际沟通</td><td><span class="tag b">B 描述性</span></td><td>只看了一个大部门的公开 Slack 频道</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 外部对照 ============ -->
+<section class="block" id="sec-cases">
+  <div class="wrap">
+    <h2>补充案例：外部研究与企业做法</h2>
+    <p class="text">下面的研究样本、时间窗和方法都不同，不能拼成一个统一的“AI 就业效应”。每张卡片标了性质和与本报告的关系。支持“初级岗收缩”的证据和指向“增强、瓶颈”的证据都保留。</p>
+
+    <h3 class="group-h">一、岗位结构：其他数据也看到初级岗收缩</h3>
+    <div class="grid">
+      <div class="case"><h3>Canaries in the Coal Mine</h3><div class="meta">Brynjolfsson、Chandar、Chen · 斯坦福 · 工作论文 2026-08 版 · ADP 薪酬数据至 2026-06 · <span class="tag b">B 描述性</span></div><p class="small">AI 高暴露职业中 22–25 岁员工的就业，比“按低暴露同龄人的增速增长”这一假设路径低 19%；资深员工没有类似差距。主要通过少招而不是多裁实现。没有发现全经济范围的岗位替代。作者称这是早期描述性指标，非因果估计。</p><p class="rel">关系：在全美数据里看到与 Anthropic 同方向的“少招新人”。差距自 2025-08 首次发布（当时 13%）后持续扩大。</p></div>
+      <div class="case"><h3>Generative AI as Seniority-Biased Technological Change</h3><div class="meta">Hosseini Maasoum、Lichtinger · 哈佛 · SSRN 5425555 工作论文 · 约 6,000 万+ 简历与职位数据 · <span class="tag b">B 描述性（双重差分）</span></div><p class="small">从 2023 年一季度起，采用生成式 AI 的公司初级就业相对未采用公司下降，资深就业继续增长；交错双重差分显示采用约 8 个季度后初级就业下降约 8%。主要来自少招。</p><p class="rel">关系：原文引用了这篇。它说明“采用 AI 的公司少招初级”不是 Anthropic 独有现象。不同版本数字略有差异。</p></div>
+      <div class="case"><h3>AI-Native Firms</h3><div class="meta">Kim（INSEAD）、Koning（HBS）· HBS 工作论文 26-090 · 2026-06-09 · YC 与美国风投支持创业公司 · <span class="tag b">B 描述性</span></div><p class="small">与同行业同批次的非 AI 创业公司相比，AI 原生公司规模小 25%，工程师占比高 13%，初级员工和经理占比各低约 15%，层级平半级，估值相近。作者认为主要途径是把 AI 做进产品，而不只是给流程加 AI 工具。</p><p class="rel">关系：原文引用了这篇。Anthropic 的“工程师多、初级少、扁平”与这组公司的组织特征一致。</p></div>
+    </div>
+
+    <h3 class="group-h">二、产出落差与反向证据：写得多 ≠ 交付多，新手也可能获益最大</h3>
+    <div class="grid">
+      <div class="case"><h3>Writing Code vs. Shipping Code</h3><div class="meta">Demirer、Musolff、Yang · NBER 工作论文 35275 · 2026-05，2026-09 修订 · GitHub 开发者 + 微软数据 · <span class="tag a">准实验</span></div><p class="small">自主编码代理让提交量增加约 240%，但到“项目”只剩约 80%，到“发布”只剩约 30%。作者用“弱链条”解释：审查、合并、发布等人类环节限制了 AI 的增益。应用市场里新应用数量大增，总使用量没有增加。两位作者披露与微软有咨询关系。</p><p class="rel">关系：原文引用了这篇。它提醒：Anthropic 的“5.1 倍提交”不能直接读成 5.1 倍交付价值；也印证了“人是瓶颈”。</p></div>
+      <div class="case"><h3>Generative AI at Work</h3><div class="meta">Brynjolfsson、Li、Raymond · QJE 2025 正式发表 · 5,172 名客服的交错上线 · <span class="tag a">准实验</span></div><p class="small">AI 助手让每小时解决问题数平均提高约 15%；经验少、技能低的客服在速度和质量上都改善更多，最资深者提速很小、质量略降。</p><p class="rel">关系：形成张力。在客服场景里 AI 对新手帮助最大，但 Anthropic 的工程岗却少招新手。说明“AI 帮新手”和“公司少招新手”可以同时成立，取决于岗位和公司的选择。</p></div>
+      <div class="case"><h3>METR 资深开发者随机试验</h3><div class="meta">Becker 等 · METR · 2025-07 · 16 名资深开源开发者、246 个真实任务 · <span class="tag a">随机对照</span></div><p class="small">使用 2025 年初的 AI 工具时完成任务慢了 19%，但开发者事后自认快了 20%。METR 现已把这一结果标为历史结果，不代表当前工具。</p><p class="rel">关系：提醒自报效率不可靠，也说明工具代际差异很大。Anthropic 的数据来自 2025-26 年的新一代代理，不能与之直接比较。</p></div>
+    </div>
+
+    <h3 class="group-h">三、企业做法：管理选择及其代价</h3>
+    <div class="grid">
+      <div class="case"><h3>Shopify：加人前先证明 AI 做不了</h3><div class="meta">CEO Tobi Lütke 内部备忘录，本人 2025-04-07 在 X 公开 · <span class="tag c">公司表态</span></div><p class="small">“团队在申请更多人员和资源之前，必须说明为什么用 AI 做不到。”AI 使用写进绩效与同事评估问卷。</p><p class="rel">关系：是对招聘的“前置闸门”，与 Anthropic 经理“少招初级”方向一致。区别是 Shopify 写成了全公司的明文规则，Anthropic 原文描述的是各团队招聘重点的变化。</p></div>
+      <div class="case"><h3>Salesforce：客服 9,000→约 5,000</h3><div class="meta">CEO Marc Benioff 播客自述，2025-09 · <span class="tag c">管理层自述</span></div><p class="small">称 AI 代理处理约一半客服对话，客服人数从约 9,000 降到约 5,000。公司官方说法是“不再补缺”，并把数百人再部署到专业服务、销售等岗位。</p><p class="rel">关系：内部再部署与 Anthropic 的做法相似；“不再补缺”是 Salesforce 自己的说法，Anthropic 原文没有这样的政策（其技术招聘绝对数仍在增长）。数字来自管理层自述，未经独立核实。</p></div>
+      <div class="case"><h3>Klarna：从“AI 顶 700 人”到保留人工</h3><div class="meta">公司新闻稿 2024-02-27；CEO 接受 Bloomberg 采访 2025-05（转引自 Entrepreneur）· <span class="tag c">公司表态</span></div><p class="small">2024 年称 AI 助手做了相当于 700 名全职客服的工作（是工作量换算，不是裁员人数）。2025 年 5 月 CEO 对 Bloomberg 说，成本在决策中“占了过重的分量”，“最后得到的是更低的质量”，开始重新招聘人工客服，并强调客户想找人工时一定能找到。</p><p class="rel">关系：反面教材，对应原文说的“勉强划算的自动化”风险，也说明“代理折算多少人”的说法很不可靠。</p></div>
+    </div>
+    <p class="small muted" style="margin-top:var(--sp-4)">背景：Anthropic 2025-12 发布的前一份内部研究（132 名工程师问卷）中，工程师自报在 59% 的日常工作里使用 Claude、自报提效约 50%。那是自述数据，与本报告的行政数据不完全可比。</p>
+  </div>
+</section>
+
+<!-- ============ 对读者的含义 ============ -->
+<section class="block" id="sec-act">
+  <div class="wrap">
+    <h2>对 AI 工具与一人公司从业者：5 条可以照做的事</h2>
+    <ol class="act">
+      <li><b>用端到端交付衡量 AI，不只看生成量</b>给每个高频工作流记录“从需求到上线 / 交付”的周期、返工次数和错误数。代码行数、生成字数、代理运行时长都只是中间量（对应原文 5.1 倍提交与 NBER“发布只多 30%”的落差）。</li>
+      <li><b>把审阅时间当成预算</b>每周记一次自己花在审阅输出、核对事实、处理异常上的时间。如果审阅时间吃掉了节省的时间，就缩小任务范围，或让代理输出更短、更结构化的结果（对应原文“80% 时间在等人”“读完输出需半周以上”）。</li>
+      <li><b>把上下文写成文件，并做版本管理</b>业务规则、客户背景、决策记录、提示词、验收标准都写成可检索的文档。线下或私聊做的决定，当天补一条记录，否则代理会按过期信息做事（对应原文“决策写在代理看得见的地方”与 8,500 份常驻指令）。</li>
+      <li><b>按风险分级给代理权限</b>可逆、低风险的任务允许自动执行；付款、发布、法律承诺、客户敏感事项设人工批准。用真实的错误与返工记录逐步放权，不一次追求全自动。</li>
+      <li><b>如果要带新人，保留可验证的学习任务</b>AI 接手基础执行后，新人不会自动获得成长机会。主动把代码审查、客户问题诊断、测试与评估、异常处理留给新人，并逐步扩大责任（对应原文“人离开了最初培养技能的一线工作”）。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 局限 ============ -->
+<section class="block" id="sec-limits">
+  <div class="wrap">
+    <h2>原文局限与本页口径</h2>
+    <ul class="text">
+      <li><strong>单一公司：</strong>Anthropic 是卖 AI 的公司，一年内规模扩大到 3 倍，员工广泛持股，模型接入条件与普通企业不同。作者自己说很多做法“无法在整个经济中复制”。</li>
+      <li><strong>作者身份：</strong>报告由 Anthropic 研究人员用公司内部数据撰写，外界无法复核原始数据；有读者认为它兼有宣传作用。本页只依据报告公开的内容做判断。</li>
+      <li><strong>大量指标由 Claude 自动编码：</strong>任务难度、元工作、面试评语主题都由自动编码器判定，编码误差没有公开。</li>
+      <li><strong>时间窗短：</strong>多数趋势只有 6–18 个月，正好与公司高速增长期重合。</li>
+      <li><strong>本页读数：</strong>原文图表是图片，没有附数据表。本页凡原图明确标注的端点（如 9%、14%、6×、19×、5.1×、424 小时）照录；其余中间点按原图目测读数，属近似值，不是统计置信区间，仅用于呈现趋势形状。</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <h3>来源</h3>
+    <ul>
+      <li>Wilmers, Catipon, Massenkoff, McCrory (2026). <a href="https://www.anthropic.com/research/employment-at-anthropic">How Employment is Changing at Anthropic</a>. The Anthropic Institute, 2026-10-16（<a href="https://www-cdn.anthropic.com/72628f1863c53432195db83279252dfd2cb53158/Employment%20at%20Anthropic.pdf">PDF</a>）。</li>
+      <li>Brynjolfsson, Chandar, Chen. <a href="https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf">Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of AI</a>，2026-08 版。</li>
+      <li>Hosseini Maasoum, Lichtinger. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5425555">Generative AI as Seniority-Biased Technological Change</a>，SSRN 5425555。</li>
+      <li>Kim, Koning. <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=69077">AI-Native Firms</a>，HBS Working Paper 26-090，2026-06。</li>
+      <li>Demirer, Musolff, Yang. <a href="https://www.nber.org/papers/w35275">Writing Code vs. Shipping Code</a>，NBER Working Paper 35275，2026-05（2026-09 修订）。</li>
+      <li>Brynjolfsson, Li, Raymond. <a href="https://doi.org/10.1093/qje/qjae044">Generative AI at Work</a>，QJE 140(2), 2025。</li>
+      <li>METR. <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity</a>，2025-07-10。</li>
+      <li>Tobi Lütke. <a href="https://x.com/tobi/status/1909251946235437514">Reflexive AI usage is now a baseline expectation at Shopify</a>，2025-04-07。</li>
+      <li>Fortune. <a href="https://fortune.com/2025/09/02/salesforce-ceo-billionaire-marc-benioff-ai-agents-jobs-layoffs-customer-service-sales/">Salesforce CEO Marc Benioff says his company has cut 4,000 customer service jobs as AI steps in</a>，2025-09-02。</li>
+      <li>Klarna. <a href="https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/">Klarna AI assistant handles two-thirds of customer service chats in its first month</a>，2024-02-27。</li>
+      <li>Entrepreneur. <a href="https://www.entrepreneur.com/business-news/klarna-ceo-reverses-course-by-hiring-more-humans-not-ai/491396">Klarna Is Hiring Customer Service Agents After AI Couldn't Cut It on Calls</a>，2025-05（转述 CEO 对 Bloomberg 的表态）。</li>
+      <li>Anthropic. <a href="https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic">How AI is transforming work at Anthropic</a>，2025-12-02。</li>
+    </ul>
+    <p class="xs">本页数据读数与解读由 Claude 整理，内容经 ChatGPT Pro 审阅提纲后修订。图表可悬停或用 Tab 键聚焦查看数值，每张数据图下方可展开数据表（目测读数同样标注为近似值）。</p>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- 数据（来源见各图注；中间点为目测读数） ---------- */
+const M16=['2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+const A1={
+  tech:{hire:[null,null,27.6,25.3,21.5,22.1,20.7,22.6,18.5,16.9,16.6,18.5,19.1,16.7,13.5,9],
+        head:[21,20.5,21.4,16.5,16.3,16.8,17.2,18.1,17.5,13.2,13.6,14.0,14.5,14.4,14.0,14],
+        open:[10.7,13.5,13.9,12.8,12.3,14.4,16.4,17.4,21.4,20.2,15.4,14.5,9.3,9.7,6.2,6]},
+  non:{hire:[null,null,31.2,30.1,26.4,23.9,29,29.7,32.2,27.1,25.3,22,25.3,26.9,28.7,26],
+       head:[22.8,25.3,25.2,22.1,27,26.5,27.8,27,27.1,25.1,25.6,24.5,25.4,26.2,25.9,25],
+       open:[31.5,30.4,21.3,23.6,24.9,20,18.1,16.7,16.1,17.9,15.6,17.6,15.4,15.7,15.5,13]}
+};
+const A2=[[5.5,.56,5],[12,1.39,5],[23,1.27,20],[20.7,.42,20],[27.3,.13,6],[29.4,.29,5],[31.6,.4,5],[33.7,.69,5],[35.8,-.25,10],[38,.85,5],[40.2,-.4,5],[42.5,.64,25],[47.9,1.25,5],[47.9,-.69,5],[51.2,.29,5],[53.3,-.5,6],[55.5,.63,50],[57.6,-.4,5],[59.8,1.0,7],[61.9,.92,5],[64.1,.15,18],[66.3,.29,5],[68.5,-.59,10],[70.6,.15,100],[72.8,-.4,7],[77.2,.77,7],[81.5,-.33,100],[85.8,.29,7],[88,.42,18],[90.1,-.4,5],[92.3,0,5],[94.5,0,5]];
+const B1m=['2月初','3月初','4月初','5月初','6月初','7月初','8月初','8月下旬'];
+const B1={research:[.2,.3,.9,2.1,4.1,7.8,13,19],all:[.13,.19,.51,.92,1.6,2.9,5.2,6]};
+const B2=[['工程与研究',424],['财务与会计',43],['销售与市场拓展',35],['其他非工程',27],['法务、政策与信任',26],['营销与传播',12]];
+const B3=[['基础设施',4.7,29],['安全与信任',13.9,27],['开发者工具',4.5,26],['产品工程',13.1,26],['安全研究',11.2,25],['其他技术',22.4,24],['全部职能',10.4,22],['模型研究',7.9,22],['数据科学',15.0,19],['其他非技术',10.3,17],['销售',14.6,15],['财务、法务与营销',6.4,12]];
+const C1=[['工程师：代码提交',5.1],['数据科学家：查询',3.1],['法务：合同',3.1],['销售：成交',1.7],['招聘官：录用',1.4],['应付账款：发票',1.4]];
+const C2=[[-4,-.07,-.97,.8],[-3,-.07,-.7,.55],[-2,-.1,-.57,.37],[-1,0,0,0],[0,.98,.38,1.58],[1,1.3,.6,2.02],[2,1.86,.95,2.77],[3,1.0,.03,1.98]];
+const C3=[[-4,-1.2,-3.1,.7],[-3,.05,-1.6,1.7],[-2,.25,-1.1,1.6],[-1,0,0,0],[0,.3,-1.1,1.7],[1,2.95,1.15,4.75],[2,5.55,2.9,8.2],[3,6.65,3.1,10.2]];
+const C4=[['90 天内被删的行',-.1,-1.4,1.3],['90 天内被 bug 修复删掉的行',.7,-.6,2.1],['整次提交被显式回滚',.1,0,.3],['新增 lint 抑制注释',.1,-2,1.9],['新增 TODO / FIXME / HACK',-.3,-1,.3],['新增不稳定测试标记',0,-.2,.1]];
+const D1=[['技术岗',5,15],['非技术岗',7,28]];
+
+/* ---------- 工具 ---------- */
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+const tip=document.getElementById('tip');
+const cssPx=n=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue(n))||0;
+function bindTip(node,html){node.setAttribute('tabindex','0');node.setAttribute('aria-label',html.replace(/<[^>]+>/g,' '));
+  const show=(x,y)=>{tip.innerHTML=html;tip.classList.add('on');const w=tip.offsetWidth,h=tip.offsetHeight,g=cssPx('--tip-gap'),m=cssPx('--tip-edge');let L=x+g,T=y-h-g;if(L+w>innerWidth-m)L=x-w-g;if(L<m)L=m;if(T<m)T=y+g;tip.style.left=L+'px';tip.style.top=T+'px';};
+  node.addEventListener('mousemove',e=>show(e.clientX,e.clientY));
+  node.addEventListener('mouseleave',()=>tip.classList.remove('on'));
+  node.addEventListener('focus',()=>{const r=node.getBoundingClientRect();show(r.left+r.width/2,r.top);});
+  node.addEventListener('blur',()=>tip.classList.remove('on'));
+  node.addEventListener('touchstart',e=>{const t=e.touches[0];show(t.clientX,t.clientY);},{passive:true});
+}
+function svgFor(id){const host=document.getElementById(id);host.innerHTML='';const lab=host.getAttribute('aria-label')||'';if(host.getAttribute('role')==='img'){host.removeAttribute('role');host.removeAttribute('aria-label');host.dataset.label=lab;}const W=Math.max(host.clientWidth,260);const H=parseInt(getComputedStyle(host).minHeight);const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:'group','aria-label':host.dataset.label+'（可用 Tab 键逐点查看数值）'},host);return {s,W,H};}
+const fmt=(v,d=1)=>v==null?'—':(+v).toFixed(d).replace(/\.0$/,'');
+function table(id,head,rows){const t=document.createElement('table');const tr=t.createTHead().insertRow();head.forEach(h=>{const th=document.createElement('th');th.textContent=h;tr.appendChild(th);});const b=t.createTBody();rows.forEach(r=>{const row=b.insertRow();r.forEach((c,i)=>{const td=row.insertCell();td.textContent=c;if(i>0)td.className='n';});});document.getElementById(id).appendChild(t);}
+
+/* 折线图（线性或对数） */
+function lineChart(id,{labels,xs,series,yMin,yMax,ticks,log=false,unit='',title,ref,tickEvery=3,endFmt}){
+  const {s,W,H}=svgFor(id);const pl=40,pr=52,pt=title?26:12,pb=28;const iw=W-pl-pr,ih=H-pt-pb;
+  if(title)el('text',{x:pl,y:16,class:'ttl'},s,title);
+  const yv=v=>log?Math.log10(v):v;const y0=yv(yMin),y1=yv(yMax);
+  const Y=v=>pt+ih-(yv(v)-y0)/(y1-y0)*ih;const xv=xs||labels.map((_,i)=>i);const X=i=>pl+(xv[i]-xv[0])/(xv[xv.length-1]-xv[0])*iw;
+  ticks.forEach(t=>{el('line',{x1:pl,x2:pl+iw,y1:Y(t),y2:Y(t),class:'grid-l'},s);el('text',{x:pl-6,y:Y(t)+4,'text-anchor':'end'},s,t+unit);});
+  el('line',{x1:pl,x2:pl+iw,y1:pt+ih,y2:pt+ih,class:'axis'},s);
+  labels.forEach((l,i)=>{if(i%tickEvery===0||i===labels.length-1)el('text',{x:X(i),y:H-8,'text-anchor':'middle'},s,l.replace(/^20(\d\d)-/,'$1/'));});
+  if(ref!=null){el('line',{x1:pl,x2:pl+iw,y1:Y(ref),y2:Y(ref),class:'ref'},s);}
+  const ends=[];
+  series.forEach(se=>{let d='';se.v.forEach((v,i)=>{if(v==null)return;d+=(d?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1);});el('path',{d,class:'ln '+se.k},s);
+    se.v.forEach((v,i)=>{if(v==null)return;const c=el('circle',{cx:X(i),cy:Y(v),r:10,class:'hit'},s);bindTip(c,`<b>${se.name}</b><br>${labels[i]}：${fmt(v,v<1?2:1)}${unit}`);});
+    const li=se.v.length-1;el('circle',{cx:X(li),cy:Y(se.v[li]),r:4,class:'mk '+se.k},s);ends.push({y:Y(se.v[li]),t:endFmt?endFmt(se.v[li]):fmt(se.v[li])+unit});});
+  ends.sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<14)ends[i].y=ends[i-1].y+14;
+  ends.forEach(e=>el('text',{x:pl+iw+8,y:e.y+4,class:'lab'},s,e.t));
+}
+/* 水平条形 */
+function barChart(id,rows,{max,unit='',cap,refs=[],k='k1',dec=1}){
+  const {s,W}=svgFor(id);const narrow=W<520;const lw=narrow?Math.min(118,W*.36):150,pr=56,rowH=34,pt=8;
+  const H=pt+rows.length*rowH+24;s.setAttribute('viewBox',`0 0 ${W} ${H}`);s.setAttribute('height',H);
+  const iw=W-lw-pr;const X=v=>lw+Math.min(v,cap||max)/max*iw;
+  refs.forEach(r=>{el('line',{x1:X(r),x2:X(r),y1:pt-4,y2:pt+rows.length*rowH,class:'ref'},s);el('text',{x:X(r),y:H-6,'text-anchor':'middle'},s,r+unit);});
+  rows.forEach((r,i)=>{const y=pt+i*rowH;el('text',{x:lw-8,y:y+rowH/2+4,'text-anchor':'end'},s,r[0]);
+    const w=X(r[1])-lw;el('rect',{x:lw,y:y+7,width:Math.max(w,2),height:rowH-14,rx:4,class:k},s);
+    const cut=cap&&r[1]>cap;if(cut){const cx=X(cap)-14;el('line',{x1:cx,x2:cx+6,y1:y+5,y2:y+rowH-5,class:'bar-cut'},s);el('line',{x1:cx+6,x2:cx+12,y1:y+5,y2:y+rowH-5,class:'bar-cut'},s);}
+    if(cut)el('text',{x:X(cap)-20,y:y+rowH/2+4,'text-anchor':'end',class:'inv'},s,fmt(r[1],dec)+unit+' · 截断');
+    else el('text',{x:X(r[1])+6,y:y+rowH/2+4,class:'lab'},s,fmt(r[1],dec)+unit);
+    const h=el('rect',{x:0,y,width:W,height:rowH,class:'hit'},s);bindTip(h,`<b>${r[0]}</b><br>${fmt(r[1],dec)}${unit}`);});
+}
+/* 哑铃 */
+function dumbbell(id,rows,{max,unit='%'}){
+  const {s,W}=svgFor(id);const narrow=W<520;const lw=narrow?Math.min(112,W*.34):150,pr=40,rowH=30,pt=6;
+  const H=pt+rows.length*rowH+26;s.setAttribute('viewBox',`0 0 ${W} ${H}`);s.setAttribute('height',H);
+  const iw=W-lw-pr;const X=v=>lw+v/max*iw;
+  [0,10,20,30].forEach(t=>{el('line',{x1:X(t),x2:X(t),y1:pt,y2:pt+rows.length*rowH,class:'grid-l'},s);el('text',{x:X(t),y:H-6,'text-anchor':'middle'},s,t+unit);});
+  rows.forEach((r,i)=>{const y=pt+i*rowH+rowH/2;const bold=r[0]==='全部职能';
+    el('text',{x:lw-8,y:y+4,'text-anchor':'end',class:bold?'lab':''},s,r[0]);
+    el('line',{x1:X(r[1]),x2:X(r[2]),y1:y,y2:y,class:'axis'},s);
+    el('circle',{cx:X(r[1]),cy:y,r:5,class:'mk k4'},s);el('circle',{cx:X(r[2]),cy:y,r:5,class:'mk k1'},s);
+    el('text',{x:X(r[2])+9,y:y+4,class:'lab'},s,fmt(r[2],0)+unit);
+    const h=el('rect',{x:0,y:y-rowH/2,width:W,height:rowH,class:'hit'},s);bindTip(h,`<b>${r[0]}</b><br>2025-08~10：约 ${fmt(r[1])}%<br>2026-04~06：${r[2]}%`);});
+}
+/* 事件研究点+区间 */
+function eventChart(id,rows,{yMin,yMax,ticks,unit,label}){
+  const {s,W,H}=svgFor(id);const pl=40,pr=12,pt=10,pb=40;const iw=W-pl-pr,ih=H-pt-pb;
+  const xs=rows.map(r=>r[0]);const xmin=Math.min(...xs)-.5,xmax=Math.max(...xs)+.5;
+  const X=v=>pl+(v-xmin)/(xmax-xmin)*iw;const Y=v=>pt+ih-(v-yMin)/(yMax-yMin)*ih;
+  el('rect',{x:X(xmin),y:pt,width:X(-.5)-X(xmin),height:ih,class:'shade'},s);
+  ticks.forEach(t=>{el('line',{x1:pl,x2:pl+iw,y1:Y(t),y2:Y(t),class:t===0?'axis':'grid-l'},s);el('text',{x:pl-6,y:Y(t)+4,'text-anchor':'end'},s,t);});
+  let d='';rows.forEach((r,i)=>{d+=(i?'L':'M')+X(r[0]).toFixed(1)+','+Y(r[1]).toFixed(1);});el('path',{d,class:'ln k2'},s);
+  rows.forEach(r=>{el('line',{x1:X(r[0]),x2:X(r[0]),y1:Y(r[2]),y2:Y(r[3]),class:'ci k2'},s);el('circle',{cx:X(r[0]),cy:Y(r[1]),r:5,class:'mk k2'},s);
+    el('text',{x:X(r[0]),y:pt+ih+16,'text-anchor':'middle'},s,r[0]);
+    const h=el('rect',{x:X(r[0])-14,y:pt,width:28,height:ih,class:'hit'},s);bindTip(h,`采用后第 ${r[0]} 月<br>估计 ${fmt(r[1],2)}${unit}<br>95% 区间 [${fmt(r[2],2)}, ${fmt(r[3],2)}]`+(r[0]===-1?'<br>（基准月）':''));});
+  el('text',{x:pl+iw/2,y:H-4,'text-anchor':'middle'},s,label);
+}
+/* 森林图 */
+function forest(id,rows){
+  const {s,W}=svgFor(id);const narrow=W<520;const lw=narrow?12:210,pr=16,rowH=narrow?46:32,pt=6;
+  const H=pt+rows.length*rowH+30;s.setAttribute('viewBox',`0 0 ${W} ${H}`);s.setAttribute('height',H);
+  const iw=W-lw-pr;const X=v=>lw+(v+2.2)/4.4*iw;
+  [-2,-1,0,1,2].forEach(t=>{el('line',{x1:X(t),x2:X(t),y1:pt,y2:pt+rows.length*rowH,class:t===0?'axis':'grid-l'},s);el('text',{x:X(t),y:H-8,'text-anchor':'middle'},s,(t>0?'+':'')+t);});
+  rows.forEach((r,i)=>{const y=pt+i*rowH+rowH/2;
+    if(narrow)el('text',{x:lw,y:y-10},s,r[0]);else el('text',{x:lw-8,y:y+4,'text-anchor':'end'},s,r[0]);
+    const cy=narrow?y+6:y;
+    el('line',{x1:X(r[2]),x2:X(r[3]),y1:cy,y2:cy,class:'ci k2'},s);el('circle',{cx:X(r[1]),cy:cy,r:5,class:'mk k2'},s);
+    const h=el('rect',{x:0,y:y-rowH/2,width:W,height:rowH,class:'hit'},s);bindTip(h,`<b>${r[0]}</b><br>AI − 人工：${fmt(r[1],1)} 个百分点<br>95% 区间 [${fmt(r[2],1)}, ${fmt(r[3],1)}]`);});
+}
+/* 气泡散点 */
+function scatter(id,pts){
+  const {s,W,H}=svgFor(id);const pl=40,pr=14,pt=10,pb=36;const iw=W-pl-pr,ih=H-pt-pb;
+  const X=v=>pl+v/100*iw;const Y=v=>pt+ih-(v+.8)/2.4*ih;
+  [-.5,0,.5,1,1.5].forEach(t=>{el('line',{x1:pl,x2:pl+iw,y1:Y(t),y2:Y(t),class:t===0?'axis':'grid-l'},s);el('text',{x:pl-6,y:Y(t)+4,'text-anchor':'end'},s,t);});
+  [0,20,40,60,80,100].forEach(t=>el('text',{x:X(t),y:pt+ih+16,'text-anchor':'middle'},s,t));
+  el('text',{x:pl+iw/2,y:H-4,'text-anchor':'middle'},s,'Claude 任务复杂度（百分位）');
+  const rMax=Math.max(10,Math.min(26,W/30));
+  pts.slice().sort((a,b)=>b[2]-a[2]).forEach(p=>{const r=Math.max(3.5,Math.sqrt(p[2]/100)*rMax);const c=el('circle',{cx:X(p[0]),cy:Y(p[1]),r,class:'bub k2'},s);bindTip(c,`复杂度第 ${fmt(p[0],0)} 百分位<br>初级人数增长 ${fmt(p[1],2)} 对数点<br>1 月初级人数约 ${p[2]}`);});
+  el('line',{x1:X(5.5),y1:Y(1.0),x2:X(94.5),y2:Y(-.25),class:'ref'},s);
+}
+
+function renderAll(){
+  lineChart('c-a1t',{labels:M16,title:'技术部门',series:[{name:'新招',k:'k1',v:A1.tech.hire},{name:'在岗',k:'k2',v:A1.tech.head},{name:'开放职位',k:'k3',v:A1.tech.open}],yMin:0,yMax:35,ticks:[0,10,20,30],unit:'%',tickEvery:5});
+  lineChart('c-a1n',{labels:M16,title:'非技术部门',series:[{name:'新招',k:'k1',v:A1.non.hire},{name:'在岗',k:'k2',v:A1.non.head},{name:'开放职位',k:'k3',v:A1.non.open}],yMin:0,yMax:35,ticks:[0,10,20,30],unit:'%',tickEvery:5});
+  scatter('c-a2',A2);
+  lineChart('c-b1',{labels:B1m,xs:[0,1,2,3,4,5,6,6.75],series:[{name:'研究部门',k:'k1',v:B1.research},{name:'全体员工',k:'k2',v:B1.all}],yMin:.1,yMax:30,ticks:[.1,.3,1,3,10,30],log:true,unit:'×',ref:1,tickEvery:1,endFmt:v=>'约'+fmt(v,0)+'×'});
+  barChart('c-b2',B2,{max:60,cap:56,unit:' 小时',refs:[20,40],dec:0});
+  dumbbell('c-b3',B3,{max:32});
+  barChart('c-c1',C1,{max:5.6,unit:'×',refs:[1],dec:1});
+  eventChart('c-c2',C2,{yMin:-1.2,yMax:3,ticks:[-1,0,1,2,3],unit:' 对数点',label:'采用编码代理后的月份'});
+  eventChart('c-c3',C3,{yMin:-4,yMax:11,ticks:[0,5,10],unit:' 个客户',label:'采用编码代理后的月份'});
+  forest('c-c4',C4);
+  groupBars('c-d1',D1);
+}
+/* 分组条形（两期对比） */
+function groupBars(id,rows){
+  const {s,W}=svgFor(id);const lw=86,pr=56,rowH=64,pt=6;const H=pt+rows.length*rowH+24;s.setAttribute('viewBox',`0 0 ${W} ${H}`);s.setAttribute('height',H);
+  const iw=W-lw-pr;const X=v=>lw+v/32*iw;
+  [0,10,20,30].forEach(t=>{el('line',{x1:X(t),x2:X(t),y1:pt,y2:pt+rows.length*rowH,class:'grid-l'},s);el('text',{x:X(t),y:H-6,'text-anchor':'middle'},s,t+'%');});
+  rows.forEach((r,i)=>{const y=pt+i*rowH;el('text',{x:lw-8,y:y+rowH/2+4,'text-anchor':'end',class:'lab'},s,r[0]);
+    el('rect',{x:lw,y:y+8,width:X(r[1])-lw,height:20,rx:4,class:'k4'},s);el('text',{x:X(r[1])+6,y:y+23},s,'约 '+r[1]+'%（2024）');
+    el('rect',{x:lw,y:y+32,width:X(r[2])-lw,height:20,rx:4,class:'k1'},s);el('text',{x:X(r[2])+6,y:y+47,class:'lab'},s,'约 '+r[2]+'%');
+    const h=el('rect',{x:0,y,width:W,height:rowH,class:'hit'},s);bindTip(h,`<b>${r[0]}</b><br>2024：约 ${r[1]}%<br>2026：约 ${r[2]}%（${r[0]==='技术岗'?'约 3 倍':'约 4 倍'}，推算）`);});
+}
+
+/* 数据表 */
+table('t-a1',['月份','技术·新招','技术·在岗','技术·开放','非技术·新招','非技术·在岗','非技术·开放'],M16.map((m,i)=>[m,fmt(A1.tech.hire[i])+(A1.tech.hire[i]==null?'':'%'),fmt(A1.tech.head[i])+'%',fmt(A1.tech.open[i])+'%',fmt(A1.non.hire[i])+(A1.non.hire[i]==null?'':'%'),fmt(A1.non.head[i])+'%',fmt(A1.non.open[i])+'%']));
+table('t-a2',['复杂度百分位','初级人数增长（对数点）','1 月初级人数（约）'],A2.map(p=>[fmt(p[0]),fmt(p[1],2),String(p[2])]));
+table('t-b1',['时间','研究部门','全体员工'],B1m.map((m,i)=>[m,fmt(B1.research[i],2)+'×',fmt(B1.all[i],2)+'×']));
+table('t-b2',['职能组','小时/人/周'],B2.map(r=>[r[0],String(r[1])]));
+table('t-b3',['职能','2025-08~10（约）','2026-04~06'],B3.map(r=>[r[0],fmt(r[1])+'%',r[2]+'%']));
+table('t-c1',['职能：产出单位','2026 年中 ÷ 2025-12'],C1.map(r=>[r[0],r[1]+'×']));
+table('t-c2',['采用后月份','估计（对数点）','95% 区间'],C2.map(r=>[String(r[0]),fmt(r[1],2),`[${fmt(r[2],2)}, ${fmt(r[3],2)}]`]));
+table('t-c3',['采用后月份','多成交客户数','95% 区间'],C3.map(r=>[String(r[0]),fmt(r[1],2),`[${fmt(r[2],2)}, ${fmt(r[3],2)}]`]));
+table('t-d1',['岗位类型','2024','2026（推算）'],D1.map(r=>[r[0],'约 '+r[1]+'%','约 '+r[2]+'%']));
+table('t-c4',['质量指标','AI − 人工（百分点）','95% 区间'],C4.map(r=>[r[0],fmt(r[1]),`[${fmt(r[2])}, ${fmt(r[3])}]`]));
+
+renderAll();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(renderAll,150);});
+</script>
+</body>
+</html>

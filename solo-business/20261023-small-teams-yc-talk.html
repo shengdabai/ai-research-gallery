@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="基于深思圈 Garry Tan × Paul Copplestone 对谈整理的证据分层、效率情景推演与小团队验证计划。">
+<title>小团队，放大的是什么？｜YC 对谈阅读与验证</title>
+<style>
+/* Token source: primitives → semantic roles. All authored design values live here.
+   Responsive threshold: compact = 760px, defined once below. Runtime bar widths are calculated data.
+   Extend by adding semantic tokens here; no external fonts, libraries, images or analytics. */
+:root{
+ --paper:#f6f2e8;--sheet:#fffdf7;--ink:#242c28;--muted:#58615a;--line:#c9cdbf;--green:#285843;--lime:#e2ebc9;--rust:#a54528;--warm:#f4e1d2;--blue:#37546a;--cool:#e3eaf0;
+ --color-bg:var(--paper);--color-surface:var(--sheet);--color-text:var(--ink);--color-secondary:var(--muted);--color-border:var(--line);--color-action:var(--green);--color-positive:var(--green);--color-caution:var(--rust);--color-focus:var(--blue);--color-track:var(--line);
+ --font-body:"PingFang SC","Microsoft YaHei",sans-serif;--font-display:"Songti SC","STSong",serif;--font-number:"Avenir Next","Helvetica Neue",sans-serif;--font-code:ui-monospace,monospace;
+ --type-xs:.78rem;--type-sm:.9rem;--type-base:1rem;--type-md:1.15rem;--type-lg:1.4rem;--type-xl:2rem;--type-hero:clamp(2.6rem,6vw,5.5rem);--type-section:clamp(1.7rem,3vw,2.5rem);--weight-normal:400;--weight-medium:600;--weight-bold:700;--leading-body:1.8;--leading-title:1.15;--tracking-kicker:.12em;
+ --space-1:.3rem;--space-2:.6rem;--space-3:1rem;--space-4:1.5rem;--space-5:2rem;--space-6:3rem;--space-7:4.5rem;--space-8:6rem;
+ --border-thin:1px;--border-strong:2px;--radius-sm:.25rem;--radius-round:100%;--focus-ring:3px;--focus-offset:3px;--motion-fast:160ms;--easing:ease-out;
+ --layout-idea-columns:minmax(0,1.4fr) minmax(0,1fr);--layout-sim-columns:minmax(0,1fr) minmax(0,1.15fr);--layout-max:1180px;--layout-gutter:clamp(1.15rem,4vw,3.5rem);--layout-article:48rem;--layout-hero-aside:20rem;--layout-claim-label:12rem;--layout-stage:11rem;--layout-control:2rem;--layout-touch:2.75rem;--layout-bar:2.4rem;--layout-result:8rem;--layout-table:42rem;--layer-nav:10;
+}
+/* Base */
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:var(--type-base);line-height:var(--leading-body)}
+::selection{background:var(--lime);color:var(--ink)}a{color:var(--color-action);text-underline-offset:var(--space-1)}a:hover{color:var(--color-caution)}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:var(--focus-ring) solid var(--color-focus);outline-offset:var(--focus-offset)}
+button,input{font:inherit}button{cursor:pointer}h1,h2,h3,p{margin:0}h1,h2{font-family:var(--font-display);font-weight:var(--weight-bold);line-height:var(--leading-title)}h3{font-size:var(--type-md);line-height:var(--leading-body)}p+p{margin-top:var(--space-3)}strong{font-weight:var(--weight-bold)}small{font-size:var(--type-xs)}
+.wrap{max-width:var(--layout-max);margin:auto;padding-inline:var(--layout-gutter)}.skip{position:absolute;transform:translateY(-100%);background:var(--color-surface);padding:var(--space-3)}.skip:focus{transform:none}.kicker{font-family:var(--font-number);letter-spacing:var(--tracking-kicker);font-size:var(--type-xs);font-weight:var(--weight-bold);text-transform:uppercase}.quiet{color:var(--color-secondary)}.mini{font-size:var(--type-sm)}.tag{display:inline-block;font-size:var(--type-xs);padding:var(--space-1) var(--space-2);border:var(--border-thin) solid var(--color-border);border-radius:var(--radius-sm);line-height:var(--leading-title)}.tag.verified{background:var(--lime);color:var(--green);border-color:var(--green)}.tag.pending{background:var(--warm);color:var(--rust);border-color:var(--rust)}.tag.analysis{background:var(--cool);color:var(--blue);border-color:var(--blue)}
+/* Header + hero */
+.masthead{padding-block:var(--space-4);display:flex;gap:var(--space-3);justify-content:space-between;flex-wrap:wrap;border-bottom:var(--border-thin) solid var(--color-border)}.hero{padding-block:var(--space-7) var(--space-6);display:grid;grid-template-columns:minmax(0,1fr) var(--layout-hero-aside);gap:var(--space-6);align-items:end}.hero h1{font-size:var(--type-hero);margin-block:var(--space-3) var(--space-4)}.hero h1 span{color:var(--color-action)}.hero .lead{font-size:var(--type-md);max-width:var(--layout-article)}.hero-aside{border-top:var(--border-strong) solid var(--color-text);padding-top:var(--space-4)}.hero-aside p{font-size:var(--type-sm)}.hero-aside .scope{margin-top:var(--space-4);color:var(--color-secondary)}
+.navigation{position:sticky;top:0;z-index:var(--layer-nav);background:var(--color-bg);border-block:var(--border-thin) solid var(--color-border)}.navigation .wrap{display:flex;gap:var(--space-4);flex-wrap:wrap;padding-block:var(--space-2)}.navigation a{text-decoration:none;font-size:var(--type-sm);padding-block:var(--space-1)}
+/* Sections */
+section{padding-block:var(--space-7);border-bottom:var(--border-thin) solid var(--color-border);scroll-margin-top:var(--space-8)}.section-head{display:grid;grid-template-columns:var(--layout-claim-label) minmax(0,1fr);gap:var(--space-5);margin-bottom:var(--space-5)}.section-head h2{font-size:var(--type-section);margin-bottom:var(--space-3)}.section-head .num{font-family:var(--font-number);color:var(--color-action);font-size:var(--type-sm);font-weight:var(--weight-bold)}.section-head p{max-width:var(--layout-article);color:var(--color-secondary)}
+.big-idea{display:grid;grid-template-columns:var(--layout-idea-columns);gap:var(--space-6);padding:var(--space-5);background:var(--color-action);color:var(--color-surface)}.big-idea h3{font-family:var(--font-display);font-size:var(--type-xl);line-height:var(--leading-title);margin-bottom:var(--space-4)}.big-idea ol{margin:0;padding-left:var(--space-4)}.big-idea li+li{margin-top:var(--space-3)}
+.logic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-3);margin-top:var(--space-5)}.logic div{border-top:var(--border-strong) solid var(--color-action);padding-top:var(--space-3)}.logic b{font-family:var(--font-number);display:block;color:var(--color-action);font-size:var(--type-sm);margin-bottom:var(--space-2)}.logic p{font-size:var(--type-sm);color:var(--color-secondary)}
+.claim{display:grid;grid-template-columns:var(--layout-claim-label) minmax(0,1fr) minmax(0,1fr);gap:var(--space-5);padding-block:var(--space-4);border-top:var(--border-thin) solid var(--color-border)}.claim h3{margin-top:var(--space-2)}.claim p{font-size:var(--type-sm)}.claim .question{color:var(--color-secondary)}.author-view{background:var(--warm);padding:var(--space-4);margin-top:var(--space-5)}
+/* Evidence ledger */
+.evidence-row{padding:var(--space-4);border-top:var(--border-thin) solid var(--color-border);display:grid;grid-template-columns:var(--layout-claim-label) minmax(0,1fr);gap:var(--space-5)}.evidence-row:nth-child(even){background:var(--color-surface)}.evidence-row h3{margin-bottom:var(--space-2)}.evidence-row p{font-size:var(--type-sm)}.evidence-row .tag{margin-bottom:var(--space-2)}.note{padding:var(--space-4);background:var(--color-surface);border:var(--border-thin) solid var(--color-border);margin-top:var(--space-4)}.note p{font-size:var(--type-sm)}
+/* Interactive model */
+.simulator{border:var(--border-strong) solid var(--color-action);background:var(--color-surface)}.sim-header{padding:var(--space-4) var(--space-5);background:var(--lime);display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap}.sim-body{padding:var(--space-5);display:grid;grid-template-columns:var(--layout-sim-columns);gap:var(--space-6)}.controls label{display:block;font-weight:var(--weight-medium)}.control{margin-bottom:var(--space-4)}.control-head{display:flex;justify-content:space-between;gap:var(--space-3);align-items:baseline}.control output{font-family:var(--font-number);color:var(--color-action);font-size:var(--type-md);font-weight:var(--weight-bold)}input[type=range]{width:100%;accent-color:var(--color-action);height:var(--layout-control);cursor:pointer}.control small{display:block;color:var(--color-secondary)}.presets{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-4)}button{border:var(--border-thin) solid var(--color-action);background:var(--color-surface);color:var(--color-action);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);min-height:var(--layout-touch);font-size:var(--type-sm);transition:background var(--motion-fast) var(--easing)}button:hover{background:var(--lime)}button[aria-pressed=true]{background:var(--color-action);color:var(--color-surface)}.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);margin-bottom:var(--space-4)}.result{padding-bottom:var(--space-3);border-bottom:var(--border-thin) solid var(--color-border)}.result strong{display:block;font-family:var(--font-number);font-size:var(--type-xl);line-height:var(--leading-title);color:var(--color-action)}.result span{font-size:var(--type-sm)}.bars{margin-block:var(--space-4)}.bar-label{display:flex;justify-content:space-between;font-size:var(--type-sm);gap:var(--space-3)}.bar-track{height:var(--layout-bar);background:var(--color-bg);margin-block:var(--space-2) var(--space-3);display:flex}.bar-piece{height:100%;flex-shrink:0}.baseline{background:var(--color-secondary)}.unchanged{background:var(--blue)}.accelerated{background:var(--green)}.overhead{background:var(--rust)}.legend{display:flex;gap:var(--space-3);flex-wrap:wrap;font-size:var(--type-xs)}.legend span::before{content:"";display:inline-block;width:var(--space-2);height:var(--space-2);margin-right:var(--space-1);background:var(--legend-color)}.legend .blue{--legend-color:var(--blue)}.legend .green{--legend-color:var(--green)}.legend .rust{--legend-color:var(--rust)}.calc-summary{font-size:var(--type-sm);margin-top:var(--space-4)}.formula{font-family:var(--font-code);font-size:var(--type-sm);overflow-wrap:anywhere;padding:var(--space-4);background:var(--color-bg);margin-top:var(--space-4)}.sim-foot{padding:var(--space-4) var(--space-5);border-top:var(--border-thin) solid var(--color-border);font-size:var(--type-sm)}.assumptions{margin-top:var(--space-4)}summary{cursor:pointer;min-height:var(--layout-touch);font-weight:var(--weight-medium)}details p{font-size:var(--type-sm);margin-block:var(--space-2) var(--space-3)}.counterpoint{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-5);margin-top:var(--space-5)}.counterpoint article{border-top:var(--border-strong) solid var(--color-border);padding-top:var(--space-3)}.counterpoint p{font-size:var(--type-sm)}
+/* Validation pathway + operations */
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-3);list-style:none;padding:0;margin:0}.chain li{background:var(--color-surface);padding:var(--space-4);border:var(--border-thin) solid var(--color-border)}.chain .step{font-family:var(--font-number);color:var(--color-action);font-weight:var(--weight-bold);font-size:var(--type-sm)}.chain p{font-size:var(--type-sm)}.chain .not-yet{margin-top:var(--space-3);padding-top:var(--space-2);border-top:var(--border-thin) solid var(--color-border);color:var(--color-secondary);font-size:var(--type-xs)}.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-6)}.two-col h3{margin-bottom:var(--space-3)}.two-col ul{padding-left:var(--space-4);margin:0}.two-col li{margin-bottom:var(--space-3);font-size:var(--type-sm)}.workflow{margin-top:var(--space-5);padding:var(--space-4);background:var(--lime)}.workflow p{font-size:var(--type-sm)}.days{counter-reset:day}.day{display:grid;grid-template-columns:var(--layout-claim-label) minmax(0,1fr);gap:var(--space-5);padding-block:var(--space-4);border-top:var(--border-thin) solid var(--color-border)}.day p{font-size:var(--type-sm)}.day b{color:var(--color-action)}.criteria{border:var(--border-thin) solid var(--color-border);padding:var(--space-4);background:var(--color-surface);margin-top:var(--space-4)}
+/* References */
+.sources{list-style:none;padding:0;margin:0}.sources li{display:grid;grid-template-columns:var(--layout-claim-label) minmax(0,1fr);gap:var(--space-5);padding-block:var(--space-4);border-top:var(--border-thin) solid var(--color-border);font-size:var(--type-sm)}.sources a{overflow-wrap:anywhere}.source-id{font-family:var(--font-number);color:var(--color-action);font-weight:var(--weight-bold)}.audit{margin-top:var(--space-5);padding:var(--space-4);background:var(--cool);font-size:var(--type-sm)}.audit ul{margin:var(--space-3) 0 0;padding-left:var(--space-4)}footer{padding-block:var(--space-5);font-size:var(--type-xs);color:var(--color-secondary)}
+/* Compact breakpoint token: 760px (single authoritative media threshold). */
+@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr);padding-top:var(--space-6);gap:var(--space-5)}.hero-aside{max-width:none}.section-head,.claim,.evidence-row,.day,.sources li{grid-template-columns:minmax(0,1fr);gap:var(--space-3)}.section-head{margin-bottom:var(--space-4)}section{padding-block:var(--space-6)}.big-idea,.sim-body,.two-col,.counterpoint{grid-template-columns:minmax(0,1fr);gap:var(--space-5)}.logic,.chain{grid-template-columns:repeat(2,minmax(0,1fr))}.navigation{position:relative}.navigation .wrap{gap:var(--space-2) var(--space-4)}.sim-body,.sim-header,.sim-foot{padding:var(--space-4)}.hero h1{overflow-wrap:anywhere}.claim .question{padding-top:var(--space-2)}.chain li{padding:var(--space-3)}.results{gap:var(--space-3)}.big-idea{padding:var(--space-4)}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="wrap masthead"><span class="kicker">Field notes / 小团队研究</span><span class="mini quiet">阅读日期 · 2026.10.23</span></header>
+<main id="main">
+<div class="wrap hero">
+ <div><p class="kicker">Garry Tan × Paul Copplestone</p><h1>小团队，<br><span>放大的是什么？</span></h1><p class="lead">AI 可能缩短部分制作任务。一个小团队能否因此交付更多价值，仍取决于用户需求、质量、持续使用和总成本。</p></div>
+ <aside class="hero-aside"><p><strong>基于链接原文的阅读与验证</strong></p><p class="scope">主材料：深思圈，2026-10-23 08:35 的中文对谈整理。全文文字已读取，已追到官方原访谈并核对关键数字段的自动字幕；未逐秒人工听校全片。本文将嘉宾转述、作者评论和本页分析分开标注。</p><p class="scope">适用读者：创作者、独立开发者与小团队。用途：判断下一项工作怎样验证。</p></aside>
+</div>
+<nav class="navigation" aria-label="本文导航"><div class="wrap"><a href="#thesis">核心判断</a><a href="#claims">原文图谱</a><a href="#evidence">数字核查</a><a href="#model">工时推演</a><a href="#validation">商业验证</a><a href="#action">行动计划</a><a href="#sources">来源与限制</a></div></nav>
+<div class="wrap">
+<section id="thesis">
+ <div class="section-head"><span class="num">01 / 先读结论</span><div><h2>把制作优势，逐步验证为交付优势</h2><p>本页分析：可以尝试更小团队与更多自动化。每次尝试都要保留可观察的验收结果，才能判断这种组织方式是否适合当前任务。</p></div></div>
+ <div class="big-idea"><div><p class="kicker">本页结论 · 分析判断</p><h3>制作更快之后，<br>还要测量什么？</h3><p>原型完成、代码生成、任务自动化、客户付款、持续使用和复购是不同指标。制作成本下降可能扩大可尝试的项目数量，也可能增加同质化、获客竞争和维护负担。</p></div><ol><li><strong>总工时：</strong>把审查、返工与维护计入同一统计范围。</li><li><strong>质量：</strong>同一验收标准下比较结果，记录缺陷。</li><li><strong>用户行为：</strong>分别记录付款、接受交付、后续使用和复购。</li></ol></div>
+ <div class="logic" aria-label="从工具能力到经营结果的四步关系"><div><b>01 → 任务能力</b><h3>某项工作更快</h3><p>比较同类任务，先记录基线。</p></div><div><b>02 → 系统总量</b><h3>总工时更少</h3><p>加上集成、复核和返工。</p></div><div><b>03 → 用户结果</b><h3>交付达到要求</h3><p>让真实使用者按标准验收。</p></div><div><b>04 → 经营结果</b><h3>重复产生净价值</h3><p>继续观察使用、复购与全部成本。</p></div></div>
+ <p class="mini quiet">箭头表示下一项需要验证的关系。通过前一步，不能自动证明后一步。</p>
+</section>
+<section id="claims">
+ <div class="section-head"><span class="num">02 / 原文图谱</span><div><h2>七个主题，各自提出什么问题</h2><p>左侧是主题；中间按公众号整理转述嘉宾观点；右侧是本页提出的检验问题。已核对的原访谈数字段见 [S8]；自动字幕可能存在识别误差，精确措辞以原音频为准。[S1]</p></div></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>硬科技</h3></div><p>AI 辅助研发，让少数技术人才更可能尝试过去难以进入的领域。</p><p class="question"><strong>本页检验：</strong>仿真改进是否经过真实实验、制造和客户验证？研发能力与资本需求应分别测量。</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>单人产出</h3></div><p>嘉宾用多种高倍数描述个别人的产出，也承认先前的表达过强。</p><p class="question"><strong>本页检验：</strong>倍数指哪项任务？是否在同等质量下计入了人工复核？单项任务能否代表公司全部工作？</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>创业基本功</h3></div><p>与用户交谈、做出首版、观察真实使用，仍被视为创业的基础。</p><p class="question"><strong>本页检验：</strong>是否记录用户原来的做法、接受标准与实际行为？Paul Graham 早期文章支持这一方法方向，但不能验证本次转述的逐字准确性。[S2]</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>Agent 与记忆</h3></div><p>Garry 的经验从细致编排转向目标、上下文与检索辅助，并提到 G Stack、G Brain。</p><p class="question"><strong>本页检验：</strong>能否追溯来源、处理过期信息、定位错误和恢复操作？检索测试与外部动作权限要分开管理。</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>早期招聘</h3></div><p>优先考虑熟悉、可信、愿意运用 Agent 的合作者。</p><p class="question"><strong>本页检验：</strong>是否能独立定义问题、审查结果、处理异常并负责交付？熟悉程度与岗位能力应各自验证。</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>融资与即时软件</h3></div><p>硬科技受到更多关注；按需生成的小工具成为新的工作方式。</p><p class="question"><strong>本页检验：</strong>融资金额不能证明需求。临时工具是否留下权限、依赖和维护成本？是否存在反复发生的用户任务？</p></div>
+ <div class="claim"><div><span class="tag pending">嘉宾观点 · 二手转述</span><h3>SaaS 与小团队</h3></div><p>嘉宾反对 SaaS 消亡的判断，并用匿名高收入案例支持小团队的可能性。</p><p class="question"><strong>本页检验：</strong>收入指累计、年度、ARR 还是其他口径？是否含外包？是否盈利？无公司身份和数据口径，无法比较典型表现。</p></div>
+ <div class="author-view"><span class="tag analysis">公众号作者评论</span><p>作者将全文归纳为执行成本下降，而判断做什么仍然困难。这是作者的综合解释。它能启发行动，但本身不是生产率研究结论。[S1]</p></div>
+</section>
+<section id="evidence">
+ <div class="section-head"><span class="num">03 / 数字核查</span><div><h2>数字先对口径，再谈意义</h2><p>未核实数字保留为线索，不制作趋势图、不计算投资回报，也不把匿名个案拼成人均收入排行。</p></div></div>
+ <div class="evidence-row"><div><span class="tag pending">已追到发言 · 统计未验证</span><h3>25% / 3–5%</h3></div><p>官方访谈 00:21–00:36，Garry 给出约 75% 软件、25% 硬科技，并用近似、回忆性的措辞描述五年前约 3–5%。已验证他这样说过；尚无批次清单、样本量与分类标准，不能当作整个创业市场份额。[S8]</p></div>
+ <div class="evidence-row"><div><span class="tag pending">发言人估计</span><h3>8× 至 100×</h3></div><p>官方访谈 01:38 起，Garry 先撤回先前的 400 人表达，再提及 8、10、50 至 100 倍。字幕与公众号转述方向一致；没有统一任务、时间、质量口径和对照样本，不能作默认实测参数或招聘与裁员依据。[S8]</p></div>
+ <div class="evidence-row"><div><span class="tag pending">匿名案例</span><h3>收入与人数</h3></div><p>官方访谈 25:24 起，嘉宾列出 2000 万、5000 万、1 亿美元收入及 50、30、15 人的团队；原文另提年轻创始人的案例。公司、时期、收入口径、外包与利润均未验证。不要把两组数字自行一一配对，也不要将收入当作利润。[S1][S8]</p></div>
+ <div class="evidence-row"><div><span class="tag verified">已纠错 · 官方公告</span><h3>WhatsApp 收购金额</h3></div><p id="whatsapp-fact">公众号和官方视频 26:17 附近均出现“以 10 亿美元出售”的说法。Meta 于 2014-02-19 公告的交易对价约为 160 亿美元（40 亿现金、120 亿股票），另有约 30 亿美元员工受限股。这里采用公告时口径，并非最终交割估值；“55 人”仅核实为嘉宾说法，未找到独立一手人数记录。[S5][S8]</p></div>
+ <div class="evidence-row"><div><span class="tag pending">成果公告与机构状态分开</span><h3>Navier–Stokes</h3></div><p id="navier-fact">OpenAI 于 2026-09-08 公布内部系统给出的存在性与光滑性问题解答，并公开论文与 Lean 形式化材料；公告称求解模型显著强于 GPT‑6 Astra，Astra 参与后续形式化与验证。本轮查看 Clay 时，题目仍为 Active。应分别陈述“提出方公布成果”和“机构页面状态”，后者不能证明成果错误。本页未独立审查数学证明，也未核实文中的美元成本与未来降价预测。[S6][S7]</p></div>
+ <div class="evidence-row"><div><span class="tag pending">不可作能力保证</span><h3>95% / GPU 故障 / 24–36 月</h3></div><p>长上下文检索准确率、GPU 通信故障比例与未来问题解决时间，均缺本轮可核对的测试、样本或原始报告。七加减二是历史认知表述，不能与 token 数直接换算组织能力；本页不采用这些数字作能力或时间承诺。[S1]</p></div>
+ <div class="note"><strong>怎样削弱本页的判断？</strong><p>如果相同验收标准下，计入复核、返工和维护后仍没有减少总工时，就应下调对该任务的效率判断。如果用户持续使用并重复付款，且总成本可控，才有更强证据支持商业价值。任何一项反证都应保留。</p></div>
+</section>
+<section id="model">
+ <div class="section-head"><span class="num">04 / 可调整情景</span><div><h2>代码快十倍，总工时会怎样？</h2><p>这是本页建立的简化模型。先把一项任务的原始总工时标准化为 100 小时，再拆分可加速工作与其他工作。所有预设都是演示假设。</p></div></div>
+ <div class="simulator" id="simulator">
+ <div class="sim-header"><strong>总工时推演</strong><span class="tag analysis">情景演示 · 不是实测</span></div>
+ <div class="sim-body">
+ <div class="controls">
+  <div class="control"><div class="control-head"><label for="share">可加速工时占比 p</label><output id="share-out" for="share">60%</output></div><input id="share" type="range" min="0" max="100" step="1" value="60"><small>占原始总工时的比例；其余工作保持原耗时。</small></div>
+  <div class="control"><div class="control-head"><label for="speed">局部加速倍数 s</label><output id="speed-out" for="speed">10×</output></div><input id="speed" type="range" min="1" max="100" step="1" value="10"><small>只作用于 p 对应的工作；要求质量标准相同。</small></div>
+  <div class="control"><div class="control-head"><label for="overhead">新增工时占比 o</label><output id="overhead-out" for="overhead">15%</output></div><input id="overhead" type="range" min="0" max="100" step="1" value="15"><small>新增复核、集成、返工与维护；分母是原始总工时，避免与 p 内的耗时重复计算。</small></div>
+  <div class="presets" role="group" aria-label="选择演示情景"><button type="button" data-values="60,10,15" aria-pressed="true">初始情景</button><button type="button" data-values="30,10,20" aria-pressed="false">加速范围小</button><button type="button" data-values="90,20,10" aria-pressed="false">加速范围大</button><button type="button" data-values="30,3,50" aria-pressed="false">复核成本高</button></div>
+ </div>
+ <div>
+  <div class="results"><div class="result"><strong id="total-time">61.0 h</strong><span>情景总工时 / 原始 100 h</span></div><div class="result"><strong id="total-speed">1.64×</strong><span>总体加速倍数</span></div></div>
+  <div class="bars" role="img" id="bars" aria-label="原始100小时；情景61小时，其中未加速40小时、加速部分6小时、新增15小时。">
+   <div class="bar-label"><span>原始任务</span><span>100 h</span></div><div class="bar-track"><div class="bar-piece baseline" id="baseline-bar"></div></div>
+   <div class="bar-label"><span>同等质量下的情景任务</span><span id="after-label">61.0 h</span></div><div class="bar-track"><div class="bar-piece unchanged" id="unchanged-bar"></div><div class="bar-piece accelerated" id="accelerated-bar"></div><div class="bar-piece overhead" id="overhead-bar"></div></div>
+  </div>
+  <div class="legend"><span class="blue">未加速工作</span><span class="green">加速后工作</span><span class="rust">新增工时</span></div>
+  <p id="calc-summary" class="calc-summary" aria-live="polite" aria-atomic="true">未加速 40.0 h + 加速后 6.0 h + 新增 15.0 h = 61.0 h。情景节省 39.0% 总工时。</p>
+  <div class="formula">工时比例 = (1 − p) + p ÷ s + o<br>总体加速倍数 = 1 ÷ 工时比例</div>
+ </div>
+ </div>
+ <div class="sim-foot"><strong>本计算器不是效率实测，也不是收入预测。</strong>它仅演示：当一部分工作可以被加速时，新增复核、返工与维护成本会如何影响总体工时。请使用自己的任务记录填写参数，并将结果视为待验证假设，而不是生产率承诺。<details class="assumptions"><summary>查看假设、边界与公式例子</summary><p>公式假设工作可以按原始工时拆分，其余工作耗时不变。它没有表示任务之间的依赖、排队、客户等待和并行资源冲突，因此不能直接预测日历交付周期。若新流程改变质量、范围或任务种类，需要重新建立可比基线。</p><p>初始值：p = 0.60、s = 10、o = 0.15。结果 = 0.40 + 0.06 + 0.15 = 0.61，100 ÷ 61 ≈ 1.64 倍。模型不计算收入、利润、就业人数或成功率。</p></details></div>
+ </div>
+ <noscript><div class="note">浏览器未启用 JavaScript，滑块与情景按钮不会更新。初始情景结果仍可阅读：原始 100 小时，情景 61 小时，总体 1.64 倍；计算方法与边界见上文。</div></noscript>
+ <div class="counterpoint"><article><span class="tag verified">有范围的实证 · 2025</span><h3>主观觉得更快，可能测到更慢</h3><p>METR 在 16 名熟悉开源项目的开发者、246 项任务中随机允许或禁止 AI。该条件下，允许 AI 的任务耗时增加 19%。这是早期 2025 工具与特定成熟项目的结果，不能外推到所有开发工作或今天的模型。[S3]</p></article><article><span class="tag pending">研究更新 · 2026-02-24</span><h3>后续工具改进，也需要新的测量</h3><p>METR 的后续数据出现加速信号，但研究者指出，参与者与任务选择、以及并行 Agent 的计时问题，使新数据不足以可靠估算当前效果。旧研究不能当成“AI 永远降效”的证明，新研究也不能支持统一高倍数。[S4]</p></article></div>
+</section>
+<section id="validation">
+ <div class="section-head"><span class="num">05 / 商业验证</span><div><h2>每一步，留一份独立证据</h2><p>这是一套建议的记录顺序，实际业务可以分支或反复。下列状态目前都是“待读者验证”；本页不推断读者是否已有客户或收入。</p></div></div>
+ <ol class="chain"><li><span class="step">01 / 具体问题</span><h3>谁在什么情境受阻</h3><p>记录原有做法、发生频率和现有代价。</p><p class="not-yet">访谈表达说明存在问题；仍需观察行为。</p></li><li><span class="step">02 / 报价</span><h3>对交付范围达成理解</h3><p>写清付款方、使用者、期限与接受标准。</p><p class="not-yet">收到报价或口头赞同，尚不能证明付款。</p></li><li><span class="step">03 / 付款</span><h3>有人真实支付</h3><p>记录金额、退款条件与对应承诺。</p><p class="not-yet">付款证明这笔交易；交付仍需验证。</p></li><li><span class="step">04 / 验收</span><h3>用户接受交付</h3><p>对照预定标准，保留问题与修改记录。</p><p class="not-yet">一次验收尚不能说明后续价值。</p></li><li><span class="step">05 / 后续使用</span><h3>结果进入真实工作</h3><p>约定合适观察期，查实际使用与效果。</p><p class="not-yet">使用不自动等于愿意继续支付。</p></li><li><span class="step">06 / 复购或续费</span><h3>同类需求再次发生</h3><p>观察再次付款、续费或明确流失原因。</p><p class="not-yet">一次复购尚不能估计稳定留存。</p></li><li><span class="step">07 / 全部成本</span><h3>扣除投入后仍值得做</h3><p>同时计入人力、模型、获客、交付、维护和退款。</p><p class="not-yet">成本从第一天记录，最后统一核算。</p></li><li><span class="step">08 / 重复验证</span><h3>检查结果能否复现</h3><p>换任务、换用户，保留失败样本与结果分布。</p><p class="not-yet">小样本提示路径，不估计普遍成功率。</p></li></ol>
+ <div class="note"><strong>收入、人效与利润，各自回答不同问题。</strong><p>收入高不能单独证明净利润高。团队人数少也可能包含大量外包、平台能力与创始人隐性工时。比较小团队时，需要统一时期、收入定义、人员边界、质量与服务成本。</p></div>
+</section>
+<section id="organization">
+ <div class="section-head"><span class="num">06 / 组织与工具</span><div><h2>给 Agent 明确任务，也保留验收能力</h2><p>以下是本页建议，不是嘉宾已经证明的通用方法。用一个范围清楚、能恢复的任务开始，避免把整套工具采购当作经营验证。</p></div></div>
+ <div class="two-col"><div><h3>从文章迁移到自己的流程</h3><ul><li><strong>目标与上下文：</strong>写清输入、输出、质量标准、资料来源和不可做的动作。</li><li><strong>并行有条件：</strong>只有相互独立的任务才并行。对同一文件或系统的写入指定唯一负责人。</li><li><strong>记忆可追溯：</strong>保留原文、日期与来源。为检索设已知答案的小样本，记录漏检与错误引用。</li><li><strong>外部动作单独授权：</strong>能生成草稿不代表能发消息、付款、改权限或发布。让负责人明确确认目标。</li></ul></div><div><h3>先识别招聘要解除的限制</h3><ul><li><strong>如果需求判断不清：</strong>先安排真实用户观察与交付访谈，记录仍无法回答的问题。</li><li><strong>如果审查积压：</strong>测量审查耗时、缺陷类型和返工；再判断需要领域经验还是流程调整。</li><li><strong>如果维护占用增长：</strong>核查重复故障、依赖与服务承诺，再确定岗位责任。</li><li><strong>如果拟聘合作者：</strong>给同一范围的小任务，观察其问题定义、异常处理与交付证据，工具熟练度只是其中一项。</li></ul></div></div>
+ <div class="note"><span class="tag analysis">本页推断 · 需要客户验证</span><h3>即时软件之后，SaaS 可以验证哪种价值？</h3><p>客户也许愿意为已经接通的数据与权限、稳定运行、多人协作、问题处理和明确的服务责任付费。这些只是候选价值，仍需逐项问清付款方、替代方案、接受标准和持续使用情况。能临时生成一个工具，不代表愿意自行承担长期运行；有人选择购买，也不能证明某种收费方式普遍成立。</p></div><div class="workflow"><h3>一项任务的最小闭环</h3><p>负责人定义标准 → Agent 生成或执行 → 负责人核对来源与测试 → 真实使用者验收 → 记录工时、缺陷和下一步。失败时回到对应步骤，保留错误结果。</p></div>
+ <p class="mini quiet">即时软件也需要有人维护。若每次使用都要重复修复、解释或人工兜底，应将这些工时纳入总成本；若任务涉及敏感资料，应先确定可用的数据范围。</p>
+</section>
+<section id="action">
+ <div class="section-head"><span class="num">07 / 七日实验</span><div><h2>用一周换一个可复核的判断</h2><p>本计划用于发现流程问题，不是市场需求已经成立的证明。原有客户、已有收入或正在运行的业务，均应使用自己的真实记录。</p></div></div>
+ <div class="days"><div class="day"><b>第 1 天 / 划边界</b><p>选一项有明确输出和验收标准的任务，写下原始流程。先确定工时、缺陷和费用的记录方式。</p></div><div class="day"><b>第 2 天 / 记基线</b><p>按原有流程完成一次记录。任务若无法重做，就选择难度相近的任务，并写明这种比较的偏差。</p></div><div class="day"><b>第 3 天 / 用 Agent</b><p>记录生成、等待、人工介入和模型费用。试验期间固定输入范围与质量标准，避免同时改变太多因素。</p></div><div class="day"><b>第 4 天 / 算返工</b><p>独立核查输出并修复。把审查、集成和返工加入总工时；记录仍未发现的风险与后续维护窗口。</p></div><div class="day"><b>第 5 天 / 看验收</b><p>请真实使用者按预定标准验收，记录接受、修改或拒绝及原因。没有真实使用者时，标记“用户价值尚未验证”。</p></div><div class="day"><b>第 6 天 / 查行为</b><p>若确有交易场景，核对报价与实际付款；若是内部任务，观察后续使用。复购与长期使用超出一周时，另设回访日期。</p></div><div class="day"><b>第 7 天 / 作决定</b><p>按事先确定的阈值选择继续、修改或停止。一次对比容易受任务难度与熟悉程度影响，下一轮交换任务顺序并重复记录。</p></div></div>
+ <div class="criteria"><strong>开始前填写自己的阈值</strong><p class="mini">任务：______　质量标准：______　工时上限：______　费用上限：______<br>真实使用者及接受标准：______　后续观察日期：______　停止条件：______</p><p class="mini quiet">没有实际付款、使用或复购记录时，相应一栏保持“尚未验证”。不以模拟反馈、模型评分或他人成功案例填补。</p></div>
+</section>
+<section id="sources">
+ <div class="section-head"><span class="num">08 / 来源与限制</span><div><h2>知道什么，尚不知道什么</h2><p>外部事实按已打开的原始页面核查。证据只能支持对应陈述；官方方法论文章不能证明这次访谈的逐字准确性。</p></div></div>
+ <ol class="sources">
+ <li><span class="source-id">S1 · 主材料</span><div><a href="https://mp.weixin.qq.com/s/7Sgjj80cTO3kXxylbh74PA" target="_blank" rel="noopener noreferrer">深思圈：YC CEO 谈小团队的时代：一个人干一百个人的活，创业的根本却一点没变</a><p class="quiet">发布：2026-10-23 08:35。wechat-reader 成功读取文字正文，未截断。包含 5 个图片引用，未做图片 OCR；未把图片内容作为本页事实。文章是中文整理与评论，属于二手材料。</p></div></li>
+ <li><span class="source-id">S2 · 方法原文</span><div><a href="https://paulgraham.com/ds.html" target="_blank" rel="noopener noreferrer">Paul Graham · Do Things that Don't Scale</a><p class="quiet">2013-07。原文论述手动招募早期用户、直接观察使用和提供服务。它支持用户工作的重要性，不验证 AI 倍数与当前 YC 批次数据。</p></div></li>
+ <li><span class="source-id">S3 · 对照研究</span><div><a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank" rel="noopener noreferrer">METR · Early-2025 AI and Experienced Open-Source Developers</a><p class="quiet">2025-07-10。16 名开发者、246 项任务；特定工具与成熟项目条件下耗时增加 19%。不代表其他行业、全部开发者或当前工具。</p></div></li>
+ <li><span class="source-id">S4 · 研究更新</span><div><a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener noreferrer">METR · Changing our Developer Productivity Experiment Design</a><p class="quiet">2026-02-24。后续研究存在参与者选择、任务选择与计时限制，研究者认为新数据难以可靠估算当前效果。与 S3 来自同一研究机构，不算两条独立研究。</p></div></li>
+ <li><span class="source-id">S5 · 金额纠错</span><div><a href="https://about.fb.com/news/2014/02/facebook-to-acquire-whatsapp/" target="_blank" rel="noopener noreferrer">Meta · Facebook to Acquire WhatsApp</a><p class="quiet">2014-02-19 公告。约 160 亿美元交易对价，另有约 30 亿美元受限股；不是 10 亿美元收购。只核查当时公告金额，未将其作为 AI 时代案例。</p></div></li>
+<li><span class="source-id">S6 · 成果提出方</span><div><a href="https://openai.com/index/navier-stokes-solution/" target="_blank" rel="noopener noreferrer">OpenAI · On the Navier–Stokes Millennium Prize Problem</a><p class="quiet">2026-09-08。发布内部系统的解答与形式化材料；本页只核查官方声明，未独立验证证明。不能由此推断所有研发问题将在相同时间与成本内解决。</p></div></li>
+<li><span class="source-id">S7 · 机构页面状态</span><div><a href="https://www.claymath.org/millennium/navier-stokes-equation/" target="_blank" rel="noopener noreferrer">Clay Mathematics Institute · Navier-Stokes Equation</a><p class="quiet">2026-10-23 查阅：Active。表示当前页面状态，不能据此判断提出方证明正确或错误，也不能替代数学共同体审查。</p></div></li>
+<li><span class="source-id">S8 · 原始访谈</span><div><a href="https://www.youtube.com/watch?v=SSfig1Z0E3c" target="_blank" rel="noopener noreferrer">Supabase Library · Tiny Teams Doing the Work of 100 People | Garry Tan</a><p class="quiet">2026-10-02 录制，官方频道 2026-10-12 上传，时长 27:09；讲者 Garry Tan 与 Paul Copplestone。官方活动页也列出此场次：<a href="https://select.supabase.com/" target="_blank" rel="noopener noreferrer">Supabase Select 26</a>。本次对关键段自动字幕作定向核对，未逐秒听校全片。</p><p><a href="https://www.youtube.com/watch?v=SSfig1Z0E3c&amp;t=21s" target="_blank" rel="noopener noreferrer">00:21 YC 比例</a> · <a href="https://www.youtube.com/watch?v=SSfig1Z0E3c&amp;t=98s" target="_blank" rel="noopener noreferrer">01:38 产出倍数</a> · <a href="https://www.youtube.com/watch?v=SSfig1Z0E3c&amp;t=1524s" target="_blank" rel="noopener noreferrer">25:24 收入与人数</a> · <a href="https://www.youtube.com/watch?v=SSfig1Z0E3c&amp;t=1577s" target="_blank" rel="noopener noreferrer">26:17 WhatsApp</a></p></div></li>
+ </ol>
+ <div class="audit"><h3>本次制作与核验范围</h3><ul><li id="interview-scope">原访谈：已定位官方视频与活动页，并核对四个关键数字段的自动字幕。主材料仍为公众号文字；未逐秒人工听校全片，未独立验证嘉宾的样本数据。</li><li>本页整理原文七个主题；其余框架、公式与行动计划均明确标为本页分析或建议。没有读取读者的经营后台，未核实匿名公司的收入。</li><li>Pro 内容审查已取得完整回复。采纳证据分层、总工时口径、反证条件与七日验证建议；未把 Pro 的建议作为外部事实。</li><li>Gemini 补充调研未取得：模型菜单打不开(页面可能还在生成、被遮挡或改版)。本页未引用其事实或结论。</li><li id="local-check">本机校验：1440、768、390、320px 浏览器布局检查均无横向溢出；5 组公式边界、情景按钮、键盘滑块、折叠说明与无 JavaScript 阅读通过；无脚本错误、无外部自动请求。未生成截图。</li><li id="cross-review">Claude Code 只读交叉审核：UNKNOWN。官方守卫返回 usage_limit_reached（本轮会话额度耗尽，预计上海时间 11:10 重置），未取得有效审核报告，不能称交叉审核通过。本机内容与布局检查已完成。</li></ul></div>
+</section>
+</div>
+</main>
+<footer class="wrap">独立阅读与验证笔记 · 2026-10-23 · 自包含 HTML，正文与来源可离线阅读；打开来源链接需要联网。页面没有上传数据或记录滑块输入。</footer>
+<script>
+'use strict';
+// Values below are task data. All visual constants are in the CSS token source.
+const inputs=['share','speed','overhead'].map(id=>document.getElementById(id));
+const presets=[...document.querySelectorAll('[data-values]')];
+const n=x=>x.toFixed(1);
+function update(){
+ const [percent,s,extra]=inputs.map(el=>Number(el.value));
+ const p=percent/100,o=extra/100;
+ const unchanged=100*(1-p),accelerated=100*p/s,overhead=100*o;
+ const total=unchanged+accelerated+overhead,scale=Math.max(100,total);
+ document.getElementById('share-out').value=percent+'%';
+ document.getElementById('speed-out').value=s+'×';
+ document.getElementById('overhead-out').value=extra+'%';
+ document.getElementById('total-time').textContent=n(total)+' h';
+ document.getElementById('after-label').textContent=n(total)+' h';
+ document.getElementById('total-speed').textContent=(100/total).toFixed(2)+'×';
+ for(const [id,v] of [['baseline-bar',100],['unchanged-bar',unchanged],['accelerated-bar',accelerated],['overhead-bar',overhead]])document.getElementById(id).style.width=(v/scale*100)+'%';
+ const delta=100-total;
+ const change=Math.abs(delta)<0.000001?'情景总工时持平。':delta>0?'情景节省 '+n(delta)+'% 总工时。':'情景增加 '+n(-delta)+'% 总工时。';
+ const summary='未加速 '+n(unchanged)+' h + 加速后 '+n(accelerated)+' h + 新增 '+n(overhead)+' h = '+n(total)+' h。'+change;
+ document.getElementById('calc-summary').textContent=summary;
+ document.getElementById('bars').setAttribute('aria-label','原始100小时。'+summary);
+ presets.forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.values===inputs.map(el=>el.value).join(','))));
+}
+inputs.forEach(el=>el.addEventListener('input',update));
+presets.forEach(btn=>btn.addEventListener('click',()=>{btn.dataset.values.split(',').forEach((v,i)=>inputs[i].value=v);update()}));
+update();
+</script>
+</body>
+</html>

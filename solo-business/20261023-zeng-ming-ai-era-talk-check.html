@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>曾鸣 AI 时代分享口播核对与分析 · 11 条判定 · 2026-10-23</title>
+<meta name="description" content="逐条核对一段转述曾鸣教授分享的 5000 字口播：哪些有曾鸣公开原话支持、哪些是作者延伸、哪些事实需纠正，并给一人公司经营者 5 条可检验行动。">
+<style>
+/* ============================================================
+   TOKENS（唯一权威来源）
+   命名：--color-* 语义色 / --space-* 间距 / --font-* 字体 / --radius-* / --shadow-* / --line-* / --w-* 布局宽度 / --dur-*
+   原始值只在本段出现；组件只消费语义 token。
+   断点：640px / 960px（@media 不能用 var，统一在此注明，正文只用这两个值）
+   ============================================================ */
+:root{
+  /* 原始色阶 */
+  --p-ink-900:#13202E; --p-ink-700:#2B3A4B; --p-ink-500:#5B6B7C; --p-ink-300:#A6B1BD; --p-ink-150:#DCE2E8; --p-ink-80:#EEF2F5; --p-white:#FFFFFF;
+  --p-blue-700:#174A9C; --p-blue-500:#1F5FBF; --p-blue-100:#E3ECFA;
+  --p-green-700:#1E6B47; --p-green-500:#2E8B5C; --p-green-100:#E1F3EA;
+  --p-amber-700:#8A5A00; --p-amber-500:#C48400; --p-amber-100:#FCF1D6;
+  --p-red-700:#9B2C2C; --p-red-500:#C0392B; --p-red-100:#FBE4E1;
+  --p-violet-700:#4C3A8E; --p-violet-500:#6A54BF; --p-violet-100:#ECE8F8;
+  --p-gray-500:#6F7A86; --p-gray-100:#EDEFF2;
+
+  /* 语义色 */
+  --color-bg:var(--p-white);
+  --color-bg-soft:var(--p-ink-80);
+  --color-surface:var(--p-white);
+  --color-text:var(--p-ink-900);
+  --color-text-2:var(--p-ink-700);
+  --color-text-3:var(--p-ink-500);
+  --color-border:var(--p-ink-150);
+  --color-border-strong:var(--p-ink-300);
+  --color-accent:var(--p-blue-500);
+  --color-accent-strong:var(--p-blue-700);
+  --color-accent-soft:var(--p-blue-100);
+  --color-on-accent:var(--p-white);
+  --color-focus:var(--p-blue-500);
+
+  /* 证据等级（分类色） */
+  --color-grade-direct:var(--p-green-500);   --color-grade-direct-soft:var(--p-green-100);   --color-grade-direct-text:var(--p-green-700);
+  --color-grade-limited:var(--p-blue-500);   --color-grade-limited-soft:var(--p-blue-100);   --color-grade-limited-text:var(--p-blue-700);
+  --color-grade-author:var(--p-amber-500);   --color-grade-author-soft:var(--p-amber-100);   --color-grade-author-text:var(--p-amber-700);
+  --color-grade-unverified:var(--p-gray-500);--color-grade-unverified-soft:var(--p-gray-100);--color-grade-unverified-text:var(--p-ink-700);
+  --color-fix:var(--p-red-500);              --color-fix-soft:var(--p-red-100);              --color-fix-text:var(--p-red-700);
+  --color-insight:var(--p-violet-500);       --color-insight-soft:var(--p-violet-100);       --color-insight-text:var(--p-violet-700);
+
+  /* 字体 */
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Helvetica Neue",Arial,sans-serif;
+  --font-size-xs:0.78rem; --font-size-sm:0.88rem; --font-size-md:1rem; --font-size-lg:1.15rem; --font-size-xl:1.5rem; --font-size-2xl:2rem; --font-size-3xl:2.5rem;
+  --font-weight-regular:400; --font-weight-medium:500; --font-weight-bold:700;
+  --line-tight:1.25; --line-normal:1.65; --line-loose:1.8;
+  --letter-tight:-0.01em;
+
+  /* 间距 */
+  --space-1:0.25rem; --space-2:0.5rem; --space-3:0.75rem; --space-4:1rem; --space-5:1.5rem; --space-6:2rem; --space-7:3rem; --space-8:4rem;
+
+  /* 形状、层次 */
+  --radius-sm:4px; --radius-md:8px; --radius-lg:14px;
+  --border-w:1px; --border-w-strong:3px;
+  --shadow-sm:0 1px 2px rgba(19,32,46,0.06);
+  --shadow-md:0 6px 20px rgba(19,32,46,0.08);
+  --opacity-muted:0.72;
+  --z-nav:10;
+
+  /* 布局 */
+  --w-content:1080px; --w-prose:760px;
+  --h-bar:10px; --h-timeline-dot:12px; --timeline-dot-top:0.45em; --w-bar-min:80px;
+  --list-indent:1.4em; --list-indent-lg:1.6em; --underline-offset:0.15em; --focus-offset:2px;
+  --w-stat-min:150px; --w-card-min:300px; --w-table-min:880px; --w-matrix-min:720px; --w-figure-min:520px; --w-figure-max:820px; --h-nav-offset:56px;
+
+  /* SVG 图形 */
+  --font-size-svg-lg:14px; --font-size-svg-md:12px; --font-size-svg-sm:11px;
+  --stroke-w:1.5; --stroke-w-strong:2; --dash-author:5 4;
+
+  /* 动效 */
+  --dur-fast:150ms; --ease-standard:cubic-bezier(.2,.7,.3,1);
+}
+
+/* ============================================================ 基础 ============================================================ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--font-size-md);line-height:var(--line-normal);overflow-x:hidden}
+h1,h2,h3,h4{line-height:var(--line-tight);letter-spacing:var(--letter-tight);margin:0 0 var(--space-3)}
+h1{font-size:var(--font-size-2xl);font-weight:var(--font-weight-bold)}
+h2{font-size:var(--font-size-xl);font-weight:var(--font-weight-bold)}
+h3{font-size:var(--font-size-lg);font-weight:var(--font-weight-bold)}
+h4{font-size:var(--font-size-md);font-weight:var(--font-weight-bold)}
+p{margin:0 0 var(--space-3)}
+ul,ol{margin:0 0 var(--space-3);padding-left:var(--list-indent)}
+li{margin-bottom:var(--space-1)}
+a{color:var(--color-accent-strong);text-decoration:underline;text-underline-offset:var(--underline-offset)}
+a:hover{color:var(--color-accent)}
+:focus-visible{outline:var(--border-w-strong) solid var(--color-focus);outline-offset:var(--focus-offset)}
+strong{font-weight:var(--font-weight-bold)}
+blockquote{margin:0 0 var(--space-3);padding:var(--space-2) var(--space-4);border-left:var(--border-w-strong) solid var(--color-accent);background:var(--color-accent-soft);border-radius:var(--radius-sm);color:var(--color-text-2)}
+blockquote p{margin:0}
+small,.muted{color:var(--color-text-3);font-size:var(--font-size-sm)}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ============================================================ 布局 ============================================================ */
+.wrap{max-width:var(--w-content);margin:0 auto;padding:0 var(--space-4)}
+.prose{max-width:var(--w-prose)}
+section{padding:var(--space-7) 0;scroll-margin-top:var(--h-nav-offset)}
+.item{scroll-margin-top:var(--h-nav-offset)}
+section + section{border-top:var(--border-w) solid var(--color-border)}
+.section-head{margin-bottom:var(--space-5)}
+.section-head p{color:var(--color-text-2);max-width:var(--w-prose)}
+
+/* 顶部导航 */
+.nav{position:sticky;top:0;z-index:var(--z-nav);background:var(--color-surface);border-bottom:var(--border-w) solid var(--color-border);box-shadow:var(--shadow-sm)}
+.nav ul{list-style:none;display:flex;gap:var(--space-2);margin:0;padding:var(--space-2) 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav li{margin:0;flex:0 0 auto}
+.nav a{display:inline-block;padding:var(--space-1) var(--space-3);border-radius:var(--radius-sm);color:var(--color-text-2);text-decoration:none;font-size:var(--font-size-sm);white-space:nowrap;transition:background var(--dur-fast) var(--ease-standard)}
+.nav a:hover{background:var(--color-bg-soft);color:var(--color-text)}
+
+/* Hero */
+.hero{padding:var(--space-7) 0 var(--space-6)}
+.hero .kicker{color:var(--color-text-3);font-size:var(--font-size-sm);margin-bottom:var(--space-2)}
+.hero h1{font-size:var(--font-size-3xl)}
+.hero .lede{font-size:var(--font-size-lg);color:var(--color-text-2);max-width:var(--w-prose)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--w-stat-min),1fr));gap:var(--space-3);margin-top:var(--space-5)}
+.stat{border:var(--border-w) solid var(--color-border);border-top:var(--border-w-strong) solid var(--color-border-strong);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);background:var(--color-surface)}
+.stat .num{font-size:var(--font-size-2xl);font-weight:var(--font-weight-bold);line-height:var(--line-tight)}
+.stat .lab{color:var(--color-text-3);font-size:var(--font-size-sm)}
+.stat.direct{border-top-color:var(--color-grade-direct)}
+.stat.limited{border-top-color:var(--color-grade-limited)}
+.stat.author{border-top-color:var(--color-grade-author)}
+.stat.unverified{border-top-color:var(--color-grade-unverified)}
+.stat.fix{border-top-color:var(--color-fix)}
+
+/* 标签 */
+.tag{display:inline-block;padding:0 var(--space-2);border-radius:var(--radius-sm);font-size:var(--font-size-xs);font-weight:var(--font-weight-medium);line-height:1.8;border:var(--border-w) solid transparent;white-space:nowrap;vertical-align:middle}
+.tag-direct{background:var(--color-grade-direct-soft);color:var(--color-grade-direct-text);border-color:var(--color-grade-direct)}
+.tag-limited{background:var(--color-grade-limited-soft);color:var(--color-grade-limited-text);border-color:var(--color-grade-limited)}
+.tag-author{background:var(--color-grade-author-soft);color:var(--color-grade-author-text);border-color:var(--color-grade-author)}
+.tag-unverified{background:var(--color-grade-unverified-soft);color:var(--color-grade-unverified-text);border-color:var(--color-grade-unverified)}
+.tag-fix{background:var(--color-fix-soft);color:var(--color-fix-text);border-color:var(--color-fix)}
+.tag-time{background:var(--color-bg-soft);color:var(--color-text-2);border-color:var(--color-border-strong)}
+
+/* 卡片网格 */
+.grid{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(var(--w-card-min),1fr))}
+.card{border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);background:var(--color-surface);box-shadow:var(--shadow-sm)}
+.card h3{margin-bottom:var(--space-2)}
+.card.legend{border-left:var(--border-w-strong) solid var(--color-border-strong)}
+.card.legend.direct{border-left-color:var(--color-grade-direct)}
+.card.legend.limited{border-left-color:var(--color-grade-limited)}
+.card.legend.author{border-left-color:var(--color-grade-author)}
+.card.legend.unverified{border-left-color:var(--color-grade-unverified)}
+.legend-note{margin-top:var(--space-4)}
+
+/* 表格 */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md)}
+table{border-collapse:collapse;width:100%;font-size:var(--font-size-sm)}
+th,td{padding:var(--space-2) var(--space-3);border-bottom:var(--border-w) solid var(--color-border);text-align:left;vertical-align:top}
+th{background:var(--color-bg-soft);color:var(--color-text-2);font-weight:var(--font-weight-medium);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:none}
+.table-matrix table{min-width:var(--w-matrix-min)}
+.table-wide table{min-width:var(--w-table-min)}
+td.nowrap{white-space:nowrap}
+
+/* 逐条核对卡 */
+.item{border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface);margin-bottom:var(--space-5);overflow:hidden}
+.item-head{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-3);align-items:center;padding:var(--space-4) var(--space-5);border-bottom:var(--border-w) solid var(--color-border);background:var(--color-bg-soft)}
+.item-head h3{margin:0;flex:1 1 auto}
+.item-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.item-body > div{padding:var(--space-4) var(--space-5);border-bottom:var(--border-w) solid var(--color-border)}
+.item-body > div:nth-child(odd){border-right:var(--border-w) solid var(--color-border)}
+.item-body > div:nth-last-child(-n+2){border-bottom:none}
+.item-body h4{color:var(--color-text-3);font-size:var(--font-size-xs);text-transform:none;margin-bottom:var(--space-2);font-weight:var(--font-weight-medium)}
+.item-body .insight{background:var(--color-insight-soft)}
+.item-body .insight h4{color:var(--color-insight-text)}
+.item-body .fixbox{background:var(--color-fix-soft)}
+.item-body .fixbox h4{color:var(--color-fix-text)}
+.item-body .quote-src{display:block;color:var(--color-text-3);font-size:var(--font-size-xs);margin-top:var(--space-1)}
+.item-body ul{margin-bottom:0}
+.item-body p:last-child{margin-bottom:0}
+
+/* 图：三时代 / 飞轮 / 能力框架 */
+.figure{border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);background:var(--color-surface)}
+.figure figcaption{color:var(--color-text-3);font-size:var(--font-size-sm);margin-top:var(--space-3)}
+.figures{grid-template-columns:1fr}
+.figures > .figure{min-width:0}
+.figure .svg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.figure svg{width:100%;min-width:var(--w-figure-min);max-width:var(--w-figure-max);height:auto;display:block;margin:0 auto}
+.svg-box{fill:var(--color-surface);stroke:var(--color-border-strong);stroke-width:var(--stroke-w)}
+.svg-box-accent{fill:var(--color-accent-soft);stroke:var(--color-accent)}
+.svg-box-author{fill:var(--color-grade-author-soft);stroke:var(--color-grade-author)}
+.svg-box-direct{fill:var(--color-grade-direct-soft);stroke:var(--color-grade-direct)}
+.svg-text{fill:var(--color-text);font-family:var(--font-sans);font-size:var(--font-size-svg-lg);font-weight:var(--font-weight-bold)}
+.svg-text-sm{fill:var(--color-text-2);font-family:var(--font-sans);font-size:var(--font-size-svg-md)}
+.svg-text-xs{fill:var(--color-text-3);font-family:var(--font-sans);font-size:var(--font-size-svg-sm)}
+.svg-line{stroke:var(--color-border-strong);stroke-width:var(--stroke-w);fill:none}
+.svg-line-accent{stroke:var(--color-accent);stroke-width:var(--stroke-w-strong);fill:none}
+.svg-line-dash{stroke:var(--color-grade-author);stroke-width:var(--stroke-w);fill:none;stroke-dasharray:var(--dash-author)}
+.svg-box-dash{stroke-dasharray:var(--dash-author)}
+.svg-arrow{fill:var(--color-border-strong)}
+.svg-arrow-accent{fill:var(--color-accent)}
+
+/* 证据条形（用于矩阵视觉） */
+.bar{height:var(--h-bar);border-radius:var(--radius-sm);background:var(--color-bg-soft);overflow:hidden;min-width:var(--w-bar-min)}
+.bar > span{display:block;height:100%}
+.bar-direct > span{background:var(--color-grade-direct)}
+.bar-limited > span{background:var(--color-grade-limited)}
+.bar-author > span{background:var(--color-grade-author)}
+.bar-unverified > span{background:var(--color-grade-unverified)}
+
+/* 行动建议 */
+.action{border:var(--border-w) solid var(--color-border);border-left:var(--border-w-strong) solid var(--color-insight);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);background:var(--color-surface);margin-bottom:var(--space-3)}
+.action .meta{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2)}
+.action .pass{background:var(--color-insight-soft);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);color:var(--color-insight-text)}
+.action p:last-child{margin-bottom:0}
+
+/* 时间线 */
+.timeline{list-style:none;padding:0;margin:0;border-left:var(--border-w) solid var(--color-border-strong);margin-left:var(--space-2)}
+.timeline li{position:relative;padding:0 0 var(--space-4) var(--space-5);margin:0}
+.timeline li::before{content:"";position:absolute;left:calc(-1 * var(--h-timeline-dot) / 2 - var(--border-w) / 2);top:var(--timeline-dot-top);width:var(--h-timeline-dot);height:var(--h-timeline-dot);border-radius:50%;background:var(--color-accent);border:var(--border-w) solid var(--color-surface)}
+.timeline li.ext::before{background:var(--color-grade-unverified)}
+.timeline time{font-weight:var(--font-weight-bold);color:var(--color-text-2);margin-right:var(--space-2)}
+
+/* 来源 */
+.sources ol{padding-left:var(--list-indent-lg)}
+.sources li{margin-bottom:var(--space-2);font-size:var(--font-size-sm);word-break:break-word}
+.sources a{word-break:break-all}
+
+/* 页脚 */
+footer{padding:var(--space-6) 0 var(--space-8);color:var(--color-text-3);font-size:var(--font-size-sm);border-top:var(--border-w) solid var(--color-border)}
+
+/* ============================================================ 响应式（断点 960 / 640，见 token 段说明） ============================================================ */
+@media (max-width:960px){
+  .hero h1{font-size:var(--font-size-2xl)}
+}
+@media (max-width:640px){
+  section{padding:var(--space-6) 0}
+  .hero{padding:var(--space-6) 0 var(--space-5)}
+  .hero h1{font-size:var(--font-size-xl)}
+  .hero .lede{font-size:var(--font-size-md)}
+  h2{font-size:var(--font-size-lg)}
+  .item-body{grid-template-columns:1fr}
+  .item-body > div:nth-child(odd){border-right:none}
+  .item-body > div:nth-last-child(-n+2){border-bottom:var(--border-w) solid var(--color-border)}
+  .item-body > div:last-child{border-bottom:none}
+  .item-head,.item-body > div,.card,.figure,.action{padding-left:var(--space-4);padding-right:var(--space-4)}
+  .stat .num{font-size:var(--font-size-xl)}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="页面导航">
+  <div class="wrap">
+    <ul>
+      <li><a href="#conclusion">结论</a></li>
+      <li><a href="#grades">证据等级</a></li>
+      <li><a href="#matrix">11 条矩阵</a></li>
+      <li><a href="#frameworks">三张框架图</a></li>
+      <li><a href="#items">逐条核对</a></li>
+      <li><a href="#fixes">事实纠正</a></li>
+      <li><a href="#tension">一处张力</a></li>
+      <li><a href="#actions">5 条行动</a></li>
+      <li><a href="#timeline">时间线</a></li>
+      <li><a href="#sources">来源</a></li>
+      <li><a href="#method">方法与边界</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">口播核对与分析 · 2026-10-23 · 对象：一段约 5000 字的转述口播（作者自述「有的是曾鸣说的，也不全是」）</p>
+    <h1>曾鸣「AI 时代」分享口播核对：哪些是曾鸣说的，哪些是作者加的</h1>
+    <p class="lede">结论先说：口播的<strong>骨架</strong>（应用层爆发、AI 对结果负责、智能复利、岗位变任务、一人公司是阶段性产物、情绪价值）都能在曾鸣 2025–2026 年的公开发言里找到原话；<strong>血肉</strong>（菜市场比喻、放大器、噪音与金牌团队、三环组织、两个原因、分身）在本次核对的公开材料中没有找到直接依据，暂按作者延伸处理，归属待核。另有 5 处人名、机构、数字需要纠正，1 处背景口径需补充。</p>
+    <div class="stats" role="list" aria-label="判定统计">
+      <div class="stat direct" role="listitem"><div class="num">3</div><div class="lab">直接支持 · 原话明确表达该命题</div></div>
+      <div class="stat limited" role="listitem"><div class="num">5</div><div class="lab">有限支持 · 方向有原话，表述比原话满</div></div>
+      <div class="stat author" role="listitem"><div class="num">2</div><div class="lab">作者延伸 · 本次未找到直接依据，归属待核</div></div>
+      <div class="stat unverified" role="listitem"><div class="num">1</div><div class="lab">暂未核实 · 公开材料未找到出处</div></div>
+      <div class="stat fix" role="listitem"><div class="num">5</div><div class="lab">事实纠正 · 人名 / 机构 / 数字</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="conclusion">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>先看结论</h2>
+      <p>页面不判断观点「对不对」，只判断三件事：原话究竟支持什么、作者额外推导了什么、读者能用什么证据判断自己是否适用。</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>1 · 曾鸣的核心命题被转述得基本准确</h3>
+        <p>「工业时代规模经济、互联网时代网络效应、AI 时代智能复利」是曾鸣在 2026 年 WAIC 的原话。「AI 能否对结果负责」对应他新书里的「60 分奇点」。「组织的基本单元是任务」「一人公司是阶段性的产物」「一定会有分工合作」都出自张小珺《商业访谈录》第 153 期的官方文稿。</p>
+      </div>
+      <div class="card">
+        <h3>2 · 最生动的部分多数未找到曾鸣依据</h3>
+        <p>菜市场与餐厅的比喻、「放大器放大一万倍到一亿倍」、「噪音」导致金牌团队崩、核心层/中间层/外围层三环、「两个原因」、「每个员工都是你的分身」，在本次核对的公开材料里都没有找到曾鸣原话。作者在开头和结尾两次声明有个人观点，这些部分最可能就是，但口播作者看的那场分享可能包含本页未获取的内容。</p>
+      </div>
+      <div class="card">
+        <h3>3 · 有两处比原话更满，一处内部张力</h3>
+        <p>「一人公司逻辑不成立」比曾鸣的「阶段性产物」更满；「网站和 App 正在失效」没有数据，曾鸣说的是「下一个最大机会是浏览器式入口」且「Agent OS 属更远阶段」。结尾「人人同一起跑线」与第四点「越用越强、强者恒强」存在张力，第 7 节单独讨论。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="grades">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>证据等级与时间层级怎么读</h2>
+      <p>每条观点给一个<strong>证据等级</strong>和一个<strong>时间层级</strong>（说的是现状、趋势还是预测）。<strong>证据等级只评该条的核心命题</strong>，不评整段口播；口播在核心命题之外多说的部分，统一写在每张卡的「作者延伸」栏，矩阵里也单列一列。「未找到原话」不等于「曾鸣从未说过」，准确说法是「在本次核对的公开材料中未找到直接依据」。这条限定贯穿全页。</p>
+    </div>
+    <div class="grid">
+      <div class="card legend direct"><h3><span class="tag tag-direct">直接支持</span></h3><p>核心命题有曾鸣公开原话明确支持。该条口播其余部分仍可能有延伸或省略，见「作者延伸」栏。</p></div>
+      <div class="card legend limited"><h3><span class="tag tag-limited">有限支持</span></h3><p>核心命题的方向有原话支持，但命题本身的表述、比例或归因已经超出了原话。</p></div>
+      <div class="card legend author"><h3><span class="tag tag-author">作者延伸</span></h3><p>本次材料未找到直接依据的框架或比喻，暂按作者延伸处理、归属待核；需要独立论证，不能当作曾鸣说的。</p></div>
+      <div class="card legend unverified"><h3><span class="tag tag-unverified">暂未核实</span></h3><p>口播称是曾鸣说的，但本次核对的公开材料里没有找到，也没有找到相反证据。</p></div>
+    </div>
+    <p class="muted legend-note">时间层级三档：<span class="tag tag-time">当前观察</span> 已经发生、可以看到的变化 · <span class="tag tag-time">趋势判断</span> 正在形成、方向明确但程度未定 · <span class="tag tag-time">未来预测</span> 对几年后的推演，证据类型是推理不是数据。</p>
+  </div>
+</section>
+
+<section id="matrix">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>11 条判定矩阵</h2>
+      <p>证据等级和条形只评「核心命题」一栏；「作者延伸」列写的是同一条口播里超出原话的部分，两列要一起读。条形长度（直接 100%、有限 60%、作者延伸 30%、暂未核实 15%）只是视觉辅助，不是测量值。</p>
+    </div>
+    <div class="table-scroll table-matrix">
+      <table>
+        <caption class="visually-hidden">11 条口播观点的证据等级、时间层级、作者延伸与事实纠正</caption>
+        <thead><tr><th>#</th><th>口播观点（核心命题）</th><th>证据等级（评核心命题）</th><th>支持度</th><th>时间层级</th><th>作者延伸的部分</th><th>需纠正</th></tr></thead>
+        <tbody>
+          <tr><td class="nowrap">1</td><td>AI 应用层大爆发，模型公司卖 token 是基建</td><td><span class="tag tag-direct">直接支持</span></td><td><div class="bar bar-direct" aria-hidden="true"><span style="width:100%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>菜市场 / 餐厅比喻；「基建层已经完成」比「基本完成」满</td><td>—</td></tr>
+          <tr><td class="nowrap">2</td><td>Agent 三步：调工具 → 拆解长任务 → 为结果负责</td><td><span class="tag tag-limited">有限支持</span></td><td><div class="bar bar-limited" aria-hidden="true"><span style="width:60%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>「三步」分法本次材料未找到，暂按作者整理；第三步对应曾鸣的「60 分奇点」</td><td>「Groq 的 bot」疑似 xAI 的 Grok</td></tr>
+          <tr><td class="nowrap">3</td><td>网站和 App 正在失效，会出现 Agent OS</td><td><span class="tag tag-author">作者延伸</span></td><td><div class="bar bar-author" aria-hidden="true"><span style="width:30%"></span></div></td><td><span class="tag tag-time">未来预测</span></td><td>「失效」是体感推断无数据；曾鸣说 Agent OS 属更远阶段</td><td>—</td></tr>
+          <tr><td class="nowrap">4</td><td>未来壁垒是智能复利；越用越聪明；黑洞效应</td><td><span class="tag tag-direct">直接支持</span></td><td><div class="bar bar-direct" aria-hidden="true"><span style="width:100%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>「AI 与 AI 对接无损」未找到依据，暂按作者假设；个人用 Codex 越久越好用是体感</td><td>「想了三五年」原话是「琢磨了两三年」</td></tr>
+          <tr><td class="nowrap">5</td><td>放大器逻辑：网红是网络效应放大器，AI 放大一万倍到一亿倍</td><td><span class="tag tag-author">作者延伸</span></td><td><div class="bar bar-author" aria-hidden="true"><span style="width:30%"></span></div></td><td><span class="tag tag-time">未来预测</span></td><td>「放大器」框架本次材料未找到；倍数是修辞</td><td>—</td></tr>
+          <tr><td class="nowrap">6</td><td>吃到红利的人：高能动性 + 学习力；高认知碾压经验</td><td><span class="tag tag-limited">有限支持</span></td><td><div class="bar bar-limited" aria-hidden="true"><span style="width:60%"></span></div></td><td><span class="tag tag-time">当前观察</span></td><td>「从 Meta 挖人总结出来」归因偏强；曾鸣只提到「top researchers 转会费那么高」</td><td>无；Meta 挖人金额口播未提，见背景补充</td></tr>
+          <tr><td class="nowrap">7</td><td>缺点也被放大叫噪音；金牌团队崩；一人公司逻辑不成立</td><td><span class="tag tag-limited">有限支持</span></td><td><div class="bar bar-limited" aria-hidden="true"><span style="width:60%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>「噪音」在曾鸣那里指判断外界信号；「金牌团队崩」未找到；「不成立」比「阶段性」满</td><td>—</td></tr>
+          <tr><td class="nowrap">8</td><td>岗位制变任务制，AI 原生组织按任务定义能力组合</td><td><span class="tag tag-direct">直接支持</span></td><td><div class="bar bar-direct" aria-hidden="true"><span style="width:100%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>「岗位可能就不存在了」原话带「可能」，口播省略了</td><td>—</td></tr>
+          <tr><td class="nowrap">9</td><td>工作流组织三环；任务认领制替代分配制；OKR 类比</td><td><span class="tag tag-limited">有限支持</span></td><td><div class="bar bar-limited" aria-hidden="true"><span style="width:60%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>核心层 / 中间层 / 外围层三环未找到；曾鸣 2025 年另有一套三层</td><td>—</td></tr>
+          <tr><td class="nowrap">10</td><td>公司投了 AI 效率没升的两个原因；每个员工都是你的分身</td><td><span class="tag tag-unverified">暂未核实</span></td><td><div class="bar bar-unverified" aria-hidden="true"><span style="width:15%"></span></div></td><td><span class="tag tag-time">当前观察</span></td><td>「两个原因」与「分身」未找到原话；方向与「旧流程叠加 AI 只是阶段性方案」一致</td><td>MIT 95% 数据只能作旁证，须标局限</td></tr>
+          <tr><td class="nowrap">结</td><td>模型是通用生产资料，人人同一起跑线；情绪价值</td><td><span class="tag tag-limited">有限支持</span></td><td><div class="bar bar-limited" aria-hidden="true"><span style="width:60%"></span></div></td><td><span class="tag tag-time">趋势判断</span></td><td>「同一起跑线」未找到曾鸣依据，暂按作者观点，与第 4 条有张力</td><td>作者身份：原湖畔大学教育长，不是武汉大学</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="frameworks">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>三张框架图：把曾鸣原话和作者推演画开</h2>
+      <p>实线框是整理稿记录的曾鸣观点，虚线框是口播里有、本次材料未找到依据的部分（暂按作者整理，归属待核）。两条路径不是同一套说法，不要拼在一起当作曾鸣的模型。</p>
+    </div>
+    <div class="grid figures">
+      <figure class="figure">
+        <div class="svg-wrap"><svg viewBox="0 0 520 165" role="img" aria-labelledby="fig1t fig1d">
+          <title id="fig1t">三个时代的定义性经济规律</title>
+          <desc id="fig1d">工业时代规模经济，互联网时代网络效应，AI 时代智能复利；箭头依次连接。</desc>
+          <rect x="10" y="60" width="150" height="90" rx="10" class="svg-box"/>
+          <text x="85" y="92" text-anchor="middle" class="svg-text">工业时代</text>
+          <text x="85" y="114" text-anchor="middle" class="svg-text-sm">规模经济</text>
+          <text x="85" y="134" text-anchor="middle" class="svg-text-xs">流水线 · 厂房</text>
+          <path d="M160 105 L180 105" class="svg-line"/><polygon points="180,100 190,105 180,110" class="svg-arrow"/>
+          <rect x="190" y="60" width="150" height="90" rx="10" class="svg-box"/>
+          <text x="265" y="92" text-anchor="middle" class="svg-text">互联网时代</text>
+          <text x="265" y="114" text-anchor="middle" class="svg-text-sm">网络效应</text>
+          <text x="265" y="134" text-anchor="middle" class="svg-text-xs">用户越多越有价值</text>
+          <path d="M340 105 L360 105" class="svg-line-accent"/><polygon points="360,100 370,105 360,110" class="svg-arrow-accent"/>
+          <rect x="370" y="60" width="140" height="90" rx="10" class="svg-box svg-box-direct"/>
+          <text x="440" y="92" text-anchor="middle" class="svg-text">AI 时代</text>
+          <text x="440" y="114" text-anchor="middle" class="svg-text-sm">智能复利</text>
+          <text x="440" y="134" text-anchor="middle" class="svg-text-xs">干得越多越聪明</text>
+        </svg></div>
+        <figcaption>图 1 · 三时代规律。曾鸣 2026-07 WAIC 原话：「企业竞争的核心逻辑正从工业时代的规模经济、互联网时代的网络效应，转向 AI 时代的智能复利」。口播转述准确。</figcaption>
+      </figure>
+      <figure class="figure">
+        <div class="svg-wrap"><svg viewBox="0 0 520 240" role="img" aria-labelledby="fig2t fig2d">
+          <title id="fig2t">智能复利飞轮与 60 分奇点</title>
+          <desc id="fig2d">AI 独立完成任务，得到真实反馈，能力提升，承接更难任务，循环。门槛是 60 分奇点：AI 能对结果负责、人不再兜底。</desc>
+          <circle cx="200" cy="120" r="78" class="svg-line-accent"/>
+          <rect x="140" y="12" width="120" height="34" rx="8" class="svg-box svg-box-accent"/><text x="200" y="34" text-anchor="middle" class="svg-text-sm">独立完成任务</text>
+          <rect x="268" y="103" width="120" height="34" rx="8" class="svg-box svg-box-accent"/><text x="328" y="125" text-anchor="middle" class="svg-text-sm">拿到真实反馈</text>
+          <rect x="140" y="194" width="120" height="34" rx="8" class="svg-box svg-box-accent"/><text x="200" y="216" text-anchor="middle" class="svg-text-sm">能力提升</text>
+          <rect x="12" y="103" width="120" height="34" rx="8" class="svg-box svg-box-accent"/><text x="72" y="125" text-anchor="middle" class="svg-text-sm">承接更难任务</text>
+          <polygon points="272,62 284,70 270,76" class="svg-arrow-accent"/>
+          <polygon points="130,178 116,172 128,164" class="svg-arrow-accent"/>
+          <rect x="400" y="20" width="112" height="78" rx="8" class="svg-box svg-box-direct"/>
+          <text x="456" y="44" text-anchor="middle" class="svg-text-sm">门槛：60 分奇点</text>
+          <text x="456" y="62" text-anchor="middle" class="svg-text-xs">AI 能对结果负责</text>
+          <text x="456" y="78" text-anchor="middle" class="svg-text-xs">人不再中途兜底</text>
+          <path d="M400 60 L392 60" class="svg-line"/>
+        </svg></div>
+        <figcaption>图 2 · 智能复利飞轮。曾鸣：「反馈闭环有两个前提条件：第一，AI 是否能够端到端完成一项任务。第二，AI 是否能够对结果负责。」「只要人在中间环节不断介入，AI 的学习过程就会被打断。」（36 氪 WAIC 访谈）口播第 2 点「第三步为一件事负责」对应这里的门槛。</figcaption>
+      </figure>
+      <figure class="figure">
+        <div class="svg-wrap"><svg viewBox="0 0 520 232" role="img" aria-labelledby="fig3t fig3d">
+          <title id="fig3t">口播的 Agent 三步框架（暂按作者整理，归属待核）与整理稿记录的曾鸣入口判断</title>
+          <desc id="fig3d">上行虚线框：口播的调用工具、拆解长任务、为结果负责三步，本次材料未找到依据，暂按作者整理、归属待核。下行实线框：整理稿记录的曾鸣观点，浏览器式入口、统一 agent 标准、卡在信任、Agent OS 更远（含概括）。</desc>
+          <text x="12" y="22" class="svg-text-xs">口播三步框架（第 2 点，暂按作者整理，归属待核）——虚线</text>
+          <rect x="12" y="32" width="150" height="56" rx="8" class="svg-box svg-box-author svg-box-dash"/><text x="87" y="56" text-anchor="middle" class="svg-text-sm">① 调用工具</text><text x="87" y="74" text-anchor="middle" class="svg-text-xs">完成一个具体任务</text>
+          <path d="M162 60 L178 60" class="svg-line-dash"/><polygon points="178,55 188,60 178,65" class="svg-arrow"/>
+          <rect x="188" y="32" width="150" height="56" rx="8" class="svg-box svg-box-author svg-box-dash"/><text x="263" y="56" text-anchor="middle" class="svg-text-sm">② 自主拆解长任务</text><text x="263" y="74" text-anchor="middle" class="svg-text-xs">跨步骤执行</text>
+          <path d="M338 60 L354 60" class="svg-line-dash"/><polygon points="354,55 364,60 354,65" class="svg-arrow"/>
+          <rect x="364" y="32" width="146" height="56" rx="8" class="svg-box svg-box-author svg-box-dash"/><text x="437" y="56" text-anchor="middle" class="svg-text-sm">③ 为结果负责</text><text x="437" y="74" text-anchor="middle" class="svg-text-xs">作者称「尚未突破」</text>
+          <path d="M437 88 L437 120" class="svg-line-dash"/>
+          <text x="437" y="112" text-anchor="end" class="svg-text-xs">对应曾鸣「60 分奇点」→</text>
+          <text x="12" y="150" class="svg-text-xs">曾鸣观点（第 153 期整理稿、LeaderClub 整理）——实线</text>
+          <rect x="12" y="160" width="150" height="56" rx="8" class="svg-box svg-box-direct"/><text x="87" y="184" text-anchor="middle" class="svg-text-sm">浏览器式入口</text><text x="87" y="202" text-anchor="middle" class="svg-text-xs">「下一个最大的机会」</text>
+          <path d="M162 188 L178 188" class="svg-line-accent"/><polygon points="178,183 188,188 178,193" class="svg-arrow-accent"/>
+          <rect x="188" y="160" width="150" height="56" rx="8" class="svg-box svg-box-direct"/><text x="263" y="184" text-anchor="middle" class="svg-text-sm">统一 agent 标准</text><text x="263" y="202" text-anchor="middle" class="svg-text-xs">「卡在信任上」（LeaderClub 整理）</text>
+          <path d="M338 188 L354 188" class="svg-line-accent"/><polygon points="354,183 364,188 354,193" class="svg-arrow-accent"/>
+          <rect x="364" y="160" width="146" height="56" rx="8" class="svg-box"/><text x="437" y="184" text-anchor="middle" class="svg-text-sm">Agent OS</text><text x="437" y="202" text-anchor="middle" class="svg-text-xs">更远的阶段（整理稿概括）</text>
+        </svg></div>
+        <figcaption>图 3 · 两条路径分开画。虚线是口播三步框架（暂按作者整理，归属待核），实线是整理稿记录的曾鸣观点（含整理者概括），只有「为结果负责」一格两者重合。口播第 3 点把「Agent OS」说成下一步要出现的新生态，曾鸣的顺序是先入口与标准，Agent OS 更远；「网站和 App 正在失效」在两条路径里都没有出处，是作者体感。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="items">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>逐条核对：口播说法 / 曾鸣原话 / 作者延伸 / 事实纠正 / 经营者启示</h2>
+      <p>「曾鸣原话」栏只放整理稿或官方文稿摘录中以引语形式记录的句子，每句标出处与日期；第三方概括、书评定义一律不加引号，并写明「概括」。本页没有直接听原音频，引语以整理稿为准。</p>
+    </div>
+
+    <article class="item" id="item-1">
+      <div class="item-head"><h3>观点 1 · AI 会在应用层大爆发，模型公司是卖 token 的基建</h3><span class="tag tag-direct">直接支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>用 Codex、Claude Code、WorkBuddy、豆包本质是在用通用模型，模型公司卖 token、属于基建。像菜市场卖菜，应用层像餐厅、大排档。基建层已经完成，接下来应用层百花齐放。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「基于第一阶段的积累，现在该做的，就是第二阶段该做的事：让应用大爆发。」<span class="quote-src">张小珺《商业访谈录》第 153 期，2026-09-03（BBX 整理）</span></p></blockquote><blockquote><p>「它们更可能成为 AI 时代的『电网』。」「AI 的第二阶段会持续 8 到 10 年，应用层有足够长的窗口。」<span class="quote-src">LeaderClub 整理，2026-09-09</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>菜市场 / 餐厅比喻本次材料未找到，暂按作者比喻处理；整理稿里曾鸣用的是「电网」。</li><li>「基建层已经完成」比原话「2026 年是第一阶段基本完成、第二阶段开场」更满；曾鸣还说「原生应用与基础设施成熟之间，还存在一个过渡性阶段」。</li><li>「电网」是战略类比，不是已验证的商业结局；8–10 年是窗口估计，不是精确期限。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><ul><li>口播里的「Workbody」应为腾讯 <strong>WorkBuddy</strong>（2026-03-09 上线的桌面智能体）。</li><li>「豆瓣」应为字节的 <strong>豆包</strong>（语音转写误差）。</li></ul></div>
+        <div class="insight"><h4>经营者启示</h4><p>「应用层有机会」不等于「所有应用层公司都有机会」。曾鸣同一场访谈强调「真正的机会在于完整、复杂、高价值的任务，单一步骤工具容易触及上限」。判断自己的产品时问：它完成的是一个完整任务，还是一个步骤？</p></div>
+        <div><h4>读者容易误读的点</h4><p>口播把三家产品并列为「通用模型」，实际 WorkBuddy 和 Claude Code 已经是应用层产品，只是底层调用模型。比喻里餐厅和菜市场的边界，在真实产业里是模糊的。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-2">
+      <div class="item-head"><h3>观点 2 · Agent 能力三步：调工具 → 自主拆解长任务 → 为一件事负责</h3><span class="tag tag-limited">有限支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>第一步调工具完成具体任务，第二步自主拆解跨步骤长任务，第三步「能够为一件事情负责」尚未突破；负责直接关联信任。「Groq 的 bot」（疑似指 Grok，待核原音频）已在朝信任层面努力。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「只有形成反馈闭环，AI 才能自主学习并不断提升。但反馈闭环有两个前提条件：第一，AI 是否能够端到端完成一项任务。第二，AI 是否能够对结果负责。」<span class="quote-src">36 氪 WAIC 访谈，2026-07</span></p></blockquote><blockquote><p>「你敢不敢把一件重要的事交给 Agent？」「这些东西都需要一个新的服务商来建立信任。」<span class="quote-src">第 153 期（BBX 整理）</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>「三步」分法在本次材料里没有找到，暂按作者的整理框架处理。整理稿记录的曾鸣框架是「Agent 的本质是独立围绕目标完成任务」加「60 分奇点」。</li><li>「负责」要再拆三层：执行结果、验证结果、承担商业或法律责任。AI 输出看似完整，不代表具备可靠的结果责任能力。</li><li>「Groq 的 bot 用后感受很好」（疑似指 Grok）是作者个人体验，不是对「负责」能力的证据。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>口播说的「Groq 的 bot」结合上下文（各大模型都在突破信任）疑似指 xAI 的 <strong>Grok</strong>；Groq 是另一家名称相近的公司。需核对原音频确认。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>曾鸣的「60 分奇点」是一个可操作的门：把你交给 AI 的每类任务分成「人仍在兜底」和「AI 独立对结果负责」两类。只有后一类才会累积智能复利。多数人现在的任务全部在前一类。</p></div>
+        <div><h4>读者容易误读的点</h4><p>口播说第二步「我们最近已经能感受到进入了」，这是个人体感；曾鸣说的是行业在 2026 年进入 Agent 阶段，没有说长任务拆解已经普遍可靠。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-3">
+      <div class="item-head"><h3>观点 3 · 网站和 App 正在失效，会出现 Agent OS 新生态</h3><span class="tag tag-author">作者延伸</span><span class="tag tag-time">未来预测</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>你最近一年装了几个 App？打开网站的频率是不是越来越低？有了 AI 之后对原有载体依赖越来越小，未来可能出现 Agent OS 这样的新平台。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「我完全没有看到『AI 时代雅虎』的雏形，所以下一个最大的机会就是一个类似浏览器的机会：把 agent 的标准统一起来，让用户用很简单的方法就能调用 agent。」<span class="quote-src">第 153 期（知乎整理）</span></p></blockquote><p>对「Agent OS」，第三方整理稿（人人都是产品经理 42 条判断，第 18 条）概括他的判断为：属于更远的阶段，需等 Agent 供给与调用方式成熟后再谈。这是整理者概括，不是逐字引语。</p></div>
+        <div><h4>作者延伸</h4><ul><li>「网站和 App 正在失效」在本次核对的材料里没有出处，也没有数据。更稳的表述是「部分交互入口可能被 Agent 重构」。</li><li>作者把「Agent OS」当作下一步要出现的生态；曾鸣的顺序是先有入口级产品与标准（他估计三年内可能出现），Agent OS 更远。</li><li>「装了几个 App」是针对听众的反问，不是统计。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>无人名或数字错误。需要纠正的是时间顺序：曾鸣把 Agent OS 放在入口与标准之后。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>曾鸣说入口「卡在信任上」。对小团队，这意味着先在一个垂直任务上建立「交给它就放心」的记录，比追 Agent OS 概念更接近机会。</p></div>
+        <div><h4>读者容易误读的点</h4><p>容易把「作者预测」听成「曾鸣预测」。整段里能在本次材料中找到曾鸣依据的只有「入口」「标准」「信任」三个词，其余归属待核。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-4">
+      <div class="item-head"><h3>观点 4 · 未来的壁垒是智能复利：越用越聪明，强者越强</h3><span class="tag tag-direct">直接支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>过去做项目讲复制、讲人效，现在复制变简单，人效计算失效。曾鸣想了三五年给出答案：智能复利。工业时代规模经济，互联网时代网络效应，AI 时代智能复利。系统干得越多越强，历史数据都是资产。人越干越累，AI 越干越兴奋。人与人对接效率最低，AI 与 AI 对接可以无损。飞轮转起来是黑洞效应。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「企业竞争的核心逻辑正从工业时代的规模经济、互联网时代的网络效应，转向 AI 时代的智能复利。」<span class="quote-src">WAIC 2026，上观新闻 2026-07-19</span></p></blockquote><p>新书《智能》书评对概念的概括（非逐字发言，腾讯新闻 2026-09-22）：智能复利指 AI 时代的增长不仅让企业变大，还让系统本身变聪明，每一次业务实践产生的数据与经验都在反哺系统，使下一次处理更优。</p><blockquote><p>「这是我琢磨了两三年的问题。」<span class="quote-src">第 153 期（BBX 整理）</span></p></blockquote><p>上观新闻 WAIC 报道转述（记者表述，非逐字引语，2026-07-19）：当智能复利跨越特定任务的复杂性奇点后，会产生不可逆的优势积累。</p></div>
+        <div><h4>作者延伸</h4><ul><li>「AI 与 AI 对接无损，因为交流方式是上下文文档、流程、Agent，全部数据化」在本次材料里没有找到对应说法，暂按作者假设处理。实际多 Agent 协作里的上下文丢失、误差传递是已知问题。</li><li>「越用越聪明」至少有四种来源：模型学习、上下文积累、工作流优化、使用者经验增长。个人用 Codex 越久越顺手，多数来自后三种，不是模型在从你的使用中学习。</li><li>「买了 300 部手机做矩阵，850 元买、200 元卖」是作者自述，无法独立核验，只能作为个人经历。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>口播说曾鸣「想了三五年」，整理稿原话是「琢磨了两三年」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>智能复利的前提是「AI 独立对结果负责、人不再兜底」。一人公司最容易实现的复利不是模型变聪明，而是把每次任务的输入、验收标准、失败案例沉淀成可复用的上下文和工作流。这是能验证的（见行动 2）。</p></div>
+        <div><h4>读者容易误读的点</h4><p>搜索摘要显示曾鸣在 2026 年访谈中认为黑洞效应不会导致赢者通吃、会有多个智能体存在（原页本次未打开，属二手概括）。口播的「恐怖的黑洞效应」比这一说法更满。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-5">
+      <div class="item-head"><h3>观点 5 · 放大器逻辑：网红靠网络效应放大，AI 会放大到一万倍、一亿倍</h3><span class="tag tag-author">作者延伸</span><span class="tag tag-time">未来预测</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>网红直播收打赏不是「赛道选得好」，本质是网络效应的放大器。街头卖菜刀一次营销十几人，直播间十万场观等于同时营销十万人。AI 会把放大效应做到一万倍甚至一亿倍，落在 Agent 和智能复利上。</p></div>
+        <div><h4>曾鸣原话</h4><p>本次核对的公开材料里没有「放大器」框架，也没有网红或直播间的论述。最接近的是新书书评概括了个体被智能体放大的方向（书评作者概括，非曾鸣逐字引语）。2025 年 3 月公开课提到一位 CEO 用抖音做达人营销，是案例不是框架。</p></div>
+        <div><h4>作者延伸</h4><ul><li>整个「放大器」框架本次材料未找到直接依据，暂按作者分析框架处理，归属待核。它可以成立，但要补三样东西：放大的对象是什么（触达、效率、传播还是利润）、比较基线是什么、适用条件是什么。否则四个指标会混成一个。</li><li>「一万倍、一亿倍」是修辞，不是测算。</li><li>「十万场观等于同时营销十万人」把曝光等同于营销触达，忽略了停留、转化。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>无具体事实错误。需要标明的是归属：这一点不要写成「曾鸣说」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>如果一定要用放大器思路，先问放大的是什么。对服务型一人公司，AI 最先放大的是「交付产能」，不是「流量」。产能放大了但没有买家，等于零。</p></div>
+        <div><h4>读者容易误读的点</h4><p>口播在这一段和第 4 点之间说「接上一个观点」，让人以为是曾鸣框架的延续。本次材料里找不到它是曾鸣框架延续的依据，归属待核。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-6">
+      <div class="item-head"><h3>观点 6 · 谁能吃到红利：高能动性 + 学习力；高认知碾压经验</h3><span class="tag tag-limited">有限支持</span><span class="tag tag-time">当前观察</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>曾鸣从 Meta 去年高价挖人才和几家优秀公司创始人身上总结两个特点：高能动性、学习力。顶尖人才把机器学习的方法用在自己身上：有反馈、结构化、从第一性原理出发。现在是高认知碾压高经验，经验会被打上「老登」标签。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「为什么这半年硅谷最流行的词叫 high agency？」「本质是自驱。」<span class="quote-src">第 153 期官方文稿摘录</span></p></blockquote><blockquote><p>「第一，底层原因是元认知能力强。何为元认知能力强？即能抽象建模，洞察本质，进行第一性原理思考。」「由于高认知能力可以迅速超越经验，顶尖人才的时间稀缺性部分被打破。」<span class="quote-src">曾鸣书院公开课 2025-03-27（笔记侠整理）</span></p></blockquote><blockquote><p>「『老登』这个词特别有意思。」「能够转化成知识的经验都不再有价值——它都被大模型吸收了。」<span class="quote-src">第 153 期（BBX 整理）</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>「从 Meta 挖人总结出来」归因偏强。公开材料里曾鸣只问「为什么这些 top researchers 转会费那么高」，人才特质的论述来自 2025 年公开课和 2026 年访谈，不是 Meta 案例推出来的。</li><li>「把机器学习方法用在自己身上」这个说法未找到原话，暂按作者解释处理，归属待核。</li></ul></div>
+        <div class="fixbox"><h4>背景口径补充（口播未提金额，不算纠正）</h4><p>口播只说「Meta 去年高价去挖人才」。公开报道的金额要分三层说：Sam Altman 2025-06 称 Meta 开出「1 亿美元签约奖金」；Meta CTO 称夸大、被挖者说是多年股票（TechCrunch 2025-06-27）；2025-08-21 Meta 暂停相关招聘（CNBC）。不能写成确定的「1 亿美元 offer」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>「高认知超越经验」只对「能转化成知识的经验」成立。曾鸣的原话有这个限定。你的客户关系、失败记录、行业默契不在大模型里，这部分经验仍是壁垒。</p></div>
+        <div><h4>读者容易误读的点</h4><p>「经验主义失效」容易听成「所有经验无用」。曾鸣说的是被模型吸收的那部分。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-7">
+      <div class="item-head"><h3>观点 7 · 放大器的弊端是噪音；金牌团队崩；所以一人公司逻辑不成立</h3><span class="tag tag-limited">有限支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>优点被放大、缺点也被放大，缺点叫噪音，对团队可能是致命打击。曾鸣举例一家公司招了几个金牌得主最后团队崩了。文明进步的基础是分工和合作，所以一人公司（OPC）逻辑在 AI 背景下不成立，个人内核稳定很重要。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「『一人公司』是阶段性的产物。」「所以一定要有组织，一定会有分工，一定会有合作。」<span class="quote-src">第 153 期官方文稿摘录；BBX 整理</span></p></blockquote><blockquote><p>「一个人有了 AI 帮助，能干原来几十个人的活。但一个人能干的事永远有限，必须有分工和合作。每个人可以成为六边形战士，但要和组织里其他六边形战士合作，才能创造更大的价值。」<span class="quote-src">腾讯新闻视频文字稿 2026-09-11</span></p></blockquote><blockquote><p>「利他、同理心和自我逐渐变小，大概是走向卓越必不可少的因素。」<span class="quote-src">第 153 期官方文稿摘录</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>「噪音」在曾鸣那里是「判断信号跟噪音」，指对外界变化的感知，不是团队内耗。把缺点叫噪音在本次材料里没有对应说法，暂按作者转义处理，归属待核。</li><li>「招了几个金牌得主团队崩了」的例子在本次核对的材料里没有找到。找到的相近表述是「当一个组织崩得那么紧，又非常高压，要做一件特别大的创新是非常难的事情」，说的是组织压力不是人才噪音。在找到出处前应标为未核实。</li><li>「一人公司逻辑不成立」比原话「阶段性产物」更满。「阶段性」意味着现在成立、长期要演进。分工协作也不必发生在同一家公司内部：外部 Agent、专业服务商、按需合作网络都是分工。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>「曾鸣举例金牌团队崩」应改为「作者转述，未找到出处」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>曾鸣的「自我变小」比「内核稳定」更具体：缺点被放大的真正风险是感知失真。一人公司的解法不一定是组建团队，可以是固定的外部复核人和明确的分工接口。</p></div>
+        <div><h4>读者容易误读的点</h4><p>这一段是全篇最容易把作者立场当成曾鸣结论的地方。作者明确说「我始终站在团队化、协作化的状态理解这事」，这是作者立场。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-8">
+      <div class="item-head"><h3>观点 8 · 创造性革命：岗位制变任务制，AI 原生组织按任务定义能力组合</h3><span class="tag tag-direct">直接支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>公司制度是工业时代的组织创新，基本单元是岗位、流程、部门、汇报线。传统组织先想这个人属于哪个部门、向谁汇报；AI 原生组织先想要完成什么任务、需要什么能力组合、Agent 能补多少、人做什么。从岗位制度到任务制度。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「岗位是公司最基本的运行单元。我们应聘都是应聘一个岗位……但是 AI 时代组织的基本单元是任务，是要被解决的事情。」「岗位可能就不存在了。」<span class="quote-src">第 153 期官方文稿摘录</span></p></blockquote><blockquote><p>「AI 原生的组织会从第一天开始就去定义那个任务、拆解那个任务、再分配那个任务。硅基员工和碳基员工都是围绕着任务的流转在协同的。」<span class="quote-src">第 153 期（知乎整理）</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>口播把「岗位可能就不存在了」说成「没有岗位制度了」，省略了「可能」。</li><li>「公司制度是工业时代的组织创新」与曾鸣「科层制公司对应工业时代的规模化生产」一致。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>无。这是全篇转述最准确的一段。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>一人公司天然就是任务制。曾鸣的框架对你的价值在于「定义任务、拆解任务、分配任务」三步里，第一步最值钱。花时间写清楚任务的目标、输入、验收标准和责任人（人或 Agent），比多试几个工具更能产生复利。</p></div>
+        <div><h4>读者容易误读的点</h4><p>「任务制」不等于「没有管理」。曾鸣 2025 年原话是「不需要管理，需要的是激励、对齐」，对齐仍是一种组织工作。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-9">
+      <div class="item-head"><h3>观点 9 · 工作流组织：核心层 / 中间层 / 外围层三环，任务认领制替代分配制</h3><span class="tag tag-limited">有限支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>工作流组织是一环套一环：核心层定方向、定框架、拆任务；中间层认领任务再拆细；外围层处理具体任务。以 OpenAI 为例。传统组织是分配制加 KPI，工作流组织是认领制，没人认领的再分配。从静态汇报关系走向动态任务协作，像 OKR 之于 KPI。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「那人怎么组织起来？就是认领任务。现在大 lab 就是这样，任务发布出来，你能干你就接，你 deliver 结果就上线。」<span class="quote-src">第 153 期（知乎整理）</span></p></blockquote><blockquote><p>「真正的第一个 neo lab 是 OpenAI。」「所以 neo lab 的本质应该是 lab，不是公司。」「招人是感召来的。」<span class="quote-src">第 153 期（BBX 整理；官方文稿摘录）</span></p></blockquote><p>OKR：Solo Unicorn 整理稿（时间戳 01:44–01:49）概括他的观点为 OKR 容易变成 KPI，AI 时代更应关注目标与判断依据的对齐；截图字幕有「其实就是对齐 对齐我们的目标」「就以前叫战略规划 现在叫战略生成」，并提到 context not control。</p></div>
+        <div><h4>作者延伸</h4><ul><li>「核心层 / 中间层 / 外围层」三环在本次核对的材料里没有找到。曾鸣 2025 年 3 月讲过另一套三层：「AI 架构师、将 AI 模块化后分解的各个配合团队、日常工作中的硅基员工」。两套不是一回事，不能拼接后统称为曾鸣的组织设计。</li><li>「没人认领的再分配」本次材料未找到，暂按作者补充的操作细节处理，归属待核。</li><li>整理稿记录曾鸣说 OpenAI 是第一个 neo lab，本次材料里没有他描述 OpenAI 内部三环结构的内容。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>「三环」在本次材料中未找到，不应直接写成曾鸣的组织设计；暂标「作者组织模型，归属待核」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>认领制的前提是任务被清楚发布。曾鸣说「招人是感召来的」，对一人公司，这意味着你发出去的任务描述本身就是招募信：写得清楚，合作者和 Agent 都能接；写不清楚，只能自己做。</p></div>
+        <div><h4>读者容易误读的点</h4><p>「大 lab 就是这样」是曾鸣对前沿实验室的观察，不是对普通公司的建议。规模、人才密度、资金都不同。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-10">
+      <div class="item-head"><h3>观点 10 · 很多公司投了 AI 效率没升，两个原因；每个员工都是你的分身</h3><span class="tag tag-unverified">暂未核实</span><span class="tag tag-time">当前观察</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>曾鸣说有两个原因：一是没找到 AI 原生的产品和服务，只在原有基础上做加法；二是组织整体智能化不够，个人效率提升 50% 也被流程卡死。固化结构让公司觉得没人才、员工觉得怀才不遇。想象每个员工都是你的分身，拥有你的经验和认知。</p></div>
+        <div><h4>曾鸣原话</h4><p>「两个原因」这一表述在本次核对的材料里没有找到。方向一致的第三方概括有两处（都不是逐字引语）：42 条判断第 20 条概括为：在旧流程上叠加 AI 只是阶段性方案，企业应先重新拆解任务与协作；中信书院公开课整理稿概括为传统科层制信息差会被打破，实现 CEO 级信息与全员共享。「分身」一词未找到。</p></div>
+        <div><h4>作者延伸</h4><ul><li>「两个原因」可能是作者对直播内容的归纳，也可能出自本次未能获取的直播原文。暂按「作者归纳」标注，归属待核，找到原话再升级。</li><li>「每个员工都是你的分身」是比喻。最接近的曾鸣原话是 CEO 级信息共享给全员，重点在信息不在复制人。</li><li>「个人效率提升 50% 被流程卡死」是举例，不是数据。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>外部旁证：MIT NANDA 2025 年《GenAI Divide》初步报告称其样本中 95% 的组织未见可衡量回报。该报告样本小（52 家访谈、153 位高管问卷）、观察期约 6 个月、非同行评审、被多方批评。只能说明「特定样本里比例高」，不能外推为「全球 95% 企业 AI 项目失败」。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>一人公司没有「流程卡死个人」的问题，但有另一种版本：AI 提效后省下的时间没有变成收入。先验证客户愿不愿意为新交付付钱，再谈效率（见行动 4）。</p></div>
+        <div><h4>读者容易误读的点</h4><p>这一点整段用「曾鸣在分享的时候说」开头，读者会全部归到曾鸣名下。本页只能确认方向一致，不能确认措辞。</p></div>
+      </div>
+    </article>
+
+    <article class="item" id="item-end">
+      <div class="item-head"><h3>结语 · 模型是通用生产资料，人人同一起跑线；关键是用起来；情绪价值</h3><span class="tag tag-limited">有限支持</span><span class="tag tag-time">趋势判断</span></div>
+      <div class="item-body">
+        <div><h4>口播说法</h4><p>不必焦虑，大模型越来越强、会成为通用生产资料，我用豆包你也用豆包，差距不大，重要的是用起来。AI 加速信息效率、学习效率、认知。竞争力回到人身上：内核稳定、情绪稳定、企业文化、愿景。AI 解决大多数问题后人会更关注社交需求、情绪价值，像 Labubu、养猫养狗。</p></div>
+        <div><h4>曾鸣原话</h4><blockquote><p>「可能开心就成了必须品，情绪价值是必须品。」<span class="quote-src">第 153 期（BBX 整理）</span></p></blockquote><blockquote><p>「未来所有人努力的方向就是开发自己的创造力。」「不确定性就是最大的机会。」<span class="quote-src">第 153 期官方文稿摘录</span></p></blockquote></div>
+        <div><h4>作者延伸</h4><ul><li>「人人同一起跑线」本次材料未找到曾鸣依据，暂按作者观点处理。整理稿概括的曾鸣立场更接近相反方向：中国 AI 竞争容易同质化，追上公开能力只是入场券，对用户任务的理解才拉开差距（42 条判断第 38 条，整理者概括）。</li><li>「布置了一个 AI 助理每天筛信息」是作者个人做法。</li><li>Labubu（泡泡玛特）与养宠物的例子在本次材料里没有出现，曾鸣整理稿只有情绪价值一句。</li></ul></div>
+        <div class="fixbox"><h4>事实纠正</h4><p>口播开头说曾鸣是「武汉大学的教育长」。公开履历是：阿里巴巴集团总参谋长（2008–2017，媒体称首席战略官），<strong>湖畔大学</strong>（现湖畔创业研学中心）教育长，长江商学院创始教授之一。与武汉大学无关。</p></div>
+        <div class="insight"><h4>经营者启示</h4><p>「用起来」对，但要加一句：用在能对结果负责的任务上。只是会用工具，确实是同一起跑线；把任务交出去并累积记录，才开始拉开差距。</p></div>
+        <div><h4>读者容易误读的点</h4><p>见下一节「一处张力」。</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="fixes">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>5 处事实纠正清单 + 1 处背景补充</h2>
+      <p>多数是语音转写或口误，不影响论点，但转发前应改。背景补充不是口播的错误，只是把「高价」具体化。</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <caption class="visually-hidden">事实纠正清单</caption>
+        <thead><tr><th>#</th><th>口播原话</th><th>应为</th><th>依据</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>曾鸣是「武汉大学的教育长」</td><td>湖畔大学（现湖畔创业研学中心）教育长；阿里总参谋长 2008–2017；长江商学院创始教授</td><td>MBA 智库、腾讯新闻、虎嗅履历整理</td></tr>
+          <tr><td>2</td><td>「Groq 的 bot」</td><td>疑似 xAI 的 Grok（待核原音频）</td><td>上下文为「各大模型」；Groq 是另一家名称相近的公司</td></tr>
+          <tr><td>3</td><td>「Workbody」</td><td>腾讯 WorkBuddy（2026-03-09 上线）</td><td>量子位、CFM 快讯</td></tr>
+          <tr><td>4</td><td>「豆瓣这样的应用」</td><td>豆包（字节跳动）</td><td>上下文为通用模型应用；豆瓣不是模型产品</td></tr>
+          <tr><td>5</td><td>曾鸣「想了三五年」</td><td>「这是我琢磨了两三年的问题」</td><td>第 153 期整理稿</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted legend-note"><strong>背景补充（非纠正）</strong>：口播说 Meta「去年高价去挖人才」，没有给金额。公开口径分三层：Sam Altman 2025-06-17 称 Meta 开出 1 亿美元签约奖金；Meta CTO 回应称夸大、被挖者说是多年股票（TechCrunch 2025-06-27）；2025-08-21 Meta 暂停相关招聘（CNBC）。更高金额的其他媒体报道本次未核对原文，不列数字。</p>
+  </div>
+</section>
+
+<section id="tension">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>一处张力：「人人同一起跑线」与「强者恒强」</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>口播第 4 点说</h3>
+        <p>智能复利是飞轮，「一旦转起来就是恐怖的黑洞效应，聪明的越来越聪明，能力强的越来越强」。</p>
+      </div>
+      <div class="card">
+        <h3>口播结语说</h3>
+        <p>「我用豆包你也用豆包，本质上我们没有太大的差距」，「没有必要焦虑」。</p>
+      </div>
+      <div class="card">
+        <h3>怎么读</h3>
+        <p>两句不必然矛盾，但描述的是不同层面。工具层面人人相近；数据、分发渠道、工作流、判断能力仍然不同，复利发生在后者。整理稿概括的曾鸣说法是：追上公开能力只是入场券，对用户任务的理解才拉开差距（非逐字引语）。页面把它写成一个值得检验的张力，不判定谁推翻谁。对读者的含义：焦虑没必要，但「用起来就一样」也不成立。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="actions">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>给一人公司经营者的 5 条可检验行动</h2>
+      <p>目标不是证明某个宏观趋势正确，而是在 2–4 周内判断它对自己的业务有没有用。每条都有周期和通过条件；不通过就调整或放弃，不要只做不测。</p>
+    </div>
+
+    <div class="action">
+      <h3>行动 1 · 用一个真实任务验证 Agent，不先搭系统</h3>
+      <div class="meta"><span class="tag tag-time">周期 2 周</span><span class="tag tag-limited">对应观点 1、2</span></div>
+      <p>选一个每周重复、输入输出明确的任务（客户需求整理、资料初筛、报告初稿）。记录人工基线耗时、AI 耗时、人工审核耗时、返工次数、错误率。</p>
+      <p class="pass"><strong>通过条件：</strong>总耗时下降至少 20%，质量不下降。只是生成更快、审核更久，不算提效。</p>
+    </div>
+
+    <div class="action">
+      <h3>行动 2 · 检验「智能复利」在你这里是否真的存在</h3>
+      <div class="meta"><span class="tag tag-time">周期 3 周</span><span class="tag tag-direct">对应观点 4</span></div>
+      <p>对同一类任务连续记录至少 15 次执行。把固定提示词、工作流改进、可复用资料库、你自己的经验增长分开记录，不要把所有进步都归因为「AI 在学习」。</p>
+      <p class="pass"><strong>通过条件：</strong>后半程中位总耗时或返工率比前半程改善至少 15%，输出质量不下降。没改善就换任务或改流程。</p>
+    </div>
+
+    <div class="action">
+      <h3>行动 3 · 验证一人公司的瓶颈是能力还是协作</h3>
+      <div class="meta"><span class="tag tag-time">周期 3–4 周</span><span class="tag tag-limited">对应观点 7、8、9</span></div>
+      <p>列出最近 20 项待办，标记哪些必须本人做、哪些 AI 能做、哪些适合外包或合作。对最耗时的两项试行 AI 或外部协作，计算沟通、返工、交付成本。</p>
+      <p class="pass"><strong>通过条件：</strong>至少一项任务总交付成本下降 15%，质量可接受。协作成本过高就保留内部完成；不预设所有任务都该自动化或外包。</p>
+    </div>
+
+    <div class="action">
+      <h3>行动 4 · 从「AI 提效」转向验证客户价值</h3>
+      <div class="meta"><span class="tag tag-time">周期 2–4 周</span><span class="tag tag-unverified">对应观点 10、结语</span></div>
+      <p>为现有服务设计一个 AI 辅助的新交付版本，向 5–10 位目标客户展示具体成果，询问购买意愿，尽量做真实报价或小额付费试单。</p>
+      <p class="pass"><strong>通过条件：</strong>至少一个付费试单，或一条明确、可记录的拒绝原因。省了内部时间但没人买，只证明成本可能下降，不证明需求成立。</p>
+    </div>
+
+    <div class="action">
+      <h3>行动 5 · 建一张 AI 任务风险清单</h3>
+      <div class="meta"><span class="tag tag-time">周期 2 周</span><span class="tag tag-limited">对应观点 2（60 分奇点）</span></div>
+      <p>对拟交给 AI 的任务逐一标记：错误代价、是否涉及客户隐私、是否需要人工批准、数据来源能否追溯。优先自动化可逆、低风险的步骤。</p>
+      <p class="pass"><strong>通过条件：</strong>每项自动化任务都有验收标准、异常处理路径、人工接管条件。涉及隐私、财务承诺、高影响决策的任务，不因效率提升取消必要审核。</p>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>来源时间线</h2>
+      <p>蓝点是曾鸣本人的公开发言或著作，灰点是外部事实。口播没有说明看的是哪一场「直播」；按内容匹配，最接近的是第 153 期访谈（2 小时 34 分，视频形式）。本页无法确认口播作者看的就是这一期。</p>
+    </div>
+    <ul class="timeline">
+      <li><time>2025-03-27</time>曾鸣书院「智能经济和组织」公开课：智能体是基本经济单元；黑洞效应；顶尖人才「超级聪明、自驱、学习能力强」；元认知与第一性原理；三层组织（AI 架构师 / 配合团队 / 硅基员工）；「一人公司会越来越多」。</li>
+      <li class="ext"><time>2025-06 至 08</time>Meta 组建 Superintelligence Labs 高价挖人：Altman 称 1 亿美元签约奖金（06-17）；Meta 称夸大（06-27）；08-21 暂停招聘。</li>
+      <li class="ext"><time>2025-07 至 08</time>MIT NANDA《GenAI Divide》初步报告：样本中 95% 组织未见可衡量回报；方法与样本受批评。</li>
+      <li class="ext"><time>2026-03-09</time>腾讯 WorkBuddy 正式上线。</li>
+      <li><time>2026-07</time>中信出版新书《智能：AI 时代的商业、组织与战略的本质》：智能复利、黑洞效应、60 分奇点。</li>
+      <li><time>2026-07-17 至 19</time>WAIC 2026 现场访谈（36 氪、上观新闻）：「规模经济 → 网络效应 → 智能复利」；反馈闭环两个前提；00 后 AI 原住民创业好时机。</li>
+      <li><time>2026-08</time>中信书院公开课「从管控走向赋能与智能复利」：context not control；CEO 级信息全员共享。</li>
+      <li><time>2026-09-03</time>张小珺《商业访谈录》第 153 期上线，2 小时 34 分：应用大爆发；浏览器式入口；岗位 → 任务；认领任务；neo lab；一人公司是阶段性产物；high agency；老登；情绪价值；琢磨了两三年。</li>
+      <li><time>2026-09-09 至 22</time>LeaderClub、人人都是产品经理、腾讯新闻等整理稿与书评陆续发布。</li>
+      <li class="ext"><time>2026-10-23</time>本页核对完成。口播作者说「今天看了曾鸣教授的分享」，具体场次未知。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sources" class="sources">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>来源清单</h2>
+      <p>标「原话整理」的是第三方对曾鸣公开发言的整理稿或官方文稿摘录；本页没有直接听完原访谈音频，引文以整理稿为准。标「外部事实」的是与曾鸣无关的事实来源。两处页面本次打不开（36 氪、知乎公开课），只用了搜索摘要，已注明。</p>
+    </div>
+    <ol>
+      <li>原话整理 · 张小珺《商业访谈录》第 153 期「和曾鸣聊产业史观」，2026-09-03，小宇宙：<a href="https://www.xiaoyuzhoufm.com/episode/6a97f287f03e74ee6b03ea5b" rel="noopener">xiaoyuzhoufm.com/episode/6a97f287…</a>（原始音频，本次未直接收听）</li>
+      <li>原话整理 · 「曾鸣访谈文稿精读：十七段原文」（依据公众号「语言即世界」官方文稿），2026-09-14：<a href="https://bingqiangzhou.github.io/posts/zengming-transcript-highlights/" rel="noopener">bingqiangzhou.github.io/posts/zengming-transcript-highlights/</a></li>
+      <li>原话整理 · BBX「和曾鸣聊产业史观：我的非共识判断」问答稿：<a href="https://bbx.com/zh-Hans/article/552084" rel="noopener">bbx.com/zh-Hans/article/552084</a></li>
+      <li>原话整理 · 雪球读书笔记「产业转折期的战略、组织与文明跃迁」：<a href="https://www.xueqiu.com/5283497012/410377027" rel="noopener">xueqiu.com/5283497012/410377027</a></li>
+      <li>原话整理 · 人人都是产品经理「曾鸣万字访谈总结，关于 AI 未来的 42 个判断」，2026-09-08：<a href="https://www.woshipm.com/ai/6461475.html" rel="noopener">woshipm.com/ai/6461475.html</a></li>
+      <li>原话整理 · Solo Unicorn「曾鸣谈 AI 原生组织」（带时间戳），2026-09-07：<a href="https://www.solounicorn.club/zh/blog/zh-zeng-ming-ai-native-organizations" rel="noopener">solounicorn.club/zh/blog/zh-zeng-ming-ai-native-organizations</a></li>
+      <li>原话整理 · 知乎「曾鸣最新访谈：2026 像极了 1995」：<a href="https://zhuanlan.zhihu.com/p/2079586567115503255" rel="noopener">zhuanlan.zhihu.com/p/2079586567115503255</a></li>
+      <li>原话整理 · 上观新闻 / 腾讯新闻「AI 时代企业如何竞争？曾鸣：把握『智能复利』是关键」，WAIC 2026，2026-07-19：<a href="https://news.qq.com/rain/a/20260719A04Q0500" rel="noopener">news.qq.com/rain/a/20260719A04Q0500</a></li>
+      <li>原话整理 · 36 氪「对话曾鸣教授：AI 时代，企业竞争的关键是构建智能复利」，2026-07：<a href="https://36kr.com/p/3909358392988806" rel="noopener">36kr.com/p/3909358392988806</a>（本次页面被安全检测拦截，引文取自搜索摘要）</li>
+      <li>原话整理 · 腾讯新闻书评「《智能》：曾鸣写给 AI 商业时代的第一性原理之作」，2026-09-22：<a href="https://news.qq.com/rain/a/20260922A09BGS00" rel="noopener">news.qq.com/rain/a/20260922A09BGS00</a></li>
+      <li>原话整理 · 新浪财经「阿里前总参谋长曾鸣最新演讲：下一个 10 年，生意的底层逻辑变了」（曾鸣书院 2025-03-27 公开课，笔记侠整理），2025-04-19：<a href="https://finance.sina.com.cn/stock/stockzmt/2025-04-19/doc-inetrfqm7758242.shtml" rel="noopener">finance.sina.com.cn/stock/stockzmt/2025-04-19/doc-inetrfqm7758242.shtml</a></li>
+      <li>原话整理 · 搜狐 / LeaderClub「曾鸣：从数据智能到『智能复利』」，2026-09-09：<a href="https://www.sohu.com/a/1073986362_611453" rel="noopener">sohu.com/a/1073986362_611453</a></li>
+      <li>原话整理 · 知乎「曾鸣：AI 时代创业新范式，从管控走向赋能与智能复利」（中信书院公开课）：<a href="https://zhuanlan.zhihu.com/p/2067190363371074907" rel="noopener">zhuanlan.zhihu.com/p/2067190363371074907</a>（本次 403，引文取自搜索摘要）</li>
+      <li>原话整理 · 腾讯新闻视频「曾鸣：『一人公司』不会成为主流发展方向」，2026-09-11：<a href="https://news.qq.com/rain/a/20260911V08NJD00" rel="noopener">news.qq.com/rain/a/20260911V08NJD00</a></li>
+      <li>履历 · MBA 智库百科「曾鸣」：<a href="https://wiki.mbalib.com/wiki/%E6%9B%BE%E9%B8%A3" rel="noopener">wiki.mbalib.com/wiki/曾鸣</a>；虎嗅「阿里前参谋长，做 VC 了」2024-05：<a href="https://www.huxiu.com/article/3077823.html" rel="noopener">huxiu.com/article/3077823.html</a></li>
+      <li>外部事实 · TechCrunch「Sam Altman says Meta tried and failed to poach OpenAI's talent with $100M offers」，2025-06-17：<a href="https://techcrunch.com/2025/06/17/sam-altman-says-meta-tried-and-failed-to-poach-openais-talent-with-100m-offers/" rel="noopener">techcrunch.com/2025/06/17/…</a></li>
+      <li>外部事实 · TechCrunch「Meta is offering multimillion-dollar pay for AI researchers, but not $100M signing bonuses」，2025-06-27：<a href="https://techcrunch.com/2025/06/27/meta-is-offering-multimillion-dollar-pay-for-ai-researchers-but-not-100m-signing-bonuses/" rel="noopener">techcrunch.com/2025/06/27/…</a></li>
+      <li>外部事实 · CNBC「Meta puts the brakes on its massive AI talent spending spree」，2025-08-21：<a href="https://www.cnbc.com/2025/08/21/meta-brakes-massive-ai-talent-recruitment-spending-spree-mark-zuckerberg-tbd-superintelligence-lab.html" rel="noopener">cnbc.com/2025/08/21/…</a></li>
+      <li>外部事实（二手） · MIT NANDA《The GenAI Divide: State of AI in Business 2025》报道与方法说明：<a href="https://letsdatascience.com/news/mit-report-documents-genai-pilot-roi-gap-e0924d7d" rel="noopener">letsdatascience.com/news/mit-report-documents-genai-pilot-roi-gap…</a>（未读原报告 PDF）</li>
+      <li>外部事实 · 量子位「腾讯云发布 WorkBuddy 企业版」2026-06：<a href="https://www.qbitai.com/2026/06/430758.html" rel="noopener">qbitai.com/2026/06/430758.html</a>；CFM 闪存市场「WorkBuddy 正式上线」：<a href="https://www.chinaflashmarket.com/newsflash/37005" rel="noopener">chinaflashmarket.com/newsflash/37005</a></li>
+    </ol>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>方法与边界</h2>
+    </div>
+    <div class="prose">
+      <ul>
+        <li><strong>核对对象</strong>是一段约 5000 字的口播转写，作者在开头和结尾两次声明「有的是曾鸣说的，也不全是，很多加了我的观点」。本页的任务是把两者分开，不是评价作者。</li>
+        <li><strong>原话来源</strong>全部是第三方整理稿和官方文稿摘录，没有直接听完第 153 期音频，也没有读到新书全文。引号内文字以整理稿为准，可能与原音频有出入。</li>
+        <li><strong>「未找到」的含义</strong>：在本次核对的 20 个来源里没有找到直接依据，不是「曾鸣从未说过」。口播作者看的那场「直播」可能包含本页未获取的内容，尤其是观点 7 的团队例子和观点 10 的「两个原因」。</li>
+        <li><strong>证据等级</strong>只评「原话支持到什么程度」，不评「观点是否正确」。一条作者延伸可以是对的，一条直接支持的原话也可以是预测而非事实。</li>
+        <li><strong>支持度条形</strong>（100 / 60 / 30 / 15%）是四档等级的视觉映射，不是测量。</li>
+        <li><strong>行动建议</strong>的通过阈值（20%、15%）是经验起点，不是研究结论；按自己业务的错误代价调整。</li>
+        <li>两处页面本次未能打开（36 氪、知乎公开课），引文来自搜索引擎摘要，已在来源清单标注。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>曾鸣「AI 时代」分享口播核对与分析 · 2026-10-23 · 11 条判定：直接支持 3 · 有限支持 5 · 作者延伸 2 · 暂未核实 1 · 事实纠正 5 · 背景补充 1。本页为自包含 HTML，无外部依赖。</p>
+  </div>
+</footer>
+
+</body>
+</html>

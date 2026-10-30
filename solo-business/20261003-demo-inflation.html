@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demo 通胀:演示越来越便宜,产品没有同比例变多?</title>
+<meta name="description" content="拆解一段关于「Demo 通胀」的谈话:技术突破先降低的是演示成本还是产品成本?Waymo 自述、Karpathy 自述与算例能证明什么、推不出什么。">
+<style>
+/* ===== tokens:设计字面量只在 :root;比例数据(.sNN)与媒体查询阈值 40rem/60rem 为已注明例外 ===== */
+:root{--z-top:1;--r-s:4px;--skip-hide:-200%;
+  --c-bg:#eef1f5;--c-surface:#ffffff;--c-surface-2:#f6f8fa;--c-ink:#17202b;--c-ink-2:#4a5566;--c-ink-3:#6f7a8a;
+  --c-line:#d5dbe3;--c-brand:#1d4e89;--c-brand-2:#dfe9f5;--c-ok:#1f6f4a;--c-ok-2:#e2f1e8;--c-warn:#8a5a00;--c-warn-2:#e9e5db;
+  --c-bad:#9b2c2c;--c-bad-2:#f3e3e3;--c-note:#2f3a4a;--c-track:#e3e8ee;--c-fill:#1d4e89;--c-fill-2:#5b8ac4;--c-fill-3:#a9c1dd;
+  --f-sans:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
+  --fs-0:0.8125rem;--fs-1:0.9375rem;--fs-2:1.0625rem;--fs-3:1.25rem;--fs-4:1.625rem;--fs-5:2.25rem;--fs-6:3rem;
+  --lh-tight:1.25;--lh:1.7;--fw-b:700;--fw-m:600;--fw-r:400;
+  --sp-1:0.25rem;--sp-2:0.5rem;--sp-3:0.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-7:3rem;--sp-8:4.5rem;
+  --r-1:0.25rem;--r-2:0.5rem;--r-3:0.75rem;--bw:1px;--bw-2:3px;--bw-3:6px;
+  --w-max:72rem;--w-text:46rem;--track-h:0.5rem;--track-h-2:1.5rem;--pct:1%;--full:100%;--half:50%;--zero:0;
+  --sh:0 1px 2px rgba(23,32,43,.06),0 4px 14px rgba(23,32,43,.05);
+  --grid-min:14rem;--grid-min-2:18rem;--col-label:7.5rem;--col-num:4.5rem;--opacity-dim:.75;--step-w:2rem;
+  --clip-hide:inset(50%);
+}
+/* 媒体查询阈值统一为 40rem(手机→平板)与 60rem(平板→桌面),规则允许的例外 */
+/* ===== 数据类:比例/分值作为内容数据 ===== */
+.s35{--score:35}
+.s37{--score:37}
+.s90{--score:90}
+
+/* ===== 结构 ===== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font-family:var(--f-sans);font-size:var(--fs-2);line-height:var(--lh)}
+a{color:var(--c-brand)}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:0}
+h1{font-size:var(--fs-5);font-weight:var(--fw-b)}
+h2{font-size:var(--fs-4);font-weight:var(--fw-b);margin-bottom:var(--sp-4)}
+h3{font-size:var(--fs-3);font-weight:var(--fw-b)}
+h4{font-size:var(--fs-2);font-weight:var(--fw-m);color:var(--c-brand)}
+p,li{margin:0}
+p+p{margin-top:var(--sp-3)}
+ul,ol{padding-left:var(--sp-5);margin:0}
+li+li{margin-top:var(--sp-2)}
+.wrap{max-width:var(--w-max);margin:0 auto;padding:0 var(--sp-4)}
+.text{max-width:var(--w-text)}
+.sr{position:absolute;clip-path:var(--clip-hide);width:var(--bw);height:var(--bw);overflow:hidden}
+/* 顶部 */
+.hero{background:var(--c-surface);border-bottom:var(--bw) solid var(--c-line);padding:var(--sp-7) 0 var(--sp-6)}
+.kicker{color:var(--c-ink-3);font-size:var(--fs-1);font-weight:var(--fw-m);margin-bottom:var(--sp-3)}
+.lede{font-size:var(--fs-3);color:var(--c-ink-2);margin-top:var(--sp-4)}
+.verdict{margin-top:var(--sp-5);padding:var(--sp-4) var(--sp-5);background:var(--c-brand-2);border-left:var(--bw-3) solid var(--c-brand);border-radius:var(--r-2)}
+.verdict p+p{margin-top:var(--sp-2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--grid-min),1fr));gap:var(--sp-3);margin-top:var(--sp-5);padding:0;list-style:none}
+.stats li{background:var(--c-surface-2);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.stats b{display:block;font-size:var(--fs-4);color:var(--c-brand);line-height:var(--lh-tight)}
+.stats span{display:block;color:var(--c-ink-2);font-size:var(--fs-1);margin-top:var(--sp-1)}
+.tag{display:inline-block;font-size:var(--fs-0);font-weight:var(--fw-m);padding:0 var(--sp-2);border-radius:var(--r-1);line-height:var(--lh);vertical-align:middle}
+.tag-self{background:var(--c-warn-2);color:var(--c-warn)}
+.tag-fact{background:var(--c-ok-2);color:var(--c-ok)}
+.tag-infer{background:var(--c-brand-2);color:var(--c-brand)}
+.tag-local{background:var(--c-surface-2);color:var(--c-ink-2);border:var(--bw) solid var(--c-line)}
+.tags{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-top:var(--sp-4)}
+.tags+.sec-note{margin-top:var(--sp-3);margin-bottom:0;font-size:var(--fs-1)}
+/* 目录 */
+.toc{background:var(--c-surface);border-bottom:var(--bw) solid var(--c-line);padding:var(--sp-3) 0}
+.toc ol{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);list-style:none;padding:0;font-size:var(--fs-1)}
+.toc li{margin:0}
+.toc a{text-decoration:none;color:var(--c-ink-2)}
+.toc a:hover{color:var(--c-brand);text-decoration:underline}
+/* 章节 */
+section.sec{padding:var(--sp-7) 0}
+section.sec+section.sec{border-top:var(--bw) solid var(--c-line)}
+.sec-note{color:var(--c-ink-2);margin-bottom:var(--sp-5)}
+.card{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);box-shadow:var(--sh)}
+.card+.card{margin-top:var(--sp-4)}
+.grid{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--grid-min-2),1fr))}
+.grid .card+.card{margin-top:0}
+/* 时间线 */
+.tl{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.tl li{display:grid;grid-template-columns:var(--col-label) 1fr;gap:var(--sp-3);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.tl time{font-weight:var(--fw-b);color:var(--c-brand)}
+/* 公式 */
+.formula{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:stretch;list-style:none;padding:0}
+.formula li{flex:1 1 var(--grid-min);background:var(--c-surface);border-top:var(--bw-2) solid var(--c-brand);border-radius:var(--r-2);padding:var(--sp-4);box-shadow:var(--sh);margin:0}
+.formula b{display:block;font-size:var(--fs-3);margin-bottom:var(--sp-2)}
+.formula p{color:var(--c-ink-2);font-size:var(--fs-1)}
+/* 比例条 */
+.ratio{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.ratio li{display:grid;grid-template-columns:var(--col-label) 1fr var(--col-num);align-items:center;gap:var(--sp-3);margin:0}
+.ratio .lab{font-weight:var(--fw-m)}
+.track{height:var(--track-h-2);background:var(--c-track);border-radius:var(--r-1);overflow:hidden}
+.fill{display:block;height:var(--full);width:calc(var(--score) * var(--pct));background:var(--c-fill)}
+.fill-2{background:var(--c-fill-2)}
+.fill-3{background:var(--c-fill-3)}
+.num{text-align:right;font-weight:var(--fw-b);color:var(--c-brand)}
+.ratio-title{font-weight:var(--fw-m);color:var(--c-ink-2);margin-bottom:var(--sp-2)}
+.two{display:grid;gap:var(--sp-5);grid-template-columns:1fr}
+/* 流程 */
+.flow{list-style:none;padding:0;display:grid;gap:var(--sp-3);counter-reset:step}
+.flow li{counter-increment:step;display:grid;grid-template-columns:var(--step-w) 1fr;gap:var(--sp-3);background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-4);margin:0}
+.flow li::before{content:counter(step);width:var(--step-w);height:var(--step-w);border-radius:var(--half);background:var(--c-brand);color:var(--c-surface);font-weight:var(--fw-b);display:grid;place-items:center;font-size:var(--fs-1)}
+.flow b{display:block;font-size:var(--fs-2)}
+.flow .tool{color:var(--c-ink-3);font-size:var(--fs-0);margin-top:var(--sp-1)}
+.flow .human{border-left:var(--bw-3) solid var(--c-ok)}
+.flow .ai{border-left:var(--bw-3) solid var(--c-brand)}
+.legend{display:flex;gap:var(--sp-4);flex-wrap:wrap;font-size:var(--fs-1);color:var(--c-ink-2);margin-bottom:var(--sp-4)}
+.legend span::before{content:"";display:inline-block;width:var(--sp-3);height:var(--sp-3);border-radius:var(--r-1);margin-right:var(--sp-2);vertical-align:middle;background:var(--c-brand)}
+.legend .lg-h::before{background:var(--c-ok)}
+/* 判定 */
+.claim{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);box-shadow:var(--sh)}
+.claim+.claim{margin-top:var(--sp-4)}
+.claim-head{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-3);align-items:baseline;justify-content:space-between;margin-bottom:var(--sp-3)}
+.v{font-size:var(--fs-1);font-weight:var(--fw-b);padding:var(--sp-1) var(--sp-3);border-radius:var(--r-1)}
+.v-ok{background:var(--c-ok-2);color:var(--c-ok)}
+.v-part{background:var(--c-warn-2);color:var(--c-warn)}
+.v-open{background:var(--c-surface-2);color:var(--c-ink-2);border:var(--bw) solid var(--c-line)}
+.claim-body{display:grid;gap:var(--sp-4);grid-template-columns:1fr}
+.claim-body h4{margin-bottom:var(--sp-1)}
+.claim-body .limit h4{color:var(--c-warn)}
+.claim .judge{margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:var(--bw) solid var(--c-line)}
+blockquote{margin:0;padding:var(--sp-3) var(--sp-4);background:var(--c-surface-2);border-left:var(--bw-2) solid var(--c-line);color:var(--c-note);border-radius:var(--r-1)}
+blockquote+p{margin-top:var(--sp-3)}
+/* 数字卡 */
+.facts{display:grid;gap:var(--sp-3);grid-template-columns:repeat(auto-fit,minmax(var(--grid-min),1fr));list-style:none;padding:0}
+.facts li{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);padding:var(--sp-4);margin:0}
+.facts b{display:block;font-size:var(--fs-4);color:var(--c-brand);line-height:var(--lh-tight)}
+.facts span{display:block;color:var(--c-ink-2);font-size:var(--fs-1);margin-top:var(--sp-2)}
+/* 表 */
+table{width:var(--full);border-collapse:collapse;background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-2);font-size:var(--fs-1)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-3) var(--sp-4);border-bottom:var(--bw) solid var(--c-line)}
+th{background:var(--c-surface-2);font-weight:var(--fw-m)}
+tr:last-child td{border-bottom:0}
+.tbl{overflow-x:auto}
+/* 行动 */
+.weeks{list-style:none;padding:0;display:grid;gap:var(--sp-4)}
+.weeks li{background:var(--c-surface);border:var(--bw) solid var(--c-line);border-radius:var(--r-3);padding:var(--sp-5);margin:0;box-shadow:var(--sh)}
+.weeks h3{margin-bottom:var(--sp-2)}
+.weeks .kpi{margin-top:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:var(--c-ok-2);border-radius:var(--r-2);color:var(--c-ok);font-weight:var(--fw-m)}
+.weeks .stop{margin-top:var(--sp-2);padding:var(--sp-3) var(--sp-4);background:var(--c-warn-2);border-radius:var(--r-2);color:var(--c-warn)}
+/* 自检 */
+.check{list-style:none;padding:0;display:grid;gap:var(--sp-3)}
+.check li{background:var(--c-surface);border-left:var(--bw-3) solid var(--c-warn);border-radius:var(--r-2);padding:var(--sp-3) var(--sp-4);margin:0}
+.check+h3{margin-top:var(--sp-5)}
+.two h3{margin-bottom:var(--sp-3)}
+.two .card+.card{margin-top:0}
+/* 来源 */
+.src{font-size:var(--fs-1)}
+.src li{margin-top:var(--sp-2)}
+.src-meta{display:block;color:var(--c-ink-3);font-size:var(--fs-0)}
+.cite{text-decoration:none;font-size:var(--fs-0);vertical-align:super;line-height:var(--lh-tight)}
+footer{padding:var(--sp-6) 0 var(--sp-8);color:var(--c-ink-3);font-size:var(--fs-0)}
+/* 响应式 */
+@media (min-width:40rem){
+  h1{font-size:var(--fs-6)}
+  .two{grid-template-columns:1fr 1fr}
+  .claim-body{grid-template-columns:1fr 1fr}
+}
+@media (min-width:60rem){
+  .wrap{padding:0 var(--sp-6)}
+  .claim-body{grid-template-columns:1fr 1fr 1fr}
+}
+@media (max-width:40rem){
+  .tl li{grid-template-columns:1fr}
+  .ratio li{grid-template-columns:1fr var(--col-num)}
+  .ratio .lab{grid-column:1/-1}
+  .ratio .num{text-align:right}
+  .toc ol{gap:var(--sp-2) var(--sp-3)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.sub{margin-top:var(--sp-6);margin-bottom:var(--sp-3)}
+.claim-body p.tag{margin-top:var(--sp-3)}
+.claim-body p+p{margin-top:var(--sp-3)}
+.stats li:nth-child(2) b{color:var(--c-warn)}
+.stats li:nth-child(3) b{color:var(--c-ink-2)}
+
+.skip{position:absolute;left:0;top:0;transform:translateY(var(--skip-hide));background:var(--c-brand);color:var(--c-bg);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-s);z-index:var(--z-top)}
+.skip:focus{transform:none}
+.card h4{font-size:var(--fs-3);font-weight:var(--fw-b);color:var(--c-ink)}
+.tbl caption{text-align:left;color:var(--c-ink-3);font-size:var(--fs-1);padding-bottom:var(--sp-2)}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main-content">跳至正文</a>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">谈话拆解 · 节目「换个视角看懂AI」(讲者姓名未知)· 整理于 2026-10-03</p>
+    <h1>Demo 通胀:演示越来越便宜,产品没有同比例变多?</h1>
+    <p class="lede text">讲者的命题是:这轮 AI 浪潮最大的错觉「不是模型不够强,而是模型太强了」,每轮技术突破最先降低的「可能并不是做成产品的成本,而是做出 Demo 的成本」。<a class="cite" href="#s7">[7]</a> 这页把谈话拆成「他说什么 — 证据实际证明什么 — 还不能推出什么 — 读者如何判断」,结论停在证据能支持的位置。</p>
+    <div class="verdict text">
+      <p><strong>一句话判定:</strong>自动驾驶中的「Demo 到产品存在很大鸿沟」有个案亲历自述支持,但自述不是独立的工作量测量。<a class="cite" href="#s1">[1]</a><a class="cite" href="#s5">[5]</a> 「技术突破先降 Demo 成本」的先后与幅度、以及「Demo 通胀」这个总体趋势,所列材料虽有从业者归纳,却未提供可比的成本对照或数量统计,不足以确立为跨行业事实。</p>
+      <p>谈话摘引中的 Waymo 数字(18 个月、约 15 年、1%)可与 Dolgov 演讲整理稿对照;核到的是其回顾与估计,不是独立核实了工期和工作量比例。<a class="cite" href="#s1">[1]</a> 「每天一万次任务」「99.9%」是讲者的举例口径,不是实测。<a class="cite" href="#s7">[7]</a></p>
+    </div>
+    <ul class="stats">
+      <li><b>有条件支持</b><span>Demo 到产品的鸿沟:本页所列亲历案例来自自动驾驶,自述方向一致,不足以量化其他领域</span></li>
+      <li><b>所列证据不足</b><span>「每轮浪潮只解决最好看的 1%」「Demo 通胀」作为跨行业规律:缺少可比的跨领域成本或数量数据</span></li>
+      <li><b>须分开判</b><span>「多个九」有两种口径:Dolgov 说每个九约十倍努力,Karpathy 说每个九工作量相当;并列不等于一致</span></li>
+    </ul>
+    <div class="tags">
+      <span class="tag tag-self">亲历自述 / 讲者转述</span>
+      <span class="tag tag-fact">演讲整理稿 / 百科时间线</span>
+      <span class="tag tag-infer">媒体报道 / 作者论述</span>
+      <span class="tag tag-local">算例 / 整理者推断</span>
+    </div>
+    <p class="sec-note">标签只标来源性质,不代表证据分量。判定分三档:<strong>有条件支持</strong>(限缩后的版本有证据)、<strong>所列证据不足</strong>(不足以确立原命题,不等于命题为假)、<strong>具体事实待核</strong>(来源作了自述或转述,但本页尚未独立核实其所述事实)。</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <div class="wrap">
+    <ol>
+      <li><a href="#claims">一、四组判定</a></li>
+      <li><a href="#viz">二、看得见的鸿沟:时间线、三层难度、九的算术</a></li>
+      <li><a href="#why">三、为什么先便宜的可能是 Demo</a></li>
+      <li><a href="#ask">四、看一个 AI 项目的三问,加一问</a></li>
+      <li><a href="#edge">五、所列证据不能支持的进一步结论</a></li>
+      <li><a href="#sources">来源</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main id="main-content" tabindex="-1">
+
+<section class="sec" id="claims">
+  <div class="wrap">
+    <h2>一、四组判定</h2>
+    <p class="sec-note text">每组按同一节奏:他说什么 → 证据实际证明什么 → 还不能推出什么 → 读者如何判断。</p>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>1. Waymo:「Demo 只用了大约 18 个月,规模化用了大约 15 年,Demo 可能只占整个工作的 1%」</h3>
+        <span class="v v-ok">有条件支持 · 转述口径须分开</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">讲者转述</span></h4>
+          <blockquote>「Waymo 做出第一个看起来相当成熟的自动驾驶 Demo 只用了大约 18 个月……但真正能够提供无人驾驶服务并规模化,用了大约 15 年。Demo 可能只占整个工作的 1%。」<a class="cite" href="#s7">[7]</a></blockquote>
+          <p>讲者据此总结:「Demo 越来越像产品,但它依然不是产品。」<a class="cite" href="#s7">[7]</a></p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-fact">演讲整理稿</span></h4>
+          <p>Dolgov 在 YC Startup School 2026 的演讲整理稿里回顾:Demo 用了 18 个月,产品用了约 15 年;他把一个能跑的 Demo 估为「最多是 1%」的工作量,强调后续「许多个九」的可靠性投入。他说的 Demo 是 2010 年前后的里程碑:约十二名工程师,一年半左右实现 10 万英里自动驾驶,并完成十条各 100 英里的零接管路线。<a class="cite" href="#s1">[1]</a></p>
+          <p class="tag tag-local">整理者汇总</p>
+          <p>百科条目记载的时间线:2009 年 1 月项目启动;2010 年 10 月公开;2016 年 12 月分拆为 Waymo;2017 年 11 月凤凰城无车内安全员测试;2020 年 10 月向公众开放无车内安全员的服务。<a class="cite" href="#s3">[3]</a> 2026 年 3 月媒体报道:每周 50 万付费行程、10 个城市。<a class="cite" href="#s4">[4]</a></p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>「18 个月」和「约 15 年」是回顾的历时,「1%」是工作量的经验估计,三者不能互算。</strong>这些表述没有给出可靠性工作与其他产品化工作的工时分解。</li>
+            <li><strong>测试、上线和规模化不是同一个终点。</strong>2017 年的无安全员测试、2018 年的上线载客、2020 年的公众无人服务是不同里程碑。<a class="cite" href="#s3">[3]</a> 「约 15 年」是 Dolgov 对从 Demo 走向规模化服务历程的概括,不宜任选其中某一年作为统一的「产品完成」日期。<a class="cite" href="#s1">[1]</a></li>
+            <li><strong>这是个案自述。</strong>它支持 Waymo 这一自动驾驶案例中的鸿沟判断,不自动证明每个 AI 领域都是「1% 对 99%」。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>本页摘引的转述与整理稿的核心意思基本相符,不等于逐字一致。引用时写清这是 Dolgov 对 Waymo 历程的回顾,保留「约」「最多」等限定,并区分历时与工作量估计。把「1%」套到自己的项目上之前,先评估错误后果、可恢复性和人工兜底方式。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>2. 规律:「每一次技术突破只解决最好看的 1%,没解决最难的 99%」</h3>
+        <span class="v v-part">鸿沟有条件支持 · 跨领域规律证据不足</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">讲者归纳</span></h4>
+          <blockquote>「深度学习来了,大家做出了各种识别 Demo;大模型来了,大家做出了各种写作、编程、客服、问答 Demo;多模态和 Agent 来了,大家做出了能看、能听、能操作软件的 Demo。」<a class="cite" href="#s7">[7]</a></blockquote>
+          <p>讲者把三轮浪潮并列,得出「技术突破让起点前移,但不会把终点搬过来」。<a class="cite" href="#s7">[7]</a></p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-self">亲历自述</span></h4>
+          <p>Karpathy 在 2025 年 10 月的访谈里说,自动驾驶的演示可以追溯到 1986 年;他自己 2014 年左右坐过一次近乎完美的 Waymo 演示,当时以为很接近了,结果仍花了很长时间。他的判断是:某些任务存在很大的 demo-to-product gap,Demo 很容易,产品很难,尤其在自动驾驶这类失败代价很高的场景。<a class="cite" href="#s5">[5]</a></p>
+          <p>Dolgov 的七课里,除「Demo 与产品的差距」外,还有「每家物理 AI 公司都需要模拟器」「评测是竞争优势」。<a class="cite" href="#s1">[1]</a> 整理者认为,这些与讲者强调工程投入的方向相近,但不能视为对讲者整套产品化清单的逐项验证。</p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>本页所列亲历案例来自自动驾驶。</strong>所列材料未提供写作、编程、客服等领域可比的一手工作量测量;Karpathy 自己也提醒,很多行业、任务未必具有高失败代价这个属性。<a class="cite" href="#s5">[5]</a></li>
+            <li><strong>「只解决 1%」是把 Waymo 的经验比例借用到其他浪潮。</strong>它是比喻性的归纳,不是跨领域测量结果。</li>
+            <li><strong>模型进步也可能降低产品化成本。</strong>测试、集成、运维是否因此提效、提效多少,所列材料未给出可比的成本数据;不能据此断言只有 Demo 受益。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>把这条当作「有自动驾驶亲历自述支持的提醒」,而不是「在所有高错误成本领域已被反复验证的规律」或「所有 AI 项目的定律」。判断自己的领域时,先看<a href="#ask">第四节的错误成本问题</a>。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>3. 「可靠性的多个九」:成功率算术与工程投入应分开</h3>
+        <span class="v v-ok">有条件支持 · 算术与经验判断分开</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">讲者举例</span></h4>
+          <blockquote>「如果 AI 能达到 99%,每天跑一万次任务就还有一百次失败……第一个九可能来自模型能力,后面的九往往来自整个组织能力。」<a class="cite" href="#s7">[7]</a></blockquote>
+          <p>讲者强调「不能只问我的 AI 能做到什么,还要问它做错一次会发生什么」。<a class="cite" href="#s7">[7]</a> 错误后果是讨论可靠性需求的重要维度,但不是单独决定所需成功率的计算规则。</p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-self">亲历自述</span></h4>
+          <p>Dolgov 在所述物理 AI 语境下认为:可靠性和性能「活在一条指数型的九的梯子上」,到第一个 90% 或 99% 是容易的部分,之后每加一个九大约要十倍努力;他以错误可能危及人命、无法像数字操作那样撤销重试来强调失败代价。<a class="cite" href="#s1">[1]</a></p>
+          <p>Karpathy 把这一过程称为「march of nines」,认为每个九的工作量相当,Demo 能跑 90% 只是第一个九。他的粗略回忆是,在 Tesla 约五年推进了两到三个九,后面还有更多。<a class="cite" href="#s5">[5]</a></p>
+          <p class="tag tag-infer">作者论述</p>
+          <p>Garg 列出的算例是:每步 90% 成功时,10 步任务整体成功约 35%;每步 99% 时约 90%;100 步任务即使每步 99% 也只有约 37%。<a class="cite" href="#s6">[6]</a> 本页明确采用的简化前提是:每步成功率相同、步骤互相独立、任一步失败即整体失败。</p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>两种增量描述不同,但缺少可比口径。</strong>Dolgov 说每个九「约十倍努力」,Karpathy 说工作量相当;所引段落均未定义可比较的工作量单位。本页不把它们画成同一条成本曲线,也不据此认定两人在同一度量下相互矛盾。</li>
+            <li><strong>「每天一万次、一百次失败」是期望值算术,不是观察。</strong>在每天一万次任务、各次失败概率均为 1% 的假设下,期望失败次数是一百次;不要求任务彼此独立,也不意味着每天恰好失败一百次。演示成功率不能直接代替真实任务分布上的成功率。</li>
+            <li><strong>步骤独立是简化假设,不是对真实 Agent 的普遍描述。</strong>Garg 还讨论了错误进入后续步骤上下文的问题。<a class="cite" href="#s6">[6]</a> 这不使上述乘方算例变成对具体系统的实测,也不足以判断其偏差方向和幅度。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>两位亲历者的共同提醒是:在他们讨论的自动驾驶场景中,做出演示不等于完成产品,后续可靠性仍需工程投入。各阶段的工作量比例、每个九的投入及具体交付目标,仍须在自己的任务和系统中验证。</p>
+    </article>
+
+    <article class="claim">
+      <div class="claim-head">
+        <h3>4. 「Demo 通胀」:惊艳演示越来越多,能稳定交付的产品没有同比例增加</h3>
+        <span class="v v-open">所列证据不足 · 讲者用语</span>
+      </div>
+      <div class="claim-body">
+        <div>
+          <h4>他说什么 <span class="tag tag-self">讲者命名</span></h4>
+          <blockquote>「过去做出 Demo 本身就是门槛,现在 Demo 正在成为最低配置。一个精彩的演示可能只证明你用了最新的模型。」<a class="cite" href="#s7">[7]</a></blockquote>
+          <p>讲者把这种现象称为「Demo 通胀」,并提出三个「最危险的创业幻觉」:Demo 完成不等于产品快完成;产品能运行不等于商业模式成立;用户惊艳不等于长期付费。<a class="cite" href="#s7">[7]</a></p>
+        </div>
+        <div>
+          <h4>证据实际证明什么 <span class="tag tag-local">整理者核查</span></h4>
+          <p>所列材料不足以确认「Demo 通胀」这一中文说法的首创者,也未提供按统一口径统计演示与稳定交付产品数量的对照数据。Karpathy 对 Demo 的谨慎态度是个人判断,不是数量趋势的证据。<a class="cite" href="#s5">[5]</a></p>
+          <p>Dolgov 演讲在 YC 视频页的标题是「Demo 只是 1% 的工作」,说明这一观点在 2026 年已被一线从业者公开强调;这是从业者归纳,并非统计验证。<a class="cite" href="#s2">[2]</a> 本页只核到该页标题,不能把它作为独立佐证。</p>
+        </div>
+        <div class="limit">
+          <h4>还不能推出什么</h4>
+          <ul>
+            <li><strong>不能确认更早出处,不等于「讲者原创」;所列材料没有统计,也不等于「现象不存在」。</strong>这里只能说:所列证据不足以确认原创性或验证总体趋势。</li>
+            <li><strong>「通胀」需要可比较的口径。</strong>要检验它,至少需界定什么算 Demo、什么算稳定交付的产品、统计哪个时间窗口与范围,并提供可比较的数量或成本证据;所列材料没有给出这样的对照。</li>
+            <li><strong>三个「幻觉」的后两条并非 AI 独有。</strong>「能运行不等于商业模式成立」「惊艳不等于付费」是通用创业判断;本页所见谈话摘引没有论证它们因 AI 而加剧。</li>
+          </ul>
+        </div>
+      </div>
+      <p class="judge"><strong>读者如何判断:</strong>把「Demo 通胀」当作一个提醒和讨论框架,不当作已被证明的市场趋势。对自己有用的版本是:当做出 Demo 的门槛下降时,判断一个项目要看 Demo 之外的指标。</p>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="viz">
+  <div class="wrap">
+    <h2>二、看得见的鸿沟:时间线、三层难度、九的算术</h2>
+    <p class="sec-note text">以下仅整理所列来源中的里程碑、经验表述和假设算例;不画工期占比饼图,不画统一的成本曲线。</p>
+
+    <h3 class="sub">Waymo 公开里程碑:测试、上线载客、公众无人服务、规模化是不同的事 <span class="tag tag-fact">百科时间线 / 媒体报道</span></h3>
+    <ol class="tl">
+      <li><time datetime="2009-01">2009-01</time><span>Google 自动驾驶项目启动。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2010">2010</time><span>Dolgov 所说的「Demo」里程碑约在这一年:约十二人、约一年半,实现 10 万英里自动驾驶,并完成十条各 100 英里的零接管路线。<a class="cite" href="#s1">[1]</a> 同年 10 月项目公开。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2016-12">2016-12</time><span>更名 Waymo,从 Google 分拆。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2017-11">2017-11</time><span>凤凰城开始无车内安全员测试。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2018-12">2018-12</time><span>Waymo One 在凤凰城上线载客。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2020-10">2020-10</time><span>向公众开放无车内安全员的服务。<a class="cite" href="#s3">[3]</a></span></li>
+      <li><time datetime="2026-03">2026-03</time><span>媒体报道每周 50 万付费行程、10 个城市;此为报道月份,不是首次达成时间。<a class="cite" href="#s4">[4]</a></span></li>
+    </ol>
+
+    <h3 class="sub">三层难度:要检验的东西不一样 <span class="tag tag-self">讲者框架</span></h3>
+    <div class="grid">
+      <article class="card">
+        <h4>Demo</h4>
+        <p>展示「在给定条件下可能做到」。可以自选输入、彩排多次、出错重来或引入人工接管;演示条件和人工介入应当说明。</p>
+        <p class="text">对应问题:<strong>业务结果是什么?</strong>你展示的是能力还是结果。</p>
+      </article>
+      <article class="card">
+        <h4>产品</h4>
+        <p>检验「在约定范围内可持续做到」。要处理模糊输入、错误数据、权限缺失和异常情况,稳定达到交付要求,并有失败处理机制。</p>
+        <p class="text">对应问题:<strong>代表性评测是否稳定?</strong>关注代表性样本中的持续表现,而不是最好的一次。</p>
+      </article>
+      <article class="card">
+        <h4>公司</h4>
+        <p>追求「可持续、规模化、成本可承担的交付」。要组织评测集、异常处理、人工复核、权限、审计、回退和交付流程。</p>
+        <p class="text">对应问题:<strong>失败如何发现、谁接管、代价由谁承担?</strong></p>
+      </article>
+    </div>
+    <p class="sec-note text">Dolgov 强调模拟器与评测。<a class="cite" href="#s1">[1]</a> Demo、产品、公司的三层区分来自讲者框架。<a class="cite" href="#s7">[7]</a> 卡片中的对应问题与措辞限缩为整理者归纳;各层工作并非互斥,也不代表量化的工作量比例。</p>
+
+    <h3 class="sub">两种「九」的口径对照 <span class="tag tag-self">亲历自述</span></h3>
+    <div class="two">
+      <article class="card">
+        <h4>Dolgov(Waymo)</h4>
+        <p>他认为可靠性在一条指数型的九的梯子上;到 90% 或 99% 是容易的部分,之后每加一个九约十倍努力。<a class="cite" href="#s1">[1]</a></p>
+        <p class="text">语境:他强调物理世界的错误可能危及人命,不能像数字操作那样撤销重试。<a class="cite" href="#s1">[1]</a></p>
+      </article>
+      <article class="card">
+        <h4>Karpathy(Tesla 自动驾驶五年亲历者)</h4>
+        <p>他将其称为「march of nines」,认为每个九的工作量相当;90% 只是第一个九。他的粗略回忆是约五年推进了两到三个九,不是精确计数。<a class="cite" href="#s5">[5]</a></p>
+        <p class="text">语境:亲历案例是自动驾驶;他也提醒,很多行业和任务未必具有高失败代价这个属性。<a class="cite" href="#s5">[5]</a></p>
+      </article>
+    </div>
+    <p class="sec-note text">所引段落没有给出可比的工作量单位。十倍与相当工作量是不同的增量描述,不能合成同一条成本曲线;共同提醒是,演示之后的可靠性仍需工程投入。</p>
+
+    <h3 class="sub">九的算术:同一失败率,任务量放大后的期望失败次数 <span class="tag tag-local">算术</span></h3>
+    <div class="tbl" role="region" aria-labelledby="nines-table-caption" tabindex="0">
+      <table aria-describedby="nines-table-note">
+        <caption id="nines-table-caption">每天一万次任务的失败次数算例,非实测</caption>
+        <thead>
+          <tr>
+            <th scope="col">单次成功率</th>
+            <th scope="col">每天一万次任务的期望失败次数</th>
+            <th scope="col">讲者对这档的描述,非通用交付标准</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">90%</th><td>1000 次</td><td>「可以做出精彩演示」,交给客户是「需要用户帮你不断善后的实验」</td></tr>
+          <tr><th scope="row">99%</th><td>100 次</td><td>「每天一万次任务就还有一百次失败」</td></tr>
+          <tr><th scope="row">99.9%</th><td>10 次</td><td>「不一定够,要看剩下的错误落在了谁身上」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sec-note text" id="nines-table-note">每天「一万次」的设定及表内讲者描述来自谈话摘引。<a class="cite" href="#s7">[7]</a> 在各次任务成功概率等于表中设定值的假设下,期望失败次数等于失败率乘任务量,不要求任务彼此独立。期望值不保证每天的实际次数相同;演示与真实环境之间的成功率差异,也不能由这些算例推定。</p>
+
+    <h3 class="sub">多步任务的整体成功率(Garg 算例) <span class="tag tag-infer">作者算例</span></h3>
+    <p class="ratio-title">本页采用的简化假设:每步成功率相同、步骤独立、任一步失败即整体失败</p>
+    <ul class="ratio">
+      <li><span class="lab">90% × 10 步</span><span class="track" aria-hidden="true"><span class="fill s35"></span></span><span class="num">约 35%</span></li>
+      <li><span class="lab">99% × 10 步</span><span class="track" aria-hidden="true"><span class="fill fill-2 s90"></span></span><span class="num">约 90%</span></li>
+      <li><span class="lab">99% × 100 步</span><span class="track" aria-hidden="true"><span class="fill fill-3 s37"></span></span><span class="num">约 37%</span></li>
+    </ul>
+    <p class="sec-note text">数值来自 Garg 文章中的数学算例,并非实测;他还讨论了错误进入后续上下文的问题。<a class="cite" href="#s6">[6]</a> 在上述简化假设下,任务步数越多,整体成功率越低。实际系统可能存在步骤相关性、重试或纠错机制,不能据此算例直接判断具体 Agent 的成功率或是否「可托付」。</p>
+  </div>
+</section>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <h2>三、为什么先便宜的可能是 Demo</h2>
+    <p class="sec-note text">这一节整理讲者的解释,不把它当作已由成本数据验证的因果结论。<a class="cite" href="#s7">[7]</a> <span class="tag tag-self">讲者论证</span></p>
+    <div class="two">
+      <div>
+        <h3>Demo 可以选择条件</h3>
+        <ul class="check">
+          <li>可以用最标准的数据、最清晰的指令、最理想的流程</li>
+          <li>可以彩排十次,只展示成功的一次</li>
+          <li>出错可以重新生成,背后可以有人接管</li>
+          <li>讲者的比喻:「Demo 面对的是一道你提前知道答案的题」</li>
+        </ul>
+      </div>
+      <div>
+        <h3>讲者的比喻:产品面对「永远不知道下一题是什么的考试」</h3>
+        <ul class="check">
+          <li>失败了怎么办、异常了谁处理、不确定时要不要停下来</li>
+          <li>与客户现有系统对不上怎么办、客户中途改需求怎么办</li>
+          <li>模型升级后流程失效怎么办</li>
+          <li>谁发现错误、谁承担损失</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="sub">整理者补一条边界</h3>
+    <p class="text">不能把上述比喻理解为「产品不能选择条件」。产品同样可以限定场景、拒答、重试和人工复核。审查重点不在于是否允许限定条件,而在于是否披露边界、满足约定并能处理失败;Demo 也应说明演示条件和人工介入,不能无证据地概括为「通常不说」。<span class="tag tag-local">整理者推断</span></p>
+  </div>
+</section>
+
+<section class="sec" id="ask">
+  <div class="wrap">
+    <h2>四、看一个 AI 项目的三问,加一问</h2>
+    <p class="sec-note text">前三问及「做错一次会发生什么」来自讲者。<a class="cite" href="#s7">[7]</a> 整理者将失败后果单列为第四问,用来讨论前三问需要具备多强的保障。</p>
+    <ol class="flow">
+      <li class="ai"><div><b>它展示的是能力,还是结果?</b>「能自动回复客户」是能力;「客户问题解决率达到多少」是结果。还应说明能力如何转化为用户价值,不能由演示直接推出付费意愿,也不宜断言「只有结果能定价」。<p class="tool">讲者原问;定价说明经整理者限缩</p></div></li>
+      <li class="ai"><div><b>它展示的是最好的一次,还是稳定的一千次?</b>看代表性样本上的表现,而不是剪辑过的成功案例;同时交代样本选择、失败定义和人工介入程度。「一千次」是讲者的表达,不是统一的验收样本门槛。<p class="tool">讲者原问 + 整理者补充</p></div></li>
+      <li class="ai"><div><b>它有没有处理失败的机制?</b>系统如何识别不确定性、错误如何被发现、谁来接管、错误怎样进入下一轮评测。讲者的话:「没有失败机制的 AI 不是自动化,只是把风险藏到了流程后面。」<a class="cite" href="#s7">[7]</a><p class="tool">讲者原问与警句;具体问题由整理者展开</p></div></li>
+      <li class="human"><div><b>它做错一次会发生什么?</b>生成一张不满意的图片可以重来;漏付一笔款、交错一份合规文件、在路上判断失误,代价不同。可靠性目标还须结合任务量、错误后果、可恢复性与兜底机制判断,不能仅因错误成本低就把 90% 当作通用交付门槛。<p class="tool">讲者提出失败后果问题;Karpathy 也区分不同任务的失败代价。<a class="cite" href="#s5">[5]</a> 本项具体判断建议为整理者归纳。</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="edge">
+  <div class="wrap">
+    <h2>五、所列证据不能支持的进一步结论</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Demo 不重要?</h3>
+        <p>不能这样推出。Dolgov 讲的是 Demo 之后的工作量比例,不是 Demo 的价值;他的 Demo 正是整个故事的起点。<a class="cite" href="#s1">[1]</a> 讲者也说「模型负责缩短从零到一」。<a class="cite" href="#s7">[7]</a> 工作量占比不能直接代替价值判断。</p>
+      </article>
+      <article class="card">
+        <h3>所有项目都要五个九?</h3>
+        <p>不能这样推出。Karpathy 提醒很多任务未必具有高失败代价属性。<a class="cite" href="#s5">[5]</a> 整理者建议结合具体任务量、错误后果、可恢复性和兜底机制设定目标,而不是从行业热度或单一成功率推导要求。</p>
+      </article>
+      <article class="card">
+        <h3>「稳定」就等于「商业成立」?</h3>
+        <p>不是。讲者把「产品能运行」和「商业模式成立」分开。<a class="cite" href="#s7">[7]</a> 稳定交付不能单独证明需求或长期付费意愿,这些仍需另外验证。</p>
+      </article>
+      <article class="card">
+        <h3>「车内无人」等于没有人类参与?</h3>
+        <p><strong>具体事实待核。</strong>Karpathy 在 2025 年访谈中谈到远程人员参与,也明确承认不了解 Waymo 的具体机制。<a class="cite" href="#s5">[5]</a> 这不是对其远程驾驶方式的核实;本页不据此判断 Waymo 当前的人类参与程度,也不把远程协助与远程驾驶混为一谈。</p>
+      </article>
+      <article class="card">
+        <h3>15 年都花在「可靠性」上?</h3>
+        <p>不能这样推出。Dolgov 用「许多个九」强调 Demo 之后的可靠性投入。<a class="cite" href="#s1">[1]</a> 「约 15 年」是历程概括,不是可靠性工作的工时合计;所列材料也不能支持硬件、法规、运营或融资各占多少时间的拆分。</p>
+      </article>
+      <article class="card">
+        <h3>模型升级只抬高起点?</h3>
+        <p>讲者说「模型升级会抬高所有人的起点,但不会替你完成产品化」。<a class="cite" href="#s7">[7]</a> 「不会替你完成」不等于「不会降低产品化成本」。模型工具也可能影响测试、集成、运维成本,但所列材料没有给出可比的成本数据。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sources">
+  <div class="wrap">
+    <h2>来源</h2>
+    <p class="sec-note text">每条注明核查深度:「正文已读」指整理者读过该页正文;「仅核摘要」指只核对了搜索摘要或条目;「只核到标题」不作独立佐证。英文原话均由整理者译为中文,引号内为意译。</p>
+    <ol class="src">
+<li id="s1"><a href="https://www.ycrootaccess.com/p/dmitri-dolgov-seven-lessons-from" rel="noopener">Dmitri Dolgov: Seven Lessons From Building AI for the Physical World(YC Root Access 整理稿)</a><span class="src-meta">2026-08-03 · Waymo 联合 CEO 在 YC Startup School 2026 的演讲整理稿;亲历自述;正文已读</span></li>
+<li id="s2"><a href="https://www.ycombinator.com/library/WV-waymo-co-ceo-dmitri-dolgov-the-demo-is-only-1-of-the-work" rel="noopener">Waymo Co-CEO Dmitri Dolgov: The Demo Is Only 1% Of The Work(YC Startup Library 视频页)</a><span class="src-meta">日期未核 · 同一演讲的视频页;只核到标题,页面未读,不作独立佐证</span></li>
+<li id="s3"><a href="https://en.wikipedia.org/wiki/Waymo" rel="noopener">Wikipedia: Waymo</a><span class="src-meta">2026-10-03 读取 · 百科时间线条目;仅核与本页相关的日期条目,未读全文</span></li>
+<li id="s4"><a href="https://techcrunch.com/2026/03/27/waymo-skyrocketing-ridership-in-one-chart/" rel="noopener">TechCrunch: Waymo’s skyrocketing ridership in one chart</a><span class="src-meta">2026-03-27 · 媒体报道;仅核摘要;报道数字未回核 Waymo 原始数据</span></li>
+<li id="s5"><a href="https://www.dwarkesh.com/p/andrej-karpathy" rel="noopener">Dwarkesh Patel 访谈 Andrej Karpathy:AGI is still a decade away(官方文字稿)</a><span class="src-meta">2025-10-17 · 在 Tesla 做了五年自动驾驶的亲历者自述;正文已读</span></li>
+<li id="s6"><a href="https://ashugarg.substack.com/p/what-it-takes-to-build-ai-agents" rel="noopener">Ashu Garg(Foundation Capital):What it takes to build AI agents that actually work</a><span class="src-meta">2025-11-01 · 投资人文章;作者论述与算例;仅核摘要</span></li>
+<li id="s7">原始分享:「换个视角看懂AI」节目谈话逐字稿<span class="src-meta">2026-10-03 由用户提供 · 主材料;讲者姓名未知;其中 Waymo 数字为对来源 [1] 的转述;「每天一万次任务」为举例</span></li>
+</ol>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <p>整理者说明:本页基于用户提供的谈话逐字稿与上列来源整理;讲者姓名未知,节目名按逐字稿落款。Waymo 数字已对照 Dolgov 演讲整理稿,核到的是他的回顾与估计,不等于独立核实工期和工作量比例;其余数字按性质标为时间线、媒体转述、举例或算例。本页是对一段谈话的证据核查,不构成对任何公司或项目的总体评价。</p>
+  </div>
+</footer>
+</body>
+</html>

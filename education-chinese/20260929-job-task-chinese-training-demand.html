@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="面向中文教师与教育创业者的研究决策报告：区分事实、推断、建议与未知，按企业岗位任务选择中文训练产品，并以可失败的付费试点验证需求。">
+    <title>先卖岗位任务，再决定教什么中文｜研究决策报告</title>
+
+  <style>
+    :root {
+      --paper: #f4f0e6;
+      --surface: #fcfaf5;
+      --ink: #152d44;
+      --ink-soft: #29445c;
+      --muted: #586370;
+      --rule: #d4d0c4;
+      --quiet: #eae6dc;
+      --accent: #c43f25;
+      --accent-soft: #f7e4dc;
+      --on-dark: #fcf7eb;
+      --muted-on-dark: #d1dbe2;
+      --rule-on-dark: #4b5f70;
+      --transparent: transparent;
+
+      --font-sans: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      --font-serif: "Noto Serif CJK SC", "Songti SC", "STSong", serif;
+      --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      --font-body: 16px;
+      --font-small: 14px;
+      --font-note: 13px;
+      --font-tiny: 12px;
+      --font-h1: clamp(38px, 4.7vw, 60px);
+      --font-h2: clamp(26px, 2.5vw, 32px);
+      --font-h3: 21px;
+      --font-pull: 25px;
+      --font-stat: clamp(32px, 3.1vw, 40px);
+      --font-section: 30px;
+      --weight-normal: 400;
+      --weight-medium: 500;
+      --weight-bold: 700;
+      --weight-heavy: 800;
+      --leading-body: 1.75;
+      --leading-compact: 1.5;
+      --leading-heading: 1.35;
+      --leading-display: 1.24;
+      --tracking-wide: .1em;
+      --tracking-tight: -.025em;
+
+      --zero: 0;
+      --full: 100%;
+      --s-0: 2px;
+      --s-1: 4px;
+      --s-2: 8px;
+      --s-3: 12px;
+      --s-4: 16px;
+      --s-5: 20px;
+      --s-6: 24px;
+      --s-8: 32px;
+      --s-10: 40px;
+      --s-12: 48px;
+      --s-14: 56px;
+      --s-16: 64px;
+
+      --canvas-width: 1280px;
+      --page-gutter: clamp(20px, 3.75vw, 48px);
+      --section-gap: 64px;
+      --compact-breakpoint: 760px;
+      --anchor-offset: 90px;
+      --tap-size: 44px;
+      --logo-size: 36px;
+      --ref-size: 26px;
+      --check-size: 20px;
+      --measure: 64ch;
+      --matrix-min-width: 1080px;
+      --metric-min-width: 820px;
+
+      --border-size: 1px;
+      --accent-border-size: 4px;
+      --focus-size: 3px;
+      --focus-offset: 3px;
+      --radius: 4px;
+      --rule-line: var(--border-size) solid var(--rule);
+      --dark-rule-line: var(--border-size) solid var(--rule-on-dark);
+      --ink-line: var(--border-size) solid var(--ink);
+      --accent-line: var(--accent-border-size) solid var(--accent);
+      --focus-outline: var(--focus-size) solid var(--accent);
+      --shadow: 0 14px 48px #152d4412;
+
+      --columns-one: minmax(0, 1fr);
+      --columns-two: repeat(2, minmax(0, 1fr));
+      --columns-three: repeat(3, minmax(0, 1fr));
+      --columns-four: repeat(4, minmax(0, 1fr));
+      --columns-five: repeat(5, minmax(0, 1fr));
+      --hero-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      --price-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      --logic-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      --source-columns: 62px minmax(0, 1.1fr) minmax(0, 1fr);
+      --mobile-field-columns: 88px minmax(0, 1fr);
+      --gate-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      --matrix-col-type: 14%;
+      --matrix-col-payer: 13%;
+      --matrix-col-learner: 10%;
+      --matrix-col-task: 16%;
+      --matrix-col-accept: 18%;
+      --matrix-col-evidence: 18%;
+      --matrix-col-substitute: 11%;
+
+      --z-nav: 10;
+      --z-skip: 100;
+      --sr-size: 1px;
+      --sr-clip: inset(50%);
+      --skip-away: translateY(-160%);
+      --skip-visible: translateY(0);
+
+      --print-page-height: 1920px;
+      --print-page-top: 28px;
+      --print-page-bottom: 28px;
+      --print-gutter: 48px;
+      --print-section-gap: 40px;
+      --print-font-h1: 56px;
+      --print-font-h2: 30px;
+      --print-font-stat: 38px;
+      --print-widows: 3;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--quiet); }
+    body {
+      margin: var(--zero);
+      color: var(--ink);
+      font: var(--weight-normal) var(--font-body)/var(--leading-body) var(--font-sans);
+    }
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: var(--zero); }
+    h1, h2, h3, h4 { line-height: var(--leading-heading); }
+    h1, h2 { font-family: var(--font-serif); }
+    h1 {
+      font-size: var(--font-h1);
+      font-weight: var(--weight-heavy);
+      letter-spacing: var(--tracking-tight);
+      line-height: var(--leading-display);
+    }
+    h2 { font-size: var(--font-h2); font-weight: var(--weight-bold); }
+    h3 { font-size: var(--font-h3); }
+    h4 { font-size: var(--font-body); }
+    p + p { margin-top: var(--s-3); }
+    strong { font-weight: var(--weight-bold); }
+    a {
+      color: inherit;
+      text-decoration-thickness: var(--border-size);
+      text-underline-offset: var(--s-1);
+    }
+    a:hover { color: var(--accent); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: var(--focus-offset);
+    }
+    [id] { scroll-margin-top: var(--anchor-offset); }
+    [hidden] { display: none !important; }
+    .sr-only {
+      position: absolute;
+      width: var(--sr-size);
+      height: var(--sr-size);
+      padding: var(--zero);
+      overflow: hidden;
+      clip-path: var(--sr-clip);
+      white-space: nowrap;
+      border: var(--zero);
+    }
+    .skip-link {
+      position: fixed;
+      top: var(--s-3);
+      left: var(--s-3);
+      z-index: var(--z-skip);
+      padding: var(--s-3) var(--s-5);
+      background: var(--ink);
+      color: var(--on-dark);
+      transform: var(--skip-away);
+    }
+    .skip-link:focus { transform: var(--skip-visible); }
+    .report {
+      width: min(var(--full), var(--canvas-width));
+      margin-inline: auto;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .inset { padding-inline: var(--page-gutter); }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s-4);
+      padding-block: var(--s-5);
+      border-bottom: var(--rule-line);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      font-weight: var(--weight-bold);
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: var(--logo-size);
+      height: var(--logo-size);
+      background: var(--ink);
+      color: var(--on-dark);
+      border-bottom: var(--accent-line);
+    }
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: var(--font-tiny);
+      font-weight: var(--weight-normal);
+      letter-spacing: var(--tracking-wide);
+    }
+    .masthead-right { display: flex; align-items: center; gap: var(--s-5); }
+    .issue { color: var(--muted); font-size: var(--font-note); }
+    .button {
+      display: inline-flex;
+      flex-shrink: var(--zero);
+      white-space: nowrap;
+      justify-content: center;
+      align-items: center;
+      min-height: var(--tap-size);
+      padding: var(--s-2) var(--s-4);
+      border: var(--ink-line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: var(--transparent);
+      text-decoration: none;
+      font-size: var(--font-small);
+      font-weight: var(--weight-bold);
+    }
+    .button:hover { background: var(--ink); color: var(--on-dark); }
+    .js-only { display: none; }
+    .has-js .js-only { display: inline-flex; }
+    .eyebrow {
+      font-size: var(--font-note);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wide);
+      color: var(--accent);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: var(--hero-columns);
+      gap: var(--s-12);
+      align-items: center;
+      padding-block: var(--s-14);
+    }
+    .hero > *, .grid > *, .source-row > * { min-width: var(--zero); }
+    .hero h1 { margin-block: var(--s-5) var(--s-6); }
+    .hero h1 span { color: var(--accent); }
+    .hero-lead { max-width: var(--measure); color: var(--ink-soft); }
+    .meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-2) var(--s-5);
+      margin-top: var(--s-6);
+      color: var(--muted);
+      font-size: var(--font-note);
+    }
+    .decision-slip {
+      background: var(--ink);
+      color: var(--on-dark);
+      padding: var(--s-8);
+      border-top: var(--accent-line);
+    }
+    .slip-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-5);
+      font-size: var(--font-small);
+    }
+    .slip-row { padding-block: var(--s-4); border-top: var(--dark-rule-line); }
+    .slip-row small {
+      display: block;
+      color: var(--muted-on-dark);
+      font-size: var(--font-note);
+      margin-bottom: var(--s-1);
+    }
+    .slip-row strong { font-size: var(--font-h3); }
+    .decision-slip .ref { color: var(--on-dark); }
+    .decision-slip a:focus-visible, .counter-band a:focus-visible {
+      outline-color: var(--on-dark);
+    }
+    .slip-note {
+      margin-top: var(--s-4);
+      color: var(--muted-on-dark);
+      font-size: var(--font-note);
+    }
+
+    .toc {
+      position: sticky;
+      top: var(--zero);
+      z-index: var(--z-nav);
+      background: var(--surface);
+      border-block: var(--rule-line);
+    }
+    .toc-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--s-5);
+      overflow-x: auto;
+      padding-block: var(--s-2);
+    }
+    .toc-label {
+      flex-shrink: var(--zero);
+      font-size: var(--font-note);
+      color: var(--muted);
+    }
+    .toc-links { display: flex; gap: var(--s-1); }
+    .toc a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap-size);
+      padding-inline: var(--s-3);
+      font-size: var(--font-small);
+      white-space: nowrap;
+      text-decoration: none;
+      border-bottom: var(--border-size) solid var(--transparent);
+    }
+    .toc a:hover, .toc a[aria-current="location"] {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .chapter { padding-top: var(--section-gap); }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s-5);
+      margin-bottom: var(--s-4);
+    }
+    .section-number {
+      flex-shrink: var(--zero);
+      color: var(--accent);
+      font: var(--weight-normal) var(--font-section)/var(--leading-heading) var(--font-mono);
+    }
+    .section-intro {
+      color: var(--muted);
+      margin-bottom: var(--s-6);
+      max-width: var(--measure);
+    }
+    .grid { display: grid; gap: var(--s-5); }
+    .legend-grid { grid-template-columns: var(--columns-four); }
+    .grade-grid, .choice-grid { grid-template-columns: var(--columns-three); }
+    .case-grid { grid-template-columns: var(--columns-two); }
+    .price-grid { grid-template-columns: var(--price-columns); }
+    .counter-grid, .question-grid, .pilot-grid { grid-template-columns: var(--columns-two); }
+    .panel {
+      padding: var(--s-6);
+      background: var(--surface);
+      border: var(--rule-line);
+      border-radius: var(--radius);
+    }
+    .legend-item { padding-bottom: var(--s-5); border-bottom: var(--ink-line); }
+    .legend-item p, .grade-item p {
+      margin-top: var(--s-3);
+      color: var(--muted);
+      font-size: var(--font-small);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-1);
+      padding: var(--s-0) var(--s-2);
+      border: var(--border-size) solid var(--transparent);
+      border-radius: var(--radius);
+      font-size: var(--font-tiny);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-compact);
+      vertical-align: baseline;
+      white-space: nowrap;
+    }
+    .fact { color: var(--on-dark); background: var(--ink); }
+    .inference { color: var(--ink); border-color: var(--ink); background: var(--transparent); }
+    .advice { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+    .unknown {
+      color: var(--muted);
+      background: var(--quiet);
+      border-style: dashed;
+      border-color: var(--muted);
+    }
+    .grade-grid { margin-top: var(--s-6); }
+    .grade-item { padding: var(--s-5); background: var(--quiet); }
+    .grade-item strong { display: block; }
+    .grade-letter { font-family: var(--font-mono); margin-right: var(--s-2); }
+    .note { font-size: var(--font-note); color: var(--muted); }
+    .under-note { margin-top: var(--s-4); }
+    .ref {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: var(--ref-size);
+      padding: var(--s-0) var(--s-1);
+      margin-left: var(--s-1);
+      color: var(--accent);
+      font: var(--weight-bold) var(--font-tiny)/var(--leading-compact) var(--font-mono);
+      text-decoration: none;
+      border-bottom: var(--border-size) solid currentColor;
+      vertical-align: baseline;
+    }
+
+    .logic-figure { margin-top: var(--s-8); }
+    .logic-track {
+      display: grid;
+      grid-template-columns: var(--logic-columns);
+      align-items: center;
+      gap: var(--s-4);
+      padding: var(--s-6);
+      background: var(--surface);
+      border: var(--rule-line);
+    }
+    .logic-node strong, .logic-node small { display: block; }
+    .logic-node small {
+      margin-top: var(--s-2);
+      color: var(--muted);
+      font-size: var(--font-note);
+    }
+    .logic-separator {
+      color: var(--accent);
+      font-size: var(--font-section);
+      text-align: center;
+    }
+    figcaption { margin-top: var(--s-3); color: var(--muted); font-size: var(--font-small); }
+
+    .table-wrap { overflow-x: auto; border: var(--rule-line); background: var(--surface); }
+    table {
+      width: var(--full);
+      border-collapse: collapse;
+      text-align: left;
+      font-size: var(--font-small);
+    }
+    caption {
+      padding: var(--s-4) var(--s-5);
+      text-align: left;
+      font-size: var(--font-small);
+      font-weight: var(--weight-bold);
+      color: var(--ink);
+      background: var(--quiet);
+    }
+    th, td {
+      padding: var(--s-4) var(--s-3);
+      border-bottom: var(--rule-line);
+      vertical-align: top;
+      line-height: var(--leading-compact);
+      overflow-wrap: anywhere;
+    }
+    thead th {
+      color: var(--on-dark);
+      background: var(--ink);
+      font-size: var(--font-note);
+      font-weight: var(--weight-medium);
+    }
+    tbody th { font-weight: var(--weight-bold); }
+    tbody tr:last-child > * { border-bottom: var(--zero); }
+    .matrix-table { table-layout: fixed; min-width: var(--matrix-min-width); }
+    .col-type { width: var(--matrix-col-type); }
+    .col-payer { width: var(--matrix-col-payer); }
+    .col-learner { width: var(--matrix-col-learner); }
+    .col-task { width: var(--matrix-col-task); }
+    .col-accept { width: var(--matrix-col-accept); }
+    .col-evidence { width: var(--matrix-col-evidence); }
+    .col-substitute { width: var(--matrix-col-substitute); }
+    .row-label {
+      display: block;
+      margin-top: var(--s-3);
+      font-weight: var(--weight-normal);
+      font-size: var(--font-note);
+      color: var(--accent);
+    }
+    .evidence-title {
+      display: block;
+      margin-bottom: var(--s-2);
+      font-weight: var(--weight-bold);
+    }
+    .matrix-table tbody tr:first-child { background: var(--accent-soft); }
+    .callout {
+      margin-top: var(--s-5);
+      padding: var(--s-5) var(--s-6);
+      border-left: var(--accent-line);
+      background: var(--surface);
+      font-size: var(--font-small);
+    }
+
+    .case-card {
+      display: flex;
+      flex-direction: column;
+      padding: var(--s-6);
+      background: var(--surface);
+      border: var(--rule-line);
+      border-top: var(--ink-line);
+    }
+    .card-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--s-2);
+      margin-bottom: var(--s-4);
+      color: var(--muted);
+      font-size: var(--font-note);
+    }
+    .case-card h3 { margin-bottom: var(--s-4); }
+    .stat {
+      margin-bottom: var(--s-5);
+      padding-block: var(--s-4);
+      border-block: var(--rule-line);
+    }
+    .stat-number {
+      display: block;
+      font: var(--weight-bold) var(--font-stat)/var(--leading-heading) var(--font-mono);
+      letter-spacing: var(--tracking-tight);
+    }
+    .stat-caption {
+      display: block;
+      color: var(--muted);
+      font-size: var(--font-note);
+      margin-top: var(--s-2);
+    }
+    .case-card p { font-size: var(--font-small); }
+    .boundary { margin-top: auto; padding-top: var(--s-5); }
+    .boundary p { color: var(--muted); margin-top: var(--s-2); }
+
+    .price-context { margin-top: var(--s-3); color: var(--muted); font-size: var(--font-small); }
+    .price-pair {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--s-5);
+      margin-block: var(--s-6);
+    }
+    .price-cell { padding-top: var(--s-4); border-top: var(--ink-line); }
+    .price-cell dt { color: var(--muted); font-size: var(--font-small); }
+    .price-cell dd {
+      margin-top: var(--s-2);
+      font: var(--weight-bold) var(--font-stat)/var(--leading-heading) var(--font-mono);
+    }
+    .currency {
+      display: block;
+      color: var(--muted);
+      font-size: var(--font-small);
+      font-weight: var(--weight-normal);
+    }
+    .price-cell small {
+      font-family: var(--font-sans);
+      font-size: var(--font-note);
+      font-weight: var(--weight-normal);
+    }
+    .distinction + .distinction {
+      margin-top: var(--s-5);
+      padding-top: var(--s-4);
+      border-top: var(--rule-line);
+    }
+    .distinction p { margin-top: var(--s-2); color: var(--muted); font-size: var(--font-small); }
+    .formula-band {
+      margin-top: var(--s-5);
+      padding: var(--s-6);
+      background: var(--ink);
+      color: var(--on-dark);
+    }
+    .formula {
+      margin-block: var(--s-4);
+      font-size: var(--font-h3);
+      font-weight: var(--weight-bold);
+    }
+    .formula-band .note { color: var(--muted-on-dark); }
+
+    .buy-chain {
+      display: grid;
+      grid-template-columns: var(--columns-five);
+      gap: var(--s-4);
+    }
+    .chain-card { padding: var(--s-5); border: var(--rule-line); background: var(--surface); }
+    .step-number {
+      display: block;
+      margin-bottom: var(--s-3);
+      color: var(--accent);
+      font: var(--weight-bold) var(--font-h3)/var(--leading-heading) var(--font-mono);
+    }
+    .chain-card h3 { font-size: var(--font-body); }
+    .chain-card p { margin-top: var(--s-3); color: var(--muted); font-size: var(--font-small); }
+    .chain-card .deliverable {
+      color: var(--ink);
+      padding-top: var(--s-3);
+      border-top: var(--rule-line);
+    }
+    .question-grid { margin-top: var(--s-5); }
+    .question-grid p { margin-top: var(--s-3); font-size: var(--font-small); }
+
+    .choice-card { padding: var(--s-6); border-top: var(--accent-line); background: var(--surface); }
+    .choice-card h3 { margin-block: var(--s-4); }
+    .choice-card p { font-size: var(--font-small); }
+    .choice-card .product {
+      margin-block: var(--s-4);
+      padding-block: var(--s-4);
+      border-block: var(--rule-line);
+      font-weight: var(--weight-bold);
+    }
+
+    .counter-band { padding: var(--s-8); background: var(--ink); color: var(--on-dark); }
+    .counter-band h3 {
+      margin-block: var(--s-4);
+      font-family: var(--font-serif);
+      font-size: var(--font-pull);
+    }
+    .counter-band p { color: var(--muted-on-dark); }
+    .counter-band .ref { color: var(--on-dark); }
+    .counter-band .fact { background: var(--on-dark); color: var(--ink); }
+    .counter-grid { margin-top: var(--s-5); }
+    .counter-grid h3 { margin-bottom: var(--s-3); font-size: var(--font-body); }
+    .counter-grid p { font-size: var(--font-small); }
+
+    .pilot-lead {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--s-4) var(--s-8);
+      padding-block: var(--s-5);
+      border-block: var(--ink-line);
+      margin-bottom: var(--s-6);
+    }
+    .pilot-lead strong {
+      font: var(--weight-bold) var(--font-stat)/var(--leading-heading) var(--font-mono);
+    }
+    .pilot-lead span { color: var(--muted); font-size: var(--font-small); }
+    .timeline {
+      display: grid;
+      grid-template-columns: var(--columns-four);
+      gap: var(--s-4);
+    }
+    .timeline article {
+      padding: var(--s-5);
+      background: var(--surface);
+      border-top: var(--accent-line);
+    }
+    .timeline h3 { font-size: var(--font-body); margin-block: var(--s-3); }
+    .timeline p { font-size: var(--font-small); color: var(--muted); }
+    .pilot-grid { margin-top: var(--s-5); }
+    .pilot-grid h3 { margin-bottom: var(--s-3); font-size: var(--font-body); }
+    .pilot-grid p { font-size: var(--font-small); }
+    .metric-wrap { margin-top: var(--s-6); }
+    .metric-table { min-width: var(--metric-min-width); }
+    .metric-table th[scope="row"] { white-space: nowrap; }
+    .gate-grid {
+      display: grid;
+      grid-template-columns: var(--gate-columns);
+      gap: var(--s-5);
+      margin-top: var(--s-5);
+    }
+    .gate-stop {
+      padding: var(--s-6);
+      background: var(--accent-soft);
+      border: var(--border-size) solid var(--accent);
+    }
+    .gate-go { padding: var(--s-6); background: var(--surface); border: var(--ink-line); }
+    .gate-stop h3, .gate-go h3 { margin-bottom: var(--s-4); }
+    .gate-stop p, .gate-go p { font-size: var(--font-small); }
+    .check-panel {
+      margin-top: var(--s-6);
+      padding: var(--s-6);
+      border: var(--rule-line);
+      background: var(--surface);
+    }
+    fieldset {
+      margin: var(--zero);
+      padding: var(--zero);
+      border: var(--zero);
+      min-width: var(--zero);
+    }
+    legend {
+      padding: var(--zero);
+      font-weight: var(--weight-bold);
+      margin-bottom: var(--s-4);
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--s-3) var(--s-6);
+    }
+    .check-label {
+      display: flex;
+      gap: var(--s-3);
+      align-items: flex-start;
+      min-height: var(--tap-size);
+      padding-block: var(--s-2);
+      font-size: var(--font-small);
+      cursor: pointer;
+    }
+    .check-label input {
+      flex-shrink: var(--zero);
+      width: var(--check-size);
+      height: var(--check-size);
+      margin: var(--s-1) var(--zero) var(--zero);
+      accent-color: var(--accent);
+    }
+    .gate-output {
+      display: block;
+      margin-top: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      background: var(--quiet);
+      border-left: var(--accent-line);
+      font-size: var(--font-small);
+    }
+    .gate-output[data-state="ready"] { background: var(--ink); color: var(--on-dark); }
+
+    .source-list { border-top: var(--ink-line); }
+    .source-row {
+      display: grid;
+      grid-template-columns: var(--source-columns);
+      gap: var(--s-5);
+      padding-block: var(--s-6);
+      border-bottom: var(--rule-line);
+    }
+    .source-id strong {
+      display: block;
+      font: var(--weight-bold) var(--font-h3)/var(--leading-heading) var(--font-mono);
+    }
+    .source-id small { color: var(--muted); font-size: var(--font-tiny); }
+    .source-link { font-size: var(--font-body); font-weight: var(--weight-bold); }
+    .source-row p { font-size: var(--font-small); color: var(--muted); margin-top: var(--s-2); }
+    .source-row .source-boundary { color: var(--ink); }
+
+    .footer {
+      margin-top: var(--section-gap);
+      padding-block: var(--s-8);
+      border-top: var(--ink-line);
+    }
+    .footer-verdict {
+      font-family: var(--font-serif);
+      font-size: var(--font-h3);
+      font-weight: var(--weight-bold);
+    }
+    .footer-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--s-3) var(--s-6);
+      margin-top: var(--s-5);
+      color: var(--muted);
+      font-size: var(--font-tiny);
+    }
+    .handoff { font-family: var(--font-mono); overflow-wrap: anywhere; }
+    .print-help { font-size: var(--font-note); color: var(--muted); margin-top: var(--s-3); }
+
+    /*
+      断点直接读取 :root token，不在媒体查询中重复写尺寸。
+      无 JS 时保留流式容器与可横向阅读的表格。
+      compact 规则仅作用于屏幕，避免移动端导出 PDF 时继承窄屏布局。
+    */
+    @media screen {
+      .compact .hero,
+      .compact .grade-grid,
+      .compact .case-grid,
+      .compact .choice-grid,
+      .compact .price-grid,
+      .compact .counter-grid,
+      .compact .question-grid,
+      .compact .pilot-grid,
+      .compact .gate-grid,
+      .compact .source-row,
+      .compact .buy-chain,
+      .compact .timeline,
+      .compact .check-grid {
+        grid-template-columns: var(--columns-one);
+      }
+      .compact .legend-grid { grid-template-columns: var(--columns-two); }
+      .compact .hero { gap: var(--s-8); padding-block: var(--s-10); }
+      .compact .decision-slip { padding: var(--s-6); }
+      .compact .issue, .compact .toc-label, .compact .brand small { display: none; }
+      .compact .masthead-right { gap: var(--s-2); }
+      .compact .toc-inner { gap: var(--s-2); }
+      .compact .section-head { gap: var(--s-3); }
+      .compact .logic-track { grid-template-columns: var(--columns-one); }
+      .compact .logic-node { text-align: center; }
+      .compact .counter-band { padding: var(--s-6); }
+
+      .compact .matrix-wrap, .compact .metric-wrap {
+        overflow: visible;
+        border: var(--zero);
+        background: var(--transparent);
+      }
+      .compact .responsive-table,
+      .compact .responsive-table tbody,
+      .compact .responsive-table tr {
+        display: block;
+        width: var(--full);
+        min-width: var(--zero);
+      }
+      .compact .responsive-table colgroup { display: none; }
+      .compact .responsive-table thead {
+        position: absolute;
+        width: var(--sr-size);
+        height: var(--sr-size);
+        overflow: hidden;
+        clip-path: var(--sr-clip);
+      }
+      .compact .responsive-table caption { display: block; margin-bottom: var(--s-4); }
+      .compact .responsive-table tr {
+        background: var(--surface);
+        border: var(--rule-line);
+        margin-bottom: var(--s-5);
+      }
+      .compact .responsive-table th[scope="row"] {
+        display: block;
+        padding: var(--s-4);
+        background: var(--ink);
+        color: var(--on-dark);
+        white-space: normal;
+        border: var(--zero);
+      }
+      .compact .responsive-table .row-label {
+        color: var(--muted-on-dark);
+        margin-top: var(--s-2);
+      }
+      .compact .responsive-table td {
+        display: grid;
+        grid-template-columns: var(--mobile-field-columns);
+        gap: var(--s-3);
+        padding: var(--s-4);
+        border-bottom: var(--rule-line);
+      }
+      .compact .responsive-table td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-weight: var(--weight-bold);
+        font-size: var(--font-note);
+      }
+      .compact .responsive-table td:last-child { border-bottom: var(--zero); }
+      .compact .source-row { gap: var(--s-3); }
+      .compact .source-id { display: flex; align-items: baseline; gap: var(--s-3); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @page {
+      size: var(--canvas-width) var(--print-page-height);
+      margin: var(--print-page-top) var(--zero) var(--print-page-bottom);
+    }
+
+    @media print {
+      :root {
+        --page-gutter: var(--print-gutter);
+        --section-gap: var(--print-section-gap);
+        --font-h1: var(--print-font-h1);
+        --font-h2: var(--print-font-h2);
+        --font-stat: var(--print-font-stat);
+      }
+      html, body {
+        width: var(--canvas-width);
+        min-width: var(--canvas-width);
+        margin: var(--zero);
+        background: var(--paper);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .report {
+        width: var(--canvas-width);
+        max-width: none;
+        margin: var(--zero);
+        box-shadow: none;
+      }
+      .toc, .skip-link, .screen-only, button { display: none !important; }
+      .hero { padding-block: var(--s-8); }
+      .table-wrap { overflow: visible; }
+      .matrix-table, .metric-table { min-width: var(--zero); }
+      .panel, .case-card, .choice-card, .chain-card, .timeline article,
+      .source-row, .callout, .grade-item, .legend-item, .counter-band,
+      .gate-stop, .gate-go, .check-panel, .formula-band {
+        break-inside: avoid;
+      }
+      h1, h2, h3, h4, .section-head, .section-intro, caption { break-after: avoid; }
+      .buy-chain { break-inside: avoid; }
+      p { orphans: var(--print-widows); widows: var(--print-widows); }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      #matrix, #cases, #buying, #pilot, #sources { break-before: page; }
+      .source-link::after {
+        content: "\A" attr(href);
+        display: block;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-family: var(--font-mono);
+        font-size: var(--font-tiny);
+        font-weight: var(--weight-normal);
+        margin-top: var(--s-2);
+        color: var(--muted);
+      }
+      .footer { break-inside: avoid; }
+    }
+  </style>
+
+  <script>
+    (() => {
+      "use strict";
+      const root = document.documentElement;
+      const breakpoint = getComputedStyle(root)
+        .getPropertyValue("--compact-breakpoint")
+        .trim();
+      const media = window.matchMedia(`(max-width: ${breakpoint})`);
+      const syncLayout = () => root.classList.toggle("compact", media.matches);
+
+      root.classList.add("has-js");
+      syncLayout();
+      window.addEventListener("beforeprint", () => root.classList.remove("compact"));
+      window.addEventListener("afterprint", syncLayout);
+
+      if (media.addEventListener) {
+        media.addEventListener("change", syncLayout);
+      } else {
+        media.addListener(syncLayout);
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到报告正文</a>
+
+  <div class="report" id="top">
+    <header class="masthead inset">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">研</span>
+        <div>
+          岗位中文 · 决策手册
+          <small>公开证据 / 产品选择 / 付费验证</small>
+        </div>
+      </div>
+      <div class="masthead-right">
+        <span class="issue">研究报告 · 2026.09</span>
+        <button class="button js-only screen-only" id="print-button" type="button">打印 / PDF</button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero inset" aria-labelledby="report-title">
+        <div>
+          <p class="eyebrow">写给正在选择“教什么、卖给谁”的中文教师</p>
+          <h1 id="report-title">先卖岗位任务，<br><span>再决定教什么中文。</span></h1>
+          <p class="hero-lead">不能从“英文写作教师稀缺”直接推出“中文写作教师收益最高”。前者未在本材料集得到验证；后者还缺中文写作付费需求、交付成本与续约证据。</p>
+          <p class="hero-lead"><strong>更可检验的命题：</strong>不泛卖“商务中文”，而是为一个岗位、一类沟通任务和一位预算负责人，设计可验收的中文训练。</p>
+          <div class="meta-line">
+            <span>范围：S1–S8，非市场全量调查</span>
+            <span>网页复核：<time datetime="2026-09-29">2026-09-29</time></span>
+          </div>
+        </div>
+
+        <aside class="decision-slip" aria-label="当前投入顺序建议">
+          <div class="slip-heading">
+            <span>当前投入顺序</span>
+            <span class="tag advice">建议</span>
+          </div>
+          <div class="slip-row">
+            <small>优先验证</small>
+            <strong>零售与接待场景口语</strong>
+          </div>
+          <div class="slip-row">
+            <small>有明确岗位损失与预算再进入</small>
+            <strong>销售、驻地、会议与写作</strong>
+          </div>
+          <div class="slip-row">
+            <small>另设客群与购买模型</small>
+            <strong>学术中文</strong>
+          </div>
+          <p class="slip-note">这是验证顺序，不是收入排名。零售场景更贴近商业企业的二语岗位任务，并非证据等级高于公共部门写作案例；教师净收益仍未知。<a class="ref" href="#s2" aria-label="查看来源S2">S2</a><a class="ref" href="#s3" aria-label="查看来源S3">S3</a></p>
+        </aside>
+      </section>
+
+      <nav class="toc" aria-label="研究报告目录">
+        <div class="toc-inner inset">
+          <span class="toc-label">阅读路径</span>
+          <div class="toc-links">
+            <a href="#evidence">证据规则</a>
+            <a href="#matrix">岗位矩阵</a>
+            <a href="#cases">案例</a>
+            <a href="#pricing">价格</a>
+            <a href="#buying">购买链</a>
+            <a href="#choices">选择建议</a>
+            <a href="#counter">反证</a>
+            <a href="#pilot">付费试点</a>
+            <a href="#sources">来源</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="inset">
+        <section class="chapter" id="evidence" aria-labelledby="evidence-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">01</span>
+            <h2 id="evidence-title">先分清：证据说了什么，没说什么</h2>
+          </div>
+          <p class="section-intro">陈述性质与来源强度是两件事。一份官方材料可以可靠地证明“开过课”，却仍然不能证明“外包成交”或“教师利润高”。</p>
+
+          <div class="grid legend-grid" aria-label="陈述性质图例">
+            <div class="legend-item">
+              <span class="tag fact">事实</span>
+              <p>来源直接披露的内容。供应商说过什么，不等于客户效果已经独立证实。</p>
+            </div>
+            <div class="legend-item">
+              <span class="tag inference">推断</span>
+              <p>从材料延伸的可检验解释；不冒充企业已确认的采购原因。</p>
+            </div>
+            <div class="legend-item">
+              <span class="tag advice">建议</span>
+              <p>本报告设计的客群、产品、验收与停止规则，尚待实践验证。</p>
+            </div>
+            <div class="legend-item">
+              <span class="tag unknown">未知</span>
+              <p>本材料未披露，或本次无法完整核验；未知不等于不存在。</p>
+            </div>
+          </div>
+
+          <div class="grid grade-grid" aria-label="证据等级图例">
+            <div class="grade-item">
+              <strong><span class="grade-letter">A</span>需求方一手 / 官方定义</strong>
+              <p>对其明确披露事项较强。企业年报和公共部门记录可支持培训活动，官方考试页可支持能力定义；均未必支持成交。<a class="ref" href="#s2">S2</a><a class="ref" href="#s5">S5</a><a class="ref" href="#s8">S8</a></p>
+            </div>
+            <div class="grade-item">
+              <strong><span class="grade-letter">B</span>供应方项目 / 公开报价</strong>
+              <p>提供交付形式、替代方案或报价线索。须另核实需求方确认、成交金额与实际效果。<a class="ref" href="#s3">S3</a><a class="ref" href="#s4">S4</a><a class="ref" href="#s6">S6</a></p>
+            </div>
+            <div class="grade-item">
+              <strong><span class="grade-letter">C</span>受限材料 / 历史补充</strong>
+              <p>原件访问受限或年代久远，降低对当前决策的支撑强度；不改变其原始发布主体。<a class="ref" href="#s1">S1</a><a class="ref" href="#s7">S7</a></p>
+            </div>
+          </div>
+
+          <p class="note under-note">A/B/C 是本报告的可追溯性与适用性分层，不是成交概率或正式学术评级。岗位矩阵另标“对该任务的支持程度”，不能只看来源等级。</p>
+
+          <figure class="logic-figure">
+            <div class="logic-track" aria-label="英文写作师资稀缺不能等同于中文写作付费需求，更不能等同于教师净收益最高">
+              <div class="logic-node">
+                <strong>英文写作教师稀缺</strong>
+                <small>本材料尚未验证这一前提</small>
+              </div>
+              <span class="logic-separator" aria-hidden="true">≠</span>
+              <div class="logic-node">
+                <strong>中文写作付费需求强</strong>
+                <small>语言、客群、任务不能直接平移</small>
+              </div>
+              <span class="logic-separator" aria-hidden="true">≠</span>
+              <div class="logic-node">
+                <strong>中文写作教师收益最高</strong>
+                <small>还缺价格、成本、容量与续约</small>
+              </div>
+            </div>
+            <figcaption><span class="tag inference">推断</span> 即便供给稀缺，也可能同时存在需求小、获客贵或交付难的情况；“稀缺”本身不足以排出收益高低。</figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter" id="matrix" aria-labelledby="matrix-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">02</span>
+            <h2 id="matrix-title">岗位任务矩阵：把“商务中文”拆开卖</h2>
+          </div>
+          <p class="section-intro"><span class="tag advice">设计假设</span> 下表的付费方、学员、场景、验收与替代品均为待验证设计，不代表所引企业已按此采购。证据强弱只针对本材料，不代表市场大小。</p>
+
+          <div class="table-wrap matrix-wrap" tabindex="0" role="region" aria-label="六类中文课程岗位任务矩阵；窄屏无脚本时可横向滚动">
+            <table class="matrix-table responsive-table" role="table">
+              <caption>先问谁承担损失，再问谁学习；最后才是课程名称。</caption>
+              <colgroup>
+                <col class="col-type">
+                <col class="col-payer">
+                <col class="col-learner">
+                <col class="col-task">
+                <col class="col-accept">
+                <col class="col-evidence">
+                <col class="col-substitute">
+              </colgroup>
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col">课程 / 教师类型</th>
+                  <th scope="col">付费方 / 预算线</th>
+                  <th scope="col">学员</th>
+                  <th scope="col">岗位场景</th>
+                  <th scope="col">验收样例</th>
+                  <th scope="col">证据强弱与缺口</th>
+                  <th scope="col">主要替代品</th>
+                </tr>
+              </thead>
+              <tbody role="rowgroup">
+                <tr role="row">
+                  <th scope="row">零售与接待场景口语<span class="row-label">建议先做窄任务试点</span></th>
+                  <td data-label="付费方"><div>零售运营、门店培训预算；具体签字权限待查。</div></td>
+                  <td data-label="学员"><div>导购、前台、接待人员。</div></td>
+                  <td data-label="岗位场景"><div>问需求、说明商品与价格、解释库存或服务规则、确认下一步。</div></td>
+                  <td data-label="验收样例"><div>在新对话中问齐关键条件，说明准确，并按规则完成服务或交接。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">贴近商业岗位：场景线索</span>S3 描述商业零售的二语顾客互动；比公共部门母语写作更贴近本轮拟测试的买方，但 S3 仍是供应商自述。成交与净收益未知。<a class="ref" href="#s3">S3</a><a class="ref" href="#s2">S2</a></div>
+                  </td>
+                  <td data-label="主要替代品"><div>双语值班员工、翻译工具、双语服务卡。</div></td>
+                </tr>
+
+                <tr role="row">
+                  <th scope="row">销售和客户关系<span class="row-label">沿既有业务场景延伸</span></th>
+                  <td data-label="付费方"><div>销售负责人或客户运营部门。</div></td>
+                  <td data-label="学员"><div>客户经理、售后与客户维护团队。</div></td>
+                  <td data-label="岗位场景"><div>需求澄清、异议回应、跟进预约、售后解释。</div></td>
+                  <td data-label="验收样例"><div>准确复述需求，不作错误承诺；明确跟进事项、责任人和时间。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">中等：内容关联</span>S3 含销售对话；S2 的销售营销重点属于整体培训，非普通话课成效。<a class="ref" href="#s3">S3</a><a class="ref" href="#s2">S2</a></div>
+                  </td>
+                  <td data-label="主要替代品"><div>双语客户经理、客户管理模板、口译。</div></td>
+                </tr>
+
+                <tr role="row">
+                  <th scope="row">外派 / 驻地通用中文<span class="row-label">先找到雇主或机构入口</span></th>
+                  <td data-label="付费方"><div>派出企业的人力或行政部门；公共机构采购另列。</div></td>
+                  <td data-label="学员"><div>不同中文起点的外派、驻地工作人员。</div></td>
+                  <td data-label="岗位场景"><div>预约办事、日常协作、办公沟通与求助。</div></td>
+                  <td data-label="验收样例"><div>按起点分组，独立完成改约、信息核对和求助；不承诺统一进度。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">受限：机构询价</span>S1 不是企业成交；原件受限，units 的时长定义须补核。<a class="ref" href="#s1">S1</a></div>
+                  </td>
+                  <td data-label="主要替代品"><div>英语协作、本地行政支持、翻译软件。</div></td>
+                </tr>
+
+                <tr role="row">
+                  <th scope="row">跨境项目专业术语与会议<span class="row-label">需要行业知识与项目入口</span></th>
+                  <td data-label="付费方"><div>项目负责人、事业部或项目培训预算。</div></td>
+                  <td data-label="学员"><div>工程、采购、项目协调人员。</div></td>
+                  <td data-label="岗位场景"><div>澄清规格、汇报进度、核对约束、复述会议决议。</div></td>
+                  <td data-label="验收样例"><div>术语准确、关键约束无漏传；说清行动项、责任人与日期。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">弱：仅有能力方向</span>S5 支持工作沟通定位；本材料没有该专项采购案例。<a class="ref" href="#s5">S5</a></div>
+                  </td>
+                  <td data-label="主要替代品"><div>口译、双语项目经理、术语库与会议字幕。</div></td>
+                </tr>
+
+                <tr role="row">
+                  <th scope="row">岗位中文写作<span class="row-label">母语公文与二语商务写作分开验证</span></th>
+                  <td data-label="付费方"><div>公共部门内部训练；付费方与采购方式未披露。商业企业另核实预算负责人。</div></td>
+                  <td data-label="学员"><div>母语或高水平中文写公文者，与二语商务邮件写作者分开。</div></td>
+                  <td data-label="岗位场景"><div>公文、报告、纪要，或客户邮件与报价说明；先限定一种文书。</div></td>
+                  <td data-label="验收样例"><div>同难度新稿的事实与条款准确；跟踪返工次数、审核耗时和关键错误。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">组织实施可证</span>香港公务员部门有中文公文写作训练记录；商业企业专项成交额和教师收入仍未知。<a class="ref" href="#s8">S8</a></div>
+                  </td>
+                  <td data-label="主要替代品"><div>模板、AI 起草加人工审核、专业编辑。</div></td>
+                </tr>
+
+                <tr role="row">
+                  <th scope="row">学术中文<span class="row-label">与企业岗位培训分开建模</span></th>
+                  <td data-label="付费方"><div>建议主要面向个人付费（B2C）或院校，另查预算机制。</div></td>
+                  <td data-label="学员"><div>准备中文学业、开展中文研究的学习者。</div></td>
+                  <td data-label="岗位场景"><div>学术阅读、摘要、报告、论证与规范引用；不是企业日常岗位任务。</div></td>
+                  <td data-label="验收样例"><div>自主完成摘要或报告，论证清楚、引用规范；不代写。</div></td>
+                  <td data-label="证据与缺口">
+                    <div><span class="evidence-title">本材料未覆盖</span>不能用企业普通话课案例替代院校或个人市场证据。</div>
+                  </td>
+                  <td data-label="主要替代品"><div>院校语言中心、写作中心、导师支持。</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <aside class="callout"><span class="tag fact">事实</span> BCT 官方定位是工作、商务等场景中的中文实际沟通能力。<a class="ref" href="#s5">S5</a> <span class="tag advice">建议</span> 可用作分层和评估参考，但验收仍回到岗位任务。<strong>不能据此声称所有采购都要求 BCT。</strong></aside>
+        </section>
+
+        <section class="chapter" id="cases" aria-labelledby="cases-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">03</span>
+            <h2 id="cases-title">企业案例与机构需求：四种信号，四种边界</h2>
+          </div>
+          <p class="section-intro">训练活动、供应商项目叙述和采购询价，不是同一阶段的商业证据。以下数值不合并、不外推为市场规模。</p>
+
+          <div class="grid case-grid">
+            <article class="case-card">
+              <div class="card-kicker">
+                <span class="tag fact">事实 · A</span>
+                <span>香港 / 企业年报</span>
+                <a class="ref" href="#s2">S2</a>
+              </div>
+              <h3>Sino Land（信和置业）</h3>
+              <div class="stat">
+                <strong class="stat-number">169,800+</strong>
+                <span class="stat-caption">小时 · 2023/24 全部员工培训<br>不是普通话课程时数</span>
+              </div>
+              <p>年报课程列表含 Business Putonghua；整体培训重点包括客服及大湾区销售营销。页码核对见来源记录。</p>
+              <div class="boundary">
+                <span class="tag unknown">不能证明</span>
+                <p>没有普通话单项预算；也未说明该课是否外包。总培训时数不能划给普通话课，更不能用于推算教师收入。</p>
+              </div>
+            </article>
+
+            <article class="case-card">
+              <div class="card-kicker">
+                <span class="tag fact">事实 · B</span>
+                <span>越南 / 供应商自述</span>
+                <a class="ref" href="#s3">S3</a>
+              </div>
+              <h3>IPPG 零售项目</h3>
+              <div class="stat">
+                <strong class="stat-number">5 周 / 10 小时</strong>
+                <span class="stat-caption">供应商披露的项目周期与课时</span>
+              </div>
+              <p>Ni Hao Ma 称项目围绕顾客互动和销售对话开展，提供了“岗位口语模块”的具体交付线索。</p>
+              <div class="boundary">
+                <span class="tag unknown">尚未独立证实</span>
+                <p>本材料未见 IPPG 自证、付款金额或可复查的前后测。供应商对学习成效的描述不作为已验证结果。</p>
+              </div>
+            </article>
+
+            <article class="case-card">
+              <div class="card-kicker">
+                <span class="tag fact">索引摘录 · 未核原件</span>
+                <span>北京 / 公共机构询价</span>
+                <a class="ref" href="#s1">S1</a>
+              </div>
+              <h3>菲律宾驻北京使馆</h3>
+              <div class="stat">
+                <strong class="stat-number">RMB 50,000</strong>
+                <span class="stat-caption">预算上限 · 2025-11-20 询价<br>不代表成交；不作为当前在采机会</span>
+              </div>
+              <p>搜索索引摘录显示：11 位不同级别人员、每类 40 units，要求面授及灵活排班。units 不擅自换算为小时。</p>
+              <div class="boundary">
+                <span class="tag unknown">访问与金额边界</span>
+                <p>原 PDF 直链本次返回 403；搜索索引摘录已复现，但全文未核。预算上限≠成交额。</p>
+              </div>
+            </article>
+
+            <article class="case-card">
+              <div class="card-kicker"><span class="tag fact">事实 · A</span><span>香港 / 公共部门实施</span><a class="ref" href="#s8">S8</a></div>
+              <h3>公文写作工作坊（中英并重）</h3>
+              <div class="stat"><strong class="stat-number">2 班 / 中英各 2 天</strong><span class="stat-caption">每班课程共 4.5 天；余半天未单独归类</span></div>
+              <p>香港公务员事务局为文书与秘书职系开展训练，目标是更准确、得体地写公文；计划 2024/25 年续办。同一课程英文写作也占两天，不能说明中文师资更紧缺。</p>
+              <div class="boundary"><span class="tag unknown">不能证明</span><p>未披露是否外购、价格或教师报酬；这是母语/高水平岗位写作，不能直接推到非母语企业中文写作课。</p></div>
+            </article>
+          </div>
+
+          <p class="note under-note"><strong>历史补充：</strong>2005 年的 Sino Land 年报把前线员工普通话课程与客户服务要求联系起来；仅作历史场景补充，不说明当期需求，也不与 S2 算作两家企业。<a class="ref" href="#s7">S7</a></p>
+        </section>
+
+        <section class="chapter" id="pricing" aria-labelledby="pricing-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">04</span>
+            <h2 id="pricing-title">价格证据：挂牌价不是老师的时薪</h2>
+          </div>
+          <p class="section-intro">本材料提供预算与价格信号，没有明确披露可用于本命题的真实成交额。不跨币种、不跨计价单位推算收益。</p>
+
+          <div class="grid price-grid">
+            <article class="panel">
+              <div class="card-kicker">
+                <span class="tag fact">事实 · B / 挂牌价</span>
+                <a class="ref" href="#s4">S4</a>
+              </div>
+              <h3>香港培训商，同规格公开价目</h3>
+              <p class="price-context">7–10 人一组 · 总课时 30–59 小时<br>单位：港币 / 组小时，不是每人小时。</p>
+              <dl class="price-pair">
+                <div class="price-cell">
+                  <dt>普通话</dt>
+                  <dd><span class="currency">HK$</span>820 <small>/ 组小时</small></dd>
+                </div>
+                <div class="price-cell">
+                  <dt>英文</dt>
+                  <dd><span class="currency">HK$</span>980 <small>/ 组小时</small></dd>
+                </div>
+              </dl>
+              <p class="note">基础套餐价未含教材费，可能另收交通费。该表不是写作专项；网页未列明确生效日期，最终适用条件与报价须向供应商确认。</p>
+            </article>
+
+            <article class="panel">
+              <div class="distinction">
+                <h3>预算上限 ≠ 付款金额</h3>
+                <p>S1 的 RMB 50,000 是询价上限，不是订单收入、已支付金额或教师所得。<a class="ref" href="#s1">S1</a></p>
+              </div>
+              <div class="distinction">
+                <h3>供应商报价 ≠ 教师报酬</h3>
+                <p>S4 的组小时报价未披露折扣、师资分成、获客与备课成本，不能据此算利润。<a class="ref" href="#s4">S4</a></p>
+              </div>
+              <div class="distinction">
+                <h3>一张价目表 ≠ 市场收益排名</h3>
+                <p>这份同规格挂牌价中，英文（HK$980）高于普通话（HK$820）；它既不是写作比较，也不能代表所有地区、课型或教师。<a class="ref" href="#s4">S4</a></p>
+              </div>
+            </article>
+          </div>
+
+          <div class="formula-band">
+            <span class="tag advice">建议 · 教师本人时间回报口径</span>
+            <p class="formula">单位时间回报 ＝（实际到账 − 项目现金成本）÷ 本人全部投入小时</p>
+            <p class="note">现金成本记录获客、外聘师资、教材、平台、往返等；本人时间包括售前、备课、授课、修改、排班、评估与售后。税费口径另列。此式不是会计净利润，也不是收入预测。</p>
+            <p class="note"><strong>当前未知：</strong>实际折扣、到账、教师分成、可售课容量、返工与续约。没有这些字段，不能证明哪类教师“收益最高”。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="buying" aria-labelledby="buying-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">05</span>
+            <h2 id="buying-title">购买决策链：学员说需要，不等于有人能签单</h2>
+          </div>
+          <p class="section-intro"><span class="tag advice">访谈模型</span> 下列是建议核查的角色与凭据，不是对 S1–S8 采购过程的还原。小企业可能由一人兼任多个角色。</p>
+
+          <div class="buy-chain" aria-label="从业务损失到付款续约的五个核查环节">
+            <article class="chain-card">
+              <span class="step-number">01 →</span>
+              <h3>业务发起人</h3>
+              <p>门店、客服或项目负责人：指出中文沟通在哪个任务上失败。</p>
+              <p class="deliverable"><strong>拿到：</strong>真实失误样本与业务后果。</p>
+            </article>
+            <article class="chain-card">
+              <span class="step-number">02 →</span>
+              <h3>预算负责人</h3>
+              <p>运营、培训或人力负责人：确认预算归属与付款责任。</p>
+              <p class="deliverable"><strong>拿到：</strong>预算科目、金额范围、授权人。</p>
+            </article>
+            <article class="chain-card">
+              <span class="step-number">03 →</span>
+              <h3>采购与审核</h3>
+              <p>采购、财务及数据审核接口：确认供方条件、合同和材料授权。</p>
+              <p class="deliverable"><strong>拿到：</strong>范围、排班、付款日与数据边界。</p>
+            </article>
+            <article class="chain-card">
+              <span class="step-number">04 →</span>
+              <h3>使用与验收</h3>
+              <p>学员与业务主管：用真实岗位标准确认任务表现。</p>
+              <p class="deliverable"><strong>拿到：</strong>基线、后测、主管签认。</p>
+            </article>
+            <article class="chain-card">
+              <span class="step-number">05</span>
+              <h3>付款与续约</h3>
+              <p>授权签约人与预算负责人：付款，并决定是否购买下一阶段。</p>
+              <p class="deliverable"><strong>拿到：</strong>到账记录、续约或拒绝理由。</p>
+            </article>
+          </div>
+
+          <div class="grid question-grid">
+            <div class="panel">
+              <h3>对业务人，不先问“想学什么”</h3>
+              <p>问：“最近一次中文沟通失败发生在哪一步？造成了什么返工或服务问题？现有替代办法为什么没解决？能否提供有权共享的脱敏样本？”</p>
+            </div>
+            <div class="panel">
+              <h3>对预算人，不只问“有没有兴趣”</h3>
+              <p>问：“谁能为这个任务付款？从哪项预算出？谁签试点金额、范围、付款日与验收标准？不采购的条件是什么？”</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="choices" aria-labelledby="choices-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">06</span>
+            <h2 id="choices-title">选择建议：先选可触达的任务，不选想象中的高价课</h2>
+          </div>
+          <p class="section-intro"><span class="tag advice">研究优先级</span> 先看你能否找到业务负责人、拿到样本、做出岗位验收，再决定课程与教师能力投入。</p>
+
+          <div class="grid choice-grid">
+            <article class="choice-card">
+              <span class="tag advice">优先验证</span>
+              <h3>零售与接待场景口语</h3>
+              <p class="product">示例产品：零售接待中文任务包</p>
+              <p>限定需求澄清、商品说明、规则解释和交接，不打包成泛泛的“全面商务能力”。S3 提供直接场景线索，S2 提供组织培训背景。<a class="ref" href="#s3">S3</a><a class="ref" href="#s2">S2</a></p>
+              <p><strong>教师适配：</strong>能做角色扮演、纠错与任务评分，并可接触门店或客服主管。先验证接待，再考虑销售跟进模块。</p>
+            </article>
+
+            <article class="choice-card">
+              <span class="tag advice">有条件进入</span>
+              <h3>岗位中文写作</h3>
+              <p class="product">示例产品：客户邮件返工诊断</p>
+              <p>先找频繁使用中文文书、能展示错误或审核损失、并愿意付款的岗位。把文种缩到邮件、报价说明或纪要之一。</p>
+              <p><strong>进入门槛：</strong>教师懂该文种及业务语境；训练须与“模板 / AI 起草＋人工审核”比较。政府公文课已有组织实施记录，但商业企业仍须核实预算；不因“写作稀缺”重押。<a class="ref" href="#s8">S8</a></p>
+            </article>
+
+            <article class="choice-card">
+              <span class="tag advice">独立建模</span>
+              <h3>学术中文</h3>
+              <p class="product">示例产品：学术摘要与报告表达</p>
+              <p>建议主要面向个人付费或院校渠道，另查入学、研究表达与教学支持需求，不把企业培训案例搬来证明学术市场。</p>
+              <p><strong>教师适配：</strong>具备学术阅读、论证和引用规范教学能力；以学习者自主产出验收，不能用代写制造“效果”。</p>
+            </article>
+          </div>
+
+          <aside class="callout"><strong>驻地与专业会议怎么选？</strong> 已有雇主或项目入口、能取得岗位样本时再推进。S1 是受限的机构线索，S5 是能力框架，不足以宣称这两个企业细分市场已经验证。<a class="ref" href="#s1">S1</a><a class="ref" href="#s5">S5</a></aside>
+        </section>
+
+        <section class="chapter" id="counter" aria-labelledby="counter-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">07</span>
+            <h2 id="counter-title">反证：企业要中文服务，不一定要中文课</h2>
+          </div>
+
+          <div class="counter-band">
+            <span class="tag fact">事实 · B / 供应商案例</span>
+            <h3>BICS 的另一条路径：微信接入中英实时翻译客服</h3>
+            <p>Cognigy 的案例描述了 BICS 在微信支持流程中接入中英实时翻译，让中文客户与原有英语服务团队沟通。它提供了“用系统解决语言问题”的替代路径。<a class="ref" href="#s6">S6</a></p>
+            <p><strong>边界：</strong>系统成本未知；该案例不证明 BICS 从未培训员工，也不证明翻译系统一定比培训便宜。</p>
+          </div>
+
+          <div class="grid counter-grid">
+            <article class="panel">
+              <h3><span class="tag advice">反证测试</span> 工具或模板已经足够？</h3>
+              <p>把“仅工具 / 模板”放进对照。若业务质量相当、总成本更低且采购方偏好工具，就停止完整培训方案；只保留确有价值的工具使用与审核训练，或退出。</p>
+            </article>
+            <article class="panel">
+              <h3><span class="tag inference">待验证</span> 真正的瓶颈并非语言？</h3>
+              <p>失误可能来自库存、权限、流程或岗位流动。若中文更流利仍无法改善任务，不应继续把问题包装成语言课。</p>
+            </article>
+          </div>
+
+          <aside class="callout"><span class="tag unknown">外推限制</span> S2 与 S7 是同一企业不同年代的材料；S3 是供应商自述；S1 是公共机构询价；S8 是公共部门的中英并重写作训练。地区、时间与采购性质不同，不能合并成需求量、增长率或收益排行。商业企业写作专项成交、可比教师净收入、长期续约及训练相对工具的净增益，仍未得到本材料支持。<a class="ref" href="#s1">S1</a><a class="ref" href="#s2">S2</a><a class="ref" href="#s3">S3</a><a class="ref" href="#s7">S7</a><a class="ref" href="#s8">S8</a></aside>
+        </section>
+
+        <section class="chapter" id="pilot" aria-labelledby="pilot-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">08</span>
+            <h2 id="pilot-title">两周付费诊断 / 试点：允许失败，才算验证</h2>
+          </div>
+          <p class="section-intro"><span class="tag advice">研究方案，不是历史事实</span> 下列企业数、时间窗、付费门槛和效果阈值均为建议。目标不是证明课程一定成功，而是尽早识别没人买、没有改善或替代品更好的情况。</p>
+
+          <div class="pilot-lead">
+            <div><strong>2 周</strong> <span>目标验证窗口</span></div>
+            <div><strong>3–5 家</strong> <span>同一类岗位的目标企业；不是预测客户数</span></div>
+          </div>
+
+          <div class="timeline">
+            <article>
+              <span class="eyebrow">第 1–3 天</span>
+              <h3>找损失，找预算人</h3>
+              <p>接洽同一细分场景的目标企业，拿真实但脱敏的岗位对话或文书样本。记录当前替代办法、学员起点、业务后果与预算负责人。</p>
+            </article>
+            <article>
+              <span class="eyebrow">第 4–5 天</span>
+              <h3>收费诊断或签付费试点</h3>
+              <p>收取诊断费，或签署写明金额、范围与付款日的付费试点。已签未收与实际到账分开记录；按约定收款后启动训练交付。</p>
+            </article>
+            <article>
+              <span class="eyebrow">第 6–10 天</span>
+              <h3>先基线，后窄任务训练</h3>
+              <p>训练前完成基线；练一个岗位的有限任务。保留工具对照，统一工具权限与评分标准。零基础只测窄任务，不承诺两周流利。</p>
+            </article>
+            <article>
+              <span class="eyebrow">第 11–14 天</span>
+              <h3>新任务后测，做购买决定</h3>
+              <p>用未练过但同难度的任务后测，由业务主管按同一规则评分。报告改善、未改善与替代方案，要求明确继续付费或停止。</p>
+            </article>
+          </div>
+
+          <div class="grid pilot-grid">
+            <article class="panel">
+              <h3>试点卖什么，如何报价</h3>
+              <p>交付岗位失误诊断、限定范围的训练、可复查的前后测与继续 / 停止报告。诊断和试点按范围及成本报固定费用，写清人数、课时、修改边界、线上或面授与超范围计费。</p>
+              <p><strong>不以 S1 的预算上限倒推你的报价；不承诺销售增长。</strong>采购审批超过两周则记为本轮未完成付费验证，不把口头兴趣算成交。</p>
+            </article>
+            <article class="panel">
+              <h3>样本与比较规则</h3>
+              <p>只接收企业有权提供且已脱敏的材料，移除人名、联系方式、订单号及商业敏感信息；约定使用范围和保留期限。录音另获授权，无须向本网页上传材料。</p>
+              <p>基线与后测保持任务难度、样本构成、工具权限和评分一致；有条件加入延迟培训组。缺少可比对照时，只报告观察变化，不承诺因果效果。</p>
+            </article>
+          </div>
+
+          <div class="table-wrap metric-wrap" tabindex="0" role="region" aria-label="试点验收指标；窄屏无脚本时可横向滚动">
+            <table class="metric-table responsive-table" role="table">
+              <caption>建议验收口径：记录基线、后测、分子与分母；本页没有填入虚构结果。</caption>
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col">指标</th>
+                  <th scope="col">如何计算 / 记录</th>
+                  <th scope="col">判断边界</th>
+                </tr>
+              </thead>
+              <tbody role="rowgroup">
+                <tr role="row">
+                  <th scope="row">任务完成率</th>
+                  <td data-label="计算与记录"><div>按预定步骤及质量条件完成的任务数 ÷ 有效评估任务数。分别记录每位学员的基线与后测。</div></td>
+                  <td data-label="判断边界"><div>正确的必要升级也可计为完成；不把死记原脚本的复现当作新任务成功。</div></td>
+                </tr>
+                <tr role="row">
+                  <th scope="row">转人工 / 转交率</th>
+                  <td data-label="计算与记录"><div>因语言受阻而转交的目标任务数 ÷ 可比较的目标任务总数。前线人工岗位改记“转交双语同事率”。</div></td>
+                  <td data-label="判断边界"><div>权限、合规或业务流程要求的必要转交单列，不以压低必要升级来制造进步。</div></td>
+                </tr>
+                <tr role="row">
+                  <th scope="row">业务质量</th>
+                  <td data-label="计算与记录"><div>由业务主管核对关键事实、价格或约束、下一步承诺及服务规范；记录关键错误数与检查机会数。</div></td>
+                  <td data-label="判断边界"><div>质量是护栏。不能用“说得更快”抵消错误承诺或关键信息漏传；写作另跟踪返工与审核时间。</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note under-note">小样本同时报告人数、任务数和逐人变化，不只给百分比；两周结果不等于长期业务回报。工具对照也应计入配置、使用、人工审核及纠错成本。</p>
+
+          <div class="gate-grid">
+            <article class="gate-stop">
+              <h3>停止线：不要用免费交付掩盖没有买方</h3>
+              <p><strong>商业停止：</strong>对单个企业，无预算负责人或无付费承诺，就停止定制与授课。第 5 天结束，3–5 家中没有一家同时满足预算责任明确及“诊断已付费 / 付费试点已签署”，停止本轮方向。</p>
+              <p><strong>效果停止：</strong>关键业务错误增加、主指标未达预先约定阈值，或工具方案质量不差且总成本更低，则不扩课，记录失败原因。</p>
+            </article>
+            <article class="gate-go">
+              <h3>继续线：先写阈值，再看结果</h3>
+              <p><strong>建议阈值示例：</strong>任务完成率提升至少 15 个百分点，关键错误不增加，语言受阻转交率不升；约定款项实际到账。</p>
+              <p>基线已高时，预先改用质量或耗时指标，不能看完后测再换标准。继续下一阶段须有新的付费承诺；通过只支持该岗位的小范围复测，不证明收益最高或可以规模化。</p>
+            </article>
+          </div>
+
+          <div class="check-panel">
+            <fieldset id="pilot-checklist">
+              <legend>启动前自查 <span class="tag advice">仅本地，不上传、不保存</span></legend>
+              <div class="check-grid">
+                <label class="check-label">
+                  <input type="checkbox" id="check-owner">
+                  <span>已确认预算负责人及其付款权限。</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="check-paid">
+                  <span>诊断费已到账，或已签署有金额、范围与付款日的付费试点。</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="check-samples">
+                  <span>已取得授权、脱敏的真实岗位样本。</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="check-metrics">
+                  <span>已预先约定基线、后测、工具对照及停止阈值。</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <output class="gate-output" id="gate-output" aria-live="polite" aria-atomic="true" data-state="stop">尚不具备启动条件：请先确认预算负责人和付费承诺。</output>
+            <p class="note under-note">勾选只表示你的自查，不核验付款或合同，不预测收益；签署未付款不计为实际到账。刷新页面不保留自查状态。</p>
+            <noscript><p class="note">脚本未启用，状态提示不自动更新；请依据上面的停止线与继续线手动判断。</p></noscript>
+          </div>
+        </section>
+
+        <section class="chapter" id="sources" aria-labelledby="sources-title">
+          <div class="section-head">
+            <span class="section-number" aria-hidden="true">09</span>
+            <h2 id="sources-title">S1–S8｜来源与核验边界</h2>
+          </div>
+          <p class="section-intro">外链用于追溯；正文、样式和自查逻辑均可离线使用。复核日期为 2026-09-29，历史材料不等于当前采购机会，动态价目不等于报价承诺。</p>
+
+          <div class="source-list">
+            <article class="source-row" id="s1" aria-labelledby="s1-title">
+              <div class="source-id">
+                <strong>S1</strong>
+                <small>C · 受限</small>
+              </div>
+              <div>
+                <a class="source-link" id="s1-title" href="https://beijingpe.dfa.gov.ph/images/2025/RFQ2025/RFQ_2025-11-0068.pdf" target="_blank" rel="noreferrer noopener">菲律宾驻北京使馆普通话培训询价 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口，PDF）</span></a>
+                <p>2025-11-20 · 原始主体为采购需求方。预算上限 RMB 50,000；11 人、每类 40 units、面授及灵活排班，据原站搜索索引摘录。</p>
+              </div>
+              <div>
+                <p class="source-boundary"><strong>索引摘录：</strong>原站搜索结果可见，原件当次未重开；预算上限≠成交额。</p>
+                <p>本次原链接返回 403。金额、课时单位及最终合同仍须重开原件核对，不做每人或每小时价格换算。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s2" aria-labelledby="s2-title">
+              <div class="source-id">
+                <strong>S2</strong>
+                <small>A · 年报</small>
+              </div>
+              <div>
+                <a class="source-link" id="s2-title" href="https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0926/2024092601281.pdf#page=49" target="_blank" rel="noreferrer noopener">Sino Land 2024 年报 · 员工学习与发展 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口，PDF）</span></a>
+                <p>需求方一手披露；本次已复核文字与页面。相关原文位于印刷 p.47、PDF 第 49 页。</p>
+              </div>
+              <div>
+                <p class="source-boundary"><strong>页码：</strong>169,800+ 小时及 Business Putonghua 列表实际在印刷 p.47。</p>
+                <p>时数为全部培训，客服与大湾区销售营销为整体重点；未披露普通话单项预算或外包安排。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s3" aria-labelledby="s3-title">
+              <div class="source-id">
+                <strong>S3</strong>
+                <small>B · 自述</small>
+              </div>
+              <div>
+                <a class="source-link" id="s3-title" href="https://nihaoma-mandarin.com/corporate/" target="_blank" rel="noreferrer noopener">Ni Hao Ma · IPPG 企业培训项目 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a>
+                <p>供应商企业课程页；本次可读，项目发布日期未明确。描述 5 周共 10 小时的顾客互动与销售对话训练。</p>
+              </div>
+              <div>
+                <p class="source-boundary">只确认供应商公开作出该描述；本材料未见 IPPG 自证、付款金额或独立效果数据。</p>
+                <p>不把案例页的营销性成效表述升级为已验证的业务改善。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s4" aria-labelledby="s4-title">
+              <div class="source-id">
+                <strong>S4</strong>
+                <small>B · 价目</small>
+              </div>
+              <div>
+                <a class="source-link" id="s4-title" href="https://www.hkpls.com.hk/corporate-training/price-list/" target="_blank" rel="noreferrer noopener">Hong Kong Pro Language School · 企业培训价目 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a>
+                <p>本次可读：7–10 人、30–59 小时，普通话 HK$820、英文 HK$980，均为组小时挂牌价。</p>
+              </div>
+              <div>
+                <p class="source-boundary">非写作专项，非教师时薪，非成交证明。基础套餐未含教材费，地点可能产生交通费。</p>
+                <p>网页未列明确生效日期；折扣、最终报价、教师分成与利润未知。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s5" aria-labelledby="s5-title">
+              <div class="source-id">
+                <strong>S5</strong>
+                <small>A · 定义</small>
+              </div>
+              <div>
+                <a class="source-link" id="s5-title" href="https://www.chinesetest.cn/BCT" target="_blank" rel="noreferrer noopener">中文考试服务网 · BCT 官方介绍 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a>
+                <p>本次可读。定义强调工作、商务及专业场景中的实际中文沟通能力。</p>
+              </div>
+              <div>
+                <p class="source-boundary">对能力定位的支持较强，对具体企业采购与付费意愿没有直接证明力。</p>
+                <p>可作企业评估参考，不意味着每个企业采购都需要 BCT，也不能用考试通过替代岗位验收。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s6" aria-labelledby="s6-title">
+              <div class="source-id">
+                <strong>S6</strong>
+                <small>B · 替代</small>
+              </div>
+              <div>
+                <a class="source-link" id="s6-title" href="https://www.cognigy.com/en/case-study/bics" target="_blank" rel="noreferrer noopener">Cognigy · BICS 微信支持案例 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a>
+                <p>供应商案例，本次中英实时翻译与微信支持流程的描述可读。</p>
+              </div>
+              <div>
+                <p class="source-boundary">用于证明存在技术替代路径，不用于证明培训一定无效。</p>
+                <p>系统成本与培训支出未知；未据此断言 BICS 完全没有培训员工。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s7" aria-labelledby="s7-title">
+              <div class="source-id">
+                <strong>S7</strong>
+                <small>C · 历史</small>
+              </div>
+              <div>
+                <a class="source-link" id="s7-title" href="https://www.hkexnews.hk/listedco/listconews/sehk/2005/1014/00247/f107.pdf#page=9" target="_blank" rel="noreferrer noopener">Sino Land 2005 年报片段 · 员工培训 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口，PDF）</span></a>
+                <p>本次已复核页面：印刷 p.15、该 PDF 第 9 页。普通话课程与前线客服要求相联系。</p>
+              </div>
+              <div>
+                <p class="source-boundary">一手但年代久远，仅作补充，不代表当前采购规模或价格。</p>
+                <p>与 S2 属于同一企业，不能增加为一个独立企业样本。</p>
+              </div>
+            </article>
+
+            <article class="source-row" id="s8" aria-labelledby="s8-title">
+              <div class="source-id"><strong>S8</strong><small>A · 公共部门</small></div>
+              <div><a class="source-link" id="s8-title" href="https://www.csb.gov.hk/hkgcsb/ggocsn/issue46/02.html" target="_blank" rel="noreferrer noopener">香港公务员事务局 · 文书及秘书职系通讯 <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a><p>2024 年 1 月发布；本次已读取原网页。记载 2023/24 年开办两班公文写作工作坊；每班共四天半，中文与英文写作各两天，并计划 2024/25 年续办。</p></div>
+              <div><p class="source-boundary">直接支持岗位中文写作训练确有组织实施与明确目标。</p><p>属于公共部门，未披露外部教师采购金额、商业企业成交或教师利润。</p></div>
+            </article>
+          </div>
+
+          <p class="note under-note"><strong>研究边界：</strong>S1 尚缺可重开的原件全文；其余材料主要支持培训活动、供应商项目、挂牌价、能力定义或技术替代路径。它们不足以核实本命题所需的真实成交额、教师净收益与跨课型收益排序。</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer inset">
+      <p class="footer-verdict">没有付费方，不扩课；没有效果证据，不扩单。</p>
+      <p class="note under-note">这是下一轮研究的行动原则，不是对任何课型的永久结论。</p>
+      <p class="print-help screen-only">打印版采用 1280px 定宽与自定义纸张。导出 PDF 时保留背景图形，并关闭浏览器附加页眉页脚。</p>
+      <div class="footer-meta">
+        <span>岗位中文 · 研究决策报告 / <a href="#top">返回顶部</a></span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const printButton = document.getElementById("print-button");
+      printButton.addEventListener("click", () => window.print());
+
+      const ids = [
+        "check-owner",
+        "check-paid",
+        "check-samples",
+        "check-metrics"
+      ];
+      const checks = ids.map(id => document.getElementById(id));
+      const output = document.getElementById("gate-output");
+
+      const updateGate = () => {
+        const [owner, paid, samples, metrics] = checks.map(input => input.checked);
+
+        if (!owner || !paid) {
+          output.dataset.state = "stop";
+          output.textContent = "停止启动：预算负责人或付费承诺尚未确认。不要继续为该企业定制与授课。";
+        } else if (!samples || !metrics) {
+          output.dataset.state = "pending";
+          output.textContent = "暂缓交付：已勾选商业前提，但授权脱敏样本或验收规则尚未齐备；请先补齐。";
+        } else {
+          output.dataset.state = "ready";
+          output.textContent = "可进入试点准备：按合同约定收款后再交付。此提示只反映你的勾选，不核验材料，也不预测收益。";
+        }
+      };
+
+      checks.forEach(input => {
+        input.checked = false;
+        input.addEventListener("change", updateGate);
+      });
+
+      window.addEventListener("pageshow", event => {
+        if (event.persisted) {
+          checks.forEach(input => { input.checked = false; });
+        }
+        updateGate();
+      });
+
+      updateGate();
+
+      const navLinks = Array.from(document.querySelectorAll(".toc a"));
+      const chapters = navLinks.map(link =>
+        document.querySelector(link.getAttribute("href"))
+      );
+      let scheduled = false;
+
+      const markSection = () => {
+        const offset = parseFloat(
+          getComputedStyle(document.documentElement)
+            .getPropertyValue("--anchor-offset")
+        );
+        let active = null;
+
+        chapters.forEach(section => {
+          if (section.getBoundingClientRect().top <= offset) {
+            active = section.id;
+          }
+        });
+
+        navLinks.forEach(link => {
+          if (link.getAttribute("href") === `#${active}`) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+
+        scheduled = false;
+      };
+
+      window.addEventListener("scroll", () => {
+        if (!scheduled) {
+          scheduled = true;
+          requestAnimationFrame(markSection);
+        }
+      }, { passive: true });
+
+      window.addEventListener("resize", markSection);
+      markSection();
+    })();
+  </script>
+</body>
+</html>

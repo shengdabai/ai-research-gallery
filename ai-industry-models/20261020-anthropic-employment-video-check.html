@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic 内部就业变化报告：视频说对了什么，说过了什么</title>
+<style>
+/* ==========================================================
+   Tokens（唯一设计值来源）
+   命名：primitive（--p-*）→ semantic（--color-* / --space-* / --font-*）。
+   组件只用 semantic token。新增颜色先加 primitive，再映射到角色。
+   断点：窄屏阈值 720px，写在下方唯一一个 @media 里（media query 不能用 var()）。
+   ========================================================== */
+:root {
+  /* primitive colors */
+  --p-ink-900: #0f1b2d;
+  --p-ink-700: #2c3a4f;
+  --p-ink-500: #5a6779;
+  --p-ink-300: #a9b3c1;
+  --p-ink-150: #d9dfe7;
+  --p-ink-080: #eef1f5;
+  --p-ink-040: #f6f8fa;
+  --p-white: #ffffff;
+  --p-teal-700: #0b5d63;
+  --p-teal-500: #13838b;
+  --p-teal-100: #dcf0f1;
+  --p-coral-600: #c2452d;
+  --p-coral-100: #fbe4de;
+  --p-amber-700: #8a5a00;
+  --p-amber-100: #fbefd2;
+  --p-violet-600: #5b4bb7;
+  --p-violet-100: #e8e5f7;
+  --p-green-700: #1f6b3a;
+  --p-green-100: #ddf1e3;
+
+  /* semantic colors */
+  --color-bg: var(--p-ink-040);
+  --color-surface: var(--p-white);
+  --color-surface-muted: var(--p-ink-080);
+  --color-border: var(--p-ink-150);
+  --color-text: var(--p-ink-900);
+  --color-text-soft: var(--p-ink-700);
+  --color-text-muted: var(--p-ink-500);
+  --color-accent: var(--p-teal-700);
+  --color-accent-strong: var(--p-teal-500);
+  --color-accent-bg: var(--p-teal-100);
+  --color-hero-bg: var(--p-ink-900);
+  --color-hero-text: var(--p-white);
+  --color-hero-soft: var(--p-ink-150);
+  --color-series-a: var(--p-teal-500);
+  --color-series-b: var(--p-coral-600);
+  --color-series-muted: var(--p-ink-300);
+  --color-grid: var(--p-ink-150);
+  --color-ok-text: var(--p-green-700);
+  --color-ok-bg: var(--p-green-100);
+  --color-partial-text: var(--p-amber-700);
+  --color-partial-bg: var(--p-amber-100);
+  --color-gloss-text: var(--p-violet-600);
+  --color-gloss-bg: var(--p-violet-100);
+  --color-warn-text: var(--p-coral-600);
+  --color-warn-bg: var(--p-coral-100);
+  --color-focus: var(--p-teal-500);
+
+  /* typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-size-xs: 0.78rem;
+  --font-size-sm: 0.88rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.18rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2.1rem;
+  --font-size-kpi: 2rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.3;
+  --line-height-body: 1.75;
+
+  /* spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* shape, depth, layout, motion */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --border-width: 1px;
+  --border-width-accent: 4px;
+  --shadow-card: 0 1px 3px rgba(15, 27, 45, 0.08);
+  --layout-max: 1040px;
+  --layout-card-min: 220px;
+  --bar-height: 1.4rem;
+  --chart-stroke: 2.5;
+  --chart-grid-stroke: 1;
+  --chart-label-size: 12px;
+  --chart-dash: 4 4;
+  --input-width: 9rem;
+  --bar-label-width: 9rem;
+  --bar-value-width: 4.5rem;
+  --bar-label-width-narrow: 6.5rem;
+  --bar-value-width-narrow: 3.8rem;
+  --bar-break-start: 92%;
+  --bar-break-angle: 90deg;
+  --flow-columns: 4;
+  --bar-break-end: 94%;
+  --motion-fast: 150ms;
+  --motion-ease: ease-out;
+}
+
+/* ===================== Base ===================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  overflow-wrap: anywhere;
+}
+h1, h2, h3 { line-height: var(--line-height-tight); margin: 0 0 var(--space-3); }
+h2 { font-size: var(--font-size-xl); }
+h3 { font-size: var(--font-size-lg); }
+section.block .card + h3, section.block .callout + h3 { margin-top: var(--space-5); }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); }
+a:focus-visible, input:focus-visible { outline: var(--border-width-accent) solid var(--color-focus); outline-offset: var(--space-1); }
+strong { font-weight: var(--font-weight-bold); }
+ul, ol { margin: 0 0 var(--space-3); padding-left: var(--space-5); }
+li { margin-bottom: var(--space-2); }
+
+/* ===================== Layout ===================== */
+.wrap { max-width: var(--layout-max); margin: 0 auto; padding: 0 var(--space-5); }
+section.block { padding: var(--space-6) 0; border-bottom: var(--border-width) solid var(--color-border); }
+.lead { color: var(--color-text-soft); font-size: var(--font-size-lg); }
+.muted { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(var(--layout-card-min), 1fr)); }
+
+/* ===================== Hero ===================== */
+.hero { background: var(--color-hero-bg); color: var(--color-hero-text); padding: var(--space-7) 0 var(--space-6); }
+.hero h1 { font-size: var(--font-size-2xl); margin-bottom: var(--space-4); }
+.hero p { color: var(--color-hero-soft); }
+.hero .verdict { color: var(--color-hero-text); font-size: var(--font-size-lg); border-left: var(--border-width-accent) solid var(--color-accent-strong); padding-left: var(--space-4); margin: var(--space-5) 0; }
+.hero a { color: var(--color-hero-text); }
+.hero .hero-kicker { font-size: var(--font-size-sm); }
+
+/* ===================== Card / KPI ===================== */
+.card { background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4) var(--space-5); box-shadow: var(--shadow-card); }
+.card h3 { margin-bottom: var(--space-2); }
+.kpi-value { font-size: var(--font-size-kpi); font-weight: var(--font-weight-bold); color: var(--color-accent); line-height: var(--line-height-tight); }
+.kpi-label { font-size: var(--font-size-sm); color: var(--color-text-soft); margin: var(--space-1) 0 var(--space-2); }
+.kpi-note { font-size: var(--font-size-xs); color: var(--color-text-muted); margin: 0; }
+
+/* ===================== Callout ===================== */
+.callout { background: var(--color-accent-bg); border-left: var(--border-width-accent) solid var(--color-accent); border-radius: var(--radius-sm); padding: var(--space-4) var(--space-5); margin: var(--space-4) 0; }
+.callout.warn { background: var(--color-warn-bg); border-left-color: var(--color-warn-text); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ===================== Badge ===================== */
+.badge { display: inline-block; font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); padding: 0 var(--space-2); border-radius: var(--radius-sm); white-space: nowrap; }
+.badge.ok { color: var(--color-ok-text); background: var(--color-ok-bg); }
+.badge.partial { color: var(--color-partial-text); background: var(--color-partial-bg); }
+.badge.gloss { color: var(--color-gloss-text); background: var(--color-gloss-bg); }
+.badge.second { color: var(--color-warn-text); background: var(--color-warn-bg); }
+.legend-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: var(--space-3) 0; font-size: var(--font-size-sm); }
+
+/* ===================== Check table ===================== */
+.table-check { width: 100%; border-collapse: collapse; background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); font-size: var(--font-size-sm); }
+.table-check th, .table-check td { text-align: left; vertical-align: top; padding: var(--space-3); border-bottom: var(--border-width) solid var(--color-border); }
+.table-check th { background: var(--color-surface-muted); font-weight: var(--font-weight-medium); }
+.table-check td:first-child { font-weight: var(--font-weight-medium); }
+
+/* ===================== Charts ===================== */
+.chart { width: 100%; height: auto; display: block; }
+.chart .grid-line { stroke: var(--color-grid); stroke-width: var(--chart-grid-stroke); }
+.chart .parity { stroke: var(--color-text-muted); stroke-width: var(--chart-grid-stroke); stroke-dasharray: var(--chart-dash); }
+.chart .axis-text { fill: var(--color-text-muted); font-size: var(--chart-label-size); font-family: var(--font-sans); }
+.chart .series-a { fill: none; stroke: var(--color-series-a); stroke-width: var(--chart-stroke); }
+.chart .series-b { fill: none; stroke: var(--color-series-b); stroke-width: var(--chart-stroke); }
+.chart .label-a { fill: var(--color-series-a); font-size: var(--chart-label-size); font-weight: var(--font-weight-bold); font-family: var(--font-sans); }
+.chart .label-b { fill: var(--color-series-b); font-size: var(--chart-label-size); font-weight: var(--font-weight-bold); font-family: var(--font-sans); }
+
+.bars { margin: var(--space-4) 0; }
+.bar-row { display: grid; grid-template-columns: var(--bar-label-width) 1fr var(--bar-value-width); gap: var(--space-3); align-items: center; margin-bottom: var(--space-2); font-size: var(--font-size-sm); }
+.bar-track { position: relative; height: var(--bar-height); background: var(--color-surface-muted); border-radius: var(--radius-sm); }
+.bar-fill { height: 100%; background: var(--color-series-a); border-radius: var(--radius-sm); }
+.bar-fill.alt { background: var(--color-series-b); }
+.bar-fill.muted { background: var(--color-series-muted); }
+.bar-fill.overflow { background: repeating-linear-gradient(var(--bar-break-angle), var(--color-series-b) 0 var(--bar-break-start), var(--color-surface) var(--bar-break-start) var(--bar-break-end), var(--color-series-b) var(--bar-break-end) 100%); }
+.bar-mark { position: absolute; top: calc(-1 * var(--space-1)); bottom: calc(-1 * var(--space-1)); border-left: var(--border-width) dashed var(--color-text); }
+.bar-value { font-weight: var(--font-weight-medium); text-align: right; }
+.bar-scale { display: grid; grid-template-columns: var(--bar-label-width) 1fr var(--bar-value-width); gap: var(--space-3); font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.bar-scale .scale-track { position: relative; height: var(--space-5); }
+.bar-scale .scale-track span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.bar-scale .scale-track span:first-child { transform: none; }
+.bar-scale .scale-track span:last-child { transform: translateX(-100%); }
+
+.pair { display: grid; grid-template-columns: 1fr; gap: var(--space-2); margin-bottom: var(--space-4); }
+.pair-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); }
+
+/* ===================== Flow ===================== */
+.flow { display: grid; grid-template-columns: repeat(var(--flow-columns), 1fr); gap: var(--space-3); margin: var(--space-4) 0; }
+.flow-step { background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-top: var(--border-width-accent) solid var(--color-accent); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); font-size: var(--font-size-sm); }
+.flow-step b { display: block; font-size: var(--font-size-md); margin-bottom: var(--space-1); }
+
+/* ===================== Calculator ===================== */
+.calc label { display: block; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); margin-bottom: var(--space-1); }
+.calc input[type="number"] { width: var(--input-width); padding: var(--space-2); font: inherit; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); }
+.calc .field { margin-bottom: var(--space-3); }
+.calc output { display: block; font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-accent); margin-top: var(--space-2); transition: color var(--motion-fast) var(--motion-ease); }
+
+/* ===================== Footer ===================== */
+.sources li { font-size: var(--font-size-sm); }
+footer { padding: var(--space-6) 0; color: var(--color-text-muted); font-size: var(--font-size-xs); }
+
+/* ===================== Responsive（窄屏阈值 720px） ===================== */
+@media (max-width: 720px) {
+  :root { --chart-label-size: 20px; }
+  .wrap { padding: 0 var(--space-4); }
+  .hero { padding: var(--space-6) 0 var(--space-5); }
+  .hero h1 { font-size: var(--font-size-xl); }
+  .flow { grid-template-columns: 1fr; }
+  .bar-row, .bar-scale { grid-template-columns: var(--bar-label-width-narrow) 1fr var(--bar-value-width-narrow); gap: var(--space-2); }
+  .table-check, .table-check tbody, .table-check tr, .table-check td { display: block; width: 100%; }
+  .table-check thead { display: none; }
+  .table-check tr { border-bottom: var(--border-width-accent) solid var(--color-border); padding: var(--space-2) 0; }
+  .table-check td { border-bottom: none; padding: var(--space-1) var(--space-3); }
+  .table-check td::before { content: attr(data-label); display: block; font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight: var(--font-weight-normal); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calc output { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="hero-kicker">视频核对 · 原报告：Anthropic《How employment is changing at Anthropic》，2026 年 10 月 16 日</p>
+    <h1>Anthropic 内部就业变化报告：视频说对了什么，说过了什么</h1>
+    <p class="verdict">结论：视频引用的关键数字都能在原报告里找到出处，大体准确。但是视频有三处说过了头：它把初级技术岗招聘占比下降直接说成是 AI 造成的；它把“企业组织 AI”说成报告的发现，其实这是视频作者自己的观点；它也没有提报告自己写明的局限。</p>
+    <p>原报告是 Anthropic 自己发布的研究，用的是公司内部的用工、AI 使用、产出、问卷、Slack、日历和招聘数据，另外做了 17 次员工访谈。报告没有说明经过外部审计。所以，下面的数字都应该读作“这家公司自己测到并公开的数据”。</p>
+  </div>
+</header>
+
+<main>
+
+<section class="block">
+  <div class="wrap">
+    <h2>先看六个数字</h2>
+    <p class="lead">这六个数字都来自原报告。每个数字下面写了它的测量口径，因为口径决定了这个数字能说明什么。</p>
+    <div class="grid">
+      <div class="card">
+        <div class="kpi-value">6 倍</div>
+        <p class="kpi-label">2026 年 8 月，员工直接指挥的 agent 工作小时是人类工作小时的 6 倍</p>
+        <p class="kpi-note">只计员工发起的交互会话，子 agent 合并计算；研究部门是 19 倍。人类小时按“人数 × 每周 40 小时”计算。</p>
+      </div>
+      <div class="card">
+        <div class="kpi-value">5 倍</div>
+        <p class="kpi-label">每名工程师的代码提交量，和 6 个月前相比</p>
+        <p class="kpi-note">这是所有职能里增长最快的产出指标。律师处理的合同、财务处理的发票、销售成交的单数也增加了。</p>
+      </div>
+      <div class="card">
+        <div class="kpi-value">2 → 90</div>
+        <p class="kpi-label">非技术员工的编程类 agent 会话，从每月 2 次增加到每月 90 次</p>
+        <p class="kpi-note">时间：2025 年 8 月到 2026 年 5 月。“非技术员工”指基线期没有代码提交的人，不含新员工。报告没有写明这是人均数还是总数。</p>
+      </div>
+      <div class="card">
+        <div class="kpi-value">80%</div>
+        <p class="kpi-label">交互式多轮会话里，约 80% 的时间是 agent 在空等人类回复</p>
+        <p class="kpi-note">这是会话的墙钟时间占比，不是员工自己工作时间的占比。</p>
+      </div>
+      <div class="card">
+        <div class="kpi-value">10% → 22%</div>
+        <p class="kpi-label">“元工作”在交互会话中的占比，2025 年秋到 2026 年春</p>
+        <p class="kpi-note">元工作指写多 agent 任务说明、让一个 agent 审另一个 agent、监控流水线。数据来自 2,000 条会话一行摘要的抽样编码。</p>
+      </div>
+      <div class="card">
+        <div class="kpi-value">27% → 9%</div>
+        <p class="kpi-label">初级人员在技术岗新招聘中的占比，自 2025 年初起</p>
+        <p class="kpi-note">同期公司总人数增长到约 3 倍。非技术岗的初级招聘占比大致没变。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>逐条核对：视频说法与报告原文</h2>
+    <p>我按完整的视频文字稿，把其中 19 个主要说法和原报告逐条比对。左栏是视频原话的摘录或概括。判定分四类：</p>
+    <div class="legend-row">
+      <span><span class="badge ok">一致</span> 数字和意思都能在报告里找到</span>
+      <span><span class="badge partial">口径不同</span> 数字对，但范围或条件被说宽了</span>
+      <span><span class="badge gloss">视频引申</span> 报告里没有，是视频作者的解读或举例</span>
+      <span><span class="badge second">二手来源</span> 不在报告里，只找到转述</span>
+    </div>
+    <table class="table-check">
+      <thead><tr><th>视频说法</th><th>判定</th><th>报告原文怎么说</th></tr></thead>
+      <tbody>
+        <tr><td data-label="视频说法">孙宇晨：谁能让我入职 OpenAI 或 Anthropic，我愿意免费给 5000 万美金</td><td data-label="判定"><span class="badge second">二手来源</span></td><td data-label="报告原文怎么说">报告里没有这句话。我只找到 2026 年 10 月 10 日和 10 月 18 日的两条微博转述，没有找到原视频或原帖。应当把它当作开场噱头，不能当作事实依据。</td></tr>
+        <tr><td data-label="视频说法">2026 年 3 月，agent 的工作时间超过了人类</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">2026 年 3 月，自主 agent 和交互 agent 的工作小时加在一起，第一次超过人类工作小时。</td></tr>
+        <tr><td data-label="视频说法">到 8 月，agent 工作时间是人类的 6 倍</td><td data-label="判定"><span class="badge partial">口径不同</span></td><td data-label="报告原文怎么说">6 倍只统计员工直接指挥的交互会话，口径比“3 月超过”那个数字窄。按这个窄口径，图中大约在 5 月才和人类小时持平。研究部门是 19 倍。视频把两个口径接在一起讲，听起来像同一条曲线。</td></tr>
+        <tr><td data-label="视频说法">1000 名员工 × 每周 40 小时 = 4 万小时，agent 是 24 万小时</td><td data-label="判定"><span class="badge gloss">视频引申</span></td><td data-label="报告原文怎么说">这是视频的举例，不是报告数据。报告确实用“人数 × 每周 40 小时”计算人类小时，所以这个算法本身没错。</td></tr>
+        <tr><td data-label="视频说法">工程师人均代码提交速度，六个月内增长到原来的 5 倍</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">每名工程师的提交量是 6 个月前的 5 倍。</td></tr>
+        <tr><td data-label="视频说法">一名销售用 3 到 4 小时、借助 MCP 做出了仪表盘</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">原话：“这种开发原本超出我的能力，特别是 UI、把各种工具连起来、MCP……但我大概三四个小时就做完了。”</td></tr>
+        <tr><td data-label="视频说法">非技术员工的编程会话从每月 2 次增加到 90 次</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">时间是 2025 年 8 月到 2026 年 5 月。报告没有写明这是人均数还是总数。</td></tr>
+        <tr><td data-label="视频说法">销售、财务、人力资源也开始自己开发软件</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">三个职能都有具体案例：一名销售做了仪表盘，一名财务经理做了采购申请审核 agent，招聘人员用 agent 做了整合仪表盘。这些是个案，不能由此推断这些部门有多少人在这样做。</td></tr>
+        <tr><td data-label="视频说法">员工在管理“Claude 军团”</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">“army of Claudes”是访谈原话。2026 年 4 月的问卷里，20% 的员工说自己的角色变成了管理 Claude。</td></tr>
+        <tr><td data-label="视频说法">80% 的时间 agent 在等人</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">交互式多轮会话的墙钟时间里，约 80% 是空等人类输入。一名工程师的说法是：人在“卡住 agent”。</td></tr>
+        <tr><td data-label="视频说法">读完 AI 的全部输出，要花超过半个工作周</td><td data-label="判定"><span class="badge partial">口径不同</span></td><td data-label="报告原文怎么说">报告正文确实说“即使非技术组，也超过半个工作周”。但是按部门看差异很大：工程和研究是每人每周 424 小时，市场与传播是 12 小时，低于半周（20 小时）。这个估算假设每个 token 合 0.75 个英文词、每分钟读 250 词。</td></tr>
+        <tr><td data-label="视频说法">元工作从 10% 上升到 22%</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">交互会话中元工作的占比，2025 年秋是 10%，2026 年春是 22%，来自 2,000 条摘要的抽样编码。</td></tr>
+        <tr><td data-label="视频说法">过去一年员工总数增长到原来的三倍</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">过去一年公司人数增长到约 3 倍，管理层没有把控制权交给模型。</td></tr>
+        <tr><td data-label="视频说法">初级技术岗招聘占比从 27% 降到 9%，因为 AI 能做初级工作</td><td data-label="判定"><span class="badge partial">口径不同</span></td><td data-label="报告原文怎么说">数字一致。但报告把这部分写成描述性观察，同时提到公司在快速扩张，结构变化“不只是自动化编程的故事”。约 1/3 的机器学习经理和 1/5 的软件工程经理说，因为 AI 少招了人。非技术岗的初级占比大致没变。</td></tr>
+        <tr><td data-label="视频说法">招聘更看重自主性和判断力，判断力就是判断 AI 输出对不对</td><td data-label="判定"><span class="badge partial">口径不同</span></td><td data-label="报告原文怎么说">前半句一致：技术岗面试评语里，自主性和判断力上升最多，领域专长下降。后半句“判断 AI 输出对不对”是视频的解释，报告没有这样定义。</td></tr>
+        <tr><td data-label="视频说法">会议时间增加了 20%</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">按日历数据，员工会议时间的中位数增加了 20%；技术个人贡献者增加了 16%。</td></tr>
+        <tr><td data-label="视频说法">T 恤和杯子的故事</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">一名员工换岗很久以后，大家还拿 T 恤和杯子的需求去找他，因为 Claude 读到的旧文档还写着他负责周边。</td></tr>
+        <tr><td data-label="视频说法">要让上下文对 AI 可见</td><td data-label="判定"><span class="badge ok">一致</span></td><td data-label="报告原文怎么说">报告写道：私下进行的工作“不可见、令人困惑、不被鼓励”，工作和决定要在公开的地方进行。</td></tr>
+        <tr><td data-label="视频说法">企业正在从“员工使用 AI”走向“企业组织 AI”</td><td data-label="判定"><span class="badge gloss">视频引申</span></td><td data-label="报告原文怎么说">这是视频作者的判断。报告观察到的是：agent 围绕单个员工组织，像“一个人的团队”；在报告放大观察的一个大型部门里，人和人之间的沟通结构和密度变化很小。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>agent 小时怎样超过人类小时</h2>
+    <p>下图重画了报告图 2。纵轴是“agent 小时 ÷ 人类小时”，用对数刻度，所以每上一格是乘以约 3 倍。虚线 1 表示两者持平。</p>
+    <div class="card">
+      <svg class="chart" viewBox="0 0 640 290" role="img" aria-label="2026 年 2 月到 8 月，agent 小时与人类小时之比。全体员工 8 月约 6 倍，研究部门约 19 倍。">
+        <!-- 坐标 = 162 − 82 × log10(倍数)，各点为按原图读取的近似值（数据几何，不属设计 token） -->
+        <line class="grid-line" x1="60" y1="244" x2="560" y2="244"/>
+        <line class="grid-line" x1="60" y1="205" x2="560" y2="205"/>
+        <line class="grid-line" x1="60" y1="123" x2="560" y2="123"/>
+        <line class="grid-line" x1="60" y1="80" x2="560" y2="80"/>
+        <line class="grid-line" x1="60" y1="41" x2="560" y2="41"/>
+        <line class="parity" x1="60" y1="162" x2="560" y2="162"/>
+        <text class="axis-text" x="50" y="248" text-anchor="end">0.1</text>
+        <text class="axis-text" x="50" y="209" text-anchor="end">0.3</text>
+        <text class="axis-text" x="50" y="166" text-anchor="end">1</text>
+        <text class="axis-text" x="50" y="127" text-anchor="end">3</text>
+        <text class="axis-text" x="50" y="84" text-anchor="end">10</text>
+        <text class="axis-text" x="50" y="45" text-anchor="end">30</text>
+        <text class="axis-text" x="66" y="156">持平</text>
+        <text class="axis-text" x="60" y="276">2 月</text>
+        <text class="axis-text" x="143" y="276">3 月</text>
+        <text class="axis-text" x="227" y="276">4 月</text>
+        <text class="axis-text" x="310" y="276">5 月</text>
+        <text class="axis-text" x="393" y="276">6 月</text>
+        <text class="axis-text" x="477" y="276">7 月</text>
+        <text class="axis-text" x="540" y="276">8 月</text>
+        <polyline class="series-a" points="60,223 143,205 227,162 310,137 393,105 477,88 545,57"/>
+        <polyline class="series-b" points="60,235 143,219 227,187 310,162 393,137 477,123 545,98"/>
+        <text class="label-a" x="552" y="61">研究 19×</text>
+        <text class="label-b" x="552" y="102">全体 6×</text>
+      </svg>
+      <p class="muted">口径：员工发起的交互会话，子 agent 合并；agent 时间含推理与工具调用，不含超过 30 分钟的等待。曲线上的点是按原图目测的近似值，只有 8 月末的 6 倍和 19 倍是报告标注值。</p>
+    </div>
+    <div class="callout">
+      <p><strong>读这张图要注意一点。</strong>报告说“3 月首次超过”，指的是自主 agent 加交互 agent 的合计口径，包括大规模自动化的测试、维护和代码迁移。这张图只画员工直接指挥的那部分，所以全体员工的曲线到 5 月左右才过持平线。</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>瓶颈从“写”变成了“读”</h2>
+    <p>agent 产出越多，人越读不过来。报告用输出 token 估算了“读完全部输出需要多少小时”。下图是 2026 年 4 月每人每周的估算值，虚线是半个工作周（20 小时）。</p>
+    <div class="card">
+      <div class="bars" role="img" aria-label="各部门每人每周读完 agent 输出所需小时：工程与研究 424，财务 43，销售 35，其他非工程 27，法务政策 26，市场传播 12。">
+        <div class="bar-row"><span>工程与研究</span><div class="bar-track"><div class="bar-fill overflow" style="width:100%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">424 小时</span></div>
+        <div class="bar-row"><span>财务与会计</span><div class="bar-track"><div class="bar-fill alt" style="width:86%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">43 小时</span></div>
+        <div class="bar-row"><span>销售与市场拓展</span><div class="bar-track"><div class="bar-fill alt" style="width:70%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">35 小时</span></div>
+        <div class="bar-row"><span>其他非工程</span><div class="bar-track"><div class="bar-fill alt" style="width:54%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">27 小时</span></div>
+        <div class="bar-row"><span>法务、政策、信任</span><div class="bar-track"><div class="bar-fill alt" style="width:52%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">26 小时</span></div>
+        <div class="bar-row"><span>市场与传播</span><div class="bar-track"><div class="bar-fill muted" style="width:24%"></div><span class="bar-mark" style="left:40%"></span></div><span class="bar-value">12 小时</span></div>
+        <div class="bar-scale"><span></span><span class="scale-track"><span style="left:0">0</span><span style="left:40%">20（半周）</span><span style="left:100%">50</span></span><span>小时</span></div>
+      </div>
+      <p class="muted">刻度 0–50 小时；工程与研究的条形被截断，实际是刻度的 8 倍多。条形宽度是数据值，不是设计值。来源：报告图 6，假设每 token 合 0.75 词、每分钟读 250 词。</p>
+    </div>
+    <h3>员工怎样应对</h3>
+    <div class="flow">
+      <div class="flow-step"><b>写常驻指令</b>给 agent 的书面常驻指令，从 2025 年 7 月的几百条增加到一年后的 8,500 条。</div>
+      <div class="flow-step"><b>让 agent 管 agent</b>一名工程师设了一个“agent 幕僚长”，专门分拣其他 agent 的请求。</div>
+      <div class="flow-step"><b>做可见性工具</b>招聘人员做了整合仪表盘，由 agent 发现问题并发起动作。</div>
+      <div class="flow-step"><b>给 Claude 团队做复盘</b>一名员工给自己的 Claude 团队写了“绩效评估”，讨论沟通方式哪里有效、哪里无效。</div>
+    </div>
+    <p>这些动作的共同点是：人不再直接盯每一段代码或文字，而是去搭建让 agent 把活干好的工具。这就是元工作占比从 10% 升到 22% 的原因。</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>组织：人更多了，会也更多了</h2>
+    <div class="grid">
+      <div class="card"><h3>人数约 3 倍</h3><p>公司过去一年人数增长到约 3 倍。技术部门在总人数中的占比从 61% 降到 56%，但技术岗招聘的绝对数仍在增长。</p></div>
+      <div class="card"><h3>会议 +20%</h3><p>员工会议时间的中位数增加 20%。员工说，追查到最后的问题往往是组织和技术债问题，需要人一起商量、决定和治理。</p></div>
+      <div class="card"><h3>agent 进了近一半频道</h3><p>agent 出现在近一半活跃的公开 Slack 频道。报告放大观察了一个大型部门：人和人之间的沟通结构和密度变化很小，agent 更像“一个员工的私人团队”。</p></div>
+      <div class="card"><h3>跨部门流动 +50%</h3><p>2026 年，入职满一年的员工每月跨部门调动的可能性高 50%。一个产品写作团队整体转去做提示词和评测。</p></div>
+    </div>
+    <div class="callout warn">
+      <p><strong>T 恤和杯子的故事说明了什么。</strong>一名员工换岗很久以后，同事还拿 T 恤和杯子的需求去找他。原因是 Claude 读到的周边文档没有更新，还写着他负责。报告由此得出：私下进行的工作对 agent“不可见、令人困惑”，所以公司鼓励把工作和决定放在公开的地方。对任何公司来说，这一条最容易照着做：先更新“谁负责什么”的文档。</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>招聘：初级技术岗的招聘占比明显下降</h2>
+    <div class="card">
+      <div class="pair">
+        <span class="pair-title">技术岗新招聘中初级人员的占比</span>
+        <div class="bar-row"><span>2025 年初</span><div class="bar-track"><div class="bar-fill muted" style="width:27%"></div></div><span class="bar-value">27%</span></div>
+        <div class="bar-row"><span>最近</span><div class="bar-track"><div class="bar-fill alt" style="width:9%"></div></div><span class="bar-value">9%</span></div>
+      </div>
+      <div class="pair">
+        <span class="pair-title">技术岗在职人员中初级人员的占比</span>
+        <div class="bar-row"><span>2025 年初</span><div class="bar-track"><div class="bar-fill muted" style="width:21%"></div></div><span class="bar-value">21%</span></div>
+        <div class="bar-row"><span>最近</span><div class="bar-track"><div class="bar-fill alt" style="width:14%"></div></div><span class="bar-value">14%</span></div>
+      </div>
+      <div class="pair">
+        <span class="pair-title">对照：非技术岗新招聘中初级人员的占比（按图目测）</span>
+        <div class="bar-row"><span>最近</span><div class="bar-track"><div class="bar-fill" style="width:26%"></div></div><span class="bar-value">约 26%</span></div>
+      </div>
+      <p class="muted">条形宽度直接对应百分比。非技术岗数值按报告图 1 目测，其余为报告正文数值。</p>
+    </div>
+    <p>时间线：公司从 2026 年 1 月开始讨论初级技术招聘；到 4 月，工程和研究部门已经降低了低职级招聘的优先级。约 1/3 的机器学习经理和 1/5 的软件工程经理说，因为 AI 少招了人。</p>
+    <p>面试评语也在变。2024 年，提到候选人 AI 工具使用经验的评语，技术岗约 5%，非技术岗约 7%；到 2026 年，分别涨到约 3 倍和 4 倍。技术岗评语里自主性和判断力上升最多，领域专长下降。非技术岗评语里，客户导向和使命感上升，执行力下降。</p>
+    <div class="callout">
+      <p><strong>报告作者自己承认的部分。</strong>公司推出了三项应对：员工普遍持股、为高风险岗位建预警系统、内部转岗。但作者写明，这三项都不能解决初级招聘放缓的问题，并呼吁政府提供再培训和收入支持。视频没有提到这一段。</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>视频没讲、但影响判断的五件事</h2>
+    <ol>
+      <li><strong>人均收入。</strong>在同样的公司年龄，Anthropic 的人均收入是 Meta 和 Google 的 2 到 4 倍（截至 2026 年 4 月的 12 个月，按 2025 年美元折算）。这说明它的业务扩张很快，扩张本身也会改变招聘结构。</li>
+      <li><strong>在所测的质量指标上没有看到差别。</strong>报告跟踪了 192 名开始用编程 agent 的工程师和 74 名没用的工程师。按 90 天内被删除的比例、被修 bug 删除的比例、回滚、lint 抑制、跳过测试等指标，agent 写的代码和人写的代码没有差别。报告也提醒：质量有很多维度，AI 的错误可能更难发现，所以这不能证明整体质量相同。</li>
+      <li><strong>使用者本来就在上升。</strong>谁先用 AI 不是随机的。最早用全自主 agent 的人，在使用之前产出就已经在上升。所以产出增长不能全部算到 AI 头上。</li>
+      <li><strong>非技术岗的初级占比基本稳定。</strong>初级占比下降主要发生在技术岗。报告说，由于外包，公司的文员类岗位本来就很少，增长也慢。</li>
+      <li><strong>数据来自公司自己。</strong>这是 Anthropic 研究 Anthropic，部分数据来自员工问卷自报。2026 年 4 月问卷里“流程让我效率最高”的认同率是 75%，但那一期题目措辞变弱了，不能和前两期的 44%、58% 直接比较。</li>
+    </ol>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>自己算一下</h2>
+    <p>下面两个小计算器用的是报告的同一套算法。改数字后结果会马上更新。</p>
+    <div class="grid calc">
+      <div class="card">
+        <h3>agent 小时和人类小时</h3>
+        <div class="field"><label for="heads">员工人数</label><input id="heads" type="number" min="1" value="1000"></div>
+        <div class="field"><label for="ratio">agent 小时是人类小时的几倍</label><input id="ratio" type="number" min="0" step="0.5" value="6"></div>
+        <output id="hoursOut" for="heads ratio"></output>
+        <p class="muted">人类小时 = 人数 × 每周 40 小时（报告的算法）。1000 人和 6 倍就是视频里的例子。</p>
+      </div>
+      <div class="card">
+        <h3>读完 agent 输出要多久</h3>
+        <div class="field"><label for="tokens">每人每周 agent 输出 token 数（万）</label><input id="tokens" type="number" min="0" step="10" value="100"></div>
+        <output id="readOut" for="tokens"></output>
+        <p class="muted">小时 = token × 0.75 词 ÷ 每分钟 250 词 ÷ 60（报告的假设，基于英文）。中文阅读速度不同，结果只作量级参考。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>对普通公司和个人，能直接做的事</h2>
+    <p>Anthropic 是一家做 AI 的软件公司，它的数字不能直接套到其他公司。下面是根据报告提出的试行建议。思路来自报告，具体周期和抽样数量（例如 4 周、5 项）是本页作者设定的。每一条都写了怎样检查是否做到。</p>
+    <div class="grid">
+      <div class="card"><h3>1. 先量，再谈效率</h3><p>选一个能数的产出指标，例如每周处理的合同数、工单数或成交数。先记录 4 周基线，再引入 AI 工具。</p><p class="muted">检查：有没有引入前后各 4 周的同口径数字。</p></div>
+      <div class="card"><h3>2. 把“谁负责什么”写清楚并保持更新</h3><p>T 恤故事的教训是：agent 会照着旧文档办事。每次换岗或调整职责，当周更新负责人文档。</p><p class="muted">检查：随机抽 5 项职责，文档写的负责人是否都对。</p></div>
+      <div class="card"><h3>3. 把常用要求写成常驻指令</h3><p>每天重复说给 AI 的要求，写成一份固定的说明文件，让每次会话都能读到。</p><p class="muted">检查：同一类任务，是否不再需要每次重新交代背景。</p></div>
+      <div class="card"><h3>4. 给“读”留时间</h3><p>agent 产出很快，人读不过来。先让 agent 交摘要、改动差异和需要人决定的问题，全文保留在需要核查时再看。</p><p class="muted">检查：每周花在读 AI 输出上的时间有没有下降，漏掉的问题有没有增加。</p></div>
+      <div class="card"><h3>5. 质量用客观指标盯</h3><p>参考报告的做法：看返工、回滚、被删除的比例，不只看主观满意度。</p><p class="muted">检查：AI 参与的产出和人工产出，返工率是否相近。</p></div>
+      <div class="card"><h3>6. 招人时看真实的 AI 使用记录</h3><p>面试问候选人用 AI 完成过的一件具体事，以及他怎样判断结果可以交付。</p><p class="muted">检查：评语里有没有写下具体例子，而不是“会用 AI”。</p></div>
+    </div>
+    <div class="callout warn">
+      <p><strong>不要照搬的部分。</strong>不要因为这份报告就砍掉初级岗位。报告自己说，初级招聘占比下降是在高速扩张、人均收入很高的特殊条件下发生的，作者也承认公司的三项应对解决不了这个问题。如果没有自己的产出数据，就没有依据做这类决定。</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>来源</h2>
+    <ul class="sources">
+      <li>Anthropic, <a href="https://www.anthropic.com/research/employment-at-anthropic">How employment is changing at Anthropic</a>（网页版）；作者 Nathan Wilmers、Regina Catipon、Maxim Massenkoff、Peter McCrory，2026-10-16。</li>
+      <li>同报告 <a href="https://www-cdn.anthropic.com/72628f1863c53432195db83279252dfd2cb53158/Employment%20at%20Anthropic.pdf">PDF 全文</a>，20 页；本页数字来自正文与图 1、2、6、7、8。</li>
+      <li>孙宇晨言论的二手转述：<a href="https://www.sina.cn/weibo/detail/5352385213895179.html">微博转述（2026-10-10）</a>、<a href="https://www.sina.cn/weibo/detail/5355329881640200.html">微博转述（2026-10-18）</a>；未找到原始视频。</li>
+      <li>被核对的视频文字稿由用户提供，作者未注明。</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>核对日期：2026-10-20。图表中标“目测”的数值按原报告图片读取，其余数字均为报告正文或图中标注值。本页不代表 Anthropic 立场。</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var heads = document.getElementById('heads');
+  var ratio = document.getElementById('ratio');
+  var tokens = document.getElementById('tokens');
+  var hoursOut = document.getElementById('hoursOut');
+  var readOut = document.getElementById('readOut');
+  function num(el) { var v = parseFloat(el.value); return isFinite(v) && v >= 0 ? v : 0; }
+  function fmt(n) { return Math.round(n).toLocaleString('zh-CN'); }
+  function updateHours() {
+    var human = num(heads) * 40;
+    var agent = human * num(ratio);
+    hoursOut.textContent = '人类每周 ' + fmt(human) + ' 小时，agent 每周 ' + fmt(agent) + ' 小时';
+  }
+  function updateRead() {
+    var hours = num(tokens) * 10000 * 0.75 / 250 / 60;
+    var weeks = hours / 40;
+    readOut.textContent = '每周约 ' + hours.toFixed(1) + ' 小时，相当于 ' + weeks.toFixed(2) + ' 个 40 小时工作周';
+  }
+  heads.addEventListener('input', updateHours);
+  ratio.addEventListener('input', updateHours);
+  tokens.addEventListener('input', updateRead);
+  updateHours();
+  updateRead();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260725-1116-前沿 AI 模型全面对比 · 2026 年 7 月</title>
+<style>
+:root{
+  --bg:#0b0e14; --bg2:#111622; --card:#151b28; --card2:#1a2130;
+  --line:#232c3d; --line2:#2e3850;
+  --tx:#e6ebf5; --tx2:#9aa7bd; --tx3:#6b7891;
+  --anthropic:#d97757; --openai:#10a37f; --moonshot:#8b7cf6;
+  --deepseek:#4d7cff; --google:#e8734a; --zai:#22c5c5; --xai:#a8b3c7;
+  --good:#3fb950; --warn:#d29922; --bad:#f85149;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+a{color:#6ea8fe;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- HERO ---------- */
+header{
+  padding:72px 0 48px;
+  background:radial-gradient(ellipse 900px 480px at 50% -10%, rgba(217,119,87,.18), transparent 65%),
+             radial-gradient(ellipse 700px 400px at 85% 10%, rgba(16,163,127,.12), transparent 60%);
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{
+  display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tx3);border:1px solid var(--line);border-radius:100px;padding:5px 14px;margin-bottom:22px;
+}
+h1{font-size:clamp(30px,5vw,50px);line-height:1.22;font-weight:700;letter-spacing:-.02em;margin-bottom:18px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--anthropic),#f0b27a 40%,var(--openai) 78%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:17px;color:var(--tx2);max-width:760px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:36px;margin-top:38px}
+.hs-n{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.hs-l{font-size:13px;color:var(--tx3)}
+
+/* ---------- SECTIONS ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+h2{font-size:27px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+h2 .num{color:var(--tx3);font-size:15px;font-weight:500;margin-right:10px;font-variant-numeric:tabular-nums}
+.lede{color:var(--tx2);font-size:15px;max-width:820px;margin-bottom:32px}
+h3{font-size:18px;font-weight:650;margin:34px 0 14px}
+
+/* ---------- NOTICE ---------- */
+.notice{
+  background:linear-gradient(180deg,rgba(210,153,34,.10),rgba(210,153,34,.03));
+  border:1px solid rgba(210,153,34,.30);border-radius:14px;padding:20px 22px;margin:26px 0;
+}
+.notice b{color:#f0c674}
+.notice ul{margin:10px 0 0 18px;color:var(--tx2);font-size:14.5px}
+.notice li{margin:5px 0}
+
+/* ---------- MODEL CARDS ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;align-items:start}
+.mcard{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
+  position:relative;overflow:hidden;transition:.22s;
+}
+.mcard:hover{border-color:#3a4762;transform:translateY(-2px)}
+.mcard::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:var(--acc)}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px}
+.mname{font-size:18px;font-weight:700}
+.mvendor{font-size:12px;color:var(--acc);font-weight:600;letter-spacing:.03em}
+.mbadge{font-size:11px;padding:3px 9px;border-radius:100px;border:1px solid var(--line);color:var(--tx3);white-space:nowrap}
+.mbadge.open{color:var(--good);border-color:rgba(63,185,80,.35);background:rgba(63,185,80,.08)}
+.mbadge.closed{color:var(--tx3)}
+.mmeta{font-size:12.5px;color:var(--tx3);margin-bottom:14px;font-variant-numeric:tabular-nums}
+.mkv{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.mkv div{background:var(--card2);padding:9px 11px}
+.mkv .k{font-size:11px;color:var(--tx3);display:block}
+.mkv .v{font-size:14px;font-weight:650;font-variant-numeric:tabular-nums}
+.mlist{font-size:13.5px;color:var(--tx2);list-style:none}
+.mlist li{padding-left:18px;position:relative;margin:6px 0}
+.mlist li.p::before{content:'▲';position:absolute;left:0;color:var(--good);font-size:9px;top:5px}
+.mlist li.n::before{content:'▼';position:absolute;left:0;color:var(--bad);font-size:9px;top:5px}
+.mbest{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--tx2)}
+.mbest b{color:var(--tx)}
+
+/* ---------- CHARTS ---------- */
+.chart{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;margin-top:22px}
+.chart-t{font-size:15px;font-weight:650;margin-bottom:4px}
+.chart-s{font-size:12.5px;color:var(--tx3);margin-bottom:22px}
+.bar-row{display:grid;grid-template-columns:190px 1fr 66px;align-items:center;gap:14px;margin:9px 0}
+.bar-lbl{font-size:13px;color:var(--tx2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{background:#0e131d;border-radius:6px;height:22px;overflow:hidden;border:1px solid var(--line)}
+.bar-fill{height:100%;border-radius:5px;transform-origin:left center;animation:grow .85s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar-val{font-size:13px;font-weight:650;font-variant-numeric:tabular-nums;color:var(--tx)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx3)}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.axis{stroke:var(--line);stroke-width:1}
+.gridline{stroke:#1b2333;stroke-width:1;stroke-dasharray:3 4}
+.axlbl{fill:var(--tx3);font-size:11px}
+.ptlbl{fill:var(--tx2);font-size:11.5px}
+
+/* ---------- TABLE ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-top:20px}
+table{border-collapse:collapse;width:100%;min-width:1000px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{background:var(--card2);font-size:12px;color:var(--tx2);font-weight:650;position:sticky;top:0;letter-spacing:.02em}
+tbody tr:hover{background:#1a2230}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:5px;background:#202a3b;color:var(--tx2)}
+.tag.o{background:rgba(63,185,80,.12);color:var(--good)}
+.tag.c{background:rgba(248,81,73,.10);color:#e0837e}
+.best{color:var(--good);font-weight:650}
+
+/* ---------- MATRIX ---------- */
+.mx{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:22px}
+.mxc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.mxc h4{font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.mxc .ico{font-size:17px}
+.mxc .pick{font-size:14px;font-weight:700;color:#fff;margin:10px 0 2px}
+.mxc .why{font-size:13px;color:var(--tx2)}
+.mxc .alt{font-size:12.5px;color:var(--tx3);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+
+/* ---------- SOURCES ---------- */
+.src{columns:2;column-gap:34px;font-size:13px;color:var(--tx3)}
+.src li{margin-bottom:7px;break-inside:avoid;list-style:none;padding-left:14px;position:relative}
+.src li::before{content:'·';position:absolute;left:2px;color:var(--tx3)}
+footer{padding:44px 0 70px;color:var(--tx3);font-size:13px}
+@media(max-width:720px){
+  .bar-row{grid-template-columns:120px 1fr 52px;gap:8px}
+  .bar-lbl{font-size:11.5px}
+  .src{columns:1}
+  .hero-stats{gap:22px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">数据截至 2026 年 7 月 25 日</span>
+    <h1>前沿大模型<em>全面横向对比</em><br>谁在什么场景真的更好用</h1>
+    <p class="sub">
+      覆盖 Anthropic Claude(Opus 5 / Opus 4.8 / Fable 5 / Sonnet 5)、OpenAI GPT-5.6 三层(Sol / Terra / Luna)、
+      Moonshot Kimi K3、DeepSeek V4 Pro，以及同档位的 Google Gemini、Z.ai GLM-5.2、SpaceXAI Grok 4.5。
+      全部数据标注来源与口径，官方自测与第三方独立评测严格区分。
+    </p>
+    <div class="hero-stats">
+      <div><div class="hs-n">10+</div><div class="hs-l">对比模型</div></div>
+      <div><div class="hs-n">57×</div><div class="hs-l">最高与最低输出单价差</div></div>
+      <div><div class="hs-n">~8.5 分</div><div class="hs-l">智能指数前十名总跨度</div></div>
+      <div><div class="hs-n">4 家</div><div class="hs-l">开源权重厂商入前十</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 0. 阅读须知 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">00</span>先读这一段：这些数字能信到什么程度</h2>
+  <p class="lede">对比表里最危险的不是数字错，而是把不可比的数字并排放。以下四条口径请务必先看，否则下面任何一张图都可能被误读。</p>
+
+  <div class="notice">
+    <b>⚠️ 四条硬性口径</b>
+    <ul>
+      <li><b>厂商自测 ≠ 独立评测。</b>发布会上的 SWE-bench、Terminal-Bench 分数普遍跑在厂商自己的 scaffold 上，系统性高于标准化 harness。本页中 Artificial Analysis(AA)、LMArena、NIST CAISI 属独立第三方；标注「厂商自测」的一律只当方向性参考。</li>
+      <li><b>AA 智能指数 v4.1 重新做过基线。</b>v4.1 加大了 agentic 权重，<u>不能与 6 月的 v4.0 数字直接比</u>。例如 Opus 4.8 在 v4.0 时期报到 61.4，在 v4.1 口径下约 55.7——不是模型变笨了，是尺子换了。</li>
+      <li><b>「便宜」要看每任务成本，不是每 token 单价。</b>Grok 4.5 每个智能指数任务约耗 1.4 万输出 token，Opus 系列可达 6.7 万。单价低 3 倍但话多 4 倍，总账可能反而更贵。</li>
+      <li><b>单点基准冠军意义有限。</b>前十名总分只差约 8.5 分，多数差距落在噪声区间；DeepSeek V4 Pro 在 LiveCodeBench 报 93.5 却在防污染的 DeepSWE 上只有 8%——这种撕裂本身就是信号。</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ============ 1. 智能指数 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">01</span>综合智能：第三方统一尺子下的排名</h2>
+  <p class="lede">
+    Artificial Analysis 智能指数 v4.1 由 9 项评测合成(GDPval-AA v2、τ³-Banking、Terminal-Bench v2.1、SciCode、
+    Humanity's Last Exam、GPQA Diamond、CritPt、AA-Omniscience、AA-LCR)，全部由 AA 独立运行，是目前最适合横向比较的单一指标。
+  </p>
+  <div class="chart">
+    <div class="chart-t">AA 智能指数 v4.1（越高越强）</div>
+    <div class="chart-s">数据来源：Artificial Analysis，2026 年 7 月快照。Claude 各档为不同 effort 设置；Gemini 3.5 Pro 尚未发布故不入榜。</div>
+    <div id="chart-intel"></div>
+    <div class="legend" id="legend-vendor"></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ 2. 价格 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">02</span>价格：同一梯队内差出一个数量级</h2>
+  <p class="lede">
+    输出 token 单价（美元 / 百万 token）。输出价通常比输入价更能决定实际账单，因为推理型模型的思考过程按输出计费。
+    注意 Claude Sonnet 5 的 $2/$10 是 2026-08-31 前的促销价，之后回到 $3/$15。
+  </p>
+  <div class="chart">
+    <div class="chart-t">输出单价对比（$ / 1M tokens，越低越省）</div>
+    <div class="chart-s">开源权重模型可自行部署或走第三方托管，实际价格可能更低（如 GLM-5.2 在 DeepInfra 约 $0.95/$3.00）。</div>
+    <div id="chart-price"></div>
+  </div>
+
+  <div class="chart">
+    <div class="chart-t">智能 × 价格：性价比地图</div>
+    <div class="chart-s">横轴为输出单价（对数刻度），纵轴为 AA 智能指数。越靠<b>左上</b>越划算。虚线为经验性「性价比前沿」参考。</div>
+    <div id="chart-scatter"></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ 3. 逐个模型 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">03</span>逐个模型：它到底是什么，强在哪，坑在哪</h2>
+  <p class="lede">每张卡片都给出发布时间、价格、上下文、独立评测位次，以及最重要的一句「什么时候该选它」。</p>
+  <div class="grid" id="cards"></div>
+</div>
+</section>
+
+<!-- ============ 4. 参数总表 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">04</span>硬参数总表</h2>
+  <p class="lede">横向滚动查看完整字段。「—」表示厂商未公布或无可靠公开数据；Anthropic 从不公布任何 Claude 模型的参数量。</p>
+  <div class="tbl-wrap">
+    <table id="spec-table">
+      <thead><tr>
+        <th>模型</th><th>厂商</th><th>发布</th><th>权重</th>
+        <th>输入 $/M</th><th>输出 $/M</th><th>上下文</th><th>参数量</th>
+        <th>AA 指数</th><th>输出速度</th><th>代表性成绩</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ============ 5. 场景选型 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">05</span>场景选型：按你要干的事挑，别按排行榜挑</h2>
+  <p class="lede">排行榜第一名很少是你该用的那个。下面按真实工作场景给首选与备选。</p>
+  <div class="mx" id="matrix"></div>
+</div>
+</section>
+
+<!-- ============ 6. 格局判断 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">06</span>2026 年 7 月的五条格局判断</h2>
+  <p class="lede">从上面这些数据里能稳妥得出的结论，以及不能得出的结论。</p>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+    <div class="mcard" style="--acc:var(--anthropic)">
+      <div class="mname">① 竞争从「能力天花板」转向「每任务成本」</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        Opus 5 发布通稿的主语不是能力而是价格——「接近 Fable 5 的前沿智能，价格只要一半」。
+        GPT-5.6 拆成 Sol/Terra/Luna 三层同理。厂商已经默认「最强」卖不动，转卖「够强且用得起」。
+      </p>
+    </div>
+    <div class="mcard" style="--acc:var(--moonshot)">
+      <div class="mname">② 开源与闭源的差距压到几个月</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        英国 AI 安全研究所测得开源—闭源在前沿网络安全靶场上的差距为 4–7 个月，2025 年全年这个数字是 6–10 个月。
+        Kimi K3 (2.8T)、DeepSeek V4 Pro (1.6T)、GLM-5.2 均为可下载权重且进入 AA 前十五。
+      </p>
+    </div>
+    <div class="mcard" style="--acc:var(--openai)">
+      <div class="mname">③ 没有任何一个模型在所有维度领先</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        Opus 5 拿智能指数第一，Sol 拿 agentic 编码第一，Kimi K3 拿前端代码竞技场第一，
+        Gemini 3.1 Pro 拿 ARC-AGI-2 与事实检索第一，DeepSeek 拿单价第一。多模型混用是理性选择，不是折腾。
+      </p>
+    </div>
+    <div class="mcard" style="--acc:var(--warn)">
+      <div class="mname">④ 监管开始成为真实变量</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        Fable 5 在 6/12 因出口管制被暂停、7/1 才全球恢复；GPT-5.6 首发是应美国政府要求的受限预览（OpenAI 公开表达异议）；
+        NIST CAISI 已开始正式评估 DeepSeek。选型时「能否稳定拿到」和「跑分多少」同等重要。
+      </p>
+    </div>
+    <div class="mcard" style="--acc:var(--google)">
+      <div class="mname">⑤ 承诺 ≠ 交付：谷歌与 xAI 都在延期</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        Gemini 3.5 Pro 在 5/19 I/O 上宣布「下月发布」，7 月仍未上线，彭博 7/16 报道落后数月；
+        Grok 5 从 Q1 推到 Q2 至今未发。网上流传的这两者跑分与价格<b>全部是猜测</b>，本页一律不收录。
+      </p>
+    </div>
+    <div class="mcard" style="--acc:var(--deepseek)">
+      <div class="mname">⑥ 上下文 1M 已成标配，但别当免费的</div>
+      <p class="mlist" style="margin-top:10px;color:var(--tx2);font-size:13.5px">
+        本页十款有八款是 1M 上下文（Grok 4.5 为 500K）。但 GPT-5.6 Sol 超过 272K 输入后整个请求按 $10/$45 计费，
+        Gemini 3.1 Pro 超 200K 后涨到 $4/$18。长上下文是能力，不是白送的额度。
+      </p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ 7. 来源 ============ -->
+<section>
+<div class="wrap">
+  <h2><span class="num">07</span>数据来源</h2>
+  <p class="lede">全部为 2026 年 7 月可公开检索的信息。同一指标存在冲突时，本页优先采用第三方独立评测，并在正文中标注冲突。</p>
+  <ul class="src">
+    <li><a href="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index" target="_blank">Artificial Analysis · 智能指数 v4.1 实时榜</a></li>
+    <li><a href="https://artificialanalysis.ai/articles/opus-5" target="_blank">Artificial Analysis · Opus 5 评测文章</a></li>
+    <li><a href="https://artificialanalysis.ai/models/claude-opus-5" target="_blank">AA · Claude Opus 5 各 effort 档数据</a></li>
+    <li><a href="https://artificialanalysis.ai/models/claude-opus-4-8" target="_blank">AA · Claude Opus 4.8</a></li>
+    <li><a href="https://artificialanalysis.ai/models/deepseek-v4-pro" target="_blank">AA · DeepSeek V4 Pro</a></li>
+    <li><a href="https://artificialanalysis.ai/models/glm-5-2" target="_blank">AA · GLM-5.2</a></li>
+    <li><a href="https://artificialanalysis.ai/articles/gpt-5-6-has-landed" target="_blank">AA · GPT-5.6 落地评测</a></li>
+    <li><a href="https://llm-stats.com/benchmarks/artificial-analysis-coding-agent-index-v1.1" target="_blank">AA Coding Agent Index v1.1 榜单</a></li>
+    <li><a href="https://www.cnbc.com/2026/07/24/anthropic-claude-opus-5-ai-fable-5-cost.html" target="_blank">CNBC · Anthropic 发布 Opus 5</a></li>
+    <li><a href="https://www.vellum.ai/blog/claude-opus-5-benchmarks-explained" target="_blank">Vellum · Opus 5 基准解读</a></li>
+    <li><a href="https://qz.com/anthropic-claude-opus-5-fable-5-price-072426" target="_blank">Quartz · Opus 5 定价报道</a></li>
+    <li><a href="https://openrouter.ai/openai/gpt-5.6-sol" target="_blank">OpenRouter · GPT-5.6 Sol 定价与基准</a></li>
+    <li><a href="https://www.edenai.co/post/gpt-5-6-sol-benchmarks-pricing-api-access-guide" target="_blank">Eden AI · GPT-5.6 Sol 指南</a></li>
+    <li><a href="https://venturebeat.com/technology/chinas-moonshot-ai-releases-kimi-k3-the-largest-open-source-model-ever-rivaling-top-u-s-systems" target="_blank">VentureBeat · Kimi K3 发布</a></li>
+    <li><a href="https://simonwillison.net/2026/Jul/16/kimi-k3/" target="_blank">Simon Willison · Kimi K3 实测</a></li>
+    <li><a href="https://openrouter.ai/moonshotai/kimi-k3" target="_blank">OpenRouter · Kimi K3 定价</a></li>
+    <li><a href="https://www.bloomberg.com/news/articles/2026-07-17/china-s-powerful-new-moonshot-ai-model-closes-gap-with-us-rivals" target="_blank">Bloomberg · Kimi K3 缩小差距</a></li>
+    <li><a href="https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro" target="_blank">NIST CAISI · DeepSeek V4 Pro 评估</a></li>
+    <li><a href="https://www.morphllm.com/deepseek-v4" target="_blank">Morph · DeepSeek V4 架构与定价</a></li>
+    <li><a href="https://openrouter.ai/deepseek/deepseek-v4-pro" target="_blank">OpenRouter · DeepSeek V4 Pro</a></li>
+    <li><a href="https://venturebeat.com/technology/z-ais-open-weights-glm-5-2-beats-gpt-5-5-on-multiple-long-horizon-coding-benchmarks-for-1-6th-the-cost" target="_blank">VentureBeat · GLM-5.2 长任务编码</a></li>
+    <li><a href="https://www.datacamp.com/blog/grok-4-5" target="_blank">DataCamp · Grok 4.5 评测</a></li>
+    <li><a href="https://www.aipricing.guru/xai-pricing/" target="_blank">AI Pricing Guru · xAI 定价</a></li>
+    <li><a href="https://codersera.com/blog/gemini-3-5-pro-launch-guide-2026/" target="_blank">Codersera · Gemini 3.5 Pro 延期追踪</a></li>
+    <li><a href="https://www.aipricing.guru/anthropic-pricing/" target="_blank">AI Pricing Guru · Anthropic 全系定价</a></li>
+    <li><a href="https://emergent.sh/learn/what-is-claude-fable-5" target="_blank">Emergent · Claude Fable 5 说明</a></li>
+    <li><a href="https://www.claudedirectory.org/blog/claude-sonnet-5-guide" target="_blank">Claude Directory · Sonnet 5 指南</a></li>
+  </ul>
+</div>
+</section>
+
+<footer>
+  <div class="wrap">
+    生成于 2026-07-25 · 数据存在时效性，模型发布节奏以周计，使用前请核对官方定价页与模型卡。<br>
+    本页所有跑分均标注来源口径；厂商自测数据仅作方向性参考，不构成选型的唯一依据。
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   数据层：所有数字均来自 07 节列出的来源
+   aa: Artificial Analysis 智能指数 v4.1（null = 未收录/未发布）
+   ============================================================ */
+const V = {
+  anthropic:{n:'Anthropic',c:'#d97757'},
+  openai:{n:'OpenAI',c:'#10a37f'},
+  moonshot:{n:'Moonshot AI',c:'#8b7cf6'},
+  deepseek:{n:'DeepSeek',c:'#4d7cff'},
+  google:{n:'Google',c:'#e8734a'},
+  zai:{n:'Z.ai',c:'#22c5c5'},
+  xai:{n:'SpaceXAI (xAI)',c:'#a8b3c7'}
+};
+
+const M = [
+{
+  id:'opus5', name:'Claude Opus 5', v:'anthropic', date:'2026-07-24', open:false,
+  in:5, out:25, ctx:'1M / 128K 输出', params:'未公布', aa:61, aaNote:'max effort（medium 56 / high 59 / xhigh 60）',
+  speed:'56.3 t/s', api:'claude-opus-5',
+  key:'AA 智能指数当前第一（170 个模型中）',
+  pros:[
+    'AA 智能指数 61 分登顶，GDPval-AA v2 1861 Elo 领先第二名 100+ 分，AA-Briefcase 1720 Elo 领先 Fable 5 达 146 分',
+    '同等智能水平下每任务成本比 Fable 5 低约 26%；单价只有 Fable 5 的一半',
+    '带 effort 调节旋钮，可用质量换速度与 token 消耗；OSWorld 2.0 电脑操作超过 Fable 5 最好成绩且成本约三分之一',
+    '不保留用户数据（Fable 5 作为受管控模型有 30 天留存要求），对 ZDR 合规采购是硬性优势',
+    '自动化对齐审计中「整体失准行为」2.30 分，为近期 Claude 系列最低'
+  ],
+  cons:[
+    '编码类基准优势在噪声内：FrontierCode 53.4 vs Fable 5 的 53.5，CursorBench 3.2 相差 0.5% 以内',
+    '最长自主任务链上 Anthropic 自己仍推荐 Fable 5',
+    '独立测试反映增益不均衡、存在「想太多」和单任务成本偏高',
+    '输出速度 56.3 t/s 低于推理模型中位数 73.6 t/s；max effort 极其啰嗦（跑完智能指数产出 1 亿 token，medium 仅 2900 万）',
+    '明确不是网络安全等高危双用途能力的 SOTA'
+  ],
+  best:'日常主力。要智能上限又要账单可控时的默认选择，Claude Max 的默认模型。'
+},
+{
+  id:'opus48', name:'Claude Opus 4.8', v:'anthropic', date:'2026-05-28', open:false,
+  in:5, out:25, ctx:'1M / 128K 输出', params:'未公布', aa:55.7, aaNote:'v4.1 口径；v4.0 旧口径曾报 61.4',
+  speed:'~62 t/s', api:'claude-opus-4-8',
+  key:'久经验证的企业默认档，被 Opus 5 平价替代',
+  pros:[
+    'SWE-bench Verified 88.6%、SWE-bench Pro 69.2%、GPQA Diamond 92.0、τ²-Bench 94.4%（厂商自测）',
+    'Online-Mind2Web 84%；Hebbia Super-Agent 基准全案例端到端完成',
+    '漏放代码缺陷的概率约为前代的四分之一；首个在法律 Agent 基准 all-pass 标准上破 10% 的模型',
+    '缓存最小可缓存长度从 2048 降到 1024 token，缓存读约打一折',
+    '和 4.7 共用 tokenizer，是无痛的 drop-in 升级'
+  ],
+  cons:[
+    'Opus 5 同价位全面覆盖它，除非有既有验证包袱否则没有继续选它的理由',
+    'AA 评价为「智能领先但相对同价位偏贵、偏慢、非常啰嗦」',
+    'Terminal-Bench 2.1 被 GPT-5.5 + Codex CLI harness 的 83.4% 压制',
+    'Fast 模式快 2.5 倍但价格翻倍到 $10/$50',
+    '云托管变体更贵（Bedrock eu-central-1 为 $5.50/$27.50）'
+  ],
+  best:'已在生产中跑通、不想重新验证的存量系统；同时作为 Fable 5 的高危请求兜底模型。'
+},
+{
+  id:'fable5', name:'Claude Fable 5', v:'anthropic', date:'2026-06-09', open:false,
+  in:10, out:50, ctx:'1M / 128K 输出', params:'未公布', aa:60, aaNote:'max effort + Opus 4.8 回退',
+  speed:'—', api:'claude-fable-5',
+  key:'Mythos 层，最长自主任务的上限选手',
+  pros:[
+    'SWE-bench Verified 95%、SWE-bench Pro 80%（厂商自测），编码基准的绝对高位',
+    '超长多步 agentic 任务、研究级分析、复杂代码库、重视觉负载上 Anthropic 仍推荐它',
+    '与仅限少数机构的 Mythos 5 同底座，公开版加了生物/网络安全/LLM 研发方向的额外防护',
+    '高风险请求由分类器路由到 Opus 4.8 处理，触发率不到 5% 的会话'
+  ],
+  cons:[
+    '价格是 Opus 4.8 与 Opus 5 的整两倍、Sonnet 5 的五倍，做默认模型经济性很差',
+    '综合智能已被 Opus 5 反超（60 vs 61），且 Opus 5 每任务成本低 26%',
+    '作为受管控模型有 30 天数据留存要求，ZDR 合规场景过不了采购',
+    '6/12 因发现防护绕过被出口管制暂停，7/1 才全球恢复——供应稳定性有前科'
+  ],
+  best:'需要跑几十步不掉链子的超长 agent 任务，且预算不是第一约束时。'
+},
+{
+  id:'sonnet5', name:'Claude Sonnet 5', v:'anthropic', date:'2026-06-30', open:false,
+  in:2, out:10, ctx:'1M / 128K 输出', params:'未公布', aa:53, aaNote:'',
+  speed:'—', api:'claude-sonnet-5',
+  key:'首次让预算档拿到前沿级 1M 上下文',
+  pros:[
+    '$2/$10（促销价，8/31 后 $3/$15），是 Opus 系列的四到五分之一',
+    '1M 上下文 + 128K 输出，与 Opus 4.8 / Fable 5 同规格——预算档第一次原生拿到这个数',
+    '知识型工作上略微超过 Opus 4.8',
+    'Claude Code 与 Claude 应用中 Free / Pro 账户的默认模型'
+  ],
+  cons:[
+    'SWE-bench Pro 63.2% vs Opus 4.8 的 69.2%，硬编码任务差距明显',
+    'AA 智能指数 53，与第一梯队差 8 分',
+    '有来源提到换了新 tokenizer 可能抬高实际成本，单价对比会低估真实支出',
+    '促销价 8/31 到期后涨 50%'
+  ],
+  best:'高频调用、批量处理、成本敏感的日常任务；写代码只做中低难度改动。'
+},
+{
+  id:'sol', name:'GPT-5.6 Sol', v:'openai', date:'2026-07-09', open:false,
+  in:5, out:30, ctx:'1.05M / 128K 输出', params:'未公布', aa:59, aaNote:'max effort（xhigh 58）',
+  speed:'—', api:'gpt-5.6-sol',
+  key:'agentic 编码第一，终端任务统治级',
+  pros:[
+    'AA Coding Agent Index v1.1 以 80.0 分排名第一（DeepSWE + Terminal-Bench v2 + SWE-Atlas-QnA 三项 pass@1 均值）',
+    'Terminal-Bench 2.1 Ultra 模式 91.9%、基础模式 88.8%，超过 Claude Mythos 5 与 GPT-5.5',
+    'AA 智能指数 59，仅次于 Opus 5 与 Fable 5，且成本约为 Fable 5 的三分之一',
+    '首次引入缓存写入定价：缓存输入 $0.50、缓存写 $6.25，长上下文重复调用可显著省钱',
+    '知识截止 2026 年 2 月，是本表中最新的'
+  ],
+  cons:[
+    '输入超过 272K 时整个请求按 $10/$45 计费——长上下文是个价格陷阱',
+    '安全文档中承认模型会在自身评测上作弊（cheats on its own tests）',
+    '首发是应美国政府要求的受限伙伴预览，OpenAI 公开表达异议，供应政治化',
+    '$30 的输出单价是 Opus 5 的 1.2 倍、Sonnet 5 的 3 倍'
+  ],
+  best:'终端 / CLI 密集的 agent 编码，长时自主开发流水线。'
+},
+{
+  id:'terra', name:'GPT-5.6 Terra', v:'openai', date:'2026-07-09', open:false,
+  in:2.5, out:15, ctx:'1M 级', params:'未公布', aa:55, aaNote:'',
+  speed:'—', api:'gpt-5.6-terra',
+  key:'均衡档，面向高并发企业工作流',
+  pros:[
+    'AA 智能指数 55，每任务成本比 Sol 低约 50%',
+    '$2.50/$15 处在「够聪明 + 跑得起」的甜点区',
+    '与 Sol / Luna 同代同 API 形态，可按任务难度动态路由，无需换供应商'
+  ],
+  cons:[
+    '智能指数比 Sol 低 4 分，硬任务上会掉链子',
+    '同价位面对 Kimi K3（$3/$15，AA 57.1）没有优势',
+    '「三层」策略意味着 OpenAI 未来会独立升级各层，版本管理更复杂'
+  ],
+  best:'企业内部高频、难度中等的批量工作流；Sol 的降级兜底档。'
+},
+{
+  id:'luna', name:'GPT-5.6 Luna', v:'openai', date:'2026-07-09', open:false,
+  in:1, out:6, ctx:'1M 级', params:'未公布', aa:51, aaNote:'',
+  speed:'—', api:'gpt-5.6-luna',
+  key:'OpenAI 最快最便宜档',
+  pros:[
+    '$1/$6，每任务成本比 Sol 低约 80%',
+    'AA 智能指数 51，与 GLM-5.2 持平——便宜档里不算笨',
+    '同代 API 形态，做分级路由时切换零成本'
+  ],
+  cons:[
+    'Gemini 3.6 Flash 在输出价上压过它（$7.50 → 但 AA 50 与其接近，需按任务实测）',
+    '智能指数 51 距前沿 10 分，复杂推理和长链任务不适合',
+    '闭源，无法自部署，价格随时可调'
+  ],
+  best:'分类、抽取、改写、路由判定等高频轻任务；agent 流水线中的廉价子步骤。'
+},
+{
+  id:'k3', name:'Kimi K3', v:'moonshot', date:'2026-07-16', open:true,
+  in:3, out:15, ctx:'1M', params:'2.8T MoE（896 专家取 16）', aa:57.1, aaNote:'第三方镜像快照',
+  speed:'—', api:'kimi-k3',
+  key:'首个「开放 3T 级」模型，前端代码竞技场第一',
+  pros:[
+    'LMArena 前端代码竞技场首发即 #1（1679 Elo），超过 Claude Fable 5，七个前端子项拿下六个第一',
+    'AA 智能指数 57.1 排第三，仅次于 Opus 5 / Fable 5 与 Sol；长周期知识工作 Elo 1547（比 K2.6 暴涨 732 分）',
+    '每任务成本 $0.94，低于 GPT-5.6 Sol 的 $1.04 与 Opus 4.8 的 $1.80',
+    '原生多模态：文本 + 图像 + 视频输入；KDA 与 Attention Residuals 架构提升计算效率',
+    'GDPval-AA v2 得 1687 分排第三；计划以 Modified MIT 许可放出权重'
+  ],
+  cons:[
+    '截至 7 月 17 日权重尚未公开，官方称 7 月 27 日放出——在此之前无法自部署，也无法做真正独立的复现评测',
+    '发布跑分在各厂商自己环境中运行，单项冠军只能当方向性参考',
+    'FrontierSWE、HLE-Full 与综合智能仍落后 Fable 5；AA 智能指数与 DeepSWE 落后 GPT-5.6 Sol',
+    '2.8T 规模意味着即便放权重，自部署门槛也极高'
+  ],
+  best:'前端 / UI 代码生成，中文场景，以及等权重落地后的高端自部署方案。'
+},
+{
+  id:'dsv4', name:'DeepSeek V4 Pro', v:'deepseek', date:'2026-04-24', open:true,
+  in:0.435, out:0.87, ctx:'1M', params:'1.6T MoE（49B 激活）', aa:44, aaNote:'Reasoning, Max Effort',
+  speed:'67.6 t/s', api:'deepseek-v4-pro',
+  key:'单价碾压级便宜，MIT 权重可商用',
+  pros:[
+    '$0.435 / $0.87，输出单价是 Opus 5 的约 1/29、GPT-5.6 Sol 的 1/34（5 月起 75% 折扣转为常态价）',
+    'MIT 许可开放权重，可自部署、可商用、可微调，无供应政治风险',
+    'LiveCodeBench Pass@1 93.5 为受测模型最高（厂商自测），Codeforces 3206 分，Terminal-Bench 2.0 67.9',
+    'AA 智能指数 44，远高于同体量开源模型中位数 25',
+    '第三方追踪 SWE-bench Verified 达 80.6%（max 档）'
+  ],
+  cons:[
+    '⚠️ 防污染基准 DeepSWE 上仅 8% pass@1，而 GPT-5.5 为 70%、Opus 4.7 为 54%——与其 LiveCodeBench 93.5 形成剧烈撕裂，强烈提示基准污染',
+    'NIST CAISI 评估认为其能力落后前沿约 8 个月',
+    'HLE 37.7% 低于 Claude 40.0 / GPT-5.4 39.8 / Gemini 3.1 Pro 44.4；SimpleQA-Verified 57.9% 对比 Gemini 75.6%，事实检索有明显缺口',
+    'AA 智能指数 44，比第一梯队低 17 分，硬推理任务不要指望它'
+  ],
+  best:'成本敏感的大批量代码与推理任务、需要自托管与数据不出境的场景。绝不要用于需要事实准确性的检索问答。'
+},
+{
+  id:'glm52', name:'GLM-5.2', v:'zai', date:'2026-06-13', open:true,
+  in:1.40, out:4.40, ctx:'1M', params:'~744–753B MoE（40B 激活）', aa:51, aaNote:'最强开源权重',
+  speed:'175.9 t/s', api:'glm-5.2',
+  key:'AA 认证的开源权重第一，专攻长周期编码',
+  pros:[
+    'Artificial Analysis 确认为 v4.1 榜上排名最高的开源模型（51 分）',
+    'SWE-bench Pro 62.1，为 2026 年中开源编码模型第一，超过 GPT-5.5',
+    '输出 175.9 t/s，是本表最快的高智能模型之一（Opus 5 仅 56.3）',
+    '$1.40/$4.40，缓存输入 $0.26；第三方托管更低至约 $0.95/$3.00',
+    'MIT 许可，权重在 HuggingFace，首日即支持 Claude Code / Cline（Anthropic 兼容端点）'
+  ],
+  cons:[
+    '发布时未出完整技术报告，架构细节仅厂商口径、未经独立验证；参数量各来源不一致（744B / 753B）',
+    'AA 智能指数 51 与第一梯队差 10 分',
+    '最难的仓库级修复仍被 Claude Opus 4.8 的 SWE-bench Verified 88.6% 拉开',
+    '发布时无官方基准，社区评测为主'
+  ],
+  best:'预算有限但要跑长周期自动编码的团队，尤其想直接接进 Claude Code 的场景。'
+},
+{
+  id:'grok45', name:'Grok 4.5', v:'xai', date:'2026-07-08', open:false,
+  in:2, out:6, ctx:'500K', params:'未公布', aa:54, aaNote:'',
+  speed:'—', api:'grok-4.5',
+  key:'token 效率之王，卖的是性价比不是上限',
+  pros:[
+    '每个智能指数任务约 1.4 万输出 token，对比 Opus 的 6.7 万——完成同一任务的总账可能低 4 倍以上',
+    '$2/$6，比 Opus 4.8 与 GPT-5.5 便宜 60% 以上',
+    'AA 智能指数 54 排第四梯队；Coding Agent Index 76 与 GPT-5.5 在 Codex harness 下持平',
+    'SWE Marathon 编码基准第一；Cursor 报 Terminal-Bench 2.1 达 83.3%',
+    '带每次调用的推理强度旋钮'
+  ],
+  cons:[
+    '⚠️ AA 测得幻觉率从 Grok 4.3 的 25% 翻倍到 54%——准确率提升的同时幻觉也涨了，这是很危险的组合',
+    'xAI 至今未发布 Grok 4.5 的 model card',
+    '上下文 500K，是本表唯一没到 1M 的',
+    '发布时不支持欧盟（预计 7 月中旬），欧盟 SuperGrok 用户拿到的是 Grok 4.3',
+    'Grok 5 从 Q1 推到 Q2 至今未发，路线图可信度存疑'
+  ],
+  best:'成本与 token 效率优先、且下游有事实校验环节的编码与 agent 任务。'
+},
+{
+  id:'g31pro', name:'Gemini 3.1 Pro', v:'google', date:'2026 上半年', open:false,
+  in:2, out:12, ctx:'1M（>200K 转 $4/$18）', params:'未公布', aa:null, aaNote:'AA v4.1 未列入前十',
+  speed:'—', api:'gemini-3.1-pro',
+  key:'谷歌现任旗舰，事实检索与抽象推理最强',
+  pros:[
+    'GPQA Diamond 94.3%、Humanity\'s Last Exam 44.4%、ARC-AGI-2 77.1%、LiveCodeBench Pro 2887 Elo、BrowseComp 85.9%（谷歌自测）',
+    'SimpleQA-Verified 75.6%，事实准确性显著优于 DeepSeek V4 Pro 的 57.9%',
+    'SWE-bench Verified 80.6%，与 Claude Opus 4.6 的 80.8% 基本持平',
+    '$2/$12（200K 以内），在同智能水平里价格温和'
+  ],
+  cons:[
+    '超过 200K 上下文后涨到 $4/$18，长文档处理成本非线性',
+    '继任者 Gemini 3.5 Pro 在 5/19 I/O 宣布后跳票至今（彭博 7/16 报道落后数月），产品节奏被 Anthropic 与 OpenAI 甩开',
+    '上表多数指标为谷歌自测口径，AA v4.1 前十榜中未见其身影'
+  ],
+  best:'需要事实准确性的检索问答、多模态、抽象推理（ARC-AGI 类）任务。'
+},
+{
+  id:'g36flash', name:'Gemini 3.6 Flash', v:'google', date:'2026-07-21', open:false,
+  in:1.5, out:7.5, ctx:'1M', params:'未公布', aa:50, aaNote:'与 3.5 Flash 持平',
+  speed:'—', api:'gemini-3.6-flash',
+  key:'廉价档最新一员，买的是速度不是智商',
+  pros:[
+    '$1.50/$7.50，相比 3.5 Flash 输出价降 17%',
+    '1M 上下文，在廉价档里规格完整',
+    '前代 3.5 Flash 在编码与 agentic 基准上就已超过 3.1 Pro'
+  ],
+  cons:[
+    'AA 智能指数 50，与 3.5 Flash 完全持平——降价只降在输出侧，不是更聪明的模型',
+    '同价位面对 GPT-5.6 Luna（$1/$6，AA 51）没有优势',
+    '与第一梯队差 11 分'
+  ],
+  best:'高并发轻量任务、需要 1M 上下文但预算极紧的场景。'
+}
+];
+
+/* ---------------- 智能指数条形图 ---------------- */
+(function(){
+  const data = M.filter(m=>m.aa!=null).sort((a,b)=>b.aa-a.aa);
+  const max = 65;
+  const host = document.getElementById('chart-intel');
+  host.innerHTML = data.map(m=>`
+    <div class="bar-row">
+      <div class="bar-lbl" title="${m.name}">${m.name}</div>
+      <div class="bar-track"><div class="bar-fill"
+        style="width:${(m.aa/max*100).toFixed(1)}%;background:linear-gradient(90deg,${V[m.v].c}bb,${V[m.v].c})"></div></div>
+      <div class="bar-val">${m.aa}</div>
+    </div>`).join('');
+  // 图例
+  document.getElementById('legend-vendor').innerHTML =
+    Object.values(V).map(v=>`<span><i class="dot" style="background:${v.c}"></i>${v.n}</span>`).join('');
+})();
+
+/* ---------------- 价格条形图 ---------------- */
+(function(){
+  const data=[...M].sort((a,b)=>a.out-b.out);
+  const max=Math.max(...data.map(m=>m.out));
+  document.getElementById('chart-price').innerHTML = data.map(m=>`
+    <div class="bar-row">
+      <div class="bar-lbl" title="${m.name}">${m.name}</div>
+      <div class="bar-track"><div class="bar-fill"
+        style="width:${(m.out/max*100).toFixed(1)}%;background:linear-gradient(90deg,${V[m.v].c}55,${V[m.v].c})"></div></div>
+      <div class="bar-val">$${m.out}</div>
+    </div>`).join('');
+})();
+
+/* ---------------- 散点图：智能 × 价格 ---------------- */
+(function(){
+  const pts=M.filter(m=>m.aa!=null);
+  const W=1000,H=520,pad={l:56,r:26,t:24,b:56};
+  const xMin=Math.log10(0.8), xMax=Math.log10(60);
+  const yMin=40,yMax=64;
+  const X=v=>pad.l+(Math.log10(v)-xMin)/(xMax-xMin)*(W-pad.l-pad.r);
+  const Y=v=>H-pad.b-(v-yMin)/(yMax-yMin)*(H-pad.t-pad.b);
+
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="智能与价格散点图">`;
+  // 网格
+  for(let y=40;y<=64;y+=4){
+    s+=`<line class="gridline" x1="${pad.l}" y1="${Y(y)}" x2="${W-pad.r}" y2="${Y(y)}"/>`;
+    s+=`<text class="axlbl" x="${pad.l-10}" y="${Y(y)+4}" text-anchor="end">${y}</text>`;
+  }
+  [1,2,5,10,25,50].forEach(x=>{
+    s+=`<line class="gridline" x1="${X(x)}" y1="${pad.t}" x2="${X(x)}" y2="${H-pad.b}"/>`;
+    s+=`<text class="axlbl" x="${X(x)}" y="${H-pad.b+20}" text-anchor="middle">$${x}</text>`;
+  });
+  s+=`<line class="axis" x1="${pad.l}" y1="${H-pad.b}" x2="${W-pad.r}" y2="${H-pad.b}"/>`;
+  s+=`<line class="axis" x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${H-pad.b}"/>`;
+  s+=`<text class="axlbl" x="${(W)/2}" y="${H-14}" text-anchor="middle" style="font-size:12px">输出单价 $ / 1M tokens（对数刻度）→ 越右越贵</text>`;
+  s+=`<text class="axlbl" transform="translate(16,${H/2}) rotate(-90)" text-anchor="middle" style="font-size:12px">AA 智能指数 v4.1 → 越上越强</text>`;
+
+  // 性价比前沿参考线（DeepSeek → GLM → Kimi → Opus5）
+  const frontier=['dsv4','glm52','k3','opus5'].map(id=>pts.find(p=>p.id===id)).filter(Boolean);
+  s+=`<polyline fill="none" stroke="#3fb95055" stroke-width="2" stroke-dasharray="6 5" points="${
+      frontier.map(p=>`${X(p.out)},${Y(p.aa)}`).join(' ')}"/>`;
+
+  pts.forEach(p=>{
+    const c=V[p.v].c;
+    s+=`<circle cx="${X(p.out)}" cy="${Y(p.aa)}" r="8" fill="${c}" fill-opacity=".85" stroke="${c}" stroke-width="2"/>`;
+    // 标签避让：价格高的往左标；同高度相邻点手动错开
+    const right = p.out < 12 && p.id !== 'glm52';
+    s+=`<text class="ptlbl" x="${X(p.out)+(right?14:-14)}" y="${Y(p.aa)+4}" text-anchor="${right?'start':'end'}">${p.name}</text>`;
+  });
+  s+='</svg>';
+  document.getElementById('chart-scatter').innerHTML=s;
+})();
+
+/* ---------------- 模型卡片 ---------------- */
+(function(){
+  document.getElementById('cards').innerHTML = M.map(m=>`
+  <div class="mcard" style="--acc:${V[m.v].c}">
+    <div class="mhead">
+      <div>
+        <div class="mname">${m.name}</div>
+        <div class="mvendor">${V[m.v].n}</div>
+      </div>
+      <span class="mbadge ${m.open?'open':'closed'}">${m.open?'开放权重':'闭源 API'}</span>
+    </div>
+    <div class="mmeta">${m.date} · <code>${m.api}</code></div>
+    <div class="mkv">
+      <div><span class="k">输入 / 输出（$ / 1M）</span><span class="v">$${m.in} / $${m.out}</span></div>
+      <div><span class="k">AA 智能指数 v4.1</span><span class="v">${m.aa==null?'未列入':m.aa}</span></div>
+      <div><span class="k">上下文</span><span class="v" style="font-size:13px">${m.ctx}</span></div>
+      <div><span class="k">参数量</span><span class="v" style="font-size:13px">${m.params}</span></div>
+    </div>
+    <div style="font-size:13px;color:${V[m.v].c};font-weight:600;margin-bottom:10px">${m.key}</div>
+    <ul class="mlist">
+      ${m.pros.map(p=>`<li class="p">${p}</li>`).join('')}
+      ${m.cons.map(c=>`<li class="n">${c}</li>`).join('')}
+    </ul>
+    <div class="mbest"><b>什么时候选它：</b>${m.best}</div>
+  </div>`).join('');
+})();
+
+/* ---------------- 参数总表 ---------------- */
+(function(){
+  const rows=[...M].sort((a,b)=>(b.aa??0)-(a.aa??0));
+  const hi={aa:61,out:0.87};
+  document.querySelector('#spec-table tbody').innerHTML = rows.map(m=>`
+    <tr>
+      <td><b>${m.name}</b></td>
+      <td><span style="color:${V[m.v].c}">${V[m.v].n}</span></td>
+      <td class="n">${m.date}</td>
+      <td><span class="tag ${m.open?'o':'c'}">${m.open?'开放':'闭源'}</span></td>
+      <td class="n">$${m.in}</td>
+      <td class="n ${m.out===hi.out?'best':''}">$${m.out}</td>
+      <td>${m.ctx}</td>
+      <td>${m.params}</td>
+      <td class="n ${m.aa===hi.aa?'best':''}">${m.aa==null?'—':m.aa}${m.aaNote?`<span style="color:var(--tx3);font-size:11px"> ${m.aaNote?'*':''}</span>`:''}</td>
+      <td class="n">${m.speed}</td>
+      <td style="white-space:normal;min-width:230px;color:var(--tx2);font-size:12.5px">${m.key}</td>
+    </tr>`).join('')
+    + `<tr><td colspan="11" style="color:var(--tx3);font-size:12px;white-space:normal">
+       * AA 指数带星号者有口径说明：Opus 5 为 max effort 档；Opus 4.8 为 v4.1 重基线后数值（v4.0 时期曾报 61.4）；
+       Fable 5 为 max effort + Opus 4.8 回退配置；Kimi K3 为第三方镜像快照；GLM-5.2 为 AA 认证的开源权重最高分；
+       Gemini 3.6 Flash 与前代 3.5 Flash 同分。Gemini 3.1 Pro 未进 AA v4.1 公开前十，故记为 —，其成绩多为谷歌自测口径。</td></tr>`;
+})();
+
+/* ---------------- 场景选型矩阵 ---------------- */
+(function(){
+  const MX=[
+    {i:'🧠',t:'最难的推理 / 研究级分析',pick:'Claude Opus 5',why:'AA 智能指数 61 当前第一，GDPval-AA v2 领先第二名 100+ Elo，且成本只有 Fable 5 的一半。',alt:'备选：Fable 5（更长任务链）、GPT-5.6 Sol（59 分，第三方评测紧咬）'},
+    {i:'⌨️',t:'终端 / CLI 型 agent 编码',pick:'GPT-5.6 Sol',why:'Coding Agent Index 第一（80.0），Terminal-Bench 2.1 达 91.9%，长时自主开发的实测最稳。',alt:'备选：Grok 4.5（token 效率高 4 倍）、GLM-5.2（开源且原生接 Claude Code）'},
+    {i:'🎨',t:'前端 / UI 代码生成',pick:'Kimi K3',why:'LMArena 前端代码竞技场 #1（1679 Elo），七个前端子项拿六项第一，超过 Fable 5。',alt:'备选：Claude Opus 5（综合更稳）、GLM-5.2（成本低 3 倍）'},
+    {i:'🔁',t:'超长多步自主任务',pick:'Claude Fable 5',why:'Anthropic 自己在最长自主任务上仍推荐它而不是 Opus 5；SWE-bench Pro 80%。',alt:'备选：Opus 5（便宜一半，差距在噪声内）'},
+    {i:'💰',t:'成本极度敏感的大批量',pick:'DeepSeek V4 Pro',why:'$0.435/$0.87，输出价约为 Opus 5 的 1/29，且 MIT 权重可自部署。',alt:'备选：GPT-5.6 Luna（$1/$6，智能高 7 分）、Gemini 3.6 Flash'},
+    {i:'🏠',t:'必须自部署 / 数据不出境',pick:'GLM-5.2',why:'AA 认证的开源权重第一（51 分），MIT 许可，175.9 t/s 是本表最快之一。',alt:'备选：DeepSeek V4 Pro（更便宜但 DeepSWE 表现存疑）、Kimi K3（7/27 放权重）'},
+    {i:'🔍',t:'事实准确性优先的检索问答',pick:'Gemini 3.1 Pro',why:'SimpleQA-Verified 75.6%、BrowseComp 85.9%，事实检索缺口最小。',alt:'⚠️ 避开：DeepSeek V4 Pro（57.9%）、Grok 4.5（幻觉率 54%）'},
+    {i:'⚡',t:'高频轻任务 / 分类抽取',pick:'GPT-5.6 Luna',why:'$1/$6 且 AA 51 分，便宜档里智能不掉队，同代 API 便于分级路由。',alt:'备选：Claude Sonnet 5（1M 上下文）、Gemini 3.6 Flash'},
+    {i:'🛡️',t:'合规采购 / 零数据留存',pick:'Claude Opus 5',why:'明确不保留用户数据，而 Fable 5 作为受管控模型有 30 天留存要求，是采购硬门槛。',alt:'备选：任何自部署开源模型（DeepSeek / GLM / Kimi）'},
+    {i:'📉',t:'token 效率 / 总账最优',pick:'Grok 4.5',why:'每任务约 1.4 万输出 token vs Opus 的 6.7 万，单价还低 60%+。',alt:'⚠️ 前提：下游必须有事实校验，其幻觉率已达 54%'},
+    {i:'🖼️',t:'多模态（图 / 视频输入）',pick:'Kimi K3',why:'原生支持文本 + 图像 + 视频输入，是本表中模态最全的开源系模型。',alt:'备选：Gemini 3.1 Pro（谷歌多模态积累最深）、Claude 全系（支持图像）'},
+    {i:'🧪',t:'存量系统不想重新验证',pick:'Claude Opus 4.8',why:'与 4.7 共用 tokenizer、工具面一致，是无痛 drop-in；生产验证充分。',alt:'但同价位 Opus 5 全面覆盖它，新项目没有理由再选 4.8'}
+  ];
+  document.getElementById('matrix').innerHTML=MX.map(x=>`
+    <div class="mxc">
+      <h4><span class="ico">${x.i}</span>${x.t}</h4>
+      <div class="pick">→ ${x.pick}</div>
+      <div class="why">${x.why}</div>
+      <div class="alt">${x.alt}</div>
+    </div>`).join('');
+})();
+
+/* 条形图宽度已内联写死，动画仅为观感；即使脚本或动画不生效也能正确显示 */
+</script>
+</body>
+</html>

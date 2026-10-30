@@ -1,0 +1,504 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="麦肯锡 2026 State of AI 全球调查：对照 17 组原图重绘关键数据，部分选摘；附分母核对、真实案例、外部旁证与小团队实践。">
+<title>麦肯锡 2026 年 AI 现状：从采用到投资回报｜可视化调研</title><style>
+/* DESIGN TOKENS: authoritative source for this standalone report.
+   Primitive scales feed semantic roles; components consume roles/scales.
+   --value and --shade on charts are source data, not fixed design values.
+   Breakpoints: mobile 700px, compact 1060px; declared only in the media rules below. */
+:root {
+  --white: #ffffff;
+  --navy-900: #092239;
+  --navy-800: #12344f;
+  --blue-600: #1768b5;
+  --cyan-600: #168c9d;
+  --amber-600: #c97a23;
+  --gray-050: #f7f9fb;
+  --gray-100: #edf2f5;
+  --gray-200: #dbe5ec;
+  --gray-500: #557086;
+  --green-050: #eaf6f0;
+  --blue-050: #eaf3fc;
+  --amber-050: #fff4e6;
+  --color-page: var(--gray-100);
+  --color-surface: var(--white);
+  --color-surface-alt: var(--gray-050);
+  --color-ink: var(--navy-900);
+  --color-ink-soft: var(--navy-800);
+  --color-muted: var(--gray-500);
+  --color-border: var(--gray-200);
+  --color-blue: var(--blue-600);
+  --color-teal: var(--cyan-600);
+  --color-amber: var(--amber-600);
+  --color-hero: var(--navy-900);
+  --color-hero-text: var(--white);
+  --cyan-100: #b9d6e8;
+  --cyan-200: #98e1e1;
+  --color-hero-subtle: var(--cyan-100);
+  --color-hero-highlight: var(--cyan-200);
+  --color-track: var(--gray-200);
+  --color-blue-soft: var(--blue-050);
+  --color-green-soft: var(--green-050);
+  --color-amber-soft: var(--amber-050);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --type-xs: 12px;
+  --type-sm: 14px;
+  --type-base: 16px;
+  --type-md: 18px;
+  --type-lg: 22px;
+  --type-xl: 30px;
+  --type-xxl: 44px;
+  --type-hero: 72px;
+  --type-metric: 58px;
+  --line-tight: 1.12;
+  --line-heading: 1.24;
+  --line-body: 1.62;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semi: 600;
+  --weight-bold: 700;
+  --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: Georgia, "Songti SC", serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --border-thin: 1px;
+  --border-accent: 4px;
+  --shadow-report: 0 20px 80px rgba(9, 34, 57, .10);
+  --report-width: 1280px;
+  --bar-height: 13px;
+  --bar-label-width: 174px;
+  --bar-value-width: 50px;
+  --pair-caption-width: 76px;
+  --three-label-width: 218px;
+  --section-number-width: 48px;
+  --table-min-width: 640px;
+  --toc-sticky-top: 0px;
+  --z-nav: 2;
+  --tracking-eyebrow: .12em;
+  --tracking-hero: -.04em;
+  --tracking-toc: .1em;
+  --tracking-heading: -.025em;
+  --hero-deck-width: 44em;
+  --mix-hero-border: 24%;
+  --mix-hero-link: 44%;
+  --mix-hero-hover: 12%;
+  --mix-hero-panel: 9%;
+  --mix-hero-row: 10%;
+}
+/* BASE */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--color-page); }
+body { margin: 0; color: var(--color-ink); background: var(--color-page); font-family: var(--font-body); font-size: var(--type-base); line-height: var(--line-body); }
+a { color: var(--color-blue); text-underline-offset: var(--space-1); overflow-wrap: anywhere; }
+a:hover { color: var(--color-teal); }
+a:focus-visible { outline: var(--border-accent) solid var(--color-amber); outline-offset: var(--space-1); }
+.report { width: min(100%, var(--report-width)); margin: var(--space-7) auto; background: var(--color-surface); box-shadow: var(--shadow-report); overflow: clip; }
+h1,h2,h3,p,ol,ul { margin-top: 0; }
+h2,h3 { line-height: var(--line-heading); }
+p { margin-bottom: var(--space-4); }
+/* HERO */
+.hero { padding: var(--space-7) var(--space-8) var(--space-6); color: var(--color-hero-text); background: var(--color-hero); }
+.hero-top { display: flex; justify-content: space-between; gap: var(--space-4); align-items: center; padding-bottom: var(--space-5); border-bottom: var(--border-thin) solid color-mix(in srgb, var(--color-hero-text) var(--mix-hero-border), transparent); }
+.eyebrow,.hero-date,.hero-kicker,.card-kicker { font-size: var(--type-xs); font-weight: var(--weight-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; }
+.eyebrow { color: var(--color-hero-subtle); }
+.eyebrow--dark { color: var(--color-teal); }
+.hero-date { color: var(--color-hero-subtle); }
+.hero-main { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, .75fr); gap: var(--space-7); align-items: end; padding: var(--space-8) 0; }
+.hero-kicker { color: var(--color-hero-subtle); margin-bottom: var(--space-5); }
+.hero h1 { font-family: var(--font-display); font-size: var(--type-hero); line-height: var(--line-tight); letter-spacing: var(--tracking-hero); margin-bottom: var(--space-5); }
+.hero h1 em { color: var(--color-hero-highlight); font-style: normal; }
+.hero-deck { max-width: var(--hero-deck-width); font-size: var(--type-md); color: var(--color-hero-subtle); }
+.hero-links { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.hero-links a { color: var(--color-hero-text); border: var(--border-thin) solid color-mix(in srgb, var(--color-hero-text) var(--mix-hero-link), transparent); padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); text-decoration: none; font-size: var(--type-sm); }
+.hero-links a:hover { background: color-mix(in srgb, var(--color-hero-text) var(--mix-hero-hover), transparent); }
+.hero-thesis { padding: var(--space-5); border-left: var(--border-accent) solid var(--color-hero-highlight); background: color-mix(in srgb, var(--color-hero-text) var(--mix-hero-panel), transparent); border-radius: var(--radius-md); }
+.hero-thesis span { display: block; color: var(--color-hero-subtle); font-size: var(--type-sm); }
+.hero-thesis strong { display: block; font-family: var(--font-display); font-size: var(--type-xl); line-height: var(--line-heading); margin: var(--space-3) 0; }
+.hero-thesis p { color: var(--color-hero-subtle); margin: 0; font-size: var(--type-sm); }
+.hero-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: var(--border-thin) solid color-mix(in srgb, var(--color-hero-text) var(--mix-hero-border), transparent); padding-top: var(--space-6); gap: var(--space-5); }
+.hero-metrics > div { display: flex; flex-direction: column; gap: var(--space-1); }
+.hero-metrics b { font-size: var(--type-metric); line-height: var(--line-tight); font-weight: var(--weight-bold); }
+.hero-metrics b span { font-size: var(--type-xl); }
+.hero-metrics > div > span { color: var(--color-hero-subtle); font-size: var(--type-sm); }
+.hero-caveat { color: var(--color-hero-subtle); margin: var(--space-5) 0 0; font-size: var(--type-xs); }
+/* NAV + CHAPTERS */
+.toc { display: flex; align-items: center; gap: var(--space-4); overflow-x: auto; white-space: nowrap; padding: var(--space-4) var(--space-8); background: var(--color-surface); border-bottom: var(--border-thin) solid var(--color-border); position: sticky; top: var(--toc-sticky-top); z-index: var(--z-nav); }
+.toc span { font-size: var(--type-xs); font-weight: var(--weight-bold); color: var(--color-muted); letter-spacing: var(--tracking-toc); }
+.toc a { flex: none; font-size: var(--type-sm); text-decoration: none; color: var(--color-ink-soft); }
+.toc a:hover { color: var(--color-blue); }
+.chapter { padding: var(--space-7) var(--space-8) var(--space-8); border-bottom: var(--border-thin) solid var(--color-border); }
+.chapter:nth-of-type(even) { background: var(--color-surface-alt); }
+.section-head { display: grid; grid-template-columns: var(--section-number-width) minmax(0,1fr); gap: var(--space-5); align-items: start; margin-bottom: var(--space-6); scroll-margin-top: var(--space-8); }
+.section-num { display: grid; place-items: center; width: var(--section-number-width); aspect-ratio: 1; color: var(--color-blue); border: var(--border-thin) solid var(--color-blue); border-radius: var(--radius-pill); font-size: var(--type-sm); font-weight: var(--weight-bold); }
+.section-head h2 { font-family: var(--font-display); font-size: var(--type-xxl); margin-bottom: var(--space-2); letter-spacing: var(--tracking-heading); }
+.section-head p { color: var(--color-muted); font-size: var(--type-md); margin: 0; }
+.grid-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-5); align-items: start; margin-bottom: var(--space-5); }
+.grid-two--wide { grid-template-columns: minmax(0,1.25fr) minmax(0,.75fr); }
+.grid-two--balanced { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.viz-card,.reading-card,.case-card { background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-5); }
+.grid-two .viz-card { margin-bottom: 0; }
+.card-kicker { color: var(--color-teal); margin-bottom: var(--space-2); }
+.viz-card h3 { font-size: var(--type-lg); margin-bottom: var(--space-5); }
+.card-foot { border-top: var(--border-thin) solid var(--color-border); margin-top: var(--space-5); padding-top: var(--space-4); }
+.source-note { color: var(--color-muted); font-size: var(--type-xs); line-height: var(--line-body); margin: 0; }
+.source-note__key { display: inline-block; margin-right: var(--space-2); color: var(--color-ink-soft); font-weight: var(--weight-bold); }
+.source-note__sep { padding: 0 var(--space-2); }
+.chart-callout { background: var(--color-blue-soft); border-left: var(--border-accent) solid var(--color-blue); border-radius: var(--radius-sm); padding: var(--space-4); margin: var(--space-5) 0 0; font-size: var(--type-sm); }
+.mini-comparison { margin-top: var(--space-5); padding: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-alt); }
+.mini-comparison > p { display: grid; gap: var(--space-1); margin: 0 0 var(--space-2); font-size: var(--type-sm); }
+.mini-comparison > p span { color: var(--color-muted); font-size: var(--type-xs); }
+.mini-comparison .pair-row { border-bottom: 0; }
+.invest-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-4); padding: var(--space-5); margin-bottom: var(--space-5); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+.invest-comparison > div { display: grid; gap: var(--space-2); padding: var(--space-4); border-left: var(--border-accent) solid var(--color-blue); background: var(--color-blue-soft); }
+.invest-comparison > div:nth-child(2) { border-color: var(--color-amber); background: var(--color-amber-soft); }
+.invest-comparison b { font-size: var(--type-xl); line-height: var(--line-tight); }
+.invest-comparison span,.invest-comparison small,.invest-comparison p { font-size: var(--type-sm); }
+.invest-comparison small { color: var(--color-muted); }
+.invest-comparison p { grid-column: 1 / -1; margin: 0; color: var(--color-muted); }
+/* EVIDENCE + METHOD */
+.reading-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--space-4); }
+.reading-card { margin: 0; }
+.reading-card span { display: block; color: var(--color-teal); font-size: var(--type-sm); font-weight: var(--weight-bold); }
+.reading-card strong { display: block; font-size: var(--type-lg); margin: var(--space-2) 0; }
+.reading-card p { color: var(--color-muted); font-size: var(--type-sm); margin: 0; }
+.read-legend { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-5) 0 var(--space-3); }
+.evidence-badge { display: inline-block; background: var(--color-blue-soft); color: var(--color-blue); border-radius: var(--radius-pill); padding: var(--space-1) var(--space-3); font-size: var(--type-xs); font-weight: var(--weight-bold); }
+.evidence-badge--external { background: var(--color-green-soft); color: var(--color-teal); }
+.evidence-badge--inference { background: var(--color-amber-soft); color: var(--color-amber); }
+.evidence-badge--action { background: var(--color-surface-alt); color: var(--color-ink-soft); border: var(--border-thin) solid var(--color-border); }
+.method-link { color: var(--color-muted); font-size: var(--type-sm); }
+/* CHARTS */
+.bar-row,.stack-row { display: grid; grid-template-columns: var(--bar-label-width) minmax(0,1fr) var(--bar-value-width); gap: var(--space-3); align-items: center; margin: var(--space-3) 0; }
+.bar-label,.stack-label,.pair-label,.three-label { font-size: var(--type-sm); font-weight: var(--weight-medium); line-height: var(--line-heading); }
+.bar-track,.stack-track { display: block; width: 100%; height: var(--bar-height); background: var(--color-track); border-radius: var(--radius-pill); overflow: hidden; }
+.bar-fill { display: block; width: var(--value); height: 100%; border-radius: var(--radius-pill); background: var(--color-blue); }
+.bar-fill--amber { background: var(--color-amber); }
+.bar-fill--teal { background: var(--color-teal); }
+.bar-value,.stack-row strong { text-align: right; font-size: var(--type-sm); }
+.bar-extra,.stack-row small { grid-column: 2 / -1; color: var(--color-muted); font-size: var(--type-xs); }
+.pair-row { display: grid; grid-template-columns: var(--bar-label-width) minmax(0,1fr); gap: var(--space-3); align-items: center; padding: var(--space-3) 0; border-bottom: var(--border-thin) solid var(--color-border); }
+.pair-row:last-child { border-bottom: 0; }
+.pair-lines { display: grid; gap: var(--space-2); }
+.pair-line { display: grid; grid-template-columns: var(--pair-caption-width) minmax(0,1fr) var(--bar-value-width); gap: var(--space-2); align-items: center; font-style: normal; }
+.pair-line > span { color: var(--color-muted); font-size: var(--type-xs); }
+.pair-line i { font-style: normal; }
+.pair-line b { text-align: right; font-size: var(--type-sm); }
+.stack-track { display: flex; }
+.stack-seg { width: var(--value); height: 100%; }
+.stack-seg--0,.legend-swatch--0 { background: var(--color-blue); }
+.stack-seg--1,.legend-swatch--1 { background: var(--color-teal); }
+.stack-seg--2,.legend-swatch--2 { background: var(--color-amber); }
+.stack-legend { display: flex; gap: var(--space-4); flex-wrap: wrap; color: var(--color-muted); font-size: var(--type-xs); margin-bottom: var(--space-5); }
+.stack-legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.legend-swatch { display: inline-block; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-sm); }
+.three-row { display: grid; grid-template-columns: var(--three-label-width) minmax(0,1fr); gap: var(--space-4); align-items: center; padding: var(--space-4) 0; border-bottom: var(--border-thin) solid var(--color-border); }
+.three-values { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--space-4); }
+.three-cell { display: flex; flex-direction: column; gap: var(--space-1); }
+.three-fill { display: block; width: var(--value); height: var(--bar-height); background: var(--color-blue); border-radius: var(--radius-pill); }
+.three-cell--1 .three-fill { background: var(--color-teal); }
+.three-cell--2 .three-fill { background: var(--color-amber); }
+.three-cell b { font-size: var(--type-lg); line-height: var(--line-tight); }
+.three-cell small { color: var(--color-muted); font-size: var(--type-xs); }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+.heat-table,.source-table { width: 100%; border-collapse: collapse; text-align: left; font-size: var(--type-sm); }
+.heat-table th,.heat-table td,.source-table th,.source-table td { padding: var(--space-2) var(--space-3); border-bottom: var(--border-thin) solid var(--color-border); }
+.heat-table thead th,.source-table thead th { background: var(--color-surface-alt); color: var(--color-ink-soft); font-weight: var(--weight-bold); }
+.heat-table th[scope=row] { font-weight: var(--weight-medium); }
+.heat-table td { text-align: center; font-weight: var(--weight-bold); background: color-mix(in srgb, var(--color-blue) var(--shade), var(--color-surface)); }
+.heat-negative td { background: color-mix(in srgb, var(--color-amber) var(--shade), var(--color-surface)); }
+.heat-table--risk td { min-width: var(--space-8); }
+.source-table th[scope=row] { color: var(--color-blue); }
+/* CHAPTER SPECIALS */
+.insight-strip,.analysis-panel,.economics,.thesis-box,.external-note,.falsify,.source-list { border-radius: var(--radius-lg); padding: var(--space-6); margin: var(--space-5) 0; }
+.insight-strip { background: var(--color-blue-soft); }
+.insight-strip h3,.analysis-panel h3,.economics h3,.falsify h3 { font-size: var(--type-lg); margin: var(--space-3) 0; }
+.industry-mini { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: var(--space-4); }
+.industry-mini p { display: flex; flex-direction: column; margin: var(--space-3) 0; }
+.industry-mini b { font-size: var(--type-xl); color: var(--color-blue); }
+.industry-mini span { font-size: var(--type-sm); }
+.analysis-panel { background: var(--color-amber-soft); margin: 0; }
+.analysis-panel p { font-size: var(--type-sm); }
+.decision-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-4); }
+.decision-grid div { background: var(--color-surface); border-radius: var(--radius-md); padding: var(--space-4); }
+.decision-grid p { margin: var(--space-2) 0 0; }
+.analysis-caption { margin: var(--space-5) 0 0; color: var(--color-muted); }
+.value-contrast { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: var(--space-4); align-items: stretch; margin-bottom: var(--space-3); }
+.value-contrast > div { padding: var(--space-5); background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); }
+.value-contrast span { display: block; color: var(--color-muted); font-size: var(--type-sm); }
+.value-contrast strong { display: block; font-size: var(--type-metric); color: var(--color-blue); line-height: var(--line-tight); }
+.value-contrast i { display: grid; place-items: center; color: var(--color-amber); font-style: normal; font-size: var(--type-xl); }
+.value-contrast p { margin: 0; font-size: var(--type-sm); }
+.interpretation { color: var(--color-muted); font-size: var(--type-sm); margin-bottom: var(--space-6); }
+.thesis-box { background: var(--color-blue-soft); border-left: var(--border-accent) solid var(--color-blue); }
+.thesis-box p { margin: var(--space-3) 0 0; }
+.cost-headline { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--space-4); margin-bottom: var(--space-5); }
+.cost-headline div { background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+.cost-headline strong { font-size: var(--type-metric); line-height: var(--line-tight); color: var(--color-blue); }
+.cost-headline p { margin: 0; color: var(--color-muted); font-size: var(--type-sm); }
+.economics { background: var(--color-hero); color: var(--color-hero-text); display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-6); }
+.economics h3 { font-family: var(--font-display); font-size: var(--type-xl); }
+.economics p { color: var(--color-hero-subtle); }
+.economics ol { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-2); }
+.economics li { display: grid; grid-template-columns: var(--bar-value-width) minmax(0,1fr); gap: var(--space-3); padding: var(--space-3); background: color-mix(in srgb, var(--color-hero-text) var(--mix-hero-row), transparent); border-radius: var(--radius-sm); }
+.economics li b { color: var(--color-hero-highlight); }
+.economics .source-note { grid-column: 1 / -1; }
+.economics .source-note a { color: var(--color-hero-text); }
+.leader-intro { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.leader-intro > div { background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+.leader-intro strong { display: block; color: var(--color-blue); font-size: var(--type-xl); }
+.leader-intro p { color: var(--color-muted); margin: 0; }
+.leader-intro > p { grid-column: 1 / -1; font-size: var(--type-sm); }
+.practice-grid { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+.practice-grid li { display: grid; grid-template-columns: var(--bar-value-width) minmax(0,1fr); gap: var(--space-2); border-bottom: var(--border-thin) solid var(--color-border); padding: var(--space-2) 0; }
+.practice-grid span { font-size: var(--type-xs); color: var(--color-teal); }
+.practice-grid b { font-size: var(--type-sm); }
+.practice-grid small { grid-column: 2; color: var(--color-muted); font-size: var(--type-xs); }
+.labor-secondary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--space-3); margin-top: var(--space-5); }
+.labor-secondary span { background: var(--color-surface-alt); border-radius: var(--radius-sm); padding: var(--space-3); font-size: var(--type-xs); }
+.labor-secondary b { display: block; font-size: var(--type-lg); color: var(--color-teal); }
+.evidence-bridge { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.42fr) minmax(0,1fr); gap: var(--space-4); align-items: center; }
+.evidence-bridge article { background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+.evidence-bridge strong { display: block; font-size: var(--type-metric); line-height: var(--line-tight); margin: var(--space-4) 0; }
+.evidence-bridge h3 { font-size: var(--type-lg); }
+.evidence-bridge p { font-size: var(--type-sm); color: var(--color-muted); }
+.bridge-warning { text-align: center; color: var(--color-amber); font-weight: var(--weight-bold); }
+.bridge-warning small { display: block; font-size: var(--type-xs); font-weight: var(--weight-normal); color: var(--color-muted); }
+.external-note { background: var(--color-green-soft); }
+.external-note p { margin: var(--space-3) 0 0; }
+.case-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--space-4); }
+.case-card { margin: 0; display: flex; flex-direction: column; }
+.case-card > span { font-size: var(--type-xs); font-weight: var(--weight-bold); color: var(--color-teal); }
+.case-card h3 { font-size: var(--type-lg); margin: var(--space-3) 0; }
+.case-card p { font-size: var(--type-sm); }
+.case-card b { font-size: var(--type-sm); }
+.case-card a { margin-top: auto; font-size: var(--type-sm); }
+.case-caveat { color: var(--color-muted); font-size: var(--type-sm); margin: var(--space-4) 0 0; }
+.playbook { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: var(--space-3); }
+.playbook-step { background: var(--color-surface); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4); }
+.playbook-step b { color: var(--color-teal); font-size: var(--type-xl); }
+.playbook-step h3 { font-size: var(--type-md); margin: var(--space-3) 0; }
+.playbook-step p { font-size: var(--type-sm); color: var(--color-muted); margin: 0; }
+.example-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-4); margin-top: var(--space-5); }
+.example-grid > div { background: var(--color-blue-soft); border-radius: var(--radius-lg); padding: var(--space-5); }
+.example-grid h3 { font-size: var(--type-lg); margin: var(--space-3) 0; }
+.example-grid p { font-size: var(--type-sm); }
+.falsify { background: var(--color-amber-soft); }
+.falsify li { margin-bottom: var(--space-2); }
+.source-table { min-width: var(--table-min-width); }
+.source-list { background: var(--color-surface-alt); }
+.source-list h3 { font-size: var(--type-lg); }
+.source-list li { margin-bottom: var(--space-3); }
+.source-list p { color: var(--color-muted); font-size: var(--type-sm); }
+.footer { display: flex; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-7); padding-top: var(--space-5); border-top: var(--border-thin) solid var(--color-border); color: var(--color-muted); font-size: var(--type-sm); }
+/* RESPONSIVE: 1060px compact, 700px mobile. These are the only breakpoints. */
+@media (max-width: 1060px) {
+  :root { --bar-label-width: 138px; --three-label-width: 160px; }
+  .hero,.chapter { padding-inline: var(--space-6); }
+  .toc { padding-inline: var(--space-6); }
+  .hero h1 { font-size: var(--type-metric); }
+  .grid-two--balanced,.grid-two--wide { grid-template-columns: 1fr; }
+  .playbook { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 700px) {
+  :root { --type-hero: 40px; --type-xxl: 31px; --type-metric: 42px; --type-xl: 25px; --type-lg: 20px; --bar-label-width: 110px; --three-label-width: 100%; --section-number-width: 36px; --bar-value-width: 44px; }
+  .report { margin: 0; box-shadow: none; }
+  .hero,.chapter { padding: var(--space-6) var(--space-4); }
+  .hero-main,.grid-two,.reading-grid,.cost-headline,.economics,.leader-intro,.example-grid,.case-grid,.evidence-bridge { grid-template-columns: 1fr; }
+  .hero-main { gap: var(--space-5); padding: var(--space-7) 0; }
+  .hero h1 { font-size: var(--type-hero); }
+  .hero-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .hero-thesis { display: none; }
+  .toc { padding-inline: var(--space-4); gap: var(--space-3); }
+  .section-head { gap: var(--space-3); }
+  .section-head p { font-size: var(--type-base); }
+  .viz-card,.reading-card,.analysis-panel,.economics,.thesis-box,.external-note,.falsify,.source-list { padding: var(--space-4); }
+  .pair-row,.three-row { grid-template-columns: 1fr; gap: var(--space-2); }
+  .pair-lines { gap: var(--space-1); }
+  .pair-line { grid-template-columns: var(--pair-caption-width) minmax(0,1fr) var(--bar-value-width); }
+  .stack-row,.bar-row { gap: var(--space-2); }
+  .industry-mini,.decision-grid,.labor-secondary { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .value-contrast { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .value-contrast > i { display: none; }
+  .value-contrast > div { padding: var(--space-4); }
+  .playbook { grid-template-columns: 1fr; }
+  .playbook-step { display: grid; grid-template-columns: var(--section-number-width) 1fr; column-gap: var(--space-3); }
+  .playbook-step p { grid-column: 2; }
+  .evidence-bridge .bridge-warning { padding: var(--space-3); }
+  .table-scroll table { min-width: var(--table-min-width); }
+  .footer { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html,body { background: var(--color-surface); }
+  .report { width: var(--report-width); margin: 0; box-shadow: none; overflow: visible; }
+  .toc { position: static; }
+  .chapter { break-inside: auto; }
+  .viz-card,.case-card,.reading-card { break-inside: avoid; }
+  .section-head { break-after: avoid; }
+}
+</style></head><body><main class="report"><header class="hero" id="top">
+  <div class="hero-top"><span class="eyebrow">RESEARCH ATLAS / 2026</span><span class="hero-date">校核 · 2026-09-23</span></div>
+  <div class="hero-main"><div><p class="hero-kicker">麦肯锡《The state of AI in 2026: On the road to ROI》深度拆解</p>
+    <h1>AI 已进入组织，<br><em>价值仍在路上。</em></h1>
+    <p class="hero-deck">从 31 页原报告的 17 组主图与行业侧栏出发，重画关键数据、拆开分母、交叉核对旁证，并把结论翻译成创作者和小团队可执行的判断。</p>
+    <div class="hero-links"><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener noreferrer">麦肯锡官网原文 ↗</a><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">31 页官方 PDF ↗</a></div></div>
+    <aside class="hero-thesis"><span>核心张力</span><strong>个人效率<br>≠ 企业利润</strong><p>同时看到“使用更深”与“财务回报仍集中”，才能读懂这份报告。</p></aside>
+  </div>
+  <div class="hero-metrics">
+    <div><b>89<span>%</span></b><span>至少一个职能经常用 AI</span></div>
+    <div><b>44<span>%</span></b><span>在用 AI 组织中：企业范围规模化</span></div>
+    <div><b>37<span>%</span></b><span>归因于 AI 的正面 EBIT</span></div>
+    <div><b>6<span>%</span></b><span>符合高绩效定义</span></div>
+  </div>
+  <p class="hero-caveat">44% 以在用 AI 的组织为分母；89% 是全体受访者的组织使用率，37% 与 6% 另有筛选条件。这不是转化漏斗，不能用 44% ÷ 89% 或 6% ÷ 37% 推算转化率。来源：麦肯锡 2026 全球调查。</p>
+</header><nav class="toc" aria-label="报告目录"><span>导航</span>
+  <a href="#reading">读图规则</a><a href="#adoption">采用与规模化</a><a href="#build">自建与采购</a>
+  <a href="#value">个人与财务价值</a><a href="#costs">成本与投资</a><a href="#leaders">高绩效剖面</a>
+  <a href="#labor">用工预期</a><a href="#triangulation">外部旁证</a><a href="#cases">真实案例</a><a href="#practice">行动方法</a><a href="#sources">来源索引</a>
+</nav><section class="chapter chapter--reading"><div class="section-head" id="reading"><span class="section-num">00</span><div><h2>先把尺子摆正</h2><p>图上每个百分比都标明问了谁、问的是什么、发生了还是预计会发生。</p></div></div><div class="reading-grid">
+  <div class="reading-card"><span>样本</span><strong>1,719 人 · 97 国</strong><p>2026-05-04 至 06-08 在线调查；受访者来自不同职级、行业与规模，按国家 GDP 权重调整回应率。36% 所在组织年营收超过 10 亿美元。</p></div>
+  <div class="reading-card"><span>层级</span><strong>人、组织、职能</strong><p>“个人效率”只问工作中使用 AI 的受访者；职能成本／收入只问在该职能使用 AI 的组织；高绩效比较的样本为 92 人对 1,429 人。</p></div>
+  <div class="reading-card"><span>证据</span><strong>报告值、旁证、推断</strong><p>颜色与标签区分自陈调查、外部研究、案例以及本报告建议。组间相关不能证明因果；2026 年职能财务问题的问法也与往年不同。</p></div>
+</div>
+<div class="read-legend"><span class="evidence-badge evidence-badge--reported">原报告：受访者自陈</span><span class="evidence-badge evidence-badge--external">外部一手研究</span><span class="evidence-badge evidence-badge--inference">分析推断</span><span class="evidence-badge evidence-badge--action">执行建议</span></div>
+<p class="method-link">方法原文：<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">McKinsey 2026 PDF，第 30 页 About the research</a>。本文图形是按原报告数字重新绘制，不复制原图。</p></section><section class="chapter chapter--adoption"><div class="section-head" id="adoption"><span class="section-num">01</span><div><h2>采用变深，规模分化</h2><p>“近九成在用”与“44% 规模化”同时成立；大企业扩张速度更快。</p></div></div><div class="grid-two"><article class="viz-card"><div class="card-kicker">2025 → 2026</div><h3>采用率的三种层级</h3><div class="pair-row"><div class="pair-label">至少一职能经常使用</div><div class="pair-lines">
+      <div class="pair-line"><span>2025</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:88%"></i></i><b>88%</b></div>
+      <div class="pair-line"><span>2026</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:89%"></i></i><b>89%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">企业范围至少规模化</div><div class="pair-lines">
+      <div class="pair-line"><span>2025</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:38%"></i></i><b>38%</b></div>
+      <div class="pair-line"><span>2026</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:44%"></i></i><b>44%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">覆盖至少三项职能</div><div class="pair-lines">
+      <div class="pair-line"><span>2025</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:51%"></i></i><b>51%</b></div>
+      <div class="pair-line"><span>2026</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:56%"></i></i><b>56%</b></div>
+    </div></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>88%／89% 为全体受访者的组织使用率；38%／44% 是在用 AI 组织内的阶段分布；51%／56% 取自正文。三行分母不同，不可相除。更早年份 AI 使用定义数次改变。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 5 页 · Exhibit 1 + 正文</a></p></div></article><article class="viz-card"><div class="card-kicker">两年 × 规模</div><h3>智能体规模化：增长集中在大企业</h3><div class="pair-row"><div class="pair-label">较小组织</div><div class="pair-lines">
+      <div class="pair-line"><span>2025</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:21%"></i></i><b>21%</b></div>
+      <div class="pair-line"><span>2026</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:22%"></i></i><b>22%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">年营收 ≥10 亿美元</div><div class="pair-lines">
+      <div class="pair-line"><span>2025</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:27%"></i></i><b>27%</b></div>
+      <div class="pair-line"><span>2026</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:40%"></i></i><b>40%</b></div>
+    </div></div><p class="chart-callout">大企业 +13 个百分点；较小组织 +1 个百分点。2026 年企业级 AI 规模化：大企业 54%，较小组织约三分之一。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>受访者描述所在组织在至少一个职能规模化部署智能体，图值已重基到全样本；2026 年大企业 n=595、较小组织 n=1,035。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 6 页 · Exhibit 2</a></p></div></article></div><article class="viz-card"><div class="card-kicker">2026 · 按企业营收规模</div><h3>工具到达规模化阶段的比例</h3><div class="pair-row"><div class="pair-label">聊天机器人</div><div class="pair-lines">
+      <div class="pair-line"><span>较小组织</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:39%"></i></i><b>39%</b></div>
+      <div class="pair-line"><span>大企业</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:64%"></i></i><b>64%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">专用 AI 工具</div><div class="pair-lines">
+      <div class="pair-line"><span>较小组织</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:20%"></i></i><b>20%</b></div>
+      <div class="pair-line"><span>大企业</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:35%"></i></i><b>35%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">编程智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>较小组织</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:17%"></i></i><b>17%</b></div>
+      <div class="pair-line"><span>大企业</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:31%"></i></i><b>31%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>较小组织</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:13%"></i></i><b>13%</b></div>
+      <div class="pair-line"><span>大企业</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:25%"></i></i><b>25%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 技术</div><div class="pair-lines">
+      <div class="pair-line"><span>较小组织</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:13%"></i></i><b>13%</b></div>
+      <div class="pair-line"><span>大企业</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:26%"></i></i><b>26%</b></div>
+    </div></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问所在组织至少一职能经常用 AI 的人，并重基到全样本；大企业 n=595、较小组织 n=1,035。图中“规模化”不是“试用”。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 7 页 · Exhibit 3</a></p></div></article><div class="insight-strip"><div><span class="evidence-badge evidence-badge--reported">原报告：行业侧栏</span><h3>智能体先进入本行业最值钱的职能</h3></div>
+  <div class="industry-mini"><p><b>31%</b><span>科技业：软件工程</span></p><p><b>15%</b><span>消费零售：营销销售</span></p><p><b>14%</b><span>先进制造：供应链</span></p><p><b>14%</b><span>先进制造：制造流程</span></p></div>
+  <p class="source-note">行业×职能的细分样本较小；比例已重基到全样本，不可当作该行业企业普查。<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 8 页 · 行业侧栏</a></p></div></section><section class="chapter chapter--build"><div class="section-head" id="build"><span class="section-num">02</span><div><h2>编程智能体改变采购谈判</h2><p>32% 是“至少放弃一项采购”的经历，不代表三分之一的软件预算消失。</p></div></div><div class="grid-two grid-two--wide"><article class="viz-card"><div class="card-kicker">受访者比例 · %</div><h3>各行业曾以自建替代至少一项购买</h3><div class="bar-row"><span class="bar-label">科技</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:41%"></span></span><strong class="bar-value">41%</strong></div><div class="bar-row"><span class="bar-label">医疗支付与服务</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:39%"></span></span><strong class="bar-value">39%</strong></div><div class="bar-row"><span class="bar-label">专业服务</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:38%"></span></span><strong class="bar-value">38%</strong></div><div class="bar-row"><span class="bar-label">能源与材料</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:38%"></span></span><strong class="bar-value">38%</strong></div><div class="bar-row"><span class="bar-label">金融机构</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:36%"></span></span><strong class="bar-value">36%</strong></div><div class="bar-row"><span class="bar-label">媒体与电信</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:34%"></span></span><strong class="bar-value">34%</strong></div><div class="bar-row"><span class="bar-label">医药与医疗产品</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:33%"></span></span><strong class="bar-value">33%</strong></div><div class="bar-row"><span class="bar-label">旅行与物流</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:31%"></span></span><strong class="bar-value">31%</strong></div><div class="bar-row"><span class="bar-label">消费品与零售</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:29%"></span></span><strong class="bar-value">29%</strong></div><div class="bar-row"><span class="bar-label">工程与建筑</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:28%"></span></span><strong class="bar-value">28%</strong></div><div class="bar-row"><span class="bar-label">先进制造</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:27%"></span></span><strong class="bar-value">27%</strong></div><div class="bar-row"><span class="bar-label">保险</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:19%"></span></span><strong class="bar-value">19%</strong></div><div class="bar-row"><span class="bar-label">公共与社会部门</span><span class="bar-track"><span class="bar-fill bar-fill--teal" style="--value:17%"></span></span><strong class="bar-value">17%</strong></div><p class="chart-callout">全体 AI 使用组织受访者：<strong>32%</strong>。科技 41%，公共／社会部门 17%；这描述选择发生的比例，不衡量支出、替代规模或自建成功率。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问至少一职能经常用 AI 的组织受访者；行业 n 约 40–205，不能以细小差值排定总体高低。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 9 页 · Exhibit 4</a></p></div></article><aside class="analysis-panel"><span><span class="evidence-badge evidence-badge--inference">分析推断</span></span><h3>“能自建”改变的是采购门槛</h3>
+<p>当功能可用编程智能体快速做出，买方会重新比较：采购价格、实施速度、维护责任、数据控制、合规与跨系统集成。原报告没有测量 SaaS 流失率，更没有证明通用 SaaS 会整体被取代。</p>
+<div class="decision-grid"><div><b>适合自建的候选</b><p>内部专用、流程稳定、数据边界清楚、维护有人负责。</p></div><div><b>适合采购的候选</b><p>持续更新、合规责任重、跨团队协作复杂，或供应商具备难复制的运营能力。</p></div></div>
+<p class="analysis-caption">麦肯锡访谈同样强调按场景决定 build / buy / partner，而不是一律自建。<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 10 页 · 作者评论</a></p></aside></div></section><section class="chapter chapter--value"><div class="section-head" id="value"><span class="section-num">03</span><div><h2>个人确实更快，企业回报还没跟上</h2><p>效用先落在个人与局部职能，企业级 EBIT 的可归因收益仍集中。</p></div></div><div class="value-contrast"><div><span>个人感受</span><strong>80%</strong><p>认为 AI 提升个人效率</p></div><i aria-hidden="true">≠</i><div><span>企业归因</span><strong>37%</strong><p>认为 AI 对组织 EBIT 有正面贡献</p></div><div><span>高绩效者占比</span><strong>6%</strong><p>报告 ≥5% EBIT 贡献且影响显著</p></div></div>
+<p class="interpretation">这三项并非同一转化链；80% 是个人体验，37% 和 6% 是对所在组织财务影响的回答。37% 与 2025 年基本持平。<a href="#reading">先看口径</a>。</p><article class="viz-card"><div class="card-kicker">个人体验 · %</div><h3>个人影响：按职级拆开看</h3><div class="table-scroll"><table class="heat-table"><thead><tr><th scope="col">AI 工作体验</th><th scope="col">C 级</th><th scope="col">高管／资深</th><th scope="col">中层</th><th scope="col">个人贡献者</th></tr></thead><tbody><tr class=""><th scope="row">效率提升</th><td style="--shade:33.6%" title="效率提升 80%"><span>80%</span></td><td style="--shade:34.0%" title="效率提升 81%"><span>81%</span></td><td style="--shade:34.0%" title="效率提升 81%"><span>81%</span></td><td style="--shade:31.9%" title="效率提升 76%"><span>76%</span></td></tr><tr class=""><th scope="row">发展新技能</th><td style="--shade:22.3%" title="发展新技能 53%"><span>53%</span></td><td style="--shade:21.4%" title="发展新技能 51%"><span>51%</span></td><td style="--shade:23.1%" title="发展新技能 55%"><span>55%</span></td><td style="--shade:22.7%" title="发展新技能 54%"><span>54%</span></td></tr><tr class=""><th scope="row">决策改善</th><td style="--shade:23.1%" title="决策改善 55%"><span>55%</span></td><td style="--shade:20.2%" title="决策改善 48%"><span>48%</span></td><td style="--shade:21.0%" title="决策改善 50%"><span>50%</span></td><td style="--shade:16.8%" title="决策改善 40%"><span>40%</span></td></tr><tr class="heat-negative"><th scope="row">更多工作压力</th><td style="--shade:5.0%" title="更多工作压力 12%"><span>12%</span></td><td style="--shade:4.6%" title="更多工作压力 11%"><span>11%</span></td><td style="--shade:7.6%" title="更多工作压力 18%"><span>18%</span></td><td style="--shade:4.2%" title="更多工作压力 10%"><span>10%</span></td></tr><tr class="heat-negative"><th scope="row">职业前景焦虑</th><td style="--shade:2.5%" title="职业前景焦虑 6%"><span>6%</span></td><td style="--shade:4.2%" title="职业前景焦虑 10%"><span>10%</span></td><td style="--shade:8.0%" title="职业前景焦虑 19%"><span>19%</span></td><td style="--shade:7.6%" title="职业前景焦虑 18%"><span>18%</span></td></tr><tr class="heat-negative"><th scope="row">批判性思考受损</th><td style="--shade:3.8%" title="批判性思考受损 9%"><span>9%</span></td><td style="--shade:3.4%" title="批判性思考受损 8%"><span>8%</span></td><td style="--shade:8.4%" title="批判性思考受损 20%"><span>20%</span></td><td style="--shade:6.7%" title="批判性思考受损 16%"><span>16%</span></td></tr></tbody></table></div><p class="chart-callout">中层与个人贡献者中，<strong>47%</strong> 报告至少一种负面影响；高管／资深管理者为 <strong>31%</strong>。这不是把上表负面项目相加。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问在自身工作中用 AI 的受访者；C 级 n=654、高管／资深 n=424、中层 n=217、个人贡献者 n=195；可多选。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 11 页 · Exhibit 5</a></p></div></article><div class="grid-two grid-two--balanced"><article class="viz-card"><div class="card-kicker">职能内受访者比例 · 所有 11 项</div><h3>在哪些职能报告了成本下降</h3><div class="stack-legend"><span><i class="legend-swatch legend-swatch--0"></i>下降 ≥20%</span><span><i class="legend-swatch legend-swatch--1"></i>下降 11–19%</span><span><i class="legend-swatch legend-swatch--2"></i>下降 ≤10%</span></div><div class="stack-row"><span class="stack-label">供应链</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:3%" title="3%"></span><span class="stack-seg stack-seg--1" style="--value:10%" title="10%"></span><span class="stack-seg stack-seg--2" style="--value:28%" title="28%"></span></span><strong>41%</strong></div><div class="stack-row"><span class="stack-label">服务运营</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--1" style="--value:6%" title="6%"></span><span class="stack-seg stack-seg--2" style="--value:25%" title="25%"></span></span><strong>38%</strong></div><div class="stack-row"><span class="stack-label">制造</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:1%" title="1%"></span><span class="stack-seg stack-seg--1" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--2" style="--value:28%" title="28%"></span></span><strong>37%</strong></div><div class="stack-row"><span class="stack-label">营销与销售</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:2%" title="2%"></span><span class="stack-seg stack-seg--1" style="--value:9%" title="9%"></span><span class="stack-seg stack-seg--2" style="--value:23%" title="23%"></span></span><strong>34%</strong></div><div class="stack-row"><span class="stack-label">人力资源</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:6%" title="6%"></span><span class="stack-seg stack-seg--1" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--2" style="--value:20%" title="20%"></span></span><strong>33%</strong></div><div class="stack-row"><span class="stack-label">软件工程</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:4%" title="4%"></span><span class="stack-seg stack-seg--1" style="--value:9%" title="9%"></span><span class="stack-seg stack-seg--2" style="--value:20%" title="20%"></span></span><strong>33%</strong></div><div class="stack-row"><span class="stack-label">战略与财务</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:6%" title="6%"></span><span class="stack-seg stack-seg--1" style="--value:10%" title="10%"></span><span class="stack-seg stack-seg--2" style="--value:15%" title="15%"></span></span><strong>31%</strong></div><div class="stack-row"><span class="stack-label">产品／服务开发</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--1" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--2" style="--value:18%" title="18%"></span></span><strong>31%</strong></div><div class="stack-row"><span class="stack-label">IT</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:3%" title="3%"></span><span class="stack-seg stack-seg--1" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--2" style="--value:18%" title="18%"></span></span><strong>28%</strong></div><div class="stack-row"><span class="stack-label">风险管理</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:4%" title="4%"></span><span class="stack-seg stack-seg--1" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--2" style="--value:16%" title="16%"></span></span><strong>28%</strong></div><div class="stack-row"><span class="stack-label">知识管理</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--1" style="--value:6%" title="6%"></span><span class="stack-seg stack-seg--2" style="--value:12%" title="12%"></span></span><strong>25%</strong></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>各行分别只问在该职能经常使用 AI 的组织受访者；未显示成本上升／不变／未知。2026 年改为直接按职能询问，不能把数值与往年旧问法硬比。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 12 页 · Exhibit 6</a></p></div></article><article class="viz-card"><div class="card-kicker">职能内受访者比例 · 所有 7 项</div><h3>在哪些职能报告了收入上升</h3><div class="stack-legend"><span><i class="legend-swatch legend-swatch--0"></i>增长 &gt;10%</span><span><i class="legend-swatch legend-swatch--1"></i>增长 6–10%</span><span><i class="legend-swatch legend-swatch--2"></i>增长 ≤5%</span></div><div class="stack-row"><span class="stack-label">营销与销售</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--1" style="--value:9%" title="9%"></span><span class="stack-seg stack-seg--2" style="--value:21%" title="21%"></span></span><strong>37%</strong></div><div class="stack-row"><span class="stack-label">产品／服务开发</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--1" style="--value:10%" title="10%"></span><span class="stack-seg stack-seg--2" style="--value:18%" title="18%"></span></span><strong>36%</strong></div><div class="stack-row"><span class="stack-label">软件工程</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:11%" title="11%"></span><span class="stack-seg stack-seg--1" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--2" style="--value:15%" title="15%"></span></span><strong>31%</strong></div><div class="stack-row"><span class="stack-label">服务运营</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--1" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--2" style="--value:19%" title="19%"></span></span><strong>31%</strong></div><div class="stack-row"><span class="stack-label">供应链</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:3%" title="3%"></span><span class="stack-seg stack-seg--1" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--2" style="--value:19%" title="19%"></span></span><strong>29%</strong></div><div class="stack-row"><span class="stack-label">战略与财务</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--1" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--2" style="--value:12%" title="12%"></span></span><strong>26%</strong></div><div class="stack-row"><span class="stack-label">IT</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--1" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--2" style="--value:13%" title="13%"></span></span><strong>23%</strong></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>各行分别只问在该职能使用 AI 的组织受访者；未显示收入下降／不变／未知。与左图也不是同一组受访者。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 13 页 · Exhibit 7</a></p></div></article></div><div class="thesis-box"><span class="evidence-badge evidence-badge--inference">分析推断</span><p>“员工省时”要转成“企业价值”，至少还要穿过任务交接、返工、审批、客户结果和成本分摊。只测生成速度会漏掉这些环节。麦肯锡后来提出应从流程<strong>交接处</strong>识别协同成本；这是一种管理框架，非本调查直接验证的因果机制。<a class="" href="https://www.mckinsey.com/industries/industrials/our-insights/cutting-the-coordination-tax-how-agentic-ai-can-reshape-workflows" target="_blank" rel="noopener noreferrer">相关分析 ↗</a></p></div></section><section class="chapter chapter--costs"><div class="section-head" id="costs"><span class="section-num">04</span><div><h2>成本开始约束使用，投资仍在增加</h2><p>token 只是运行成本的一部分；预算增加也不等于项目经济性成立。</p></div></div><div class="cost-headline"><div><strong>20%</strong><p>称运行成本已限制 AI 使用</p></div><div><strong>28%</strong><p>称 AI 占 ICT 总预算超过 10%</p></div><div><strong>60%</strong><p>预计未来一年继续增加 AI 投入</p></div></div><div class="grid-two grid-two--balanced"><article class="viz-card"><div class="card-kicker">2026 · 使用受限的报告比例</div><h3>运行成本约束：各行业</h3><div class="bar-row"><span class="bar-label">科技</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:25%"></span></span><strong class="bar-value">25%</strong></div><div class="bar-row"><span class="bar-label">金融机构</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:24%"></span></span><strong class="bar-value">24%</strong></div><div class="bar-row"><span class="bar-label">旅行与物流</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:22%"></span></span><strong class="bar-value">22%</strong></div><div class="bar-row"><span class="bar-label">工程与建筑</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:22%"></span></span><strong class="bar-value">22%</strong></div><div class="bar-row"><span class="bar-label">专业服务</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:21%"></span></span><strong class="bar-value">21%</strong></div><div class="bar-row"><span class="bar-label">媒体与电信</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:20%"></span></span><strong class="bar-value">20%</strong></div><div class="bar-row"><span class="bar-label">医疗支付与服务</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:20%"></span></span><strong class="bar-value">20%</strong></div><div class="bar-row"><span class="bar-label">先进制造</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:18%"></span></span><strong class="bar-value">18%</strong></div><div class="bar-row"><span class="bar-label">医药与医疗产品</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:18%"></span></span><strong class="bar-value">18%</strong></div><div class="bar-row"><span class="bar-label">能源与材料</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:18%"></span></span><strong class="bar-value">18%</strong></div><div class="bar-row"><span class="bar-label">保险</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:13%"></span></span><strong class="bar-value">13%</strong></div><div class="bar-row"><span class="bar-label">公共与社会部门</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:12%"></span></span><strong class="bar-value">12%</strong></div><div class="bar-row"><span class="bar-label">消费品与零售</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--value:12%"></span></span><strong class="bar-value">12%</strong></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问所在组织至少一职能经常使用 AI 的受访者；行业 n 约 42–220。总体 20%。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 15 页 · Exhibit 8</a></p></div></article><article class="viz-card"><div class="card-kicker">2026 · 投资预期</div><h3>预计未来一年增加 AI 投入：各行业</h3><div class="stack-legend"><span><i class="legend-swatch legend-swatch--0"></i>增 ≥30%</span><span><i class="legend-swatch legend-swatch--1"></i>增 10–29%</span><span><i class="legend-swatch legend-swatch--2"></i>增 &lt;10%</span></div><div class="stack-row"><span class="stack-label">医药与医疗产品</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--1" style="--value:40%" title="40%"></span><span class="stack-seg stack-seg--2" style="--value:27%" title="27%"></span></span><strong>75%</strong></div><div class="stack-row"><span class="stack-label">保险</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:17%" title="17%"></span><span class="stack-seg stack-seg--1" style="--value:38%" title="38%"></span><span class="stack-seg stack-seg--2" style="--value:16%" title="16%"></span></span><strong>71%</strong></div><div class="stack-row"><span class="stack-label">金融机构</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--1" style="--value:37%" title="37%"></span><span class="stack-seg stack-seg--2" style="--value:24%" title="24%"></span></span><strong>69%</strong></div><div class="stack-row"><span class="stack-label">旅行与物流</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:8%" title="8%"></span><span class="stack-seg stack-seg--1" style="--value:32%" title="32%"></span><span class="stack-seg stack-seg--2" style="--value:27%" title="27%"></span></span><strong>67%</strong></div><div class="stack-row"><span class="stack-label">能源与材料</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:6%" title="6%"></span><span class="stack-seg stack-seg--1" style="--value:21%" title="21%"></span><span class="stack-seg stack-seg--2" style="--value:36%" title="36%"></span></span><strong>63%</strong></div><div class="stack-row"><span class="stack-label">消费品与零售</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:5%" title="5%"></span><span class="stack-seg stack-seg--1" style="--value:38%" title="38%"></span><span class="stack-seg stack-seg--2" style="--value:19%" title="19%"></span></span><strong>62%</strong></div><div class="stack-row"><span class="stack-label">医疗支付与服务</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:7%" title="7%"></span><span class="stack-seg stack-seg--1" style="--value:33%" title="33%"></span><span class="stack-seg stack-seg--2" style="--value:22%" title="22%"></span></span><strong>62%</strong></div><div class="stack-row"><span class="stack-label">专业服务</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:4%" title="4%"></span><span class="stack-seg stack-seg--1" style="--value:38%" title="38%"></span><span class="stack-seg stack-seg--2" style="--value:19%" title="19%"></span></span><strong>61%</strong></div><div class="stack-row"><span class="stack-label">工程与建筑</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:3%" title="3%"></span><span class="stack-seg stack-seg--1" style="--value:27%" title="27%"></span><span class="stack-seg stack-seg--2" style="--value:30%" title="30%"></span></span><strong>60%</strong></div><div class="stack-row"><span class="stack-label">科技</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:13%" title="13%"></span><span class="stack-seg stack-seg--1" style="--value:28%" title="28%"></span><span class="stack-seg stack-seg--2" style="--value:18%" title="18%"></span></span><strong>59%</strong></div><div class="stack-row"><span class="stack-label">先进制造</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:9%" title="9%"></span><span class="stack-seg stack-seg--1" style="--value:27%" title="27%"></span><span class="stack-seg stack-seg--2" style="--value:23%" title="23%"></span></span><strong>59%</strong></div><div class="stack-row"><span class="stack-label">媒体与电信</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:9%" title="9%"></span><span class="stack-seg stack-seg--1" style="--value:34%" title="34%"></span><span class="stack-seg stack-seg--2" style="--value:14%" title="14%"></span></span><strong>57%</strong></div><div class="stack-row"><span class="stack-label">公共与社会部门</span><span class="stack-track"><span class="stack-seg stack-seg--0" style="--value:4%" title="4%"></span><span class="stack-seg stack-seg--1" style="--value:14%" title="14%"></span><span class="stack-seg stack-seg--2" style="--value:24%" title="24%"></span></span><strong>42%</strong></div><p class="chart-callout">总体分档为 8% + 30% + 23% = 61%；正文写“60%”，相差 1 个百分点，原文未解释，可能由整数分档四舍五入造成；不把 61% 当精确总量。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问已在至少一职能采用 AI 的组织受访者；图中未显示不变／减少／未知；细分行业样本较小。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 16 页 · Exhibit 9</a></p></div></article></div><div class="invest-comparison"><div><span>未来一年投资增幅 ≥10%</span><b>&gt;50%</b><small>高绩效组 · 原文“超过半数”</small></div><div><span>未来一年投资增幅 ≥10%</span><b>36%</b><small>其他受访者</small></div><p>这组比较来自正文，没有精确给出高绩效组比例；图中保留“&gt;50%”而不假造小数。与各行业投资分档是不同分组。</p></div><div class="economics"><div><span class="eyebrow eyebrow--dark">COMPLETED-WORK ECONOMICS</span><h3>算完成一件事的成本</h3><p>麦肯锡的智能体经济性文章提醒：不能只看模型单价。把模型调用、人工复核、异常返工、系统集成、持续运维放在同一个“完成工作”单位里，再与产出的收入、质量或节约额比较。</p></div>
+<ol><li><b>单位</b><span>一次已解决工单／一次完成开户／一份可发布内容</span></li><li><b>总成本</b><span>模型 + 人工 + 返工 + 系统 + 维护</span></li><li><b>收益</b><span>节省工时、错误减少、转化改善或收入增加</span></li><li><b>判断</b><span>规模化后单位净收益是否仍为正</span></li></ol>
+<p class="source-note">这是实践框架，不是麦肯锡全球问卷的测量结果。<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/where-ai-agents-pay-off-a-practical-guide-to-the-economics-of-agentic-workflows" target="_blank" rel="noopener noreferrer">McKinsey, Where AI agents pay off, 2026-08-24</a></p></div></section><section class="chapter chapter--leaders"><div class="section-head" id="leaders"><span class="section-num">05</span><div><h2>高绩效者：目标、流程、工具与治理是一组动作</h2><p>只有约 6% 受访者符合高绩效定义；下面是相关差异，不是已证明的成功配方。</p></div></div><div class="leader-intro"><div><span class="eyebrow eyebrow--dark">AI HIGH PERFORMERS</span><strong>n = 92</strong><p>自陈 AI 至少贡献组织 EBIT 的 5%，且带来“显著价值”。</p></div><div><span class="eyebrow eyebrow--dark">ALL OTHER RESPONDENTS</span><strong>n = 1,429</strong><p>同一批 AI 使用组织中的其余受访者；不同图表仍有各自问法。</p></div><p>组别是按结果划分，不能把使用某工具或某种管理实践当作利润增长的独立原因。</p></div><div class="grid-two"><article class="viz-card"><div class="card-kicker">高绩效组 vs 其余组</div><h3>目标：效率普遍，增长与创新拉开差距</h3><div class="pair-row"><div class="pair-label">效率目标</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:78%"></i></i><b>78%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:82%"></i></i><b>82%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">增长目标</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:74%"></i></i><b>74%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:47%"></i></i><b>47%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">创新目标</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:65%"></i></i><b>65%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:49%"></i></i><b>49%</b></div>
+    </div></div><div class="mini-comparison"><p><b>流程根本重设计</b><span>2026 高绩效组约 75%／其他组约 25%；2025 调查的高绩效组为 55%。2026 两组仅给近似数，跨年不是同一批企业。</span></p><div class="pair-row"><div class="pair-label">2026 约数</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:75%"></i></i><b>≈75%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:25%"></i></i><b>≈25%</b></div>
+    </div></div></div><p class="chart-callout">报告正文给流程重设计的是近似比例；高绩效组追求未来三年根本转型的可能性为其他组的 3.3 倍。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问在至少一个职能经常使用 AI 的组织受访者；高绩效 n=92、其他 n=1,429。目标可多选；流程重设计近似数取自正文。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 18 页 · Exhibit 10 + 正文</a></p></div></article><article class="viz-card"><div class="card-kicker">组织能力地图</div><h3>报告列出的 11 类组织实践</h3><ol class="practice-grid"><li><span>战略</span><b>变革性目标</b><small>预期用 AI 推动企业级变革</small></li><li><span>战略</span><b>人工把关</b><small>明确哪些输出必须人工验证</small></li><li><span>战略</span><b>约束管理</b><small>主动管理 token、算力与存储</small></li><li><span>人才</span><b>劳动力规划</b><small>考虑角色与技能变化</small></li><li><span>人才</span><b>绩效管理</b><small>AI 使用纳入绩效管理流程</small></li><li><span>运营</span><b>流程重设计</b><small>重画端到端任务与交接</small></li><li><span>运营</span><b>转型办公室</b><small>赋权团队清除扩张瓶颈</small></li><li><span>数据</span><b>语义层／知识图谱</b><small>让异构数据可复用</small></li><li><span>采用</span><b>高层示范与投入</b><small>持续负责而非一次性倡议</small></li><li><span>采用</span><b>预算承诺</b><small>ICT 预算中 AI 投入超过 15%</small></li><li><span>采用</span><b>影响测量</b><small>明确量化项目效果的流程</small></li></ol><p class="chart-callout">高绩效组中，高层持续负责与影响测量的报告比例约为其他组两倍；投入 ICT 预算超过 15% 的比例也超过两倍。此图按<strong>实践类别</strong>重组，不复刻原图中没有直接标数的点位。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>高绩效 n=92、其他 n=1,429；这是组间关联，部分项目未在原文给出精确数字。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 19 页 · Exhibit 11</a></p></div></article></div><article class="viz-card"><div class="card-kicker">11 个职能 · 全量重绘</div><h3>智能体规模化：高绩效组在多数职能更高</h3><div class="pair-row"><div class="pair-label">知识管理</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:32%"></i></i><b>32%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:10%"></i></i><b>10%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">软件工程</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:30%"></i></i><b>30%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:9%"></i></i><b>9%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">IT</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:28%"></i></i><b>28%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:10%"></i></i><b>10%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">服务运营</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:26%"></i></i><b>26%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:8%"></i></i><b>8%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">营销与销售</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:26%"></i></i><b>26%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:7%"></i></i><b>7%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">产品／服务开发</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:24%"></i></i><b>24%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:8%"></i></i><b>8%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">战略与财务</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:17%"></i></i><b>17%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:4%"></i></i><b>4%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">人力资源</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:16%"></i></i><b>16%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:6%"></i></i><b>6%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">风险管理</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:15%"></i></i><b>15%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:4%"></i></i><b>4%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">制造</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:7%"></i></i><b>7%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:3%"></i></i><b>3%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">供应链</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:4%"></i></i><b>4%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:5%"></i></i><b>5%</b></div>
+    </div></div><p class="chart-callout">供应链是唯一反例：高绩效组 4%，其他组 5%；不能把“多数职能更高”写成“全部更高”。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>高绩效 n=92、其他 n=1,429；数字为各职能达到规模化阶段的受访者比例，不能相加为全组织覆盖率。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 20 页 · Exhibit 12</a></p></div></article><div class="grid-two grid-two--balanced"><article class="viz-card"><div class="card-kicker">5 类工具</div><h3>工具规模化：更广，也更深</h3><div class="pair-row"><div class="pair-label">聊天机器人</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:77%"></i></i><b>77%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:45%"></i></i><b>45%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">专用 AI 工具</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:44%"></i></i><b>44%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:24%"></i></i><b>24%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">编程智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:40%"></i></i><b>40%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:20%"></i></i><b>20%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:40%"></i></i><b>40%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:15%"></i></i><b>15%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 技术</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:36%"></i></i><b>36%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:16%"></i></i><b>16%</b></div>
+    </div></div><p class="chart-callout">其中编程智能体为 40% 对 20%；其他 AI 智能体为 40% 对 15%。高绩效组近半曾因可自建而放弃至少一项软件采购，其他组为 31%。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问至少一个职能使用 AI 的组织受访者，重基到全样本；高绩效 n=92、其他 n=1,429。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 21 页 · Exhibit 13 + 正文</a></p></div></article><article class="viz-card"><div class="card-kicker">5 类工具</div><h3>编程智能体的成本约束差异最大</h3><div class="pair-row"><div class="pair-label">编程智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:18%"></i></i><b>18%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:6%"></i></i><b>6%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">聊天机器人</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:10%"></i></i><b>10%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:9%"></i></i><b>9%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 智能体</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:8%"></i></i><b>8%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:9%"></i></i><b>9%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">专用 AI 工具</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:6%"></i></i><b>6%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:6%"></i></i><b>6%</b></div>
+    </div></div><div class="pair-row"><div class="pair-label">其他 AI 技术</div><div class="pair-lines">
+      <div class="pair-line"><span>高绩效</span><i class="bar-track"><i class="bar-fill bar-fill--blue" style="--value:5%"></i></i><b>5%</b></div>
+      <div class="pair-line"><span>其他</span><i class="bar-track"><i class="bar-fill bar-fill--amber" style="--value:4%"></i></i><b>4%</b></div>
+    </div></div><p class="chart-callout">编程智能体：18% 对 6%；其他四类工具两组接近。不能据此推断“成本越高、利润越高”。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>成本受限相关问题后重基到全样本；高绩效 n=92、其他 n=1,429。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 22 页 · Exhibit 14</a></p></div></article></div><article class="viz-card"><div class="card-kicker">15 类风险 · 全量重绘</div><h3>风险治理：不是“风险更少”，而是关注面不同</h3><div class="table-scroll"><table class="heat-table heat-table--risk"><thead><tr><th scope="col">在缓解的 AI 风险</th><th scope="col">高绩效组</th><th scope="col">其他组</th></tr></thead><tbody><tr><th scope="row">准确性</th><td style="--shade:21.8%" title="准确性 高绩效 52%"><span>52%</span></td><td style="--shade:22.3%" title="准确性 其他 53%"><span>53%</span></td></tr><tr><th scope="row">AI 社工网络攻击</th><td style="--shade:17.2%" title="AI 社工网络攻击 高绩效 41%"><span>41%</span></td><td style="--shade:18.1%" title="AI 社工网络攻击 其他 43%"><span>43%</span></td></tr><tr><th scope="row">越权／意外行动</th><td style="--shade:18.9%" title="越权／意外行动 高绩效 45%"><span>45%</span></td><td style="--shade:13.9%" title="越权／意外行动 其他 33%"><span>33%</span></td></tr><tr><th scope="row">可解释性</th><td style="--shade:13.9%" title="可解释性 高绩效 33%"><span>33%</span></td><td style="--shade:10.1%" title="可解释性 其他 24%"><span>24%</span></td></tr><tr><th scope="row">AI 技术漏洞利用</th><td style="--shade:23.5%" title="AI 技术漏洞利用 高绩效 56%"><span>56%</span></td><td style="--shade:19.3%" title="AI 技术漏洞利用 其他 46%"><span>46%</span></td></tr><tr><th scope="row">知识产权</th><td style="--shade:19.7%" title="知识产权 高绩效 47%"><span>47%</span></td><td style="--shade:16.8%" title="知识产权 其他 40%"><span>40%</span></td></tr><tr><th scope="row">法规合规</th><td style="--shade:17.2%" title="法规合规 高绩效 41%"><span>41%</span></td><td style="--shade:16.4%" title="法规合规 其他 39%"><span>39%</span></td></tr><tr><th scope="row">公平性</th><td style="--shade:11.3%" title="公平性 高绩效 27%"><span>27%</span></td><td style="--shade:8.0%" title="公平性 其他 19%"><span>19%</span></td></tr><tr><th scope="row">个人隐私</th><td style="--shade:13.9%" title="个人隐私 高绩效 33%"><span>33%</span></td><td style="--shade:15.1%" title="个人隐私 其他 36%"><span>36%</span></td></tr><tr><th scope="row">劳动力置换</th><td style="--shade:6.3%" title="劳动力置换 高绩效 15%"><span>15%</span></td><td style="--shade:5.9%" title="劳动力置换 其他 14%"><span>14%</span></td></tr><tr><th scope="row">组织声誉</th><td style="--shade:13.4%" title="组织声誉 高绩效 32%"><span>32%</span></td><td style="--shade:9.7%" title="组织声誉 其他 23%"><span>23%</span></td></tr><tr><th scope="row">环境影响</th><td style="--shade:5.0%" title="环境影响 高绩效 12%"><span>12%</span></td><td style="--shade:3.8%" title="环境影响 其他 9%"><span>9%</span></td></tr><tr><th scope="row">人身安全</th><td style="--shade:2.9%" title="人身安全 高绩效 7%"><span>7%</span></td><td style="--shade:2.9%" title="人身安全 其他 7%"><span>7%</span></td></tr><tr><th scope="row">国家安全</th><td style="--shade:3.8%" title="国家安全 高绩效 9%"><span>9%</span></td><td style="--shade:3.8%" title="国家安全 其他 9%"><span>9%</span></td></tr><tr><th scope="row">政治稳定</th><td style="--shade:1.3%" title="政治稳定 高绩效 3%"><span>3%</span></td><td style="--shade:1.7%" title="政治稳定 其他 4%"><span>4%</span></td></tr></tbody></table></div><p class="chart-callout">高绩效组在越权／意外行动、技术漏洞利用、组织声誉等方面更常报告治理动作；准确性、隐私等并非每项都更高。报告问的是<strong>是否在缓解</strong>，不是风险事件发生率或治理有效性。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>高绩效 n=92、其他 n=1,429；可多选，指标是风险缓解动作的受访者比例。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 23 页 · Exhibit 15</a></p></div></article></section><section class="chapter chapter--labor"><div class="section-head" id="labor"><span class="section-num">06</span><div><h2>裁员预期高于已经发生的变化</h2><p>别把下一年的预测当成过去一年的事实；两次调查并非同一总体的审计记录。</p></div></div><article class="viz-card"><div class="card-kicker">2025 预测 → 2026 实际 → 2026 预测</div><h3>企业总人数：三次视角</h3><div class="three-row"><span class="three-label">认为 AI 会／已导致人数下降</span><div class="three-values"><span class="three-cell three-cell--0"><i class="three-fill" style="--value:32%"></i><b>32%</b><small>2025 预期</small></span><span class="three-cell three-cell--1"><i class="three-fill" style="--value:14%"></i><b>14%</b><small>2026 实际</small></span><span class="three-cell three-cell--2"><i class="three-fill" style="--value:39%"></i><b>39%</b><small>2026 预期</small></span></div></div><div class="labor-secondary"><span><b>43%</b> 2025 预计下一年变化很小／无变化</span><span><b>66%</b> 2026 回顾过去一年变化很小／无变化</span><span><b>43%</b> 2026 预计下一年变化很小／无变化</span></div><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只问至少一职能经常使用 AI 的组织受访者；2025 n=1,753，2026 n=1,521。2025 预期与 2026 实际为不同调查，另有 552 名两年都回答者的方向性核对。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 25 页 · Exhibit 16</a></p></div></article><article class="viz-card"><div class="card-kicker">四个职能 · 下降档位合计</div><h3>四个职能：预期、实际、再预期</h3><div class="three-row"><span class="three-label">服务运营</span><div class="three-values"><span class="three-cell three-cell--0"><i class="three-fill" style="--value:39%"></i><b>39%</b><small>2025 预期</small></span><span class="three-cell three-cell--1"><i class="three-fill" style="--value:24%"></i><b>24%</b><small>2026 实际</small></span><span class="three-cell three-cell--2"><i class="three-fill" style="--value:44%"></i><b>44%</b><small>2026 预期</small></span></div></div><div class="three-row"><span class="three-label">供应链</span><div class="three-values"><span class="three-cell three-cell--0"><i class="three-fill" style="--value:33%"></i><b>33%</b><small>2025 预期</small></span><span class="three-cell three-cell--1"><i class="three-fill" style="--value:23%"></i><b>23%</b><small>2026 实际</small></span><span class="three-cell three-cell--2"><i class="three-fill" style="--value:38%"></i><b>38%</b><small>2026 预期</small></span></div></div><div class="three-row"><span class="three-label">营销与销售</span><div class="three-values"><span class="three-cell three-cell--0"><i class="three-fill" style="--value:33%"></i><b>33%</b><small>2025 预期</small></span><span class="three-cell three-cell--1"><i class="three-fill" style="--value:14%"></i><b>14%</b><small>2026 实际</small></span><span class="three-cell three-cell--2"><i class="three-fill" style="--value:31%"></i><b>31%</b><small>2026 预期</small></span></div></div><div class="three-row"><span class="three-label">软件工程</span><div class="three-values"><span class="three-cell three-cell--0"><i class="three-fill" style="--value:31%"></i><b>31%</b><small>2025 预期</small></span><span class="three-cell three-cell--1"><i class="three-fill" style="--value:22%"></i><b>22%</b><small>2026 实际</small></span><span class="three-cell three-cell--2"><i class="three-fill" style="--value:36%"></i><b>36%</b><small>2026 预期</small></span></div></div><p class="chart-callout">图中是“报告该职能人数下降”的受访者占比，按原图三个下降档位求和；整数分档可能产生约 1 个百分点的四舍五入误差。服务运营 39→24→44%，营销销售 33→14→31%。</p><div class="card-foot"><p class="source-note"><span class="source-note__key">口径</span>只选摘四个职能；原报告还列其他七个。官方 Exhibit 17B／17C 把 2026 调查标为 n=1,753，和 Exhibit 16 的 2026 n=1,521 冲突；该分母疑似误植，未获确认，故不在此确定分母。三期是调查回答，不是实际岗位净损失。<span class="source-note__sep">／</span><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 26–28 页 · Exhibit 17A／17B／17C</a></p></div></article><div class="thesis-box"><span class="evidence-badge evidence-badge--reported">原报告：受访者自陈</span><p>仅 <strong>13%</strong> 的受访者说 AI 使自己对职业前景感到焦虑。企业层面“预计人数减少”与个人焦虑也不是同一个问题。<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">PDF 第 29 页</a></p></div></section><section class="chapter chapter--triangulation"><div class="section-head" id="triangulation"><span class="section-num">07</span><div><h2>用外部研究校准，而非拼成一个百分比</h2><p>独立来源能提醒我们哪些问题值得追问；定义不同的数据不能直接放到同一坐标轴。</p></div></div><div class="evidence-bridge"><article><span><span class="evidence-badge evidence-badge--reported">麦肯锡全球问卷</span></span><strong>89%</strong><h3>受访者报告组织至少一职能经常用 AI</h3><p>1,719 名跨国受访者、按国家 GDP 加权；时间为 2026 年 5–6 月。</p><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener noreferrer">原文 ↗</a></article>
+<div class="bridge-warning">不可直接横比<br><small>地区、抽样框、组织规模、AI 使用定义与时间窗均不同</small></div>
+<article><span><span class="evidence-badge evidence-badge--external">美国 Census 研究</span></span><strong>18%</strong><h3>美国企业在某业务职能使用 AI</h3><p>基于具有全国代表性的 BTOS 补充调查；参考期为 2025 年 11 月至 2026 年 1 月。按就业人数加权为 32%。</p><a class="" href="https://www.census.gov/library/working-papers/2026/adrm/CES-WP-26-25.html" target="_blank" rel="noopener noreferrer">研究原文 ↗</a></article></div>
+<div class="external-note"><span><span class="evidence-badge evidence-badge--external">NBER 随机试验</span></span><p>另一项研究在 66 家企业、7,137 名知识工作者中随机提供办公 AI。实验后半段，使用工具的处理组员工每周邮件时间约少 2 小时，但研究未检出任务数量或结构的变化。它支持“个人任务可变快”，并不直接证明组织利润增长。<a class="" href="https://www.nber.org/papers/w33795" target="_blank" rel="noopener noreferrer">研究原文 ↗</a></p></div></section><section class="chapter chapter--cases"><div class="section-head" id="cases"><span class="section-num">08</span><div><h2>真实案例如何补上图表解释</h2><p>这些是麦肯锡另一篇文章研究的被选中成功案例，不是全球调查的随机样本。</p></div></div><div class="case-grid">
+<article class="case-card"><span>制造／供应链 · Toyota</span><h3>围绕完整系统组合技术</h3><p>案例描述将机器学习预测、支持供应计划的智能体流程、面向经销商与客户的数字透明度连接起来，同时调整数据质量和工作方式。</p><b>可迁移做法</b><p>先确定供需决策的业务目标，再组合预测、协同与反馈，而不是只部署一个聊天入口。</p><a class="" href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-new-management-playbook-for-ai-how-to-move-faster-and-create-more-value" target="_blank" rel="noopener noreferrer">案例来源 ↗</a></article>
+<article class="case-card"><span>航空／服务 · LATAM</span><h3>把一次能力做成多渠道复用</h3><p>文章描述其把客户侧能力做成 API 优先、模块化平台；一个订单变更能力可用于网页、App、联络中心与 WhatsApp。</p><b>可迁移做法</b><p>小团队也可把身份、订单、通知和审核做成稳定接口，避免每个渠道重新写一套核心逻辑。</p><a class="" href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-new-management-playbook-for-ai-how-to-move-faster-and-create-more-value" target="_blank" rel="noopener noreferrer">案例来源 ↗</a></article>
+<article class="case-card"><span>采矿／运营 · Freeport-McMoRan</span><h3>领域负责人承担结果</h3><p>麦肯锡描述公司让兼懂现场与 AI 落地的负责人主导浸出优化，并区分跨工厂可复用的约 60% 系统与需本地适配的约 40%。</p><b>可迁移做法</b><p>把可复用底座与客户现场配置分开；让业务负责人对质量、采用与财务指标负责。</p><a class="" href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-new-management-playbook-for-ai-how-to-move-faster-and-create-more-value" target="_blank" rel="noopener noreferrer">案例来源 ↗</a></article>
+</div>
+<p class="case-caveat">案例用于说明组织设计与复用方式，不能据此推算普通公司会得到同样回报。麦肯锡文章研究的是 20 家已创造显著经济价值的企业，存在选样偏向。</p></section><section class="chapter chapter--practice"><div class="section-head" id="practice"><span class="section-num">09</span><div><h2>把研究变成可测的下一步</h2><p>对小团队，先做一个完整流程的闭环实验，再决定买、建或扩大部署。</p></div></div><div class="playbook"><div class="playbook-step"><b>01</b><h3>选问题</h3><p>挑高频、边界清楚、结果可验的流程；写清客户或内部使用者、原有完成方式、单次价值。</p></div><div class="playbook-step"><b>02</b><h3>记基线</h3><p>记录完成时间、人工交接、错误率、返工次数、客户结果和每件工作的总成本。</p></div><div class="playbook-step"><b>03</b><h3>重画流程</h3><p>标出生成、核验、路由、审批与回写的位置；给越权行动和低置信度结果设人工复核点。</p></div><div class="playbook-step"><b>04</b><h3>比较两种方案</h3><p>以同一完成单位比较买与建；包含模型、人工、集成、维护、安全和切换成本。</p></div><div class="playbook-step"><b>05</b><h3>设置放大门槛</h3><p>只有完成率、质量、单位净收益、异常处理与使用率同时达到预设标准，再扩更多场景。</p></div></div><div class="example-grid"><div><span><span class="evidence-badge evidence-badge--inference">示例：说明性场景</span></span><h3>创作者：从选题到可发布稿</h3><p><b>原流程</b>：检索资料 → 写初稿 → 核事实 → 排版 → 发布。<br><b>AI 流程</b>：先生成“来源—主张”对照表，自动提示缺证据段落，再让人审校事实与表达，最后输出可发布稿。</p><p><b>验收</b>：每篇实际总工时、可核验引用比例、修订轮次、发布后纠错次数；这些才比“初稿生成速度”更接近业务价值。</p></div>
+<div><span><span class="evidence-badge evidence-badge--inference">示例：说明性场景</span></span><h3>独立开发者：客户工单助手</h3><p><b>原流程</b>：阅读工单 → 查知识库 → 复制答案 → 核权限 → 回复。<br><b>AI 流程</b>：检索证据、生成候选回复、校验账户权限，把高风险请求交给人，关闭工单后回写知识库。</p><p><b>验收</b>：每件已解决工单的总成本、首次解决率、升级率、错误回复率与客户满意度；把人工复核时间算进去。</p></div></div>
+<div class="falsify"><span><span class="evidence-badge evidence-badge--action">反证清单</span></span><h3>三条判断何时该改</h3><ol><li>如果客户愿为合规、售后和稳定集成持续付费，自建替代采购的威胁就没想象中大。</li><li>如果单点省时很多、但总流程时间和返工率不变，应撤回“已创造企业价值”的判断。</li><li>如果扩量后人工复核与异常成本上升更快，原先的单位经济性估算就失效。</li></ol></div></section><section class="chapter chapter--sources"><div class="section-head" id="sources"><span class="section-num">10</span><div><h2>展项覆盖与来源</h2><p>每个原报告展项都可在本页找到对应的重绘、概念图或明确的选摘。</p></div></div><div class="table-scroll"><table class="source-table"><thead><tr><th>原图</th><th>主题</th><th>本页呈现</th></tr></thead><tbody><tr><th scope="row">1</th><td>采用与规模化</td><td><a href="#adoption">两年三指标</a></td></tr><tr><th scope="row">2</th><td>大／小企业智能体</td><td><a href="#adoption">两年分组</a></td></tr><tr><th scope="row">3</th><td>五类工具规模化</td><td><a href="#adoption">完整分组</a></td></tr><tr><th scope="row">行业侧栏</th><td>智能体在行业职能</td><td><a href="#adoption">四个代表点；原图完整矩阵见 PDF</a></td></tr><tr><th scope="row">4</th><td>自建替代采购</td><td><a href="#build">全部 13 个行业</a></td></tr><tr><th scope="row">5</th><td>个人正负体验</td><td><a href="#value">六项体验×四职级</a></td></tr><tr><th scope="row">6</th><td>职能成本下降</td><td><a href="#value">全部 11 个职能</a></td></tr><tr><th scope="row">7</th><td>职能收入增长</td><td><a href="#value">全部 7 个职能</a></td></tr><tr><th scope="row">8</th><td>成本约束</td><td><a href="#costs">全部 13 个行业</a></td></tr><tr><th scope="row">9</th><td>投资预期</td><td><a href="#costs">全部 13 个行业</a></td></tr><tr><th scope="row">10</th><td>高绩效目标</td><td><a href="#leaders">三种目标</a></td></tr><tr><th scope="row">11</th><td>组织最佳实践</td><td><a href="#leaders">11 类概念图；不估读无标数值</a></td></tr><tr><th scope="row">12</th><td>高绩效组智能体</td><td><a href="#leaders">全部 11 个职能</a></td></tr><tr><th scope="row">13</th><td>高绩效组工具</td><td><a href="#leaders">全部五类</a></td></tr><tr><th scope="row">14</th><td>高绩效组成本</td><td><a href="#leaders">全部五类</a></td></tr><tr><th scope="row">15</th><td>风险缓解</td><td><a href="#leaders">15 类风险</a></td></tr><tr><th scope="row">16</th><td>企业人数</td><td><a href="#labor">三阶段</a></td></tr><tr><th scope="row">17A–C</th><td>职能人数</td><td><a href="#labor">四个代表职能；原图全职能见 PDF</a></td></tr></tbody></table></div>
+<div class="source-list"><h3>一手来源与边界</h3><ol>
+<li><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener noreferrer">McKinsey, The state of AI in 2026: On the road to ROI</a>，2026-08-25；本文主数据。<a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai#/download/%2F~%2Fmedia%2Fmckinsey%2Fbusiness%20functions%2Fquantumblack%2Four%20insights%2Fthe%20state%20of%20ai%2Fthe-state-of-ai-in-2026-on-the-road-to-roi-aug-2026.pdf%3FshouldIndex%3Dfalse" target="_blank" rel="noopener noreferrer">官方 31 页 PDF</a>。</li>
+<li><a class="" href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-new-management-playbook-for-ai-how-to-move-faster-and-create-more-value" target="_blank" rel="noopener noreferrer">McKinsey, The new management playbook for AI</a>，2026-08-28；案例和组织能力，选中的成功企业，不能代表平均公司。</li>
+<li><a class="" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/where-ai-agents-pay-off-a-practical-guide-to-the-economics-of-agentic-workflows" target="_blank" rel="noopener noreferrer">McKinsey, Where AI agents pay off</a>，2026-08-24；完成工作单位经济性的实践框架。</li>
+<li><a class="" href="https://www.mckinsey.com/industries/industrials/our-insights/cutting-the-coordination-tax-how-agentic-ai-can-reshape-workflows" target="_blank" rel="noopener noreferrer">McKinsey, Cutting the coordination tax</a>，2026-09-18；流程交接视角，属于后续解释。</li>
+<li><a class="" href="https://www.census.gov/library/working-papers/2026/adrm/CES-WP-26-25.html" target="_blank" rel="noopener noreferrer">U.S. Census Bureau, The Microstructure of AI Diffusion</a>，2026-04；美国全国代表性企业数据，定义与麦肯锡不同。</li>
+<li><a class="" href="https://www.nber.org/papers/w33795" target="_blank" rel="noopener noreferrer">NBER, Shifting Work Patterns with Generative AI</a>，2025 年修订版；随机试验对个人工作方式的观察。</li>
+</ol><p>原报告是在线自陈调查，不能验证企业财报或推出因果；样本跨年变化、行业细分样本较小，且 2026 年职能财务问法改变。所有图表均为说明性重绘；整数档位求和可能与报告正文有 1 个百分点四舍五入差异。</p></div><footer class="footer"><a href="#top">返回顶部 ↑</a><span>Source-led visual research · 2026-09-23</span></footer></section></main></body></html>

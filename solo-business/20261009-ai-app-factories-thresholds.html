@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 时代做 App:从做出来到赚到钱,中间还有哪些门槛——五家 App 工厂的打法与三种可能的优势机制</title>
+<style>
+/* ============================================================
+   1. Design tokens(唯一权威来源)
+   命名:primitive 色阶 → 语义角色 → 少量组件 token。
+   断点字面量:默认单列;640px 起两列(.grid-2/.pair);1024px 起三列与横向流程。
+   ============================================================ */
+:root {
+  /* primitive: color */
+  --blue-700: #2a5f9e;
+  --blue-800: #1f4a7d;
+  --blue-400: #6b93c4;    /* 嵌套/参与段,validator WARN 仅色觉模拟,已配直接标签 */
+  --blue-50: #eef4fb;
+  --orange-700: #b45309;
+  --orange-50: #fdf3e7;
+  --green-700: #166534;
+  --green-50: #ecf7f0;
+  --purple-700: #7c3aed;
+  --purple-50: #f3eefc;
+  --gray-900: #1f2937;
+  --gray-700: #374151;
+  --gray-600: #4b5563;
+  --gray-500: #64748b;
+  --gray-300: #cbd5e1;
+  --gray-200: #e2e8f0;
+  --gray-100: #f1f5f9;
+  --white: #ffffff;
+
+  /* semantic: color roles */
+  --color-bg: var(--white);
+  --color-surface: var(--white);
+  --color-surface-muted: var(--gray-100);
+  --color-text: var(--gray-900);
+  --color-text-secondary: var(--gray-600);
+  --color-text-muted: var(--gray-500);
+  --color-border: var(--gray-200);
+  --color-border-strong: var(--gray-300);
+  --color-accent: var(--blue-700);
+  --color-accent-strong: var(--blue-800);
+  --color-accent-soft: var(--blue-50);
+  --color-warn: var(--orange-700);
+  --color-warn-soft: var(--orange-50);
+  --color-ok: var(--green-700);
+  --color-ok-soft: var(--green-50);
+  --color-info: var(--purple-700);
+  --color-info-soft: var(--purple-50);
+
+  /* chart marks(已用 dataviz validator 校验:#2a5f9e,#b45309 PASS) */
+  --chart-mark-1: var(--blue-700);
+  --chart-mark-2: var(--orange-700);
+  --chart-mark-1-soft: var(--blue-400);
+  --chart-track: var(--gray-200);
+  --chart-grid: var(--gray-300);
+  --chart-label: var(--gray-700);
+  --chart-label-on-mark: var(--white);
+  --chart-stroke-w: 1;
+  --chart-fs: 23px;        /* SVG 用户单位,随 viewBox 缩放;390px 视口约 14px */
+  --chart-fs-sm: 19px;
+
+  /* typography */
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+  --fs-kpi: 2.5rem;
+  --lh-tight: 1.25;
+  --lh-snug: 1.4;
+  --lh-base: 1.65;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --ls-tight: -0.01em;
+  --lh-none: 1;
+  --underline-offset: 0.15em;
+  --measure-lead: 70ch;
+  --measure-sub: 64ch;
+  --flow-arrow-gap: 0.5em;
+
+  /* spacing scale */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* borders, radii, shadows */
+  --bw-1: 1px;
+  --bw-2: 2px;
+  --bw-accent: 4px;
+  --radius-sm: 4px;
+  --chart-rx: 3px;
+  --chart-rx-lg: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+
+  /* layout dimensions */
+  --content-max: 1080px;
+  --kpi-min: 220px;
+  --card-min: 260px;
+  --table-min: 640px;
+  --chart-max: 560px;
+  --flow-direction: column;   /* 1024px 起改为 row */
+  --flow-arrow: "↓";          /* 1024px 起改为 → */
+  --tag-pad-y: 0.1rem;
+  --tag-pad-x: 0.45rem;
+}
+
+/* ============================================================
+   2. Reset / base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+h1, h2, h3, h4 { line-height: var(--lh-tight); letter-spacing: var(--ls-tight); margin: 0; }
+p { margin: 0 0 var(--sp-3); }
+p:last-child { margin-bottom: 0; }
+a { color: var(--color-accent); text-decoration: underline; text-underline-offset: var(--underline-offset); }
+a:hover { color: var(--color-accent-strong); }
+ul, ol { margin: 0 0 var(--sp-3); padding-left: var(--sp-5); }
+li { margin-bottom: var(--sp-1); }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-sm); }
+th, td { text-align: left; vertical-align: top; padding: var(--sp-2) var(--sp-3); border-bottom: var(--bw-1) solid var(--color-border); }
+th { font-weight: var(--fw-semibold); color: var(--color-text-secondary); background: var(--color-surface-muted); white-space: nowrap; }
+svg { display: block; width: 100%; height: auto; }
+figure { margin: 0; }
+figcaption { font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: var(--sp-2); }
+
+/* ============================================================
+   3. Layout
+   ============================================================ */
+.wrap { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--sp-4); }
+.section { padding: var(--sp-10) 0; border-top: var(--bw-1) solid var(--color-border); }
+.section-title { font-size: var(--fs-xl); margin-bottom: var(--sp-2); }
+.section-lead { color: var(--color-text-secondary); margin-bottom: var(--sp-6); max-width: var(--measure-lead); }
+.grid { display: grid; gap: var(--sp-4); grid-template-columns: 1fr; }
+.grid-2, .grid-3 { grid-template-columns: 1fr; }
+.table-scroll { overflow-x: auto; min-width: 0; -webkit-overflow-scrolling: touch; }
+.table-scroll table { min-width: var(--table-min); }
+.table-scroll:focus-visible { outline: var(--bw-accent) solid var(--color-accent); outline-offset: var(--sp-1); }
+
+/* ============================================================
+   4. Components
+   ============================================================ */
+/* header */
+.hero { padding: var(--sp-12) 0 var(--sp-8); }
+.hero-kicker { font-size: var(--fs-sm); color: var(--color-text-muted); margin-bottom: var(--sp-3); }
+.hero h1 { font-size: var(--fs-2xl); margin-bottom: var(--sp-3); }
+.hero-sub { font-size: var(--fs-md); color: var(--color-text-secondary); max-width: var(--measure-sub); margin-bottom: var(--sp-6); }
+.hero-claim { border-left: var(--bw-accent) solid var(--color-accent); background: var(--color-accent-soft); padding: var(--sp-4) var(--sp-5); border-radius: var(--radius-md); margin-bottom: var(--sp-6); font-size: var(--fs-md); }
+.kpis { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(var(--kpi-min), 1fr)); }
+.kpi { border: var(--bw-1) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--sp-5); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.kpi-num { font-size: var(--fs-kpi); font-weight: var(--fw-bold); color: var(--color-accent); line-height: var(--lh-tight); }
+.kpi-label { font-size: var(--fs-sm); color: var(--color-text-secondary); margin-top: var(--sp-2); }
+
+/* evidence tags */
+.tag { display: inline-block; font-size: var(--fs-xs); line-height: var(--lh-snug); padding: var(--tag-pad-y) var(--tag-pad-x); border-radius: var(--radius-sm); border: var(--bw-1) solid transparent; vertical-align: middle; white-space: nowrap; font-weight: var(--fw-medium); }
+.tag-verified { color: var(--color-ok); background: var(--color-ok-soft); border-color: var(--color-ok); }
+.tag-self { color: var(--color-warn); background: var(--color-warn-soft); border-color: var(--color-warn); }
+.tag-est { color: var(--color-info); background: var(--color-info-soft); border-color: var(--color-info); }
+.tag-note { color: var(--color-text-secondary); background: var(--color-surface-muted); border-color: var(--color-border-strong); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); align-items: center; font-size: var(--fs-sm); color: var(--color-text-secondary); padding: var(--sp-3) var(--sp-4); border: var(--bw-1) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-muted); }
+.legend-item { display: inline-flex; align-items: center; gap: var(--sp-2); }
+
+/* cards */
+.card { border: var(--bw-1) solid var(--color-border); border-radius: var(--radius-lg); padding: var(--sp-5); background: var(--color-surface); box-shadow: var(--shadow-card); min-width: 0; }
+.card h3 { font-size: var(--fs-md); margin-bottom: var(--sp-3); }
+.card-meta { font-size: var(--fs-sm); color: var(--color-text-muted); }
+.card-boundary { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: var(--bw-1) dashed var(--color-border-strong); font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.card-boundary strong { color: var(--color-warn); }
+.callout { border-left: var(--bw-accent) solid var(--color-warn); background: var(--color-warn-soft); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-md); font-size: var(--fs-sm); }
+.callout-ok { border-left-color: var(--color-ok); background: var(--color-ok-soft); }
+.note-table { color: var(--color-text-secondary); }
+.note-table th { color: var(--color-text-muted); }
+
+/* charts */
+.chart-title { font-size: var(--fs-base); font-weight: var(--fw-semibold); margin-bottom: var(--sp-1); }
+.chart-sub { font-size: var(--fs-sm); color: var(--color-text-muted); margin-bottom: var(--sp-3); }
+.chart { max-width: var(--chart-max); }
+.chart text { font-family: var(--font-sans); fill: var(--chart-label); font-size: var(--chart-fs); }
+.chart .lbl-on { fill: var(--chart-label-on-mark); font-weight: var(--fw-semibold); }
+.chart .lbl-strong { font-weight: var(--fw-semibold); fill: var(--color-text); }
+.chart .lbl-muted { fill: var(--color-text-muted); font-size: var(--chart-fs-sm); }
+.chart rect { rx: var(--chart-rx); }
+.chart rect.rx-lg { rx: var(--chart-rx-lg); }
+.chart .track { fill: var(--chart-track); }
+.chart .mark-1 { fill: var(--chart-mark-1); }
+.chart .mark-2 { fill: var(--chart-mark-2); }
+.chart .mark-1-soft { fill: var(--chart-mark-1-soft); }
+.chart .grid-line { stroke: var(--chart-grid); stroke-width: var(--chart-stroke-w); }
+.chart .baseline { stroke: var(--color-border-strong); stroke-width: var(--chart-stroke-w); }
+
+/* comparison pair(旧例 vs 新例) */
+.pair { display: grid; gap: var(--sp-4); grid-template-columns: 1fr; }
+.pair-item { border: var(--bw-1) solid var(--color-border); border-radius: var(--radius-md); padding: var(--sp-4); background: var(--color-surface-muted); }
+.pair-item h4 { font-size: var(--fs-base); margin-bottom: var(--sp-2); }
+.pair-big { font-size: var(--fs-lg); font-weight: var(--fw-bold); color: var(--color-accent); }
+
+/* flow(HubX 实验系统) */
+.flow { display: flex; flex-direction: var(--flow-direction); gap: var(--sp-3); align-items: stretch; }
+.flow-step { flex: 1 1 0; min-width: 0; position: relative; border: var(--bw-1) solid var(--color-border); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4); background: var(--color-surface); }
+.flow-step strong { display: block; color: var(--color-accent-strong); margin-bottom: var(--sp-1); font-size: var(--fs-sm); }
+.flow-step span { font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.flow-step + .flow-step::before { content: var(--flow-arrow); position: absolute; color: var(--color-text-muted); font-size: var(--fs-sm); top: calc(-1 * var(--sp-3) - var(--flow-arrow-gap)); left: 50%; transform: translateX(-50%); line-height: var(--lh-none); }
+.flow-step-decision { border-color: var(--color-warn); background: var(--color-warn-soft); }
+
+/* sources */
+.sources { font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.sources li { margin-bottom: var(--sp-2); word-break: break-all; }
+footer { padding: var(--sp-8) 0 var(--sp-12); font-size: var(--fs-sm); color: var(--color-text-muted); border-top: var(--bw-1) solid var(--color-border); }
+
+/* ============================================================
+   5. Responsive(断点:1024px 多列;≤480px 单列为默认)
+   ============================================================ */
+/* 640px:两列断点 */
+@media (min-width: 640px) {
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  :root { --flow-direction: row; --flow-arrow: "→"; }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-3 .pair { grid-template-columns: 1fr; }   /* 三列卡片内对比块保持单列 */
+  .flow-step + .flow-step::before { top: 50%; left: calc(-1 * var(--sp-3) - var(--flow-arrow-gap)); transform: translateY(-50%); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="hero-kicker">公众号文章笔记的可视化整理 + 逐条核实与例证补充 · 2026-10-09</p>
+    <h1>AI 时代做 App:从做出来到赚到钱,中间还有哪些门槛</h1>
+    <p class="hero-sub">五家 App 工厂的打法与三种可能的优势机制。底稿是一篇公众号文章的笔记摘要(微信原文未能抓取);每个数字都标注了证据状态,标题与结论按「优势假说」而非「已证明」来写。</p>
+    <div class="hero-claim">核心判断:AI 可能降低了部分开发投入,现有数据还不能判断「让一个 App 赚钱」的难度是否下降。技术门槛若继续降低,需求发现、获客和持续变现的能力相对更值钱——这是 App 工厂在 AI 时代占优的假说,下面的证据与它相容,但不构成证明。</div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-num">14,700+</div><div class="kpi-label">2026 年 1 月每月新上线订阅 App 数(2022 年 1 月约 2,000)<br><span class="tag tag-verified">已核实出处</span> Appfigures 数据,RevenueCat 报告转引</div></div>
+      <div class="kpi"><div class="kpi-num">4.6%</div><div class="kpi-label">报告筛选样本中,新上线订阅 App 两年内达到 $10K 月收入的比例<br><span class="tag tag-verified">已核实出处</span> RevenueCat 筛选样本,所有品类</div></div>
+      <div class="kpi"><div class="kpi-num">69%</div><div class="kpi-label">2020 年前上线的 App 贡献的订阅收入份额(2025 年及以后上线的仅 3%)<br><span class="tag tag-verified">已核实出处</span> RevenueCat</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="section" id="legend">
+  <div class="wrap">
+    <div class="legend" role="note" aria-label="证据标签说明">
+      <span class="legend-item"><span class="tag tag-verified">已核实出处</span>找到原始来源并逐字核对(仍不等于独立证实)</span>
+      <span class="legend-item"><span class="tag tag-self">自报</span>公司或创始人自报,未独立验证</span>
+      <span class="legend-item"><span class="tag tag-est">第三方估算</span>Sensor Tower、Appfigures 等估算,有原始出处</span>
+      <span class="legend-item"><span class="tag tag-note">笔记摘要记载</span>原始出处未核,只放文字,不进图表</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="market">
+  <div class="wrap">
+    <h2 class="section-title">1 · 市场有多卷</h2>
+    <p class="section-lead">新上线数量四年涨了六倍多;报告筛选样本中,两年内做到 $10K 月收入的新订阅 App 不到二十分之一。老 App 占了大部分收入。</p>
+    <div class="grid grid-2">
+      <figure class="card">
+        <div class="chart-title">图 1 · 每月新上线订阅 App:2022-01 vs 2026-01</div>
+        <div class="chart-sub">只画两个端点,不画逐月折线。单位:款/月 <span class="tag tag-verified">已核实出处</span></div>
+        <svg class="chart" viewBox="0 0 520 118" role="img" aria-label="2022年1月约2000款,2026年1月14700款以上">
+          <text x="0" y="36" class="lbl-strong">2022-01</text>
+          <rect class="track" x="105" y="20" width="405" height="26"></rect>
+          <rect class="mark-1" x="105" y="20" width="55" height="26"></rect>
+          <text x="170" y="38">约 2,000</text>
+          <text x="0" y="96" class="lbl-strong">2026-01</text>
+          <rect class="track" x="105" y="80" width="405" height="26"></rect>
+          <rect class="mark-1" x="105" y="80" width="405" height="26"></rect>
+          <text x="115" y="98" class="lbl-on">14,700+</text>
+          
+        </svg>
+        <figcaption>新上线数量:Appfigures 数据,RevenueCat《State of Subscription Apps 2026》转引。报告总体数据集 115,000+ App、$16B+ 收入,不代表本图单项样本。</figcaption>
+      </figure>
+      <figure class="card">
+        <div class="chart-title">图 2 · 报告筛选样本中,新订阅 App 两年内达到收入门槛的比例</div>
+        <div class="chart-sub">4.6% 包含在 17.3% 之内(同底嵌套);所有品类 <span class="tag tag-verified">已核实出处</span></div>
+        <svg class="chart" viewBox="0 0 520 118" role="img" aria-label="17.3%达到每月1千美元,4.6%达到每月1万美元,其余约82.7%两者都未达到">
+          <rect class="track rx-lg" x="0" y="10" width="520" height="36"></rect>
+          <rect class="mark-1-soft rx-lg" x="0" y="10" width="90" height="36"></rect>
+          <rect class="mark-1 rx-lg" x="0" y="10" width="24" height="36"></rect>
+          <text x="100" y="35" class="lbl-strong">17.3% 达 $1K/月</text>
+          <text x="0" y="76">深色 4.6% 达 $10K/月(含于 17.3%)</text>
+          <text x="0" y="106">其余 82.7% 两年内未达 $1K/月</text>
+          
+        </svg>
+        <figcaption>RevenueCat 筛选样本,所有品类;4.6% 是 17.3% 的子集</figcaption>
+      </figure>
+      <figure class="card">
+        <div class="chart-title">图 3 · 订阅收入按 App 上线年份</div>
+        <div class="chart-sub">存在应用年龄差异,不据此推断需求停滞 <span class="tag tag-verified">已核实出处</span></div>
+        <svg class="chart" viewBox="0 0 520 118" role="img" aria-label="2020年前上线的App贡献69%收入,2025年及以后上线的贡献3%">
+          <text x="0" y="36" class="lbl-strong">2020 年前上线</text>
+          <rect class="track" x="175" y="20" width="335" height="26"></rect>
+          <rect class="mark-1" x="175" y="20" width="231" height="26"></rect>
+          <text x="185" y="38" class="lbl-on">69%</text>
+          <text x="0" y="96" class="lbl-strong">2025 年及以后</text>
+          <rect class="track" x="175" y="80" width="335" height="26"></rect>
+          <rect class="mark-2" x="175" y="80" width="10" height="26"></rect>
+          <text x="195" y="98">3%</text>
+          
+        </svg>
+        <figcaption>RevenueCat 同一报告;中间年份未在本页列出</figcaption>
+      </figure>
+      <div class="card">
+        <h3>同一报告里的另外两个数</h3>
+        <ul>
+          <li>上线一年后,App 月收入中位数约 <strong>$72</strong>。<span class="tag tag-verified">已核实出处</span></li>
+          <li>AI 类 App 每付费用户收入高 <strong>41%</strong>,但流失快 <strong>30%</strong>(报告样本内的平均差异,收入不等于利润)。<span class="tag tag-verified">已核实出处</span></li>
+        </ul>
+        <div class="callout">本地笔记补充(<span class="tag tag-note">笔记摘要记载</span>):App Store 月提交量 2024 年下半年约 5 万 → 7.8 万;2025 年全年约 55.7 万。注意这是「提交」不是「上线」,与图 1 口径不同。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="factories">
+  <div class="wrap">
+    <h2 class="section-title">2 · 五家 App 工厂</h2>
+    <p class="section-lead">「App 工厂」在本页指:几十款产品共享代码、模型接口、订阅系统与投放经验,把每款 App 当作一次商业实验的公司。下表的产品数、用户、下载、安装下限口径各不相同,不做排名。</p>
+    <figure>
+    <div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格">
+      <table>
+        <thead><tr><th>公司</th><th>总部 / 成立</th><th>规模(口径见标签)</th><th>代表 AI 产品</th><th>可核实的关键点</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Codeway</strong></td>
+            <td>土耳其 · 2020</td>
+            <td>60+ 产品、600M+ 下载 <span class="tag tag-self">自报</span><br>笔记称 AI 产品 30+ <span class="tag tag-note">笔记摘要记载</span></td>
+            <td>Learna、Retake、Chat &amp; Ask AI</td>
+            <td>Learna 换用 ElevenLabs 语音后转化与 LTV 提升(见 3a);Sensor Tower 估整体约 $25M/月 <span class="tag tag-est">第三方估算</span></td>
+          </tr>
+          <tr>
+            <td><strong>HubX</strong></td>
+            <td>土耳其伊兹密尔 · 2022</td>
+            <td>40+ 产品、600M+ 用户(官方用词「用户」)、370+ 员工 <span class="tag tag-verified">已核实出处</span></td>
+            <td>Nova、AI Video、Home AI</td>
+            <td>2026-08 首轮外部融资最高 $75M,Point72 领投,pre-money $1.2B,土耳其第 8 家独角兽 <span class="tag tag-verified">已核实出处</span>;此前无外部融资、持续盈利 <span class="tag tag-self">自报</span></td>
+          </tr>
+          <tr>
+            <td><strong>Glority / 杭州睿琪</strong></td>
+            <td>中国杭州</td>
+            <td>笔记称约 36 款、24+ AI <span class="tag tag-note">笔记摘要记载</span><br>媒体报道 19 款产品年收入约 $168M <span class="tag tag-est">第三方报道,需核</span></td>
+            <td>PictureThis、Picture Insect</td>
+            <td>把植物、昆虫、鸟、鱼、蘑菇、岩石等识别需求拆成独立 App,2019 年起约每 3 个月出一批 <span class="tag tag-est">第三方报道</span></td>
+          </tr>
+          <tr>
+            <td><strong>AIBY</strong></td>
+            <td>美国迈阿密</td>
+            <td>Google Play 20 款约 9,000 万安装;ChatOn 1,000 万+、ARTA 100 万+、Rock ID 50 万+ <span class="tag tag-verified">已核实出处</span>(商店页安装下限)<br>笔记称 2024 年以来新增 29 款、19 款 AI <span class="tag tag-note">笔记摘要记载</span></td>
+            <td>ChatOn、ARTA、Coin ID</td>
+            <td>Rock ID 这类月流水只有几千美元的小 App 仍在矩阵里运营,是「小需求也能做」的样本 <span class="tag tag-note">笔记摘要记载</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tevo</strong></td>
+            <td>东南亚(越南)</td>
+            <td>60+ 产品、1 亿+ 下载、200+ 国家;Weifu AI 500 万+ 下载 <span class="tag tag-self">自报</span></td>
+            <td>Weifu AI、AI PDF Editor</td>
+            <td>官网自称 60+ 产品覆盖 200+ 国家;产品线与模型复用方式未公开可核细节 <span class="tag tag-self">自报</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption>产品数、用户、下载、安装下限来自不同口径与日期,仅供识别规模量级,不可横向排名。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="samples">
+  <div class="wrap">
+    <h2 class="section-title">3 · 两个样本细看</h2>
+    <p class="section-lead">Codeway 看一份供应商报告里的模型更换与指标变化,HubX 看公开的工具与测试流程示意。</p>
+    <div class="grid">
+      <div class="card">
+        <h3>3a · Codeway / Learna:供应商案例里换一套语音后的指标变化</h3>
+        <p class="card-meta">Learna 是 AI 口语外教 App:场景化练习,实时纠正发音、用词、语法。</p>
+        <figure>
+          <div class="chart-title">图 4 · 换用 ElevenLabs 语音后的相对提升</div>
+          <div class="chart-sub">相对提升,不是百分点;供应商客户案例(2026-02-16),未披露试验期与样本 <span class="tag tag-self">自报</span></div>
+          <svg class="chart" viewBox="0 0 520 92" role="img" aria-label="试用转化率相对提升9%,用户生命周期价值相对提升11%">
+            <text x="0" y="30" class="lbl-strong">试用转化率</text>
+            <rect class="track" x="130" y="14" width="380" height="24"></rect>
+            <rect class="mark-1" x="130" y="14" width="311" height="24"></rect>
+            <text x="140" y="31" class="lbl-on">+9%</text>
+            <text x="0" y="78" class="lbl-strong">LTV</text>
+            <rect class="track" x="130" y="62" width="380" height="24"></rect>
+            <rect class="mark-1" x="130" y="62" width="380" height="24"></rect>
+            <text x="140" y="79" class="lbl-on">+11%</text>
+            
+          </svg>
+          <figcaption>条长按两者相对比例绘制(11% 为满长),只表示大小关系</figcaption>
+        </figure>
+        <div class="note-table" style="margin-top: var(--sp-4)">
+          <table>
+            <thead><tr><th>笔记记载的 Codeway 产品 iOS 月流水</th><th>金额</th></tr></thead>
+            <tbody>
+              <tr><td>Learna(2026-09,月下载约 200 万)</td><td>$5–6M</td></tr>
+              <tr><td>Retake(AI 修图)</td><td>≈ $2M</td></tr>
+              <tr><td>Chat AI(通用助手)</td><td>≈ $0.6M</td></tr>
+              <tr><td>Smart Noter(会议记录)</td><td>≈ $0.4M</td></tr>
+              <tr><td>TypeAI(AI 写作)</td><td>≈ $0.1M</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="card-meta" style="margin-top: var(--sp-2)"><span class="tag tag-note">笔记摘要记载</span> 原始估算未找到,因此不入图。可核的旁证:官网称 Retake 150M+ 下载、Learna 50M+ 用户 <span class="tag tag-self">自报</span>;Sensor Tower 估 Codeway 整体约 $25M/月(2026-04 博客转引,毛 / 净口径未明)<span class="tag tag-est">第三方估算</span>。</p>
+      </div>
+      <div class="card">
+        <h3>3b · HubX 公开的工具与测试流程示意</h3>
+        <p class="card-meta"><span class="tag tag-note">笔记摘要记载</span> HubX 没有超级单品、靠多点开花,2024 年成立 AI Lab 微调模型。下面的流程是依据公开描述整理的示意,不是公司披露的完整流程。</p>
+        <div class="flow" style="margin-top: var(--sp-4)">
+          <div class="flow-step"><strong>XRay 扫描</strong><span>每小时处理 App Store / Google Play 数百万 App 的数据,用统计模型估算日下载与收入</span></div>
+          <div class="flow-step"><strong>筛出机会</strong><span>在估算的下载、收入、增长趋势里找新品类机会</span></div>
+          <div class="flow-step"><strong>最小可行版本</strong><span>通过筛选后不做完整产品,只做最小可行版本并上架</span></div>
+          <div class="flow-step"><strong>付费投放测试</strong><span>上架后立即投放,验证用户的下载与付费意愿</span></div>
+          <div class="flow-step"><strong>MarketingX 预测</strong><span>从投放第一天起预测未来收入,估算 campaign 的长期盈利性</span></div>
+          <div class="flow-step flow-step-decision"><strong>止损 / 加码(整理者推断)</strong><span>按预测收益与投放成本决定停掉还是追加;公司只公开了「预测长期盈利性」这一步</span></div>
+        </div>
+        <p class="card-meta" style="margin-top: var(--sp-4)">来源:HubX 官网技术页(XRay、MarketingX 描述)<span class="tag tag-verified">已核实出处</span>;白鲸出海 2026-09 报道(最小可行版本与投放测试)<span class="tag tag-est">第三方报道</span>。笔记记载的 Home AI ≈ $0.9M、AI Video ≈ $1M iOS 月流水 <span class="tag tag-note">笔记摘要记载</span>,不入图。</p>
+        <div class="callout callout-ok" style="margin-top: var(--sp-3)">这些公开描述提供了「把每款 App 当作一次商业实验」的流程参考;测试成本、止损规则、小需求是否盈利都未公开,仍待验证。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <div class="wrap">
+    <h2 class="section-title">4 · AI 可能让工厂占优的三种机制</h2>
+    <p class="section-lead">三种可能的优势机制,不是已证明的因果;每张卡片都附一行「证据边界」:数据支持到哪里,哪里开始是推断。</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>机制 1 · 开发投入可能下降,小需求进入可试范围</h3>
+        <figure>
+          <div class="chart-title">图 5 · Bending Spoons:AI 编写或参与的代码 PR 占比</div>
+          <div class="chart-sub">F-1 招股书(2026-06-08)<span class="tag tag-verified">已核实出处</span></div>
+          <svg class="chart" viewBox="0 0 520 100" role="img" aria-label="2025年第一季度低于10%,2026年第一季度末高于90%,其中约70%完全由AI完成">
+            <text x="0" y="30" class="lbl-strong">2025 Q1</text>
+            <rect class="track" x="150" y="14" width="360" height="24"></rect>
+            <rect class="mark-2" x="150" y="14" width="36" height="24"></rect>
+            <text x="195" y="31">&lt;10%</text>
+            <text x="0" y="78" class="lbl-strong">2026 Q1 末</text>
+            <rect class="track" x="150" y="62" width="360" height="24"></rect>
+            <rect class="mark-1-soft" x="150" y="62" width="324" height="24"></rect>
+            <rect class="mark-1" x="150" y="62" width="252" height="24"></rect>
+            <text x="160" y="79" class="lbl-on">约 70% AI 独立完成</text>
+            <text x="412" y="79" class="lbl-strong">&gt;90%</text>
+            
+          </svg>
+          <figcaption>深色 = AI 独立完成,浅色 = AI 参与。条长按 10% / 90% 边界示意,实际值分别低于 / 高于该边界。同公司人均收入 $1.12M(2023)→ $2.57M(2025)</figcaption>
+        </figure>
+        <p style="margin-top: var(--sp-3)">几十款产品共享代码、模型接口、订阅系统和投放经验,单款 App 的边际投入可能进一步下降。如果开发与复用成本确实下降,类似 Rock ID(月流水约 $5K,<span class="tag tag-note">笔记摘要记载</span>)的小需求可能进入可试范围;本页没有前后成本对照,是否划算要按各家成本数据验证。</p>
+        <div class="card-boundary"><strong>证据边界:</strong>PR 参与率不等于降本率。METR 随机试验(2025-07)显示资深开发者用早期工具反而慢 19%;2026-02 续研点估计转为加速,但置信区间含零、存在选择偏差。降本幅度要按场景验证。<span class="tag tag-verified">已核实出处</span></div>
+      </div>
+      <div class="card">
+        <h3>机制 2 · 模型进步与新一批付费 App 同时出现</h3>
+        <div class="pair">
+          <div class="pair-item">
+            <h4>旧例 · Meal Snap(2011)</h4>
+            <p class="pair-big">150–614 卡</p>
+            <p>拍一小把腰果,热量估算区间宽到没法用;售价 $2.99。TechCrunch 2011-04-05 <span class="tag tag-verified">已核实出处</span></p>
+          </div>
+          <div class="pair-item">
+            <h4>新例 · Cal AI(2026)</h4>
+            <p class="pair-big">1,500 万+ 下载</p>
+            <p>MyFitnessPal 称年收入 $3,000 万+(TechCrunch 2026-03-02)<span class="tag tag-verified">已核实出处</span>;创始人自报过去 12 个月销售额 $4,000 万+ <span class="tag tag-self">自报</span>;「准确率 &gt;90%」为产品宣传 <span class="tag tag-self">自报</span>。2025-12 完成收购,条款未披露,7 人团队。</p>
+          </div>
+        </div>
+        <p style="margin-top: var(--sp-3)">AI 外教、AI 装修设计、照片转视频也属于与模型进步同时出现的商业化案例;付费是否由技术进步带来,本页没有单独证据。</p>
+        <div class="card-boundary"><strong>证据边界:</strong>旧例是记者单次测试,新例是产品宣传口径,两者不能做定量准确率对比,本卡只做「旧 vs 新」的叙事。$30M 与 $40M 的差额原因待核(可能是口径或时间窗不同,未确认)。</div>
+      </div>
+      <div class="card">
+        <h3>机制 3 · 商业化能力更像壁垒</h3>
+        <figure>
+          <div class="chart-title">图 2 复用 · 样本中两年内达 $10K 月收入的新订阅 App</div>
+          <svg class="chart" viewBox="0 0 520 70" role="img" aria-label="报告筛选样本中,4.6%的新订阅App两年内达到每月1万美元">
+            <rect class="track rx-lg" x="0" y="14" width="520" height="28"></rect>
+            <rect class="mark-1 rx-lg" x="0" y="14" width="24" height="28"></rect>
+            <text x="34" y="33" class="lbl-strong">4.6%</text>
+            <text x="110" y="33">其余 95.4% 未达 $10K/月</text>
+          </svg>
+        </figure>
+        <p style="margin-top: var(--sp-3)">每月近 1.5 万款新订阅 App 进场,报告筛选样本里绝大多数两年内连 $1K 月收入都做不到。工厂可能的优势不在写代码,而在发现需求、获取用户、持续变现——HubX 公开的 XRay 与 MarketingX(第 3b 节)是把前两件事工具化的例子。</p>
+        <ul>
+          <li><strong>平台风险:</strong>Apple 审核指南 4.3(a) 禁止同一 App 用多个 Bundle ID 重复提交;4.1(c)(2025-11-13 更新,Sora 2 克隆潮之后)禁止使用其他开发者的图标、品牌、产品名。批量复制会撞上这两条。<span class="tag tag-verified">已核实出处</span></li>
+          <li><strong>隐性成本:</strong>36kr 2026-07 报道指出,权限、数据安全、长期维护才是批量造 App 真正贵的部分。<span class="tag tag-est">第三方报道</span></li>
+        </ul>
+        <div class="card-boundary"><strong>证据边界:</strong>五家成功样本不能证明「工厂先获利」,缺失败样本与利润对照;流水不是利润,估值不是收入。本页把它当作优势假说。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="small">
+  <div class="wrap">
+    <h2 class="section-title">5 · 小团队例证:能复制的是「实验系统」,不是某个产品</h2>
+    <p class="section-lead">两个本地笔记里的个人开发者案例,都是自报数字,不可外推成年收入;它们只提供了品类选择与获客的个人经验,不能证明开发前验证流程或普遍有效性。</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>Samuel Rondo · 3 款 App 月入 $45K</h3>
+        <p class="card-meta">2025-12 视频分享 <span class="tag tag-self">自报,未独立验证</span></p>
+        <p>Use Altimis 约 $15K/月、Story Short 约 $20K/月。方法是「复制已验证的品类 + 优化 1%」:不做没人要的新东西,而是在已证明有付费需求的品类里做更好的一版。</p>
+      </div>
+      <div class="card">
+        <h3>零基础一周上架 ·《能合盖吗》</h3>
+        <p class="card-meta">2026-06 分享 <span class="tag tag-self">自报,未独立验证</span></p>
+        <p>开发者账号 ¥688,一周收入 $148;下载量主要来自一条 30 万播放的视频。作者自己的结论:「GTM 先于代码」——先想清楚用户从哪来,再决定做什么。</p>
+      </div>
+      <div class="card">
+        <h3>把工厂的做法缩小到一个人</h3>
+        <ul>
+          <li>复制的是「扫描 → 最小版本 → 投放测试 → 止损或加码」这套流程,不是某款爆品。</li>
+          <li>先验证需求再做:可先用预算受限的视频、落地页或小额投放测试需求,再决定开发投入。</li>
+          <li>止损线要把推理成本、退款、维护一起算进去;报告样本中 AI App 平均流失比非 AI 快 30%,留存是第一道坎。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gaps">
+  <div class="wrap">
+    <h2 class="section-title">6 · 口径差异与未核清单</h2>
+    <p class="section-lead">以下条目在不同来源之间有出入,或者没找到原始出处。本页不替它们拼区间、不下结论。</p>
+    <div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格">
+      <table>
+        <thead><tr><th>条目</th><th>笔记 / 自报口径</th><th>可核口径</th><th>本页处理</th></tr></thead>
+        <tbody>
+          <tr><td>Cal AI 年收入</td><td>过去 12 个月销售额 $4,000 万+(创始人)</td><td>MyFitnessPal 称年收入 $3,000 万+(TechCrunch 2026-03-02)</td><td>两者并列,差额原因待核</td></tr>
+          <tr><td>HubX 规模</td><td>笔记写「覆盖超 6 亿用户」</td><td>投资署通稿用「用户」,部分媒体用「下载」</td><td>按官方用词写「用户」,注明口径未统一</td></tr>
+          <tr><td>PictureThis 月流水</td><td>双端约 $1,200 万</td><td>Sensor Tower 基础博客 $800–1,300 万(2026);AppSprint $1,000–2,500 万;Appfigures 2022-05 净收入 &gt;$1,300 万</td><td>不拼区间,各来源分列,均为第三方估算</td></tr>
+          <tr><td>Codeway 2024 年初仅 9 款 App</td><td>笔记记载</td><td>未找到来源</td><td>仅文字,标笔记摘要记载</td></tr>
+          <tr><td>Smart Noter / TypeAI 月流水</td><td>笔记记载 ≈ $0.4M / ≈ $0.1M</td><td>未找到任何第三方估算</td><td>仅文字,不入图</td></tr>
+          <tr><td>Learna +9% / +11%</td><td>笔记写成「↑9% / ↑11%」</td><td>ElevenLabs 案例原文为相对提升(uplift),未披露试验期与样本</td><td>按 +9% / +11% 相对提升,标供应商案例</td></tr>
+          <tr><td>微信原文</td><td>—</td><td>两次抓取均失败</td><td>本页以笔记摘要为底稿,原文链接列在来源</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sources">
+  <div class="wrap">
+    <h2 class="section-title">7 · 来源</h2>
+    <ol class="sources">
+      <li>RevenueCat,《State of Subscription Apps 2026》(新上线数量、达标比例、收入份额、中位收入、AI App 付费与流失):<a href="https://www.revenuecat.com/state-of-subscription-apps" rel="noopener">revenuecat.com/state-of-subscription-apps</a></li>
+      <li>ElevenLabs 客户案例,Codeway / Learna,2026-02-16:<a href="https://elevenlabs.io/blog/codeway" rel="noopener">elevenlabs.io/blog/codeway</a></li>
+      <li>Codeway 官网(60+ 产品、600M+ 下载、Retake / Learna 数字):<a href="https://www.codeway.co/" rel="noopener">codeway.co</a></li>
+      <li>Sparrow Apps 博客,Codeway 约 $25M/月(Sensor Tower 估),2026-04-08:<a href="https://blog.sparrowapps.io/p/how-codeway-built-a-25m-month-app-empire" rel="noopener">blog.sparrowapps.io</a></li>
+      <li>土耳其投资署,HubX 成为土耳其首家 App 工作室独角兽,2026-08-31:<a href="https://www.invest.gov.tr/en/news/news-from-turkey/pages/hubx-becomes-turkiyes-first-app-studio-unicorn.aspx" rel="noopener">invest.gov.tr</a></li>
+      <li>HubX 技术页(XRay、MarketingX):<a href="https://hubx.co/technologies" rel="noopener">hubx.co/technologies</a></li>
+      <li>白鲸出海(站长之家转载),HubX 估值破 10 亿美元,2026-09-14:<a href="https://www.chinaz.com/2026/0914/1776946.shtml" rel="noopener">chinaz.com/2026/0914/1776946.shtml</a></li>
+      <li>人人都是产品经理,杭州睿琪 19 款产品年收入超 10 亿:<a href="https://www.woshipm.com/ai/6194841.html" rel="noopener">woshipm.com/ai/6194841.html</a></li>
+      <li>Google Play,AIBY 开发者页与各 App 安装量(ChatOn、ARTA、Rock ID):<a href="https://play.google.com/store/apps/dev?id=5700313618786177705" rel="noopener">play.google.com</a></li>
+      <li>Tevo 官网(60+ 产品、1 亿+ 下载):<a href="https://www.tevo.app/about" rel="noopener">tevo.app/about</a></li>
+      <li>Bending Spoons,F-1 招股书,SEC,2026-06-08(AI PR 占比、人均收入):<a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company=bending+spoons&type=F-1" rel="noopener">sec.gov(EDGAR 检索)</a></li>
+      <li>TechCrunch,Meal Snap,2011-04-05:<a href="https://techcrunch.com/2011/04/05/too-lazy-to-count-calories-now-you-can-just-take-a-picture-of-your-meal/" rel="noopener">techcrunch.com/2011/04/05</a></li>
+      <li>TechCrunch,MyFitnessPal 收购 Cal AI,2026-03-02:<a href="https://techcrunch.com/2026/03/02/myfitnesspal-has-acquired-cal-ai-the-viral-calorie-app-built-by-teens/" rel="noopener">techcrunch.com/2026/03/02</a></li>
+      <li>Apple,App Review Guidelines,4.3(a) 与 4.1(c):<a href="https://developer.apple.com/app-store/review/guidelines/" rel="noopener">developer.apple.com/app-store/review/guidelines</a></li>
+      <li>9to5Mac,Apple 收紧审核指南打击仿冒 App,2025-11-13:<a href="https://9to5mac.com/2025/11/13/apple-tightens-app-review-guidelines-to-crack-down-on-copycat-apps/" rel="noopener">9to5mac.com/2025/11/13</a></li>
+      <li>METR,《Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity》,arXiv:2507.09089,2025-07;以及 2026-02-24 实验设计更新:<a href="https://arxiv.org/abs/2507.09089" rel="noopener">arxiv.org/abs/2507.09089</a> · <a href="https://metr.org/blog/" rel="noopener">metr.org/blog</a></li>
+      <li>36 氪,《AI 批量造 App,也在批量埋雷》,2026-07:<a href="https://www.36kr.com/p/3892107686984581" rel="noopener">36kr.com/p/3892107686984581</a></li>
+      <li>36 氪,《AI 正在制造 App 过剩时代》,2026-09:<a href="https://www.36kr.com/p/3993031158889473" rel="noopener">36kr.com/p/3993031158889473</a></li>
+      <li>公众号原文(未能抓取,本页以笔记摘要为底稿):<a href="https://mp.weixin.qq.com/s/91fTFlvBbGi1rk6gSMbiAg" rel="noopener">mp.weixin.qq.com/s/91fTFlvBbGi1rk6gSMbiAg</a></li>
+      <li>本地笔记三则(Vibe Coding 革命 2026-02-06;Samuel Rondo 2025-12-13;零基础一周上架 2026-06-17):个人笔记库,未公开。</li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>整理日期 2026-10-09。本页为单文件自包含 HTML,无外部依赖;原始出处未核的笔记数字不入图;图 4 为供应商客户案例,未独立验证。标题结论为优势假说,未做因果推断。</p>
+  </div>
+</footer>
+</body>
+</html>

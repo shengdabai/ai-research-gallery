@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPU:GPU 从 1:8 到 1:1？Agent 时代算力重构核查报告</title>
+<style>
+/* ============================================================
+   TOKENS — 唯一的设计值来源。
+   结构:primitive(原始刻度) → semantic(语义角色) → 组件直接消费语义角色。
+   主题:暗色模式只在下方 @media 中覆盖语义 token。
+   断点:720px(窄屏堆叠),CSS 变量不能用于媒体查询,故在文件内统一用该字面量。
+   扩展:新增颜色/间距先加 primitive,再映射语义角色,组件不写裸值。
+   ============================================================ */
+:root {
+  /* primitive: color */
+  --c-white: #ffffff;
+  --c-gray-50: #f3f5f8;
+  --c-gray-100: #e8ecf1;
+  --c-gray-200: #d5dbe3;
+  --c-gray-500: #6b7685;
+  --c-gray-700: #3a4452;
+  --c-gray-900: #0f1720;
+  --c-night-900: #0e1116;
+  --c-night-800: #161a20;
+  --c-night-700: #222832;
+  --c-night-600: #2f3742;
+  --c-night-300: #9aa4b2;
+  --c-night-100: #dfe4ea;
+  --c-blue-450: #2a78d6;
+  --c-blue-400: #3987e5;
+  --c-blue-100: #e3eefb;
+  --c-blue-900: #14283f;
+  --c-orange-450: #eb6834;
+  --c-orange-500: #d95926;
+  --c-good: #0ca30c;
+  --c-warn: #fab219;
+  --c-crit: #d03b3b;
+  --c-good-wash: #e7f6e7;
+  --c-warn-wash: #fef3d6;
+  --c-crit-wash: #fbe6e6;
+  --c-neutral-wash: #e8ecf1;
+  --c-good-wash-dark: #12301a;
+  --c-warn-wash-dark: #3a2e0c;
+  --c-crit-wash-dark: #3a1717;
+
+  /* primitive: scale */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 72px;
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --fs-xs: 12px; --fs-sm: 13px; --fs-md: 15px; --fs-lg: 18px;
+  --fs-xl: 22px; --fs-2xl: 30px; --fs-3xl: 40px; --fs-hero: 52px;
+  --fw-normal: 400; --fw-medium: 500; --fw-bold: 650;
+  --lh-tight: 1.25; --lh-body: 1.7;
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --border-hair: 1px;
+  --bar-thick: 18px;
+  --bar-gap: 2px;
+  --measure: 1080px;
+  --label-col: 210px;
+  --value-col: 150px;
+  --label-col-compact: 130px;
+  --value-col-compact: 64px;
+  --space-hair: 1px; --space-05: 2px;
+  --radius-xs: 2px;
+  --border-accent: 3px;
+  --lh-snug: 1.6; --lh-figure: 1.1;
+  --node-basis: 150px;
+  --table-min-wide: 760px; --table-min: 680px;
+  --c-amber-700: #9a6700;
+
+  /* semantic */
+  --bg-page: var(--c-gray-50);
+  --bg-card: var(--c-white);
+  --bg-sunken: var(--c-gray-50);
+  --bg-accent-wash: var(--c-blue-100);
+  --text-primary: var(--c-gray-900);
+  --text-secondary: var(--c-gray-700);
+  --text-muted: var(--c-gray-500);
+  --line: var(--c-gray-200);
+  --line-soft: var(--c-gray-100);
+  --accent: var(--c-blue-450);
+  --series-1: var(--c-blue-450);
+  --series-2: var(--c-orange-450);
+  --track: var(--c-gray-100);
+  --status-good: var(--c-good);
+  --status-warn: var(--c-warn);
+  --status-crit: var(--c-crit);
+  --status-warn-ink: var(--c-amber-700);
+  --wash-good: var(--c-good-wash);
+  --wash-warn: var(--c-warn-wash);
+  --wash-crit: var(--c-crit-wash);
+  --wash-neutral: var(--c-neutral-wash);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: var(--c-night-900);
+    --bg-card: var(--c-night-800);
+    --bg-sunken: var(--c-night-700);
+    --bg-accent-wash: var(--c-blue-900);
+    --text-primary: var(--c-white);
+    --text-secondary: var(--c-night-100);
+    --text-muted: var(--c-night-300);
+    --line: var(--c-night-600);
+    --line-soft: var(--c-night-700);
+    --accent: var(--c-blue-400);
+    --series-1: var(--c-blue-400);
+    --series-2: var(--c-orange-500);
+    --track: var(--c-night-700);
+    --status-warn-ink: var(--c-warn);
+    --wash-good: var(--c-good-wash-dark);
+    --wash-warn: var(--c-warn-wash-dark);
+    --wash-crit: var(--c-crit-wash-dark);
+    --wash-neutral: var(--c-night-700);
+    color-scheme: dark;
+  }
+}
+
+/* ============================ BASE ============================ */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg-page); color: var(--text-primary);
+  font-family: var(--font-sans); font-size: var(--fs-md); line-height: var(--lh-body);
+}
+a { color: var(--accent); text-underline-offset: 2px; }
+h1, h2, h3 { line-height: var(--lh-tight); margin: 0; font-weight: var(--fw-bold); text-wrap: balance; }
+p { margin: 0 0 var(--space-3); }
+ul { margin: 0 0 var(--space-3); padding-left: var(--space-5); }
+li { margin-bottom: var(--space-1); }
+sup a { text-decoration: none; font-size: var(--fs-xs); padding: 0 var(--space-hair); }
+strong { font-weight: var(--fw-bold); }
+
+/* ============================ LAYOUT ============================ */
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--space-4); }
+.masthead { padding-block: var(--space-7) var(--space-5); }
+.masthead h1 { font-size: var(--fs-3xl); margin-bottom: var(--space-3); }
+.masthead .lede { font-size: var(--fs-lg); color: var(--text-secondary); max-width: 48em; }
+.meta { color: var(--text-muted); font-size: var(--fs-sm); margin-top: var(--space-3); }
+.toc { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); padding-block: var(--space-3);
+  border-top: var(--border-hair) solid var(--line); border-bottom: var(--border-hair) solid var(--line);
+  font-size: var(--fs-sm); }
+.toc a { text-decoration: none; color: var(--text-secondary); }
+.toc a:hover { color: var(--accent); }
+section { padding-block: var(--space-6); }
+section > h2 { font-size: var(--fs-2xl); margin-bottom: var(--space-2); }
+.sec-note { color: var(--text-secondary); max-width: 50em; margin-bottom: var(--space-5); }
+h3 { font-size: var(--fs-lg); margin-bottom: var(--space-3); }
+
+/* ============================ CARD ============================ */
+.card { background: var(--bg-card); border: var(--border-hair) solid var(--line);
+  border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-4); }
+.card > :last-child { margin-bottom: 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.grid-2 > .card, .grid-3 > .card { margin-bottom: 0; }
+.caption { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--space-3); }
+
+/* ============================ VERDICT (hero) ============================ */
+.verdict { background: var(--bg-accent-wash); border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-4); }
+.verdict h2 { font-size: var(--fs-xl); margin-bottom: var(--space-3); }
+.verdict p { font-size: var(--fs-lg); line-height: var(--lh-snug); margin: 0; }
+
+/* ============================ STAT TILE ============================ */
+.stat .label { font-size: var(--fs-sm); color: var(--text-secondary); }
+.stat .value { font-size: var(--fs-hero); font-weight: var(--fw-bold); line-height: var(--lh-figure); margin-block: var(--space-2); }
+.stat .note { font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+
+/* ============================ PROCESS ============================ */
+.steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+.step { background: var(--bg-card); border: var(--border-hair) solid var(--line); border-radius: var(--radius-md); padding: var(--space-4); }
+.step b { display: block; margin-bottom: var(--space-1); }
+.step span { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+/* ============================ BADGE ============================ */
+.badge { display: inline-flex; align-items: center; gap: var(--space-1); white-space: nowrap;
+  font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--text-primary);
+  padding: var(--space-05) var(--space-2); border-radius: var(--radius-sm); }
+.badge::before { font-weight: var(--fw-bold); }
+.badge.ok { background: var(--wash-good); } .badge.ok::before { content: "✓"; color: var(--status-good); }
+.badge.part { background: var(--wash-warn); } .badge.part::before { content: "◐"; color: var(--status-warn-ink); }
+.badge.no { background: var(--wash-crit); } .badge.no::before { content: "✕"; color: var(--status-crit); }
+.badge.unk { background: var(--wash-neutral); } .badge.unk::before { content: "?"; color: var(--text-muted); }
+.grade { display: inline-block; font-size: var(--fs-xs); font-weight: var(--fw-bold); color: var(--text-secondary);
+  border: var(--border-hair) solid var(--line); border-radius: var(--radius-sm); padding: 0 var(--space-1); }
+
+/* ============================ TABLE ============================ */
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+th, td { text-align: left; vertical-align: top; padding: var(--space-3) var(--space-3);
+  border-bottom: var(--border-hair) solid var(--line-soft); }
+th { color: var(--text-muted); font-weight: var(--fw-medium); white-space: nowrap; border-bottom-color: var(--line); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.t-claims { min-width: var(--table-min-wide); } .t-wide { min-width: var(--table-min); }
+
+/* ============================ BAR CHART ============================ */
+.chart-title { font-weight: var(--fw-bold); margin-bottom: var(--space-1); }
+.chart-sub { font-size: var(--fs-sm); color: var(--text-muted); margin-bottom: var(--space-4); }
+.bars { display: grid; gap: var(--space-3); }
+.bar-row { display: grid; grid-template-columns: var(--label-col) 1fr var(--value-col); align-items: center; gap: var(--space-3); }
+.grid-2 .bar-row { grid-template-columns: var(--label-col-compact) 1fr var(--value-col-compact); }
+.bar-label { font-size: var(--fs-sm); color: var(--text-secondary); }
+.bar-track { position: relative; height: var(--bar-thick); border-left: var(--border-hair) solid var(--line); }
+.bar-fill { height: 100%; width: var(--v); min-width: var(--bar-gap); background: var(--series-1);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.bar-fill.s2 { background: var(--series-2); }
+.bar-value { font-size: var(--fs-sm); font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--fs-sm); color: var(--text-secondary); margin-bottom: var(--space-3); }
+.legend i { display: inline-block; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-xs); margin-right: var(--space-1); vertical-align: calc(-1 * var(--space-hair)); background: var(--series-1); }
+.legend i.s2 { background: var(--series-2); }
+
+/* ============================ AGENT LOOP ============================ */
+.loop { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: stretch; }
+.node { flex: 1 1 var(--node-basis); border-radius: var(--radius-md); padding: var(--space-3); border: var(--border-hair) solid var(--line); background: var(--bg-sunken); }
+.node b { display: block; font-size: var(--fs-sm); }
+.node span { font-size: var(--fs-xs); color: var(--text-secondary); }
+.node .lane { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--fs-xs); font-weight: var(--fw-bold); color: var(--text-primary); margin-bottom: var(--space-1); }
+.node .lane::before { content: ""; width: var(--space-2); height: var(--space-2); border-radius: 50%; background: var(--series-1); }
+.node.cpu .lane::before { background: var(--series-2); }
+
+/* ============================ CALCULATOR ============================ */
+.calc label { display: block; font-size: var(--fs-sm); color: var(--text-secondary); margin-bottom: var(--space-2); }
+.calc input[type=range] { width: 100%; accent-color: var(--accent); }
+.calc-out { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin-top: var(--space-4); }
+.calc-out div { background: var(--bg-sunken); border-radius: var(--radius-md); padding: var(--space-3); }
+.calc-out small { display: block; color: var(--text-muted); font-size: var(--fs-xs); }
+.calc-out b { font-size: var(--fs-xl); }
+
+/* ============================ CALLOUT ============================ */
+.callout { border-left: var(--border-accent) solid var(--accent); background: var(--bg-sunken); padding: var(--space-3) var(--space-4);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-block: var(--space-4); }
+.callout p:last-child { margin: 0; }
+
+/* ============================ SOURCES ============================ */
+.sources { font-size: var(--fs-sm); padding-left: var(--space-5); }
+.sources li { margin-bottom: var(--space-2); overflow-wrap: anywhere; }
+footer { color: var(--text-muted); font-size: var(--fs-sm); padding-block: var(--space-5) var(--space-7); border-top: var(--border-hair) solid var(--line); }
+
+/* ============================ NARROW (≤720px) ============================ */
+@media (max-width: 720px) {
+  .masthead h1 { font-size: var(--fs-2xl); }
+  .masthead .lede, .verdict p { font-size: var(--fs-md); }
+  .grid-2, .grid-3, .steps, .calc-out { grid-template-columns: 1fr; }
+  .card, .verdict { padding: var(--space-4); }
+  .stat .value { font-size: var(--fs-3xl); }
+  .bar-row, .grid-2 .bar-row { grid-template-columns: 1fr auto; gap: var(--space-1) var(--space-3); }
+  .t-claims { min-width: 0; }
+  .t-claims thead { display: none; }
+  .t-claims tr { display: block; padding-block: var(--space-3); border-bottom: var(--border-hair) solid var(--line-soft); }
+  .t-claims tr:last-child { border-bottom: 0; }
+  .t-claims td { display: block; border: 0; padding: var(--space-1) 0; }
+  .t-claims td:first-child { font-weight: var(--fw-bold); font-size: var(--fs-md); }
+  .bar-label { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <h1>CPU:GPU 从 1:8 到 1:1？<br>Agent 时代算力重构核查报告</h1>
+  <p class="lede">针对一条短视频的核心论断——「Anthropic 嘉宾预测 2028 年 AI 服务器 CPU 与 GPU 比例走到 1:1,这关乎投资、职业与国运」——逐条溯源、对照一手数据,回答三个问题:这个比例是真的吗?钱会因此离开 GPU 吗?中国真的踩中风口了吗?</p>
+  <p class="meta">成稿:2026-10-01(上海时间) · 数据截至 2026-09-30 · 共引用 30 个来源,文末列出并标注证据等级 · 不构成投资建议</p>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <a href="#verdict">结论</a><a href="#process">研究流程</a><a href="#claims">论断核验</a><a href="#ratio">比例口径</a>
+  <a href="#why">机理与实测</a><a href="#money">钱往哪走</a><a href="#players">玩家对比</a><a href="#china">中国产业链</a>
+  <a href="#counter">反方与不确定性</a><a href="#scenario">2028 情景</a><a href="#sources">来源</a>
+</nav>
+
+<section id="verdict">
+  <div class="verdict">
+    <h2>一句话结论</h2>
+    <p><strong>方向是真的,归因和推论被夸大了。</strong>Agent 确实把大量工作推回 CPU,CPU 颗数配比上升有财报、产品和实测三重证据;但「2028 年 1:1」查不到 Anthropic 的公开出处,公开讲 1:1 的几乎都是卖 CPU 的公司;更关键的是,<strong>颗数 1:1 不等于金额 1:1</strong>——按厂商自己最乐观的 2030 年预测,服务器 CPU 市场仍只有 AI 加速器市场的约七分之一。</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card stat">
+      <div class="label">Vera Rubin NVL72 单机架内 CPU:GPU</div>
+      <div class="value">1 : 2</div>
+      <p class="note">36 颗 Vera CPU 配 72 颗 Rubin GPU。英伟达自己的旗舰机架早已不是 1:8。<sup><a href="#s12">[12]</a></sup></p>
+    </div>
+    <div class="card stat">
+      <div class="label">2030 年服务器 CPU 与 AI 加速器的金额比(AMD 预测)</div>
+      <div class="value">≈ 1 : 7</div>
+      <p class="note">服务器 CPU「超过 2000 亿美元」对 AI 加速器「约 1.4 万亿美元」。<sup><a href="#s7">[7]</a></sup></p>
+    </div>
+    <div class="card stat">
+      <div class="label">Anthropic 与 Akamai 的 7 年 CPU 算力合同</div>
+      <div class="value">$116 亿</div>
+      <p class="note">2026-09-24 披露,文件只写 CPU 工作负载。买方用订单投票,比任何「预测」都硬。<sup><a href="#s13">[13]</a></sup></p>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <h2>研究流程</h2>
+  <p class="sec-note">本报告按「先拆论断、再找一手、后做对比」的顺序完成,每个数字都挂到文末来源。</p>
+  <div class="steps">
+    <div class="step"><b>拆论断</b><span>把逐字稿拆成 10 条可检验的事实或推论。</span></div>
+    <div class="step"><b>溯源头</b><span>每条追到财报电话会、SEC 文件、官方新闻稿或论文原文。</span></div>
+    <div class="step"><b>对口径</b><span>区分颗数比、核数比、金额比,同口径才比较。</span></div>
+    <div class="step"><b>找反方</b><span>收集质疑 1:1 的实测与利益冲突。</span></div>
+    <div class="step"><b>推情景</b><span>给出 2028 年三种情景与可跟踪指标。</span></div>
+  </div>
+</section>
+
+<section id="claims">
+  <h2>论断核验:视频里的 10 句话</h2>
+  <p class="sec-note">判定只针对「说法与公开证据是否一致」。「查无出处」不等于嘉宾没说过,只表示无法由公开材料印证。</p>
+  <div class="card">
+    <div class="table-scroll">
+    <table class="t-claims">
+      <thead><tr><th>视频说法</th><th>判定</th><th>证据与说明</th></tr></thead>
+      <tbody>
+        <tr><td>Anthropic 的人预测 2028 年 CPU:GPU 走到 1:1</td><td><span class="badge unk">查无出处</span></td>
+          <td>中英文检索均未找到该分享的公开记录。Anthropic 的公开表态只有算力负责人 James Bradbury 称 Vera 是「解决 agentic 工作负载的有前景的一环」,没有给比例。<sup><a href="#s1">[1]</a></sup>「2028」这个时间点也没有对应的公开预测;AMD 的说法是「未来 3–5 年优于 1:1」。<sup><a href="#s6">[6]</a></sup></td></tr>
+        <tr><td>这个信息国内都没人讨论</td><td><span class="badge no">不成立</span></td>
+          <td>TrendForce 2026-04-14 已发专题;知乎、虎嗅、微博、券商研报自 4 月起密集讨论,中信证券甚至提出极端情形 8:1。<sup><a href="#s9">[9]</a><a href="#s28">[28]</a></sup></td></tr>
+        <tr><td>过去 CPU 和 GPU 大概是 1:8</td><td><span class="badge ok">基本成立</span></td>
+          <td>Intel CFO:训练场景约 7–8 颗 GPU 配 1 颗 CPU;TrendForce:现有 AI 数据中心约 1:4 到 1:8。<sup><a href="#s4">[4]</a><a href="#s9">[9]</a></sup></td></tr>
+        <tr><td>这是「总算力比」</td><td><span class="badge no">口径错误</span></td>
+          <td>行业讲的是芯片颗数(或插槽数)之比,不是算力之比。算力无法这样直接比较。</td></tr>
+        <tr><td>现在正从 1:8 往 1:4 走</td><td><span class="badge ok">成立</span></td>
+          <td>Intel CEO 陈立武 2026-04-23:「过去是 1 比 8,现在是 1 比 4,正走向对等甚至更高。」<sup><a href="#s4">[4]</a></sup></td></tr>
+        <tr><td>英伟达推出 Vera,官网写着 CPU for Agents</td><td><span class="badge ok">成立</span></td>
+          <td>2026-05-31 新闻稿标题即《NVIDIA Unveils Vera, the CPU for Agents》。<sup><a href="#s1">[1]</a></sup></td></tr>
+        <tr><td>过去 99% 是矩阵相乘,CPU 只负责开机调度</td><td><span class="badge part">修辞夸张</span></td>
+          <td>方向对(CPU 曾主要做 host 节点),但「99%」没有数据来源。</td></tr>
+        <tr><td>Agent 的工具调用、跑代码、沙箱大量发生在 CPU 侧</td><td><span class="badge ok">成立</span></td>
+          <td>两项独立实测支持:工具处理最高占端到端延迟 90.6%;Azure 生产流量中超过 27% 的请求工具耗时不低于模型推理。<sup><a href="#s10">[10]</a><a href="#s11">[11]</a></sup></td></tr>
+        <tr><td>AI 上游的钱将不再高度集中在 GPU</td><td><span class="badge no">证据不支持</span></td>
+          <td>CPU 增速很快,但基数小。金额比今天约 1:6–1:8,2030 年最乐观预测仍约 1:7,见<a href="#money">「钱往哪走」</a>。</td></tr>
+        <tr><td>中国产业积累恰好踩中风口</td><td><span class="badge part">部分成立</span></td>
+          <td>光模块确实全球领先;服务器 CPU 有完整梯队但体量小,且先进制程瓶颈与 GPU 相同;海外 CPU 出口管制较松,反而能进入中国市场竞争,见<a href="#china">「中国产业链」</a>。</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="ratio">
+  <h2>比例到底指什么:三种口径,三个答案</h2>
+  <p class="sec-note">「1:8 → 1:4 → 1:1」听起来像一条曲线,其实混了两件事:一是单台服务器/机架内部的配置变化(已经发生),二是在 GPU 机架旁边另加纯 CPU 机架(正在发生,规模未知)。</p>
+
+  <div class="card">
+    <div class="chart-title">每 1 颗 GPU 配多少颗 CPU</div>
+    <div class="chart-sub">各阶段的公开口径。前三项是已发生的配置,最后一项是厂商预期。</div>
+    <div class="bars">
+      <div class="bar-row" title="训练:约 0.13 颗 CPU / GPU"><div class="bar-label">训练服务器(8 卡机)</div><div class="bar-track"><div class="bar-fill" style="--v:12.5%"></div></div><div class="bar-value">0.13(1:8)</div></div>
+      <div class="bar-row" title="推理:约 0.25–0.33 颗 CPU / GPU"><div class="bar-label">推理部署(Intel 口径)</div><div class="bar-track"><div class="bar-fill" style="--v:25%"></div></div><div class="bar-value">0.25(1:4)</div></div>
+      <div class="bar-row" title="NVL72:36 CPU / 72 GPU"><div class="bar-label">Vera Rubin NVL72 机架实配</div><div class="bar-track"><div class="bar-fill" style="--v:50%"></div></div><div class="bar-value">0.50(1:2)</div></div>
+      <div class="bar-row" title="Agentic 预期:约 1 颗 CPU / GPU"><div class="bar-label">Agentic 预期(Intel / AMD)</div><div class="bar-track"><div class="bar-fill" style="--v:100%"></div></div><div class="bar-value">1.00(1:1)</div></div>
+    </div>
+    <p class="caption">来源:Intel 2026 Q1 电话会<sup><a href="#s4">[4]</a></sup>、AMD 2026 Q1 电话会<sup><a href="#s6">[6]</a></sup>、NVL72 规格<sup><a href="#s12">[12]</a></sup>。</p>
+  </div>
+
+  <div class="card calc">
+    <h3>自己算:要加多少 CPU 机架才到 1:1</h3>
+    <p>按公开规格:一个 NVL72 机架含 36 颗 Vera CPU 和 72 颗 Rubin GPU;一个 Vera CPU 机架含 256 颗 Vera CPU、不含 GPU。<sup><a href="#s9">[9]</a><a href="#s12">[12]</a></sup>固定 10 个 GPU 机架,拖动滑块看全场颗数比。</p>
+    <label for="rk">在 10 个 NVL72 机架旁边,加 <b id="rk-n">1</b> 个 Vera CPU 机架</label>
+    <input id="rk" type="range" min="0" max="10" step="1" value="1">
+    <div class="calc-out">
+      <div><small>CPU 颗数</small><b id="o-cpu">616</b></div>
+      <div><small>GPU 颗数</small><b id="o-gpu">720</b></div>
+      <div><small>每颗 GPU 对应 CPU</small><b id="o-ratio">0.86</b></div>
+    </div>
+    <p class="caption">算术结论:不加 CPU 机架是 1:2;大约每 7 个 GPU 机架配 1 个 CPU 机架即达到 1:1;1 配 1 时约为 4:1。只统计这两类机架里的 Vera 封装,未计入存储、网络与通用 x86 服务器中的 CPU。厂商至今没有公布「该配几个 CPU 机架」的规则。<sup><a href="#s12">[12]</a></sup></p>
+  </div>
+
+  <div class="card">
+    <h3>谁在说 1:1,他们卖什么</h3>
+    <div class="table-scroll">
+    <table class="t-wide">
+      <thead><tr><th>发言方</th><th>时间</th><th>原话要点</th><th>立场</th></tr></thead>
+      <tbody>
+        <tr><td>Intel CEO 陈立武</td><td>2026-04-23</td><td>过去 1:8,现在 1:4,走向对等甚至更高<sup><a href="#s4">[4]</a></sup></td><td>卖 CPU</td></tr>
+        <tr><td>Intel CFO Zinsner</td><td>2026-04-23</td><td>训练 7–8 GPU 配 1 CPU;推理 3–4 配 1;agentic 可能反转<sup><a href="#s4">[4]</a></sup></td><td>卖 CPU</td></tr>
+        <tr><td>AMD CEO 苏姿丰</td><td>2026-05 起</td><td>从 1:4、1:8 走向接近 1:1;未来 3–5 年「优于 1:1」<sup><a href="#s6">[6]</a></sup></td><td>卖 CPU 也卖 GPU</td></tr>
+        <tr><td>Arm CEO Haas</td><td>2026-03-24</td><td>每 GW 所需 CPU 核数从 3000 万升到 1.2 亿(4 倍)<sup><a href="#s16">[16]</a></sup></td><td>卖 CPU 与授权</td></tr>
+        <tr><td>NVIDIA 黄仁勋</td><td>2026-05</td><td>「AI agents 将成为计算的最大用户」;Vera 打开 2000 亿美元新市场<sup><a href="#s1">[1]</a><a href="#s29">[29]</a></sup></td><td>卖 GPU 也卖 CPU</td></tr>
+        <tr><td>TrendForce</td><td>2026-04-14</td><td>由 1:4–1:8 走向 1:1–1:2<sup><a href="#s9">[9]</a></sup></td><td>研究机构</td></tr>
+        <tr><td>摩根士丹利</td><td>2026-04</td><td>假设每颗 GPU 额外需要 2–3 个 CPU 密集节点<sup><a href="#s14">[14]</a></sup></td><td>卖方研究</td></tr>
+        <tr><td>Anthropic(算力负责人)</td><td>2026-05-31</td><td>正评估用 Vera 扩展 CPU 密集的 agentic 负载;未给比例<sup><a href="#s1">[1]</a></sup></td><td>买方</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><p>公开讲出「1:1」的,全部是 CPU 的卖方或引用卖方的分析师。这不代表说法是错的,但意味着这个数字至今没有来自买方或独立实验的定量验证。买方的证据是订单:Anthropic 的 116 亿美元 CPU 合同、首批 Vera 系统交付给 Anthropic、OpenAI 等。<sup><a href="#s13">[13]</a><a href="#s12">[12]</a></sup></p></div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>为什么 Agent 吃 CPU:机理与实测</h2>
+  <p class="sec-note">聊天模型是「问一句、算一次」;Agent 是一个循环,每轮都在 GPU 与 CPU 之间来回跨越。</p>
+
+  <div class="card">
+    <h3>一次 Agent 任务的执行环</h3>
+    <div class="loop">
+      <div class="node"><div class="lane">GPU</div><b>模型规划</b><span>读任务,决定下一步</span></div>
+      <div class="node cpu"><div class="lane">CPU</div><b>编排与权限</b><span>路由工具调用、检查权限、管理状态</span></div>
+      <div class="node cpu"><div class="lane">CPU</div><b>沙箱执行</b><span>跑 Bash / Python、编译、测试</span></div>
+      <div class="node cpu"><div class="lane">CPU</div><b>检索与抓取</b><span>向量检索、数据库、网页</span></div>
+      <div class="node"><div class="lane">GPU</div><b>模型读结果</b><span>评估,继续循环或输出</span></div>
+    </div>
+    <p class="caption">示意图,依据两篇实测论文对工作流的描述整理。<sup><a href="#s10">[10]</a><a href="#s11">[11]</a></sup></p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">CPU 侧工具执行占端到端延迟的比例</div>
+      <div class="chart-sub">SWE-Agent 在三个基准上的实测,以及全部受测负载的上限</div>
+      <div class="bars">
+        <div class="bar-row" title="DS-1000:43.8%"><div class="bar-label">DS-1000</div><div class="bar-track"><div class="bar-fill" style="--v:43.8%"></div></div><div class="bar-value">43.8%</div></div>
+        <div class="bar-row" title="APPS:64.7%"><div class="bar-label">APPS</div><div class="bar-track"><div class="bar-fill" style="--v:64.7%"></div></div><div class="bar-value">64.7%</div></div>
+        <div class="bar-row" title="BigCodeBench:78.7%"><div class="bar-label">BigCodeBench</div><div class="bar-track"><div class="bar-fill" style="--v:78.7%"></div></div><div class="bar-value">78.7%</div></div>
+        <div class="bar-row" title="全部负载上限:90.6%"><div class="bar-label">全部负载中的上限</div><div class="bar-track"><div class="bar-fill" style="--v:90.6%"></div></div><div class="bar-value">90.6%</div></div>
+      </div>
+      <p class="caption">佐治亚理工与 Intel 合著(5 位作者中 2 位来自 Intel),每套系统只有 1 颗 CPU 与 1 颗 GPU。另测得大批量时 CPU 动态能耗最高占 44%。<sup><a href="#s10">[10]</a><a href="#s12">[12]</a></sup></p>
+    </div>
+    <div class="card">
+      <h3>Azure 生产流量给出的另一面</h3>
+      <ul>
+        <li>24 小时生产 trace 中,<strong>超过 27%</strong> 的请求工具执行时间不低于模型推理时间。</li>
+        <li>但主机 CPU 利用率中位数只有 <strong>6%–31%</strong>(因框架而异);顺序阶段约 11%,并行构建与测试时瞬间冲到接近 100%。</li>
+        <li>GPU 计算活动低于 55%,功耗却在峰值的 50%–70%。</li>
+        <li>作者原话:<strong>没有单一的 CPU-GPU 时间比能刻画这类负载</strong>。</li>
+        <li>实验机是 96 核 EPYC 配 8 张 A100,也就是老的 1:8 形态。</li>
+      </ul>
+      <p class="caption">得州大学奥斯汀分校与微软 Azure 合作,2026-08-05 发布。<sup><a href="#s11">[11]</a></sup></p>
+    </div>
+  </div>
+  <div class="callout"><p><strong>读法:</strong>机理成立——Agent 让 CPU 上了关键路径。但两项研究量的是「一个请求的时间怎么分」,不是「机房里该放多少颗 CPU」。负载是低均值加高尖峰:按均值配会在尖峰卡住 GPU,按尖峰配又大量闲置。这正是 1:1 至今缺少实验依据的原因。</p></div>
+</section>
+
+<section id="money">
+  <h2>钱往哪走:颗数 1:1 不等于金额 1:1</h2>
+  <p class="sec-note">视频从「比例变了」直接推到「财富分配重构」。把颗数换成金额,结论会很不一样:CPU 市场在高速增长,但 GPU 市场长得同样快,而且基数大一个数量级。</p>
+
+  <div class="card">
+    <div class="chart-title">最近一个季度的数据中心业务收入(十亿美元)</div>
+    <div class="chart-sub">NVIDIA 为截至 2026-07-26 的财季;Intel、AMD 为截至 2026-06-27 的季度</div>
+    <div class="bars">
+      <div class="bar-row" title="NVIDIA 数据中心:89.0"><div class="bar-label">NVIDIA 数据中心</div><div class="bar-track"><div class="bar-fill" style="--v:100%"></div></div><div class="bar-value">89.0(同比 +117%)</div></div>
+      <div class="bar-row" title="AMD 数据中心:6.7"><div class="bar-label">AMD 数据中心(含 GPU)</div><div class="bar-track"><div class="bar-fill" style="--v:7.5%"></div></div><div class="bar-value">6.7(同比 +107%)</div></div>
+      <div class="bar-row" title="Intel DCAI:6.3"><div class="bar-label">Intel 数据中心与 AI</div><div class="bar-track"><div class="bar-fill" style="--v:7.1%"></div></div><div class="bar-value">6.3(同比 +59%)</div></div>
+    </div>
+    <p class="caption">NVIDIA 单季数据中心收入约为 Intel 与 AMD 两家数据中心收入之和的 6.8 倍(89.0 ÷ 13.0)。NVIDIA 口径含网络产品,AMD 口径含 Instinct GPU,三者不是纯 CPU 对纯 GPU 的对比。来源:NVIDIA 8-K<sup><a href="#s2">[2]</a></sup>、Intel 8-K<sup><a href="#s5">[5]</a></sup>、AMD 财报报道<sup><a href="#s8">[8]</a></sup>。</p>
+  </div>
+
+  <div class="card">
+    <div class="chart-title">2030 年服务器 CPU 市场规模预测(十亿美元)</div>
+    <div class="chart-sub">同一家公司半年内三次上调,是这轮 CPU 行情最强的信号</div>
+    <div class="bars">
+      <div class="bar-row" title="AMD 2025-11:约 60"><div class="bar-label">AMD,2025-11 分析师日</div><div class="bar-track"><div class="bar-fill" style="--v:30%"></div></div><div class="bar-value">约 60</div></div>
+      <div class="bar-row" title="AMD 2026-05:超过 120"><div class="bar-label">AMD,2026-05 财报会</div><div class="bar-track"><div class="bar-fill" style="--v:60%"></div></div><div class="bar-value">&gt; 120</div></div>
+      <div class="bar-row" title="花旗:约 132"><div class="bar-label">花旗</div><div class="bar-track"><div class="bar-fill" style="--v:66%"></div></div><div class="bar-value">约 132</div></div>
+      <div class="bar-row" title="摩根士丹利:100 以上基数加 32.5–60 增量"><div class="bar-label">摩根士丹利(含 agentic 增量)</div><div class="bar-track"><div class="bar-fill" style="--v:80%"></div></div><div class="bar-value">约 133–160</div></div>
+      <div class="bar-row" title="瑞银:约 170"><div class="bar-label">瑞银</div><div class="bar-track"><div class="bar-fill" style="--v:85%"></div></div><div class="bar-value">约 170</div></div>
+      <div class="bar-row" title="AMD 2026-07:超过 200"><div class="bar-label">AMD,2026-07 Advancing AI</div><div class="bar-track"><div class="bar-fill" style="--v:100%"></div></div><div class="bar-value">&gt; 200</div></div>
+    </div>
+    <p class="caption">来源:AMD<sup><a href="#s6">[6]</a><a href="#s7">[7]</a></sup>、摩根士丹利<sup><a href="#s14">[14]</a></sup>、花旗与瑞银(经二手转述)<sup><a href="#s25">[25]</a></sup>。摩根士丹利一栏为「超过 1000 亿美元」的基数加 325–600 亿美元增量的合计。</p>
+  </div>
+
+  <div class="card">
+    <h3>同口径比金额:今天和 2030 年都在 1:7 上下</h3>
+    <div class="table-scroll">
+    <table class="t-wide">
+      <thead><tr><th>时点</th><th class="num">服务器 CPU</th><th class="num">GPU / AI 加速器</th><th class="num">金额比</th><th>口径</th></tr></thead>
+      <tbody>
+        <tr><td>2025 年(实际)</td><td class="num">约 250–310 亿美元</td><td class="num">1937 亿美元</td><td class="num">约 1:6 – 1:8</td><td>CPU 为全市场(AMD、瑞银口径);加速器仅 NVIDIA 一家 2026 财年数据中心收入<sup><a href="#s3">[3]</a><a href="#s7">[7]</a><a href="#s25">[25]</a></sup></td></tr>
+        <tr><td>2030 年(AMD 预测)</td><td class="num">&gt; 2000 亿美元</td><td class="num">约 1.4 万亿美元</td><td class="num">约 1:7</td><td>同一场发布会上的两个 TAM<sup><a href="#s7">[7]</a></sup></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><p><strong>关键发现:</strong>即使采信 CPU 厂商自己最乐观的预测,金额比从今天到 2030 年也几乎没有收敛。原因很简单——一颗服务器 CPU 的售价是数千美元量级(摩根士丹利建模用 3000 美元)<sup><a href="#s14">[14]</a></sup>,远低于 AI 加速器(本报告未取得加速器单价的一手数据,此处只做方向判断)。苏姿丰本人的说法是 CPU 需求对加速器「基本是增量」,而不是替代。<sup><a href="#s6">[6]</a></sup>所以更准确的表述是:<strong>AI 上游多了一条高增长的 CPU 赛道,而不是钱从 GPU 搬去了 CPU。</strong></p></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>供给侧:CPU 确实紧了</h3>
+      <ul>
+        <li>Intel 称 Xeon 供不应求,未满足需求「以 B 开头」(十亿美元级);预计全行业供给紧张持续到明年。<sup><a href="#s26">[26]</a><a href="#s5">[5]</a></sup></li>
+        <li>2026 年二季度服务器处理器出货同比 +20%;AMD 份额 34.5%,Arm 架构 13.6%,均为纪录。<sup><a href="#s15">[15]</a></sup></li>
+        <li>AMD 称 2026 Q2 服务器 CPU 收入同比增长指引超过 70%。<sup><a href="#s6">[6]</a></sup></li>
+        <li>有报道称 AMD EPYC Venice 2027 年产能已售罄(单一来源,待证实)。<sup><a href="#s27">[27]</a></sup></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>机构对「怎么参与」的分歧</h3>
+      <ul>
+        <li>摩根士丹利认同瓶颈正移向 CPU 与内存,但<strong>不建议直接买 CPU 股</strong>,更偏好 NVIDIA、博通与存储,理由是 CPU 公司估值已高(23–64 倍市盈率)。<sup><a href="#s14">[14]</a></sup></li>
+        <li>受益者未必是 Intel 和 AMD:AWS 称 2025 年新增算力多数跑在自研 Graviton 上;NVIDIA Vera 与 Arm AGI CPU 都是 Arm 架构。<sup><a href="#s12">[12]</a></sup></li>
+        <li>NVIDIA 自己也在吃这块蛋糕:黄仁勋称 Vera 将成为第二大收入来源。<sup><a href="#s29">[29]</a></sup></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="players">
+  <h2>玩家对比:2026 年的服务器 CPU</h2>
+  <p class="sec-note">这轮竞争的新变量是 GPU 公司、IP 公司和云厂商同时下场做 CPU。</p>
+  <div class="card">
+    <div class="table-scroll">
+    <table class="t-wide">
+      <thead><tr><th>产品</th><th>厂商</th><th class="num">核 / 线程</th><th>制程</th><th>定位</th></tr></thead>
+      <tbody>
+        <tr><td>Xeon 6+(Clearwater Forest)</td><td>Intel</td><td class="num">288 / 288</td><td>Intel 18A</td><td>高密度能效核,去掉 AVX-512 与超线程</td></tr>
+        <tr><td>Xeon 7(Diamond Rapids)</td><td>Intel</td><td class="num">256 / 256</td><td>Intel 18A</td><td>性能核旗舰</td></tr>
+        <tr><td>EPYC Venice</td><td>AMD</td><td class="num">256 / 512</td><td>TSMC N2</td><td>线程数最高;含面向 agentic 的 Verano</td></tr>
+        <tr><td>Vera</td><td>NVIDIA</td><td class="num">88 / 176</td><td>TSMC N3</td><td>单核性能与 NVLink 直连 GPU;可独立成 256 颗 CPU 机架</td></tr>
+        <tr><td>AGI CPU</td><td>Arm</td><td class="num">136 / 136</td><td>TSMC N3</td><td>Arm 35 年来首款自研成品芯片,Meta 联合开发</td></tr>
+        <tr><td>Graviton5</td><td>AWS</td><td class="num">192 / 192</td><td>TSMC N3</td><td>云厂商自研,自用为主</td></tr>
+        <tr><td>Cobalt 200</td><td>Microsoft</td><td class="num">132 / 132</td><td>TSMC N3</td><td>云厂商自研</td></tr>
+        <tr><td>海光 C86-4G</td><td>海光信息</td><td class="num">64 / 128</td><td>7nm</td><td>x86 授权路线,国内商用市场主力 <span class="grade">C</span></td></tr>
+        <tr><td>鲲鹏 920</td><td>华为</td><td class="num">—</td><td>7nm</td><td>Arm 路线,运营商市场主力 <span class="grade">C</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="caption">海外产品来自 TrendForce 汇总<sup><a href="#s9">[9]</a></sup>;国产两款来自技术社区文章<sup><a href="#s22">[22]</a></sup>,新一代产品(海光 C86-5G、鲲鹏 950)的规格仅见于自媒体,未列入。标 C 表示证据等级较低。</p>
+  </div>
+</section>
+
+<section id="china">
+  <h2>中国产业链:哪些踩中,哪些没踩中</h2>
+  <p class="sec-note">视频的逻辑是「瓶颈从 GPU 分散到 CPU、光模块、服务器,而这些中国都有」。逐个环节看,结论有强有弱。</p>
+
+  <div class="card">
+    <div class="table-scroll">
+    <table class="t-wide">
+      <thead><tr><th>环节</th><th>判断</th><th>数据</th><th>制约</th></tr></thead>
+      <tbody>
+        <tr><td>光模块</td><td><span class="badge ok">真强项</span></td><td>LightCounting 2025 年榜单:中际旭创第 1、新易盛第 2,前十中国占 7 席<sup><a href="#s20">[20]</a></sup></td><td>DSP 芯片、EML 激光器等核心器件仍主要来自海外</td></tr>
+        <tr><td>服务器 CPU</td><td><span class="badge part">有梯队,体量小</span></td><td>海光 2026 上半年营收 90.99 亿元(+66.52%)、净利 17.98 亿元;IDC 称鲲鹏 2025 年占中国服务器市场超 22%;中国移动集采 6.29 万台服务器中 Arm 占 65%<sup><a href="#s17">[17]</a><a href="#s21">[21]</a></sup></td><td>海光半年营收约合 13 亿美元,不到 AMD 单季数据中心收入的五分之一;主力产品停在 7nm</td></tr>
+        <tr><td>AI 加速器</td><td><span class="badge part">快速追赶</span></td><td>2025 年中国加速卡出货约 400 万张,国产约 165 万张、占 41%;华为昇腾 81.2 万张<sup><a href="#s18">[18]</a></sup></td><td>先进制程产能;软件生态</td></tr>
+        <tr><td>先进制程</td><td><span class="badge no">共同瓶颈</span></td><td>国产为「等效 7nm」,密度、效率、成本仍有差距;海外新一代服务器 CPU 用 TSMC N3、N2<sup><a href="#s22">[22]</a><a href="#s9">[9]</a></sup></td><td>CPU 与 GPU 抢的是同一批受限产能</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chart-title">2025 年中国 AI 加速卡出货量(万张)</div>
+    <div class="chart-sub">IDC 口径,经媒体转述;按出货量而非金额</div>
+    <div class="legend"><span><i class="s2"></i>海外厂商</span><span><i></i>国产厂商</span></div>
+    <div class="bars">
+      <div class="bar-row" title="英伟达:约 220 万张"><div class="bar-label">英伟达</div><div class="bar-track"><div class="bar-fill s2" style="--v:100%"></div></div><div class="bar-value">约 220(55%)</div></div>
+      <div class="bar-row" title="华为昇腾:81.2 万张"><div class="bar-label">华为昇腾</div><div class="bar-track"><div class="bar-fill" style="--v:36.9%"></div></div><div class="bar-value">81.2</div></div>
+      <div class="bar-row" title="阿里平头哥:26.5 万张"><div class="bar-label">阿里平头哥</div><div class="bar-track"><div class="bar-fill" style="--v:12%"></div></div><div class="bar-value">26.5</div></div>
+      <div class="bar-row" title="百度昆仑芯:11.6 万张"><div class="bar-label">百度昆仑芯</div><div class="bar-track"><div class="bar-fill" style="--v:5.3%"></div></div><div class="bar-value">11.6</div></div>
+      <div class="bar-row" title="寒武纪:11.6 万张"><div class="bar-label">寒武纪</div><div class="bar-track"><div class="bar-fill" style="--v:5.3%"></div></div><div class="bar-value">11.6</div></div>
+      <div class="bar-row" title="海光信息:约 8.25 万张"><div class="bar-label">海光信息</div><div class="bar-track"><div class="bar-fill" style="--v:3.75%"></div></div><div class="bar-value">约 8.25</div></div>
+      <div class="bar-row" title="沐曦:约 6.6 万张"><div class="bar-label">沐曦</div><div class="bar-track"><div class="bar-fill" style="--v:3%"></div></div><div class="bar-value">约 6.6</div></div>
+      <div class="bar-row" title="天数智芯:约 5 万张"><div class="bar-label">天数智芯</div><div class="bar-track"><div class="bar-fill" style="--v:2.3%"></div></div><div class="bar-value">约 5</div></div>
+    </div>
+    <p class="caption">来源:<sup><a href="#s18">[18]</a></sup>。2026 年预测分歧大:Bernstein 按金额估英伟达份额降至约 8%、华为超 50%,TrendForce 估国产占国内高端市场近 90%,均为预测而非实际数据。<sup><a href="#s19">[19]</a></sup>NVIDIA 最新季报称对华 Hopper 产品出货不足数据中心收入的 1%。<sup><a href="#s2">[2]</a></sup></p>
+  </div>
+
+  <div class="card">
+    <h3>被视频忽略的三个反向因素</h3>
+    <ul>
+      <li><strong>CPU 管制更松,对国产是双刃剑。</strong>服务器 CPU 的出口限制比先进 GPU 轻。路透社报道 NVIDIA 已向中国客户推销 Vera,阿里与字节跳动在官方合作名单中。<sup><a href="#s23">[23]</a><a href="#s1">[1]</a></sup>GPU 买不到,国产替代是刚需;CPU 买得到,国产就要正面拼性能与生态。</li>
+      <li><strong>规则仍在收紧。</strong>美国商务部 2026-05-31 指引重申:向总部在中国的实体(含其海外子公司)出口先进计算产品须申请许可。<sup><a href="#s24">[24]</a></sup>后续是否延伸到高端 CPU 是未知数。</li>
+      <li><strong>制程不分 CPU、GPU。</strong>Agent 需要的是高核数、高内存带宽的先进 CPU,同样依赖先进制程与先进封装。瓶颈「分散」到 CPU,并没有绕开制造这一关。<sup><a href="#s22">[22]</a></sup></li>
+    </ul>
+    <div class="callout"><p><strong>判断:</strong>「中国踩中风口」对光模块等环节成立,对服务器 CPU 只能说「有牌可打」。更稳妥的说法是:Agent 让国内信创 CPU 多了一个增量场景(海光、鲲鹏的增速已经体现),但全球 CPU 增量的大头,目前流向 AMD、Intel、NVIDIA、Arm 与云厂商自研。</p></div>
+  </div>
+</section>
+
+<section id="counter">
+  <h2>反方与不确定性</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>质疑 1:1 的理由</h3>
+      <ul>
+        <li>没有任何已发表研究改变过 CPU:GPU 配比做对照实验;两项实测都在固定配置上测「时间怎么分」。<sup><a href="#s12">[12]</a></sup></li>
+        <li>CPU 平均利用率低、尖峰高,可通过调度、超卖、核池化提高利用率,而不必堆硬件。Azure 论文的原型系统正是这么做的。<sup><a href="#s11">[11]</a></sup></li>
+        <li>NVIDIA「比 x86 快 1.8 倍」的 agentic 基准被独立分析指出是 4 项常规整数测试,整机差距约 3%。<sup><a href="#s12">[12]</a></sup></li>
+        <li>按功耗而非颗数来衡量可能更合理;AMD 自己的机架分析就是按 100kW 归一。<sup><a href="#s12">[12]</a></sup></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>可能让趋势落空的变量</h3>
+      <ul>
+        <li>Agent 落地不及预期:德勤调查显示仅 11% 的组织已在生产中使用 AI agent,38% 在试点。<sup><a href="#s30">[30]</a></sup></li>
+        <li>云厂商资本开支放缓,或 agent 工具执行被搬到端侧与用户本机。</li>
+        <li>旧服务器 CPU 足以承担大量工具负载,新增需求被存量吸收。<sup><a href="#s12">[12]</a></sup></li>
+        <li>Intel 18A 良率与 TSMC 先进产能分配决定供给能否跟上。<sup><a href="#s9">[9]</a></sup></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="scenario">
+  <h2>2028 年三种情景与跟踪指标</h2>
+  <p class="sec-note">以下为本报告的分析判断,不是引用数据。</p>
+  <div class="card">
+    <div class="table-scroll">
+    <table class="t-wide">
+      <thead><tr><th>情景</th><th>全场颗数比</th><th>出现条件</th><th>对应的机房形态</th></tr></thead>
+      <tbody>
+        <tr><td><strong>保守</strong></td><td>1:2 到 1:1.5</td><td>Agent 以企业试点为主,调度优化吸收大部分尖峰</td><td>GPU 机架内 1:2 不变,CPU 机架少量追加</td></tr>
+        <tr><td><strong>基准</strong></td><td>约 1:1</td><td>编码与通用 agent 成为主流负载,头部实验室继续签 CPU 长约</td><td>约每 7 个 GPU 机架配 1 个 CPU 机架</td></tr>
+        <tr><td><strong>激进</strong></td><td>CPU 多于 GPU</td><td>多智能体与强化学习环境大规模并行</td><td>CPU 机架与 GPU 机架 1 比 3 以内</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>倾向性判断:以 Anthropic、OpenAI 这类 agent 流量最重的买方为样本,2028 年颗数接近 1:1 是可信的;推广到「全行业 AI 服务器」则偏乐观。无论哪种情景,金额重心仍在加速器。</p>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>值得持续跟踪的指标</h3>
+      <ul>
+        <li>Intel DCAI 与 AMD 服务器 CPU 的季度增速能否维持在 50% 以上。</li>
+        <li>NVIDIA 是否单独披露 Vera 收入(200 亿美元目标的口径各家报道不一)。<sup><a href="#s29">[29]</a></sup></li>
+        <li>是否有云厂商或实验室公布实际的 CPU 机架配比。</li>
+        <li>海光、鲲鹏的营收增速与国产先进制程产能。</li>
+        <li>美国对高端服务器 CPU 的出口规则是否变化。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>这份结论怎么用</h3>
+      <ul>
+        <li><strong>看投资叙事:</strong>把「比例」换成「金额」再判断;趋势成立不等于相关公司估值便宜。</li>
+        <li><strong>看职业方向:</strong>CPU 侧的增量其实是软件问题——沙箱、编排、调度、权限、检索,这些 agent 基础设施能力的需求是确定的。</li>
+        <li><strong>看信息源:</strong>「硅谷一手消息」先问三件事:原话在哪、谁在卖什么、数字是哪种口径。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <h2>来源与证据等级</h2>
+  <p class="sec-note"><span class="grade">A</span> 一手材料(SEC 文件、官方新闻稿、论文原文) · <span class="grade">B</span> 权威媒体或研究机构对一手材料的报道 · <span class="grade">C</span> 二手转述、自媒体或利益相关方博客。</p>
+  <div class="card">
+  <ol class="sources">
+    <li id="s1"><span class="grade">A</span> NVIDIA 新闻稿《NVIDIA Unveils Vera, the CPU for Agents》,2026-05-31。<a href="https://nvidianews.nvidia.com/news/nvidia-unveils-vera-the-cpu-for-agents">nvidianews.nvidia.com</a></li>
+    <li id="s2"><span class="grade">A</span> NVIDIA 2027 财年 Q2 业绩 8-K,2026-08-26。<a href="https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm">sec.gov</a></li>
+    <li id="s3"><span class="grade">A</span> NVIDIA 2026 财年 Q4 及全年业绩(数据中心收入 1937 亿美元)。<a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026">nvidianews.nvidia.com</a></li>
+    <li id="s4"><span class="grade">B</span> Intel 2026 Q1 电话会实录(2026-04-23)与 TrendForce 报道。各转录稿对发言人标注有出入,本报告采用多数转录稿与 TrendForce 的归属。<a href="https://www.fool.com/earnings/call-transcripts/2026/04/23/intel-intc-q1-2026-earnings-transcript/">fool.com</a> · <a href="https://www.trendforce.com/news/2026/04/24/news-intel-says-ai-inference-pushes-cpu-ratio-from-18-toward-11-18a-yield-target-reportedly-advanced-by-6-months-to-mid-year/">trendforce.com</a></li>
+    <li id="s5"><span class="grade">A</span> Intel 2026 Q2 业绩 8-K(DCAI 收入 63 亿美元,+59%)。<a href="https://www.sec.gov/Archives/edgar/data/0000050863/000005086326000155/q226earningsrelease.htm">sec.gov</a></li>
+    <li id="s6"><span class="grade">B</span> AMD 2026 Q1 电话会报道:TAM 上调与配比表述。<a href="https://www.cnbc.com/2026/05/06/amd-lisa-su-stock-forecast-earnings.html">cnbc.com</a> · <a href="https://www.benzinga.com/markets/tech/26/05/52311020/amd-lisa-su-ai-server-cpu-boom-120bn-revenue-opportunity">benzinga.com</a> · <a href="https://wccftech.com/amds-lisa-su-pushes-back-on-gpu-cannibalization-fears-calling-agentic-ais-cpu-surge-largely-additive-to-accelerator-demand/">wccftech.com</a></li>
+    <li id="s7"><span class="grade">B</span> AMD Advancing AI 2026(2026-07-23)主题演讲实录与报道:服务器 CPU 超 2000 亿美元(当前基数约 250 亿)、AI 加速器约 1.4 万亿美元。<a href="https://www.investing.com/news/transcripts/amd-at-advancing-ai-2026-keynote-a-bigger-bet-on-scale-93CH-4809800">investing.com</a> · <a href="https://www.business-standard.com/technology/tech-news/amd-sees-compute-market-zooming-to-2-trn-by-2030-launches-new-products-126072400507_1.html">business-standard.com</a></li>
+    <li id="s8"><span class="grade">B</span> AMD 2026 Q2 业绩报道(数据中心收入 67 亿美元,+107%);未直接核对 AMD 原始公告。<a href="https://stocktwits.com/news-articles/markets/equity/lisa-su-customers-want-more-compute-tremendous-momentum-amd-data-center/cZo4M2NRJID">stocktwits.com</a></li>
+    <li id="s9"><span class="grade">B</span> TrendForce《The Great Rebalance: How Agentic AI Is Reshaping the CPU:GPU Ratio》,2026-04-14。<a href="https://insights.trendforce.com/p/agentic-ai-cpu-gpu">insights.trendforce.com</a></li>
+    <li id="s10"><span class="grade">A</span> 论文《A CPU-Centric Perspective on Agentic AI》,arXiv 2511.00739(佐治亚理工与 Intel)。<a href="https://arxiv.org/abs/2511.00739">arxiv.org</a></li>
+    <li id="s11"><span class="grade">A</span> 论文《Architectural Implications of Agentic AI Workflows》,arXiv 2608.04458,2026-08-05(含 Azure 生产 trace)。<a href="https://arxiv.org/abs/2608.04458">arxiv.org</a></li>
+    <li id="s12"><span class="grade">C</span> BuySellRam《Do AI Agents Really Need One CPU per GPU?》,2026-08-18。二手硬件商博客,但逐项引用 NVIDIA、Arm、AMD 规格页;机架算术已由本报告复算。<a href="https://www.buysellram.com/blog/do-ai-agents-really-need-one-cpu-per-gpu/">buysellram.com</a></li>
+    <li id="s13"><span class="grade">B</span> Akamai 8-K(2026-09-24)报道:Anthropic 7 年约 116 亿美元 CPU 算力承诺,可追加至约 200 亿。<a href="https://www.datacenterdynamics.com/en/news/akamai-signs-116bn-compute-deal-with-anthropic/">datacenterdynamics.com</a></li>
+    <li id="s14"><span class="grade">B</span> 路透社:摩根士丹利称 agentic AI 将芯片支出扩展到 CPU,2026-04。<a href="https://finance.yahoo.com/sectors/technology/articles/morgan-stanley-sees-agentic-ai-081758905.html">finance.yahoo.com</a> · <a href="https://www.tradingkey.com/analysis/stocks/us-stocks/261902902-agentic-ai-claude-anthropic-cpu-gpu-openclaw-nvidia-amd-sndk-tradingkey">tradingkey.com</a></li>
+    <li id="s15"><span class="grade">B</span> The Register:Mercury Research 2026 Q2 份额数据,2026-08-21。<a href="https://www.theregister.com/systems/2026/08/21/amd-grabs-more-cpu-share-while-pricier-pcs-punish-desktop-demand/5291053">theregister.com</a></li>
+    <li id="s16"><span class="grade">B</span> Data Center Knowledge:Arm 发布 AGI CPU 与每 GW 核数估算,2026-03-24。<a href="https://www.datacenterknowledge.com/data-center-chips/arm-enters-data-center-chip-fray-with-agi-cpu-for-ai-infrastructure">datacenterknowledge.com</a></li>
+    <li id="s17"><span class="grade">B</span> 海光信息 2026 年半年报报道。<a href="https://www.ithome.com/0/989/391.htm">ithome.com</a> · <a href="https://finance.sina.com.cn/tech/roll/2026-08-17/doc-ininruyf6769682.shtml">finance.sina.com.cn</a></li>
+    <li id="s18"><span class="grade">C</span> 2025 年中国 AI 加速卡出货结构(IDC 口径的媒体转述)。<a href="https://finance.sina.com.cn/roll/2026-05-14/doc-inhxvihv4081907.shtml">finance.sina.com.cn</a> · <a href="https://36kr.com/p/3767894822925058">36kr.com</a></li>
+    <li id="s19"><span class="grade">C</span> Bernstein 与 TrendForce 对 2026 年中国 AI 芯片份额的预测(媒体转述)。<a href="https://www.esmchina.com/news/14475.html">esmchina.com</a> · <a href="https://www.199it.com/archives/1799670.html">199it.com</a></li>
+    <li id="s20"><span class="grade">B</span> LightCounting 2025 年光模块厂商排名报道,2026-05-28。<a href="https://finance.sina.com.cn/stock/bxjj/2026-05-28/doc-inhzmtwq0182462.shtml">finance.sina.com.cn</a></li>
+    <li id="s21"><span class="grade">B</span> 观察者网:中国移动集采服务器 Arm 占比升至 65%;IDC 鲲鹏份额为社区文章转述(C)。<a href="https://www.guancha.cn/economy/2026_04_20_814249.shtml">guancha.cn</a> · <a href="https://hwcomputing.csdn.net/6a4384ef662f9a54cb86d7db.html">hwcomputing.csdn.net</a></li>
+    <li id="s22"><span class="grade">B</span> 财富中文网《国产先进制程芯片的最新突围》,2026-03;国产 CPU 规格来自技术社区(C)。<a href="https://www.fortunechina.com/shangye/c/2026-03/17/content_472799.htm">fortunechina.com</a> · <a href="https://www.xcc.com/news/detail/5572201">xcc.com</a></li>
+    <li id="s23"><span class="grade">B</span> The Next Web(引路透社):NVIDIA 向中国客户推销 Vera CPU。<a href="https://thenextweb.com/news/nvidia-vera-cpu-china">thenextweb.com</a></li>
+    <li id="s24"><span class="grade">B</span> Holland &amp; Knight:BIS 2026-05-31 先进计算产品许可指引解读。<a href="https://www.hklaw.com/en/insights/publications/2026/06/bis-publishes-guidance-license-requirements-advanced-computing-items">hklaw.com</a></li>
+    <li id="s25"><span class="grade">C</span> 瑞银(2025 年 310 亿 → 2030 年 1700 亿美元)与花旗(1320 亿美元)预测的转述。<a href="https://www.indmoney.com/blog/us-stocks/cpu-revival-agentic-ai-amd-server-chip-supercycle">indmoney.com</a> · <a href="https://io-fund.com/ai-stocks/ai-cpu-gold-rush-amd-intel-nvidia-arm">io-fund.com</a></li>
+    <li id="s26"><span class="grade">B</span> Tom's Hardware:Intel 称配比由 1:8 收紧到 1:4,Xeon 供给受限,2026-04-24。<a href="https://www.tomshardware.com/pc-components/cpus/shifting-need-for-cpus-in-ai-workloads-drives-intensifying-shortages-price-hikes">tomshardware.com</a></li>
+    <li id="s27"><span class="grade">C</span> TechTimes:AMD EPYC Venice 2027 年供给售罄,2026-09-30。<a href="https://www.techtimes.com/articles/328325/20260930/amd-epyc-venice-supply-exhausted-2027-agentic-ai-drives-server-cpu-crunch.htm">techtimes.com</a></li>
+    <li id="s28"><span class="grade">C</span> 国内已有讨论的例证。<a href="https://zhuanlan.zhihu.com/p/2049059358676456681">zhuanlan.zhihu.com</a> · <a href="https://www.huxiu.com/article/4893583.html">huxiu.com</a></li>
+    <li id="s29"><span class="grade">B</span> NVIDIA 2027 财年 Q1 电话会:Vera 打开 2000 亿美元 TAM;200 亿美元收入的表述各家报道不一。<a href="https://dataconomy.com/2026/05/21/nvidia-vera-cpu-jensen-huang-91-billion-revenue/">dataconomy.com</a> · <a href="https://www.fool.com/investing/2026/06/26/jensen-huang-nvidias-china-zero-20-billion-plan/">fool.com</a></li>
+    <li id="s30"><span class="grade">B</span> Moor Insights &amp; Strategy 对 AMD Advancing AI 的评述(引德勤 Tech Trends 2026)。<a href="https://moorinsightsstrategy.com/field-notes/amd-advancing-ai-2026-helios-ships-venice-swings-and-the-software-moat-narrows/">moorinsightsstrategy.com</a></li>
+  </ol>
+  </div>
+</section>
+
+<footer>
+  <p><strong>方法与局限。</strong>① 视频所称的 Anthropic 嘉宾分享未找到公开记录,相关判断只基于可检索材料。② 美银、Evercore、中信证券等机构的配比预测只见于二手转述,未列入图表。③ 服务器整机、交换机、内存三个环节的中国份额本次未取得权威数据,未做判断。④ 人民币折美元按 7.0–7.2 粗算。⑤ 金额对比中各公司财年与业务口径不完全一致,已在图注说明。⑥ 情景部分是分析判断,不是预测数据。</p>
+  <p>样式说明:全部设计值来自文件顶部的 token 定义;柱宽等由数据驱动的数值以内联自定义属性传入。</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  var CPU_PER_GPU_RACK = 36, GPU_PER_GPU_RACK = 72, CPU_PER_CPU_RACK = 256, GPU_RACKS = 10;
+  var input = document.getElementById('rk');
+  function render() {
+    var n = Number(input.value);
+    var cpu = CPU_PER_GPU_RACK * GPU_RACKS + CPU_PER_CPU_RACK * n;
+    var gpu = GPU_PER_GPU_RACK * GPU_RACKS;
+    document.getElementById('rk-n').textContent = n;
+    document.getElementById('o-cpu').textContent = cpu.toLocaleString('en-US');
+    document.getElementById('o-gpu').textContent = gpu.toLocaleString('en-US');
+    document.getElementById('o-ratio').textContent = (cpu / gpu).toFixed(2);
+  }
+  input.addEventListener('input', render);
+  render();
+})();
+</script>
+</body>
+</html>

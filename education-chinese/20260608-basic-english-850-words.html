@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="Basic English · 奥格登的 850 词系统">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260608-1616-Basic English · 奥格登的 850 词系统</title>
+<style>
+  :root{
+    --bg:#f4f1ea;--ink:#1e1b16;--muted:#6b6358;--paper:#fffdf7;
+    --line:#d8d0c0;--accent:#b3541e;--accent2:#1f5c52;--gold:#9a7b22;
+    --noun:#1f5c52;--noun2:#3a7d6f;--adj:#b3541e;--op:#5b4a8a;--intl:#9a7b22;
+    --shadow:0 1px 0 rgba(0,0,0,.04),0 8px 24px -12px rgba(60,40,20,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Songti SC","Noto Serif SC",Georgia,serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent);color:#fff}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    position:relative;overflow:hidden;
+    padding:88px 24px 64px;text-align:center;
+    background:
+      radial-gradient(ellipse at 50% -10%,rgba(179,84,30,.10),transparent 60%),
+      linear-gradient(180deg,#faf6ee,#f4f1ea);
+    border-bottom:1px solid var(--line);
+  }
+  .kicker{
+    font-size:13px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:18px;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  header.hero h1{
+    font-size:clamp(38px,7vw,76px);line-height:1.02;font-weight:800;
+    letter-spacing:-.02em;margin-bottom:8px;
+  }
+  header.hero .sub{
+    font-size:clamp(16px,2.4vw,22px);color:var(--muted);font-style:italic;
+    max-width:680px;margin:14px auto 0;
+  }
+  .acronym{
+    margin:36px auto 0;display:flex;gap:0;flex-wrap:wrap;justify-content:center;
+    max-width:760px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:var(--paper);box-shadow:var(--shadow);
+  }
+  .acronym div{flex:1;min-width:120px;padding:16px 10px;border-right:1px solid var(--line)}
+  .acronym div:last-child{border-right:0}
+  .acronym b{display:block;font-size:30px;color:var(--accent);font-weight:800}
+  .acronym span{font-size:13px;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif}
+
+  .stat-row{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:40px auto 0;max-width:760px}
+  .stat{padding:0 28px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0}
+  .stat .n{font-size:42px;font-weight:800;color:var(--accent2);line-height:1}
+  .stat .l{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;background:rgba(250,246,238,.92);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    display:flex;gap:4px;overflow-x:auto;padding:10px 16px;
+    font-family:ui-sans-serif,system-ui,sans-serif;
+  }
+  nav a{
+    white-space:nowrap;color:var(--muted);text-decoration:none;font-size:13.5px;
+    padding:7px 14px;border-radius:999px;font-weight:600;transition:.18s;
+  }
+  nav a:hover{color:var(--ink);background:rgba(179,84,30,.08)}
+
+  /* ---------- Layout ---------- */
+  main{max-width:1080px;margin:0 auto;padding:0 24px 100px}
+  section{padding:64px 0 8px;border-bottom:1px dashed var(--line)}
+  section:last-child{border-bottom:0}
+  .sec-num{font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;letter-spacing:.2em;color:var(--accent);font-weight:700}
+  h2{font-size:clamp(28px,4.4vw,42px);font-weight:800;letter-spacing:-.015em;margin:6px 0 22px}
+  h3{font-size:22px;font-weight:700;margin:34px 0 12px;color:var(--accent2)}
+  p{margin:0 0 16px;font-size:17.5px;color:#312c25}
+  p.lead{font-size:20px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  strong{color:var(--ink)}
+  em.k{font-style:normal;background:rgba(154,123,34,.16);padding:1px 6px;border-radius:5px;font-weight:600}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px 26px;box-shadow:var(--shadow);margin:18px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+
+  ul.clean{list-style:none;margin:10px 0 18px}
+  ul.clean li{padding:8px 0 8px 30px;position:relative;border-bottom:1px solid var(--line);font-size:16.5px}
+  ul.clean li:last-child{border-bottom:0}
+  ul.clean li::before{content:"";position:absolute;left:6px;top:16px;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+  ul.clean li b{color:var(--accent2)}
+
+  /* ---------- Operator showcase ---------- */
+  .ops-18{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+  .ops-18 span{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:15px;font-weight:700;
+    background:linear-gradient(180deg,#fff,#f3eee2);border:1px solid var(--line);
+    color:var(--op);padding:8px 14px;border-radius:9px;box-shadow:var(--shadow);
+  }
+
+  /* ---------- table ---------- */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+  th{background:#f0ece2;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  tr:last-child td{border-bottom:0}
+  td.basic{color:var(--accent2);font-weight:600}
+  td code{background:rgba(91,74,138,.1);color:var(--op);padding:2px 7px;border-radius:5px;font-size:14px}
+
+  /* ---------- vocab ---------- */
+  .vocab-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 8px;font-family:ui-sans-serif,system-ui,sans-serif}
+  #search{
+    flex:1;min-width:200px;padding:13px 18px;border:1px solid var(--line);border-radius:11px;
+    font-size:16px;background:var(--paper);color:var(--ink);font-family:inherit;
+  }
+  #search:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .filter-btn{
+    padding:11px 16px;border:1px solid var(--line);background:var(--paper);color:var(--muted);
+    border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;
+  }
+  .filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .filter-btn:hover{border-color:var(--accent)}
+  #count{font-size:14px;color:var(--muted);margin-left:auto}
+
+  .word-block{margin:30px 0}
+  .word-block-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px;flex-wrap:wrap}
+  .pill{font-family:ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;color:#fff;letter-spacing:.04em}
+  .pill.noun{background:var(--noun)} .pill.noun2{background:var(--noun2)}
+  .pill.adj{background:var(--adj)} .pill.adj2{background:#c9772f}
+  .pill.op{background:var(--op)} .pill.intl{background:var(--intl)}
+  .word-block h4{font-size:19px;font-weight:700;display:inline}
+  .wb-count{font-size:13px;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif}
+  .word-block p.desc{font-size:15px;color:var(--muted);margin:4px 0 12px}
+
+  .words{display:flex;flex-wrap:wrap;gap:7px}
+  .w{
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:14.5px;
+    background:var(--paper);border:1px solid var(--line);padding:5px 11px;border-radius:8px;
+    transition:.12s;cursor:default;
+  }
+  .w:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow)}
+  .w.hide{display:none}
+  .w.hit{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .word-block.empty{display:none}
+  /* table-row vocab */
+  .table-head,.row{display:grid;grid-template-columns:minmax(120px,1.4fr) minmax(120px,1.5fr) 64px 2fr;gap:14px;align-items:baseline}
+  .table-head{padding:9px 14px;margin-top:4px;font-family:ui-sans-serif,system-ui,sans-serif;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line)}
+  .rows{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;overflow:hidden}
+  .row{padding:11px 14px;border-bottom:1px solid var(--line);transition:background .12s}
+  .row:last-child{border-bottom:0}
+  .row:nth-child(even){background:rgba(216,208,192,.14)}
+  .row:hover{background:rgba(179,84,30,.07)}
+  .row.hide{display:none}
+  .c-w{font-family:ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:16px;color:var(--ink)}
+  .c-ipa{font-family:"Charis SIL","Doulos SIL","Gentium Plus","Times New Roman",serif;font-size:15px;color:var(--accent2)}
+  .c-pos{font-family:ui-sans-serif,system-ui,sans-serif;font-size:12.5px;color:#fff;background:var(--gold);border-radius:5px;padding:1px 0;text-align:center;justify-self:start;min-width:42px;line-height:1.8}
+  .c-zh{font-size:15.5px;color:#312c25}
+  .row.hit .c-w{color:var(--accent)}
+  mark{background:rgba(154,123,34,.32);color:inherit;border-radius:3px;padding:0 1px}
+  @media(max-width:640px){
+    .table-head{display:none}
+    .row{grid-template-columns:1fr auto;grid-template-areas:"w pos" "ipa pos" "zh zh";gap:3px 12px;row-gap:2px}
+    .c-w{grid-area:w}.c-ipa{grid-area:ipa}.c-pos{grid-area:pos;align-self:start}.c-zh{grid-area:zh;margin-top:4px}
+  }
+
+  .callout{border-left:4px solid var(--accent);background:rgba(179,84,30,.05);padding:16px 20px;border-radius:0 10px 10px 0;margin:18px 0}
+  .quote{font-style:italic;font-size:21px;color:var(--accent2);text-align:center;max-width:760px;margin:30px auto;line-height:1.5}
+  .quote span{display:block;font-size:14px;color:var(--muted);font-style:normal;margin-top:10px;font-family:ui-sans-serif,system-ui,sans-serif}
+
+  footer{text-align:center;padding:50px 24px;color:var(--muted);font-size:14px;font-family:ui-sans-serif,system-ui,sans-serif;background:#faf6ee;border-top:1px solid var(--line)}
+  footer a{color:var(--accent2)}
+  .src{max-width:760px;margin:14px auto 0;font-size:12.5px;line-height:1.9;text-align:left}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker">C. K. Ogden · 1930</div>
+  <h1>Basic English</h1>
+  <p class="sub">用 850 个英文单词,表达人类几乎所有的意思 —— 一套被精心削减到极限的"最小完备词汇"</p>
+
+  <div class="acronym">
+    <div><b>B</b><span>British</span></div>
+    <div><b>A</b><span>American</span></div>
+    <div><b>S</b><span>Scientific</span></div>
+    <div><b>I</b><span>International</span></div>
+    <div><b>C</b><span>Commercial</span></div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n">850</div><div class="l">核心词</div></div>
+    <div class="stat"><div class="n">18</div><div class="l">动词(操作词)</div></div>
+    <div class="stat"><div class="n">600</div><div class="l">名词</div></div>
+    <div class="stat"><div class="n">~90%</div><div class="l">日常意义覆盖</div></div>
+  </div>
+</header>
+
+<nav>
+  <a href="#idea">核心理念</a>
+  <a href="#why">为什么是 850</a>
+  <a href="#operators">18 个动词</a>
+  <a href="#rules">语法规则</a>
+  <a href="#paraphrase">如何表达万物</a>
+  <a href="#supplement">扩展词表</a>
+  <a href="#vocab">★ 完整词汇表</a>
+</nav>
+
+<main>
+
+<!-- ========== 核心理念 ========== -->
+<section id="idea">
+  <div class="sec-num">01 — THE IDEA</div>
+  <h2>核心理念:语言的"最小完备集"</h2>
+  <p class="lead">查尔斯·凯·奥格登(Charles Kay Ogden,1889–1957)是英国语言学家与哲学家,《意义之意义》(The Meaning of Meaning)的合著者。1930 年,他在《Basic English: A General Introduction with Rules and Grammar》一书中提出了一个激进的主张:</p>
+
+  <div class="quote">
+    “一本约 25,000 词的英语词典里,大约 90% 的概念,都可以用其中精心挑选的 850 个词重新表达出来。”
+    <span>—— 奥格登的"削减论"</span>
+  </div>
+
+  <p>他的逻辑是:大部分单词其实是<strong>冗余的</strong> —— 任何一个能被几个更简单的词"定义出来"的词,本质上都不是必需的。把这些可被定义、可被替换的词全部剥离,剩下的就是一组<strong>不可再简化的最小词汇</strong>。这 850 个词不是随便挑的"常用词",而是一套经过逻辑筛选的<em class="k">完备基底</em>:其余的意思都能由它们组合"搭建"出来。</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">两个目的</h3>
+      <ul class="clean">
+        <li><b>国际辅助语</b> —— 给商业、科学、外交一套低门槛的跨国通用语</li>
+        <li><b>英语教学的第一级台阶</b> —— 与"取代英语"的世界语(Esperanto)不同,Basic 是真正英语的子集,学完可无缝进入完整英语</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">关键机制:释义法(Paraphrasis)</h3>
+      <p style="margin:0">复杂的意思不是去"记一个新词",而是用基础词<strong>当场拼装出来</strong>。翻译技术叫<em class="k">竖向翻译</em>:逐句改写,把任何不在表内的词,换成表内词的等价说法(专有名词允许保留)。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 为什么 850 ========== -->
+<section id="why">
+  <div class="sec-num">02 — THE STRUCTURE</div>
+  <h2>850 词是怎么拆分的</h2>
+  <p>这 850 个词并非平铺,而是按奥格登独特的逻辑分成三大类。最反直觉的一点是:这套系统里<strong>几乎没有"动词"这个类别</strong>。</p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="pill op">OPERATIONS · 100</span>
+      <h3 style="margin-top:10px">操作词 100 个</h3>
+      <p style="margin:0;font-size:16px">包含全套系统里仅有的 <strong>18 个"动词"(operators)</strong>,加上介词、方向词、代词、连词、冠词、限定词、副词等"功能词"。这是整套语言的"骨架"。</p>
+    </div>
+    <div class="card">
+      <span class="pill noun">THINGS · 600</span>
+      <h3 style="margin-top:10px">名词 600 个</h3>
+      <p style="margin:0;font-size:16px"><strong>400 个抽象/一般名词</strong>(account、idea、power…)+ <strong>200 个"可画出来"的具体名词</strong>(apple、arm、clock…)。名词是英语里最规则、最容易学的部分。</p>
+    </div>
+    <div class="card">
+      <span class="pill adj">QUALITIES · 150</span>
+      <h3 style="margin-top:10px">形容词 150 个</h3>
+      <p style="margin:0;font-size:16px"><strong>100 个一般性质词</strong>(able、clean、good…)+ <strong>50 个"反义词"</strong>(bad、cold、wrong…),成对覆盖描述的两端。</p>
+    </div>
+    <div class="card" style="border-color:var(--accent);background:rgba(179,84,30,.04)">
+      <h3 style="margin-top:0">"英语里没有动词"</h3>
+      <p style="margin:0;font-size:16px">这是奥格登的核心洞察。英语真正难的不是名词,而是动词的变位与无穷的习语。所以他<strong>取消了动词这个词类</strong>,只保留 18 个"操作词"。靠它们与方向词、名词的组合,这 18 个词就顶替了约 <strong>4,000 个</strong>常规英语动词。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>计数验证</strong>:100(操作词)+ 400 + 200(名词)+ 100 + 50(形容词)= <strong>恰好 850</strong>,无重复。本页词表已按此逐词核对。
+  </div>
+</section>
+
+<!-- ========== 18 动词 ========== -->
+<section id="operators">
+  <div class="sec-num">03 — THE 18 VERBS</div>
+  <h2>支撑整套语言的 18 个动词</h2>
+  <p>这是 Basic English 最精巧的发明。所有动作意义,都由这 18 个"操作词"为核心来表达:</p>
+
+  <div class="ops-18">
+    <span>come</span><span>get</span><span>give</span><span>go</span><span>keep</span><span>let</span><span>make</span><span>put</span><span>seem</span><span>take</span>
+    <span>be</span><span>do</span><span>have</span><span>say</span><span>see</span><span>send</span><span>may</span><span>will</span>
+  </div>
+  <p class="muted" style="font-size:14px">前 10 个是"动作操作词",后 8 个含助动词与基本动词。它们正常变位(come/comes/came/coming)。</p>
+
+  <h3>魔法在于"操作词 + 方向/介词"</h3>
+  <p>把一个操作词和一个方向词拼起来,就替换掉了一整个独立动词:</p>
+  <table>
+    <thead><tr><th>组合</th><th>等于</th><th>组合</th><th>等于</th></tr></thead>
+    <tbody>
+      <tr><td><code>go in</code></td><td class="basic">enter 进入</td><td><code>get up</code></td><td class="basic">rise 起身</td></tr>
+      <tr><td><code>go out</code></td><td class="basic">exit 出去</td><td><code>get off</code></td><td class="basic">descend 下来</td></tr>
+      <tr><td><code>go up</code></td><td class="basic">ascend 上升</td><td><code>get to</code></td><td class="basic">arrive 到达</td></tr>
+      <tr><td><code>go on</code></td><td class="basic">continue 继续</td><td><code>get back</code></td><td class="basic">return 返回</td></tr>
+      <tr><td><code>put together</code></td><td class="basic">assemble 组装</td><td><code>make up</code></td><td class="basic">invent 编造</td></tr>
+      <tr><td><code>put off</code></td><td class="basic">postpone 推迟</td><td><code>give up</code></td><td class="basic">surrender 放弃</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>已知的批评</strong>(Fries &amp; Traver):正因为这些操作词太"万能",反而最难掌握 —— OED 为这 850 词记录了约 18,416 条义项,而 get、make、do 这类短词恰恰语义范围最广、最难拿捏。
+  </div>
+</section>
+
+<!-- ========== 语法规则 ========== -->
+<section id="rules">
+  <div class="sec-num">04 — GRAMMAR</div>
+  <h2>语法规则:依然是"正确的英语"</h2>
+  <p>Basic English 的语法不是另造一套,而是标准英语的子集 —— 母语者读起来就是正常英语。规则被压缩到极简:</p>
+
+  <div class="grid2">
+    <div class="card">
+      <ul class="clean">
+        <li><b>复数</b>:加 <em class="k">-S</em>(及常规 -ES / -IES)</li>
+        <li><b>名词派生</b>:加 <em class="k">-ER</em>(prisoner)、<em class="k">-ING</em>(building)</li>
+        <li><b>形容词派生</b>:加 <em class="k">-ING</em>(boiling)、<em class="k">-ED</em>(mixed)</li>
+        <li><b>副词</b>:性质词加 <em class="k">-LY</em>(quick → quickly)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>比较级</b>:用 <em class="k">more / most</em></li>
+        <li><b>否定形容词</b>:前缀 <em class="k">un-</em>(unhappy)</li>
+        <li><b>疑问句</b>:倒装,或用 <em class="k">do</em>("Do you see it?")</li>
+        <li><b>复合词</b>:名词+名词(milkman)、名词+方向词(sundown)</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>整套构词只靠 <strong>6 个词缀</strong>:<em class="k">-s</em>(复数/三单)、<em class="k">-ed</em>(过去/分词)、<em class="k">-ing</em>(分词/动名词)、<em class="k">-er</em>(施动者/比较级)、<em class="k">-ly</em>(副词)、<em class="k">un-</em>(否定),外加 more / most 表程度。数字、货币、月份、星期与国际通用词均用其标准英语形式。</p>
+</section>
+
+<!-- ========== 如何表达万物 ========== -->
+<section id="paraphrase">
+  <div class="sec-num">05 — IN PRACTICE</div>
+  <h2>如何用 850 词表达任何意思</h2>
+  <p>通法两条:① 把抽象动词换成<strong>操作词 + 方向/介词</strong>;② 或者换成<strong>操作词(give/make/take/have)+ 一个名词</strong>。</p>
+
+  <table>
+    <thead><tr><th>想说的词</th><th>用 Basic English 这样说</th></tr></thead>
+    <tbody>
+      <tr><td>purchase / buy 购买</td><td class="basic">give money for(给钱换某物)</td></tr>
+      <tr><td>enter 进入</td><td class="basic">go in</td></tr>
+      <tr><td>decrease 减少</td><td class="basic">make less / go down</td></tr>
+      <tr><td>increase 增加</td><td class="basic">make more / get greater</td></tr>
+      <tr><td>assemble 组装</td><td class="basic">put together</td></tr>
+      <tr><td>photograph 拍照</td><td class="basic">take a picture</td></tr>
+      <tr><td>invent 发明/编造</td><td class="basic">make up</td></tr>
+      <tr><td>pursue 追赶</td><td class="basic">go after</td></tr>
+      <tr><td>postpone 推迟</td><td class="basic">put off</td></tr>
+      <tr><td>arrive 到达</td><td class="basic">get to</td></tr>
+      <tr><td>destroy 摧毁</td><td class="basic">put an end to</td></tr>
+      <tr><td>disappear 消失</td><td class="basic">go out of view</td></tr>
+      <tr><td>accelerate 加速</td><td class="basic">make … go more quickly</td></tr>
+      <tr><td>forget 忘记</td><td class="basic">let … go from memory</td></tr>
+      <tr><td>try 尝试</td><td class="basic">make an attempt</td></tr>
+      <tr><td>glance 瞥一眼</td><td class="basic">have a look</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========== 扩展 ========== -->
+<section id="supplement">
+  <div class="sec-num">06 — BEYOND 850</div>
+  <h2>从 850 词走向 ~2000 词</h2>
+  <p>奥格登设计了清晰的扩张路径:<strong>850 核心 + 约 100–200 个"国际词"(默认已被全球认识)+ 每个学科 100 个通用词 + 每个专业 50 个词</strong> ≈ 一套可用的 2000 词"标准英语"。</p>
+
+  <div class="word-block">
+    <div class="word-block-head"><span class="pill intl">INTERNATIONAL · 50</span><h4>国际词(各语言共通,默认无需教学)</h4></div>
+    <p class="desc">这些词在西方语言里写法/发音相近,直接以英语形式使用。</p>
+    <div class="words" data-cat="intl">
+      <span class="w">alcohol</span><span class="w">aluminum</span><span class="w">automobile</span><span class="w">bank</span><span class="w">bar</span><span class="w">beef</span><span class="w">beer</span><span class="w">calendar</span><span class="w">chemist</span><span class="w">check</span><span class="w">chocolate</span><span class="w">chorus</span><span class="w">cigarette</span><span class="w">club</span><span class="w">coffee</span><span class="w">colony</span><span class="w">dance</span><span class="w">engineer</span><span class="w">gas</span><span class="w">hotel</span><span class="w">influenza</span><span class="w">lava</span><span class="w">madam</span><span class="w">nickel</span><span class="w">opera</span><span class="w">orchestra</span><span class="w">paraffin</span><span class="w">park</span><span class="w">passport</span><span class="w">patent</span><span class="w">phonograph</span><span class="w">piano</span><span class="w">police</span><span class="w">post</span><span class="w">program</span><span class="w">propaganda</span><span class="w">radio</span><span class="w">restaurant</span><span class="w">sir</span><span class="w">sport</span><span class="w">taxi</span><span class="w">tea</span><span class="w">telegram</span><span class="w">telephone</span><span class="w">terrace</span><span class="w">theater</span><span class="w">tobacco</span><span class="w">university</span><span class="w">whisky</span><span class="w">zinc</span>
+    </div>
+  </div>
+
+  <div class="word-block">
+    <div class="word-block-head"><span class="pill intl">SCIENCES · 12</span><h4>学科名称</h4></div>
+    <div class="words" data-cat="intl">
+      <span class="w">Algebra</span><span class="w">Arithmetic</span><span class="w">Biology</span><span class="w">Chemistry</span><span class="w">Geography</span><span class="w">Geology</span><span class="w">Geometry</span><span class="w">Mathematics</span><span class="w">Physics</span><span class="w">Physiology</span><span class="w">Psychology</span><span class="w">Zoology</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 完整词汇表 ========== -->
+<section id="vocab">
+  <div class="sec-num">07 — THE FULL LIST</div>
+  <h2>★ 完整 850 词汇表</h2>
+  <p>以下是奥格登原始主题顺序排列的全部 850 个词,可按类别筛选或直接搜索任意单词。</p>
+
+  <div class="vocab-controls">
+    <input id="search" type="text" placeholder="🔍 搜索单词或中文,例如 power、苹果、good…" autocomplete="off">
+    <button class="filter-btn active" data-f="all">全部 850</button>
+    <button class="filter-btn" data-f="op">操作词 100</button>
+    <button class="filter-btn" data-f="noun">名词 600</button>
+    <button class="filter-btn" data-f="adj">形容词 150</button>
+    <span id="count"></span>
+  </div>
+
+  <div class="word-block" data-group="op">
+    <div class="word-block-head"><span class="pill op">OPERATIONS</span><h4>操作词</h4><span class="wb-count">100 个</span></div>
+    <p class="desc">18 个动词 + 介词 / 方向词 / 代词 / 连词 / 冠词 / 限定词 / 副词 —— 整套语言的骨架。</p>
+    <div class="table-head"><span>单词</span><span>音标</span><span>词性</span><span>词义</span></div>
+    <div class="rows">
+      <div class="row" data-w="come"><span class="c-w">come</span><span class="c-ipa">/kʌm/</span><span class="c-pos">v.</span><span class="c-zh">来;到来</span></div>
+      <div class="row" data-w="get"><span class="c-w">get</span><span class="c-ipa">/ɡɛt/</span><span class="c-pos">v.</span><span class="c-zh">得到;获得</span></div>
+      <div class="row" data-w="give"><span class="c-w">give</span><span class="c-ipa">/ɡɪv/</span><span class="c-pos">v.</span><span class="c-zh">给;给予</span></div>
+      <div class="row" data-w="go"><span class="c-w">go</span><span class="c-ipa">/ɡoʊ/</span><span class="c-pos">v.</span><span class="c-zh">去;走</span></div>
+      <div class="row" data-w="keep"><span class="c-w">keep</span><span class="c-ipa">/kip/</span><span class="c-pos">v.</span><span class="c-zh">保持;保留</span></div>
+      <div class="row" data-w="let"><span class="c-w">let</span><span class="c-ipa">/lɛt/</span><span class="c-pos">v.</span><span class="c-zh">让;允许</span></div>
+      <div class="row" data-w="make"><span class="c-w">make</span><span class="c-ipa">/meɪk/</span><span class="c-pos">v.</span><span class="c-zh">做;制造</span></div>
+      <div class="row" data-w="put"><span class="c-w">put</span><span class="c-ipa">/pʊt/</span><span class="c-pos">v.</span><span class="c-zh">放;摆放</span></div>
+      <div class="row" data-w="seem"><span class="c-w">seem</span><span class="c-ipa">/sim/</span><span class="c-pos">v.</span><span class="c-zh">似乎;看起来</span></div>
+      <div class="row" data-w="take"><span class="c-w">take</span><span class="c-ipa">/teɪk/</span><span class="c-pos">v.</span><span class="c-zh">拿;取</span></div>
+      <div class="row" data-w="be"><span class="c-w">be</span><span class="c-ipa">/bi/</span><span class="c-pos">v.</span><span class="c-zh">是;存在</span></div>
+      <div class="row" data-w="do"><span class="c-w">do</span><span class="c-ipa">/du/</span><span class="c-pos">v.</span><span class="c-zh">做;干</span></div>
+      <div class="row" data-w="have"><span class="c-w">have</span><span class="c-ipa">/hæv/</span><span class="c-pos">v.</span><span class="c-zh">有;拥有</span></div>
+      <div class="row" data-w="say"><span class="c-w">say</span><span class="c-ipa">/seɪ/</span><span class="c-pos">v.</span><span class="c-zh">说;讲</span></div>
+      <div class="row" data-w="see"><span class="c-w">see</span><span class="c-ipa">/si/</span><span class="c-pos">v.</span><span class="c-zh">看见;明白</span></div>
+      <div class="row" data-w="send"><span class="c-w">send</span><span class="c-ipa">/sɛnd/</span><span class="c-pos">v.</span><span class="c-zh">送;寄</span></div>
+      <div class="row" data-w="may"><span class="c-w">may</span><span class="c-ipa">/meɪ/</span><span class="c-pos">v.</span><span class="c-zh">可以;可能</span></div>
+      <div class="row" data-w="will"><span class="c-w">will</span><span class="c-ipa">/wɪl/</span><span class="c-pos">v.</span><span class="c-zh">将;愿意</span></div>
+      <div class="row" data-w="about"><span class="c-w">about</span><span class="c-ipa">/əˈbaʊt/</span><span class="c-pos">prep.</span><span class="c-zh">关于;大约</span></div>
+      <div class="row" data-w="across"><span class="c-w">across</span><span class="c-ipa">/əˈkrɔs/</span><span class="c-pos">prep.</span><span class="c-zh">穿过;横过</span></div>
+      <div class="row" data-w="after"><span class="c-w">after</span><span class="c-ipa">/ˈæftɚ/</span><span class="c-pos">prep.</span><span class="c-zh">在…之后</span></div>
+      <div class="row" data-w="against"><span class="c-w">against</span><span class="c-ipa">/əˈɡɛnst/</span><span class="c-pos">prep.</span><span class="c-zh">反对;靠着</span></div>
+      <div class="row" data-w="among"><span class="c-w">among</span><span class="c-ipa">/əˈmʌŋ/</span><span class="c-pos">prep.</span><span class="c-zh">在…之中</span></div>
+      <div class="row" data-w="at"><span class="c-w">at</span><span class="c-ipa">/æt/</span><span class="c-pos">prep.</span><span class="c-zh">在;于</span></div>
+      <div class="row" data-w="before"><span class="c-w">before</span><span class="c-ipa">/bɪˈfɔr/</span><span class="c-pos">prep.</span><span class="c-zh">在…之前</span></div>
+      <div class="row" data-w="between"><span class="c-w">between</span><span class="c-ipa">/bɪˈtwin/</span><span class="c-pos">prep.</span><span class="c-zh">在…之间</span></div>
+      <div class="row" data-w="by"><span class="c-w">by</span><span class="c-ipa">/baɪ/</span><span class="c-pos">prep.</span><span class="c-zh">被;由;在旁</span></div>
+      <div class="row" data-w="down"><span class="c-w">down</span><span class="c-ipa">/daʊn/</span><span class="c-pos">adv.</span><span class="c-zh">向下;朝下</span></div>
+      <div class="row" data-w="from"><span class="c-w">from</span><span class="c-ipa">/frʌm/</span><span class="c-pos">prep.</span><span class="c-zh">从;来自</span></div>
+      <div class="row" data-w="in"><span class="c-w">in</span><span class="c-ipa">/ɪn/</span><span class="c-pos">prep.</span><span class="c-zh">在…里</span></div>
+      <div class="row" data-w="off"><span class="c-w">off</span><span class="c-ipa">/ɔf/</span><span class="c-pos">adv.</span><span class="c-zh">离开;脱离</span></div>
+      <div class="row" data-w="on"><span class="c-w">on</span><span class="c-ipa">/ɑn/</span><span class="c-pos">prep.</span><span class="c-zh">在…上</span></div>
+      <div class="row" data-w="over"><span class="c-w">over</span><span class="c-ipa">/ˈoʊvɚ/</span><span class="c-pos">prep.</span><span class="c-zh">在…上方;越过</span></div>
+      <div class="row" data-w="through"><span class="c-w">through</span><span class="c-ipa">/θru/</span><span class="c-pos">prep.</span><span class="c-zh">穿过;通过</span></div>
+      <div class="row" data-w="to"><span class="c-w">to</span><span class="c-ipa">/tu/</span><span class="c-pos">prep.</span><span class="c-zh">到;向</span></div>
+      <div class="row" data-w="under"><span class="c-w">under</span><span class="c-ipa">/ˈʌndɚ/</span><span class="c-pos">prep.</span><span class="c-zh">在…下面</span></div>
+      <div class="row" data-w="up"><span class="c-w">up</span><span class="c-ipa">/ʌp/</span><span class="c-pos">adv.</span><span class="c-zh">向上;朝上</span></div>
+      <div class="row" data-w="with"><span class="c-w">with</span><span class="c-ipa">/wɪð/</span><span class="c-pos">prep.</span><span class="c-zh">和;用;具有</span></div>
+      <div class="row" data-w="as"><span class="c-w">as</span><span class="c-ipa">/æz/</span><span class="c-pos">conj.</span><span class="c-zh">作为;当…时</span></div>
+      <div class="row" data-w="for"><span class="c-w">for</span><span class="c-ipa">/fɔr/</span><span class="c-pos">prep.</span><span class="c-zh">为了;给</span></div>
+      <div class="row" data-w="of"><span class="c-w">of</span><span class="c-ipa">/ʌv/</span><span class="c-pos">prep.</span><span class="c-zh">…的</span></div>
+      <div class="row" data-w="till"><span class="c-w">till</span><span class="c-ipa">/tɪl/</span><span class="c-pos">prep.</span><span class="c-zh">直到</span></div>
+      <div class="row" data-w="than"><span class="c-w">than</span><span class="c-ipa">/ðæn/</span><span class="c-pos">conj.</span><span class="c-zh">比</span></div>
+      <div class="row" data-w="a"><span class="c-w">a</span><span class="c-ipa">/ə/</span><span class="c-pos">art.</span><span class="c-zh">(不定冠词)一个</span></div>
+      <div class="row" data-w="the"><span class="c-w">the</span><span class="c-ipa">/ðə/</span><span class="c-pos">art.</span><span class="c-zh">(定冠词)这;那</span></div>
+      <div class="row" data-w="all"><span class="c-w">all</span><span class="c-ipa">/ɔl/</span><span class="c-pos">det.</span><span class="c-zh">全部;所有</span></div>
+      <div class="row" data-w="any"><span class="c-w">any</span><span class="c-ipa">/ˈɛni/</span><span class="c-pos">det.</span><span class="c-zh">任何;一些</span></div>
+      <div class="row" data-w="every"><span class="c-w">every</span><span class="c-ipa">/ˈɛvri/</span><span class="c-pos">det.</span><span class="c-zh">每个;每一</span></div>
+      <div class="row" data-w="little"><span class="c-w">little</span><span class="c-ipa">/ˈlɪtl̩/</span><span class="c-pos">det.</span><span class="c-zh">少;小</span></div>
+      <div class="row" data-w="much"><span class="c-w">much</span><span class="c-ipa">/mʌtʃ/</span><span class="c-pos">det.</span><span class="c-zh">许多;大量</span></div>
+      <div class="row" data-w="no"><span class="c-w">no</span><span class="c-ipa">/noʊ/</span><span class="c-pos">det.</span><span class="c-zh">没有;不</span></div>
+      <div class="row" data-w="other"><span class="c-w">other</span><span class="c-ipa">/ˈʌðɚ/</span><span class="c-pos">det.</span><span class="c-zh">其他的;别的</span></div>
+      <div class="row" data-w="some"><span class="c-w">some</span><span class="c-ipa">/sʌm/</span><span class="c-pos">det.</span><span class="c-zh">一些;某些</span></div>
+      <div class="row" data-w="such"><span class="c-w">such</span><span class="c-ipa">/sʌtʃ/</span><span class="c-pos">det.</span><span class="c-zh">这样的;如此</span></div>
+      <div class="row" data-w="that"><span class="c-w">that</span><span class="c-ipa">/ðæt/</span><span class="c-pos">pron.</span><span class="c-zh">那;那个</span></div>
+      <div class="row" data-w="this"><span class="c-w">this</span><span class="c-ipa">/ðɪs/</span><span class="c-pos">pron.</span><span class="c-zh">这;这个</span></div>
+      <div class="row" data-w="I"><span class="c-w">I</span><span class="c-ipa">/aɪ/</span><span class="c-pos">pron.</span><span class="c-zh">我</span></div>
+      <div class="row" data-w="he"><span class="c-w">he</span><span class="c-ipa">/hi/</span><span class="c-pos">pron.</span><span class="c-zh">他</span></div>
+      <div class="row" data-w="you"><span class="c-w">you</span><span class="c-ipa">/ju/</span><span class="c-pos">pron.</span><span class="c-zh">你;你们</span></div>
+      <div class="row" data-w="who"><span class="c-w">who</span><span class="c-ipa">/hu/</span><span class="c-pos">pron.</span><span class="c-zh">谁</span></div>
+      <div class="row" data-w="and"><span class="c-w">and</span><span class="c-ipa">/ænd/</span><span class="c-pos">conj.</span><span class="c-zh">和;并且</span></div>
+      <div class="row" data-w="because"><span class="c-w">because</span><span class="c-ipa">/bɪˈkɔz/</span><span class="c-pos">conj.</span><span class="c-zh">因为</span></div>
+      <div class="row" data-w="but"><span class="c-w">but</span><span class="c-ipa">/bʌt/</span><span class="c-pos">conj.</span><span class="c-zh">但是</span></div>
+      <div class="row" data-w="or"><span class="c-w">or</span><span class="c-ipa">/ɔr/</span><span class="c-pos">conj.</span><span class="c-zh">或者</span></div>
+      <div class="row" data-w="if"><span class="c-w">if</span><span class="c-ipa">/ɪf/</span><span class="c-pos">conj.</span><span class="c-zh">如果</span></div>
+      <div class="row" data-w="though"><span class="c-w">though</span><span class="c-ipa">/ðoʊ/</span><span class="c-pos">conj.</span><span class="c-zh">虽然;尽管</span></div>
+      <div class="row" data-w="while"><span class="c-w">while</span><span class="c-ipa">/waɪl/</span><span class="c-pos">conj.</span><span class="c-zh">当…时;而</span></div>
+      <div class="row" data-w="how"><span class="c-w">how</span><span class="c-ipa">/haʊ/</span><span class="c-pos">adv.</span><span class="c-zh">怎样;如何</span></div>
+      <div class="row" data-w="when"><span class="c-w">when</span><span class="c-ipa">/wɛn/</span><span class="c-pos">adv.</span><span class="c-zh">何时;当…时</span></div>
+      <div class="row" data-w="where"><span class="c-w">where</span><span class="c-ipa">/wɛr/</span><span class="c-pos">adv.</span><span class="c-zh">哪里;在那里</span></div>
+      <div class="row" data-w="why"><span class="c-w">why</span><span class="c-ipa">/waɪ/</span><span class="c-pos">adv.</span><span class="c-zh">为什么</span></div>
+      <div class="row" data-w="again"><span class="c-w">again</span><span class="c-ipa">/əˈɡɛn/</span><span class="c-pos">adv.</span><span class="c-zh">再次;又</span></div>
+      <div class="row" data-w="ever"><span class="c-w">ever</span><span class="c-ipa">/ˈɛvɚ/</span><span class="c-pos">adv.</span><span class="c-zh">曾经;永远</span></div>
+      <div class="row" data-w="far"><span class="c-w">far</span><span class="c-ipa">/fɑr/</span><span class="c-pos">adv.</span><span class="c-zh">远;遥远</span></div>
+      <div class="row" data-w="forward"><span class="c-w">forward</span><span class="c-ipa">/ˈfɔrwɚd/</span><span class="c-pos">adv.</span><span class="c-zh">向前</span></div>
+      <div class="row" data-w="here"><span class="c-w">here</span><span class="c-ipa">/hɪr/</span><span class="c-pos">adv.</span><span class="c-zh">这里;在此</span></div>
+      <div class="row" data-w="near"><span class="c-w">near</span><span class="c-ipa">/nɪr/</span><span class="c-pos">adv.</span><span class="c-zh">近;附近</span></div>
+      <div class="row" data-w="now"><span class="c-w">now</span><span class="c-ipa">/naʊ/</span><span class="c-pos">adv.</span><span class="c-zh">现在</span></div>
+      <div class="row" data-w="out"><span class="c-w">out</span><span class="c-ipa">/aʊt/</span><span class="c-pos">adv.</span><span class="c-zh">出;在外</span></div>
+      <div class="row" data-w="still"><span class="c-w">still</span><span class="c-ipa">/stɪl/</span><span class="c-pos">adv.</span><span class="c-zh">仍然;还</span></div>
+      <div class="row" data-w="then"><span class="c-w">then</span><span class="c-ipa">/ðɛn/</span><span class="c-pos">adv.</span><span class="c-zh">那时;然后</span></div>
+      <div class="row" data-w="there"><span class="c-w">there</span><span class="c-ipa">/ðɛr/</span><span class="c-pos">adv.</span><span class="c-zh">那里;在那</span></div>
+      <div class="row" data-w="together"><span class="c-w">together</span><span class="c-ipa">/təˈɡɛðɚ/</span><span class="c-pos">adv.</span><span class="c-zh">一起</span></div>
+      <div class="row" data-w="well"><span class="c-w">well</span><span class="c-ipa">/wɛl/</span><span class="c-pos">adv.</span><span class="c-zh">好;很好地</span></div>
+      <div class="row" data-w="almost"><span class="c-w">almost</span><span class="c-ipa">/ˈɔlmoʊst/</span><span class="c-pos">adv.</span><span class="c-zh">几乎</span></div>
+      <div class="row" data-w="enough"><span class="c-w">enough</span><span class="c-ipa">/ɪˈnʌf/</span><span class="c-pos">adv.</span><span class="c-zh">足够</span></div>
+      <div class="row" data-w="even"><span class="c-w">even</span><span class="c-ipa">/ˈivən/</span><span class="c-pos">adv.</span><span class="c-zh">甚至;连</span></div>
+      <div class="row" data-w="not"><span class="c-w">not</span><span class="c-ipa">/nɑt/</span><span class="c-pos">adv.</span><span class="c-zh">不;没有</span></div>
+      <div class="row" data-w="only"><span class="c-w">only</span><span class="c-ipa">/ˈoʊnli/</span><span class="c-pos">adv.</span><span class="c-zh">仅仅;只</span></div>
+      <div class="row" data-w="quite"><span class="c-w">quite</span><span class="c-ipa">/kwaɪt/</span><span class="c-pos">adv.</span><span class="c-zh">相当;十分</span></div>
+      <div class="row" data-w="so"><span class="c-w">so</span><span class="c-ipa">/soʊ/</span><span class="c-pos">adv.</span><span class="c-zh">如此;所以</span></div>
+      <div class="row" data-w="very"><span class="c-w">very</span><span class="c-ipa">/ˈvɛri/</span><span class="c-pos">adv.</span><span class="c-zh">非常</span></div>
+      <div class="row" data-w="tomorrow"><span class="c-w">tomorrow</span><span class="c-ipa">/təˈmɔroʊ/</span><span class="c-pos">adv.</span><span class="c-zh">明天</span></div>
+      <div class="row" data-w="yesterday"><span class="c-w">yesterday</span><span class="c-ipa">/ˈjɛstɚdeɪ/</span><span class="c-pos">adv.</span><span class="c-zh">昨天</span></div>
+      <div class="row" data-w="north"><span class="c-w">north</span><span class="c-ipa">/nɔrθ/</span><span class="c-pos">n.</span><span class="c-zh">北;北方</span></div>
+      <div class="row" data-w="south"><span class="c-w">south</span><span class="c-ipa">/saʊθ/</span><span class="c-pos">n.</span><span class="c-zh">南;南方</span></div>
+      <div class="row" data-w="east"><span class="c-w">east</span><span class="c-ipa">/ist/</span><span class="c-pos">n.</span><span class="c-zh">东;东方</span></div>
+      <div class="row" data-w="west"><span class="c-w">west</span><span class="c-ipa">/wɛst/</span><span class="c-pos">n.</span><span class="c-zh">西;西方</span></div>
+      <div class="row" data-w="please"><span class="c-w">please</span><span class="c-ipa">/pliz/</span><span class="c-pos">adv.</span><span class="c-zh">请</span></div>
+      <div class="row" data-w="yes"><span class="c-w">yes</span><span class="c-ipa">/jɛs/</span><span class="c-pos">adv.</span><span class="c-zh">是;对</span></div>
+    </div>
+  </div>
+
+  <div class="word-block" data-group="noun">
+    <div class="word-block-head"><span class="pill noun">THINGS · GENERAL</span><h4>一般名词</h4><span class="wb-count">400 个</span></div>
+    <p class="desc">抽象与一般概念名词。</p>
+    <div class="table-head"><span>单词</span><span>音标</span><span>词性</span><span>词义</span></div>
+    <div class="rows">
+      <div class="row" data-w="account"><span class="c-w">account</span><span class="c-ipa">/əˈkaʊnt/</span><span class="c-pos">n.</span><span class="c-zh">账户;描述</span></div>
+      <div class="row" data-w="act"><span class="c-w">act</span><span class="c-ipa">/ækt/</span><span class="c-pos">n.</span><span class="c-zh">行为;法案</span></div>
+      <div class="row" data-w="addition"><span class="c-w">addition</span><span class="c-ipa">/əˈdɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">增加;加法</span></div>
+      <div class="row" data-w="adjustment"><span class="c-w">adjustment</span><span class="c-ipa">/əˈdʒʌstmənt/</span><span class="c-pos">n.</span><span class="c-zh">调整</span></div>
+      <div class="row" data-w="advertisement"><span class="c-w">advertisement</span><span class="c-ipa">/ˌædvɚˈtaɪzmənt/</span><span class="c-pos">n.</span><span class="c-zh">广告</span></div>
+      <div class="row" data-w="agreement"><span class="c-w">agreement</span><span class="c-ipa">/əˈɡrimənt/</span><span class="c-pos">n.</span><span class="c-zh">协议;一致</span></div>
+      <div class="row" data-w="air"><span class="c-w">air</span><span class="c-ipa">/ɛr/</span><span class="c-pos">n.</span><span class="c-zh">空气</span></div>
+      <div class="row" data-w="amount"><span class="c-w">amount</span><span class="c-ipa">/əˈmaʊnt/</span><span class="c-pos">n.</span><span class="c-zh">数量;总额</span></div>
+      <div class="row" data-w="amusement"><span class="c-w">amusement</span><span class="c-ipa">/əˈmjuzmənt/</span><span class="c-pos">n.</span><span class="c-zh">娱乐;消遣</span></div>
+      <div class="row" data-w="animal"><span class="c-w">animal</span><span class="c-ipa">/ˈænəməl/</span><span class="c-pos">n.</span><span class="c-zh">动物</span></div>
+      <div class="row" data-w="answer"><span class="c-w">answer</span><span class="c-ipa">/ˈænsɚ/</span><span class="c-pos">n.</span><span class="c-zh">答案;回答</span></div>
+      <div class="row" data-w="apparatus"><span class="c-w">apparatus</span><span class="c-ipa">/ˌæpəˈrætəs/</span><span class="c-pos">n.</span><span class="c-zh">器械;设备</span></div>
+      <div class="row" data-w="approval"><span class="c-w">approval</span><span class="c-ipa">/əˈpruvəl/</span><span class="c-pos">n.</span><span class="c-zh">赞成;批准</span></div>
+      <div class="row" data-w="argument"><span class="c-w">argument</span><span class="c-ipa">/ˈɑrɡjəmənt/</span><span class="c-pos">n.</span><span class="c-zh">争论;论点</span></div>
+      <div class="row" data-w="art"><span class="c-w">art</span><span class="c-ipa">/ɑrt/</span><span class="c-pos">n.</span><span class="c-zh">艺术</span></div>
+      <div class="row" data-w="attack"><span class="c-w">attack</span><span class="c-ipa">/əˈtæk/</span><span class="c-pos">n.</span><span class="c-zh">攻击</span></div>
+      <div class="row" data-w="attempt"><span class="c-w">attempt</span><span class="c-ipa">/əˈtɛmpt/</span><span class="c-pos">n.</span><span class="c-zh">尝试;企图</span></div>
+      <div class="row" data-w="attention"><span class="c-w">attention</span><span class="c-ipa">/əˈtɛnʃən/</span><span class="c-pos">n.</span><span class="c-zh">注意;关注</span></div>
+      <div class="row" data-w="attraction"><span class="c-w">attraction</span><span class="c-ipa">/əˈtrækʃən/</span><span class="c-pos">n.</span><span class="c-zh">吸引;魅力</span></div>
+      <div class="row" data-w="authority"><span class="c-w">authority</span><span class="c-ipa">/əˈθɔrəti/</span><span class="c-pos">n.</span><span class="c-zh">权威;当局</span></div>
+      <div class="row" data-w="back"><span class="c-w">back</span><span class="c-ipa">/bæk/</span><span class="c-pos">n.</span><span class="c-zh">背;后部</span></div>
+      <div class="row" data-w="balance"><span class="c-w">balance</span><span class="c-ipa">/ˈbæləns/</span><span class="c-pos">n.</span><span class="c-zh">平衡;余额</span></div>
+      <div class="row" data-w="base"><span class="c-w">base</span><span class="c-ipa">/beɪs/</span><span class="c-pos">n.</span><span class="c-zh">基础;底座</span></div>
+      <div class="row" data-w="behavior"><span class="c-w">behavior</span><span class="c-ipa">/bɪˈheɪvjɚ/</span><span class="c-pos">n.</span><span class="c-zh">行为;举止</span></div>
+      <div class="row" data-w="belief"><span class="c-w">belief</span><span class="c-ipa">/bɪˈlif/</span><span class="c-pos">n.</span><span class="c-zh">信念;信仰</span></div>
+      <div class="row" data-w="birth"><span class="c-w">birth</span><span class="c-ipa">/bɝθ/</span><span class="c-pos">n.</span><span class="c-zh">出生;诞生</span></div>
+      <div class="row" data-w="bit"><span class="c-w">bit</span><span class="c-ipa">/bɪt/</span><span class="c-pos">n.</span><span class="c-zh">一点;少量</span></div>
+      <div class="row" data-w="bite"><span class="c-w">bite</span><span class="c-ipa">/baɪt/</span><span class="c-pos">n.</span><span class="c-zh">咬;一口</span></div>
+      <div class="row" data-w="blood"><span class="c-w">blood</span><span class="c-ipa">/blʌd/</span><span class="c-pos">n.</span><span class="c-zh">血;血液</span></div>
+      <div class="row" data-w="blow"><span class="c-w">blow</span><span class="c-ipa">/bloʊ/</span><span class="c-pos">n.</span><span class="c-zh">打击;吹</span></div>
+      <div class="row" data-w="body"><span class="c-w">body</span><span class="c-ipa">/ˈbɑdi/</span><span class="c-pos">n.</span><span class="c-zh">身体;主体</span></div>
+      <div class="row" data-w="brass"><span class="c-w">brass</span><span class="c-ipa">/bræs/</span><span class="c-pos">n.</span><span class="c-zh">黄铜</span></div>
+      <div class="row" data-w="bread"><span class="c-w">bread</span><span class="c-ipa">/brɛd/</span><span class="c-pos">n.</span><span class="c-zh">面包</span></div>
+      <div class="row" data-w="breath"><span class="c-w">breath</span><span class="c-ipa">/brɛθ/</span><span class="c-pos">n.</span><span class="c-zh">呼吸;气息</span></div>
+      <div class="row" data-w="brother"><span class="c-w">brother</span><span class="c-ipa">/ˈbrʌðɚ/</span><span class="c-pos">n.</span><span class="c-zh">兄弟</span></div>
+      <div class="row" data-w="building"><span class="c-w">building</span><span class="c-ipa">/ˈbɪldɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">建筑;大楼</span></div>
+      <div class="row" data-w="burn"><span class="c-w">burn</span><span class="c-ipa">/bɝn/</span><span class="c-pos">n.</span><span class="c-zh">烧伤;燃烧</span></div>
+      <div class="row" data-w="burst"><span class="c-w">burst</span><span class="c-ipa">/bɝst/</span><span class="c-pos">n.</span><span class="c-zh">爆裂;突发</span></div>
+      <div class="row" data-w="business"><span class="c-w">business</span><span class="c-ipa">/ˈbɪznəs/</span><span class="c-pos">n.</span><span class="c-zh">生意;事务</span></div>
+      <div class="row" data-w="butter"><span class="c-w">butter</span><span class="c-ipa">/ˈbʌtɚ/</span><span class="c-pos">n.</span><span class="c-zh">黄油</span></div>
+      <div class="row" data-w="canvas"><span class="c-w">canvas</span><span class="c-ipa">/ˈkænvəs/</span><span class="c-pos">n.</span><span class="c-zh">帆布;画布</span></div>
+      <div class="row" data-w="care"><span class="c-w">care</span><span class="c-ipa">/kɛr/</span><span class="c-pos">n.</span><span class="c-zh">关心;照料</span></div>
+      <div class="row" data-w="cause"><span class="c-w">cause</span><span class="c-ipa">/kɔz/</span><span class="c-pos">n.</span><span class="c-zh">原因;起因</span></div>
+      <div class="row" data-w="chalk"><span class="c-w">chalk</span><span class="c-ipa">/tʃɔk/</span><span class="c-pos">n.</span><span class="c-zh">粉笔;白垩</span></div>
+      <div class="row" data-w="chance"><span class="c-w">chance</span><span class="c-ipa">/tʃæns/</span><span class="c-pos">n.</span><span class="c-zh">机会;可能</span></div>
+      <div class="row" data-w="change"><span class="c-w">change</span><span class="c-ipa">/tʃeɪndʒ/</span><span class="c-pos">n.</span><span class="c-zh">变化;零钱</span></div>
+      <div class="row" data-w="cloth"><span class="c-w">cloth</span><span class="c-ipa">/klɔθ/</span><span class="c-pos">n.</span><span class="c-zh">布;布料</span></div>
+      <div class="row" data-w="coal"><span class="c-w">coal</span><span class="c-ipa">/koʊl/</span><span class="c-pos">n.</span><span class="c-zh">煤</span></div>
+      <div class="row" data-w="color"><span class="c-w">color</span><span class="c-ipa">/ˈkʌlɚ/</span><span class="c-pos">n.</span><span class="c-zh">颜色</span></div>
+      <div class="row" data-w="comfort"><span class="c-w">comfort</span><span class="c-ipa">/ˈkʌmfɚt/</span><span class="c-pos">n.</span><span class="c-zh">安慰;舒适</span></div>
+      <div class="row" data-w="committee"><span class="c-w">committee</span><span class="c-ipa">/kəˈmɪti/</span><span class="c-pos">n.</span><span class="c-zh">委员会</span></div>
+      <div class="row" data-w="company"><span class="c-w">company</span><span class="c-ipa">/ˈkʌmpəni/</span><span class="c-pos">n.</span><span class="c-zh">公司;陪伴</span></div>
+      <div class="row" data-w="comparison"><span class="c-w">comparison</span><span class="c-ipa">/kəmˈpɛrəsən/</span><span class="c-pos">n.</span><span class="c-zh">比较</span></div>
+      <div class="row" data-w="competition"><span class="c-w">competition</span><span class="c-ipa">/ˌkɑmpəˈtɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">竞争;比赛</span></div>
+      <div class="row" data-w="condition"><span class="c-w">condition</span><span class="c-ipa">/kənˈdɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">条件;状况</span></div>
+      <div class="row" data-w="connection"><span class="c-w">connection</span><span class="c-ipa">/kəˈnɛkʃən/</span><span class="c-pos">n.</span><span class="c-zh">连接;关系</span></div>
+      <div class="row" data-w="control"><span class="c-w">control</span><span class="c-ipa">/kənˈtroʊl/</span><span class="c-pos">n.</span><span class="c-zh">控制</span></div>
+      <div class="row" data-w="cook"><span class="c-w">cook</span><span class="c-ipa">/kʊk/</span><span class="c-pos">n.</span><span class="c-zh">厨师</span></div>
+      <div class="row" data-w="copper"><span class="c-w">copper</span><span class="c-ipa">/ˈkɑpɚ/</span><span class="c-pos">n.</span><span class="c-zh">铜</span></div>
+      <div class="row" data-w="copy"><span class="c-w">copy</span><span class="c-ipa">/ˈkɑpi/</span><span class="c-pos">n.</span><span class="c-zh">副本;复制品</span></div>
+      <div class="row" data-w="cork"><span class="c-w">cork</span><span class="c-ipa">/kɔrk/</span><span class="c-pos">n.</span><span class="c-zh">软木;瓶塞</span></div>
+      <div class="row" data-w="cotton"><span class="c-w">cotton</span><span class="c-ipa">/ˈkɑtən/</span><span class="c-pos">n.</span><span class="c-zh">棉;棉花</span></div>
+      <div class="row" data-w="cough"><span class="c-w">cough</span><span class="c-ipa">/kɔf/</span><span class="c-pos">n.</span><span class="c-zh">咳嗽</span></div>
+      <div class="row" data-w="country"><span class="c-w">country</span><span class="c-ipa">/ˈkʌntri/</span><span class="c-pos">n.</span><span class="c-zh">国家;乡村</span></div>
+      <div class="row" data-w="cover"><span class="c-w">cover</span><span class="c-ipa">/ˈkʌvɚ/</span><span class="c-pos">n.</span><span class="c-zh">覆盖物;封面</span></div>
+      <div class="row" data-w="crack"><span class="c-w">crack</span><span class="c-ipa">/kræk/</span><span class="c-pos">n.</span><span class="c-zh">裂缝;爆裂声</span></div>
+      <div class="row" data-w="credit"><span class="c-w">credit</span><span class="c-ipa">/ˈkrɛdɪt/</span><span class="c-pos">n.</span><span class="c-zh">信用;赊账</span></div>
+      <div class="row" data-w="crime"><span class="c-w">crime</span><span class="c-ipa">/kraɪm/</span><span class="c-pos">n.</span><span class="c-zh">罪行</span></div>
+      <div class="row" data-w="crush"><span class="c-w">crush</span><span class="c-ipa">/krʌʃ/</span><span class="c-pos">n.</span><span class="c-zh">压碎;拥挤</span></div>
+      <div class="row" data-w="cry"><span class="c-w">cry</span><span class="c-ipa">/kraɪ/</span><span class="c-pos">n.</span><span class="c-zh">哭;喊叫</span></div>
+      <div class="row" data-w="current"><span class="c-w">current</span><span class="c-ipa">/ˈkɝənt/</span><span class="c-pos">n.</span><span class="c-zh">电流;水流</span></div>
+      <div class="row" data-w="curve"><span class="c-w">curve</span><span class="c-ipa">/kɝv/</span><span class="c-pos">n.</span><span class="c-zh">曲线;弯</span></div>
+      <div class="row" data-w="damage"><span class="c-w">damage</span><span class="c-ipa">/ˈdæmɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">损害</span></div>
+      <div class="row" data-w="danger"><span class="c-w">danger</span><span class="c-ipa">/ˈdeɪndʒɚ/</span><span class="c-pos">n.</span><span class="c-zh">危险</span></div>
+      <div class="row" data-w="daughter"><span class="c-w">daughter</span><span class="c-ipa">/ˈdɔtɚ/</span><span class="c-pos">n.</span><span class="c-zh">女儿</span></div>
+      <div class="row" data-w="day"><span class="c-w">day</span><span class="c-ipa">/deɪ/</span><span class="c-pos">n.</span><span class="c-zh">天;白天</span></div>
+      <div class="row" data-w="death"><span class="c-w">death</span><span class="c-ipa">/dɛθ/</span><span class="c-pos">n.</span><span class="c-zh">死亡</span></div>
+      <div class="row" data-w="debt"><span class="c-w">debt</span><span class="c-ipa">/dɛt/</span><span class="c-pos">n.</span><span class="c-zh">债务</span></div>
+      <div class="row" data-w="decision"><span class="c-w">decision</span><span class="c-ipa">/dɪˈsɪʒən/</span><span class="c-pos">n.</span><span class="c-zh">决定</span></div>
+      <div class="row" data-w="degree"><span class="c-w">degree</span><span class="c-ipa">/dɪˈɡri/</span><span class="c-pos">n.</span><span class="c-zh">程度;度数;学位</span></div>
+      <div class="row" data-w="design"><span class="c-w">design</span><span class="c-ipa">/dɪˈzaɪn/</span><span class="c-pos">n.</span><span class="c-zh">设计;图案</span></div>
+      <div class="row" data-w="desire"><span class="c-w">desire</span><span class="c-ipa">/dɪˈzaɪɚ/</span><span class="c-pos">n.</span><span class="c-zh">欲望;渴望</span></div>
+      <div class="row" data-w="destruction"><span class="c-w">destruction</span><span class="c-ipa">/dɪˈstrʌkʃən/</span><span class="c-pos">n.</span><span class="c-zh">破坏;毁灭</span></div>
+      <div class="row" data-w="detail"><span class="c-w">detail</span><span class="c-ipa">/dɪˈteɪl/</span><span class="c-pos">n.</span><span class="c-zh">细节</span></div>
+      <div class="row" data-w="development"><span class="c-w">development</span><span class="c-ipa">/dɪˈvɛləpmənt/</span><span class="c-pos">n.</span><span class="c-zh">发展</span></div>
+      <div class="row" data-w="digestion"><span class="c-w">digestion</span><span class="c-ipa">/daɪˈdʒɛstʃən/</span><span class="c-pos">n.</span><span class="c-zh">消化</span></div>
+      <div class="row" data-w="direction"><span class="c-w">direction</span><span class="c-ipa">/dɪˈrɛkʃən/</span><span class="c-pos">n.</span><span class="c-zh">方向;指导</span></div>
+      <div class="row" data-w="discovery"><span class="c-w">discovery</span><span class="c-ipa">/dɪˈskʌvɚi/</span><span class="c-pos">n.</span><span class="c-zh">发现</span></div>
+      <div class="row" data-w="discussion"><span class="c-w">discussion</span><span class="c-ipa">/dɪˈskʌʃən/</span><span class="c-pos">n.</span><span class="c-zh">讨论</span></div>
+      <div class="row" data-w="disease"><span class="c-w">disease</span><span class="c-ipa">/dɪˈziz/</span><span class="c-pos">n.</span><span class="c-zh">疾病</span></div>
+      <div class="row" data-w="disgust"><span class="c-w">disgust</span><span class="c-ipa">/dɪsˈɡʌst/</span><span class="c-pos">n.</span><span class="c-zh">厌恶</span></div>
+      <div class="row" data-w="distance"><span class="c-w">distance</span><span class="c-ipa">/ˈdɪstəns/</span><span class="c-pos">n.</span><span class="c-zh">距离</span></div>
+      <div class="row" data-w="distribution"><span class="c-w">distribution</span><span class="c-ipa">/ˌdɪstrəˈbjuʃən/</span><span class="c-pos">n.</span><span class="c-zh">分配;分布</span></div>
+      <div class="row" data-w="division"><span class="c-w">division</span><span class="c-ipa">/dɪˈvɪʒən/</span><span class="c-pos">n.</span><span class="c-zh">划分;除法</span></div>
+      <div class="row" data-w="doubt"><span class="c-w">doubt</span><span class="c-ipa">/daʊt/</span><span class="c-pos">n.</span><span class="c-zh">怀疑</span></div>
+      <div class="row" data-w="drink"><span class="c-w">drink</span><span class="c-ipa">/drɪŋk/</span><span class="c-pos">n.</span><span class="c-zh">饮料</span></div>
+      <div class="row" data-w="driving"><span class="c-w">driving</span><span class="c-ipa">/ˈdraɪvɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">驾驶</span></div>
+      <div class="row" data-w="dust"><span class="c-w">dust</span><span class="c-ipa">/dʌst/</span><span class="c-pos">n.</span><span class="c-zh">灰尘</span></div>
+      <div class="row" data-w="earth"><span class="c-w">earth</span><span class="c-ipa">/ɝθ/</span><span class="c-pos">n.</span><span class="c-zh">地球;泥土</span></div>
+      <div class="row" data-w="edge"><span class="c-w">edge</span><span class="c-ipa">/ɛdʒ/</span><span class="c-pos">n.</span><span class="c-zh">边缘;刃</span></div>
+      <div class="row" data-w="education"><span class="c-w">education</span><span class="c-ipa">/ˌɛdʒəˈkeɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">教育</span></div>
+      <div class="row" data-w="effect"><span class="c-w">effect</span><span class="c-ipa">/ɪˈfɛkt/</span><span class="c-pos">n.</span><span class="c-zh">效果;影响</span></div>
+      <div class="row" data-w="end"><span class="c-w">end</span><span class="c-ipa">/ɛnd/</span><span class="c-pos">n.</span><span class="c-zh">结尾;末端</span></div>
+      <div class="row" data-w="error"><span class="c-w">error</span><span class="c-ipa">/ˈɛrɚ/</span><span class="c-pos">n.</span><span class="c-zh">错误</span></div>
+      <div class="row" data-w="event"><span class="c-w">event</span><span class="c-ipa">/ɪˈvɛnt/</span><span class="c-pos">n.</span><span class="c-zh">事件</span></div>
+      <div class="row" data-w="example"><span class="c-w">example</span><span class="c-ipa">/ɪɡˈzæmpəl/</span><span class="c-pos">n.</span><span class="c-zh">例子;榜样</span></div>
+      <div class="row" data-w="exchange"><span class="c-w">exchange</span><span class="c-ipa">/ɪksˈtʃeɪndʒ/</span><span class="c-pos">n.</span><span class="c-zh">交换;兑换</span></div>
+      <div class="row" data-w="existence"><span class="c-w">existence</span><span class="c-ipa">/ɪɡˈzɪstəns/</span><span class="c-pos">n.</span><span class="c-zh">存在</span></div>
+      <div class="row" data-w="expansion"><span class="c-w">expansion</span><span class="c-ipa">/ɪkˈspænʃən/</span><span class="c-pos">n.</span><span class="c-zh">扩张;膨胀</span></div>
+      <div class="row" data-w="experience"><span class="c-w">experience</span><span class="c-ipa">/ɪkˈspɪriəns/</span><span class="c-pos">n.</span><span class="c-zh">经验;经历</span></div>
+      <div class="row" data-w="expert"><span class="c-w">expert</span><span class="c-ipa">/ˈɛkspɝt/</span><span class="c-pos">n.</span><span class="c-zh">专家</span></div>
+      <div class="row" data-w="fact"><span class="c-w">fact</span><span class="c-ipa">/fækt/</span><span class="c-pos">n.</span><span class="c-zh">事实</span></div>
+      <div class="row" data-w="fall"><span class="c-w">fall</span><span class="c-ipa">/fɔl/</span><span class="c-pos">n.</span><span class="c-zh">落下;秋天</span></div>
+      <div class="row" data-w="family"><span class="c-w">family</span><span class="c-ipa">/ˈfæməli/</span><span class="c-pos">n.</span><span class="c-zh">家庭</span></div>
+      <div class="row" data-w="father"><span class="c-w">father</span><span class="c-ipa">/ˈfɑðɚ/</span><span class="c-pos">n.</span><span class="c-zh">父亲</span></div>
+      <div class="row" data-w="fear"><span class="c-w">fear</span><span class="c-ipa">/fɪr/</span><span class="c-pos">n.</span><span class="c-zh">恐惧</span></div>
+      <div class="row" data-w="feeling"><span class="c-w">feeling</span><span class="c-ipa">/ˈfilɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">感觉;情感</span></div>
+      <div class="row" data-w="fiction"><span class="c-w">fiction</span><span class="c-ipa">/ˈfɪkʃən/</span><span class="c-pos">n.</span><span class="c-zh">虚构;小说</span></div>
+      <div class="row" data-w="field"><span class="c-w">field</span><span class="c-ipa">/fild/</span><span class="c-pos">n.</span><span class="c-zh">田地;领域</span></div>
+      <div class="row" data-w="fight"><span class="c-w">fight</span><span class="c-ipa">/faɪt/</span><span class="c-pos">n.</span><span class="c-zh">打斗;斗争</span></div>
+      <div class="row" data-w="fire"><span class="c-w">fire</span><span class="c-ipa">/ˈfaɪɚ/</span><span class="c-pos">n.</span><span class="c-zh">火</span></div>
+      <div class="row" data-w="flame"><span class="c-w">flame</span><span class="c-ipa">/fleɪm/</span><span class="c-pos">n.</span><span class="c-zh">火焰</span></div>
+      <div class="row" data-w="flight"><span class="c-w">flight</span><span class="c-ipa">/flaɪt/</span><span class="c-pos">n.</span><span class="c-zh">飞行;航班</span></div>
+      <div class="row" data-w="flower"><span class="c-w">flower</span><span class="c-ipa">/ˈflaʊɚ/</span><span class="c-pos">n.</span><span class="c-zh">花</span></div>
+      <div class="row" data-w="fold"><span class="c-w">fold</span><span class="c-ipa">/foʊld/</span><span class="c-pos">n.</span><span class="c-zh">折叠;褶</span></div>
+      <div class="row" data-w="food"><span class="c-w">food</span><span class="c-ipa">/fud/</span><span class="c-pos">n.</span><span class="c-zh">食物</span></div>
+      <div class="row" data-w="force"><span class="c-w">force</span><span class="c-ipa">/fɔrs/</span><span class="c-pos">n.</span><span class="c-zh">力;力量</span></div>
+      <div class="row" data-w="form"><span class="c-w">form</span><span class="c-ipa">/fɔrm/</span><span class="c-pos">n.</span><span class="c-zh">形式;表格</span></div>
+      <div class="row" data-w="friend"><span class="c-w">friend</span><span class="c-ipa">/frɛnd/</span><span class="c-pos">n.</span><span class="c-zh">朋友</span></div>
+      <div class="row" data-w="front"><span class="c-w">front</span><span class="c-ipa">/frʌnt/</span><span class="c-pos">n.</span><span class="c-zh">前面;正面</span></div>
+      <div class="row" data-w="fruit"><span class="c-w">fruit</span><span class="c-ipa">/frut/</span><span class="c-pos">n.</span><span class="c-zh">水果</span></div>
+      <div class="row" data-w="glass"><span class="c-w">glass</span><span class="c-ipa">/ɡlæs/</span><span class="c-pos">n.</span><span class="c-zh">玻璃;玻璃杯</span></div>
+      <div class="row" data-w="gold"><span class="c-w">gold</span><span class="c-ipa">/ɡoʊld/</span><span class="c-pos">n.</span><span class="c-zh">黄金</span></div>
+      <div class="row" data-w="government"><span class="c-w">government</span><span class="c-ipa">/ˈɡʌvɚnmənt/</span><span class="c-pos">n.</span><span class="c-zh">政府</span></div>
+      <div class="row" data-w="grain"><span class="c-w">grain</span><span class="c-ipa">/ɡreɪn/</span><span class="c-pos">n.</span><span class="c-zh">谷物;颗粒</span></div>
+      <div class="row" data-w="grass"><span class="c-w">grass</span><span class="c-ipa">/ɡræs/</span><span class="c-pos">n.</span><span class="c-zh">草</span></div>
+      <div class="row" data-w="grip"><span class="c-w">grip</span><span class="c-ipa">/ɡrɪp/</span><span class="c-pos">n.</span><span class="c-zh">紧握;掌控</span></div>
+      <div class="row" data-w="group"><span class="c-w">group</span><span class="c-ipa">/ɡrup/</span><span class="c-pos">n.</span><span class="c-zh">群;组</span></div>
+      <div class="row" data-w="growth"><span class="c-w">growth</span><span class="c-ipa">/ɡroʊθ/</span><span class="c-pos">n.</span><span class="c-zh">生长;增长</span></div>
+      <div class="row" data-w="guide"><span class="c-w">guide</span><span class="c-ipa">/ɡaɪd/</span><span class="c-pos">n.</span><span class="c-zh">向导;指南</span></div>
+      <div class="row" data-w="harbor"><span class="c-w">harbor</span><span class="c-ipa">/ˈhɑrbɚ/</span><span class="c-pos">n.</span><span class="c-zh">港口</span></div>
+      <div class="row" data-w="harmony"><span class="c-w">harmony</span><span class="c-ipa">/ˈhɑrməni/</span><span class="c-pos">n.</span><span class="c-zh">和谐</span></div>
+      <div class="row" data-w="hate"><span class="c-w">hate</span><span class="c-ipa">/heɪt/</span><span class="c-pos">n.</span><span class="c-zh">憎恨</span></div>
+      <div class="row" data-w="hearing"><span class="c-w">hearing</span><span class="c-ipa">/ˈhɪrɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">听觉;听证</span></div>
+      <div class="row" data-w="heat"><span class="c-w">heat</span><span class="c-ipa">/hit/</span><span class="c-pos">n.</span><span class="c-zh">热;热量</span></div>
+      <div class="row" data-w="help"><span class="c-w">help</span><span class="c-ipa">/hɛlp/</span><span class="c-pos">n.</span><span class="c-zh">帮助</span></div>
+      <div class="row" data-w="history"><span class="c-w">history</span><span class="c-ipa">/ˈhɪstəri/</span><span class="c-pos">n.</span><span class="c-zh">历史</span></div>
+      <div class="row" data-w="hole"><span class="c-w">hole</span><span class="c-ipa">/hoʊl/</span><span class="c-pos">n.</span><span class="c-zh">洞;孔</span></div>
+      <div class="row" data-w="hope"><span class="c-w">hope</span><span class="c-ipa">/hoʊp/</span><span class="c-pos">n.</span><span class="c-zh">希望</span></div>
+      <div class="row" data-w="hour"><span class="c-w">hour</span><span class="c-ipa">/ˈaʊɚ/</span><span class="c-pos">n.</span><span class="c-zh">小时</span></div>
+      <div class="row" data-w="humor"><span class="c-w">humor</span><span class="c-ipa">/ˈhjumɚ/</span><span class="c-pos">n.</span><span class="c-zh">幽默</span></div>
+      <div class="row" data-w="ice"><span class="c-w">ice</span><span class="c-ipa">/aɪs/</span><span class="c-pos">n.</span><span class="c-zh">冰</span></div>
+      <div class="row" data-w="idea"><span class="c-w">idea</span><span class="c-ipa">/aɪˈdiə/</span><span class="c-pos">n.</span><span class="c-zh">想法;主意</span></div>
+      <div class="row" data-w="impulse"><span class="c-w">impulse</span><span class="c-ipa">/ˈɪmpʌls/</span><span class="c-pos">n.</span><span class="c-zh">冲动;脉冲</span></div>
+      <div class="row" data-w="increase"><span class="c-w">increase</span><span class="c-ipa">/ˈɪnkris/</span><span class="c-pos">n.</span><span class="c-zh">增加</span></div>
+      <div class="row" data-w="industry"><span class="c-w">industry</span><span class="c-ipa">/ˈɪndəstri/</span><span class="c-pos">n.</span><span class="c-zh">工业;勤勉</span></div>
+      <div class="row" data-w="ink"><span class="c-w">ink</span><span class="c-ipa">/ɪŋk/</span><span class="c-pos">n.</span><span class="c-zh">墨水</span></div>
+      <div class="row" data-w="insect"><span class="c-w">insect</span><span class="c-ipa">/ˈɪnsɛkt/</span><span class="c-pos">n.</span><span class="c-zh">昆虫</span></div>
+      <div class="row" data-w="instrument"><span class="c-w">instrument</span><span class="c-ipa">/ˈɪnstrəmənt/</span><span class="c-pos">n.</span><span class="c-zh">工具;乐器</span></div>
+      <div class="row" data-w="insurance"><span class="c-w">insurance</span><span class="c-ipa">/ɪnˈʃʊrəns/</span><span class="c-pos">n.</span><span class="c-zh">保险</span></div>
+      <div class="row" data-w="interest"><span class="c-w">interest</span><span class="c-ipa">/ˈɪntrəst/</span><span class="c-pos">n.</span><span class="c-zh">兴趣;利息</span></div>
+      <div class="row" data-w="invention"><span class="c-w">invention</span><span class="c-ipa">/ɪnˈvɛnʃən/</span><span class="c-pos">n.</span><span class="c-zh">发明</span></div>
+      <div class="row" data-w="iron"><span class="c-w">iron</span><span class="c-ipa">/ˈaɪɚn/</span><span class="c-pos">n.</span><span class="c-zh">铁;熨斗</span></div>
+      <div class="row" data-w="jelly"><span class="c-w">jelly</span><span class="c-ipa">/ˈdʒɛli/</span><span class="c-pos">n.</span><span class="c-zh">果冻</span></div>
+      <div class="row" data-w="join"><span class="c-w">join</span><span class="c-ipa">/dʒɔɪn/</span><span class="c-pos">n.</span><span class="c-zh">接合;连接处</span></div>
+      <div class="row" data-w="journey"><span class="c-w">journey</span><span class="c-ipa">/ˈdʒɝni/</span><span class="c-pos">n.</span><span class="c-zh">旅程</span></div>
+      <div class="row" data-w="judge"><span class="c-w">judge</span><span class="c-ipa">/dʒʌdʒ/</span><span class="c-pos">n.</span><span class="c-zh">法官;裁判</span></div>
+      <div class="row" data-w="jump"><span class="c-w">jump</span><span class="c-ipa">/dʒʌmp/</span><span class="c-pos">n.</span><span class="c-zh">跳;跳跃</span></div>
+      <div class="row" data-w="kick"><span class="c-w">kick</span><span class="c-ipa">/kɪk/</span><span class="c-pos">n.</span><span class="c-zh">踢</span></div>
+      <div class="row" data-w="kiss"><span class="c-w">kiss</span><span class="c-ipa">/kɪs/</span><span class="c-pos">n.</span><span class="c-zh">吻</span></div>
+      <div class="row" data-w="knowledge"><span class="c-w">knowledge</span><span class="c-ipa">/ˈnɑlɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">知识</span></div>
+      <div class="row" data-w="land"><span class="c-w">land</span><span class="c-ipa">/lænd/</span><span class="c-pos">n.</span><span class="c-zh">土地;陆地</span></div>
+      <div class="row" data-w="language"><span class="c-w">language</span><span class="c-ipa">/ˈlæŋɡwɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">语言</span></div>
+      <div class="row" data-w="laugh"><span class="c-w">laugh</span><span class="c-ipa">/læf/</span><span class="c-pos">n.</span><span class="c-zh">笑;笑声</span></div>
+      <div class="row" data-w="law"><span class="c-w">law</span><span class="c-ipa">/lɔ/</span><span class="c-pos">n.</span><span class="c-zh">法律</span></div>
+      <div class="row" data-w="lead"><span class="c-w">lead</span><span class="c-ipa">/lɛd/</span><span class="c-pos">n.</span><span class="c-zh">铅</span></div>
+      <div class="row" data-w="learning"><span class="c-w">learning</span><span class="c-ipa">/ˈlɝnɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">学习;学问</span></div>
+      <div class="row" data-w="leather"><span class="c-w">leather</span><span class="c-ipa">/ˈlɛðɚ/</span><span class="c-pos">n.</span><span class="c-zh">皮革</span></div>
+      <div class="row" data-w="letter"><span class="c-w">letter</span><span class="c-ipa">/ˈlɛtɚ/</span><span class="c-pos">n.</span><span class="c-zh">信;字母</span></div>
+      <div class="row" data-w="level"><span class="c-w">level</span><span class="c-ipa">/ˈlɛvəl/</span><span class="c-pos">n.</span><span class="c-zh">水平;层级</span></div>
+      <div class="row" data-w="lift"><span class="c-w">lift</span><span class="c-ipa">/lɪft/</span><span class="c-pos">n.</span><span class="c-zh">提升;搭车</span></div>
+      <div class="row" data-w="light"><span class="c-w">light</span><span class="c-ipa">/laɪt/</span><span class="c-pos">n.</span><span class="c-zh">光;灯</span></div>
+      <div class="row" data-w="limit"><span class="c-w">limit</span><span class="c-ipa">/ˈlɪmɪt/</span><span class="c-pos">n.</span><span class="c-zh">限制;界限</span></div>
+      <div class="row" data-w="linen"><span class="c-w">linen</span><span class="c-ipa">/ˈlɪnən/</span><span class="c-pos">n.</span><span class="c-zh">亚麻;亚麻布</span></div>
+      <div class="row" data-w="liquid"><span class="c-w">liquid</span><span class="c-ipa">/ˈlɪkwɪd/</span><span class="c-pos">n.</span><span class="c-zh">液体</span></div>
+      <div class="row" data-w="list"><span class="c-w">list</span><span class="c-ipa">/lɪst/</span><span class="c-pos">n.</span><span class="c-zh">清单;名单</span></div>
+      <div class="row" data-w="look"><span class="c-w">look</span><span class="c-ipa">/lʊk/</span><span class="c-pos">n.</span><span class="c-zh">看;样子</span></div>
+      <div class="row" data-w="loss"><span class="c-w">loss</span><span class="c-ipa">/lɔs/</span><span class="c-pos">n.</span><span class="c-zh">损失</span></div>
+      <div class="row" data-w="love"><span class="c-w">love</span><span class="c-ipa">/lʌv/</span><span class="c-pos">n.</span><span class="c-zh">爱</span></div>
+      <div class="row" data-w="machine"><span class="c-w">machine</span><span class="c-ipa">/məˈʃin/</span><span class="c-pos">n.</span><span class="c-zh">机器</span></div>
+      <div class="row" data-w="man"><span class="c-w">man</span><span class="c-ipa">/mæn/</span><span class="c-pos">n.</span><span class="c-zh">男人;人</span></div>
+      <div class="row" data-w="manager"><span class="c-w">manager</span><span class="c-ipa">/ˈmænɪdʒɚ/</span><span class="c-pos">n.</span><span class="c-zh">经理</span></div>
+      <div class="row" data-w="mark"><span class="c-w">mark</span><span class="c-ipa">/mɑrk/</span><span class="c-pos">n.</span><span class="c-zh">记号;分数</span></div>
+      <div class="row" data-w="market"><span class="c-w">market</span><span class="c-ipa">/ˈmɑrkɪt/</span><span class="c-pos">n.</span><span class="c-zh">市场</span></div>
+      <div class="row" data-w="mass"><span class="c-w">mass</span><span class="c-ipa">/mæs/</span><span class="c-pos">n.</span><span class="c-zh">质量;大量</span></div>
+      <div class="row" data-w="meal"><span class="c-w">meal</span><span class="c-ipa">/mil/</span><span class="c-pos">n.</span><span class="c-zh">一餐;膳食</span></div>
+      <div class="row" data-w="measure"><span class="c-w">measure</span><span class="c-ipa">/ˈmɛʒɚ/</span><span class="c-pos">n.</span><span class="c-zh">措施;尺度</span></div>
+      <div class="row" data-w="meat"><span class="c-w">meat</span><span class="c-ipa">/mit/</span><span class="c-pos">n.</span><span class="c-zh">肉</span></div>
+      <div class="row" data-w="meeting"><span class="c-w">meeting</span><span class="c-ipa">/ˈmitɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">会议</span></div>
+      <div class="row" data-w="memory"><span class="c-w">memory</span><span class="c-ipa">/ˈmɛməri/</span><span class="c-pos">n.</span><span class="c-zh">记忆</span></div>
+      <div class="row" data-w="metal"><span class="c-w">metal</span><span class="c-ipa">/ˈmɛtəl/</span><span class="c-pos">n.</span><span class="c-zh">金属</span></div>
+      <div class="row" data-w="middle"><span class="c-w">middle</span><span class="c-ipa">/ˈmɪdəl/</span><span class="c-pos">n.</span><span class="c-zh">中间</span></div>
+      <div class="row" data-w="milk"><span class="c-w">milk</span><span class="c-ipa">/mɪlk/</span><span class="c-pos">n.</span><span class="c-zh">牛奶</span></div>
+      <div class="row" data-w="mind"><span class="c-w">mind</span><span class="c-ipa">/maɪnd/</span><span class="c-pos">n.</span><span class="c-zh">头脑;心智</span></div>
+      <div class="row" data-w="mine"><span class="c-w">mine</span><span class="c-ipa">/maɪn/</span><span class="c-pos">n.</span><span class="c-zh">矿;矿井</span></div>
+      <div class="row" data-w="minute"><span class="c-w">minute</span><span class="c-ipa">/ˈmɪnɪt/</span><span class="c-pos">n.</span><span class="c-zh">分钟</span></div>
+      <div class="row" data-w="mist"><span class="c-w">mist</span><span class="c-ipa">/mɪst/</span><span class="c-pos">n.</span><span class="c-zh">薄雾</span></div>
+      <div class="row" data-w="money"><span class="c-w">money</span><span class="c-ipa">/ˈmʌni/</span><span class="c-pos">n.</span><span class="c-zh">钱</span></div>
+      <div class="row" data-w="month"><span class="c-w">month</span><span class="c-ipa">/mʌnθ/</span><span class="c-pos">n.</span><span class="c-zh">月;月份</span></div>
+      <div class="row" data-w="morning"><span class="c-w">morning</span><span class="c-ipa">/ˈmɔrnɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">早晨</span></div>
+      <div class="row" data-w="mother"><span class="c-w">mother</span><span class="c-ipa">/ˈmʌðɚ/</span><span class="c-pos">n.</span><span class="c-zh">母亲</span></div>
+      <div class="row" data-w="motion"><span class="c-w">motion</span><span class="c-ipa">/ˈmoʊʃən/</span><span class="c-pos">n.</span><span class="c-zh">运动;动议</span></div>
+      <div class="row" data-w="mountain"><span class="c-w">mountain</span><span class="c-ipa">/ˈmaʊntən/</span><span class="c-pos">n.</span><span class="c-zh">山</span></div>
+      <div class="row" data-w="move"><span class="c-w">move</span><span class="c-ipa">/muv/</span><span class="c-pos">n.</span><span class="c-zh">移动;举措</span></div>
+      <div class="row" data-w="music"><span class="c-w">music</span><span class="c-ipa">/ˈmjuzɪk/</span><span class="c-pos">n.</span><span class="c-zh">音乐</span></div>
+      <div class="row" data-w="name"><span class="c-w">name</span><span class="c-ipa">/neɪm/</span><span class="c-pos">n.</span><span class="c-zh">名字</span></div>
+      <div class="row" data-w="nation"><span class="c-w">nation</span><span class="c-ipa">/ˈneɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">国家;民族</span></div>
+      <div class="row" data-w="need"><span class="c-w">need</span><span class="c-ipa">/nid/</span><span class="c-pos">n.</span><span class="c-zh">需要</span></div>
+      <div class="row" data-w="news"><span class="c-w">news</span><span class="c-ipa">/nuz/</span><span class="c-pos">n.</span><span class="c-zh">新闻;消息</span></div>
+      <div class="row" data-w="night"><span class="c-w">night</span><span class="c-ipa">/naɪt/</span><span class="c-pos">n.</span><span class="c-zh">夜晚</span></div>
+      <div class="row" data-w="noise"><span class="c-w">noise</span><span class="c-ipa">/nɔɪz/</span><span class="c-pos">n.</span><span class="c-zh">噪音</span></div>
+      <div class="row" data-w="note"><span class="c-w">note</span><span class="c-ipa">/noʊt/</span><span class="c-pos">n.</span><span class="c-zh">笔记;音符</span></div>
+      <div class="row" data-w="number"><span class="c-w">number</span><span class="c-ipa">/ˈnʌmbɚ/</span><span class="c-pos">n.</span><span class="c-zh">数字;号码</span></div>
+      <div class="row" data-w="observation"><span class="c-w">observation</span><span class="c-ipa">/ˌɑbzɚˈveɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">观察;评论</span></div>
+      <div class="row" data-w="offer"><span class="c-w">offer</span><span class="c-ipa">/ˈɔfɚ/</span><span class="c-pos">n.</span><span class="c-zh">提议;出价</span></div>
+      <div class="row" data-w="oil"><span class="c-w">oil</span><span class="c-ipa">/ɔɪl/</span><span class="c-pos">n.</span><span class="c-zh">油</span></div>
+      <div class="row" data-w="operation"><span class="c-w">operation</span><span class="c-ipa">/ˌɑpəˈreɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">操作;手术</span></div>
+      <div class="row" data-w="opinion"><span class="c-w">opinion</span><span class="c-ipa">/əˈpɪnjən/</span><span class="c-pos">n.</span><span class="c-zh">意见;看法</span></div>
+      <div class="row" data-w="order"><span class="c-w">order</span><span class="c-ipa">/ˈɔrdɚ/</span><span class="c-pos">n.</span><span class="c-zh">命令;秩序;订单</span></div>
+      <div class="row" data-w="organization"><span class="c-w">organization</span><span class="c-ipa">/ˌɔrɡənəˈzeɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">组织</span></div>
+      <div class="row" data-w="ornament"><span class="c-w">ornament</span><span class="c-ipa">/ˈɔrnəmənt/</span><span class="c-pos">n.</span><span class="c-zh">装饰品</span></div>
+      <div class="row" data-w="owner"><span class="c-w">owner</span><span class="c-ipa">/ˈoʊnɚ/</span><span class="c-pos">n.</span><span class="c-zh">主人;物主</span></div>
+      <div class="row" data-w="page"><span class="c-w">page</span><span class="c-ipa">/peɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">页;书页</span></div>
+      <div class="row" data-w="pain"><span class="c-w">pain</span><span class="c-ipa">/peɪn/</span><span class="c-pos">n.</span><span class="c-zh">疼痛</span></div>
+      <div class="row" data-w="paint"><span class="c-w">paint</span><span class="c-ipa">/peɪnt/</span><span class="c-pos">n.</span><span class="c-zh">油漆;颜料</span></div>
+      <div class="row" data-w="paper"><span class="c-w">paper</span><span class="c-ipa">/ˈpeɪpɚ/</span><span class="c-pos">n.</span><span class="c-zh">纸;报纸</span></div>
+      <div class="row" data-w="part"><span class="c-w">part</span><span class="c-ipa">/pɑrt/</span><span class="c-pos">n.</span><span class="c-zh">部分</span></div>
+      <div class="row" data-w="paste"><span class="c-w">paste</span><span class="c-ipa">/peɪst/</span><span class="c-pos">n.</span><span class="c-zh">糊;浆糊</span></div>
+      <div class="row" data-w="payment"><span class="c-w">payment</span><span class="c-ipa">/ˈpeɪmənt/</span><span class="c-pos">n.</span><span class="c-zh">支付;付款</span></div>
+      <div class="row" data-w="peace"><span class="c-w">peace</span><span class="c-ipa">/pis/</span><span class="c-pos">n.</span><span class="c-zh">和平;平静</span></div>
+      <div class="row" data-w="person"><span class="c-w">person</span><span class="c-ipa">/ˈpɝsən/</span><span class="c-pos">n.</span><span class="c-zh">人</span></div>
+      <div class="row" data-w="place"><span class="c-w">place</span><span class="c-ipa">/pleɪs/</span><span class="c-pos">n.</span><span class="c-zh">地方</span></div>
+      <div class="row" data-w="plant"><span class="c-w">plant</span><span class="c-ipa">/plænt/</span><span class="c-pos">n.</span><span class="c-zh">植物;工厂</span></div>
+      <div class="row" data-w="play"><span class="c-w">play</span><span class="c-ipa">/pleɪ/</span><span class="c-pos">n.</span><span class="c-zh">玩;戏剧</span></div>
+      <div class="row" data-w="pleasure"><span class="c-w">pleasure</span><span class="c-ipa">/ˈplɛʒɚ/</span><span class="c-pos">n.</span><span class="c-zh">愉快;乐趣</span></div>
+      <div class="row" data-w="point"><span class="c-w">point</span><span class="c-ipa">/pɔɪnt/</span><span class="c-pos">n.</span><span class="c-zh">点;要点</span></div>
+      <div class="row" data-w="poison"><span class="c-w">poison</span><span class="c-ipa">/ˈpɔɪzən/</span><span class="c-pos">n.</span><span class="c-zh">毒;毒药</span></div>
+      <div class="row" data-w="polish"><span class="c-w">polish</span><span class="c-ipa">/ˈpɑlɪʃ/</span><span class="c-pos">n.</span><span class="c-zh">擦亮;光泽剂</span></div>
+      <div class="row" data-w="porter"><span class="c-w">porter</span><span class="c-ipa">/ˈpɔrtɚ/</span><span class="c-pos">n.</span><span class="c-zh">搬运工;门房</span></div>
+      <div class="row" data-w="position"><span class="c-w">position</span><span class="c-ipa">/pəˈzɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">位置;职位</span></div>
+      <div class="row" data-w="powder"><span class="c-w">powder</span><span class="c-ipa">/ˈpaʊdɚ/</span><span class="c-pos">n.</span><span class="c-zh">粉末</span></div>
+      <div class="row" data-w="power"><span class="c-w">power</span><span class="c-ipa">/ˈpaʊɚ/</span><span class="c-pos">n.</span><span class="c-zh">力量;权力</span></div>
+      <div class="row" data-w="price"><span class="c-w">price</span><span class="c-ipa">/praɪs/</span><span class="c-pos">n.</span><span class="c-zh">价格</span></div>
+      <div class="row" data-w="print"><span class="c-w">print</span><span class="c-ipa">/prɪnt/</span><span class="c-pos">n.</span><span class="c-zh">印刷;印记</span></div>
+      <div class="row" data-w="process"><span class="c-w">process</span><span class="c-ipa">/ˈprɑsɛs/</span><span class="c-pos">n.</span><span class="c-zh">过程</span></div>
+      <div class="row" data-w="produce"><span class="c-w">produce</span><span class="c-ipa">/ˈproʊdus/</span><span class="c-pos">n.</span><span class="c-zh">农产品</span></div>
+      <div class="row" data-w="profit"><span class="c-w">profit</span><span class="c-ipa">/ˈprɑfɪt/</span><span class="c-pos">n.</span><span class="c-zh">利润</span></div>
+      <div class="row" data-w="property"><span class="c-w">property</span><span class="c-ipa">/ˈprɑpɚti/</span><span class="c-pos">n.</span><span class="c-zh">财产;属性</span></div>
+      <div class="row" data-w="prose"><span class="c-w">prose</span><span class="c-ipa">/proʊz/</span><span class="c-pos">n.</span><span class="c-zh">散文</span></div>
+      <div class="row" data-w="protest"><span class="c-w">protest</span><span class="c-ipa">/ˈproʊtɛst/</span><span class="c-pos">n.</span><span class="c-zh">抗议</span></div>
+      <div class="row" data-w="pull"><span class="c-w">pull</span><span class="c-ipa">/pʊl/</span><span class="c-pos">n.</span><span class="c-zh">拉;拖</span></div>
+      <div class="row" data-w="punishment"><span class="c-w">punishment</span><span class="c-ipa">/ˈpʌnɪʃmənt/</span><span class="c-pos">n.</span><span class="c-zh">惩罚</span></div>
+      <div class="row" data-w="purpose"><span class="c-w">purpose</span><span class="c-ipa">/ˈpɝpəs/</span><span class="c-pos">n.</span><span class="c-zh">目的</span></div>
+      <div class="row" data-w="push"><span class="c-w">push</span><span class="c-ipa">/pʊʃ/</span><span class="c-pos">n.</span><span class="c-zh">推</span></div>
+      <div class="row" data-w="quality"><span class="c-w">quality</span><span class="c-ipa">/ˈkwɑləti/</span><span class="c-pos">n.</span><span class="c-zh">质量;品质</span></div>
+      <div class="row" data-w="question"><span class="c-w">question</span><span class="c-ipa">/ˈkwɛstʃən/</span><span class="c-pos">n.</span><span class="c-zh">问题</span></div>
+      <div class="row" data-w="rain"><span class="c-w">rain</span><span class="c-ipa">/reɪn/</span><span class="c-pos">n.</span><span class="c-zh">雨</span></div>
+      <div class="row" data-w="range"><span class="c-w">range</span><span class="c-ipa">/reɪndʒ/</span><span class="c-pos">n.</span><span class="c-zh">范围;射程</span></div>
+      <div class="row" data-w="rate"><span class="c-w">rate</span><span class="c-ipa">/reɪt/</span><span class="c-pos">n.</span><span class="c-zh">比率;速度</span></div>
+      <div class="row" data-w="ray"><span class="c-w">ray</span><span class="c-ipa">/reɪ/</span><span class="c-pos">n.</span><span class="c-zh">光线;射线</span></div>
+      <div class="row" data-w="reaction"><span class="c-w">reaction</span><span class="c-ipa">/riˈækʃən/</span><span class="c-pos">n.</span><span class="c-zh">反应</span></div>
+      <div class="row" data-w="reading"><span class="c-w">reading</span><span class="c-ipa">/ˈridɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">阅读;读数</span></div>
+      <div class="row" data-w="reason"><span class="c-w">reason</span><span class="c-ipa">/ˈrizən/</span><span class="c-pos">n.</span><span class="c-zh">原因;理性</span></div>
+      <div class="row" data-w="record"><span class="c-w">record</span><span class="c-ipa">/ˈrɛkɚd/</span><span class="c-pos">n.</span><span class="c-zh">记录;唱片</span></div>
+      <div class="row" data-w="regret"><span class="c-w">regret</span><span class="c-ipa">/rɪˈɡrɛt/</span><span class="c-pos">n.</span><span class="c-zh">遗憾;后悔</span></div>
+      <div class="row" data-w="relation"><span class="c-w">relation</span><span class="c-ipa">/rɪˈleɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">关系;亲属</span></div>
+      <div class="row" data-w="religion"><span class="c-w">religion</span><span class="c-ipa">/rɪˈlɪdʒən/</span><span class="c-pos">n.</span><span class="c-zh">宗教</span></div>
+      <div class="row" data-w="representative"><span class="c-w">representative</span><span class="c-ipa">/ˌrɛprɪˈzɛntətɪv/</span><span class="c-pos">n.</span><span class="c-zh">代表</span></div>
+      <div class="row" data-w="request"><span class="c-w">request</span><span class="c-ipa">/rɪˈkwɛst/</span><span class="c-pos">n.</span><span class="c-zh">请求</span></div>
+      <div class="row" data-w="respect"><span class="c-w">respect</span><span class="c-ipa">/rɪˈspɛkt/</span><span class="c-pos">n.</span><span class="c-zh">尊敬;方面</span></div>
+      <div class="row" data-w="rest"><span class="c-w">rest</span><span class="c-ipa">/rɛst/</span><span class="c-pos">n.</span><span class="c-zh">休息;其余</span></div>
+      <div class="row" data-w="reward"><span class="c-w">reward</span><span class="c-ipa">/rɪˈwɔrd/</span><span class="c-pos">n.</span><span class="c-zh">奖励</span></div>
+      <div class="row" data-w="rhythm"><span class="c-w">rhythm</span><span class="c-ipa">/ˈrɪðəm/</span><span class="c-pos">n.</span><span class="c-zh">节奏</span></div>
+      <div class="row" data-w="rice"><span class="c-w">rice</span><span class="c-ipa">/raɪs/</span><span class="c-pos">n.</span><span class="c-zh">米;大米</span></div>
+      <div class="row" data-w="river"><span class="c-w">river</span><span class="c-ipa">/ˈrɪvɚ/</span><span class="c-pos">n.</span><span class="c-zh">河流</span></div>
+      <div class="row" data-w="road"><span class="c-w">road</span><span class="c-ipa">/roʊd/</span><span class="c-pos">n.</span><span class="c-zh">道路</span></div>
+      <div class="row" data-w="roll"><span class="c-w">roll</span><span class="c-ipa">/roʊl/</span><span class="c-pos">n.</span><span class="c-zh">卷;名册</span></div>
+      <div class="row" data-w="room"><span class="c-w">room</span><span class="c-ipa">/rum/</span><span class="c-pos">n.</span><span class="c-zh">房间;空间</span></div>
+      <div class="row" data-w="rub"><span class="c-w">rub</span><span class="c-ipa">/rʌb/</span><span class="c-pos">n.</span><span class="c-zh">摩擦</span></div>
+      <div class="row" data-w="rule"><span class="c-w">rule</span><span class="c-ipa">/rul/</span><span class="c-pos">n.</span><span class="c-zh">规则;统治</span></div>
+      <div class="row" data-w="run"><span class="c-w">run</span><span class="c-ipa">/rʌn/</span><span class="c-pos">n.</span><span class="c-zh">跑;运行</span></div>
+      <div class="row" data-w="salt"><span class="c-w">salt</span><span class="c-ipa">/sɔlt/</span><span class="c-pos">n.</span><span class="c-zh">盐</span></div>
+      <div class="row" data-w="sand"><span class="c-w">sand</span><span class="c-ipa">/sænd/</span><span class="c-pos">n.</span><span class="c-zh">沙</span></div>
+      <div class="row" data-w="scale"><span class="c-w">scale</span><span class="c-ipa">/skeɪl/</span><span class="c-pos">n.</span><span class="c-zh">刻度;规模;秤</span></div>
+      <div class="row" data-w="science"><span class="c-w">science</span><span class="c-ipa">/ˈsaɪəns/</span><span class="c-pos">n.</span><span class="c-zh">科学</span></div>
+      <div class="row" data-w="sea"><span class="c-w">sea</span><span class="c-ipa">/si/</span><span class="c-pos">n.</span><span class="c-zh">海</span></div>
+      <div class="row" data-w="seat"><span class="c-w">seat</span><span class="c-ipa">/sit/</span><span class="c-pos">n.</span><span class="c-zh">座位</span></div>
+      <div class="row" data-w="secretary"><span class="c-w">secretary</span><span class="c-ipa">/ˈsɛkrəˌtɛri/</span><span class="c-pos">n.</span><span class="c-zh">秘书;书记</span></div>
+      <div class="row" data-w="selection"><span class="c-w">selection</span><span class="c-ipa">/səˈlɛkʃən/</span><span class="c-pos">n.</span><span class="c-zh">选择</span></div>
+      <div class="row" data-w="self"><span class="c-w">self</span><span class="c-ipa">/sɛlf/</span><span class="c-pos">n.</span><span class="c-zh">自我;自己</span></div>
+      <div class="row" data-w="sense"><span class="c-w">sense</span><span class="c-ipa">/sɛns/</span><span class="c-pos">n.</span><span class="c-zh">感觉;意义</span></div>
+      <div class="row" data-w="servant"><span class="c-w">servant</span><span class="c-ipa">/ˈsɝvənt/</span><span class="c-pos">n.</span><span class="c-zh">仆人</span></div>
+      <div class="row" data-w="sex"><span class="c-w">sex</span><span class="c-ipa">/sɛks/</span><span class="c-pos">n.</span><span class="c-zh">性别;性</span></div>
+      <div class="row" data-w="shade"><span class="c-w">shade</span><span class="c-ipa">/ʃeɪd/</span><span class="c-pos">n.</span><span class="c-zh">阴影;色度</span></div>
+      <div class="row" data-w="shake"><span class="c-w">shake</span><span class="c-ipa">/ʃeɪk/</span><span class="c-pos">n.</span><span class="c-zh">摇动;震动</span></div>
+      <div class="row" data-w="shame"><span class="c-w">shame</span><span class="c-ipa">/ʃeɪm/</span><span class="c-pos">n.</span><span class="c-zh">羞耻;憾事</span></div>
+      <div class="row" data-w="shock"><span class="c-w">shock</span><span class="c-ipa">/ʃɑk/</span><span class="c-pos">n.</span><span class="c-zh">震惊;电击</span></div>
+      <div class="row" data-w="side"><span class="c-w">side</span><span class="c-ipa">/saɪd/</span><span class="c-pos">n.</span><span class="c-zh">边;侧</span></div>
+      <div class="row" data-w="sign"><span class="c-w">sign</span><span class="c-ipa">/saɪn/</span><span class="c-pos">n.</span><span class="c-zh">标志;符号</span></div>
+      <div class="row" data-w="silk"><span class="c-w">silk</span><span class="c-ipa">/sɪlk/</span><span class="c-pos">n.</span><span class="c-zh">丝绸</span></div>
+      <div class="row" data-w="silver"><span class="c-w">silver</span><span class="c-ipa">/ˈsɪlvɚ/</span><span class="c-pos">n.</span><span class="c-zh">银</span></div>
+      <div class="row" data-w="sister"><span class="c-w">sister</span><span class="c-ipa">/ˈsɪstɚ/</span><span class="c-pos">n.</span><span class="c-zh">姐妹</span></div>
+      <div class="row" data-w="size"><span class="c-w">size</span><span class="c-ipa">/saɪz/</span><span class="c-pos">n.</span><span class="c-zh">尺寸;大小</span></div>
+      <div class="row" data-w="sky"><span class="c-w">sky</span><span class="c-ipa">/skaɪ/</span><span class="c-pos">n.</span><span class="c-zh">天空</span></div>
+      <div class="row" data-w="sleep"><span class="c-w">sleep</span><span class="c-ipa">/slip/</span><span class="c-pos">n.</span><span class="c-zh">睡眠</span></div>
+      <div class="row" data-w="slip"><span class="c-w">slip</span><span class="c-ipa">/slɪp/</span><span class="c-pos">n.</span><span class="c-zh">滑;失误;纸条</span></div>
+      <div class="row" data-w="slope"><span class="c-w">slope</span><span class="c-ipa">/sloʊp/</span><span class="c-pos">n.</span><span class="c-zh">斜坡;坡度</span></div>
+      <div class="row" data-w="smash"><span class="c-w">smash</span><span class="c-ipa">/smæʃ/</span><span class="c-pos">n.</span><span class="c-zh">猛击;粉碎</span></div>
+      <div class="row" data-w="smell"><span class="c-w">smell</span><span class="c-ipa">/smɛl/</span><span class="c-pos">n.</span><span class="c-zh">气味;嗅觉</span></div>
+      <div class="row" data-w="smile"><span class="c-w">smile</span><span class="c-ipa">/smaɪl/</span><span class="c-pos">n.</span><span class="c-zh">微笑</span></div>
+      <div class="row" data-w="smoke"><span class="c-w">smoke</span><span class="c-ipa">/smoʊk/</span><span class="c-pos">n.</span><span class="c-zh">烟</span></div>
+      <div class="row" data-w="sneeze"><span class="c-w">sneeze</span><span class="c-ipa">/sniz/</span><span class="c-pos">n.</span><span class="c-zh">喷嚏</span></div>
+      <div class="row" data-w="snow"><span class="c-w">snow</span><span class="c-ipa">/snoʊ/</span><span class="c-pos">n.</span><span class="c-zh">雪</span></div>
+      <div class="row" data-w="soap"><span class="c-w">soap</span><span class="c-ipa">/soʊp/</span><span class="c-pos">n.</span><span class="c-zh">肥皂</span></div>
+      <div class="row" data-w="society"><span class="c-w">society</span><span class="c-ipa">/səˈsaɪəti/</span><span class="c-pos">n.</span><span class="c-zh">社会;社团</span></div>
+      <div class="row" data-w="son"><span class="c-w">son</span><span class="c-ipa">/sʌn/</span><span class="c-pos">n.</span><span class="c-zh">儿子</span></div>
+      <div class="row" data-w="song"><span class="c-w">song</span><span class="c-ipa">/sɔŋ/</span><span class="c-pos">n.</span><span class="c-zh">歌曲</span></div>
+      <div class="row" data-w="sort"><span class="c-w">sort</span><span class="c-ipa">/sɔrt/</span><span class="c-pos">n.</span><span class="c-zh">种类</span></div>
+      <div class="row" data-w="sound"><span class="c-w">sound</span><span class="c-ipa">/saʊnd/</span><span class="c-pos">n.</span><span class="c-zh">声音</span></div>
+      <div class="row" data-w="soup"><span class="c-w">soup</span><span class="c-ipa">/sup/</span><span class="c-pos">n.</span><span class="c-zh">汤</span></div>
+      <div class="row" data-w="space"><span class="c-w">space</span><span class="c-ipa">/speɪs/</span><span class="c-pos">n.</span><span class="c-zh">空间;太空</span></div>
+      <div class="row" data-w="stage"><span class="c-w">stage</span><span class="c-ipa">/steɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">阶段;舞台</span></div>
+      <div class="row" data-w="start"><span class="c-w">start</span><span class="c-ipa">/stɑrt/</span><span class="c-pos">n.</span><span class="c-zh">开始;起点</span></div>
+      <div class="row" data-w="statement"><span class="c-w">statement</span><span class="c-ipa">/ˈsteɪtmənt/</span><span class="c-pos">n.</span><span class="c-zh">陈述;声明</span></div>
+      <div class="row" data-w="steam"><span class="c-w">steam</span><span class="c-ipa">/stim/</span><span class="c-pos">n.</span><span class="c-zh">蒸汽</span></div>
+      <div class="row" data-w="steel"><span class="c-w">steel</span><span class="c-ipa">/stil/</span><span class="c-pos">n.</span><span class="c-zh">钢</span></div>
+      <div class="row" data-w="step"><span class="c-w">step</span><span class="c-ipa">/stɛp/</span><span class="c-pos">n.</span><span class="c-zh">步;台阶</span></div>
+      <div class="row" data-w="stitch"><span class="c-w">stitch</span><span class="c-ipa">/stɪtʃ/</span><span class="c-pos">n.</span><span class="c-zh">针脚;一针</span></div>
+      <div class="row" data-w="stone"><span class="c-w">stone</span><span class="c-ipa">/stoʊn/</span><span class="c-pos">n.</span><span class="c-zh">石头</span></div>
+      <div class="row" data-w="stop"><span class="c-w">stop</span><span class="c-ipa">/stɑp/</span><span class="c-pos">n.</span><span class="c-zh">停止;车站</span></div>
+      <div class="row" data-w="story"><span class="c-w">story</span><span class="c-ipa">/ˈstɔri/</span><span class="c-pos">n.</span><span class="c-zh">故事</span></div>
+      <div class="row" data-w="stretch"><span class="c-w">stretch</span><span class="c-ipa">/strɛtʃ/</span><span class="c-pos">n.</span><span class="c-zh">伸展;一段</span></div>
+      <div class="row" data-w="structure"><span class="c-w">structure</span><span class="c-ipa">/ˈstrʌktʃɚ/</span><span class="c-pos">n.</span><span class="c-zh">结构</span></div>
+      <div class="row" data-w="substance"><span class="c-w">substance</span><span class="c-ipa">/ˈsʌbstəns/</span><span class="c-pos">n.</span><span class="c-zh">物质;实质</span></div>
+      <div class="row" data-w="sugar"><span class="c-w">sugar</span><span class="c-ipa">/ˈʃʊɡɚ/</span><span class="c-pos">n.</span><span class="c-zh">糖</span></div>
+      <div class="row" data-w="suggestion"><span class="c-w">suggestion</span><span class="c-ipa">/səɡˈdʒɛstʃən/</span><span class="c-pos">n.</span><span class="c-zh">建议</span></div>
+      <div class="row" data-w="summer"><span class="c-w">summer</span><span class="c-ipa">/ˈsʌmɚ/</span><span class="c-pos">n.</span><span class="c-zh">夏天</span></div>
+      <div class="row" data-w="support"><span class="c-w">support</span><span class="c-ipa">/səˈpɔrt/</span><span class="c-pos">n.</span><span class="c-zh">支持;支撑</span></div>
+      <div class="row" data-w="surprise"><span class="c-w">surprise</span><span class="c-ipa">/sɚˈpraɪz/</span><span class="c-pos">n.</span><span class="c-zh">惊讶;意外</span></div>
+      <div class="row" data-w="swim"><span class="c-w">swim</span><span class="c-ipa">/swɪm/</span><span class="c-pos">n.</span><span class="c-zh">游泳</span></div>
+      <div class="row" data-w="system"><span class="c-w">system</span><span class="c-ipa">/ˈsɪstəm/</span><span class="c-pos">n.</span><span class="c-zh">系统</span></div>
+      <div class="row" data-w="talk"><span class="c-w">talk</span><span class="c-ipa">/tɔk/</span><span class="c-pos">n.</span><span class="c-zh">谈话;演讲</span></div>
+      <div class="row" data-w="taste"><span class="c-w">taste</span><span class="c-ipa">/teɪst/</span><span class="c-pos">n.</span><span class="c-zh">味道;品味</span></div>
+      <div class="row" data-w="tax"><span class="c-w">tax</span><span class="c-ipa">/tæks/</span><span class="c-pos">n.</span><span class="c-zh">税</span></div>
+      <div class="row" data-w="teaching"><span class="c-w">teaching</span><span class="c-ipa">/ˈtitʃɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">教学;教导</span></div>
+      <div class="row" data-w="tendency"><span class="c-w">tendency</span><span class="c-ipa">/ˈtɛndənsi/</span><span class="c-pos">n.</span><span class="c-zh">趋势;倾向</span></div>
+      <div class="row" data-w="test"><span class="c-w">test</span><span class="c-ipa">/tɛst/</span><span class="c-pos">n.</span><span class="c-zh">测试;考试</span></div>
+      <div class="row" data-w="theory"><span class="c-w">theory</span><span class="c-ipa">/ˈθiəri/</span><span class="c-pos">n.</span><span class="c-zh">理论</span></div>
+      <div class="row" data-w="thing"><span class="c-w">thing</span><span class="c-ipa">/θɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">事物;东西</span></div>
+      <div class="row" data-w="thought"><span class="c-w">thought</span><span class="c-ipa">/θɔt/</span><span class="c-pos">n.</span><span class="c-zh">思想;想法</span></div>
+      <div class="row" data-w="thunder"><span class="c-w">thunder</span><span class="c-ipa">/ˈθʌndɚ/</span><span class="c-pos">n.</span><span class="c-zh">雷</span></div>
+      <div class="row" data-w="time"><span class="c-w">time</span><span class="c-ipa">/taɪm/</span><span class="c-pos">n.</span><span class="c-zh">时间</span></div>
+      <div class="row" data-w="tin"><span class="c-w">tin</span><span class="c-ipa">/tɪn/</span><span class="c-pos">n.</span><span class="c-zh">锡;罐头</span></div>
+      <div class="row" data-w="top"><span class="c-w">top</span><span class="c-ipa">/tɑp/</span><span class="c-pos">n.</span><span class="c-zh">顶部</span></div>
+      <div class="row" data-w="touch"><span class="c-w">touch</span><span class="c-ipa">/tʌtʃ/</span><span class="c-pos">n.</span><span class="c-zh">触摸;触觉</span></div>
+      <div class="row" data-w="trade"><span class="c-w">trade</span><span class="c-ipa">/treɪd/</span><span class="c-pos">n.</span><span class="c-zh">贸易;行业</span></div>
+      <div class="row" data-w="transport"><span class="c-w">transport</span><span class="c-ipa">/ˈtrænspɔrt/</span><span class="c-pos">n.</span><span class="c-zh">运输</span></div>
+      <div class="row" data-w="trick"><span class="c-w">trick</span><span class="c-ipa">/trɪk/</span><span class="c-pos">n.</span><span class="c-zh">诡计;戏法</span></div>
+      <div class="row" data-w="trouble"><span class="c-w">trouble</span><span class="c-ipa">/ˈtrʌbəl/</span><span class="c-pos">n.</span><span class="c-zh">麻烦</span></div>
+      <div class="row" data-w="turn"><span class="c-w">turn</span><span class="c-ipa">/tɝn/</span><span class="c-pos">n.</span><span class="c-zh">转弯;轮次</span></div>
+      <div class="row" data-w="twist"><span class="c-w">twist</span><span class="c-ipa">/twɪst/</span><span class="c-pos">n.</span><span class="c-zh">扭转;曲折</span></div>
+      <div class="row" data-w="unit"><span class="c-w">unit</span><span class="c-ipa">/ˈjunɪt/</span><span class="c-pos">n.</span><span class="c-zh">单位;单元</span></div>
+      <div class="row" data-w="use"><span class="c-w">use</span><span class="c-ipa">/jus/</span><span class="c-pos">n.</span><span class="c-zh">使用;用途</span></div>
+      <div class="row" data-w="value"><span class="c-w">value</span><span class="c-ipa">/ˈvælju/</span><span class="c-pos">n.</span><span class="c-zh">价值</span></div>
+      <div class="row" data-w="verse"><span class="c-w">verse</span><span class="c-ipa">/vɝs/</span><span class="c-pos">n.</span><span class="c-zh">诗;诗节</span></div>
+      <div class="row" data-w="vessel"><span class="c-w">vessel</span><span class="c-ipa">/ˈvɛsəl/</span><span class="c-pos">n.</span><span class="c-zh">容器;船</span></div>
+      <div class="row" data-w="view"><span class="c-w">view</span><span class="c-ipa">/vju/</span><span class="c-pos">n.</span><span class="c-zh">景色;看法</span></div>
+      <div class="row" data-w="voice"><span class="c-w">voice</span><span class="c-ipa">/vɔɪs/</span><span class="c-pos">n.</span><span class="c-zh">声音;嗓音</span></div>
+      <div class="row" data-w="walk"><span class="c-w">walk</span><span class="c-ipa">/wɔk/</span><span class="c-pos">n.</span><span class="c-zh">步行;散步</span></div>
+      <div class="row" data-w="war"><span class="c-w">war</span><span class="c-ipa">/wɔr/</span><span class="c-pos">n.</span><span class="c-zh">战争</span></div>
+      <div class="row" data-w="wash"><span class="c-w">wash</span><span class="c-ipa">/wɑʃ/</span><span class="c-pos">n.</span><span class="c-zh">洗;洗涤</span></div>
+      <div class="row" data-w="waste"><span class="c-w">waste</span><span class="c-ipa">/weɪst/</span><span class="c-pos">n.</span><span class="c-zh">浪费;废物</span></div>
+      <div class="row" data-w="water"><span class="c-w">water</span><span class="c-ipa">/ˈwɔtɚ/</span><span class="c-pos">n.</span><span class="c-zh">水</span></div>
+      <div class="row" data-w="wave"><span class="c-w">wave</span><span class="c-ipa">/weɪv/</span><span class="c-pos">n.</span><span class="c-zh">波浪;挥手</span></div>
+      <div class="row" data-w="wax"><span class="c-w">wax</span><span class="c-ipa">/wæks/</span><span class="c-pos">n.</span><span class="c-zh">蜡</span></div>
+      <div class="row" data-w="way"><span class="c-w">way</span><span class="c-ipa">/weɪ/</span><span class="c-pos">n.</span><span class="c-zh">路;方法</span></div>
+      <div class="row" data-w="weather"><span class="c-w">weather</span><span class="c-ipa">/ˈwɛðɚ/</span><span class="c-pos">n.</span><span class="c-zh">天气</span></div>
+      <div class="row" data-w="week"><span class="c-w">week</span><span class="c-ipa">/wik/</span><span class="c-pos">n.</span><span class="c-zh">星期;周</span></div>
+      <div class="row" data-w="weight"><span class="c-w">weight</span><span class="c-ipa">/weɪt/</span><span class="c-pos">n.</span><span class="c-zh">重量</span></div>
+      <div class="row" data-w="wind"><span class="c-w">wind</span><span class="c-ipa">/wɪnd/</span><span class="c-pos">n.</span><span class="c-zh">风</span></div>
+      <div class="row" data-w="wine"><span class="c-w">wine</span><span class="c-ipa">/waɪn/</span><span class="c-pos">n.</span><span class="c-zh">葡萄酒</span></div>
+      <div class="row" data-w="winter"><span class="c-w">winter</span><span class="c-ipa">/ˈwɪntɚ/</span><span class="c-pos">n.</span><span class="c-zh">冬天</span></div>
+      <div class="row" data-w="woman"><span class="c-w">woman</span><span class="c-ipa">/ˈwʊmən/</span><span class="c-pos">n.</span><span class="c-zh">女人</span></div>
+      <div class="row" data-w="wood"><span class="c-w">wood</span><span class="c-ipa">/wʊd/</span><span class="c-pos">n.</span><span class="c-zh">木头;树林</span></div>
+      <div class="row" data-w="wool"><span class="c-w">wool</span><span class="c-ipa">/wʊl/</span><span class="c-pos">n.</span><span class="c-zh">羊毛</span></div>
+      <div class="row" data-w="word"><span class="c-w">word</span><span class="c-ipa">/wɝd/</span><span class="c-pos">n.</span><span class="c-zh">词;话</span></div>
+      <div class="row" data-w="work"><span class="c-w">work</span><span class="c-ipa">/wɝk/</span><span class="c-pos">n.</span><span class="c-zh">工作</span></div>
+      <div class="row" data-w="wound"><span class="c-w">wound</span><span class="c-ipa">/wund/</span><span class="c-pos">n.</span><span class="c-zh">伤口</span></div>
+      <div class="row" data-w="writing"><span class="c-w">writing</span><span class="c-ipa">/ˈraɪtɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">写作;字迹</span></div>
+      <div class="row" data-w="year"><span class="c-w">year</span><span class="c-ipa">/jɪr/</span><span class="c-pos">n.</span><span class="c-zh">年</span></div>
+    </div>
+  </div>
+
+  <div class="word-block" data-group="noun">
+    <div class="word-block-head"><span class="pill noun2">THINGS · PICTURABLE</span><h4>可画出的具体名词</h4><span class="wb-count">200 个</span></div>
+    <p class="desc">能直接画出来的实物名词。</p>
+    <div class="table-head"><span>单词</span><span>音标</span><span>词性</span><span>词义</span></div>
+    <div class="rows">
+      <div class="row" data-w="angle"><span class="c-w">angle</span><span class="c-ipa">/ˈæŋɡəl/</span><span class="c-pos">n.</span><span class="c-zh">角;角度</span></div>
+      <div class="row" data-w="ant"><span class="c-w">ant</span><span class="c-ipa">/ænt/</span><span class="c-pos">n.</span><span class="c-zh">蚂蚁</span></div>
+      <div class="row" data-w="apple"><span class="c-w">apple</span><span class="c-ipa">/ˈæpəl/</span><span class="c-pos">n.</span><span class="c-zh">苹果</span></div>
+      <div class="row" data-w="arch"><span class="c-w">arch</span><span class="c-ipa">/ɑrtʃ/</span><span class="c-pos">n.</span><span class="c-zh">拱;拱门</span></div>
+      <div class="row" data-w="arm"><span class="c-w">arm</span><span class="c-ipa">/ɑrm/</span><span class="c-pos">n.</span><span class="c-zh">手臂</span></div>
+      <div class="row" data-w="army"><span class="c-w">army</span><span class="c-ipa">/ˈɑrmi/</span><span class="c-pos">n.</span><span class="c-zh">军队</span></div>
+      <div class="row" data-w="baby"><span class="c-w">baby</span><span class="c-ipa">/ˈbeɪbi/</span><span class="c-pos">n.</span><span class="c-zh">婴儿</span></div>
+      <div class="row" data-w="bag"><span class="c-w">bag</span><span class="c-ipa">/bæɡ/</span><span class="c-pos">n.</span><span class="c-zh">袋;包</span></div>
+      <div class="row" data-w="ball"><span class="c-w">ball</span><span class="c-ipa">/bɔl/</span><span class="c-pos">n.</span><span class="c-zh">球</span></div>
+      <div class="row" data-w="band"><span class="c-w">band</span><span class="c-ipa">/bænd/</span><span class="c-pos">n.</span><span class="c-zh">带子;乐队</span></div>
+      <div class="row" data-w="basin"><span class="c-w">basin</span><span class="c-ipa">/ˈbeɪsən/</span><span class="c-pos">n.</span><span class="c-zh">盆;水槽</span></div>
+      <div class="row" data-w="basket"><span class="c-w">basket</span><span class="c-ipa">/ˈbæskɪt/</span><span class="c-pos">n.</span><span class="c-zh">篮子</span></div>
+      <div class="row" data-w="bath"><span class="c-w">bath</span><span class="c-ipa">/bæθ/</span><span class="c-pos">n.</span><span class="c-zh">洗澡;浴缸</span></div>
+      <div class="row" data-w="bed"><span class="c-w">bed</span><span class="c-ipa">/bɛd/</span><span class="c-pos">n.</span><span class="c-zh">床</span></div>
+      <div class="row" data-w="bee"><span class="c-w">bee</span><span class="c-ipa">/bi/</span><span class="c-pos">n.</span><span class="c-zh">蜜蜂</span></div>
+      <div class="row" data-w="bell"><span class="c-w">bell</span><span class="c-ipa">/bɛl/</span><span class="c-pos">n.</span><span class="c-zh">铃;钟</span></div>
+      <div class="row" data-w="berry"><span class="c-w">berry</span><span class="c-ipa">/ˈbɛri/</span><span class="c-pos">n.</span><span class="c-zh">浆果</span></div>
+      <div class="row" data-w="bird"><span class="c-w">bird</span><span class="c-ipa">/bɝd/</span><span class="c-pos">n.</span><span class="c-zh">鸟</span></div>
+      <div class="row" data-w="blade"><span class="c-w">blade</span><span class="c-ipa">/bleɪd/</span><span class="c-pos">n.</span><span class="c-zh">刀刃;叶片</span></div>
+      <div class="row" data-w="board"><span class="c-w">board</span><span class="c-ipa">/bɔrd/</span><span class="c-pos">n.</span><span class="c-zh">木板;委员会</span></div>
+      <div class="row" data-w="boat"><span class="c-w">boat</span><span class="c-ipa">/boʊt/</span><span class="c-pos">n.</span><span class="c-zh">船</span></div>
+      <div class="row" data-w="bone"><span class="c-w">bone</span><span class="c-ipa">/boʊn/</span><span class="c-pos">n.</span><span class="c-zh">骨头</span></div>
+      <div class="row" data-w="book"><span class="c-w">book</span><span class="c-ipa">/bʊk/</span><span class="c-pos">n.</span><span class="c-zh">书</span></div>
+      <div class="row" data-w="boot"><span class="c-w">boot</span><span class="c-ipa">/but/</span><span class="c-pos">n.</span><span class="c-zh">靴子</span></div>
+      <div class="row" data-w="bottle"><span class="c-w">bottle</span><span class="c-ipa">/ˈbɑtəl/</span><span class="c-pos">n.</span><span class="c-zh">瓶子</span></div>
+      <div class="row" data-w="box"><span class="c-w">box</span><span class="c-ipa">/bɑks/</span><span class="c-pos">n.</span><span class="c-zh">盒子;箱</span></div>
+      <div class="row" data-w="boy"><span class="c-w">boy</span><span class="c-ipa">/bɔɪ/</span><span class="c-pos">n.</span><span class="c-zh">男孩</span></div>
+      <div class="row" data-w="brain"><span class="c-w">brain</span><span class="c-ipa">/breɪn/</span><span class="c-pos">n.</span><span class="c-zh">大脑</span></div>
+      <div class="row" data-w="brake"><span class="c-w">brake</span><span class="c-ipa">/breɪk/</span><span class="c-pos">n.</span><span class="c-zh">刹车</span></div>
+      <div class="row" data-w="branch"><span class="c-w">branch</span><span class="c-ipa">/bræntʃ/</span><span class="c-pos">n.</span><span class="c-zh">树枝;分支</span></div>
+      <div class="row" data-w="brick"><span class="c-w">brick</span><span class="c-ipa">/brɪk/</span><span class="c-pos">n.</span><span class="c-zh">砖</span></div>
+      <div class="row" data-w="bridge"><span class="c-w">bridge</span><span class="c-ipa">/brɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">桥</span></div>
+      <div class="row" data-w="brush"><span class="c-w">brush</span><span class="c-ipa">/brʌʃ/</span><span class="c-pos">n.</span><span class="c-zh">刷子;画笔</span></div>
+      <div class="row" data-w="bucket"><span class="c-w">bucket</span><span class="c-ipa">/ˈbʌkɪt/</span><span class="c-pos">n.</span><span class="c-zh">水桶</span></div>
+      <div class="row" data-w="bulb"><span class="c-w">bulb</span><span class="c-ipa">/bʌlb/</span><span class="c-pos">n.</span><span class="c-zh">灯泡;球茎</span></div>
+      <div class="row" data-w="button"><span class="c-w">button</span><span class="c-ipa">/ˈbʌtən/</span><span class="c-pos">n.</span><span class="c-zh">纽扣;按钮</span></div>
+      <div class="row" data-w="cake"><span class="c-w">cake</span><span class="c-ipa">/keɪk/</span><span class="c-pos">n.</span><span class="c-zh">蛋糕</span></div>
+      <div class="row" data-w="camera"><span class="c-w">camera</span><span class="c-ipa">/ˈkæmrə/</span><span class="c-pos">n.</span><span class="c-zh">相机</span></div>
+      <div class="row" data-w="card"><span class="c-w">card</span><span class="c-ipa">/kɑrd/</span><span class="c-pos">n.</span><span class="c-zh">卡片;纸牌</span></div>
+      <div class="row" data-w="cart"><span class="c-w">cart</span><span class="c-ipa">/kɑrt/</span><span class="c-pos">n.</span><span class="c-zh">手推车</span></div>
+      <div class="row" data-w="carriage"><span class="c-w">carriage</span><span class="c-ipa">/ˈkærɪdʒ/</span><span class="c-pos">n.</span><span class="c-zh">马车;车厢</span></div>
+      <div class="row" data-w="cat"><span class="c-w">cat</span><span class="c-ipa">/kæt/</span><span class="c-pos">n.</span><span class="c-zh">猫</span></div>
+      <div class="row" data-w="chain"><span class="c-w">chain</span><span class="c-ipa">/tʃeɪn/</span><span class="c-pos">n.</span><span class="c-zh">链;链条</span></div>
+      <div class="row" data-w="cheese"><span class="c-w">cheese</span><span class="c-ipa">/tʃiz/</span><span class="c-pos">n.</span><span class="c-zh">奶酪</span></div>
+      <div class="row" data-w="chest"><span class="c-w">chest</span><span class="c-ipa">/tʃɛst/</span><span class="c-pos">n.</span><span class="c-zh">胸;箱柜</span></div>
+      <div class="row" data-w="chin"><span class="c-w">chin</span><span class="c-ipa">/tʃɪn/</span><span class="c-pos">n.</span><span class="c-zh">下巴</span></div>
+      <div class="row" data-w="church"><span class="c-w">church</span><span class="c-ipa">/tʃɝtʃ/</span><span class="c-pos">n.</span><span class="c-zh">教堂</span></div>
+      <div class="row" data-w="circle"><span class="c-w">circle</span><span class="c-ipa">/ˈsɝkəl/</span><span class="c-pos">n.</span><span class="c-zh">圆;圈</span></div>
+      <div class="row" data-w="clock"><span class="c-w">clock</span><span class="c-ipa">/klɑk/</span><span class="c-pos">n.</span><span class="c-zh">钟</span></div>
+      <div class="row" data-w="cloud"><span class="c-w">cloud</span><span class="c-ipa">/klaʊd/</span><span class="c-pos">n.</span><span class="c-zh">云</span></div>
+      <div class="row" data-w="coat"><span class="c-w">coat</span><span class="c-ipa">/koʊt/</span><span class="c-pos">n.</span><span class="c-zh">外套</span></div>
+      <div class="row" data-w="collar"><span class="c-w">collar</span><span class="c-ipa">/ˈkɑlɚ/</span><span class="c-pos">n.</span><span class="c-zh">衣领;项圈</span></div>
+      <div class="row" data-w="comb"><span class="c-w">comb</span><span class="c-ipa">/koʊm/</span><span class="c-pos">n.</span><span class="c-zh">梳子</span></div>
+      <div class="row" data-w="cord"><span class="c-w">cord</span><span class="c-ipa">/kɔrd/</span><span class="c-pos">n.</span><span class="c-zh">绳;线</span></div>
+      <div class="row" data-w="cow"><span class="c-w">cow</span><span class="c-ipa">/kaʊ/</span><span class="c-pos">n.</span><span class="c-zh">母牛;奶牛</span></div>
+      <div class="row" data-w="cup"><span class="c-w">cup</span><span class="c-ipa">/kʌp/</span><span class="c-pos">n.</span><span class="c-zh">杯子</span></div>
+      <div class="row" data-w="curtain"><span class="c-w">curtain</span><span class="c-ipa">/ˈkɝtən/</span><span class="c-pos">n.</span><span class="c-zh">窗帘;幕布</span></div>
+      <div class="row" data-w="cushion"><span class="c-w">cushion</span><span class="c-ipa">/ˈkʊʃən/</span><span class="c-pos">n.</span><span class="c-zh">垫子</span></div>
+      <div class="row" data-w="dog"><span class="c-w">dog</span><span class="c-ipa">/dɔɡ/</span><span class="c-pos">n.</span><span class="c-zh">狗</span></div>
+      <div class="row" data-w="door"><span class="c-w">door</span><span class="c-ipa">/dɔr/</span><span class="c-pos">n.</span><span class="c-zh">门</span></div>
+      <div class="row" data-w="drain"><span class="c-w">drain</span><span class="c-ipa">/dreɪn/</span><span class="c-pos">n.</span><span class="c-zh">排水管;下水道</span></div>
+      <div class="row" data-w="drawer"><span class="c-w">drawer</span><span class="c-ipa">/drɔr/</span><span class="c-pos">n.</span><span class="c-zh">抽屉</span></div>
+      <div class="row" data-w="dress"><span class="c-w">dress</span><span class="c-ipa">/drɛs/</span><span class="c-pos">n.</span><span class="c-zh">连衣裙;服装</span></div>
+      <div class="row" data-w="drop"><span class="c-w">drop</span><span class="c-ipa">/drɑp/</span><span class="c-pos">n.</span><span class="c-zh">滴;一滴</span></div>
+      <div class="row" data-w="ear"><span class="c-w">ear</span><span class="c-ipa">/ɪr/</span><span class="c-pos">n.</span><span class="c-zh">耳朵</span></div>
+      <div class="row" data-w="egg"><span class="c-w">egg</span><span class="c-ipa">/ɛɡ/</span><span class="c-pos">n.</span><span class="c-zh">蛋</span></div>
+      <div class="row" data-w="engine"><span class="c-w">engine</span><span class="c-ipa">/ˈɛndʒɪn/</span><span class="c-pos">n.</span><span class="c-zh">发动机;引擎</span></div>
+      <div class="row" data-w="eye"><span class="c-w">eye</span><span class="c-ipa">/aɪ/</span><span class="c-pos">n.</span><span class="c-zh">眼睛</span></div>
+      <div class="row" data-w="face"><span class="c-w">face</span><span class="c-ipa">/feɪs/</span><span class="c-pos">n.</span><span class="c-zh">脸</span></div>
+      <div class="row" data-w="farm"><span class="c-w">farm</span><span class="c-ipa">/fɑrm/</span><span class="c-pos">n.</span><span class="c-zh">农场</span></div>
+      <div class="row" data-w="feather"><span class="c-w">feather</span><span class="c-ipa">/ˈfɛðɚ/</span><span class="c-pos">n.</span><span class="c-zh">羽毛</span></div>
+      <div class="row" data-w="finger"><span class="c-w">finger</span><span class="c-ipa">/ˈfɪŋɡɚ/</span><span class="c-pos">n.</span><span class="c-zh">手指</span></div>
+      <div class="row" data-w="fish"><span class="c-w">fish</span><span class="c-ipa">/fɪʃ/</span><span class="c-pos">n.</span><span class="c-zh">鱼</span></div>
+      <div class="row" data-w="flag"><span class="c-w">flag</span><span class="c-ipa">/flæɡ/</span><span class="c-pos">n.</span><span class="c-zh">旗</span></div>
+      <div class="row" data-w="floor"><span class="c-w">floor</span><span class="c-ipa">/flɔr/</span><span class="c-pos">n.</span><span class="c-zh">地板;楼层</span></div>
+      <div class="row" data-w="fly"><span class="c-w">fly</span><span class="c-ipa">/flaɪ/</span><span class="c-pos">n.</span><span class="c-zh">苍蝇</span></div>
+      <div class="row" data-w="foot"><span class="c-w">foot</span><span class="c-ipa">/fʊt/</span><span class="c-pos">n.</span><span class="c-zh">脚</span></div>
+      <div class="row" data-w="fork"><span class="c-w">fork</span><span class="c-ipa">/fɔrk/</span><span class="c-pos">n.</span><span class="c-zh">叉子</span></div>
+      <div class="row" data-w="fowl"><span class="c-w">fowl</span><span class="c-ipa">/faʊl/</span><span class="c-pos">n.</span><span class="c-zh">家禽;禽</span></div>
+      <div class="row" data-w="frame"><span class="c-w">frame</span><span class="c-ipa">/freɪm/</span><span class="c-pos">n.</span><span class="c-zh">框架;画框</span></div>
+      <div class="row" data-w="garden"><span class="c-w">garden</span><span class="c-ipa">/ˈɡɑrdən/</span><span class="c-pos">n.</span><span class="c-zh">花园</span></div>
+      <div class="row" data-w="girl"><span class="c-w">girl</span><span class="c-ipa">/ɡɝl/</span><span class="c-pos">n.</span><span class="c-zh">女孩</span></div>
+      <div class="row" data-w="glove"><span class="c-w">glove</span><span class="c-ipa">/ɡlʌv/</span><span class="c-pos">n.</span><span class="c-zh">手套</span></div>
+      <div class="row" data-w="goat"><span class="c-w">goat</span><span class="c-ipa">/ɡoʊt/</span><span class="c-pos">n.</span><span class="c-zh">山羊</span></div>
+      <div class="row" data-w="gun"><span class="c-w">gun</span><span class="c-ipa">/ɡʌn/</span><span class="c-pos">n.</span><span class="c-zh">枪;炮</span></div>
+      <div class="row" data-w="hair"><span class="c-w">hair</span><span class="c-ipa">/hɛr/</span><span class="c-pos">n.</span><span class="c-zh">头发</span></div>
+      <div class="row" data-w="hammer"><span class="c-w">hammer</span><span class="c-ipa">/ˈhæmɚ/</span><span class="c-pos">n.</span><span class="c-zh">锤子</span></div>
+      <div class="row" data-w="hand"><span class="c-w">hand</span><span class="c-ipa">/hænd/</span><span class="c-pos">n.</span><span class="c-zh">手</span></div>
+      <div class="row" data-w="hat"><span class="c-w">hat</span><span class="c-ipa">/hæt/</span><span class="c-pos">n.</span><span class="c-zh">帽子</span></div>
+      <div class="row" data-w="head"><span class="c-w">head</span><span class="c-ipa">/hɛd/</span><span class="c-pos">n.</span><span class="c-zh">头</span></div>
+      <div class="row" data-w="heart"><span class="c-w">heart</span><span class="c-ipa">/hɑrt/</span><span class="c-pos">n.</span><span class="c-zh">心;心脏</span></div>
+      <div class="row" data-w="hook"><span class="c-w">hook</span><span class="c-ipa">/hʊk/</span><span class="c-pos">n.</span><span class="c-zh">钩子</span></div>
+      <div class="row" data-w="horn"><span class="c-w">horn</span><span class="c-ipa">/hɔrn/</span><span class="c-pos">n.</span><span class="c-zh">角;喇叭</span></div>
+      <div class="row" data-w="horse"><span class="c-w">horse</span><span class="c-ipa">/hɔrs/</span><span class="c-pos">n.</span><span class="c-zh">马</span></div>
+      <div class="row" data-w="hospital"><span class="c-w">hospital</span><span class="c-ipa">/ˈhɑspɪtəl/</span><span class="c-pos">n.</span><span class="c-zh">医院</span></div>
+      <div class="row" data-w="house"><span class="c-w">house</span><span class="c-ipa">/haʊs/</span><span class="c-pos">n.</span><span class="c-zh">房子</span></div>
+      <div class="row" data-w="island"><span class="c-w">island</span><span class="c-ipa">/ˈaɪlənd/</span><span class="c-pos">n.</span><span class="c-zh">岛</span></div>
+      <div class="row" data-w="jewel"><span class="c-w">jewel</span><span class="c-ipa">/ˈdʒuəl/</span><span class="c-pos">n.</span><span class="c-zh">宝石</span></div>
+      <div class="row" data-w="kettle"><span class="c-w">kettle</span><span class="c-ipa">/ˈkɛtəl/</span><span class="c-pos">n.</span><span class="c-zh">水壶</span></div>
+      <div class="row" data-w="key"><span class="c-w">key</span><span class="c-ipa">/ki/</span><span class="c-pos">n.</span><span class="c-zh">钥匙;键</span></div>
+      <div class="row" data-w="knee"><span class="c-w">knee</span><span class="c-ipa">/ni/</span><span class="c-pos">n.</span><span class="c-zh">膝盖</span></div>
+      <div class="row" data-w="knife"><span class="c-w">knife</span><span class="c-ipa">/naɪf/</span><span class="c-pos">n.</span><span class="c-zh">刀</span></div>
+      <div class="row" data-w="knot"><span class="c-w">knot</span><span class="c-ipa">/nɑt/</span><span class="c-pos">n.</span><span class="c-zh">结</span></div>
+      <div class="row" data-w="leaf"><span class="c-w">leaf</span><span class="c-ipa">/lif/</span><span class="c-pos">n.</span><span class="c-zh">叶子</span></div>
+      <div class="row" data-w="leg"><span class="c-w">leg</span><span class="c-ipa">/lɛɡ/</span><span class="c-pos">n.</span><span class="c-zh">腿</span></div>
+      <div class="row" data-w="library"><span class="c-w">library</span><span class="c-ipa">/ˈlaɪˌbrɛri/</span><span class="c-pos">n.</span><span class="c-zh">图书馆</span></div>
+      <div class="row" data-w="line"><span class="c-w">line</span><span class="c-ipa">/laɪn/</span><span class="c-pos">n.</span><span class="c-zh">线;线条</span></div>
+      <div class="row" data-w="lip"><span class="c-w">lip</span><span class="c-ipa">/lɪp/</span><span class="c-pos">n.</span><span class="c-zh">嘴唇</span></div>
+      <div class="row" data-w="lock"><span class="c-w">lock</span><span class="c-ipa">/lɑk/</span><span class="c-pos">n.</span><span class="c-zh">锁</span></div>
+      <div class="row" data-w="map"><span class="c-w">map</span><span class="c-ipa">/mæp/</span><span class="c-pos">n.</span><span class="c-zh">地图</span></div>
+      <div class="row" data-w="match"><span class="c-w">match</span><span class="c-ipa">/mætʃ/</span><span class="c-pos">n.</span><span class="c-zh">火柴;比赛</span></div>
+      <div class="row" data-w="monkey"><span class="c-w">monkey</span><span class="c-ipa">/ˈmʌŋki/</span><span class="c-pos">n.</span><span class="c-zh">猴子</span></div>
+      <div class="row" data-w="moon"><span class="c-w">moon</span><span class="c-ipa">/mun/</span><span class="c-pos">n.</span><span class="c-zh">月亮</span></div>
+      <div class="row" data-w="mouth"><span class="c-w">mouth</span><span class="c-ipa">/maʊθ/</span><span class="c-pos">n.</span><span class="c-zh">嘴</span></div>
+      <div class="row" data-w="muscle"><span class="c-w">muscle</span><span class="c-ipa">/ˈmʌsəl/</span><span class="c-pos">n.</span><span class="c-zh">肌肉</span></div>
+      <div class="row" data-w="nail"><span class="c-w">nail</span><span class="c-ipa">/neɪl/</span><span class="c-pos">n.</span><span class="c-zh">钉子;指甲</span></div>
+      <div class="row" data-w="neck"><span class="c-w">neck</span><span class="c-ipa">/nɛk/</span><span class="c-pos">n.</span><span class="c-zh">脖子</span></div>
+      <div class="row" data-w="needle"><span class="c-w">needle</span><span class="c-ipa">/ˈnidəl/</span><span class="c-pos">n.</span><span class="c-zh">针</span></div>
+      <div class="row" data-w="nerve"><span class="c-w">nerve</span><span class="c-ipa">/nɝv/</span><span class="c-pos">n.</span><span class="c-zh">神经</span></div>
+      <div class="row" data-w="net"><span class="c-w">net</span><span class="c-ipa">/nɛt/</span><span class="c-pos">n.</span><span class="c-zh">网</span></div>
+      <div class="row" data-w="nose"><span class="c-w">nose</span><span class="c-ipa">/noʊz/</span><span class="c-pos">n.</span><span class="c-zh">鼻子</span></div>
+      <div class="row" data-w="nut"><span class="c-w">nut</span><span class="c-ipa">/nʌt/</span><span class="c-pos">n.</span><span class="c-zh">坚果;螺母</span></div>
+      <div class="row" data-w="office"><span class="c-w">office</span><span class="c-ipa">/ˈɔfɪs/</span><span class="c-pos">n.</span><span class="c-zh">办公室</span></div>
+      <div class="row" data-w="orange"><span class="c-w">orange</span><span class="c-ipa">/ˈɔrɪndʒ/</span><span class="c-pos">n.</span><span class="c-zh">橙子</span></div>
+      <div class="row" data-w="oven"><span class="c-w">oven</span><span class="c-ipa">/ˈʌvən/</span><span class="c-pos">n.</span><span class="c-zh">烤箱</span></div>
+      <div class="row" data-w="parcel"><span class="c-w">parcel</span><span class="c-ipa">/ˈpɑrsəl/</span><span class="c-pos">n.</span><span class="c-zh">包裹</span></div>
+      <div class="row" data-w="pen"><span class="c-w">pen</span><span class="c-ipa">/pɛn/</span><span class="c-pos">n.</span><span class="c-zh">钢笔;笔</span></div>
+      <div class="row" data-w="pencil"><span class="c-w">pencil</span><span class="c-ipa">/ˈpɛnsəl/</span><span class="c-pos">n.</span><span class="c-zh">铅笔</span></div>
+      <div class="row" data-w="picture"><span class="c-w">picture</span><span class="c-ipa">/ˈpɪktʃɚ/</span><span class="c-pos">n.</span><span class="c-zh">图画;照片</span></div>
+      <div class="row" data-w="pig"><span class="c-w">pig</span><span class="c-ipa">/pɪɡ/</span><span class="c-pos">n.</span><span class="c-zh">猪</span></div>
+      <div class="row" data-w="pin"><span class="c-w">pin</span><span class="c-ipa">/pɪn/</span><span class="c-pos">n.</span><span class="c-zh">别针;大头针</span></div>
+      <div class="row" data-w="pipe"><span class="c-w">pipe</span><span class="c-ipa">/paɪp/</span><span class="c-pos">n.</span><span class="c-zh">管子;烟斗</span></div>
+      <div class="row" data-w="plane"><span class="c-w">plane</span><span class="c-ipa">/pleɪn/</span><span class="c-pos">n.</span><span class="c-zh">飞机;平面</span></div>
+      <div class="row" data-w="plate"><span class="c-w">plate</span><span class="c-ipa">/pleɪt/</span><span class="c-pos">n.</span><span class="c-zh">盘子;板</span></div>
+      <div class="row" data-w="plough"><span class="c-w">plough</span><span class="c-ipa">/plaʊ/</span><span class="c-pos">n.</span><span class="c-zh">犁</span></div>
+      <div class="row" data-w="pocket"><span class="c-w">pocket</span><span class="c-ipa">/ˈpɑkɪt/</span><span class="c-pos">n.</span><span class="c-zh">口袋</span></div>
+      <div class="row" data-w="pot"><span class="c-w">pot</span><span class="c-ipa">/pɑt/</span><span class="c-pos">n.</span><span class="c-zh">锅;罐</span></div>
+      <div class="row" data-w="potato"><span class="c-w">potato</span><span class="c-ipa">/pəˈteɪtoʊ/</span><span class="c-pos">n.</span><span class="c-zh">土豆</span></div>
+      <div class="row" data-w="prison"><span class="c-w">prison</span><span class="c-ipa">/ˈprɪzən/</span><span class="c-pos">n.</span><span class="c-zh">监狱</span></div>
+      <div class="row" data-w="pump"><span class="c-w">pump</span><span class="c-ipa">/pʌmp/</span><span class="c-pos">n.</span><span class="c-zh">泵</span></div>
+      <div class="row" data-w="rail"><span class="c-w">rail</span><span class="c-ipa">/reɪl/</span><span class="c-pos">n.</span><span class="c-zh">栏杆;轨道</span></div>
+      <div class="row" data-w="rat"><span class="c-w">rat</span><span class="c-ipa">/ræt/</span><span class="c-pos">n.</span><span class="c-zh">老鼠</span></div>
+      <div class="row" data-w="receipt"><span class="c-w">receipt</span><span class="c-ipa">/rɪˈsit/</span><span class="c-pos">n.</span><span class="c-zh">收据</span></div>
+      <div class="row" data-w="ring"><span class="c-w">ring</span><span class="c-ipa">/rɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">戒指;环</span></div>
+      <div class="row" data-w="rod"><span class="c-w">rod</span><span class="c-ipa">/rɑd/</span><span class="c-pos">n.</span><span class="c-zh">杆;棒</span></div>
+      <div class="row" data-w="roof"><span class="c-w">roof</span><span class="c-ipa">/ruf/</span><span class="c-pos">n.</span><span class="c-zh">屋顶</span></div>
+      <div class="row" data-w="root"><span class="c-w">root</span><span class="c-ipa">/rut/</span><span class="c-pos">n.</span><span class="c-zh">根</span></div>
+      <div class="row" data-w="sail"><span class="c-w">sail</span><span class="c-ipa">/seɪl/</span><span class="c-pos">n.</span><span class="c-zh">帆</span></div>
+      <div class="row" data-w="school"><span class="c-w">school</span><span class="c-ipa">/skul/</span><span class="c-pos">n.</span><span class="c-zh">学校</span></div>
+      <div class="row" data-w="scissors"><span class="c-w">scissors</span><span class="c-ipa">/ˈsɪzɚz/</span><span class="c-pos">n.</span><span class="c-zh">剪刀</span></div>
+      <div class="row" data-w="screw"><span class="c-w">screw</span><span class="c-ipa">/skru/</span><span class="c-pos">n.</span><span class="c-zh">螺丝</span></div>
+      <div class="row" data-w="seed"><span class="c-w">seed</span><span class="c-ipa">/sid/</span><span class="c-pos">n.</span><span class="c-zh">种子</span></div>
+      <div class="row" data-w="sheep"><span class="c-w">sheep</span><span class="c-ipa">/ʃip/</span><span class="c-pos">n.</span><span class="c-zh">绵羊</span></div>
+      <div class="row" data-w="shelf"><span class="c-w">shelf</span><span class="c-ipa">/ʃɛlf/</span><span class="c-pos">n.</span><span class="c-zh">架子;搁板</span></div>
+      <div class="row" data-w="ship"><span class="c-w">ship</span><span class="c-ipa">/ʃɪp/</span><span class="c-pos">n.</span><span class="c-zh">船;轮船</span></div>
+      <div class="row" data-w="shirt"><span class="c-w">shirt</span><span class="c-ipa">/ʃɝt/</span><span class="c-pos">n.</span><span class="c-zh">衬衫</span></div>
+      <div class="row" data-w="shoe"><span class="c-w">shoe</span><span class="c-ipa">/ʃu/</span><span class="c-pos">n.</span><span class="c-zh">鞋</span></div>
+      <div class="row" data-w="skin"><span class="c-w">skin</span><span class="c-ipa">/skɪn/</span><span class="c-pos">n.</span><span class="c-zh">皮肤</span></div>
+      <div class="row" data-w="skirt"><span class="c-w">skirt</span><span class="c-ipa">/skɝt/</span><span class="c-pos">n.</span><span class="c-zh">裙子</span></div>
+      <div class="row" data-w="snake"><span class="c-w">snake</span><span class="c-ipa">/sneɪk/</span><span class="c-pos">n.</span><span class="c-zh">蛇</span></div>
+      <div class="row" data-w="sock"><span class="c-w">sock</span><span class="c-ipa">/sɑk/</span><span class="c-pos">n.</span><span class="c-zh">袜子</span></div>
+      <div class="row" data-w="spade"><span class="c-w">spade</span><span class="c-ipa">/speɪd/</span><span class="c-pos">n.</span><span class="c-zh">铲;锹</span></div>
+      <div class="row" data-w="sponge"><span class="c-w">sponge</span><span class="c-ipa">/spʌndʒ/</span><span class="c-pos">n.</span><span class="c-zh">海绵</span></div>
+      <div class="row" data-w="spoon"><span class="c-w">spoon</span><span class="c-ipa">/spun/</span><span class="c-pos">n.</span><span class="c-zh">勺子</span></div>
+      <div class="row" data-w="spring"><span class="c-w">spring</span><span class="c-ipa">/sprɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">春天;弹簧</span></div>
+      <div class="row" data-w="square"><span class="c-w">square</span><span class="c-ipa">/skwɛr/</span><span class="c-pos">n.</span><span class="c-zh">正方形;广场</span></div>
+      <div class="row" data-w="stamp"><span class="c-w">stamp</span><span class="c-ipa">/stæmp/</span><span class="c-pos">n.</span><span class="c-zh">邮票;印章</span></div>
+      <div class="row" data-w="star"><span class="c-w">star</span><span class="c-ipa">/stɑr/</span><span class="c-pos">n.</span><span class="c-zh">星;明星</span></div>
+      <div class="row" data-w="station"><span class="c-w">station</span><span class="c-ipa">/ˈsteɪʃən/</span><span class="c-pos">n.</span><span class="c-zh">车站;站</span></div>
+      <div class="row" data-w="stem"><span class="c-w">stem</span><span class="c-ipa">/stɛm/</span><span class="c-pos">n.</span><span class="c-zh">茎;柄</span></div>
+      <div class="row" data-w="stick"><span class="c-w">stick</span><span class="c-ipa">/stɪk/</span><span class="c-pos">n.</span><span class="c-zh">棍;棒</span></div>
+      <div class="row" data-w="stocking"><span class="c-w">stocking</span><span class="c-ipa">/ˈstɑkɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">长袜</span></div>
+      <div class="row" data-w="stomach"><span class="c-w">stomach</span><span class="c-ipa">/ˈstʌmək/</span><span class="c-pos">n.</span><span class="c-zh">胃;肚子</span></div>
+      <div class="row" data-w="store"><span class="c-w">store</span><span class="c-ipa">/stɔr/</span><span class="c-pos">n.</span><span class="c-zh">商店;储存</span></div>
+      <div class="row" data-w="street"><span class="c-w">street</span><span class="c-ipa">/strit/</span><span class="c-pos">n.</span><span class="c-zh">街道</span></div>
+      <div class="row" data-w="sun"><span class="c-w">sun</span><span class="c-ipa">/sʌn/</span><span class="c-pos">n.</span><span class="c-zh">太阳</span></div>
+      <div class="row" data-w="table"><span class="c-w">table</span><span class="c-ipa">/ˈteɪbəl/</span><span class="c-pos">n.</span><span class="c-zh">桌子;表格</span></div>
+      <div class="row" data-w="tail"><span class="c-w">tail</span><span class="c-ipa">/teɪl/</span><span class="c-pos">n.</span><span class="c-zh">尾巴</span></div>
+      <div class="row" data-w="thread"><span class="c-w">thread</span><span class="c-ipa">/θrɛd/</span><span class="c-pos">n.</span><span class="c-zh">线;线索</span></div>
+      <div class="row" data-w="throat"><span class="c-w">throat</span><span class="c-ipa">/θroʊt/</span><span class="c-pos">n.</span><span class="c-zh">喉咙</span></div>
+      <div class="row" data-w="thumb"><span class="c-w">thumb</span><span class="c-ipa">/θʌm/</span><span class="c-pos">n.</span><span class="c-zh">拇指</span></div>
+      <div class="row" data-w="ticket"><span class="c-w">ticket</span><span class="c-ipa">/ˈtɪkɪt/</span><span class="c-pos">n.</span><span class="c-zh">票</span></div>
+      <div class="row" data-w="toe"><span class="c-w">toe</span><span class="c-ipa">/toʊ/</span><span class="c-pos">n.</span><span class="c-zh">脚趾</span></div>
+      <div class="row" data-w="tongue"><span class="c-w">tongue</span><span class="c-ipa">/tʌŋ/</span><span class="c-pos">n.</span><span class="c-zh">舌头;语言</span></div>
+      <div class="row" data-w="tooth"><span class="c-w">tooth</span><span class="c-ipa">/tuθ/</span><span class="c-pos">n.</span><span class="c-zh">牙齿</span></div>
+      <div class="row" data-w="town"><span class="c-w">town</span><span class="c-ipa">/taʊn/</span><span class="c-pos">n.</span><span class="c-zh">城镇</span></div>
+      <div class="row" data-w="train"><span class="c-w">train</span><span class="c-ipa">/treɪn/</span><span class="c-pos">n.</span><span class="c-zh">火车</span></div>
+      <div class="row" data-w="tray"><span class="c-w">tray</span><span class="c-ipa">/treɪ/</span><span class="c-pos">n.</span><span class="c-zh">托盘</span></div>
+      <div class="row" data-w="tree"><span class="c-w">tree</span><span class="c-ipa">/tri/</span><span class="c-pos">n.</span><span class="c-zh">树</span></div>
+      <div class="row" data-w="trousers"><span class="c-w">trousers</span><span class="c-ipa">/ˈtraʊzɚz/</span><span class="c-pos">n.</span><span class="c-zh">裤子</span></div>
+      <div class="row" data-w="umbrella"><span class="c-w">umbrella</span><span class="c-ipa">/ʌmˈbrɛlə/</span><span class="c-pos">n.</span><span class="c-zh">雨伞</span></div>
+      <div class="row" data-w="wall"><span class="c-w">wall</span><span class="c-ipa">/wɔl/</span><span class="c-pos">n.</span><span class="c-zh">墙</span></div>
+      <div class="row" data-w="watch"><span class="c-w">watch</span><span class="c-ipa">/wɑtʃ/</span><span class="c-pos">n.</span><span class="c-zh">手表</span></div>
+      <div class="row" data-w="wheel"><span class="c-w">wheel</span><span class="c-ipa">/wil/</span><span class="c-pos">n.</span><span class="c-zh">轮子</span></div>
+      <div class="row" data-w="whip"><span class="c-w">whip</span><span class="c-ipa">/wɪp/</span><span class="c-pos">n.</span><span class="c-zh">鞭子</span></div>
+      <div class="row" data-w="whistle"><span class="c-w">whistle</span><span class="c-ipa">/ˈwɪsəl/</span><span class="c-pos">n.</span><span class="c-zh">哨子;口哨</span></div>
+      <div class="row" data-w="window"><span class="c-w">window</span><span class="c-ipa">/ˈwɪndoʊ/</span><span class="c-pos">n.</span><span class="c-zh">窗户</span></div>
+      <div class="row" data-w="wing"><span class="c-w">wing</span><span class="c-ipa">/wɪŋ/</span><span class="c-pos">n.</span><span class="c-zh">翅膀</span></div>
+      <div class="row" data-w="wire"><span class="c-w">wire</span><span class="c-ipa">/ˈwaɪɚ/</span><span class="c-pos">n.</span><span class="c-zh">金属丝;电线</span></div>
+      <div class="row" data-w="worm"><span class="c-w">worm</span><span class="c-ipa">/wɝm/</span><span class="c-pos">n.</span><span class="c-zh">虫;蠕虫</span></div>
+    </div>
+  </div>
+
+  <div class="word-block" data-group="adj">
+    <div class="word-block-head"><span class="pill adj">QUALITIES · GENERAL</span><h4>一般性质形容词</h4><span class="wb-count">100 个</span></div>
+    <p class="desc">描述事物性质的一般形容词。</p>
+    <div class="table-head"><span>单词</span><span>音标</span><span>词性</span><span>词义</span></div>
+    <div class="rows">
+      <div class="row" data-w="able"><span class="c-w">able</span><span class="c-ipa">/ˈeɪbəl/</span><span class="c-pos">adj.</span><span class="c-zh">能够的;有能力的</span></div>
+      <div class="row" data-w="acid"><span class="c-w">acid</span><span class="c-ipa">/ˈæsɪd/</span><span class="c-pos">adj.</span><span class="c-zh">酸的</span></div>
+      <div class="row" data-w="angry"><span class="c-w">angry</span><span class="c-ipa">/ˈæŋɡri/</span><span class="c-pos">adj.</span><span class="c-zh">生气的</span></div>
+      <div class="row" data-w="automatic"><span class="c-w">automatic</span><span class="c-ipa">/ˌɔtəˈmætɪk/</span><span class="c-pos">adj.</span><span class="c-zh">自动的</span></div>
+      <div class="row" data-w="beautiful"><span class="c-w">beautiful</span><span class="c-ipa">/ˈbjutəfəl/</span><span class="c-pos">adj.</span><span class="c-zh">美丽的</span></div>
+      <div class="row" data-w="black"><span class="c-w">black</span><span class="c-ipa">/blæk/</span><span class="c-pos">adj.</span><span class="c-zh">黑色的</span></div>
+      <div class="row" data-w="boiling"><span class="c-w">boiling</span><span class="c-ipa">/ˈbɔɪlɪŋ/</span><span class="c-pos">adj.</span><span class="c-zh">沸腾的</span></div>
+      <div class="row" data-w="bright"><span class="c-w">bright</span><span class="c-ipa">/braɪt/</span><span class="c-pos">adj.</span><span class="c-zh">明亮的;聪明的</span></div>
+      <div class="row" data-w="broken"><span class="c-w">broken</span><span class="c-ipa">/ˈbroʊkən/</span><span class="c-pos">adj.</span><span class="c-zh">破碎的;坏了的</span></div>
+      <div class="row" data-w="brown"><span class="c-w">brown</span><span class="c-ipa">/braʊn/</span><span class="c-pos">adj.</span><span class="c-zh">棕色的</span></div>
+      <div class="row" data-w="cheap"><span class="c-w">cheap</span><span class="c-ipa">/tʃip/</span><span class="c-pos">adj.</span><span class="c-zh">便宜的</span></div>
+      <div class="row" data-w="chemical"><span class="c-w">chemical</span><span class="c-ipa">/ˈkɛmɪkəl/</span><span class="c-pos">adj.</span><span class="c-zh">化学的</span></div>
+      <div class="row" data-w="chief"><span class="c-w">chief</span><span class="c-ipa">/tʃif/</span><span class="c-pos">adj.</span><span class="c-zh">主要的;首席的</span></div>
+      <div class="row" data-w="clean"><span class="c-w">clean</span><span class="c-ipa">/klin/</span><span class="c-pos">adj.</span><span class="c-zh">干净的</span></div>
+      <div class="row" data-w="clear"><span class="c-w">clear</span><span class="c-ipa">/klɪr/</span><span class="c-pos">adj.</span><span class="c-zh">清楚的;清澈的</span></div>
+      <div class="row" data-w="common"><span class="c-w">common</span><span class="c-ipa">/ˈkɑmən/</span><span class="c-pos">adj.</span><span class="c-zh">共同的;常见的</span></div>
+      <div class="row" data-w="complex"><span class="c-w">complex</span><span class="c-ipa">/kəmˈplɛks/</span><span class="c-pos">adj.</span><span class="c-zh">复杂的</span></div>
+      <div class="row" data-w="conscious"><span class="c-w">conscious</span><span class="c-ipa">/ˈkɑnʃəs/</span><span class="c-pos">adj.</span><span class="c-zh">有意识的</span></div>
+      <div class="row" data-w="cut"><span class="c-w">cut</span><span class="c-ipa">/kʌt/</span><span class="c-pos">adj.</span><span class="c-zh">切开的;割伤的</span></div>
+      <div class="row" data-w="deep"><span class="c-w">deep</span><span class="c-ipa">/dip/</span><span class="c-pos">adj.</span><span class="c-zh">深的</span></div>
+      <div class="row" data-w="dependent"><span class="c-w">dependent</span><span class="c-ipa">/dɪˈpɛndənt/</span><span class="c-pos">adj.</span><span class="c-zh">依赖的</span></div>
+      <div class="row" data-w="early"><span class="c-w">early</span><span class="c-ipa">/ˈɝli/</span><span class="c-pos">adj.</span><span class="c-zh">早的</span></div>
+      <div class="row" data-w="elastic"><span class="c-w">elastic</span><span class="c-ipa">/ɪˈlæstɪk/</span><span class="c-pos">adj.</span><span class="c-zh">有弹性的</span></div>
+      <div class="row" data-w="electric"><span class="c-w">electric</span><span class="c-ipa">/ɪˈlɛktrɪk/</span><span class="c-pos">adj.</span><span class="c-zh">电的</span></div>
+      <div class="row" data-w="equal"><span class="c-w">equal</span><span class="c-ipa">/ˈikwəl/</span><span class="c-pos">adj.</span><span class="c-zh">相等的;平等的</span></div>
+      <div class="row" data-w="fat"><span class="c-w">fat</span><span class="c-ipa">/fæt/</span><span class="c-pos">adj.</span><span class="c-zh">肥的;胖的</span></div>
+      <div class="row" data-w="fertile"><span class="c-w">fertile</span><span class="c-ipa">/ˈfɝtəl/</span><span class="c-pos">adj.</span><span class="c-zh">肥沃的</span></div>
+      <div class="row" data-w="first"><span class="c-w">first</span><span class="c-ipa">/fɝst/</span><span class="c-pos">adj.</span><span class="c-zh">第一的</span></div>
+      <div class="row" data-w="fixed"><span class="c-w">fixed</span><span class="c-ipa">/fɪkst/</span><span class="c-pos">adj.</span><span class="c-zh">固定的</span></div>
+      <div class="row" data-w="flat"><span class="c-w">flat</span><span class="c-ipa">/flæt/</span><span class="c-pos">adj.</span><span class="c-zh">平的</span></div>
+      <div class="row" data-w="free"><span class="c-w">free</span><span class="c-ipa">/fri/</span><span class="c-pos">adj.</span><span class="c-zh">自由的;免费的</span></div>
+      <div class="row" data-w="frequent"><span class="c-w">frequent</span><span class="c-ipa">/ˈfrikwənt/</span><span class="c-pos">adj.</span><span class="c-zh">频繁的</span></div>
+      <div class="row" data-w="full"><span class="c-w">full</span><span class="c-ipa">/fʊl/</span><span class="c-pos">adj.</span><span class="c-zh">满的;充满的</span></div>
+      <div class="row" data-w="general"><span class="c-w">general</span><span class="c-ipa">/ˈdʒɛnərəl/</span><span class="c-pos">adj.</span><span class="c-zh">普遍的;总的</span></div>
+      <div class="row" data-w="good"><span class="c-w">good</span><span class="c-ipa">/ɡʊd/</span><span class="c-pos">adj.</span><span class="c-zh">好的</span></div>
+      <div class="row" data-w="great"><span class="c-w">great</span><span class="c-ipa">/ɡreɪt/</span><span class="c-pos">adj.</span><span class="c-zh">伟大的;巨大的</span></div>
+      <div class="row" data-w="grey"><span class="c-w">grey</span><span class="c-ipa">/ɡreɪ/</span><span class="c-pos">adj.</span><span class="c-zh">灰色的</span></div>
+      <div class="row" data-w="hanging"><span class="c-w">hanging</span><span class="c-ipa">/ˈhæŋɪŋ/</span><span class="c-pos">adj.</span><span class="c-zh">悬挂的</span></div>
+      <div class="row" data-w="happy"><span class="c-w">happy</span><span class="c-ipa">/ˈhæpi/</span><span class="c-pos">adj.</span><span class="c-zh">快乐的</span></div>
+      <div class="row" data-w="hard"><span class="c-w">hard</span><span class="c-ipa">/hɑrd/</span><span class="c-pos">adj.</span><span class="c-zh">硬的;困难的</span></div>
+      <div class="row" data-w="healthy"><span class="c-w">healthy</span><span class="c-ipa">/ˈhɛlθi/</span><span class="c-pos">adj.</span><span class="c-zh">健康的</span></div>
+      <div class="row" data-w="high"><span class="c-w">high</span><span class="c-ipa">/haɪ/</span><span class="c-pos">adj.</span><span class="c-zh">高的</span></div>
+      <div class="row" data-w="hollow"><span class="c-w">hollow</span><span class="c-ipa">/ˈhɑloʊ/</span><span class="c-pos">adj.</span><span class="c-zh">空心的</span></div>
+      <div class="row" data-w="important"><span class="c-w">important</span><span class="c-ipa">/ɪmˈpɔrtənt/</span><span class="c-pos">adj.</span><span class="c-zh">重要的</span></div>
+      <div class="row" data-w="kind"><span class="c-w">kind</span><span class="c-ipa">/kaɪnd/</span><span class="c-pos">adj.</span><span class="c-zh">善良的;和蔼的</span></div>
+      <div class="row" data-w="like"><span class="c-w">like</span><span class="c-ipa">/laɪk/</span><span class="c-pos">adj.</span><span class="c-zh">相似的;像</span></div>
+      <div class="row" data-w="living"><span class="c-w">living</span><span class="c-ipa">/ˈlɪvɪŋ/</span><span class="c-pos">adj.</span><span class="c-zh">活的;有生命的</span></div>
+      <div class="row" data-w="long"><span class="c-w">long</span><span class="c-ipa">/lɔŋ/</span><span class="c-pos">adj.</span><span class="c-zh">长的</span></div>
+      <div class="row" data-w="male"><span class="c-w">male</span><span class="c-ipa">/meɪl/</span><span class="c-pos">adj.</span><span class="c-zh">男性的;雄的</span></div>
+      <div class="row" data-w="married"><span class="c-w">married</span><span class="c-ipa">/ˈmɛrid/</span><span class="c-pos">adj.</span><span class="c-zh">已婚的</span></div>
+      <div class="row" data-w="material"><span class="c-w">material</span><span class="c-ipa">/məˈtɪriəl/</span><span class="c-pos">adj.</span><span class="c-zh">物质的</span></div>
+      <div class="row" data-w="medical"><span class="c-w">medical</span><span class="c-ipa">/ˈmɛdɪkəl/</span><span class="c-pos">adj.</span><span class="c-zh">医疗的</span></div>
+      <div class="row" data-w="military"><span class="c-w">military</span><span class="c-ipa">/ˈmɪləˌtɛri/</span><span class="c-pos">adj.</span><span class="c-zh">军事的</span></div>
+      <div class="row" data-w="natural"><span class="c-w">natural</span><span class="c-ipa">/ˈnætʃərəl/</span><span class="c-pos">adj.</span><span class="c-zh">自然的</span></div>
+      <div class="row" data-w="necessary"><span class="c-w">necessary</span><span class="c-ipa">/ˈnɛsəˌsɛri/</span><span class="c-pos">adj.</span><span class="c-zh">必要的</span></div>
+      <div class="row" data-w="new"><span class="c-w">new</span><span class="c-ipa">/nu/</span><span class="c-pos">adj.</span><span class="c-zh">新的</span></div>
+      <div class="row" data-w="normal"><span class="c-w">normal</span><span class="c-ipa">/ˈnɔrməl/</span><span class="c-pos">adj.</span><span class="c-zh">正常的</span></div>
+      <div class="row" data-w="open"><span class="c-w">open</span><span class="c-ipa">/ˈoʊpən/</span><span class="c-pos">adj.</span><span class="c-zh">开着的;开放的</span></div>
+      <div class="row" data-w="parallel"><span class="c-w">parallel</span><span class="c-ipa">/ˈpærəˌlɛl/</span><span class="c-pos">adj.</span><span class="c-zh">平行的</span></div>
+      <div class="row" data-w="past"><span class="c-w">past</span><span class="c-ipa">/pæst/</span><span class="c-pos">adj.</span><span class="c-zh">过去的</span></div>
+      <div class="row" data-w="physical"><span class="c-w">physical</span><span class="c-ipa">/ˈfɪzɪkəl/</span><span class="c-pos">adj.</span><span class="c-zh">身体的;物理的</span></div>
+      <div class="row" data-w="political"><span class="c-w">political</span><span class="c-ipa">/pəˈlɪtɪkəl/</span><span class="c-pos">adj.</span><span class="c-zh">政治的</span></div>
+      <div class="row" data-w="poor"><span class="c-w">poor</span><span class="c-ipa">/pʊr/</span><span class="c-pos">adj.</span><span class="c-zh">贫穷的;差的</span></div>
+      <div class="row" data-w="possible"><span class="c-w">possible</span><span class="c-ipa">/ˈpɑsəbəl/</span><span class="c-pos">adj.</span><span class="c-zh">可能的</span></div>
+      <div class="row" data-w="present"><span class="c-w">present</span><span class="c-ipa">/ˈprɛzənt/</span><span class="c-pos">adj.</span><span class="c-zh">现在的;在场的</span></div>
+      <div class="row" data-w="private"><span class="c-w">private</span><span class="c-ipa">/ˈpraɪvɪt/</span><span class="c-pos">adj.</span><span class="c-zh">私人的</span></div>
+      <div class="row" data-w="probable"><span class="c-w">probable</span><span class="c-ipa">/ˈprɑbəbəl/</span><span class="c-pos">adj.</span><span class="c-zh">很可能的</span></div>
+      <div class="row" data-w="quick"><span class="c-w">quick</span><span class="c-ipa">/kwɪk/</span><span class="c-pos">adj.</span><span class="c-zh">快的</span></div>
+      <div class="row" data-w="quiet"><span class="c-w">quiet</span><span class="c-ipa">/ˈkwaɪət/</span><span class="c-pos">adj.</span><span class="c-zh">安静的</span></div>
+      <div class="row" data-w="ready"><span class="c-w">ready</span><span class="c-ipa">/ˈrɛdi/</span><span class="c-pos">adj.</span><span class="c-zh">准备好的</span></div>
+      <div class="row" data-w="red"><span class="c-w">red</span><span class="c-ipa">/rɛd/</span><span class="c-pos">adj.</span><span class="c-zh">红色的</span></div>
+      <div class="row" data-w="regular"><span class="c-w">regular</span><span class="c-ipa">/ˈrɛɡjələr/</span><span class="c-pos">adj.</span><span class="c-zh">规则的;定期的</span></div>
+      <div class="row" data-w="responsible"><span class="c-w">responsible</span><span class="c-ipa">/rɪˈspɑnsəbəl/</span><span class="c-pos">adj.</span><span class="c-zh">负责的</span></div>
+      <div class="row" data-w="right"><span class="c-w">right</span><span class="c-ipa">/raɪt/</span><span class="c-pos">adj.</span><span class="c-zh">对的;右边的</span></div>
+      <div class="row" data-w="round"><span class="c-w">round</span><span class="c-ipa">/raʊnd/</span><span class="c-pos">adj.</span><span class="c-zh">圆的</span></div>
+      <div class="row" data-w="same"><span class="c-w">same</span><span class="c-ipa">/seɪm/</span><span class="c-pos">adj.</span><span class="c-zh">相同的</span></div>
+      <div class="row" data-w="second"><span class="c-w">second</span><span class="c-ipa">/ˈsɛkənd/</span><span class="c-pos">adj.</span><span class="c-zh">第二的</span></div>
+      <div class="row" data-w="separate"><span class="c-w">separate</span><span class="c-ipa">/ˈsɛpərɪt/</span><span class="c-pos">adj.</span><span class="c-zh">分开的;单独的</span></div>
+      <div class="row" data-w="serious"><span class="c-w">serious</span><span class="c-ipa">/ˈsɪriəs/</span><span class="c-pos">adj.</span><span class="c-zh">严肃的;严重的</span></div>
+      <div class="row" data-w="sharp"><span class="c-w">sharp</span><span class="c-ipa">/ʃɑrp/</span><span class="c-pos">adj.</span><span class="c-zh">锋利的;尖锐的</span></div>
+      <div class="row" data-w="smooth"><span class="c-w">smooth</span><span class="c-ipa">/smuð/</span><span class="c-pos">adj.</span><span class="c-zh">光滑的;平稳的</span></div>
+      <div class="row" data-w="sticky"><span class="c-w">sticky</span><span class="c-ipa">/ˈstɪki/</span><span class="c-pos">adj.</span><span class="c-zh">黏的</span></div>
+      <div class="row" data-w="stiff"><span class="c-w">stiff</span><span class="c-ipa">/stɪf/</span><span class="c-pos">adj.</span><span class="c-zh">硬的;僵硬的</span></div>
+      <div class="row" data-w="straight"><span class="c-w">straight</span><span class="c-ipa">/streɪt/</span><span class="c-pos">adj.</span><span class="c-zh">直的</span></div>
+      <div class="row" data-w="strong"><span class="c-w">strong</span><span class="c-ipa">/strɔŋ/</span><span class="c-pos">adj.</span><span class="c-zh">强壮的;强的</span></div>
+      <div class="row" data-w="sudden"><span class="c-w">sudden</span><span class="c-ipa">/ˈsʌdən/</span><span class="c-pos">adj.</span><span class="c-zh">突然的</span></div>
+      <div class="row" data-w="sweet"><span class="c-w">sweet</span><span class="c-ipa">/swit/</span><span class="c-pos">adj.</span><span class="c-zh">甜的</span></div>
+      <div class="row" data-w="tall"><span class="c-w">tall</span><span class="c-ipa">/tɔl/</span><span class="c-pos">adj.</span><span class="c-zh">高的</span></div>
+      <div class="row" data-w="thick"><span class="c-w">thick</span><span class="c-ipa">/θɪk/</span><span class="c-pos">adj.</span><span class="c-zh">厚的;粗的</span></div>
+      <div class="row" data-w="tight"><span class="c-w">tight</span><span class="c-ipa">/taɪt/</span><span class="c-pos">adj.</span><span class="c-zh">紧的</span></div>
+      <div class="row" data-w="tired"><span class="c-w">tired</span><span class="c-ipa">/ˈtaɪɚd/</span><span class="c-pos">adj.</span><span class="c-zh">疲倦的</span></div>
+      <div class="row" data-w="true"><span class="c-w">true</span><span class="c-ipa">/tru/</span><span class="c-pos">adj.</span><span class="c-zh">真的;真实的</span></div>
+      <div class="row" data-w="violent"><span class="c-w">violent</span><span class="c-ipa">/ˈvaɪələnt/</span><span class="c-pos">adj.</span><span class="c-zh">暴力的;猛烈的</span></div>
+      <div class="row" data-w="waiting"><span class="c-w">waiting</span><span class="c-ipa">/ˈweɪtɪŋ/</span><span class="c-pos">adj.</span><span class="c-zh">等待的</span></div>
+      <div class="row" data-w="warm"><span class="c-w">warm</span><span class="c-ipa">/wɔrm/</span><span class="c-pos">adj.</span><span class="c-zh">温暖的</span></div>
+      <div class="row" data-w="wet"><span class="c-w">wet</span><span class="c-ipa">/wɛt/</span><span class="c-pos">adj.</span><span class="c-zh">湿的</span></div>
+      <div class="row" data-w="wide"><span class="c-w">wide</span><span class="c-ipa">/waɪd/</span><span class="c-pos">adj.</span><span class="c-zh">宽的</span></div>
+      <div class="row" data-w="wise"><span class="c-w">wise</span><span class="c-ipa">/waɪz/</span><span class="c-pos">adj.</span><span class="c-zh">明智的;聪明的</span></div>
+      <div class="row" data-w="yellow"><span class="c-w">yellow</span><span class="c-ipa">/ˈjɛloʊ/</span><span class="c-pos">adj.</span><span class="c-zh">黄色的</span></div>
+      <div class="row" data-w="young"><span class="c-w">young</span><span class="c-ipa">/jʌŋ/</span><span class="c-pos">adj.</span><span class="c-zh">年轻的</span></div>
+    </div>
+  </div>
+
+  <div class="word-block" data-group="adj">
+    <div class="word-block-head"><span class="pill adj2">QUALITIES · OPPOSITES</span><h4>反义形容词</h4><span class="wb-count">50 个</span></div>
+    <p class="desc">成对覆盖描述两端的反义形容词。</p>
+    <div class="table-head"><span>单词</span><span>音标</span><span>词性</span><span>词义</span></div>
+    <div class="rows">
+      <div class="row" data-w="awake"><span class="c-w">awake</span><span class="c-ipa">/əˈweɪk/</span><span class="c-pos">adj.</span><span class="c-zh">醒着的</span></div>
+      <div class="row" data-w="bad"><span class="c-w">bad</span><span class="c-ipa">/bæd/</span><span class="c-pos">adj.</span><span class="c-zh">坏的</span></div>
+      <div class="row" data-w="bent"><span class="c-w">bent</span><span class="c-ipa">/bɛnt/</span><span class="c-pos">adj.</span><span class="c-zh">弯曲的</span></div>
+      <div class="row" data-w="bitter"><span class="c-w">bitter</span><span class="c-ipa">/ˈbɪtɚ/</span><span class="c-pos">adj.</span><span class="c-zh">苦的;痛苦的</span></div>
+      <div class="row" data-w="blue"><span class="c-w">blue</span><span class="c-ipa">/blu/</span><span class="c-pos">adj.</span><span class="c-zh">蓝色的</span></div>
+      <div class="row" data-w="certain"><span class="c-w">certain</span><span class="c-ipa">/ˈsɝtən/</span><span class="c-pos">adj.</span><span class="c-zh">确定的;某些</span></div>
+      <div class="row" data-w="cold"><span class="c-w">cold</span><span class="c-ipa">/koʊld/</span><span class="c-pos">adj.</span><span class="c-zh">冷的</span></div>
+      <div class="row" data-w="complete"><span class="c-w">complete</span><span class="c-ipa">/kəmˈplit/</span><span class="c-pos">adj.</span><span class="c-zh">完整的;完成的</span></div>
+      <div class="row" data-w="cruel"><span class="c-w">cruel</span><span class="c-ipa">/ˈkruəl/</span><span class="c-pos">adj.</span><span class="c-zh">残忍的</span></div>
+      <div class="row" data-w="dark"><span class="c-w">dark</span><span class="c-ipa">/dɑrk/</span><span class="c-pos">adj.</span><span class="c-zh">黑暗的;深色的</span></div>
+      <div class="row" data-w="dead"><span class="c-w">dead</span><span class="c-ipa">/dɛd/</span><span class="c-pos">adj.</span><span class="c-zh">死的</span></div>
+      <div class="row" data-w="dear"><span class="c-w">dear</span><span class="c-ipa">/dɪr/</span><span class="c-pos">adj.</span><span class="c-zh">亲爱的;昂贵的</span></div>
+      <div class="row" data-w="delicate"><span class="c-w">delicate</span><span class="c-ipa">/ˈdɛlɪkɪt/</span><span class="c-pos">adj.</span><span class="c-zh">精致的;脆弱的</span></div>
+      <div class="row" data-w="different"><span class="c-w">different</span><span class="c-ipa">/ˈdɪfərənt/</span><span class="c-pos">adj.</span><span class="c-zh">不同的</span></div>
+      <div class="row" data-w="dirty"><span class="c-w">dirty</span><span class="c-ipa">/ˈdɝti/</span><span class="c-pos">adj.</span><span class="c-zh">脏的</span></div>
+      <div class="row" data-w="dry"><span class="c-w">dry</span><span class="c-ipa">/draɪ/</span><span class="c-pos">adj.</span><span class="c-zh">干的</span></div>
+      <div class="row" data-w="false"><span class="c-w">false</span><span class="c-ipa">/fɔls/</span><span class="c-pos">adj.</span><span class="c-zh">假的;错误的</span></div>
+      <div class="row" data-w="feeble"><span class="c-w">feeble</span><span class="c-ipa">/ˈfibəl/</span><span class="c-pos">adj.</span><span class="c-zh">虚弱的</span></div>
+      <div class="row" data-w="female"><span class="c-w">female</span><span class="c-ipa">/ˈfimeɪl/</span><span class="c-pos">adj.</span><span class="c-zh">女性的;雌的</span></div>
+      <div class="row" data-w="foolish"><span class="c-w">foolish</span><span class="c-ipa">/ˈfulɪʃ/</span><span class="c-pos">adj.</span><span class="c-zh">愚蠢的</span></div>
+      <div class="row" data-w="future"><span class="c-w">future</span><span class="c-ipa">/ˈfjutʃɚ/</span><span class="c-pos">adj.</span><span class="c-zh">未来的</span></div>
+      <div class="row" data-w="green"><span class="c-w">green</span><span class="c-ipa">/ɡrin/</span><span class="c-pos">adj.</span><span class="c-zh">绿色的</span></div>
+      <div class="row" data-w="ill"><span class="c-w">ill</span><span class="c-ipa">/ɪl/</span><span class="c-pos">adj.</span><span class="c-zh">生病的</span></div>
+      <div class="row" data-w="last"><span class="c-w">last</span><span class="c-ipa">/læst/</span><span class="c-pos">adj.</span><span class="c-zh">最后的;上一个的</span></div>
+      <div class="row" data-w="late"><span class="c-w">late</span><span class="c-ipa">/leɪt/</span><span class="c-pos">adj.</span><span class="c-zh">迟的;晚的</span></div>
+      <div class="row" data-w="left"><span class="c-w">left</span><span class="c-ipa">/lɛft/</span><span class="c-pos">adj.</span><span class="c-zh">左边的</span></div>
+      <div class="row" data-w="loose"><span class="c-w">loose</span><span class="c-ipa">/lus/</span><span class="c-pos">adj.</span><span class="c-zh">松的</span></div>
+      <div class="row" data-w="loud"><span class="c-w">loud</span><span class="c-ipa">/laʊd/</span><span class="c-pos">adj.</span><span class="c-zh">响亮的;大声的</span></div>
+      <div class="row" data-w="low"><span class="c-w">low</span><span class="c-ipa">/loʊ/</span><span class="c-pos">adj.</span><span class="c-zh">低的</span></div>
+      <div class="row" data-w="mixed"><span class="c-w">mixed</span><span class="c-ipa">/mɪkst/</span><span class="c-pos">adj.</span><span class="c-zh">混合的</span></div>
+      <div class="row" data-w="narrow"><span class="c-w">narrow</span><span class="c-ipa">/ˈnæroʊ/</span><span class="c-pos">adj.</span><span class="c-zh">窄的</span></div>
+      <div class="row" data-w="old"><span class="c-w">old</span><span class="c-ipa">/oʊld/</span><span class="c-pos">adj.</span><span class="c-zh">老的;旧的</span></div>
+      <div class="row" data-w="opposite"><span class="c-w">opposite</span><span class="c-ipa">/ˈɑpəzɪt/</span><span class="c-pos">adj.</span><span class="c-zh">相反的;对面的</span></div>
+      <div class="row" data-w="public"><span class="c-w">public</span><span class="c-ipa">/ˈpʌblɪk/</span><span class="c-pos">adj.</span><span class="c-zh">公共的</span></div>
+      <div class="row" data-w="rough"><span class="c-w">rough</span><span class="c-ipa">/rʌf/</span><span class="c-pos">adj.</span><span class="c-zh">粗糙的;粗略的</span></div>
+      <div class="row" data-w="sad"><span class="c-w">sad</span><span class="c-ipa">/sæd/</span><span class="c-pos">adj.</span><span class="c-zh">悲伤的</span></div>
+      <div class="row" data-w="safe"><span class="c-w">safe</span><span class="c-ipa">/seɪf/</span><span class="c-pos">adj.</span><span class="c-zh">安全的</span></div>
+      <div class="row" data-w="secret"><span class="c-w">secret</span><span class="c-ipa">/ˈsikrɪt/</span><span class="c-pos">adj.</span><span class="c-zh">秘密的</span></div>
+      <div class="row" data-w="short"><span class="c-w">short</span><span class="c-ipa">/ʃɔrt/</span><span class="c-pos">adj.</span><span class="c-zh">短的;矮的</span></div>
+      <div class="row" data-w="shut"><span class="c-w">shut</span><span class="c-ipa">/ʃʌt/</span><span class="c-pos">adj.</span><span class="c-zh">关闭的</span></div>
+      <div class="row" data-w="simple"><span class="c-w">simple</span><span class="c-ipa">/ˈsɪmpəl/</span><span class="c-pos">adj.</span><span class="c-zh">简单的</span></div>
+      <div class="row" data-w="slow"><span class="c-w">slow</span><span class="c-ipa">/sloʊ/</span><span class="c-pos">adj.</span><span class="c-zh">慢的</span></div>
+      <div class="row" data-w="small"><span class="c-w">small</span><span class="c-ipa">/smɔl/</span><span class="c-pos">adj.</span><span class="c-zh">小的</span></div>
+      <div class="row" data-w="soft"><span class="c-w">soft</span><span class="c-ipa">/sɔft/</span><span class="c-pos">adj.</span><span class="c-zh">软的;柔和的</span></div>
+      <div class="row" data-w="solid"><span class="c-w">solid</span><span class="c-ipa">/ˈsɑlɪd/</span><span class="c-pos">adj.</span><span class="c-zh">固体的;结实的</span></div>
+      <div class="row" data-w="special"><span class="c-w">special</span><span class="c-ipa">/ˈspɛʃəl/</span><span class="c-pos">adj.</span><span class="c-zh">特殊的</span></div>
+      <div class="row" data-w="strange"><span class="c-w">strange</span><span class="c-ipa">/streɪndʒ/</span><span class="c-pos">adj.</span><span class="c-zh">奇怪的;陌生的</span></div>
+      <div class="row" data-w="thin"><span class="c-w">thin</span><span class="c-ipa">/θɪn/</span><span class="c-pos">adj.</span><span class="c-zh">薄的;瘦的</span></div>
+      <div class="row" data-w="white"><span class="c-w">white</span><span class="c-ipa">/waɪt/</span><span class="c-pos">adj.</span><span class="c-zh">白色的</span></div>
+      <div class="row" data-w="wrong"><span class="c-w">wrong</span><span class="c-ipa">/rɔŋ/</span><span class="c-pos">adj.</span><span class="c-zh">错误的</span></div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p><strong>Basic English</strong> · Charles Kay Ogden · 1930 ·《Basic English: A General Introduction with Rules and Grammar》</p>
+  <p style="margin-top:8px">全部 850 词已按 100 + 400 + 200 + 100 + 50 逐词核对 · 采用美式拼写约定</p>
+  <div class="src">
+    资料来源:Basic-English Institute (zbenglish.net) · Simple English Wikipedia: Basic English ordered wordlist · Wiktionary: Appendix:Basic English word list · Wikipedia: Basic English · Britannica · Ogden 原著 (1930, Google Books)。<br>
+    拼写说明:奥格登 1930 年英版原文用 colour / harbour / behaviour / theatre,本页统一采用美式拼写 (color / harbor / behavior / theater)。
+  </div>
+</footer>
+
+<script>
+(function(){
+  const search = document.getElementById('search');
+  const countEl = document.getElementById('count');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const blocks = document.querySelectorAll('#vocab .word-block');
+  const rows = document.querySelectorAll('#vocab .row');
+  let curFilter = 'all';
+
+  // 记录每行原始文本,便于高亮还原
+  rows.forEach(r=>{
+    r._w = r.querySelector('.c-w');
+    r._zh = r.querySelector('.c-zh');
+    r._wText = r._w.textContent;
+    r._zhText = r._zh.textContent;
+  });
+
+  function highlight(el, raw, q){
+    if(!q){ el.textContent = raw; return; }
+    const i = raw.toLowerCase().indexOf(q);
+    if(i<0){ el.textContent = raw; return; }
+    el.innerHTML = raw.slice(0,i) + '<mark>' + raw.slice(i,i+q.length) + '</mark>' + raw.slice(i+q.length);
+  }
+
+  function apply(){
+    const q = search.value.trim().toLowerCase();
+    let visible = 0;
+    blocks.forEach(block=>{
+      const group = block.getAttribute('data-group');
+      const groupOK = (curFilter==='all') || (group===curFilter);
+      let blockVisible = 0;
+      block.querySelectorAll('.row').forEach(r=>{
+        const en = r._wText.toLowerCase();
+        const zh = r._zhText;
+        const matchQ = !q || en.includes(q) || zh.includes(q);
+        const show = groupOK && matchQ;
+        r.classList.toggle('hide', !show);
+        r.classList.toggle('hit', !!q && matchQ && groupOK);
+        if(show){
+          blockVisible++; visible++;
+          highlight(r._w, r._wText, q && en.includes(q) ? q : '');
+          highlight(r._zh, r._zhText, q && zh.includes(q) ? q : '');
+        }
+      });
+      block.classList.toggle('empty', blockVisible===0);
+    });
+    countEl.textContent = q ? ('找到 '+visible+' 个') : ('显示 '+visible+' / 850');
+  }
+
+  filterBtns.forEach(btn=>btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    curFilter = btn.getAttribute('data-f');
+    apply();
+  }));
+  search.addEventListener('input', apply);
+  apply();
+})();
+</script>
+</body>
+</html>

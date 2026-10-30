@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<!-- tokens: :root 先定义原始色彩、字号、间距、尺寸与布局值，再映射为语义 token；组件声明仅使用 var(--xxx)。媒体查询断点使用固定字面量，不使用 var()。 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="墨本 Moben 产品拆解、行为机制、海外专注硬件赛道、订阅风险与商业验证框架。区分官方说明、作者自述、材料口径与分析推断。">
+  <title>墨本 Moben 与"专注无打扰"硬件赛道</title>
+  <style>
+    :root {
+      /* 第一层：原始 token */
+      --raw-white: #ffffff;
+      --raw-gray-50: #f5f7f9;
+      --raw-gray-100: #edf1f4;
+      --raw-gray-200: #dce2e7;
+      --raw-gray-600: #5c6670;
+      --raw-gray-900: #272e34;
+      --raw-ink: #193d59;
+      --raw-orange: #a65325;
+
+      --raw-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      --raw-font-root: 16px;
+      --raw-font-xs: 0.75rem;
+      --raw-font-sm: 0.875rem;
+      --raw-font-base: 1rem;
+      --raw-font-lg: 1.125rem;
+      --raw-font-xl: 1.25rem;
+      --raw-font-h2: clamp(1.45rem, 2.3vw, 1.9rem);
+      --raw-font-h1: clamp(2.05rem, 4.1vw, 3.55rem);
+      --raw-font-metric: clamp(2.15rem, 3.1vw, 3rem);
+      --raw-font-ref: 0.72em;
+      --raw-weight-normal: 400;
+      --raw-weight-medium: 600;
+      --raw-weight-bold: 700;
+      --raw-leading-tight: 1.28;
+      --raw-leading-table: 1.65;
+      --raw-leading-body: 1.85;
+      --raw-leading-one: 1;
+      --raw-tracking-tight: -0.025em;
+
+      --raw-space-0: 0;
+      --raw-space-1: 0.25rem;
+      --raw-space-2: 0.5rem;
+      --raw-space-3: 0.75rem;
+      --raw-space-4: 1rem;
+      --raw-space-5: 1.25rem;
+      --raw-space-6: 1.5rem;
+      --raw-space-8: 2rem;
+      --raw-space-10: 2.5rem;
+      --raw-space-12: 3rem;
+      --raw-space-16: 4rem;
+      --raw-space-20: 5rem;
+      --raw-gutter: clamp(1rem, 3.5vw, 3rem);
+
+      --raw-page-width: 82rem;
+      --raw-table-width: 48rem;
+      --raw-table-wide: 68rem;
+      --raw-table-compact: 40rem;
+      --raw-key-size: 3.5rem;
+      --raw-border-thin: 1px;
+      --raw-border-strong: 3px;
+      --raw-radius: 4px;
+      --raw-full: 100%;
+      --raw-half: 50%;
+      --raw-source-indent: 2.75rem;
+      --raw-outline-offset: 3px;
+
+      --raw-grid-one: minmax(0, 1fr);
+      --raw-grid-two: repeat(2, minmax(0, 1fr));
+      --raw-grid-three: repeat(3, minmax(0, 1fr));
+      --raw-grid-four: repeat(4, minmax(0, 1fr));
+      --raw-grid-five: repeat(5, minmax(0, 1fr));
+      --raw-flex-grow: 1 1 0;
+      --raw-flex-fixed: 0 0 auto;
+      --raw-flex-card: 1 1 13rem;
+      --raw-rotate-quarter: rotate(90deg);
+      --raw-source-marker: "S" counter(list-item) "  ";
+
+      --raw-auto: auto;
+      --raw-none: none;
+      --raw-block: block;
+      --raw-inline-block: inline-block;
+      --raw-flex: flex;
+      --raw-grid: grid;
+      --raw-row: row;
+      --raw-column: column;
+      --raw-wrap: wrap;
+      --raw-nowrap: nowrap;
+      --raw-center: center;
+      --raw-left: left;
+      --raw-top: top;
+      --raw-baseline: baseline;
+      --raw-stretch: stretch;
+      --raw-border-box: border-box;
+      --raw-solid: solid;
+      --raw-collapse: collapse;
+      --raw-anywhere: anywhere;
+      --raw-contain: contain;
+      --raw-super: super;
+      --raw-normal: normal;
+      --raw-inherit: inherit;
+      --raw-underline: underline;
+      --raw-tabular: tabular-nums;
+      --raw-visible: visible;
+      --raw-fixed: fixed;
+      --raw-avoid: avoid;
+      --raw-decimal: decimal;
+
+      /* 第二层：语义 token */
+      --bg: var(--raw-white);
+      --surface: var(--raw-white);
+      --surface-subtle: var(--raw-gray-50);
+      --surface-strong: var(--raw-gray-100);
+      --text: var(--raw-gray-900);
+      --muted: var(--raw-gray-600);
+      --accent: var(--raw-ink);
+      --accent-on: var(--raw-white);
+      --line: var(--raw-gray-200);
+      --ok: var(--raw-ink);
+      --warn: var(--raw-orange);
+
+      --font-body: var(--raw-font-sans);
+      --font-root: var(--raw-font-root);
+      --font-xs: var(--raw-font-xs);
+      --font-sm: var(--raw-font-sm);
+      --font-base: var(--raw-font-base);
+      --font-lead: var(--raw-font-lg);
+      --font-card-title: var(--raw-font-xl);
+      --font-section: var(--raw-font-h2);
+      --font-title: var(--raw-font-h1);
+      --font-metric: var(--raw-font-metric);
+      --font-reference: var(--raw-font-ref);
+      --weight-normal: var(--raw-weight-normal);
+      --weight-medium: var(--raw-weight-medium);
+      --weight-bold: var(--raw-weight-bold);
+      --leading-heading: var(--raw-leading-tight);
+      --leading-table: var(--raw-leading-table);
+      --leading-body: var(--raw-leading-body);
+      --leading-reference: var(--raw-leading-one);
+      --tracking-title: var(--raw-tracking-tight);
+
+      --zero: var(--raw-space-0);
+      --space-xs: var(--raw-space-1);
+      --space-sm: var(--raw-space-2);
+      --space-md: var(--raw-space-3);
+      --space-base: var(--raw-space-4);
+      --space-lg: var(--raw-space-5);
+      --space-xl: var(--raw-space-6);
+      --space-2xl: var(--raw-space-8);
+      --space-3xl: var(--raw-space-10);
+      --space-4xl: var(--raw-space-12);
+      --section-space: var(--raw-space-16);
+      --hero-space: var(--raw-space-20);
+      --page-gutter: var(--raw-gutter);
+
+      --page-width: var(--raw-page-width);
+      --table-width: var(--raw-table-width);
+      --table-wide: var(--raw-table-wide);
+      --table-compact: var(--raw-table-compact);
+      --key-size: var(--raw-key-size);
+      --radius-card: var(--raw-radius);
+      --full: var(--raw-full);
+      --half: var(--raw-half);
+      --source-indent: var(--raw-source-indent);
+
+      --rule: var(--raw-border-thin) var(--raw-solid) var(--line);
+      --rule-accent: var(--raw-border-strong) var(--raw-solid) var(--accent);
+      --rule-warn: var(--raw-border-strong) var(--raw-solid) var(--warn);
+      --rule-inverse: var(--raw-border-thin) var(--raw-solid) var(--accent-on);
+      --focus-ring: var(--raw-border-strong) var(--raw-solid) var(--accent);
+      --focus-offset: var(--raw-outline-offset);
+
+      --columns-one: var(--raw-grid-one);
+      --columns-two: var(--raw-grid-two);
+      --columns-three: var(--raw-grid-three);
+      --columns-four: var(--raw-grid-four);
+      --columns-five: var(--raw-grid-five);
+      --flex-step: var(--raw-flex-grow);
+      --flex-fixed: var(--raw-flex-fixed);
+      --flex-card: var(--raw-flex-card);
+      --arrow-down: var(--raw-rotate-quarter);
+      --source-marker: var(--raw-source-marker);
+
+      --auto: var(--raw-auto);
+      --none: var(--raw-none);
+      --block: var(--raw-block);
+      --inline-block: var(--raw-inline-block);
+      --flex: var(--raw-flex);
+      --grid: var(--raw-grid);
+      --row: var(--raw-row);
+      --column: var(--raw-column);
+      --wrap: var(--raw-wrap);
+      --nowrap: var(--raw-nowrap);
+      --center: var(--raw-center);
+      --left: var(--raw-left);
+      --top: var(--raw-top);
+      --baseline: var(--raw-baseline);
+      --stretch: var(--raw-stretch);
+      --box-sizing: var(--raw-border-box);
+      --collapse: var(--raw-collapse);
+      --word-wrap: var(--raw-anywhere);
+      --contain: var(--raw-contain);
+      --super: var(--raw-super);
+      --normal: var(--raw-normal);
+      --inherit: var(--raw-inherit);
+      --underline: var(--raw-underline);
+      --tabular: var(--raw-tabular);
+      --visible: var(--raw-visible);
+      --fixed: var(--raw-fixed);
+      --avoid: var(--raw-avoid);
+      --decimal: var(--raw-decimal);
+    }
+
+    *, *::before, *::after {
+      box-sizing: var(--box-sizing);
+    }
+
+    html {
+      font-size: var(--font-root);
+      background: var(--bg);
+      scroll-behavior: var(--auto);
+      -webkit-text-size-adjust: var(--full);
+    }
+
+    body {
+      margin: var(--zero);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--font-base);
+      font-weight: var(--weight-normal);
+      line-height: var(--leading-body);
+      overflow-wrap: var(--word-wrap);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: var(--none);
+    }
+
+    a:hover {
+      text-decoration: var(--underline);
+    }
+
+    a:focus-visible, .tbl:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-offset);
+    }
+
+    strong {
+      font-weight: var(--weight-bold);
+    }
+
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+      margin: var(--zero);
+    }
+
+    h1, h2, h3, h4 {
+      font-style: var(--normal);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+    }
+
+    h1 {
+      font-size: var(--font-title);
+      letter-spacing: var(--tracking-title);
+      color: var(--text);
+    }
+
+    h2 {
+      color: var(--accent);
+      font-size: var(--font-section);
+      margin-bottom: var(--space-base);
+    }
+
+    h3 {
+      font-size: var(--font-card-title);
+      margin-bottom: var(--space-md);
+    }
+
+    h4 {
+      font-size: var(--font-base);
+      margin-bottom: var(--space-sm);
+    }
+
+    p + p {
+      margin-top: var(--space-md);
+    }
+
+    small {
+      font-size: var(--font-sm);
+    }
+
+    .report {
+      width: var(--full);
+      max-width: var(--page-width);
+      margin-inline: var(--auto);
+      padding-inline: var(--page-gutter);
+      min-width: var(--zero);
+    }
+
+    .hero {
+      padding-top: var(--space-4xl);
+      padding-bottom: var(--space-2xl);
+      border-top: var(--rule-accent);
+    }
+
+    .meta {
+      display: var(--flex);
+      flex-wrap: var(--wrap);
+      justify-content: var(--left);
+      gap: var(--space-sm) var(--space-xl);
+      color: var(--muted);
+      font-size: var(--font-sm);
+      margin-bottom: var(--space-xl);
+    }
+
+    .headline-line {
+      display: var(--block);
+      color: var(--accent);
+      margin-top: var(--space-sm);
+    }
+
+    .lede {
+      font-size: var(--font-lead);
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .tag {
+      display: var(--inline-block);
+      padding-inline: var(--space-sm);
+      margin-inline-end: var(--space-sm);
+      border-inline-start: var(--rule-accent);
+      background: var(--surface-subtle);
+      color: var(--accent);
+      font-size: var(--font-sm);
+      font-weight: var(--weight-medium);
+      vertical-align: var(--baseline);
+    }
+
+    .tag.author, .tag.pending {
+      color: var(--warn);
+      border-inline-start: var(--rule-warn);
+    }
+
+    .metrics {
+      display: var(--grid);
+      grid-template-columns: var(--columns-three);
+      gap: var(--space-base);
+    }
+
+    .metric {
+      min-width: var(--zero);
+      padding: var(--space-xl);
+      background: var(--surface);
+      border: var(--rule);
+      border-top: var(--rule-accent);
+      border-radius: var(--radius-card);
+    }
+
+    .metric.author-metric {
+      border-top: var(--rule-warn);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: var(--font-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .metric-value {
+      display: var(--flex);
+      align-items: var(--baseline);
+      flex-wrap: var(--wrap);
+      gap: var(--space-xs);
+      margin-block: var(--space-md);
+      color: var(--accent);
+      font-size: var(--font-metric);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+      font-variant-numeric: var(--tabular);
+    }
+
+    .metric-value .unit {
+      font-size: var(--font-lead);
+      font-weight: var(--weight-medium);
+    }
+
+    .metric-value .separator {
+      color: var(--muted);
+      font-size: var(--font-card-title);
+      padding-inline: var(--space-xs);
+    }
+
+    .metric-note, .note, .section-intro, .cell-note, figcaption {
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+
+    .scope {
+      margin-top: var(--space-xl);
+      padding: var(--space-lg);
+      border: var(--rule);
+      background: var(--surface-subtle);
+      font-size: var(--font-sm);
+    }
+
+    .scope strong {
+      color: var(--accent);
+    }
+
+    .toc {
+      display: var(--grid);
+      grid-template-columns: var(--columns-five);
+      gap: var(--space-sm) var(--space-xl);
+      padding-block: var(--space-lg);
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+    }
+
+    .toc a {
+      padding-block: var(--space-sm);
+      font-size: var(--font-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    main, section, article, aside, figure {
+      min-width: var(--zero);
+    }
+
+    section {
+      padding-block: var(--section-space);
+      border-bottom: var(--rule);
+      scroll-margin-top: var(--space-xl);
+    }
+
+    .section-intro {
+      margin-bottom: var(--space-xl);
+    }
+
+    .subsection {
+      margin-top: var(--space-3xl);
+    }
+
+    .ref {
+      font-size: var(--font-reference);
+      line-height: var(--leading-reference);
+      vertical-align: var(--super);
+      white-space: var(--nowrap);
+      margin-inline-start: var(--space-xs);
+    }
+
+    .ref a {
+      font-weight: var(--weight-medium);
+    }
+
+    .tbl {
+      width: var(--full);
+      max-width: var(--full);
+      min-width: var(--zero);
+      margin-block: var(--space-base);
+      overflow-x: var(--auto);
+      overscroll-behavior-x: var(--contain);
+      border: var(--rule);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+    }
+
+    table {
+      width: var(--full);
+      min-width: var(--table-width);
+      border-collapse: var(--collapse);
+      font-size: var(--font-sm);
+      line-height: var(--leading-table);
+      text-align: var(--left);
+    }
+
+    table.wide {
+      min-width: var(--table-wide);
+    }
+
+    table.compact {
+      min-width: var(--table-compact);
+    }
+
+    table.split {
+      table-layout: var(--fixed);
+    }
+
+    caption {
+      padding: var(--space-md) var(--space-base);
+      color: var(--muted);
+      background: var(--surface);
+      text-align: var(--left);
+      font-size: var(--font-xs);
+      border-bottom: var(--rule);
+    }
+
+    th, td {
+      padding: var(--space-base);
+      vertical-align: var(--top);
+      border-bottom: var(--rule);
+      overflow-wrap: var(--word-wrap);
+    }
+
+    thead th {
+      color: var(--accent);
+      background: var(--surface-strong);
+      font-weight: var(--weight-bold);
+    }
+
+    tbody th {
+      color: var(--text);
+      background: var(--surface-subtle);
+      font-weight: var(--weight-medium);
+    }
+
+    tbody tr:last-child > * {
+      border-bottom: var(--none);
+    }
+
+    table.split th, table.split td {
+      width: var(--half);
+    }
+
+    .cell-title, .cell-note {
+      display: var(--block);
+    }
+
+    .cell-title {
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cell-note {
+      margin-top: var(--space-sm);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .callout {
+      padding: var(--space-xl);
+      margin-block: var(--space-xl);
+      border-inline-start: var(--rule-accent);
+      background: var(--surface-subtle);
+    }
+
+    .callout.warning {
+      border-inline-start: var(--rule-warn);
+    }
+
+    .callout-title {
+      display: var(--block);
+      margin-bottom: var(--space-sm);
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+    }
+
+    .key-grid {
+      display: var(--grid);
+      grid-template-columns: var(--columns-four);
+      gap: var(--space-base);
+      margin-top: var(--space-xl);
+    }
+
+    .key-card {
+      min-width: var(--zero);
+      padding: var(--space-lg);
+      border: var(--rule);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+    }
+
+    .key-card.voice {
+      border-top: var(--rule-accent);
+      background: var(--surface-subtle);
+    }
+
+    .key-face {
+      display: var(--flex);
+      align-items: var(--center);
+      justify-content: var(--center);
+      width: var(--key-size);
+      height: var(--key-size);
+      margin-bottom: var(--space-base);
+      border: var(--rule);
+      border-radius: var(--radius-card);
+      background: var(--surface-subtle);
+      color: var(--accent);
+      font-size: var(--font-card-title);
+      font-weight: var(--weight-bold);
+    }
+
+    .voice .key-face {
+      background: var(--accent);
+      color: var(--accent-on);
+      border: var(--none);
+      font-size: var(--font-base);
+    }
+
+    .key-card.menu .key-face {
+      color: var(--warn);
+      font-size: var(--font-base);
+    }
+
+    .key-card h3 {
+      font-size: var(--font-base);
+    }
+
+    .key-card p {
+      font-size: var(--font-sm);
+    }
+
+    figcaption {
+      margin-top: var(--space-md);
+    }
+
+    .two-col {
+      display: var(--grid);
+      grid-template-columns: var(--columns-two);
+      gap: var(--space-base);
+    }
+
+    .panel {
+      min-width: var(--zero);
+      padding: var(--space-xl);
+      border: var(--rule);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+    }
+
+    .panel.blue-edge {
+      border-top: var(--rule-accent);
+    }
+
+    .panel.orange-edge {
+      border-top: var(--rule-warn);
+    }
+
+    .panel-title {
+      font-size: var(--font-sm);
+      color: var(--muted);
+      margin-bottom: var(--space-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .path {
+      padding: var(--space-xl);
+      border: var(--rule);
+      background: var(--surface);
+      margin-bottom: var(--space-base);
+    }
+
+    .path.moben-path {
+      border-inline-start: var(--rule-accent);
+      background: var(--surface-subtle);
+    }
+
+    .path-title {
+      display: var(--flex);
+      flex-wrap: var(--wrap);
+      align-items: var(--baseline);
+      gap: var(--space-md);
+      margin-bottom: var(--space-base);
+    }
+
+    .path-title strong {
+      color: var(--accent);
+    }
+
+    .flow {
+      display: var(--flex);
+      flex-direction: var(--row);
+      align-items: var(--stretch);
+      gap: var(--space-sm);
+      min-width: var(--zero);
+    }
+
+    .step {
+      display: var(--flex);
+      flex: var(--flex-step);
+      align-items: var(--center);
+      justify-content: var(--center);
+      min-width: var(--zero);
+      padding: var(--space-md) var(--space-sm);
+      border: var(--rule);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      text-align: var(--center);
+      font-size: var(--font-sm);
+      font-weight: var(--weight-medium);
+      line-height: var(--leading-table);
+    }
+
+    .step.risk-step {
+      color: var(--warn);
+      border-top: var(--rule-warn);
+    }
+
+    .step.end-step {
+      color: var(--accent-on);
+      background: var(--accent);
+      border: var(--none);
+    }
+
+    .arrow {
+      display: var(--flex);
+      flex: var(--flex-fixed);
+      align-items: var(--center);
+      justify-content: var(--center);
+      color: var(--muted);
+      font-size: var(--font-lead);
+    }
+
+    .formula {
+      display: var(--flex);
+      flex-wrap: var(--wrap);
+      align-items: var(--baseline);
+      gap: var(--space-sm) var(--space-md);
+      margin-top: var(--space-md);
+      color: var(--accent);
+      font-weight: var(--weight-medium);
+    }
+
+    .formula .operator {
+      color: var(--warn);
+    }
+
+    .map-group {
+      margin-top: var(--space-3xl);
+    }
+
+    .map-group > p {
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+
+    .lessons {
+      display: var(--grid);
+      grid-template-columns: var(--columns-two);
+      gap: var(--space-base);
+      margin: var(--space-xl) var(--zero) var(--zero);
+      padding-inline-start: var(--space-xl);
+      list-style-type: var(--decimal);
+    }
+
+    .lessons li {
+      padding: var(--space-base);
+      border: var(--rule);
+      background: var(--surface);
+      font-size: var(--font-sm);
+    }
+
+    .lessons li::marker {
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+    }
+
+    .lessons strong {
+      display: var(--block);
+      margin-bottom: var(--space-sm);
+      font-size: var(--font-base);
+      color: var(--accent);
+    }
+
+    .risk-grid {
+      display: var(--grid);
+      grid-template-columns: var(--columns-two);
+      gap: var(--space-base);
+    }
+
+    .risk-card {
+      min-width: var(--zero);
+      padding: var(--space-xl);
+      border: var(--rule);
+      border-top: var(--rule-warn);
+      background: var(--surface);
+    }
+
+    .risk-card h3 {
+      font-size: var(--font-lead);
+    }
+
+    .risk-card dl {
+      font-size: var(--font-sm);
+    }
+
+    .risk-card dt {
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+      margin-top: var(--space-base);
+      margin-bottom: var(--space-xs);
+    }
+
+    .validation-grid {
+      display: var(--grid);
+      grid-template-columns: var(--columns-three);
+      gap: var(--space-base);
+    }
+
+    .validation-card {
+      min-width: var(--zero);
+      padding: var(--space-xl);
+      border: var(--rule);
+      border-top: var(--rule-accent);
+      background: var(--surface);
+    }
+
+    .validation-card p {
+      font-size: var(--font-sm);
+    }
+
+    .validation-card .test-label {
+      display: var(--block);
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+      margin-top: var(--space-base);
+      margin-bottom: var(--space-xs);
+    }
+
+    .verdict {
+      margin-top: var(--space-2xl);
+      padding: var(--space-2xl);
+      background: var(--accent);
+      color: var(--accent-on);
+      border-radius: var(--radius-card);
+    }
+
+    .verdict h3 {
+      font-size: var(--font-section);
+      margin-bottom: var(--space-xl);
+    }
+
+    .verdict .tag {
+      color: var(--accent-on);
+      background: var(--accent);
+      border-inline-start: var(--rule-inverse);
+      margin-bottom: var(--space-base);
+    }
+
+    .verdict .formula {
+      color: var(--accent-on);
+      padding-top: var(--space-xl);
+      margin-top: var(--space-xl);
+      border-top: var(--rule-inverse);
+    }
+
+    .verdict .operator {
+      color: var(--accent-on);
+    }
+
+    .src {
+      margin: var(--zero);
+      padding-inline-start: var(--source-indent);
+      font-size: var(--font-sm);
+    }
+
+    .src li {
+      padding-block: var(--space-base);
+      padding-inline-start: var(--space-sm);
+      border-bottom: var(--rule);
+      scroll-margin-top: var(--space-xl);
+    }
+
+    .src li::marker {
+      content: var(--source-marker);
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+    }
+
+    .src li:last-child {
+      border-bottom: var(--none);
+    }
+
+    .src a {
+      display: var(--block);
+      font-weight: var(--weight-medium);
+    }
+
+    .source-url {
+      display: var(--block);
+      margin-top: var(--space-xs);
+      color: var(--muted);
+      font-size: var(--font-xs);
+      font-weight: var(--weight-normal);
+      overflow-wrap: var(--word-wrap);
+    }
+
+    .footer {
+      display: var(--flex);
+      flex-wrap: var(--wrap);
+      gap: var(--space-md) var(--space-xl);
+      padding-block: var(--space-xl) var(--space-3xl);
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+
+    @media (max-width: 960px) {
+      .toc {
+        grid-template-columns: var(--columns-two);
+      }
+
+      .validation-grid {
+        grid-template-columns: var(--columns-one);
+      }
+
+      .flow {
+        flex-direction: var(--column);
+        align-items: var(--stretch);
+      }
+
+      .arrow {
+        transform: var(--arrow-down);
+      }
+
+      .step {
+        flex: var(--flex-fixed);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: var(--space-2xl);
+      }
+
+      .metrics, .two-col, .risk-grid, .lessons {
+        grid-template-columns: var(--columns-one);
+      }
+
+      .key-grid {
+        grid-template-columns: var(--columns-two);
+      }
+
+      .metric {
+        padding: var(--space-lg);
+      }
+
+      .metric-value {
+        margin-block: var(--space-sm);
+      }
+
+      section {
+        padding-block: var(--space-3xl);
+      }
+
+      .panel, .path, .risk-card, .validation-card, .callout, .verdict {
+        padding: var(--space-lg);
+      }
+
+      .key-card {
+        padding: var(--space-base);
+      }
+
+      .section-intro {
+        margin-bottom: var(--space-base);
+      }
+
+      .map-group, .subsection {
+        margin-top: var(--space-2xl);
+      }
+    }
+
+    @media print {
+      .report {
+        max-width: var(--none);
+        padding-inline: var(--zero);
+      }
+
+      .hero, section {
+        padding-block: var(--space-xl);
+      }
+
+      .toc, .footer a {
+        display: var(--none);
+      }
+
+      .tbl {
+        overflow: var(--visible);
+      }
+
+      table, table.wide, table.compact {
+        min-width: var(--zero);
+        table-layout: var(--fixed);
+        font-size: var(--font-xs);
+      }
+
+      th, td {
+        padding: var(--space-sm);
+      }
+
+      .two-col, .risk-grid, .validation-grid, .lessons {
+        grid-template-columns: var(--columns-one);
+      }
+
+      .metric, .key-card, .risk-card, .validation-card, .panel {
+        break-inside: var(--avoid);
+      }
+
+      h2, h3 {
+        break-after: var(--avoid);
+      }
+
+      .verdict {
+        color: var(--text);
+        background: var(--surface);
+        border: var(--rule-accent);
+      }
+
+      .verdict .tag, .verdict .formula, .verdict .operator {
+        color: var(--accent);
+        background: var(--surface);
+        border-color: var(--line);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="report" id="top">
+    <header class="hero">
+      <div class="meta">
+        <span>产品研究 · 行为机制 · 商业验证</span>
+        <time datetime="2026-10-04">整理日期：2026 年 10 月 4 日</time>
+        <span>官方说明优先，体验与推断分层</span>
+      </div>
+
+      <h1>墨本 Moben 与<span class="headline-line">"专注无打扰"硬件赛道</span></h1>
+
+      <p class="lede">
+        <span class="tag">推断</span>
+        墨本的机会不是“把大模型装进墨水屏”，而是把获得答案与打开手机拆开；这门生意成立的前提，是它真正替代了手机任务，并能持续兑现联网与问答服务。
+      </p>
+
+      <div class="metrics" aria-label="三个关键数字">
+        <article class="metric author-metric">
+          <p class="metric-label">硬件购入价格 · 作者自述</p>
+          <div class="metric-value">499<span class="unit">元</span></div>
+          <p class="metric-note">作者当时的购入或体验价格，不作为官网统一售价；“另加 200 元/年”同样属于作者自述。</p>
+        </article>
+
+        <article class="metric">
+          <p class="metric-label">重量与续航 · 官方口径</p>
+          <div class="metric-value">
+            <span class="unit">约</span>65<span class="unit">g</span>
+            <span class="separator">·</span>
+            15<span class="unit">天</span>
+          </div>
+          <p class="metric-note">
+            沿用官方宣传及推广材料；续航是“最长 15 天”口径，不是标准化实测平均值。<sup class="ref"><a href="#s2">[S2]</a><a href="#s3">[S3]</a></sup>
+          </p>
+        </article>
+
+        <article class="metric">
+          <p class="metric-label">功能机占手机出货 · Counterpoint</p>
+          <div class="metric-value"><span class="unit">约</span>15<span class="unit">%</span></div>
+          <p class="metric-note">
+            按材料对 Counterpoint 的二手转引保留；原始统计年份与范围待核，不代表“数字专注硬件”的市场份额。<sup class="ref"><a href="#s14">[S14]</a></sup>
+          </p>
+        </article>
+      </div>
+
+      <aside class="scope" aria-label="阅读口径">
+        <p>
+          <strong>证据口径：</strong>
+          <span class="tag">官方说明</span>表示产品方公开说明，并非独立实测；
+          <span class="tag author">作者自述</span>表示给定文章中的个人体验；
+          <span class="tag">推断</span>表示分析判断或验证建议；
+          <span class="tag pending">待核</span>表示证据尚不充分。
+        </p>
+        <p>
+          墨本按新增核实材料及官网说明书更新；说明书明确提示套餐、模型与实际权益可能调整，以设备和控制台展示为准。<sup class="ref"><a href="#s23">[S23]</a></sup>
+          海外产品的价格、规格与存续状态沿用研究材料所述材料时点，不视为本报告整理日的统一现价或实时在售认证。引用编号用于溯源，不把推广、转载与个人体验升级为独立验证。
+        </p>
+        <p>
+          <strong>任务理解说明：</strong>原始提问为语音输入，报告按以下理解执行——「海外报火」读作「海外爆火」，「手机被壳」读作「手机背壳」，「墨水瓶结合液终端」读作「墨水屏结合 AI 终端去使用」；若理解有误，相关章节（五、六）的范围需按原意调整。
+        </p>
+      </aside>
+    </header>
+
+    <nav class="toc" aria-label="报告目录">
+      <a href="#article">一、文章一页纸</a>
+      <a href="#product">二、墨本产品拆解</a>
+      <a href="#mechanism">三、行为机制</a>
+      <a href="#landscape">四、海外赛道地图</a>
+      <a href="#wallpaper">五、手机壳与 AI 壁纸</a>
+      <a href="#cases">六、失败与存活案例</a>
+      <a href="#risks">七、风险清单</a>
+      <a href="#validation">八、验证与最终判断</a>
+      <a href="#verification">九、保守措辞清单</a>
+      <a href="#sources">十、来源列表</a>
+    </nav>
+
+    <main>
+      <section id="article" aria-labelledby="article-title">
+        <h2 id="article-title">一、文章一页纸：事实与作者观点分开看</h2>
+        <p class="section-intro">精选八个主题。左栏记录功能、观察及其证据边界；右栏区分作者评价与本报告的分析推断。窄屏表格可左右滑动。</p>
+
+        <div class="tbl" tabindex="0" role="region" aria-label="文章事实与作者观点双栏对照表">
+          <table class="split">
+            <thead>
+              <tr>
+                <th scope="col">事实、观察与证据边界</th>
+                <th scope="col">作者观点与进一步判断</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="cell-title">使用样本</span>
+                  <span class="tag author">作者自述</span>
+                  使用一个多月、非广告。给定材料没有附购买凭证、利益关系披露或原始使用记录。
+                </td>
+                <td>
+                  <span class="tag">推断</span>
+                  可以作为个人体验样本，不能直接视为独立长期测评，也不能代表典型用户。
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">产品类别与公司主体</span>
+                  官网自称“便携式 AI 对话终端”；官网落款公司为深圳见山信息技术有限公司。<sup class="ref"><a href="#s24">[S24]</a><a href="#s23">[S23]</a></sup>
+                </td>
+                <td>
+                  <span class="tag author">作者观点</span>
+                  产品价值重心是问答，而非电子书阅读。
+                  <span class="cell-note">推断：应按问答任务完成度评价，而不是用电子书数量或应用丰富度评价。</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">交互方式</span>
+                  手册确认整机有左键、语音键、右键、菜单键；语音键按住说话、松手获取屏幕回答。<sup class="ref"><a href="#s23">[S23]</a></sup>
+                </td>
+                <td>
+                  <span class="tag author">作者观点</span>
+                  “低门槛、随手提问”。
+                  <span class="cell-note">推断：应分别检验激活、提问、纠错、续费和故障处理，不能只看发起问答的动作。</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">硬件取舍</span>
+                  宣传材料列出约 65 g、最长 15 天续航，以及无摄像头、无扬声器、无应用商店；这些不是本文实测结论。<sup class="ref"><a href="#s2">[S2]</a><a href="#s3">[S3]</a></sup>
+                </td>
+                <td>
+                  <span class="tag author">作者观点</span>
+                  “设计克制、简单、专注”。
+                  <span class="cell-note">推断：功能删减有助于缩小任务范围，但也会失去部分输入、输出和工具能力。</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">网络、套餐与价格</span>
+                  <span class="tag author">作者当时体验口径</span>
+                  “内置 4G 无需 SIM”“重度用户才另加 200 元/年”，硬件 499 元。
+                  <span class="cell-note">官网说明书则把移动流量列入 Pro；基础版仅 Wi-Fi，Pro 到期回基础版。<sup class="ref"><a href="#s23">[S23]</a></sup></span>
+                </td>
+                <td>
+                  <span class="tag">推断</span>
+                  “只有重度用户需要付费”不能推广到所有版本和使用周期。独立联网本身可能就是续费动机，而不只是更高 AI 用量。
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">手机使用变化</span>
+                  <span class="tag author">作者自述</span>
+                  路上查信息时掏手机次数减少，旅行中增加了好奇心驱动的阅读。
+                </td>
+                <td>
+                  <span class="tag">推断</span>
+                  这支持提出“习惯替代”假说，但不能推出手机总时长下降、长期注意力改善，或同样效果会发生在其他人身上。
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">记忆、自律与个性化</span>
+                  <span class="tag author">作者自述</span>
+                  主人画像、设定时段不回应、AI 待机封面、正念句、诗与倾诉等功能。
+                </td>
+                <td>
+                  <span class="tag author">作者观点</span>
+                  更懂主人、帮助自律，并带来片刻放松。
+                  <span class="cell-note">推断：功能存在不等于记忆准确、隐私安全或实际行为改善，个性化也可能只是新鲜感。</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="cell-title">目标人群与市场前景</span>
+                  十方融海产品页把墨本放在青少年 AI 终端语境中。<sup class="ref"><a href="#s1">[S1]</a></sup>
+                  <span class="cell-note">给定材料未提供购买者、实际使用者、长期留存或续订的人群结构。</span>
+                </td>
+                <td>
+                  <span class="tag author">作者观点</span>
+                  真正主力可能是被手机分心、又需要 AI 的成年人。
+                  <span class="cell-note">推断：这是值得验证的市场假说；平台共存类比与个人看好，不能替代销量、留存和服务经济性证据。</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="product" aria-labelledby="product-title">
+        <h2 id="product-title">二、墨本产品拆解：四键、两档权益、两种人群假说</h2>
+
+        <p>
+          官网将其描述为“便携式 AI 对话终端”，宣传 4G + Wi-Fi 与“一秒出答案”；“一秒”应保留为宣传口径，而非所有网络、模型和问题下的时延保证。<sup class="ref"><a href="#s24">[S24]</a></sup>
+          说明书进一步明确：对话需要联网，4G 能力取决于套餐权益与运营商状态。<sup class="ref"><a href="#s23">[S23]</a></sup>
+        </p>
+
+        <div class="subsection">
+          <h3>单键发起问答，不等于整机只有一键</h3>
+          <figure aria-labelledby="keys-caption">
+            <div class="key-grid">
+              <article class="key-card">
+                <div class="key-face" aria-hidden="true">←</div>
+                <h3>左键</h3>
+                <p>翻看上一页；在菜单中向左或向上切换。<sup class="ref"><a href="#s23">[S23]</a></sup></p>
+              </article>
+
+              <article class="key-card voice">
+                <div class="key-face" aria-hidden="true">按住</div>
+                <h3>语音键</h3>
+                <p><strong>按住说话，松手回答。</strong>核心问答由这一键发起。<sup class="ref"><a href="#s23">[S23]</a></sup></p>
+              </article>
+
+              <article class="key-card">
+                <div class="key-face" aria-hidden="true">→</div>
+                <h3>右键</h3>
+                <p>翻看下一页；在菜单中向右或向下切换。<sup class="ref"><a href="#s23">[S23]</a></sup></p>
+              </article>
+
+              <article class="key-card menu">
+                <div class="key-face" aria-hidden="true">菜单</div>
+                <h3>菜单键</h3>
+                <p>短按返回／控制面板；长按开关机。<sup class="ref"><a href="#s23">[S23]</a></sup></p>
+              </article>
+            </div>
+            <figcaption id="keys-caption">
+              四键功能卡为 CSS 示意，不表示实体外观、按键位置或比例。充电接口为底部 Type-C，兼容 5V/1A USB 充电器。<sup class="ref"><a href="#s23">[S23]</a></sup>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection">
+          <h3>套餐对比：独立移动联网属于 Pro 权益</h3>
+          <div class="tbl" tabindex="0" role="region" aria-label="墨本基础版与 Pro 套餐对比">
+            <table class="compact">
+              <thead>
+                <tr>
+                  <th scope="col">项目</th>
+                  <th scope="col">基础版</th>
+                  <th scope="col">Pro</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">联网方式</th>
+                  <td>仅 Wi-Fi。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td><strong>移动流量 + Wi-Fi。</strong><sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">用量</th>
+                  <td>基础额度。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>10 倍用量；不是无限量。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">模型</th>
+                  <td>基础模型。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>GLM 4.7 / DeepSeek V4 / Qwen3.6 Plus 等。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">工具能力</th>
+                  <td>内置知识问答；<strong>不支持 AI 生图</strong>。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>联网搜索、AI 生图。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">用量重置</th>
+                  <td>5 小时窗口 + 每周窗口。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>5 小时窗口 + 每周窗口。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">权益获得与到期</th>
+                  <td>Pro 权益到期后回到基础版。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>部分设备包含 Pro，也可通过订阅等方式开通。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">价格边界</th>
+                  <td>说明书未列统一硬件售价。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>说明书未给出统一 Pro 年费；不能据此确认作者所述的 200 元/年仍适用。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note">
+            手册称联网搜索与 AI 生图消耗更多用量；剩余额度、窗口重置时间与实际模型权益，以设备与官网控制台展示为准。<sup class="ref"><a href="#s23">[S23]</a></sup>
+          </p>
+
+          <aside class="callout warning">
+            <span class="callout-title">必须覆盖旧口径的两件事</span>
+            <p>
+              <strong>“内置 4G 无需 SIM”与“重度用户才加 200 元/年”均标为作者当时体验口径。</strong>
+              当前手册支持的表述是：设备具备联网能力，但移动流量属于 Pro，权益到期回基础版。<sup class="ref"><a href="#s23">[S23]</a></sup>
+            </p>
+            <p>
+              官方说明书列出自购买日起 <strong>12 个月保修</strong>，以及签收后 <strong>7 日无理由退换</strong>的申请规则；退换还受商品状态、是否可恢复、是否影响二次销售及购买平台规则等条件约束，不宜缩写为“任何状态都能退”。<sup class="ref"><a href="#s23">[S23]</a></sup>
+            </p>
+          </aside>
+        </div>
+
+        <div class="subsection">
+          <h3>定位张力：官方青少年定位 vs 作者成年人假说</h3>
+          <div class="two-col">
+            <article class="panel blue-edge">
+              <p class="panel-title">官方定位来源</p>
+              <h3>青少年 AI 终端</h3>
+              <p>十方融海产品页采用青少年使用语境。<sup class="ref"><a href="#s1">[S1]</a></sup></p>
+              <p><span class="tag">推断</span>需要分别理解家长购买与青少年实际使用：购买者认同“少娱乐”，不等于使用者会主动携带、持续提问。</p>
+            </article>
+
+            <article class="panel orange-edge">
+              <p class="panel-title">作者提出的市场假说</p>
+              <h3>需要 AI、又想少进手机的成年人</h3>
+              <p><span class="tag author">作者观点</span>成年人可能才是真正的主力用户。</p>
+              <p><span class="tag">推断</span>这一人群更接近自购、自用、自续费的逻辑，但其规模、留存和付费意愿仍需实际数据证明。</p>
+            </article>
+          </div>
+          <p class="note">
+            公司主体应按官网落款写为深圳见山信息技术有限公司。<sup class="ref"><a href="#s23">[S23]</a><a href="#s24">[S24]</a></sup>
+            十方融海站点用于引用产品定位，不能仅凭该页面推定品牌、股权、销售与服务主体之间的全部关系。
+          </p>
+        </div>
+      </section>
+
+      <section id="mechanism" aria-labelledby="mechanism-title">
+        <h2 id="mechanism-title">三、行为机制：缩短任务路径，更要减少任务外分支</h2>
+        <p class="section-intro">
+          <span class="tag">推断</span>
+          以下是机制示意，不是点击次数或时长实测。手机也能使用语音助手、快捷方式等入口，不能把示意路径当成所有人的固定操作流程。
+        </p>
+
+        <figure aria-labelledby="path-caption">
+          <div class="path">
+            <div class="path-title">
+              <strong>手机路径</strong>
+              <span class="note">获得答案与进入通用应用环境相连</span>
+            </div>
+            <div class="flow">
+              <div class="step">产生疑问</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">进入手机</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">找到搜索／AI</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">输入问题</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">阅读答案</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step risk-step">其他应用入口仍可进入</div>
+            </div>
+          </div>
+
+          <div class="path moben-path">
+            <div class="path-title">
+              <strong>墨本路径</strong>
+              <span class="note">前提：设备在身边、网络有效、答案可用</span>
+            </div>
+            <div class="flow">
+              <div class="step">产生疑问</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">按住说话</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step">松开阅读</div>
+              <span class="arrow" aria-hidden="true">→</span>
+              <div class="step end-step">结束，或主动追问</div>
+            </div>
+          </div>
+
+          <figcaption id="path-caption">
+            墨本的按住提问、松手回答与联网要求见说明书。<sup class="ref"><a href="#s23">[S23]</a></sup>
+            推断：差异不只在于少几步，而在于完成目标任务时，是否必须经过一个充满其他选择的入口。
+          </figcaption>
+        </figure>
+
+        <aside class="callout">
+          <span class="callout-title">问答总行为成本：不能只计算“按下去”有多简单</span>
+          <p><span class="tag">推断</span>应把完整任务的代价一起计算，而不是单独优化入口动作。</p>
+          <div class="formula" aria-label="问答总行为成本构成">
+            <span>发起操作</span><span class="operator">＋</span>
+            <span>等待与重试</span><span class="operator">＋</span>
+            <span>输入与阅读负担</span><span class="operator">＋</span>
+            <span>携带与维护</span><span class="operator">＋</span>
+            <span>分心转移成本</span>
+          </div>
+          <p class="note">推断：只要经常答错、联网失败或必须再拿手机补查，简单入口带来的收益就可能被后续成本抵消。</p>
+        </aside>
+
+        <div class="subsection">
+          <h3>三层专注：感官、功能与行为不能混为一谈</h3>
+          <div class="tbl" tabindex="0" role="region" aria-label="三层专注机制表">
+            <table class="compact">
+              <thead>
+                <tr>
+                  <th scope="col">层次</th>
+                  <th scope="col">墨本对应设计及依据</th>
+                  <th scope="col">需要证明什么 · 推断</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">感官层</th>
+                  <td>墨水屏、文字回答、无扬声器等宣传设计。<sup class="ref"><a href="#s2">[S2]</a><a href="#s23">[S23]</a></sup></td>
+                  <td>目标场景是否适合阅读与开口提问；“看起来平静”不等于实际减少分心。</td>
+                </tr>
+                <tr>
+                  <th scope="row">功能层</th>
+                  <td>宣传材料称无应用商店，移除了短视频、社交等入口。<sup class="ref"><a href="#s2">[S2]</a></sup></td>
+                  <td>是否真正减少任务外分支；删减的能力是否又迫使用户回到手机。</td>
+                </tr>
+                <tr>
+                  <th scope="row">行为层</th>
+                  <td>单键发起问答。<sup class="ref"><a href="#s23">[S23]</a></sup><span class="cell-note">作者自述：可设定某些时段不回应。</span></td>
+                  <td>是否更容易完成问题并结束使用；自律限制是否实际执行，而不是转移到另一台设备。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note">
+            Light Phone III 使用 OLED，而 Minimal Phone 采用墨水屏与 Android。<sup class="ref"><a href="#s5">[S5]</a><a href="#s7">[S7]</a></sup>
+            <strong>推断：屏幕材质与功能边界是两条不同的分类轴，墨水屏本身不是“无打扰”的充分条件。</strong>
+          </p>
+        </div>
+
+        <div class="subsection">
+          <h3>少掏手机 ≠ 少分心：至少有三种结果</h3>
+          <div class="tbl" tabindex="0" role="region" aria-label="手机使用减少的三种可能结果">
+            <table class="compact">
+              <thead>
+                <tr>
+                  <th scope="col">观察到的组合 · 假设场景</th>
+                  <th scope="col">如何解释 · 推断</th>
+                  <th scope="col">应该继续看什么 · 验证建议</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>手机查询减少；问题被解决；非计划使用时间也下降。</td>
+                  <td><strong class="ok">支持有效习惯替代。</strong></td>
+                  <td>新鲜感消退后是否持续，是否适用于不同人群与场景。</td>
+                </tr>
+                <tr>
+                  <td>手机查询减少；大量时间转移到墨本连续闲聊。</td>
+                  <td><strong class="warn">是设备迁移，尚未证明专注改善。</strong></td>
+                  <td>跨设备的非计划使用时间、结束任务的难易程度。</td>
+                </tr>
+                <tr>
+                  <td>墨本查询增加；之后仍需用手机完成同一任务。</td>
+                  <td><strong class="warn">可能增加了步骤，而非形成替代。</strong></td>
+                  <td>同任务手机补查率、重问次数、总完成时间。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>成功指标应更接近“完成了多少有用问题，并且没有进入原本不打算进行的活动”，而不是单纯追求对话次数与停留时长。</p>
+        </div>
+      </section>
+
+      <section id="landscape" aria-labelledby="landscape-title">
+        <h2 id="landscape-title">四、海外赛道地图：六类相邻形态，不是同一个市场</h2>
+        <p class="section-intro">
+          分类及“AI 深度”的角色判断为推断，不是算力排名。价格均为研究材料或新增材料口径，保留原币种；“未提供”不代表产品没有该能力。
+          “存续状态”只描述材料时点的发布、销售、交付或维护线索，不等于盈利或当前库存。
+        </p>
+
+        <article class="map-group" aria-labelledby="minimal-title">
+          <h3 id="minimal-title">极简手机：限制功能，同时承担手机职责</h3>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="minimal-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕</th>
+                  <th scope="col">联网</th>
+                  <th scope="col">AI 深度 · 角色分类为推断</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Light Phone III</th>
+                  <td>$699；材料另列 $25/1GB、$45 不限量套餐，周期与地区待核。<sup class="ref"><a href="#s4">[S4]</a></sup></td>
+                  <td>3.9 英寸 OLED，非墨水屏；三代放弃墨水屏改用 OLED。<sup class="ref"><a href="#s4">[S4]</a><a href="#s5">[S5]</a></sup></td>
+                  <td>蜂窝通信，套餐按月付费。<sup class="ref"><a href="#s4">[S4]</a></sup></td>
+                  <td>材料未将 AI 列为核心；价值重心是功能边界。</td>
+                  <td>材料包含持续运营与 2026 年评测线索；不据此确认当前统一售价或盈利。<sup class="ref"><a href="#s4">[S4]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Punkt MP02</th>
+                  <td>官网标价 CHF 299，地区版本与汇率待核。<sup class="ref"><a href="#s25">[S25]</a></sup></td>
+                  <td>2.0 英寸 320×240 LCD，非墨水屏；无摄像头。<sup class="ref"><a href="#s25">[S25]</a></sup></td>
+                  <td>4G LTE 蜂窝通信，支持 Wi-Fi 热点。<sup class="ref"><a href="#s25">[S25]</a></sup></td>
+                  <td>材料未列 AI 为核心。</td>
+                  <td>研究材料保留为持续经营参照；具体型号供货、地区与渠道状态仍待核。<sup class="ref"><a href="#s14">[S14]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Mudita Kompakt</th>
+                  <td>$439。<sup class="ref"><a href="#s6">[S6]</a></sup></td>
+                  <td>4.3 英寸 e-ink。<sup class="ref"><a href="#s6">[S6]</a></sup></td>
+                  <td>手机通信；有 Offline+ 硬件开关。<sup class="ref"><a href="#s6">[S6]</a></sup></td>
+                  <td>材料未列 AI 为核心。</td>
+                  <td>材料列有产品与销售线索，并标称续航 6 天；实际续航与当前现货另核。<sup class="ref"><a href="#s6">[S6]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Minimal Phone</th>
+                  <td>未提供。</td>
+                  <td>e-ink，实体 QWERTY 键盘。<sup class="ref"><a href="#s7">[S7]</a></sup></td>
+                  <td>Android 手机；具体制式未提供。<sup class="ref"><a href="#s7">[S7]</a></sup></td>
+                  <td>材料未列明确 AI 能力；开放系统不等于受限工具箱。</td>
+                  <td>材料记录 2025 年出货节点；需区分代际、品牌存续与对应型号的实际履约。<sup class="ref"><a href="#s7">[S7]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>这类设备重新安排“手机应该做什么”；墨本只承接部分信息需求，迁移门槛可能更低，却必须回答“为什么值得多带一台”。</p>
+        </article>
+
+        <article class="map-group" aria-labelledby="reading-title">
+          <h3 id="reading-title">阅读舒适诉求的平板与阅读器：改善媒介，不必然限制应用</h3>
+          <p>“护眼”是该赛道常见诉求，不代表本报告确认医学效果。</p>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="reading-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕</th>
+                  <th scope="col">联网</th>
+                  <th scope="col">AI 深度 · 角色分类为推断</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Daylight DC-1</th>
+                  <td>$729。<sup class="ref"><a href="#s8">[S8]</a></sup></td>
+                  <td>10.5 英寸反射式 LCD，不是 e-ink；材料称无摄像头。<sup class="ref"><a href="#s8">[S8]</a></sup></td>
+                  <td>研究材料未提供。</td>
+                  <td>材料未列明确 AI 能力。</td>
+                  <td>有产品发布与销售材料；当前交付及供货需另核。<sup class="ref"><a href="#s8">[S8]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">BOOX Palma 2 Pro</th>
+                  <td>$399。<sup class="ref"><a href="#s9">[S9]</a></sup></td>
+                  <td>6.13 英寸彩色墨水屏。<sup class="ref"><a href="#s9">[S9]</a></sup></td>
+                  <td>5G 数据连接；材料不将其作为支持原生蜂窝通话的手机。<sup class="ref"><a href="#s9">[S9]</a></sup></td>
+                  <td>不能仅凭系统开放与联网能力认定“深度 AI”。</td>
+                  <td>有 2025 年评测及产品线索；数据通信与蜂窝语音应分开理解。<sup class="ref"><a href="#s9">[S9]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>对本来就愿意携带阅读器的人，AI 问答可能只是已有设备的增量功能，从而削弱另买墨本的必要性。</p>
+        </article>
+
+        <article class="map-group" aria-labelledby="ai-terminal-title">
+          <h3 id="ai-terminal-title">AI 随身终端：AI 是设备存在的主要理由</h3>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="ai-terminal-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕</th>
+                  <th scope="col">联网</th>
+                  <th scope="col">AI 深度 · 角色分类为推断</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Humane AI Pin</th>
+                  <td>研究材料未提供。</td>
+                  <td>研究材料未提供具体规格。</td>
+                  <td>核心功能依赖线上服务；具体制式未展开。<sup class="ref"><a href="#s10">[S10]</a></sup></td>
+                  <td>AI 为核心产品理由。<sup class="ref"><a href="#s10">[S10]</a></sup></td>
+                  <td><strong class="warn">明确停服案例。</strong>材料记录设备服务于 2025-02-28 停止。<sup class="ref"><a href="#s10">[S10]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Rabbit R1</th>
+                  <td>$199。<sup class="ref"><a href="#s11">[S11]</a></sup></td>
+                  <td>研究材料未提供。</td>
+                  <td>研究材料未提供具体规格。</td>
+                  <td>AI 为核心，商业效果仍待验证。<sup class="ref"><a href="#s11">[S11]</a></sup></td>
+                  <td><strong class="ok">材料时点仍在迭代。</strong>2025 年 9 月推出 rabbitOS 2，不列为已退场。<sup class="ref"><a href="#s11">[S11]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">墨本 Moben</th>
+                  <td><span class="tag author">作者自述</span>499 元；“重度用户另加 200 元/年”为当时体验口径。</td>
+                  <td>墨水屏；尺寸未在给定材料中确认。<sup class="ref"><a href="#s2">[S2]</a></sup></td>
+                  <td>4G + Wi-Fi；移动流量属 Pro，基础版仅 Wi-Fi。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>问答为核心；Pro 增加联网搜索与生图。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                  <td>官网提供使用、套餐及售后说明；给定材料未提供活跃用户、续订与盈利数据。<sup class="ref"><a href="#s23">[S23]</a><a href="#s24">[S24]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>墨本更有利的边界不是“更小的通用 AI 助手”，而是稳定完成“短问题—可读答案—结束”。</p>
+        </article>
+
+        <article class="map-group" aria-labelledby="constraint-title">
+          <h3 id="constraint-title">行为约束配件：不增加能力，而是增加分心行为的阻力</h3>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="constraint-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕</th>
+                  <th scope="col">联网／配合方式</th>
+                  <th scope="col">AI 深度 · 角色分类为推断</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Brick</th>
+                  <td>$59。<sup class="ref"><a href="#s12">[S12]</a><a href="#s13">[S13]</a></sup></td>
+                  <td>配件本身不是阅读屏幕终端。<sup class="ref"><a href="#s13">[S13]</a></sup></td>
+                  <td>NFC 与手机配合，限制指定应用。<sup class="ref"><a href="#s13">[S13]</a></sup></td>
+                  <td>不以生成式 AI 为核心价值。</td>
+                  <td>材料包含持续销售及应用使用线索；不等于已经证明长期留存或盈利。<sup class="ref"><a href="#s12">[S12]</a><a href="#s13">[S13]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Bloom</th>
+                  <td>$39。<sup class="ref"><a href="#s12">[S12]</a></sup></td>
+                  <td>卡片形态，不是阅读终端。<sup class="ref"><a href="#s12">[S12]</a></sup></td>
+                  <td>与手机配合；具体连接及应用功能按版本核实。<sup class="ref"><a href="#s12">[S12]</a></sup></td>
+                  <td>不以生成式 AI 为核心价值。</td>
+                  <td>材料称存在销售，另有累计超过 6 万张的说法；原始统计与退货口径待核。<sup class="ref"><a href="#s12">[S12]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>Brick 让进入分心应用更难，墨本让有用查询更容易。两者可能互补，但只有后者必须额外证明 AI 答案足以避免手机补查。</p>
+        </article>
+
+        <article class="map-group" aria-labelledby="case-screen-title">
+          <h3 id="case-screen-title">墨水屏手机壳／背部配件：装饰屏与 AI 副屏需要分开</h3>
+          <p>
+            Reetle 按给定报道线索保留。Novixand 与 Mateluxue 的具体参数来自研究材料，但给定的 24 条来源中缺少它们各自的原始链接，以下明确作为待核线索，而不借用 Reetle 报道为其背书。
+          </p>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="case-screen-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕</th>
+                  <th scope="col">联网／同步</th>
+                  <th scope="col">AI 深度 · 角色分类为推断</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Reetle SmartInk I</th>
+                  <td>零售 $199；订阅 $99.99/年起，适用版本待核。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup></td>
+                  <td>3.97 英寸触控 e-ink。<sup class="ref"><a href="#s15">[S15]</a></sup></td>
+                  <td>与 iPhone 配合；不是材料所述的独立蜂窝终端。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup></td>
+                  <td>材料列照片生成壁纸、录音转写等功能，不只是装饰显示。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup></td>
+                  <td>研究材料列有预购与厂方自述众筹交付线索；不同地区的当前交付仍需核实。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Novixand Snapshell<span class="cell-note warn">研究材料线索 · 待核</span></th>
+                  <td>未提供。</td>
+                  <td>研究材料称四色 e-ink；原始规格页待补。</td>
+                  <td>研究材料未提供具体同步方式。</td>
+                  <td>现有研究材料不足以确认内置 AI 生成。</td>
+                  <td>研究材料称存在品牌及产品页；具体型号、颜色能力与交付未独立核实。</td>
+                </tr>
+                <tr>
+                  <th scope="row">Mateluxue<span class="cell-note warn">研究材料线索 · 待核</span></th>
+                  <td>未提供。</td>
+                  <td>研究材料称 e-ink；原始规格页待补。</td>
+                  <td>研究材料称 NFC 图片同步；原始演示待补。</td>
+                  <td>图片同步不能作为 AI 生成的证明。</td>
+                  <td>研究材料称存在众筹项目；不据此确认规模交付或持续经营。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><span class="tag">推断</span>这组产品的共性是把内容展示搬到手机背面，但“能换图”“能生图”“能独立完成 AI 任务”是三个不同层级。</p>
+        </article>
+
+        <article class="map-group" aria-labelledby="eink-ai-title">
+          <h3 id="eink-ai-title">墨水屏 × AI 终端：阅读器增加 AI，还是 AI 问答选择墨水屏？</h3>
+          <div class="tbl" tabindex="0" role="region" aria-labelledby="eink-ai-title">
+            <table class="wide">
+              <thead>
+                <tr>
+                  <th scope="col">代表产品</th>
+                  <th scope="col">价格 · 材料口径</th>
+                  <th scope="col">屏幕／系统</th>
+                  <th scope="col">联网</th>
+                  <th scope="col">AI 深度 · 功能与角色</th>
+                  <th scope="col">存续状态与边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">BOOX Note X5 Mini</th>
+                  <td>研究材料未提供。</td>
+                  <td>墨水屏。<sup class="ref"><a href="#s18">[S18]</a></sup></td>
+                  <td>研究材料未展开具体联网规格。</td>
+                  <td>DeepSeek 摘要与语音转文字；4 麦克风、2 扬声器。<sup class="ref"><a href="#s18">[S18]</a></sup><span class="cell-note">推断：阅读、笔记与语音工作流增强。</span></td>
+                  <td>材料收录对应型号；具体 AI 权益、地区版本与供货另核。<sup class="ref"><a href="#s18">[S18]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Viwoods AiPaper Reader</th>
+                  <td>$279.99。<sup class="ref"><a href="#s17">[S17]</a></sup></td>
+                  <td>墨水屏。<sup class="ref"><a href="#s17">[S17]</a></sup></td>
+                  <td>研究材料未提供具体制式。</td>
+                  <td>专用 AI 键；材料列 GPT、Gemini、DeepSeek。<sup class="ref"><a href="#s17">[S17]</a></sup><span class="cell-note">推断：在阅读器上增加 AI 入口。</span></td>
+                  <td>有 2025 年测评线索；模型、地区与套餐需对应具体版本。<sup class="ref"><a href="#s17">[S17]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Viwoods AiPaper Reader C</th>
+                  <td>$349。<sup class="ref"><a href="#s22">[S22]</a></sup></td>
+                  <td>6.13 英寸 Kaleido 3；Android 16。<sup class="ref"><a href="#s22">[S22]</a></sup></td>
+                  <td>新增材料未展开具体制式。</td>
+                  <td>捆绑 ChatGPT5 / Gemini-2.5-flash / DeepSeek-R1。<sup class="ref"><a href="#s22">[S22]</a></sup><span class="cell-note">推断：多模型阅读辅助，不等于永久无限权益。</span></td>
+                  <td>按新增材料修正为 Viwoods 产品；报道价格与模型权益仍需对应版本。<sup class="ref"><a href="#s22">[S22]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Bigme S6</th>
+                  <td>给定材料未提供。</td>
+                  <td>墨水屏电子笔记／阅读器。<sup class="ref"><a href="#s18">[S18]</a></sup></td>
+                  <td>本表不补写研究材料未展开的制式。</td>
+                  <td>内置 ChatGPT。<sup class="ref"><a href="#s18">[S18]</a></sup><span class="cell-note">推断：围绕阅读与笔记嵌入生成式 AI；“内置”不等于模型端侧运行。</span></td>
+                  <td>材料记录该型号及相关功能；当前供货与服务范围待核。<sup class="ref"><a href="#s18">[S18]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">科大讯飞 AINOTE2（讯飞蝉翼）</th>
+                  <td>标准版 3999 元，键盘套装 4899 元，2026-04-23 开售。<sup class="ref"><a href="#s19">[S19]</a></sup></td>
+                  <td>10.65 英寸 300 PPI 黑白墨水屏，厚 4.2 mm、重 295 g。<sup class="ref"><a href="#s19">[S19]</a></sup></td>
+                  <td>研究材料未展开。</td>
+                  <td>录音转写（称覆盖 200+ 方言）、8 种语言同传、一键 AI 总结；重心是会议与笔记工作流。<sup class="ref"><a href="#s19">[S19]</a></sup><span class="cell-note">推断：属“墨水屏办公本 + AI”，不是随身问答终端。</span></td>
+                  <td>厂商与发布报道口径，未见独立实测。<sup class="ref"><a href="#s19">[S19]</a></sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Kindle Scribe</th>
+                  <td>研究材料未提供。</td>
+                  <td>墨水屏。<sup class="ref"><a href="#s26">[S26]</a></sup></td>
+                  <td>研究材料未展开。</td>
+                  <td>AI 笔记摘要、手写精修、AI 搜索与 Send to Alexa 等笔记工作流功能。<sup class="ref"><a href="#s26">[S26]</a></sup><span class="cell-note">推断：不等于完整、独立的 AI 对话终端。</span></td>
+                  <td>材料列有相应功能；代际、语言、地区及实际开放范围应分别核对。<sup class="ref"><a href="#s26">[S26]</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><span class="tag">推断</span>“阅读器增加 AI”要证明 AI 对既有任务的增益；“AI 问答选择墨水屏”要证明问答本身值得一台独立硬件。</p>
+          <p>
+            COMPUTEX 2026 相关材料披露 E Ink 与 MediaTek 的带 NPU 电子纸平台及端侧 AI 方向。<sup class="ref"><a href="#s20">[S20]</a></sup>
+            <strong>推断：平台具备能力，不能反推墨本或表内所有终端已经采用端侧模型。</strong>
+          </p>
+        </article>
+
+        <aside class="callout warning">
+          <span class="callout-title">相邻市场存在，不等于墨本的需求已经成立</span>
+          <div class="two-col">
+            <div>
+              <h4>功能机规模不能直接当作专注硬件市场</h4>
+              <p class="note">
+                研究材料转引 Counterpoint：功能机约占手机出货 15%，约 2.1 亿台、32 亿美元；原始报告、年份与统计范围待核。<sup class="ref"><a href="#s14">[S14]</a></sup>
+              </p>
+              <p><span class="tag">推断</span>功能机购买动机不必然是主动追求数字专注，更不等于愿意额外购买 AI 问答终端。</p>
+            </div>
+            <div>
+              <h4>电子纸供应商增长不能直接当作终端需求</h4>
+              <p class="note">
+                研究材料列 E Ink 2025 年前三季营收约新台币 291 亿元、同比增长 29%，并有 2026 年增长展望；财报口径待核，展望不是实际业绩。<sup class="ref"><a href="#s21">[S21]</a></sup>
+              </p>
+              <p><span class="tag">推断</span>电子价签、标牌与阅读器等相邻需求，不能直接证明掌上 AI 问答终端的可服务市场。</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="wallpaper" aria-labelledby="wallpaper-title">
+        <h2 id="wallpaper-title">五、墨水屏手机壳 + AI 壁纸：把生成与展示分开</h2>
+        <p class="section-intro">
+          <span class="tag">推断</span>
+          不应把“支持换图”“支持 AI 生图”“具备 AI 工作流”写成同一种能力，也不应把“内置功能”自动理解为“模型在配件上运行”。
+        </p>
+
+        <div class="tbl" tabindex="0" role="region" aria-label="墨水屏手机壳的三种能力拆分">
+          <table class="compact">
+            <thead>
+              <tr>
+                <th scope="col">能力</th>
+                <th scope="col">实际含义 · 工作流拆分</th>
+                <th scope="col">材料对应与不能推出的结论</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">可换图墨水屏壳</th>
+                <td>把已经存在的一张图片同步到背部屏幕显示。</td>
+                <td>研究材料中 Mateluxue 为 NFC 图片同步线索，Novixand 为四色显示线索，原始出处待补。<span class="cell-note">推断：显示与同步不证明内置 AI。</span></td>
+              </tr>
+              <tr>
+                <th scope="row">AI 壁纸生成</th>
+                <td>把文字描述或照片转换成适合展示的图像。</td>
+                <td>Reetle 材料包含照片生成壁纸描述。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup><span class="cell-note">推断：不能推出计算发生在壳上，也不保证无限生成或任意内容均可生成。</span></td>
+              </tr>
+              <tr>
+                <th scope="row">AI 背部副屏终端</th>
+                <td>除显示外，还提供录音、转写等任务入口。</td>
+                <td>Reetle 材料列有录音转写等工作流。<sup class="ref"><a href="#s15">[S15]</a><a href="#s16">[S16]</a></sup><span class="cell-note">推断：不能只用“装饰性壁纸壳”解释其全部价值。</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure class="path" aria-labelledby="wallpaper-flow-caption">
+          <div class="flow">
+            <div class="step">输入照片或描述</div>
+            <span class="arrow" aria-hidden="true">→</span>
+            <div class="step">生成图片</div>
+            <span class="arrow" aria-hidden="true">→</span>
+            <div class="step">适配屏幕</div>
+            <span class="arrow" aria-hidden="true">→</span>
+            <div class="step">同步内容</div>
+            <span class="arrow" aria-hidden="true">→</span>
+            <div class="step end-step">持续静态展示</div>
+          </div>
+          <figcaption id="wallpaper-flow-caption">
+            推断：这是任务拆分示意，不假定各品牌具有相同计算位置、通信方式、收费规则或内容能力。
+          </figcaption>
+        </figure>
+
+        <div class="subsection">
+          <h3>与墨本待机封面的同源逻辑：短时生成，长期可见</h3>
+          <p class="note">
+            墨本“AI 待机封面”为作者自述的功能体验；官网说明书确认的是 Pro 支持 AI 生图、基础版不支持，并不据此扩写所有封面细节。<sup class="ref"><a href="#s23">[S23]</a></sup>
+          </p>
+          <div class="tbl" tabindex="0" role="region" aria-label="AI 手机壳与墨本待机封面的同源逻辑对照">
+            <table class="compact">
+              <caption>本表为功能价值分析，均属推断；不代表用户行为已经得到验证。</caption>
+              <thead>
+                <tr>
+                  <th scope="col">维度</th>
+                  <th scope="col">AI 手机壳／背部屏</th>
+                  <th scope="col">墨本待机封面</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">核心作用</th>
+                  <td>个性表达、外观变化，或背部信息入口。</td>
+                  <td>为问答终端增加个性与日常存在感。</td>
+                </tr>
+                <tr>
+                  <th scope="row">AI 的角色</th>
+                  <td>生成、转换或整理展示内容。</td>
+                  <td>生成设备待机时展示的个性化内容。</td>
+                </tr>
+                <tr>
+                  <th scope="row">静态屏的角色</th>
+                  <td>让一次生成结果持续可见。</td>
+                  <td>让设备不进行对话时仍具有展示价值。</td>
+                </tr>
+                <tr>
+                  <th scope="row">与少用手机的关系</th>
+                  <td>不必然成立，制作与管理还可能依赖手机。</td>
+                  <td>只有主问答流程替代手机任务，才支持这一主张。</td>
+                </tr>
+                <tr>
+                  <th scope="row">值得观察的价值</th>
+                  <td>是否持续保留、更新与欣赏内容，而非只在开箱时觉得新鲜。</td>
+                  <td>是否帮助设备被持续携带，而不是用生图次数代替问答价值。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <aside class="callout">
+            <span class="callout-title">辅助价值，不能代替核心价值</span>
+            <p><span class="tag">推断</span>生图次数多，不证明问答有用；待机内容讨喜，不证明订阅值得长期支付。个性化若逐步变成新的推荐、提醒与连续消费入口，反而可能侵蚀“无打扰”的承诺。</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="cases" aria-labelledby="cases-title">
+        <h2 id="cases-title">六、失败与存活案例：比较承诺边界，而不是简单贴标签</h2>
+        <p class="section-intro">
+          “停服”“继续迭代”“仍有销售材料”是不同状态。它们都不能单独证明完整的成败原因，更不能把持续存在直接改写为盈利。
+        </p>
+
+        <p>
+          材料记录 Humane 相关资产由 HP 以 1.16 亿美元收购，AI Pin 服务于 2025 年 2 月 28 日停止；资产被收购不等于消费者服务得到延续。<sup class="ref"><a href="#s10">[S10]</a></sup>
+          Rabbit 的材料则记录 2025 年 9 月 rabbitOS 2 更新，应归为继续迭代、商业结果待验证，而不是与 Humane 一起列为已退场。<sup class="ref"><a href="#s11">[S11]</a></sup>
+        </p>
+
+        <div class="tbl" tabindex="0" role="region" aria-label="Humane Rabbit Light Punkt Brick 承诺边界对比">
+          <table class="wide">
+            <thead>
+              <tr>
+                <th scope="col">案例</th>
+                <th scope="col">承诺边界 · 推断</th>
+                <th scope="col">关键依赖 · 结构分析</th>
+                <th scope="col">材料中的状态</th>
+                <th scope="col">对墨本的比较意义 · 推断</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Humane</th>
+                <td>把 AI 作为随身设备的主要入口，用户预期容易扩展到广泛任务。</td>
+                <td>网络、模型与持续服务；核心服务中断可能使硬件主要价值消失。</td>
+                <td><strong class="warn">服务已终止。</strong>2025-02-28 为材料所列停服日。<sup class="ref"><a href="#s10">[S10]</a></sup></td>
+                <td>卖出硬件之后，仍必须持续兑现核心服务；不能只看发布演示。</td>
+              </tr>
+              <tr>
+                <th scope="row">Rabbit</th>
+                <td>AI 驱动的问答与任务执行；“能演示”与“能稳定完成”应分开。</td>
+                <td>任务链、语音理解、线上能力与软件更新。</td>
+                <td><strong class="ok">受挫后继续迭代。</strong>材料列 rabbitOS 2 更新，未证明盈利。<sup class="ref"><a href="#s11">[S11]</a></sup></td>
+                <td>不能把持续更新当成商业成功，也不能把早期受挫当成必然退场。</td>
+              </tr>
+              <tr>
+                <th scope="row">Light</th>
+                <td>保留选定通信与工具功能，限制本身就是产品价值。</td>
+                <td>通信可用性、基础工具稳定性，以及用户对功能迁移的接受程度。</td>
+                <td>材料含持续运营与产品评测线索；不是利润或长期留存证明。<sup class="ref"><a href="#s4">[S4]</a><a href="#s5">[S5]</a></sup></td>
+                <td>清楚说明“不做什么”，可能比持续增加 AI 功能更重要。</td>
+              </tr>
+              <tr>
+                <th scope="row">Punkt</th>
+                <td>围绕基础通信形成更明确、有限的设备职责。</td>
+                <td>通信与软件服务仍需维护，极简不等于零依赖。</td>
+                <td>研究材料将其列为持续存在的极简手机参照；地区供货与商业规模待核。<sup class="ref"><a href="#s14">[S14]</a></sup></td>
+                <td>窄任务边界有助于界定成功，但不能消除运营和售后责任。</td>
+              </tr>
+              <tr>
+                <th scope="row">Brick</th>
+                <td>给进入指定应用增加物理摩擦，不承诺生成答案。</td>
+                <td>手机系统权限、应用兼容性与实际限制效果。</td>
+                <td>材料含销售与使用报道；不据此推导持续行为改善或盈利。<sup class="ref"><a href="#s12">[S12]</a><a href="#s13">[S13]</a></sup></td>
+                <td>评价墨本时，应像检查应用是否被成功限制一样，检查一个问题是否真的被完成。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection">对墨本的五条启示</h3>
+        <p class="note">以下均为推断，不是对上述公司成败的完整因果解释。</p>
+        <ol class="lessons">
+          <li>
+            <strong>收窄承诺，先定义擅长的任务</strong>
+            少承诺通用助手，多说明适合问什么、不能做什么，以及什么时候需要查证或转用其他工具。
+          </li>
+          <li>
+            <strong>以有效完成率代替生成量</strong>
+            “回答了”不等于“答对、可用、无需补查”；演示流畅也不等于日常稳定。
+          </li>
+          <li>
+            <strong>把服务连续性当作产品能力</strong>
+            联网、识别、模型、搜索与售后任一环节都可能打断体验。故障说明与到期规则不应藏在销售承诺之外。
+          </li>
+          <li>
+            <strong>证明收益大于第二台设备的负担</strong>
+            少掏手机带来的价值，必须覆盖额外携带、充电、等待、学习边界和持续付费的代价。
+          </li>
+          <li>
+            <strong>新增功能应减少摩擦，而不是扩张注意力入口</strong>
+            优先改善失败与重试，不要为了活跃度不断增加推荐、提醒与连续消费功能。
+          </li>
+        </ol>
+      </section>
+
+      <section id="risks" aria-labelledby="risks-title">
+        <h2 id="risks-title">七、风险清单：八项风险，对应八组可验证指标</h2>
+        <p class="section-intro">以下风险与指标为推断及验证建议，不是已获得的经营数据。事实性前提另附来源。</p>
+
+        <div class="risk-grid">
+          <article class="risk-card">
+            <h3>购买者与使用者错配</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>青少年定位与成年人自律假说涉及不同购买逻辑。家长认同理念，不等于实际使用者愿意持续使用；作者对成人主力的判断尚未由人群数据证明。</dd>
+              <dt>可验证指标</dt>
+              <dd>分别记录成人自购、家长代购、礼物购买的激活、主动携带、有效问答、退款和续订；购买者与使用者分开统计。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>赠送 Pro 掩盖真实续费意愿</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>部分设备含 Pro，到期回基础版，移动流量列入 Pro。<sup class="ref"><a href="#s23">[S23]</a></sup>推断：续费可能主要为了保留独立联网，而不只是偏好更强模型；赠送期满意也不代表真实付费意愿。</dd>
+              <dt>可验证指标</dt>
+              <dd>赠送到期后的实际续订率、续订后持续使用、流失原因；分别询问流量、模型、搜索与生图的付费动机，并实测到期后的联网行为。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>云服务、时延与语音场景限制</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>手册要求对话联网。<sup class="ref"><a href="#s23">[S23]</a></sup>推断：弱信号、识别错误、模型变化和服务异常都可能破坏短路径；无扬声器也没有解决不便开口的问题。</dd>
+              <dt>可验证指标</dt>
+              <dd>按网络、模型和环境记录松手到首个有用答案的中位数及高分位时延、识别成功率、重录次数、断连、放弃与转手机比例。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>回答质量抬高查证成本</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>推断：一个问题反复重问或最终仍要手机复核，会把“替代入口”变成“前置步骤”；基础版与 Pro 的工具差异也可能影响时效性任务。</dd>
+              <dt>可验证指标</dt>
+              <dd>按问题类型统计正确性、时效性、来源可查性、用户纠正次数、同任务手机补查率及总完成时间，避免只统计输出成功。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>第二台设备负担与阅读器替代</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>推断：轻巧与长续航宣传不保证日常随身；已有阅读器增加 AI 后，也可能比额外购买问答终端更有吸引力。</dd>
+              <dt>可验证指标</dt>
+              <dd>实际携带日、外出使用占比、真实充电间隔、因没带或没电放弃的次数；与手机快捷入口、AI 阅读器比较任务成功率、时间及闲置原因。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>长期记忆、隐私与青少年适用性</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>作者自述有主人画像与倾诉功能。推断：愿意倾诉不等于数据保存、第三方处理与删除路径已充分透明；移除娱乐应用也不保证所有 AI 输出都准确、适龄。</dd>
+              <dt>可验证指标</dt>
+              <dd>语音、转写和记忆的保存期限与处理方说明；查看、更正、导出和删除的实测效果；适龄内容测试，以及购买者和使用者能否清楚理解权限。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>服务成本与收入不匹配</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>推断：频繁对话、搜索、生图与移动流量会带来持续支出；硬件售价和年费口径不足以推导毛利或回本，更不能保证持续售后能力。</dd>
+              <dt>可验证指标</dt>
+              <dd>每位付费用户实收收入，对照模型、语音、搜索、生图、流量、客服及维修支出；观察额度调整后的流失、投诉，以及合同、发票和售后主体的一致性。</dd>
+            </dl>
+          </article>
+
+          <article class="risk-card">
+            <h3>功能膨胀侵蚀专注承诺</h3>
+            <dl>
+              <dt>为什么警惕</dt>
+              <dd>推断：为了提高活跃度而增加提醒、推荐或持续闲聊入口，可能让墨本变成另一块争夺注意力的屏幕。问得更多与更容易结束使用可能相互冲突。</dd>
+              <dt>可验证指标</dt>
+              <dd>每次版本更新新增的主动打扰和任务外入口；跨设备非计划使用时长；一次问答自然结束的比例；自律时段的实际执行与用户关闭原因。</dd>
+            </dl>
+          </article>
+        </div>
+
+        <aside class="callout">
+          <span class="callout-title">商业验证必须拆开两个问题</span>
+          <p><span class="tag">推断</span><strong>用户是否愿意长期付费</strong>，与<strong>这笔费用是否足以支持长期服务</strong>，是两项独立验证。499 元与 200 元/年均是作者自述的收入端口径，不能据此推导利润或可持续性。</p>
+        </aside>
+      </section>
+
+      <section id="validation" aria-labelledby="validation-title">
+        <h2 id="validation-title">八、三个验证点与最终判断</h2>
+        <p class="section-intro">
+          <span class="tag">推断</span>
+          验证应跨过开箱新鲜感，并覆盖赠送权益到期；结合自愿提供的任务记录、手机使用记录与访谈，按人群、版本和网络场景分层，而不是只看总体活跃。
+        </p>
+
+        <div class="validation-grid">
+          <article class="validation-card">
+            <p class="panel-title">任务层</p>
+            <h3>是否真正替代了手机任务？</h3>
+            <p><span class="test-label">支持证据</span>原本会拿手机完成的问题交给墨本后，问题得到解决、无需同任务补查，且非计划使用下降。</p>
+            <p><span class="test-label">关键反证</span>墨本问答量增加，但手机行为没有相应变化；或每次问答后仍需手机完成同一任务。</p>
+            <p><span class="test-label">核心指标</span>有效替代任务数、同任务补查率、总完成时间与跨设备非计划使用，而不是单纯对话次数。</p>
+          </article>
+
+          <article class="validation-card">
+            <p class="panel-title">人群层</p>
+            <h3>谁在持续使用，谁愿意付钱？</h3>
+            <p><span class="test-label">支持证据</span>成人自购、家长代购与礼物购买分组后，能够识别持续携带、稳定受益并愿意续费的明确群体。</p>
+            <p><span class="test-label">关键反证</span>购买者认可理念，实际使用者长期不用；渠道销量增长，却没有对应终端使用与续订。</p>
+            <p><span class="test-label">核心指标</span>购买者／使用者分离后的激活、携带、有效问答、退款与真实付费续订。</p>
+          </article>
+
+          <article class="validation-card">
+            <p class="panel-title">服务层</p>
+            <h3>到期之后，核心承诺还能兑现吗？</h3>
+            <p><span class="test-label">支持证据</span>网络、模型、搜索、生图和额度规则透明；续订后仍保持稳定体验，实际收入能够支撑持续服务。</p>
+            <p><span class="test-label">关键反证</span>用户到期才知道失去哪些能力；独立联网路径被打断；使用越多，越只能靠反复收紧权益维持。</p>
+            <p><span class="test-label">核心指标</span>到期理解程度、实际续订、服务可用性、付费用户收入与完整服务成本。</p>
+          </article>
+        </div>
+
+        <aside class="callout">
+          <span class="callout-title">一个更贴近承诺的统计口径</span>
+          <p><span class="tag">验证建议</span><strong>有效替代率</strong>＝原本需手机、由墨本完成且没有同任务手机补查的问题数 ÷ 原本需手机的被跟踪问题总数。</p>
+          <p class="note">推断：该口径仍需与非计划使用、问题难度和用户自选偏差一起解释，单一比率不能证明因果关系，也不应预先编造达标数值。</p>
+        </aside>
+
+        <div class="verdict">
+          <span class="tag">最终判断 · 推断</span>
+          <h3>有值得验证的入口创新，尚不足以称为已经验证的生意。</h3>
+          <p>
+            墨本最有价值的方向，是让用户在一类高频、短暂的信息需求中，更容易得到答案，也更容易结束使用。
+            现有材料不足以证明“成年人已是主力”“订阅模式已经跑通”或“它将成为赛道赢家”。
+          </p>
+          <p>
+            从产品方向走向成熟产品，关键不是再增加几个 AI 功能，而是证明：有一群明确的用户，持续用它完成一类明确的任务，并愿意为可持续兑现的服务付费。
+          </p>
+          <div class="formula" aria-label="成熟产品的三个条件">
+            <span>明确的持续用户</span>
+            <span class="operator">×</span>
+            <span>稳定完成的任务</span>
+            <span class="operator">×</span>
+            <span>可持续兑现的服务</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="verification" aria-labelledby="verification-title">
+        <h2 id="verification-title">九、需核实与保守措辞清单</h2>
+        <p class="section-intro">精选十条，用于避免把宣传、旧套餐、型号混淆、二手转引和分析假说写成已验证事实。</p>
+
+        <div class="tbl" tabindex="0" role="region" aria-label="十条需核实与保守措辞清单">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">事项</th>
+                <th scope="col">建议采用的表述</th>
+                <th scope="col">仍需核实／不应扩写</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">公司与渠道关系</th>
+                <td>官网落款公司为深圳见山信息技术有限公司；十方融海产品页提供青少年定位语境。<sup class="ref"><a href="#s23">[S23]</a><a href="#s24">[S24]</a><a href="#s1">[S1]</a></sup></td>
+                <td>发票、合同、销售、售后和数据处理主体是否一致；不凭关联页面推定全部股权或运营关系。</td>
+              </tr>
+              <tr>
+                <th scope="row">“单键”的含义</th>
+                <td>整机四键；“单键”仅指由语音键发起问答。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                <td>不再写“整机仅一颗物理按键”；旧宣传与手册冲突时，以说明书为准。</td>
+              </tr>
+              <tr>
+                <th scope="row">价格、移动流量与到期</th>
+                <td>499 元、另加 200 元/年，以及“内置 4G 无需 SIM”为作者当时体验口径；基础版仅 Wi-Fi，Pro 含移动流量。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                <td>渠道版本、赠送期限、当前续费价格、流量额度与到期实际行为；不写“永久免费联网”或“只有重度用户需要付费”。</td>
+              </tr>
+              <tr>
+                <th scope="row">模型、用量与计算位置</th>
+                <td>官网表列 Pro 10 倍用量，GLM 4.7 / DeepSeek V4 / Qwen3.6 Plus 等，支持搜索与生图；用量按 5 小时和每周窗口重置。<sup class="ref"><a href="#s23">[S23]</a></sup></td>
+                <td>不写无限量、永久固定模型或端侧运行；电子纸 AI 平台的出现也不证明墨本已采用。<sup class="ref"><a href="#s20">[S20]</a></sup></td>
+              </tr>
+              <tr>
+                <th scope="row">重量、续航与响应宣传</th>
+                <td>约 65 g、最长 15 天续航为宣传材料口径；“一秒出答案”为官网宣传表述。<sup class="ref"><a href="#s2">[S2]</a><a href="#s24">[S24]</a></sup></td>
+                <td>测试条件、使用频率、信号、时延分布与真实充电间隔；不把“护眼”“零蓝光”等宣传等同于健康效果证据。</td>
+              </tr>
+              <tr>
+                <th scope="row">成年人主力与专注效果</th>
+                <td>作者报告少掏手机，并提出成年人可能是主力的假说；本报告将其标为作者自述或推断。</td>
+                <td>实际购买者／使用者结构、长期任务替代与非计划使用；不从单个体验推出注意力改善或市场主力已确定。</td>
+              </tr>
+              <tr>
+                <th scope="row">竞品型号与 AI 功能</th>
+                <td>Reader C 属于 Viwoods；Note X5 Mini 列 DeepSeek 摘要、语音转文字及 4 麦 2 扬声器；Bigme S6 列内置 ChatGPT。<sup class="ref"><a href="#s22">[S22]</a><a href="#s18">[S18]</a></sup></td>
+                <td>不同代际、地区和固件的模型权益；“捆绑”“内置”“专用 AI 键”均不自动等于永久免费、无限使用或端侧模型。</td>
+              </tr>
+              <tr>
+                <th scope="row">海外价格与存续状态</th>
+                <td>按材料时点保留价格；Humane 为明确停服案例，Rabbit 为继续迭代案例。<sup class="ref"><a href="#s4">[S4]</a><a href="#s10">[S10]</a><a href="#s11">[S11]</a></sup></td>
+                <td>当前现货、预购履约、地区差异、含税与订阅条件；品牌累计规模不能改写为某一型号销量或当前活跃用户。</td>
+              </tr>
+              <tr>
+                <th scope="row">市场规模与财务类比</th>
+                <td>功能机约 15%及相关规模为材料对 Counterpoint 的转引；E Ink 数字及增长展望按原报道时点处理。<sup class="ref"><a href="#s14">[S14]</a><a href="#s21">[S21]</a></sup></td>
+                <td>原始报告、统计年份与业务范围；不直接推算墨本市场规模，不把融资额与资产收购价相减当成亏损或投资回报。</td>
+              </tr>
+              <tr>
+                <th scope="row">来源效力与缺失证据</th>
+                <td>S2 是推广稿，S3 按给定标注为转载；S19 为发布日媒体报道，价格与规格为厂商口径。<sup class="ref"><a href="#s2">[S2]</a><a href="#s3">[S3]</a><a href="#s19">[S19]</a></sup></td>
+                <td>推广与转载不构成两份独立验证；补齐失效或未取得正文的链接，以及 Novixand、Mateluxue 的原始规格与交付来源。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="sources" aria-labelledby="sources-title">
+        <h2 id="sources-title">十、来源列表</h2>
+        <p class="section-intro">
+          编号、名称与链接按给定清单保留，正文上标可跳转到对应来源。列表收录不等于逐条独立核验；价格与产品状态须结合其材料日期理解。
+        </p>
+
+        <aside class="callout warning">
+          <span class="callout-title">本轮来源核验边界</span>
+          <p class="note">
+            S23 说明书正文已读取，四键与套餐纠正据此确认；S1、S24 为官网页面口径。
+            海外产品的价格与存续状态以各来源发布时点为准，不视为整理日实时在售确认。
+          </p>
+          <p class="note">
+            S19 原引用的链接经核对与 AINOTE2 无关，已替换为 2026-04-23 发布日报道；Punkt 与 Kindle Scribe 补充了官方页面来源（S25、S26）。
+          </p>
+        </aside>
+
+        <ol class="src">
+          <li id="s1">
+            <a href="https://www.tenclass.com/products/moben/">
+              十方融海官网 墨本产品页
+              <span class="source-url">https://www.tenclass.com/products/moben/</span>
+            </a>
+          </li>
+          <li id="s2">
+            <a href="https://www.chinaz.com/2026/0827/1773736.shtml">
+              站长之家 2026-08-27(推广稿)
+              <span class="source-url">https://www.chinaz.com/2026/0827/1773736.shtml</span>
+            </a>
+          </li>
+          <li id="s3">
+            <a href="http://www.bkmedia.cn/Index/detail?id=943714913891901440">
+              北京科技报 2026-09-24(转载)
+              <span class="source-url">http://www.bkmedia.cn/Index/detail?id=943714913891901440</span>
+            </a>
+          </li>
+          <li id="s4">
+            <a href="https://www.consumerreports.org/electronics/cell-phones/light-phone-iii-review-a1030563155/">
+              Consumer Reports 2026-04-21
+              <span class="source-url">https://www.consumerreports.org/electronics/cell-phones/light-phone-iii-review-a1030563155/</span>
+            </a>
+          </li>
+          <li id="s5">
+            <a href="https://techcrunch.com/2024/06/11/light-phone-iii-is-a-minimalist-phone-with-a-camera/">
+              TechCrunch 2024-06-11
+              <span class="source-url">https://techcrunch.com/2024/06/11/light-phone-iii-is-a-minimalist-phone-with-a-camera/</span>
+            </a>
+          </li>
+          <li id="s6">
+            <a href="https://www.androidauthority.com/mudita-kompakt-ces-2026-3625497/">
+              Android Authority 2026-01-14
+              <span class="source-url">https://www.androidauthority.com/mudita-kompakt-ces-2026-3625497/</span>
+            </a>
+          </li>
+          <li id="s7">
+            <a href="https://www.theverge.com/2025/1/15/24344155/minimal-phone-e-ink-qwerty-android-shipping">
+              The Verge 2025-01-15
+              <span class="source-url">https://www.theverge.com/2025/1/15/24344155/minimal-phone-e-ink-qwerty-android-shipping</span>
+            </a>
+          </li>
+          <li id="s8">
+            <a href="https://liliputing.com/daylight-dc-1-is-a-729-tablet-with-a-10-5-inch-live-paper-display/">
+              Liliputing 2024-05-23
+              <span class="source-url">https://liliputing.com/daylight-dc-1-is-a-729-tablet-with-a-10-5-inch-live-paper-display/</span>
+            </a>
+          </li>
+          <li id="s9">
+            <a href="https://www.parkablogs.com/content/onyx-boox-palma-2-pro-review">
+              parkablogs 2025-11-04
+              <span class="source-url">https://www.parkablogs.com/content/onyx-boox-palma-2-pro-review</span>
+            </a>
+          </li>
+          <li id="s10">
+            <a href="https://fortune.com/2025/02/19/hp-humane-ai-pin-acquisition-116-million/">
+              Fortune 2025-02-19
+              <span class="source-url">https://fortune.com/2025/02/19/hp-humane-ai-pin-acquisition-116-million/</span>
+            </a>
+          </li>
+          <li id="s11">
+            <a href="https://9to5google.com/2025/09/08/rabbit-r1-rabbitos-2/">
+              9to5Google 2025-09-08
+              <span class="source-url">https://9to5google.com/2025/09/08/rabbit-r1-rabbitos-2/</span>
+            </a>
+          </li>
+          <li id="s12">
+            <a href="https://fortune.com/2026/02/13/brick-bloom-phone-blocker-gadgets/">
+              Fortune 2026-02-13
+              <span class="source-url">https://fortune.com/2026/02/13/brick-bloom-phone-blocker-gadgets/</span>
+            </a>
+          </li>
+          <li id="s13">
+            <a href="https://www.slashgear.com/2081144/brick-app-lockout-screen-time-gadget/">
+              SlashGear 2026-01-25
+              <span class="source-url">https://www.slashgear.com/2081144/brick-app-lockout-screen-time-gadget/</span>
+            </a>
+          </li>
+          <li id="s14">
+            <a href="https://www.aol.com/articles/dumbphones-getting-smarter-more-premium-081502581.html">
+              AOL(CNN 转载)
+              <span class="source-url">https://www.aol.com/articles/dumbphones-getting-smarter-more-premium-081502581.html</span>
+            </a>
+          </li>
+          <li id="s15">
+            <a href="https://www.cnx-software.com/2025/12/18/reetle-smartink-i-e-ink-iphone-case/">
+              CNX Software 2025-12-18
+              <span class="source-url">https://www.cnx-software.com/2025/12/18/reetle-smartink-i-e-ink-iphone-case/</span>
+            </a>
+          </li>
+          <li id="s16">
+            <a href="https://newatlas.com/mobile-technology/reetle-smartink-i-e-ink-iphone-case/">
+              New Atlas 2025-11-27
+              <span class="source-url">https://newatlas.com/mobile-technology/reetle-smartink-i-e-ink-iphone-case/</span>
+            </a>
+          </li>
+          <li id="s17">
+            <a href="https://www.ereadersforum.com/blog/compact-ai-e-reader-review-viwoods-ai-paper-reader-explained/">
+              ereadersforum 2025-11-25
+              <span class="source-url">https://www.ereadersforum.com/blog/compact-ai-e-reader-review-viwoods-ai-paper-reader-explained/</span>
+            </a>
+          </li>
+          <li id="s18">
+            <a href="https://www.bookrunch.org/overview/ai_e-readers/">
+              bookrunch 2026-04-01
+              <span class="source-url">https://www.bookrunch.org/overview/ai_e-readers/</span>
+            </a>
+          </li>
+          <li id="s19">
+            <a href="https://caijing.chinadaily.com.cn/a/202604/23/WS69e9d183a310942cc49a9125.html">
+              中国日报网 2026-04-23 科大讯飞 AINOTE2（讯飞蝉翼）开售
+              <span class="source-url">https://caijing.chinadaily.com.cn/a/202604/23/WS69e9d183a310942cc49a9125.html</span>
+            </a>
+          </li>
+          <li id="s20">
+            <a href="https://www.noypigeeks.com/tech-news/new-e-readers-ai-features/">
+              noypigeeks 2026 Computex E Ink×MediaTek
+              <span class="source-url">https://www.noypigeeks.com/tech-news/new-e-readers-ai-features/</span>
+            </a>
+          </li>
+          <li id="s21">
+            <a href="https://www.digitimes.com/news/a20251120PD237/e-ink-e-paper-chairman-profit-2026.html">
+              Digitimes 2025-11-21
+              <span class="source-url">https://www.digitimes.com/news/a20251120PD237/e-ink-e-paper-chairman-profit-2026.html</span>
+            </a>
+          </li>
+          <li id="s22">
+            <a href="https://goodereader.com/blog/electronic-readers/viwoods-announces-ai-reader-c-a-color-e-reader">
+              Good e-Reader 2025-12-05 Viwoods AiPaper Reader C
+              <span class="source-url">https://goodereader.com/blog/electronic-readers/viwoods-announces-ai-reader-c-a-color-e-reader</span>
+            </a>
+          </li>
+          <li id="s23">
+            <a href="https://moben.cn/manual/product_manual.html">
+              墨本官网产品说明书
+              <span class="source-url">https://moben.cn/manual/product_manual.html</span>
+            </a>
+          </li>
+          <li id="s24">
+            <a href="https://moben.cn/">
+              墨本官网首页
+              <span class="source-url">https://moben.cn/</span>
+            </a>
+          </li>
+          <li id="s25">
+            <a href="https://www.punkt.ch/products/mp02-4g-minimalist-phone">
+              Punkt 官网 MP02 4G Minimalist Phone 产品页
+              <span class="source-url">https://www.punkt.ch/products/mp02-4g-minimalist-phone</span>
+            </a>
+          </li>
+          <li id="s26">
+            <a href="https://www.aboutamazon.com/news/devices/kindle-scribe-gen-ai-notebook">
+              About Amazon 2026 Kindle Scribe 生成式 AI 笔记功能
+              <span class="source-url">https://www.aboutamazon.com/news/devices/kindle-scribe-gen-ai-notebook</span>
+            </a>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>墨本 Moben 与“专注无打扰”硬件赛道 · 分析报告</span>
+      <span>事实、体验与推断分层；未提供销量或经营数据的项目不作成功认证。</span>
+      <a href="#top">返回顶部 ↑</a>
+    </footer>
+  </div>
+</body>
+</html>

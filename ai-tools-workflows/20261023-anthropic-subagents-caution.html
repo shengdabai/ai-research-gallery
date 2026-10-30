@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic《谨慎使用子 Agent》全面分析：主张、证据与对个人工作流的意义</title>
+<meta name="description" content="对 AGI Hunt 转译的 Anthropic 文章《Building agents: When to fold subagents into your main agent loop》做逐条分析：核心主张、证据分级、仍该用子 Agent 的三条件、迁移四步、企业与个人分层建议。">
+<style>
+/* ==========================================================
+   1. 设计 token（唯一真源）
+   命名：--color-* 颜色角色；--space-* 间距；--text-* 字号；--radius-*；--shadow-*；--z-*；--motion-*；--size-* 有意图的布局尺寸。
+   断点字面量（CSS 不允许 var() 进 @media）：手机 ≤ 640px；平板 ≤ 900px。两处断点只在本文件 @media 里出现。
+   证据分级色：A/B/C 取同一蓝色色阶（可核验程度由深到浅），D 用中性灰；它表示“证据性质”，不是“可信度排名”。
+   ========================================================== */
+:root {
+  color-scheme: light;
+  /* 原色阶 */
+  --palette-ink-900: #0b0b0b;
+  --palette-ink-600: #52514e;
+  --palette-ink-400: #8a897f;
+  --palette-ink-200: #d9d8d2;
+  --palette-ink-100: #ecebe6;
+  --palette-paper-0: #ffffff;
+  --palette-paper-50: #f6f6f4;
+  --palette-paper-100: #fcfcfb;
+  --palette-blue-700: #0d366b;
+  --palette-blue-550: #1c5cab;
+  --palette-blue-450: #2a78d6;
+  --palette-blue-400: #3987e5;
+  --palette-blue-250: #86b6ef;
+  --palette-blue-100: #cde2fb;
+  --palette-orange-500: #eb6834;
+  --palette-aqua-500: #1baf7a;
+  --palette-good: #0ca30c;
+  --palette-warning: #fab219;
+  --palette-serious: #ec835a;
+  --palette-critical: #d03b3b;
+
+  /* 语义角色 */
+  --color-bg: var(--palette-paper-50);
+  --color-surface: var(--palette-paper-0);
+  --color-surface-alt: var(--palette-paper-100);
+  --color-surface-muted: var(--palette-ink-100);
+  --color-border: var(--palette-ink-200);
+  --color-text: var(--palette-ink-900);
+  --color-text-secondary: var(--palette-ink-600);
+  --color-text-muted: var(--palette-ink-400);
+  --color-accent: var(--palette-blue-450);
+  --color-accent-strong: var(--palette-blue-700);
+  --color-accent-soft: var(--palette-blue-100);
+  --color-on-accent: var(--palette-paper-0);
+  --color-focus: var(--palette-blue-400);
+  --color-series-main: var(--palette-blue-450);
+  --color-series-contrast: var(--palette-orange-500);
+  --color-series-third: var(--palette-aqua-500);
+  --color-status-good: var(--palette-good);
+  --color-status-warning: var(--palette-warning);
+  --color-status-serious: var(--palette-serious);
+  --color-status-critical: var(--palette-critical);
+  --color-evidence-a: var(--palette-blue-700);
+  --color-evidence-b: var(--palette-blue-450);
+  --color-evidence-c: var(--palette-blue-250);
+  --color-evidence-d: var(--palette-ink-400);
+  --color-evidence-c-text: var(--palette-ink-900);
+
+  /* 间距 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+
+  /* 字体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", Arial, sans-serif;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-md: 18px;
+  --text-lg: 22px;
+  --text-xl: 28px;
+  --text-2xl: 36px;
+  --text-hero: 44px;
+  --leading-tight: 1.25;
+  --leading-normal: 1.65;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* 边框、圆角、阴影、层级、动效 */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-width-bar: 4px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-card: 0 1px 2px rgba(11, 11, 11, 0.05);
+  --shadow-raised: 0 6px 20px rgba(11, 11, 11, 0.08);
+  --z-nav: 10;
+  --motion-fast: 120ms;
+  --motion-ease: ease-out;
+  --opacity-muted: 0.55;
+
+  /* 有意图的布局尺寸 */
+  --size-content: 1040px;
+  --size-prose: 72ch;
+  --size-card-min: 240px;
+  --size-stat-min: 180px;
+  --size-badge: 22px;
+  --size-step: 32px;
+  --size-node-min: 112px;
+  --size-check: 18px;
+  --size-meter-height: 10px;
+  --size-table-min: 640px;
+  --size-nav-offset: 56px;
+  --layout-cols-1: 1fr;
+  --layout-cols-2: repeat(2, minmax(0, 1fr));
+  --layout-cols-3: repeat(3, minmax(0, 1fr));
+  --layout-cols-4: repeat(4, minmax(0, 1fr));
+  --layout-compare: 3fr 2fr;
+  --layout-stats: repeat(auto-fit, minmax(var(--size-stat-min), 1fr));
+  --layout-cards: repeat(auto-fit, minmax(var(--size-card-min), 1fr));
+  --layout-nodes: repeat(auto-fit, minmax(var(--size-node-min), 1fr));
+  --layout-step: var(--size-step) 1fr;
+  --layout-meter: var(--size-badge) 1fr auto;
+  --layout-check: var(--size-check) 1fr;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --palette-paper-0: #1f1f1e;
+    --palette-paper-50: #141413;
+    --palette-paper-100: #1a1a19;
+    --palette-ink-900: #f0efec;
+    --palette-ink-600: #c3c2b7;
+    --palette-ink-400: #8f8e85;
+    --palette-ink-200: #3a3a37;
+    --palette-ink-100: #2a2a28;
+    --palette-blue-450: #3987e5;
+    --palette-blue-700: #86b6ef;
+    --palette-blue-100: #1c3b63;
+    --palette-blue-250: #1c5cab;
+    --color-evidence-c-text: var(--palette-ink-900);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-raised: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ==========================================================
+   2. 基础样式
+   ========================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--size-nav-offset); }
+.section, .hero { scroll-margin-top: var(--size-nav-offset); }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+a { color: var(--color-accent); text-decoration-thickness: var(--border-width); text-underline-offset: var(--space-1); }
+a:hover { color: var(--color-accent-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: var(--border-width-strong) solid var(--color-focus);
+  outline-offset: var(--space-1);
+}
+h1, h2, h3, h4 { line-height: var(--leading-tight); margin: 0; font-weight: var(--weight-bold); }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: var(--space-5); }
+li + li { margin-top: var(--space-2); }
+strong { font-weight: var(--weight-bold); }
+
+/* ==========================================================
+   3. 版式骨架
+   ========================================================== */
+.page { max-width: var(--size-content); margin: 0 auto; padding: var(--space-6) var(--space-5) var(--space-8); }
+.section { margin-top: var(--space-8); }
+.section-head { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-5); max-width: var(--size-prose); }
+.section-head h2 { font-size: var(--text-xl); }
+.section-head p { color: var(--color-text-secondary); }
+.section-kicker { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-accent); }
+.prose { max-width: var(--size-prose); }
+.prose p + p { margin-top: var(--space-3); }
+.muted { color: var(--color-text-secondary); }
+.small { font-size: var(--text-sm); }
+
+/* 顶部导航 */
+.nav {
+  position: sticky; top: 0; z-index: var(--z-nav);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+.nav-inner {
+  max-width: var(--size-content); margin: 0 auto; padding: var(--space-2) var(--space-5);
+  display: flex; gap: var(--space-4); overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-inner a { font-size: var(--text-sm); color: var(--color-text-secondary); text-decoration: none; padding: var(--space-1) 0; }
+.nav-inner a:hover { color: var(--color-accent); }
+
+/* 首屏 */
+.hero { display: grid; gap: var(--space-5); }
+.hero-meta { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); color: var(--color-text-secondary); }
+.hero h1 { font-size: var(--text-hero); max-width: var(--size-prose); }
+.hero-lede { font-size: var(--text-md); max-width: var(--size-prose); color: var(--color-text-secondary); }
+.verdict { display: grid; gap: var(--space-3); grid-template-columns: var(--layout-cols-3); }
+.verdict-card {
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border);
+  border-top: var(--border-width-bar) solid var(--color-accent);
+  border-radius: var(--radius-md); padding: var(--space-4); box-shadow: var(--shadow-card);
+}
+.verdict-card h3 { font-size: var(--text-sm); color: var(--color-accent); margin-bottom: var(--space-2); font-weight: var(--weight-medium); }
+.verdict-card p { font-size: var(--text-base); }
+
+/* 证据分级图例 */
+.legend { display: grid; gap: var(--space-2); grid-template-columns: var(--layout-cols-4); }
+.legend-item { display: flex; gap: var(--space-2); align-items: flex-start; font-size: var(--text-sm); color: var(--color-text-secondary); }
+.badge {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  min-width: var(--size-badge); height: var(--size-badge); padding: 0 var(--space-2);
+  border-radius: var(--radius-sm); font-size: var(--text-xs); font-weight: var(--weight-bold);
+  color: var(--color-on-accent); line-height: 1;
+}
+.badge-a { background: var(--color-evidence-a); }
+.badge-b { background: var(--color-evidence-b); }
+.badge-c { background: var(--color-evidence-c); color: var(--color-evidence-c-text); }
+.badge-d { background: var(--color-evidence-d); }
+
+/* 数字卡 */
+.stats { display: grid; gap: var(--space-3); grid-template-columns: var(--layout-stats); }
+.stat {
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md); padding: var(--space-4); display: grid; gap: var(--space-2); box-shadow: var(--shadow-card);
+}
+.stat-value { font-size: var(--text-2xl); font-weight: var(--weight-bold); line-height: 1; }
+.stat-label { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.stat-note { font-size: var(--text-xs); color: var(--color-text-muted); }
+.stat-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+
+/* 卡片网格 */
+.cards { display: grid; gap: var(--space-3); grid-template-columns: var(--layout-cards); }
+.card {
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md); padding: var(--space-4); display: grid; gap: var(--space-2); align-content: start; box-shadow: var(--shadow-card);
+}
+.card h3 { font-size: var(--text-md); }
+.card p, .card li { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.card .lead { color: var(--color-text); }
+.card-accent { border-left: var(--border-width-bar) solid var(--color-accent); }
+.card-contrast { border-left: var(--border-width-bar) solid var(--color-series-contrast); }
+
+/* 提示框 */
+.callout {
+  background: var(--color-accent-soft); border-radius: var(--radius-md); padding: var(--space-4) var(--space-5);
+  display: grid; gap: var(--space-2); max-width: var(--size-prose);
+}
+.callout h3 { font-size: var(--text-base); }
+.callout p, .callout li { font-size: var(--text-sm); }
+.callout-warn { background: var(--color-surface); border: var(--border-width-strong) solid var(--color-status-serious); }
+.callout-warn h3 { display: flex; align-items: center; gap: var(--space-2); }
+.callout-warn h3::before { content: "!"; display: inline-flex; width: var(--size-badge); height: var(--size-badge); align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--color-status-serious); color: var(--color-on-accent); font-size: var(--text-xs); }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+table { border-collapse: collapse; width: 100%; min-width: var(--size-table-min); font-size: var(--text-sm); }
+thead th { text-align: left; background: var(--color-surface-alt); color: var(--color-text-secondary); font-weight: var(--weight-medium); padding: var(--space-3) var(--space-4); border-bottom: var(--border-width) solid var(--color-border); }
+tbody td { padding: var(--space-3) var(--space-4); border-bottom: var(--border-width) solid var(--color-border); vertical-align: top; color: var(--color-text-secondary); }
+tbody tr:last-child td { border-bottom: 0; }
+tbody td:first-child { color: var(--color-text); font-weight: var(--weight-medium); }
+.table-compact { min-width: 0; }
+
+/* 结构对比图（CSS 画） */
+.compare { display: grid; gap: var(--space-4); grid-template-columns: var(--layout-compare); align-items: stretch; }
+.diagram {
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md);
+  padding: var(--space-4); display: grid; gap: var(--space-3); align-content: start;
+}
+.diagram h3 { font-size: var(--text-base); }
+.diagram-caption { font-size: var(--text-xs); color: var(--color-text-muted); }
+.layer { display: grid; gap: var(--space-2); }
+.layer-row { display: grid; gap: var(--space-2); grid-template-columns: var(--layout-nodes); }
+.layer-row-single { grid-template-columns: var(--layout-cols-1); }
+.th-nowrap { white-space: nowrap; }
+.node {
+  border: var(--border-width) solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs); text-align: center; color: var(--color-text-secondary); background: var(--color-surface-alt);
+}
+.node-main { background: var(--color-accent-soft); border-color: var(--color-accent); color: var(--color-text); font-weight: var(--weight-medium); }
+.node-hand { position: relative; }
+.arrow-down { text-align: center; font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1; }
+.handoff-tag { display: inline-block; font-size: var(--text-xs); color: var(--color-series-contrast); font-weight: var(--weight-medium); }
+.loop-box { border: var(--border-width-strong) solid var(--color-accent); border-radius: var(--radius-md); padding: var(--space-3); display: grid; gap: var(--space-2); }
+.loop-core { background: var(--color-accent); color: var(--color-on-accent); border-radius: var(--radius-sm); padding: var(--space-3); text-align: center; font-size: var(--text-sm); font-weight: var(--weight-medium); }
+.loop-row { display: grid; gap: var(--space-2); grid-template-columns: var(--layout-cols-3); }
+.loop-gate { font-size: var(--text-xs); color: var(--color-text-secondary); text-align: center; border-top: var(--border-width) dashed var(--color-border); padding-top: var(--space-2); }
+
+/* 流程步骤 */
+.steps { display: grid; gap: var(--space-3); counter-reset: step; }
+.step {
+  display: grid; grid-template-columns: var(--layout-step); gap: var(--space-3);
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4);
+}
+.step::before {
+  counter-increment: step; content: counter(step);
+  width: var(--size-step); height: var(--size-step); border-radius: var(--radius-sm);
+  background: var(--color-accent); color: var(--color-on-accent); display: flex; align-items: center; justify-content: center;
+  font-weight: var(--weight-bold); font-size: var(--text-sm);
+}
+.step-body { display: grid; gap: var(--space-2); }
+.step-body h3 { font-size: var(--text-md); }
+.step-grid { display: grid; gap: var(--space-2) var(--space-4); grid-template-columns: var(--layout-cols-3); font-size: var(--text-sm); }
+.step-grid dt { color: var(--color-text-muted); font-size: var(--text-xs); }
+.step-grid dd { margin: 0; color: var(--color-text-secondary); }
+
+/* 两栏对比 */
+.split { display: grid; gap: var(--space-3); grid-template-columns: var(--layout-cols-2); }
+
+/* 流水线示意（单循环） */
+.pipeline { display: grid; gap: var(--space-2); grid-template-columns: var(--layout-cols-4); align-items: stretch; }
+.pipe {
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-sm);
+  padding: var(--space-3); font-size: var(--text-sm); display: grid; gap: var(--space-1); align-content: start;
+}
+.pipe strong { color: var(--color-text); }
+.pipe span { color: var(--color-text-secondary); font-size: var(--text-xs); }
+
+/* 证据计数条（序数蓝阶 + 中性灰） */
+.meter { display: grid; gap: var(--space-2); }
+.meter-row { display: grid; grid-template-columns: var(--layout-meter); gap: var(--space-3); align-items: center; font-size: var(--text-sm); }
+.meter-bar { height: var(--size-meter-height); border-radius: var(--radius-sm); background: var(--color-surface-muted); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: var(--radius-sm); }
+.meter-fill-a { background: var(--color-evidence-a); }
+.meter-fill-b { background: var(--color-evidence-b); }
+.meter-fill-c { background: var(--color-evidence-c); }
+.meter-fill-d { background: var(--color-evidence-d); }
+.meter-count { color: var(--color-text-secondary); min-width: var(--size-step); text-align: right; }
+
+/* 自查清单 */
+.checklist { display: grid; gap: var(--space-2); }
+.check {
+  display: grid; grid-template-columns: var(--layout-check); gap: var(--space-3); align-items: start;
+  background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4);
+  cursor: pointer; transition: border-color var(--motion-fast) var(--motion-ease);
+}
+.check:hover { border-color: var(--color-accent); }
+.check input { width: var(--size-check); height: var(--size-check); margin: var(--space-1) 0 0; accent-color: var(--color-accent); }
+.check-text { display: grid; gap: var(--space-1); }
+.check-text span { font-size: var(--text-xs); color: var(--color-text-muted); }
+.check-result { padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--color-accent-soft); font-size: var(--text-sm); }
+.check-result[hidden] { display: none; }
+.btn-reset {
+  border: var(--border-width) solid var(--color-border); background: var(--color-surface); color: var(--color-text-secondary);
+  border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); font: inherit; font-size: var(--text-sm); cursor: pointer;
+}
+.btn-reset:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* 来源 */
+.sources ol { padding-left: var(--space-5); font-size: var(--text-sm); color: var(--color-text-secondary); }
+.sources a { word-break: break-all; }
+footer { margin-top: var(--space-8); padding-top: var(--space-5); border-top: var(--border-width) solid var(--color-border); font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* 展开块 */
+details { border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); padding: 0 var(--space-4); }
+summary { cursor: pointer; padding: var(--space-3) 0; font-weight: var(--weight-medium); }
+details[open] summary { border-bottom: var(--border-width) solid var(--color-border); }
+details .prose { padding: var(--space-3) 0 var(--space-4); }
+details .prose p { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+/* ==========================================================
+   4. 响应式（断点字面量仅此两处：900px 平板，640px 手机）
+   ========================================================== */
+@media (max-width: 900px) {
+  .compare { grid-template-columns: var(--layout-cols-1); }
+  .verdict { grid-template-columns: var(--layout-cols-1); }
+  .legend { grid-template-columns: var(--layout-cols-2); }
+  .pipeline { grid-template-columns: var(--layout-cols-2); }
+}
+@media (max-width: 640px) {
+  .page { padding: var(--space-5) var(--space-4) var(--space-7); }
+  .section { margin-top: var(--space-7); }
+  .hero h1 { font-size: var(--text-xl); }
+  .section-head h2 { font-size: var(--text-lg); }
+  .stat-value { font-size: var(--text-xl); }
+  .legend { grid-template-columns: var(--layout-cols-1); }
+  .split { grid-template-columns: var(--layout-cols-1); }
+  .step-grid { grid-template-columns: var(--layout-cols-1); }
+  .loop-row { grid-template-columns: var(--layout-cols-1); }
+  .pipeline { grid-template-columns: var(--layout-cols-1); }
+  .layer-row { grid-template-columns: var(--layout-cols-2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0ms !important; } /* 例外：关闭动效属无障碍要求，不属于设计值 */
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="页内导航">
+  <div class="nav-inner">
+    <a href="#conclusion">结论</a>
+    <a href="#numbers">关键数字</a>
+    <a href="#structure">结构对比</a>
+    <a href="#failures">失败模式</a>
+    <a href="#when">何时仍用子 Agent</a>
+    <a href="#loop">单循环机制</a>
+    <a href="#migrate">迁移四步</a>
+    <a href="#org">企业与个人</a>
+    <a href="#tools">工具与 Skills</a>
+    <a href="#evidence">证据审计</a>
+    <a href="#action">自查与行动</a>
+    <a href="#sources">来源</a>
+  </div>
+</nav>
+
+<main class="page">
+
+<!-- 首屏 -->
+<header class="hero" id="conclusion">
+  <div class="hero-meta">
+    <span>原文：Anthropic Applied AI，Diane Sarkis，2026-10-22</span>
+    <span>转译：AGI Hunt 公众号，2026-10-23</span>
+    <span>分析日期：2026-10-23</span>
+  </div>
+  <h1>Anthropic《谨慎使用子 Agent》全面分析</h1>
+  <p class="hero-lede">这篇文章把 Agent 架构问题从「怎样拆角色」改成「上下文要不要隔离、任务要不要并行、模型能不能选对工具」。它的建议值得优先验证，但它不是「单 Agent 已被证明普遍更优」的定论。本页逐条拆开主张与证据，并把企业建议和个人工作流建议分开。</p>
+
+  <div class="verdict" aria-label="三层结论">
+    <div class="verdict-card">
+      <h3>架构建议</h3>
+      <p>先评估一个主循环加渐进披露的 Skills 与工具能不能完成任务。文章重点列出三个适合保留子 Agent 的场景：可测量的性能下降、需要全新上下文的并行任务、选不准工具或指令冲突。</p>
+    </div>
+    <div class="verdict-card">
+      <h3>经验性发现</h3>
+      <p>Anthropic 在多个企业部署里观察到，带 Skills 的单 Agent「经常」胜过两种对照设计。文章没有给出样本数、评分方法和具体数字。</p>
+    </div>
+    <div class="verdict-card">
+      <h3>实施原则</h3>
+      <p>用同一套端到端 eval 比较改造前后，一次只改一处，让实测结果决定哪些子 Agent 该消失、哪些该保留。</p>
+    </div>
+  </div>
+
+  <div class="legend" aria-label="证据分级说明">
+    <div class="legend-item"><span class="badge badge-a">A</span><span><strong>公开资料可直接核对</strong>。官方文档原句、GitHub README、引用文章原文。A 只表示能核对出处，不表示建议已被独立实验证实。</span></div>
+    <div class="legend-item"><span class="badge badge-b">B</span><span><strong>厂商自报的经验性发现</strong>。Anthropic 自己的部署比较或内部 eval，没有公开数据。</span></div>
+    <div class="legend-item"><span class="badge badge-c">C</span><span><strong>单个匿名案例</strong>。一家客户的结果，无任务类型、模型和测量方法。</span></div>
+    <div class="legend-item"><span class="badge badge-d">D</span><span><strong>证据局限或外推风险</strong>。缺少样本数、任务分布、评分方法等。D 不等于「说法不可信」，只表示目前无法用公开信息独立验证。</span></div>
+  </div>
+</header>
+
+<!-- 关键数字 -->
+<section class="section" id="numbers">
+  <div class="section-head">
+    <span class="section-kicker">关键数字</span>
+    <h2>文章里的每个数字，都带着它自己的适用范围</h2>
+    <p>下面五个数字最常被转述。每张卡标出证据级别和不能被省略的限定语。</p>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-head"><span class="stat-label">系统提示词削减</span><span class="badge badge-b">B</span></div>
+      <div class="stat-value">80%+</div>
+      <p class="stat-note">对象是 Claude Code 面向新模型的系统提示词内容。原文说「编码评估未测得损失」。它不等于总 token、成本或延迟下降 80%，也不覆盖所有任务与模型。</p>
+    </div>
+    <div class="stat">
+      <div class="stat-head"><span class="stat-label">运行速度提升</span><span class="badge badge-c">C</span></div>
+      <div class="stat-value">约 2 倍</div>
+      <p class="stat-note">来自一家匿名客户换成单循环后的结果。文章没有给任务类型、模型配置和计时方法。不能当作一般性能提升比例。</p>
+    </div>
+    <div class="stat">
+      <div class="stat-head"><span class="stat-label">工具选择准确性可能下降的区间</span><span class="badge badge-b">B</span></div>
+      <div class="stat-value">30–50</div>
+      <p class="stat-note">系统提示词里工具定义超过这个区间，模型选工具的准确性倾向下降。Tool search 官方文档用同一区间，但两处都是经验性观察，不是硬性阈值。</p>
+    </div>
+    <div class="stat">
+      <div class="stat-head"><span class="stat-label">eval 起步样例</span><span class="badge badge-b">B</span></div>
+      <div class="stat-value">10 个</div>
+      <p class="stat-note">原文说「10 个黄金样例足够起步」。它是可行起点，不是统计上充分的样本量。优先选真实、高频、有代表性的任务。</p>
+    </div>
+    <div class="stat">
+      <div class="stat-head"><span class="stat-label">示例客服 Agent 的故障</span><span class="badge badge-b">B</span></div>
+      <div class="stat-value">1 / 2</div>
+      <p class="stat-note">合并一个子 Agent 后，主 Agent 直接作答，漏问配送专家，一个原本通过的流程失败。这个故障在两次运行里出现一次。它说明单次结果会误导判断，不是失败率估计。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 结构对比 -->
+<section class="section" id="structure">
+  <div class="section-head">
+    <span class="section-kicker">结构对比</span>
+    <h2>文章批评的多层结构，与它推荐的单循环</h2>
+    <p>左图是文章概括的组织型反模式：各团队各做子 Agent，平台团队搭编排器，架构变成组织架构图的翻版。它不是所有多 Agent 系统的共同形态。右图是文章推荐的替代方案。</p>
+  </div>
+  <div class="compare">
+    <div class="diagram">
+      <h3>多层结构（文章批评的形态）</h3>
+      <div class="layer">
+        <div class="layer-row layer-row-single"><div class="node node-main">编排器 / 路由器（平台团队）</div></div>
+        <div class="arrow-down">↓ 交接 1：任务拆分后分发 <span class="handoff-tag">丢细节</span></div>
+        <div class="layer-row">
+          <div class="node">账户子 Agent<br>（团队 A）</div>
+          <div class="node">配送子 Agent<br>（团队 B）</div>
+          <div class="node">退款子 Agent<br>（团队 C）</div>
+          <div class="node">更多重叠的子 Agent</div>
+        </div>
+        <div class="arrow-down">↓ 交接 2：各自带独立提示词、evals 与团队 <span class="handoff-tag">缝合怪提示词</span></div>
+        <div class="layer-row">
+          <div class="node">各自的工具</div>
+          <div class="node">各自的知识库</div>
+          <div class="node">各自的局部 evals</div>
+        </div>
+        <div class="arrow-down">↓ 交接 3：摘要回传编排器 <span class="handoff-tag">有损摘要 · 延迟叠加</span></div>
+        <div class="layer-row layer-row-single"><div class="node node-main">汇总后回复用户</div></div>
+      </div>
+      <p class="diagram-caption">每一层交接都压缩一次信息。文章用「传话游戏」形容按问题类型拆分后的信息衰减。</p>
+    </div>
+    <div class="diagram">
+      <h3>单循环（文章推荐）</h3>
+      <div class="loop-box">
+        <div class="loop-core">一个模型 · 一个上下文窗口 · 开放式工具循环</div>
+        <div class="loop-row">
+          <div class="node">Skills<br>按需加载流程与领域知识</div>
+          <div class="node">工具<br>tool search 按需加载定义</div>
+          <div class="node">知识库<br>放在搜索工具后面</div>
+        </div>
+        <div class="loop-gate">harness 只管：轮数 / 成本预算 · 写操作关卡 · 权限检查</div>
+      </div>
+      <div class="loop-row">
+        <div class="node">共享上下文<br>每一步结果都在同一窗口里</div>
+        <div class="node">渐进披露<br>先看简短描述，需要时才完整加载</div>
+        <div class="node">模型更强<br>从 Opus 4.5 起单循环能管的事超出预期</div>
+      </div>
+      <p class="diagram-caption">文章给单循环三个理由。第三个理由（模型能力）会随版本变化，见「结论的适用期限」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 失败模式 -->
+<section class="section" id="failures">
+  <div class="section-head">
+    <span class="section-kicker">失败模式</span>
+    <h2>大型组织搭 Agent 的五个常见问题</h2>
+    <p>这五条是文章作者在多个企业部署里反复看到的现象。它们是观察，不是统计结论。</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>问题</th><th>文章怎么描述</th><th>根因在哪</th><th>个人工作流里的对应形态</th></tr></thead>
+      <tbody>
+        <tr><td>上下文管理</td><td>子 Agent 之间交接时丢细节；主 Agent 只拿到摘要。</td><td>每次交接都是一次有损压缩。</td><td>多个 Agent 反复读同一批文件，主 Agent 还要重述和纠错。</td></tr>
+        <tr><td>子 Agent 泛滥</td><td>几百个功能重叠的子 Agent，没人知道该用哪个。</td><td>各团队各做一套，没有统一的审核与合并。</td><td>多个仓库、脚本、Agent 配置各自维护，互相冲突。</td></tr>
+        <tr><td>缝合怪提示词</td><td>系统提示词由多个团队拼接，指令互相矛盾（原文 Frankenprompt）。</td><td>没有单一负责人，没有人看完整版。</td><td>Skills 和提示词里有重复内容和冲突条件。</td></tr>
+        <tr><td>未经审核的局部 evals</td><td>各团队只测自己那一段，端到端没人测。</td><td>局部指标高，不等于任务完成率高。</td><td>只跑单元检查，没有可重复的端到端任务集。</td></tr>
+        <tr><td>延迟</td><td>嵌套循环叠加等待时间；一家客户换单循环后约快 2 倍。</td><td>每次交接都加 token 和秒级延迟。</td><td>一个任务里多次启动子进程、重建缓存。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 何时仍用子 Agent -->
+<section class="section" id="when">
+  <div class="section-head">
+    <span class="section-kicker">保留条件</span>
+    <h2>什么时候仍该用子 Agent</h2>
+    <p>文章重点列出三个场景。每个场景都带关键限定词，不能压缩成「复杂任务就用多 Agent」。它们不是穷尽清单：文章同时说子 Agent 擅长验证、并行工作和按模块划分权限。</p>
+  </div>
+  <div class="cards">
+    <div class="card card-accent">
+      <h3>上下文膨胀导致可测量的性能下降</h3>
+      <p class="lead">关键词是「可测量」。</p>
+      <p>上下文长不是拆分理由。要先用 eval 证明信息干扰和性能下降真实存在，再拆。</p>
+    </div>
+    <div class="card card-accent">
+      <h3>多个任务需要并行，且各自需要全新的上下文窗口</h3>
+      <p class="lead">并行本身不是充分条件。</p>
+      <p>如果任务共享大量上下文、需要频繁协调，拆开反而增加交接成本。两个条件要同时满足。</p>
+    </div>
+    <div class="card card-accent">
+      <h3>单 Agent 选不准工具，或系统提示词指令冲突</h3>
+      <p class="lead">先试更简单的修法。</p>
+      <p>可以先尝试 tool search、改工具描述、精简指令、调整权限边界，再比较实际效果与成本。这些都不管用时才拆。</p>
+    </div>
+  </div>
+
+  <div class="section-head" style="margin-top: var(--space-6);">
+    <h2 style="font-size: var(--text-lg);">按上下文拆，不按问题类型拆</h2>
+    <p>这是设计启发式，不是定律。目的是让每个子 Agent 的工作很少依赖系统其他部分，并且只交回一个精简结果。</p>
+  </div>
+  <div class="split">
+    <div class="card card-contrast">
+      <h3>按问题类型拆（文章不推荐）</h3>
+      <ul>
+        <li>写功能一个 Agent，写测试一个 Agent，审查一个 Agent。</li>
+        <li>三者共享同一份代码上下文，却各带一套提示词和 evals。</li>
+        <li>信息来回传递，每交接一次保真度降一次。原文叫「传话游戏」。</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h3>按上下文拆（文章推荐）</h3>
+      <ul>
+        <li>写功能和写测试放在同一个 Agent，因为它们共享代码上下文。</li>
+        <li>验证器只跑测试、只看结果，不看实现过程。它靠隔离的上下文提供独立检查。</li>
+        <li>合适的候选：相互独立的研究路径、接口清晰的独立组件、黑盒验证。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 单循环机制 -->
+<section class="section" id="loop">
+  <div class="section-head">
+    <span class="section-kicker">运行机制</span>
+    <h2>单循环怎么跑：每轮做什么，harness 管什么</h2>
+    <p>文章说单循环「需要纪律」。纪律体现在系统提示词、Skill 与工具描述的触发时机，以及上下文窗口、记忆和笔记的处理方式。</p>
+  </div>
+  <div class="pipeline" aria-label="单循环一轮的四个阶段">
+    <div class="pipe"><strong>第一轮：写计划</strong><span>模型先写出计划。后续每轮按工具结果修订计划，不是一次定死。</span></div>
+    <div class="pipe"><strong>每轮：并行一批工具调用</strong><span>一轮里发出多个工具调用，同时执行。</span></div>
+    <div class="pipe"><strong>原始结果回同一模型</strong><span>不经摘要、不换上下文窗口。模型自己决定哪些结果重要。</span></div>
+    <div class="pipe"><strong>harness 设边界</strong><span>轮数预算、成本预算、写操作关卡。模型做决策，harness 管止损。</span></div>
+  </div>
+  <div class="section-head" style="margin-top: var(--space-6);">
+    <h2 style="font-size: var(--text-lg);">什么东西放到哪里</h2>
+  </div>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <thead><tr><th>内容类型</th><th>放到哪</th><th>为什么</th></tr></thead>
+      <tbody>
+        <tr><td>顺序、领域流程、操作步骤</td><td>Skills</td><td>模型先看简短描述，需要时才完整加载。不占常驻上下文。</td></tr>
+        <tr><td>硬限制、审批、权限</td><td>工具内部</td><td>工具先检查前提与权限，拒绝时返回模型能读懂的说明。限制不靠提示词兜底。</td></tr>
+        <tr><td>廉价且每次都要的内容</td><td>代码直接加载</td><td>便宜又必需的东西不值得让模型多做一次决策。</td></tr>
+        <tr><td>知识库</td><td>搜索工具后面，或打包进 Skill</td><td>避免代码检索后整段粘进提示词，那会让上下文膨胀。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 迁移四步 -->
+<section class="section" id="migrate">
+  <div class="section-head">
+    <span class="section-kicker">迁移路线</span>
+    <h2>从多子 Agent 到单循环：四步，每步都要先有分数</h2>
+    <p>文章和它的工具包都强调同一件事：没有分数，迁移就只是意见。每一步都写出做什么、测什么、什么情况回退或仍有哪些局限。</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-body">
+        <h3>建端到端的任务完成 eval</h3>
+        <dl class="step-grid">
+          <div><dt>做什么</dt><dd>选真实、高频、有代表性的任务。10 个黄金样例可以起步。给事件打时间戳，方便回放。</dd></div>
+          <div><dt>测什么</dt><dd>先看路由准确率，再看 Skill 与工具加载是否正确，最后看任务完成率、成本、延迟。</dd></div>
+          <div><dt>何时回退</dt><dd>这一步没有回退。没有 eval 就不开始后面三步。</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h3>按共享上下文合并领域 Agent</h3>
+        <dl class="step-grid">
+          <div><dt>做什么</dt><dd>找出经常被连续调用、读同一批上下文的子 Agent，合成一个。从使用量最高的开始。</dd></div>
+          <div><dt>测什么</dt><dd>对比合并前后的 eval。看哪些任务由成功变失败、由失败变成功，不只看总分。</dd></div>
+          <div><dt>何时回退</dt><dd>合并后关键任务翻转为失败，并且可以重复复现。</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h3>保留的子 Agent 改为主 Agent 的工具调用</h3>
+        <dl class="step-grid">
+          <div><dt>做什么</dt><dd>主 Agent 像调用工具一样调用子 Agent，拿结果继续。作者建议完全交接的特殊场景是：子 Agent 需要直接和用户对话。</dd></div>
+          <div><dt>测什么</dt><dd>交接次数、摘要是否丢失关键信息、嵌套循环带来的延迟。</dd></div>
+          <div><dt>仍有哪些局限</dt><dd>每个专家 Agent 仍有自己的提示词、上下文、团队和 evals；交回的仍是有损摘要；每次调用仍是嵌套循环。文章明说这一步只解决一部分问题。</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h3>一次并入一个：提示词变 Skills，API 调用变 MCP 工具</h3>
+        <dl class="step-grid">
+          <div><dt>做什么</dt><dd>每次只动一个子 Agent。它的提示词改写成 Skill，它调用的 API 改成 MCP 工具。</dd></div>
+          <div><dt>测什么</dt><dd>同一套 eval 跑多次。示例客服 Agent 合并后漏问配送专家的故障只在两次里出现一次，单跑一次会漏掉。</dd></div>
+          <div><dt>何时回退</dt><dd>翻转的任务里出现不可接受的失败，或成本与延迟变差且无法解释。</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top: var(--space-5);">
+    <h3>eval 里还应该加什么</h3>
+    <p>文章聚焦任务完成率。对会自动改代码、提交变更、调用外部 API 的个人工作流，模型答对不等于工作流可靠。建议 eval 同时记录：权限与副作用检查是否触发、人工返工量、延迟和成本。写操作关卡要独立于模型判断。</p>
+  </div>
+</section>
+
+<!-- 企业与个人 -->
+<section class="section" id="org">
+  <div class="section-head">
+    <span class="section-kicker">组织分工</span>
+    <h2>企业治理方案，与个人工作流能借用的部分</h2>
+    <p>文章一半在讲组织问题。中央团队、各团队 DRI、上线审核，都是针对企业里职责分散和重复建设。独立开发者不需要照搬中央平台团队，但对应的风险会换一种形态出现。</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>文章的企业方案</th><th>企业里解决什么</th><th>个人工作流的对应做法</th><th>不能直接外推的地方</th></tr></thead>
+      <tbody>
+        <tr><td>小型中央团队负责系统提示词与端到端质量</td><td>防止缝合怪提示词，统一质量标准</td><td>自己充当质量负责人；系统提示词只有一份、只有一个修改入口</td><td>个人没有协调成本问题，但有「多份配置互相覆盖」的问题</td></tr>
+        <tr><td>每个新工具、每套新 eval 上线前审核</td><td>减少重复建设和冲突</td><td>新 Skill 或工具加入前，先跑一遍现有 eval 集</td><td>个人审核容易流于形式；eval 是审核的主要依据</td></tr>
+        <tr><td>各团队维护自己的 Skills、工具、知识库</td><td>领域知识留在最懂的人手里</td><td>按项目或工作流划分 Skills 的维护边界；共享流程只有一个来源</td><td>「每个团队一套 Skills」不等于「每个工作流一套 Skill」。重复 Skills 会把组织冗余换成个人维护负担</td></tr>
+        <tr><td>Skills 由各团队 DRI 负责，用 /skill-creator、/skill-doctor 维护</td><td>Skill 质量有人兜底</td><td>定期清理重复 Skills、冲突指令、不明确的触发条件</td><td>工具本身不会判断 Skill 该不该存在；去留仍要看 eval</td></tr>
+        <tr><td>工具按用户意图组织，权限检查放进工具</td><td>避免工具定义过多、拒绝不可解释</td><td>高风险工具（写文件、发消息、付费）内置前提检查，返回可读的拒绝原因</td><td>个人环境里工具数量少，30–50 的区间未必触及，但权限检查仍必要</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 工具与 Skills -->
+<section class="section" id="tools">
+  <div class="section-head">
+    <span class="section-kicker">工具与 Skills</span>
+    <h2>渐进披露怎么落到 MCP 工具、Skills 和知识库上</h2>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>MCP 工具</h3>
+      <ul>
+        <li>按用户意图组织，不按后端系统组织。</li>
+        <li>工具定义多了用 tool search 延迟加载。官方文档建议：工具数 10 个以上，或定义超过 10k token 时使用；最常用的 3–5 个工具不延迟加载。</li>
+        <li>工具内部检查前提和权限，拒绝时返回模型可读的说明。</li>
+      </ul>
+      <p><span class="badge badge-a">A</span> 阈值来自官方文档，可核对。它是使用建议，不是实验结论。</p>
+    </div>
+    <div class="card">
+      <h3>Skills</h3>
+      <ul>
+        <li>领域流程、操作顺序进 Skills。模型先看一句描述，命中时才加载全文。</li>
+        <li>每个 Skill 有一个明确负责人。</li>
+        <li>用 /skill-creator 建、/skill-doctor 查。</li>
+      </ul>
+      <p><span class="badge badge-a">A</span> 两个命令在 Claude Code 文档里可核对。</p>
+    </div>
+    <div class="card">
+      <h3>知识库</h3>
+      <ul>
+        <li>放在搜索工具后面，或打包进对应 Skill。</li>
+        <li>避免「代码先检索，再把结果整段贴进提示词」。那是上下文膨胀的常见来源。</li>
+      </ul>
+      <p><span class="badge badge-b">B</span> 这是作者的实践建议，没有附对比数据。</p>
+    </div>
+    <div class="card">
+      <h3>加速工具：/claude-api 的四个 Skill</h3>
+      <ul>
+        <li>build-eval：帮你建 eval。</li>
+        <li>prompt-audit：审查提示词。</li>
+        <li>hillclimb：按 eval 迭代提示词。</li>
+        <li>cost-optimize：优化成本。</li>
+      </ul>
+      <p><span class="badge badge-a">A</span> 四个名字在原文可核对。它们辅助建 eval 和改提示词，不会自动证明哪种架构更优。</p>
+    </div>
+  </div>
+
+  <div class="callout callout-warn" style="margin-top: var(--space-5);">
+    <h3>迁移工具包是参考实现，不是生产保证</h3>
+    <p>GitHub 仓库 anthropics/single-agent-loop-kit 的 README 自述：Reference implementation，不维护，不接受贡献。两次真实模型运行由一个人在一个模型上完成。merge 和 upkeep 两个步骤没有在真实模型上跑过。核对时仓库显示 4 星、单次提交。</p>
+    <p>这些信息不推翻它的方法论，反而指出正确用法：把它当实验脚手架，复用它的评估思路（同一套 eval 前后打分、不假设单循环总是赢），不要把它当成熟的迁移工具。</p>
+    <p><span class="badge badge-a">A</span> README 原文可核对。</p>
+  </div>
+</section>
+
+<!-- 证据审计 -->
+<section class="section" id="evidence">
+  <div class="section-head">
+    <span class="section-kicker">证据审计</span>
+    <h2>逐条列出：原文怎么说、证据在哪、缺什么、能得出什么</h2>
+    <p>这张表是本页的核心。它既不替 Anthropic 放大结论，也不把「未公开」写成「无效」。</p>
+  </div>
+  <div class="meter" aria-label="12 条主张按证据级别的分布" style="margin-bottom: var(--space-5); max-width: var(--size-prose);">
+    <div class="meter-row"><span class="badge badge-a">A</span><div class="meter-bar"><div class="meter-fill meter-fill-a" style="width: 41.7%"></div></div><span class="meter-count">5 条</span></div>
+    <div class="meter-row"><span class="badge badge-b">B</span><div class="meter-bar"><div class="meter-fill meter-fill-b" style="width: 41.7%"></div></div><span class="meter-count">5 条</span></div>
+    <div class="meter-row"><span class="badge badge-c">C</span><div class="meter-bar"><div class="meter-fill meter-fill-c" style="width: 8.3%"></div></div><span class="meter-count">1 条</span></div>
+    <div class="meter-row"><span class="badge badge-d">D</span><div class="meter-bar"><div class="meter-fill meter-fill-d" style="width: 8.3%"></div></div><span class="meter-count">1 条</span></div>
+    <p class="small muted">按下表 12 条主张的主级别计数。多数 B 级条目同时带 D 级局限，表中单列。</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>主张</th><th class="th-nowrap">级别</th><th>证据来源</th><th>缺什么</th><th>允许得出的结论</th></tr></thead>
+      <tbody>
+        <tr><td>带 Skills 的单 Agent 经常同时胜过「一个提示词包揽」和「多子 Agent」</td><td><span class="badge badge-b">B</span></td><td>原文：frequently outperformed both。引用的商业 Agent 文章（2026-09）用词是 consistently has outperformed。</td><td>样本数、任务分布、评分方法、具体数字。</td><td>Anthropic 自家部署里的常见观察。不能写成「已证明普遍更优」。两篇文章措辞强度不同，应分别标注。</td></tr>
+        <tr><td>一家客户换单循环后约快 2 倍</td><td><span class="badge badge-c">C</span></td><td>原文一句话。</td><td>任务类型、模型、计时方法、是否多次测量。</td><td>一个匿名案例。只能说「有客户观察到约 2 倍」。</td></tr>
+        <tr><td>Claude Code 系统提示词为新模型削减 80% 以上</td><td><span class="badge badge-b">B</span></td><td>claude.dev 博客 2026-07-24 原句：removed over 80%，with no measurable loss on our coding evaluations。</td><td>内部 eval 内容与数据。</td><td>提示词内容削减 80%+，编码 eval 未测得损失。不等于成本或延迟下降 80%，不覆盖其他任务。</td></tr>
+        <tr><td>工具定义超过 30–50 个，选工具准确性下降</td><td><span class="badge badge-b">B</span></td><td>原文与 tool search 官方文档都写 30–50。</td><td>测量方法与数据。</td><td>两处一致的经验性观察。不是硬性阈值。</td></tr>
+        <tr><td>tool search 的使用建议：10 个工具以上或定义超 10k token；3–5 个常用工具不延迟加载</td><td><span class="badge badge-a">A</span></td><td>官方文档原文。</td><td>它是使用建议，与架构论证不是同一层证据。</td><td>可直接照做的配置建议。</td></tr>
+        <tr><td>仍用子 Agent 的三个适用场景</td><td><span class="badge badge-a">A</span></td><td>原文三句，措辞已逐字核对。</td><td>没有给出判定每个场景的量化方法；原文未声明三条穷尽所有用途。</td><td>三个场景是作者的设计判断，用 eval 验证每个场景是否成立。</td></tr>
+        <tr><td>作者建议完全交接的特殊场景：子 Agent 需直接与用户对话</td><td><span class="badge badge-a">A</span></td><td>原文给出的特殊理由。</td><td>原文没有说其他场景一概禁止交接。</td><td>它是原文强调的交接场景，不是所有权转移的普遍定律。</td></tr>
+        <tr><td>10 个黄金样例足够起步</td><td><span class="badge badge-b">B</span></td><td>原文：Even a set of 10 golden examples is enough to start。</td><td>统计上的充分性。</td><td>起步门槛，不是推荐样本量。</td></tr>
+        <tr><td>示例客服 Agent 合并后漏问配送专家，故障出现 1/2</td><td><span class="badge badge-b">B</span></td><td>原文：only showed up in one run out of two。</td><td>这是说明用的示例，不是失败率。</td><td>每个任务要跑不止一次。</td></tr>
+        <tr><td>迁移工具包 README 自述不维护、真模型运行有限</td><td><span class="badge badge-a">A</span></td><td>GitHub README 原文；页面显示 4 星、单次提交。</td><td>无。</td><td>它是实验脚手架。</td></tr>
+        <tr><td>四个 /claude-api Skill 与 /skill-creator、/skill-doctor</td><td><span class="badge badge-a">A</span></td><td>原文与 Claude Code 文档。</td><td>无。</td><td>工具存在。效果仍要自己测。</td></tr>
+        <tr><td>模型能力结论存在版本适用与外推风险：文章说 Opus 4.5 起单循环能管更多，Opus 5.5 与 Fable 5.1 不能关闭 thinking</td><td><span class="badge badge-d">D</span></td><td>原文陈述。「能管更多」是作者经验判断；模型版本事实可核对。</td><td>「能管更多」没有量化；结论会随模型版本变化。</td><td>这是结论的适用期限，不是永久性论据。见下方说明。</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details style="margin-top: var(--space-4);">
+    <summary>结论的适用期限：为什么模型能力这一段要单独看</summary>
+    <div class="prose">
+      <p>文章说，每一代新模型都能把更多决策从 harness 交还给模型自己，更简单的循环也更容易迁移到下一个模型。这是作者在协助客户迁移时的经验：僵硬的多 Agent 结构常常阻碍新模型承担更多工作。</p>
+      <p>这段话的性质是对趋势的判断。模型版本、thinking 行为、自检能力都会变化。不能用某个版本的表现推导未来所有模型，也不能据此断言单循环在当前或未来始终足够。你的 eval 要在换模型后重跑一次。</p>
+    </div>
+  </details>
+</section>
+
+<!-- 自查与行动 -->
+<section class="section" id="action">
+  <div class="section-head">
+    <span class="section-kicker">对独立开发者</span>
+    <h2>先诊断，再决定合并什么</h2>
+    <p>对维护多个 Claude Code / Codex 工作流和一套 Skills 库的人，这篇文章最有行动价值的不是「合并所有 Agent」，而是下面的自查。勾选符合你现状的项。</p>
+  </div>
+  <form class="checklist" id="checklist" aria-label="当前工作流诊断清单">
+    <label class="check"><input type="checkbox" name="q" value="context"><span class="check-text">多个 Agent 反复读取相同的文件、文档或任务上下文<span>对应文章的「上下文交接丢细节」。这是优先评估合并的信号。</span></span></label>
+    <label class="check"><input type="checkbox" name="q" value="rework"><span class="check-text">子 Agent 的输出需要主 Agent 大量重述、补充或纠错<span>说明交接是有损的。改成工具调用或并入主循环。</span></span></label>
+    <label class="check"><input type="checkbox" name="q" value="split"><span class="check-text">功能、测试、审查各有一套提示词，却共享同一份代码上下文<span>这是「按问题类型拆」。文章建议按上下文拆：功能加测试同一个 Agent，验证器只跑测试。</span></span></label>
+    <label class="check"><input type="checkbox" name="q" value="skills"><span class="check-text">Skills 之间有重复内容、互相冲突的指令或不明确的触发条件<span>对应「缝合怪提示词」。先清理，再谈架构。</span></span></label>
+    <label class="check"><input type="checkbox" name="q" value="eval"><span class="check-text">没有一套可重复执行的端到端任务集，能比较改造前后的质量、成本与延迟<span>没有这一项，上面任何改动都无法判断好坏。这是第一步。</span></span></label>
+    <label class="check"><input type="checkbox" name="q" value="gate"><span class="check-text">写文件、提交、发消息、付费等动作没有独立于模型判断的关卡<span>文章把硬限制放进工具。这一项和架构无关，但风险最高。</span></span></label>
+  </form>
+  <div class="check-result" id="check-result" hidden></div>
+  <div style="margin-top: var(--space-3);"><button type="button" class="btn-reset" id="check-reset">清空选择</button></div>
+
+  <div class="section-head" style="margin-top: var(--space-6);">
+    <h2 style="font-size: var(--text-lg);">建议的第一步</h2>
+  </div>
+  <div class="cards">
+    <div class="card card-accent">
+      <h3>先选两三个工作流，不是全部</h3>
+      <p>选交接成本高、上下文高度重叠的那几个。为它们各建一套端到端 eval，10 个真实任务起步，每个任务跑两次以上。</p>
+    </div>
+    <div class="card card-accent">
+      <h3>一次只改一处</h3>
+      <p>先合并，跑 eval；再把保留的子 Agent 改成工具调用，跑 eval；最后把提示词改成 Skill，跑 eval。每一步看翻转的任务，不只看总分。</p>
+    </div>
+    <div class="card card-accent">
+      <h3>让分数决定去留</h3>
+      <p>eval 变好就留下改动。eval 变差且可复现就回退。不因为「单 Agent 更符合某种架构偏好」预先决定结果。文章和它的工具包都把这一条放在最后：度量，一次只改一处，留下经得起检验的。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 来源 -->
+<section class="section sources" id="sources">
+  <div class="section-head">
+    <span class="section-kicker">来源</span>
+    <h2>本页核对过的原始资料</h2>
+    <p>前五项是本页判定的直接依据，均在 2026-10-23 访问。公众号文章里的 14 张配图未纳入分析。</p>
+  </div>
+  <ol>
+    <li>Diane Sarkis，Anthropic，《Building agents: When to fold subagents into your main agent loop》，2026-10-22。<a href="https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop">claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop</a></li>
+    <li>AGI Hunt 转译，《Anthropic：谨慎使用子 Agent》，2026-10-23。<a href="https://mp.weixin.qq.com/s/Ec4UJeYBnVqcVnOSzduWxQ">mp.weixin.qq.com/s/Ec4UJeYBnVqcVnOSzduWxQ</a></li>
+    <li>GitHub，anthropics/single-agent-loop-kit，README。<a href="https://github.com/anthropics/single-agent-loop-kit">github.com/anthropics/single-agent-loop-kit</a></li>
+    <li>Thariq Shihipar，claude.dev 博客，《The new rules of context engineering for Claude 5 generation models》，2026-07-24。<a href="https://claude.dev/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models/">claude.dev/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models</a></li>
+    <li>Anthropic 平台文档，Tool search tool。<a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool</a></li>
+    <li>Anthropic 博客，《A guide to the anatomy of effective commerce agents》，2026-09-02。<a href="https://claude.com/blog/the-anatomy-of-effective-commerce-agents">claude.com/blog/the-anatomy-of-effective-commerce-agents</a></li>
+    <li>Anthropic 博客，《Building multi-agent systems: when and how to use them》。<a href="https://claude.com/blog/building-multi-agent-systems-when-and-how-to-use-them">claude.com/blog/building-multi-agent-systems-when-and-how-to-use-them</a></li>
+    <li>Anthropic Engineering，《How we built our multi-agent research system》。<a href="https://www.anthropic.com/engineering/multi-agent-research-system">anthropic.com/engineering/multi-agent-research-system</a></li>
+    <li>Anthropic 平台文档，Task budgets。<a href="https://platform.claude.com/docs/en/build-with-claude/task-budgets">platform.claude.com/docs/en/build-with-claude/task-budgets</a></li>
+    <li>Anthropic 博客，《Seeing like an agent》。<a href="https://claude.com/blog/seeing-like-an-agent">claude.com/blog/seeing-like-an-agent</a></li>
+    <li>Claude Code 文档，Commands（含 /skill-creator、/skill-doctor）。<a href="https://code.claude.com/docs/en/commands">code.claude.com/docs/en/commands</a></li>
+  </ol>
+</section>
+
+<footer>
+  <p>本页由本地分析流程生成。英文原文与引用源在 2026-10-23 逐条核对；ChatGPT 网页端做了一轮内容审查，采纳了证据分级前移、企业与个人分层、工具包风险说明、80% 口径限定等建议；Codex 做了只读交叉审核。页面自包含，不加载外部资源。</p>
+</footer>
+</main>
+
+<script>
+(function () {
+  var form = document.getElementById('checklist');
+  var result = document.getElementById('check-result');
+  var reset = document.getElementById('check-reset');
+  if (!form || !result) return;
+  var advice = {
+    eval: '先建端到端 eval。没有分数，其他改动无法判断好坏。',
+    gate: '先给高风险动作加独立关卡。这一项与架构无关，但代价最高。',
+    context: '从反复读同一批上下文的 Agent 开始评估合并，它们是优先评估的合并候选。',
+    rework: '把这类子 Agent 改成主 Agent 的工具调用，或直接并入主循环。',
+    split: '把功能与测试放回同一个 Agent，验证器只跑测试。',
+    skills: '先清理重复与冲突的 Skills，再谈合并 Agent。'
+  };
+  var order = ['eval', 'gate', 'context', 'rework', 'split', 'skills'];
+  function render() {
+    var checked = Array.prototype.slice.call(form.querySelectorAll('input:checked')).map(function (i) { return i.value; });
+    if (!checked.length) { result.hidden = true; result.textContent = ''; return; }
+    var first = order.filter(function (k) { return checked.indexOf(k) >= 0; })[0];
+    result.hidden = false;
+    result.textContent = '你勾选了 ' + checked.length + ' 项（共 6 项）。按本页建议的优先顺序，建议先处理：' + advice[first];
+  }
+  form.addEventListener('change', render);
+  if (reset) reset.addEventListener('click', function () {
+    Array.prototype.forEach.call(form.querySelectorAll('input'), function (i) { i.checked = false; });
+    render();
+  });
+})();
+</script>
+</body>
+</html>
