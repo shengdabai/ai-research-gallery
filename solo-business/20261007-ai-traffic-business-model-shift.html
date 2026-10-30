@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
+<title>AI流量爆发下的商业模式变革｜创业者研究报告</title>
+<style>
+/*
+  设计令牌：所有颜色、字体、尺寸、间距与视觉常量集中于此。
+  响应式断点：720px 双列阅读；1080px 宽屏编排。
+  原生媒体查询不能直接使用 CSS 变量，查询中的字面值与断点令牌同步。
+  0、1、auto、none 等结构性值不作为独立视觉常量。
+  无外部资源，无动画。
+*/
+:root {
+  --paper: #f5f0e6;
+  --surface: #fffaf2;
+  --field: #fffdf8;
+  --ink: #20312e;
+  --muted: #55635c;
+  --teal: #125f56;
+  --teal-wash: #e3eee6;
+  --orange: #9d4019;
+  --orange-wash: #f8e8d9;
+  --line: #c9c8b9;
+  --control-line: #718178;
+  --focus: #943711;
+
+  --font: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --base: 18px;
+  --base-wide: 19px;
+  --small: .84rem;
+  --body: 1rem;
+  --lead: 1.18rem;
+  --h1: clamp(2rem, 6.2vw, 3.6rem);
+  --h2: clamp(1.45rem, 3.1vw, 2rem);
+  --h3: 1.13rem;
+  --number: 1.65rem;
+  --weight-normal: 400;
+  --weight-medium: 600;
+  --weight-bold: 750;
+  --leading: 1.85;
+  --leading-ui: 1.5;
+  --leading-title: 1.28;
+  --tracking: .045em;
+
+  --s1: .25rem;
+  --s2: .5rem;
+  --s3: .75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+  --s8: 4rem;
+
+  --page-width: 70rem;
+  --reading-width: 48rem;
+  --gutter: 1rem;
+  --section-pad: 1.15rem;
+  --card-pad: 1rem;
+  --radius: .55rem;
+  --pill: 999rem;
+  --rule: 1px;
+  --accent-rule: 4px;
+  --focus-rule: 3px;
+  --focus-offset: 3px;
+  --touch: 2.75rem;
+  --label-width: 5.4rem;
+  --step-width: 5.5rem;
+
+  --nav-cols: 2;
+  --card-cols: 1;
+  --model-cols: 1;
+  --input-cols: 1;
+  --result-cols: 1;
+  --decision-cols: 1;
+  --breakpoint-medium: 720px;
+  --breakpoint-wide: 1080px;
+
+  --skip-layer: 10;
+  --hidden-position: -10000px;
+  --hidden-clip: 50%;
+}
+
+* { box-sizing: border-box; }
+html { font-size: var(--base); scroll-behavior: auto; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--body);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading);
+  overflow-wrap: anywhere;
+}
+[hidden] { display: none !important; }
+main, section, article, aside, figure, form, fieldset, div, dl { min-width: 0; }
+
+a {
+  color: var(--teal);
+  text-underline-offset: var(--s1);
+  text-decoration-thickness: var(--rule);
+}
+a:hover { text-decoration-thickness: var(--focus-rule); }
+:focus-visible {
+  outline: var(--focus-rule) solid var(--focus);
+  outline-offset: var(--focus-offset);
+}
+:target { scroll-margin-block-start: var(--s5); }
+
+h1, h2, h3, p, figure, dl { margin: 0; }
+h1, h2, h3 {
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-title);
+}
+h1 { font-size: var(--h1); margin-block: var(--s5); }
+h1 span { display: block; }
+h2 { font-size: var(--h2); margin-bottom: var(--s5); }
+h3 { font-size: var(--h3); margin-bottom: var(--s3); }
+p + p { margin-top: var(--s3); }
+strong { font-weight: var(--weight-bold); }
+
+button, input, select { font: inherit; color: inherit; max-width: 100%; }
+button, input, select, summary { min-height: var(--touch); }
+button, select, input {
+  border: var(--rule) solid var(--control-line);
+  border-radius: var(--radius);
+  background: var(--field);
+  padding: var(--s2) var(--s3);
+}
+button {
+  cursor: pointer;
+  white-space: normal;
+  line-height: var(--leading-ui);
+}
+button:hover { border-color: var(--teal); }
+button:disabled { cursor: not-allowed; color: var(--muted); }
+input { width: 100%; font-variant-numeric: tabular-nums; }
+input[aria-invalid="true"] { border: var(--focus-rule) solid var(--orange); }
+fieldset { margin: 0; padding: 0; border: 0; }
+legend {
+  padding: 0;
+  margin-bottom: var(--s4);
+  font-weight: var(--weight-bold);
+}
+label {
+  display: block;
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+  margin-bottom: var(--s2);
+}
+code {
+  font-family: var(--mono);
+  font-size: var(--small);
+  white-space: normal;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.skip {
+  position: absolute;
+  top: var(--hidden-position);
+  left: var(--gutter);
+  padding: var(--s3);
+  background: var(--field);
+  z-index: var(--skip-layer);
+}
+.skip:focus { top: var(--s4); }
+.sr-only {
+  position: absolute;
+  width: var(--rule);
+  height: var(--rule);
+  overflow: hidden;
+  clip-path: inset(var(--hidden-clip));
+  white-space: nowrap;
+}
+
+.masthead {
+  padding-block: var(--s6) var(--s7);
+  border-bottom: var(--accent-rule) solid var(--ink);
+}
+.meta, .eyebrow { color: var(--muted); font-size: var(--small); }
+.eyebrow {
+  letter-spacing: var(--tracking);
+  font-weight: var(--weight-medium);
+}
+.meta-row, .chips, .actions, .legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s3);
+  align-items: center;
+}
+.meta-row {
+  justify-content: space-between;
+  border-bottom: var(--rule) solid var(--line);
+  padding-bottom: var(--s3);
+  margin-bottom: var(--s6);
+}
+.teal { color: var(--teal); }
+.lead { font-size: var(--lead); max-width: var(--reading-width); }
+.chips { margin-top: var(--s5); }
+.chip, .badge {
+  display: inline-block;
+  border-radius: var(--pill);
+  padding: var(--s1) var(--s3);
+  font-size: var(--small);
+  line-height: var(--leading-ui);
+  font-weight: var(--weight-medium);
+  border: var(--rule) solid var(--line);
+}
+.chip, .fact {
+  color: var(--teal);
+  background: var(--teal-wash);
+  border-color: var(--teal);
+}
+.forecast, .unsupported, .pending {
+  color: var(--orange);
+  background: var(--orange-wash);
+  border-color: var(--orange);
+}
+.forecast { border-style: dashed; }
+.example { color: var(--muted); background: var(--surface); }
+
+.toc { padding-block: var(--s5); }
+.toc h2 { font-size: var(--body); margin-bottom: var(--s3); }
+.toc-links {
+  display: grid;
+  grid-template-columns: repeat(var(--nav-cols), minmax(0, 1fr));
+  gap: var(--s2);
+}
+.toc a {
+  display: flex;
+  align-items: center;
+  min-height: var(--touch);
+  padding: var(--s2);
+  border-bottom: var(--rule) solid var(--line);
+  text-decoration: none;
+  font-size: var(--small);
+}
+.toc a:hover { background: var(--teal-wash); }
+
+.report-section {
+  padding: var(--section-pad);
+  margin-bottom: var(--s5);
+  background: var(--surface);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+}
+.section-no {
+  display: block;
+  color: var(--teal);
+  font-size: var(--small);
+  letter-spacing: var(--tracking);
+  margin-bottom: var(--s2);
+}
+.section-intro {
+  margin-bottom: var(--s5);
+  max-width: var(--reading-width);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--card-cols), minmax(0, 1fr));
+  gap: var(--s4);
+}
+.decisions {
+  grid-template-columns: repeat(var(--decision-cols), minmax(0, 1fr));
+  margin-top: var(--s5);
+}
+.card {
+  padding: var(--card-pad);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--field);
+}
+.card p, .card dl { font-size: var(--body); }
+.card .badge { margin-bottom: var(--s3); }
+.note, .warning {
+  margin-top: var(--s5);
+  padding: var(--s4);
+  border-inline-start: var(--accent-rule) solid var(--teal);
+  background: var(--teal-wash);
+}
+.warning { border-color: var(--orange); background: var(--orange-wash); }
+.small { font-size: var(--small); color: var(--muted); }
+
+.audit-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4);
+  align-items: end;
+  margin-block: var(--s4);
+}
+.audit-tools > div { flex: 1; }
+.audit-tools select { width: 100%; }
+.audit-card { border-top: var(--accent-rule) solid var(--line); }
+.audit-card h3 { margin-top: var(--s2); }
+.cite {
+  font-size: var(--small);
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+}
+
+.flow-figure {
+  padding: var(--s4);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+}
+.flow-figure + .flow-figure { margin-top: var(--s4); }
+.flow-figure figcaption {
+  margin-bottom: var(--s4);
+  font-weight: var(--weight-bold);
+}
+.flow-row + .flow-row { margin-top: var(--s4); }
+.flow-label {
+  display: block;
+  color: var(--teal);
+  font-size: var(--small);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--s2);
+}
+.money .flow-label { color: var(--orange); }
+.flow-path {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  align-items: stretch;
+  text-align: center;
+  line-height: var(--leading-ui);
+}
+.node {
+  flex: 1;
+  padding: var(--s3);
+  border: var(--rule) solid var(--teal);
+  border-radius: var(--radius);
+  background: var(--teal-wash);
+}
+.money .node {
+  border-color: var(--orange);
+  background: var(--orange-wash);
+}
+.arrow { align-self: center; font-weight: var(--weight-bold); }
+.arrow-wide { display: none; }
+.payers { margin-top: var(--s5); }
+
+.models { grid-template-columns: repeat(var(--model-cols), minmax(0, 1fr)); }
+.pairs > div { margin-top: var(--s3); }
+.pairs dt {
+  font-size: var(--small);
+  font-weight: var(--weight-bold);
+  color: var(--muted);
+}
+.pairs dd { margin: 0; }
+.protocol { margin-top: var(--s5); }
+summary {
+  cursor: pointer;
+  font-weight: var(--weight-bold);
+  padding-block: var(--s2);
+}
+details > .details-body { margin-top: var(--s3); }
+
+.formula {
+  display: block;
+  padding: var(--s3);
+  background: var(--paper);
+  border-radius: var(--radius);
+  margin-block: var(--s3);
+}
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--input-cols), minmax(0, 1fr));
+  gap: var(--s4);
+}
+.hint {
+  display: block;
+  font-size: var(--small);
+  color: var(--muted);
+  margin-top: var(--s1);
+}
+.field-error { font-size: var(--small); color: var(--orange); }
+.field-error:empty { display: none; }
+.actions { margin-top: var(--s5); }
+.actions button { flex: 1 1 auto; }
+.primary { background: var(--teal); color: var(--field); border-color: var(--teal); }
+.calc-status {
+  margin-block: var(--s4);
+  padding-block: var(--s2);
+  color: var(--muted);
+}
+.results {
+  display: grid;
+  grid-template-columns: repeat(var(--result-cols), minmax(0, 1fr));
+  gap: var(--s3);
+}
+.results > div {
+  background: var(--paper);
+  padding: var(--s3);
+  border-radius: var(--radius);
+}
+.results dt { font-size: var(--small); color: var(--muted); }
+.results dd {
+  margin: var(--s2) 0 0;
+  font-size: var(--number);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-title);
+  font-variant-numeric: tabular-nums;
+}
+.results .positive { background: var(--teal-wash); color: var(--teal); }
+.results .negative, .negative { color: var(--orange); }
+.results .negative { background: var(--orange-wash); }
+.budget { margin-top: var(--s4); }
+.ledger { margin-top: var(--s5); }
+
+.record {
+  display: grid;
+  grid-template-columns: repeat(var(--card-cols), minmax(0, 1fr));
+  gap: var(--s3);
+  margin-top: var(--s4);
+}
+.record > div {
+  padding-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--line);
+}
+.record dt {
+  font-size: var(--small);
+  color: var(--muted);
+  font-weight: var(--weight-bold);
+}
+.record dd { margin: 0; }
+
+.steps { display: grid; gap: var(--s4); }
+.step { border-top: var(--rule) solid var(--line); padding-top: var(--s4); }
+.step-label {
+  color: var(--teal);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--s2);
+}
+.sources {
+  display: grid;
+  grid-template-columns: repeat(var(--card-cols), minmax(0, 1fr));
+  gap: var(--s4);
+}
+.source { border-top: var(--rule) solid var(--line); padding-top: var(--s4); }
+.source h3 { font-size: var(--body); }
+.source a { display: inline-block; padding-block: var(--s1); }
+.source p { font-size: var(--small); }
+.review { border-inline-start: var(--accent-rule) solid var(--orange); }
+.footer {
+  padding-block: var(--s4) var(--s7);
+  font-size: var(--small);
+  color: var(--muted);
+}
+
+/* 720px：移动单列转双列；流程箭头由纵向改横向。 */
+@media (min-width: 720px) {
+  :root {
+    --gutter: 1.5rem;
+    --section-pad: 1.75rem;
+    --card-pad: 1.1rem;
+    --nav-cols: 3;
+    --card-cols: 2;
+    --model-cols: 2;
+    --input-cols: 2;
+    --result-cols: 2;
+  }
+  .flow-path { flex-direction: row; align-items: center; }
+  .arrow-wide { display: inline; }
+  .arrow-narrow { display: none; }
+  .step {
+    display: grid;
+    grid-template-columns: var(--step-width) minmax(0, 1fr);
+    gap: var(--s4);
+  }
+}
+
+/* 1080px：宽屏增加模型与决策列数；正文仍保持可读字号。 */
+@media (min-width: 1080px) {
+  :root {
+    --gutter: 2rem;
+    --section-pad: 2rem;
+    --nav-cols: 6;
+    --model-cols: 3;
+    --decision-cols: 3;
+    --input-cols: 4;
+    --result-cols: 3;
+  }
+  html { font-size: var(--base-wide); }
+  .opportunities .pairs > div {
+    display: grid;
+    grid-template-columns: var(--label-width) minmax(0, 1fr);
+    gap: var(--s3);
+  }
+}
+
+@media print {
+  .toc, .audit-tools, .actions, .skip { display: none !important; }
+  .report-section, .card, .source { break-inside: avoid; }
+  body { background: var(--surface); }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到报告正文</a>
+
+<header class="shell masthead">
+  <div class="meta-row">
+    <p class="eyebrow">创业者研究 · 商业模式与证据</p>
+    
+  </div>
+  <p class="eyebrow">跟踪信息、决策与成交之间的收费变化</p>
+  <h1><span>AI流量爆发下的</span><span class="teal">商业模式变革</span></h1>
+  <p class="lead">从“页面被访问”到“信息被采用”，再到“结果被验收”，每一步都可能改变收费位置，却不会自动创造付费需求。</p>
+  <div class="chips" aria-label="报告讨论的四类价值">
+    <span class="chip">注意力</span>
+    <span class="chip">授权信息</span>
+    <span class="chip">核验结果</span>
+    <span class="chip">完成交易</span>
+  </div>
+</header>
+
+<nav class="shell toc" aria-label="报告目录">
+  <h2>阅读路径</h2>
+  <div class="toc-links">
+    <a href="#conclusion">01　结论与决策</a>
+    <a href="#audit">02　十二项主张审计</a>
+    <a href="#chains">03　价值链与付款人</a>
+    <a href="#traffic">04　流量分类</a>
+    <a href="#models">05　六种商业模式</a>
+    <a href="#economics">06　交互经济账</a>
+    <a href="#assets">07　内容与品牌资产</a>
+    <a href="#opportunities">08　机会假设矩阵</a>
+    <a href="#validation">09　十四天验证</a>
+    <a href="#sources">10　来源与边界</a>
+    <a href="#review">11　审核与验证</a>
+  </div>
+</nav>
+
+<main id="main" class="shell" tabindex="-1">
+
+<section id="conclusion" class="report-section" aria-labelledby="title-conclusion" tabindex="-1">
+  <h2 id="title-conclusion"><span class="section-no">01 / 结论</span>收费位置重分配，不是单一模式接管</h2>
+  <p class="lead">本报告的判断：变现可能在<strong>注意力、授权信息、核验结果与完成交易</strong>之间重新分配。现有证据不能证明某一种模式将全面替代其他模式。</p>
+  <p>随附转录要点的论证可抽象为：代理增加访问，网页广告的补贴关系可能松动，内容与交易需要重新定价。需要拆开的跳跃是：<strong>请求增长≠有价值的信息增量≠有预算的买家≠可持续利润。</strong>广告、按抓取收费与成交收费的产品机制可以同时存在。<a class="cite" href="#s3">[S3]</a> <a class="cite" href="#s8">[S8]</a> <a class="cite" href="#s9">[S9]</a></p>
+  <div class="grid decisions">
+    <article class="card">
+      <h3>先选付款角色</h3>
+      <p>选一个有预算、可验收的窄任务；优先试售持续维护的垂直数据或核验服务，不先造通用支付底座。</p>
+    </article>
+    <article class="card">
+      <h3>先算双边账</h3>
+      <p>把代理的采购成本与来源卖方的毛收入分开；用缓存、免费替代和人工成本做压力测试。</p>
+    </article>
+    <article class="card">
+      <h3>先获得付款证据</h3>
+      
+    </article>
+  </div>
+</section>
+
+<section id="audit" class="report-section" aria-labelledby="title-audit" tabindex="-1">
+  <h2 id="title-audit"><span class="section-no">02 / 证据审计</span>十二项主张，逐项缩小结论边界</h2>
+  <p class="section-intro">以下为随附主张的归纳，不是逐字引文。“事实”仅指可核对的披露或机制，不代表商业验证；分析性反驳与示例不冒充测量结果。</p>
+  <div class="legend-row" aria-label="证据标签释义">
+    <span class="badge fact">事实／限口径</span>
+    <span class="badge forecast">厂商预测</span>
+    <span class="badge unsupported">无证据推断</span>
+    <span class="badge example">说明性示例</span>
+  </div>
+
+  <div id="audit-tools" class="audit-tools" hidden>
+    <div>
+      <label for="evidence-filter">按证据类型查看</label>
+      <select id="evidence-filter" aria-controls="audit-cards">
+        <option value="all">全部主张</option>
+        <option value="fact">含事实或机制</option>
+        <option value="forecast">含厂商预测</option>
+        <option value="unsupported">含无证据推断</option>
+        <option value="example">说明性示例</option>
+      </select>
+    </div>
+    <p id="audit-count" class="small" role="status" aria-live="polite">显示 12 / 12 项</p>
+  </div>
+
+  <div id="audit-cards" class="grid">
+    <article class="card audit-card" data-evidence="fact forecast">
+      <span class="badge fact">事实：厂商观察</span>
+      <span class="badge forecast">厂商预测</span>
+      <h3>01　超过人类，五年后达千倍</h3>
+      <p>Cloudflare称自动化流量于<strong>2026年5月</strong>超过人类；<strong>若趋势持续</strong>，五年后可达人类流量的<strong>1,000倍</strong>。这是厂商观察与条件预测，不是经审计的全球普查。<a class="cite" href="#s1">[S1]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      
+      
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      <h3>03　Agent的注意力、时间无限</h3>
+      <p>不能这样建模：代理仍需推理预算、工具调用额度和响应时限。能多读，不等于每次多读都有价值；任务设计应设置成本与延迟上限。</p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported fact">
+      <span class="badge unsupported">无证据推断</span>
+      <span class="badge fact">事实：广告产品公告</span>
+      <h3>04　机器不看广告，广告就消失</h3>
+      <p>爬虫忽略网页广告，不排除广告迁移到面向人的AI回答界面。OpenAI于<strong>2026-05-05</strong>公布广告投放扩展，已构成反例。<a class="cite" href="#s8">[S8]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="fact unsupported">
+      <span class="badge fact">事实：机制存在</span>
+      <span class="badge unsupported">收入推断未证实</span>
+      <h3>05　402收费≠创作者自动获利</h3>
+      <p>允许、屏蔽、收费的机制存在，Pay Per Crawl文档仍标为Beta；这里没有经核验的创作者收入。状态码或取得页面本身都不是版权许可。<a class="cite" href="#s3">[S3]</a> <a class="cite" href="#s4">[S4]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      <h3>06　上线首日就需要千万金融TPS</h3>
+      
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      <h3>07　代理购物意味着品牌终结</h3>
+      <p>推论不成立：用户偏好仍可成为代理约束，来源可信度、售后与保证也可影响选择。品牌能否从曝光优势转成风险承诺，需要另行验证。</p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      <h3>08　JSON／MD保证发现与收入</h3>
+      <p>格式只是交换层，不保证收录、采用或付款。商品数据还要有正确价格、库存与履约流程；格式合格不是订单保证。<a class="cite" href="#s9">[S9]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported">
+      <span class="badge unsupported">无证据推断</span>
+      <h3>09　开放协议消除全部平台依赖</h3>
+      <p>开放支付不等于开放分发。入口、排序、代理预算与商家准入仍可能集中；公开商务文档也保留合作方准入条件。<a class="cite" href="#s9">[S9]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="fact">
+      <span class="badge fact">事实：财务披露</span>
+      <h3>10　财务数字：不能混用口径</h3>
+      <p><strong>Alphabet 2025财年总营收4028.36亿美元</strong>，其中Google广告营收<strong>2946.91亿美元</strong>；Alphabet 2025年第四季度总营收<strong>1138.28亿美元</strong>。均为实际披露的营收，不是利润，季度也不是全年。<a class="cite" href="#s6">[S6]</a></p>
+    </article>
+
+    <article class="card audit-card" data-evidence="unsupported fact">
+      <span class="badge unsupported">无证据推断</span>
+      <span class="badge fact">事实：公司收入披露</span>
+      <h3>11　收入、盈利与市场上限不能混用</h3>
+      <p>Anthropic在<strong>2026-05-28</strong>称当月稍早年化收入节奏超过<strong>470亿美元</strong>，不等于确认的全年营收或利润；原文“能赚一些钱”不足以证明公司已盈利。<a class="cite" href="#s7">[S7]</a></p>
+      <p>随附“OpenAI与Anthropic合计1000亿美元”预测缺时点与口径，未获确认，“美国B2B SaaS 3500亿美元”缺可靠原始范围与年份；两者均不用作市场上限或定量图表。</p>
+    </article>
+
+    <article class="card audit-card" data-evidence="example">
+      <span class="badge example">说明性示例</span>
+      <h3>12　房间细节与情绪找歌证明新需求</h3>
+      
+    </article>
+  </div>
+</section>
+
+<section id="chains" class="report-section" aria-labelledby="title-chains" tabindex="-1">
+  <h2 id="title-chains"><span class="section-no">03 / 价值链</span>信息往哪走，钱不一定就往哪走</h2>
+  <p class="section-intro">下图是机制示意，不是市场份额图。青绿色表示信息，橙色表示资金；箭头方向明确，但分账金额与资金来源不能由访问量推出。</p>
+
+  <figure class="flow-figure">
+    <figcaption>旧链条示意｜广告资助的网页场景，并非旧互联网的唯一模式</figcaption>
+    <div class="flow-row">
+      <span class="flow-label">信息流</span>
+      <div class="flow-path">
+        <span class="node">内容方</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">搜索／社交入口</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">用户阅读</span>
+      </div>
+    </div>
+    <div class="flow-row money">
+      <span class="flow-label">资金流</span>
+      <div class="flow-path">
+        <span class="node">广告主</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">广告平台</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">内容方约定分成</span>
+      </div>
+    </div>
+  </figure>
+
+  <figure class="flow-figure">
+    <figcaption>新链条示意｜代理辅助、多种收费并存的场景</figcaption>
+    <div class="flow-row">
+      <span class="flow-label">信息流</span>
+      <div class="flow-path">
+        <span class="node">授权来源／商家</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">代理检索与核验</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">用户决策／商家履约</span>
+      </div>
+    </div>
+    <div class="flow-row money">
+      <span class="flow-label">资金流：仅在另有采购与分账约定时</span>
+      <div class="flow-path">
+        <span class="node">用户／商家／赞助方</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">代理应用／平台</span>
+        <span class="arrow" aria-hidden="true"><span class="arrow-wide">→</span><span class="arrow-narrow">↓</span></span>
+        <span class="node">约定付费的数据来源</span>
+      </div>
+    </div>
+  </figure>
+
+  <div class="grid payers">
+    <article class="card">
+      <h3>用户订阅</h3>
+      <p>用户→应用方；应用方再付推理与数据费。用户承担订阅价，超支先侵蚀应用方利润或补贴预算；不能假设每次抓取另有收入。</p>
+    </article>
+    <article class="card">
+      <h3>代理厂商采购</h3>
+      <p>代理厂商→API／数据卖方。用户未额外付费不代表信息免费；采购要消耗厂商预算，长期需由其业务收入覆盖。</p>
+    </article>
+    <article class="card">
+      <h3>商家成交佣金</h3>
+      <p>消费者→商家货款；商家→平台成交费。2025-09-29公告称商家按完成购买付小额费用、用户使用服务免费；这不是向每个被抓取出版商付款。<a class="cite" href="#s9">[S9]</a></p>
+    </article>
+    <article class="card">
+      <h3>面向人的赞助位</h3>
+      
+    </article>
+  </div>
+  <p class="note"><strong>经济归宿与激励：</strong>成交费首先减少商家净收入，能否转嫁价格不能预设。资本或其他业务补贴只是转移成本。买方有减少无效抓取的动力，卖方须证明边际信息价值；赞助位则应明确标注，避免污染答案依据。</p>
+</section>
+
+<section id="traffic" class="report-section" aria-labelledby="title-traffic" tabindex="-1">
+  <h2 id="title-traffic"><span class="section-no">04 / 流量分类</span>先分用途与权利，再讨论收费</h2>
+  
+  <div class="grid">
+    <article class="card">
+      
+      <p>用途是收集训练材料。应核对训练、保留与再利用范围；可测试数据集许可，不能把未来模型使用次数算成页面订单。</p>
+    </article>
+    <article class="card">
+      
+      <p>用途是建立可检索索引。应分别判断索引、摘要与回访价值；允许收录可能换来分发，但没有自动付款承诺。</p>
+    </article>
+    <article class="card">
+      <h3>用户触发的取数代理</h3>
+      <p>围绕当前任务取信息。需核验代理凭证、用户授权与预算；新鲜、可验证的数据才有值得测试的按次或许可收费场景。</p>
+    </article>
+    <article class="card">
+      
+      <p>攻击、滥用与越权访问应进入安全治理，而不是“潜在付费需求”。不要为凑流量把防护事件记作商业机会。</p>
+    </article>
+  </div>
+  
+</section>
+
+<section id="models" class="report-section" aria-labelledby="title-models" tabindex="-1">
+  <h2 id="title-models"><span class="section-no">05 / 商业模式</span>比较六种收费，而不是寻找万能答案</h2>
+  <p class="section-intro">下列“验证证据”是创业者需要收集的材料，不是本报告已有的经营实绩；不估算市场规模。</p>
+  <div class="grid models">
+    <article class="card">
+      <h3>订阅</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>个人或企业；席位月费、任务额度。</dd></div>
+        <div><dt>成立条件</dt><dd>重复任务持续有用，用户愿意续费。</dd></div>
+        <div><dt>主要风险</dt><dd>重度用户成本、闲置席位与流失。</dd></div>
+        <div><dt>可观察验证</dt><dd>实际续费、留存及每客户服务成本。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h3>API／数据许可</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>代理厂商、行业软件；调用或许可期。</dd></div>
+        <div><dt>成立条件</dt><dd>数据新鲜、权利清楚、替代成本高。</dd></div>
+        <div><dt>主要风险</dt><dd>缓存替代、再分发和持续维护成本。</dd></div>
+        <div><dt>可观察验证</dt><dd>付费数据试用、重复采购及来源采用率。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h3>按抓取收费</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>认证爬虫运营方；成功的收费抓取。<a class="cite" href="#s3">[S3]</a></dd></div>
+        <div><dt>成立条件</dt><dd>买方愿付且难以绕过有价值来源。</dd></div>
+        <div><dt>主要风险</dt><dd>免费替代、缓存抑制及Beta接入限制。</dd></div>
+        <div><dt>可观察验证</dt><dd>成功计费记录与到账对账，不只看请求。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h3>交易抽成</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>商家；完成购买后的成交费。<a class="cite" href="#s9">[S9]</a></dd></div>
+        <div><dt>成立条件</dt><dd>库存、履约、退款和归因形成闭环。</dd></div>
+        <div><dt>主要风险</dt><dd>退单、绕平台成交、补贴掩盖亏损。</dd></div>
+        <div><dt>可观察验证</dt><dd>扣退款净订单、增量毛利与佣金实收。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h3>赞助AI界面</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>广告主；面向人的展示或点击。<a class="cite" href="#s8">[S8]</a></dd></div>
+        <div><dt>成立条件</dt><dd>真实受众、清楚标识与可测增量效果。</dd></div>
+        <div><dt>主要风险</dt><dd>归因偏差、排序操纵与信任损失。</dd></div>
+        <div><dt>可观察验证</dt><dd>真实投放付款、对照转化与后续复投。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h3>托管结果服务</h3>
+      <dl class="pairs">
+        <div><dt>买家／计价单位</dt><dd>业务负责人；验收通过的任务或报告。</dd></div>
+        <div><dt>成立条件</dt><dd>范围可界定，结果可核验、可交付。</dd></div>
+        <div><dt>主要风险</dt><dd>人工兜底、范围蔓延、保证责任。</dd></div>
+        <div><dt>可观察验证</dt><dd>付费验收、工时记录及交付后复购。</dd></div>
+      </dl>
+    </article>
+  </div>
+
+  <details class="warning protocol" open>
+    <summary>协议边界：HTTP 402不是通用收银台</summary>
+    <div class="details-body">
+      <p>Pay Per Crawl于<strong>2025-07-01</strong>推出私测，以认证爬虫和402报价支持允许／屏蔽／收费。核验日文档仍列为Beta；收费内容每次复抓按配置收费，仅成功HTTP响应触发计费。<a class="cite" href="#s3">[S3]</a></p>
+      
+      <p>Cloudflare的官方收款文档采用Stripe，并向符合条件的内容方按月付款。机制分析：逐次计费可以先记账，再汇总结算；不需要把每个HTTP访问当成独立资金清算。<a class="cite" href="#s12">[S12]</a></p>
+    </div>
+  </details>
+  <aside class="note">
+    <h3>市场已有起点，通用底座已有竞争</h3>
+    <p>OpenAI与Financial Times在2024年宣布内容合作，说明授权信息并非纯粹未来设想；公告没有给出可验证的普通创作者收益。TollBit也已提供按页面设定访问许可与价格的工具。小团队需要证明自己的数据、维护或核验价值，不能把“402尚待普及”当成没有竞争。<a class="cite" href="#s11">[S11]</a></p>
+  </aside>
+</section>
+
+<section id="economics" class="report-section" aria-labelledby="title-economics" tabindex="-1">
+  <h2 id="title-economics"><span class="section-no">06 / 交互经济账</span>同一笔内容费，是买方成本与卖方毛收入</h2>
+  <p class="section-intro">默认值全部为<strong>纯情景假设</strong>，不是行业均值或需求预测。金额单位为美元（US$）。贡献仅扣下述两类成本，不是净利润。</p>
+
+  <code class="formula">付费抓取 = N × F × q × (1 − h)</code>
+  <code class="formula">成本 = N × c + N × F × q × (1 − h) × p<br>贡献 = N × r − 成本；贡献率 = 贡献 ÷ (N × r)</code>
+  <p class="small">F是缓存前的候选抓取数；q是候选中需付费的比例；h是候选付费抓取在买方缓存的命中率。假设未命中的收费抓取均成功计费，失败响应不计入。不要对已扣缓存的F再扣一次缓存。<a class="cite" href="#s3">[S3]</a></p>
+
+  <noscript>
+    <p class="warning">脚本未启用：公式、默认输入与默认结果仍可阅读；计算与筛选增强不可用。</p>
+  </noscript>
+
+  <div id="econ-form" role="group" aria-describedby="calc-exclusions">
+    <fieldset id="econ-fields" disabled>
+      <legend>调整任务规模、信息采购与单任务收入</legend>
+      <div class="calc-grid">
+        <div>
+          <label for="N">月任务数 N（次／月）</label>
+          <input id="N" name="N" type="number" inputmode="numeric" value="10000" min="0" max="1000000000" step="1" required aria-describedby="hint-N error-N">
+          <span id="hint-N" class="hint">0–10亿，整数。</span>
+          <p id="error-N" class="field-error"></p>
+        </div>
+        <div>
+          <label for="F">每任务候选抓取 F（次）</label>
+          <input id="F" name="F" type="number" inputmode="numeric" value="100" min="0" max="1000000" step="1" required aria-describedby="hint-F error-F">
+          <span id="hint-F" class="hint">0–100万，整数；缓存前。</span>
+          <p id="error-F" class="field-error"></p>
+        </div>
+        <div>
+          <label for="q">需付费比例 q（0–1）</label>
+          <input id="q" name="q" type="number" inputmode="decimal" value="0.2" min="0" max="1" step="any" required aria-describedby="hint-q error-q">
+          <span id="hint-q" class="hint">0.2表示20%，不是20。</span>
+          <p id="error-q" class="field-error"></p>
+        </div>
+        <div>
+          <label for="h">买方缓存命中率 h（0–1）</label>
+          <input id="h" name="h" type="number" inputmode="decimal" value="0.8" min="0" max="1" step="any" required aria-describedby="hint-h error-h">
+          <span id="hint-h" class="hint">仅指避免再次付费抓取的缓存。</span>
+          <p id="error-h" class="field-error"></p>
+        </div>
+        <div>
+          <label for="p">付费抓取单价 p（美元／次）</label>
+          <input id="p" name="p" type="number" inputmode="decimal" value="0.001" min="0" max="1000000" step="any" required aria-describedby="hint-p error-p">
+          <span id="hint-p" class="hint">0–100万，可输入微小数。</span>
+          <p id="error-p" class="field-error"></p>
+        </div>
+        <div>
+          <label for="c">推理成本 c（美元／任务）</label>
+          <input id="c" name="c" type="number" inputmode="decimal" value="0.05" min="0" max="1000000" step="any" required aria-describedby="hint-c error-c">
+          <span id="hint-c" class="hint">0–100万，不含内容采购。</span>
+          <p id="error-c" class="field-error"></p>
+        </div>
+        <div>
+          <label for="r">平均营收 r（美元／任务）</label>
+          <input id="r" name="r" type="number" inputmode="decimal" value="0.2" min="0" max="1000000" step="any" required aria-describedby="hint-r error-r">
+          <span id="hint-r" class="hint">0–100万；按全部任务摊薄。</span>
+          <p id="error-r" class="field-error"></p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" type="button">计算结果</button>
+        <button type="button" data-cache="0.95">仅改h：高缓存0.95</button>
+        <button type="button" data-cache="0">仅改h：无缓存0</button>
+        <button id="reset-econ" type="button">恢复默认情景</button>
+      </div>
+    </fieldset>
+  </div>
+
+  <p id="calc-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p id="calc-status" class="calc-status">默认情景：付费抓取40,000次，贡献US$1,460.00，贡献率73%。</p>
+
+  <h3>代理买方｜每月经营贡献</h3>
+  <dl class="results" aria-label="代理买方计算结果">
+    <div>
+      <dt id="label-paid">付费抓取（期望次数／月）</dt>
+      <dd><output id="out-paid" for="N F q h" aria-labelledby="label-paid" aria-live="off">40,000</output></dd>
+    </div>
+    <div>
+      <dt id="label-content">内容采购成本</dt>
+      <dd><output id="out-content" for="N F q h p" aria-labelledby="label-content" aria-live="off">US$ 40.00</output></dd>
+    </div>
+    <div>
+      <dt id="label-inference">推理成本</dt>
+      <dd><output id="out-inference" for="N c" aria-labelledby="label-inference" aria-live="off">US$ 500.00</output></dd>
+    </div>
+    <div>
+      <dt id="label-revenue">月营收</dt>
+      <dd><output id="out-revenue" for="N r" aria-labelledby="label-revenue" aria-live="off">US$ 2,000.00</output></dd>
+    </div>
+    <div id="contribution-tile" class="positive">
+      <dt id="label-contribution">贡献金额：非净利润</dt>
+      <dd><output id="out-contribution" for="N F q h p c r" aria-labelledby="label-contribution" aria-live="off">US$ 1,460.00</output></dd>
+    </div>
+    <div id="ratio-tile" class="positive">
+      <dt id="label-ratio">贡献率：营收为零显示“--”</dt>
+      <dd><output id="out-ratio" for="N F q h p c r" aria-labelledby="label-ratio" aria-live="off">73%</output></dd>
+    </div>
+  </dl>
+
+  <p class="budget">两项成本合计：<output id="out-cost" for="N F q h p c" aria-label="月成本合计" aria-live="off">US$ 540.00</output>。覆盖推理后、未计其他费用的<strong>不亏损内容预算上限</strong>：<output id="out-budget" for="N c r" aria-label="买方内容预算上限" aria-live="off">US$ 1,500.00</output>。<span id="budget-note">这是算术上限，不是采购承诺。</span></p>
+
+  <aside class="note ledger" aria-labelledby="seller-title">
+    <h3 id="seller-title">来源卖方｜合计计费额，不是每家收入</h3>
+    <p>所有参与来源的理论毛收入合计：<strong><output id="out-seller" for="N F q h p" aria-label="来源卖方合计理论毛收入" aria-live="off">US$ 40.00</output></strong>。只有全部计费访问属于同一卖方且足额收回，才可视为该卖方毛收入；还须扣采集、维护、带宽与平台费用。</p>
+  </aside>
+
+  <p id="calc-exclusions" class="small warning">未计退款、获客成本（CAC）、人工、支付手续费、税费、运维与固定开支。输入上限仅为计算护栏，不代表产业容量。比例计算的次数可为小数，显示会四舍五入；极大或极小数用科学计数法，结果不用于财务记账。</p>
+
+  <p class="note"><strong>微支付的数量级：</strong>纯算术上，US$0.000001 × 10亿次已付费访问 = US$1,000毛收入，尚未扣成本。批量结算可以减少结算笔数，不能制造信息价值；10亿HTTP请求不等于10亿次金融清算。买方缓存减少实际复抓才会降账单，边际信息价值下降也会促使买方少抓。<a class="cite" href="#s3">[S3]</a> <a class="cite" href="#s5">[S5]</a></p>
+</section>
+
+<section id="assets" class="report-section" aria-labelledby="title-assets" tabindex="-1">
+  <h2 id="title-assets"><span class="section-no">07 / 内容与品牌</span>可维护、可追溯、可担责，比改格式更重要</h2>
+  
+
+  <dl class="record" aria-label="假设酒店记录的必要字段">
+    <div>
+      <dt>对象与日期</dt>
+      <dd>房间／房型标识、观察日期与适用期间；不包含住客资料。</dd>
+    </div>
+    <div>
+      <dt>朝向与来源</dt>
+      <dd>朝向值、酒店授权说明或实地核验依据；未知就留空。</dd>
+    </div>
+    <div>
+      <dt>权利与置信度</dt>
+      
+    </div>
+    <div>
+      <dt>维护与溯源</dt>
+      <dd>最近更新时间、复核周期、版本及原始依据的可追溯关系。</dd>
+    </div>
+  </dl>
+
+  <p class="note">应测试的资产是<strong>新鲜度、稀缺一手数据、核验能力、信任品牌与纠错保证</strong>。只处理公开且有权使用或明确授权的数据；不得越过凭证与访问权限抓取私有材料。代理有预算和延迟约束，客户对品牌、舒适度与服务的偏好仍应被尊重。</p>
+  
+</section>
+
+<section id="opportunities" class="report-section" aria-labelledby="title-opportunities" tabindex="-1">
+  <h2 id="title-opportunities"><span class="section-no">08 / 机会假设矩阵</span>五个窄切口，先核实谁真正买单</h2>
+  <p class="section-intro"><strong>全部是假设，尚非已验证市场。</strong>付款角色需在访谈中找到真人与预算。优先验证维护型垂直数据、核验决策服务；通用支付设施放在已出现账单之后。下列数量均为建议实验阈值，不是行业基准。</p>
+
+  <div class="grid opportunities">
+    <article class="card">
+      <span class="badge example">假设A · 维护型数据</span>
+      <h3>小型展会日程变更数据</h3>
+      <dl class="pairs">
+        <div><dt>付款／结果</dt><dd>参展企业销售运营负责人；交付带来源的改期、取消与报名状态。</dd></div>
+        <div><dt>替代／壁垒</dt><dd>官网与人工表格；候选壁垒是授权来源关系和更新追溯。</dd></div>
+        <div><dt>成本</dt><dd>逐条确认、纠错与持续维护。</dd></div>
+        <div><dt>首验／停止</dt><dd>向2个团队试售20条维护记录；无人付费或无需更新就停止扩建。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <span class="badge example">假设B · 授权事实包</span>
+      <h3>酒店房型事实维护</h3>
+      <dl class="pairs">
+        <div><dt>付款／结果</dt><dd>精品酒店直销负责人；交付有授权、可复核的房型信息。</dd></div>
+        <div><dt>替代／壁垒</dt><dd>酒店网页与电话确认；候选壁垒是一手核验和版本更新。</dd></div>
+        <div><dt>成本</dt><dd>获取授权、现场或远程复核、变更跟踪。</dd></div>
+        <div><dt>首验／停止</dt><dd>争取1家付费维护10条记录；拒绝授权或无人承担维护费即停。</dd></div>
+      </dl>
+    </article>
+
+    
+
+    <article class="card">
+      <span class="badge example">假设D · 商家运营</span>
+      <h3>单类目商品数据维护</h3>
+      <dl class="pairs">
+        <div><dt>付款／结果</dt><dd>小商家电商负责人；交付价格、库存与履约字段一致的商品feed。<a class="cite" href="#s9">[S9]</a></dd></div>
+        <div><dt>替代／壁垒</dt><dd>现有插件与表格；候选壁垒是类目校验与维护流程，不是JSON本身。</dd></div>
+        <div><dt>成本</dt><dd>接口适配、准入核对和异常处理。</dd></div>
+        <div><dt>首验／停止</dt><dd>1家付费修复20条记录；原生工具等效且无额外价值就停。</dd></div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <span class="badge example">假设E · 已有账单服务</span>
+      <h3>授权取数账单核对</h3>
+      <dl class="pairs">
+        <div><dt>付款／结果</dt><dd>已有数据采购支出的代理团队财务／运营负责人；交付计费差异清单。</dd></div>
+        <div><dt>替代／壁垒</dt><dd>厂商面板、自建脚本；候选壁垒是跨来源对账与审计轨迹。</dd></div>
+        <div><dt>成本</dt><dd>授权日志接入、对账及争议支持。</dd></div>
+        <div><dt>首验／停止</dt><dd>付费核对100条事件与实际账单；找不到现有付费买家或可用差异就停。</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section id="validation" class="report-section" aria-labelledby="title-validation" tabindex="-1">
+  <h2 id="title-validation"><span class="section-no">09 / 十四天验证</span>用购买、结果与复购替代宏观想象</h2>
+  <p class="section-intro">这是从项目启动日起计算的建议计划。未执行自动外联，访谈、付款与复购数据均未提供。</p>
+
+  <div class="steps">
+    <article class="step">
+      <p class="step-label">第1–3天</p>
+      <div>
+        <h3>访谈5位实际目标客户</h3>
+        <p>核对最近一次具体任务、现有替代、预算与购买权限；区分使用者和付款人。只汇总去标识的业务指标，不收集无关身份资料。</p>
+      </div>
+    </article>
+    <article class="step">
+      <p class="step-label">第4–6天</p>
+      <div>
+        <h3>出售限额付费原型</h3>
+        <p>只选一个任务，确认数据使用范围、报价、验收与退款约定。人工辅助交付也可以，先验证结果，不先搭平台。</p>
+      </div>
+    </article>
+    <article class="step">
+      <p class="step-label">第7–10天</p>
+      <div>
+        <h3>完成小规模试点</h3>
+        <p>争取2个付费试点，逐单记录购买金额、验收结果、抓取和缓存、推理费、工时、退款与支付费；与原有方法比较。</p>
+      </div>
+    </article>
+    <article class="step">
+      <p class="step-label">第11–14天</p>
+      <div>
+        <h3>复购测试与停止决策</h3>
+        <p>提出下一批付费交付，核对复购与完整成本后的贡献。长采购周期或口头赞同不能写作已验证需求。</p>
+      </div>
+    </article>
+  </div>
+
+  <p class="note"><strong>建议成功门槛，非行业基准：</strong>5位客户中至少2位实际付款，至少1位交付后复购；约定样本验收率≥90%，计入人工、退款与手续费后单笔贡献为正。小样本不外推市场。第14天没有付款信号，就停止扩建并重选问题或买家。</p>
+  <p class="warning"><strong>可能推翻项目的情景：</strong>集中式代理绕过付费来源，缓存压低收费访问，现有协议使支付能力同质化，排序操纵损伤品牌信任。分别跟踪来源被跳过率、每任务付费调用、替代报价、投诉与纠错；不要把失败归咎于“流量还不够大”。</p>
+</section>
+
+<section id="sources" class="report-section" aria-labelledby="title-sources" tabindex="-1">
+  <h2 id="title-sources"><span class="section-no">10 / 来源与研究边界</span>原始披露支持什么，也不支持什么</h2>
+  <p class="section-intro">访问与证据核验日期统一为<strong>2026-10-07</strong>。链接主动点击后才访问外部网站；本页无远程加载、数据上传或后台请求。</p>
+
+  <div class="sources" role="doc-bibliography">
+    <article id="s1" class="source" tabindex="-1">
+      <h3>[S1] Cloudflare 2026年度创始人信</h3>
+      <a href="https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/" rel="noreferrer">官方原文 · Cloudflare Blog</a>
+      <p>仅用于“2026年5月超过人类”与“趋势持续时五年后1000倍”两项厂商陈述；非独立全球审计。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s2" class="source" tabindex="-1">
+      
+      <a href="https://developers.cloudflare.com/radar/concepts/bot-classes/" rel="noreferrer">Radar Bot classes</a><br>
+      <a href="https://developers.cloudflare.com/bots/concepts/bot-score/" rel="noreferrer">Bot score技术文档</a>
+      <p>支持分数阈值及机器学习分类解释，不证明请求者身份、AI占比或商业需求。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s3" class="source" tabindex="-1">
+      <h3>[S3] Pay Per Crawl发布与计费规则</h3>
+      <a href="https://blog.cloudflare.com/introducing-pay-per-crawl/" rel="noreferrer">2025-07-01私测发布</a><br>
+      <a href="https://developers.cloudflare.com/ai-crawl-control/features/pay-per-crawl/faq/" rel="noreferrer">官方FAQ · Beta状态与复抓收费</a>
+      <p>支持访问控制、认证、报价及成功响应计费规则；不证明创作者收入或版权授权。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s4" class="source" tabindex="-1">
+      <h3>[S4] RFC 9110，15.5.3节</h3>
+      <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.3" rel="noreferrer">HTTP 402 Payment Required</a>
+      <p>2022年6月HTTP标准；402保留供未来使用，未给出普遍互通的支付清算规范。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s5" class="source" tabindex="-1">
+      <h3>[S5] x402批量结算介绍</h3>
+      <a href="https://x402.org/x402-batch-settlement/" rel="noreferrer">2026-05-11协议推广方原文</a>
+      <p>支持密码学凭证与批量结算机制的介绍，不是独立千万金融TPS测试，也不证明与Pay Per Crawl自动互通。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s6" class="source" tabindex="-1">
+      <h3>[S6] Alphabet 2025财务披露</h3>
+      <a href="https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm" rel="noreferrer">SEC · 2025财年Form 10-K</a><br>
+      <a href="https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/googexhibit991q42025.htm" rel="noreferrer">补充核对Q4：2026-02-04业绩公告附件99.1</a>
+      <p>年报支持全年及广告营收；季度值由补充公告核对，其季度附表标为未经审计。营收不等于利润。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s7" class="source" tabindex="-1">
+      <h3>[S7] Anthropic公司声明</h3>
+      <a href="https://www.anthropic.com/news/series-h" rel="noreferrer">2026-05-28 Series H公告</a>
+      <p>支持公司对年化收入节奏的陈述；不证明已确认全年营收或Claude盈利，也不支持随附市场上限推断。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s8" class="source" tabindex="-1">
+      <h3>[S8] OpenAI广告投放公告</h3>
+      <a href="https://openai.com/index/new-ways-to-buy-chatgpt-ads/" rel="noreferrer">2026-05-05 · ChatGPT广告购买方式</a>
+      <p>支持面向人的AI界面存在广告投放；不提供本报告所需的独立投放收益或资助概率。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s9" class="source" tabindex="-1">
+      <h3>[S9] OpenAI商务公告与开发文档</h3>
+      <a href="https://openai.com/index/buy-it-in-chatgpt/" rel="noreferrer">2025-09-29 · Instant Checkout发布</a><br>
+      <a href="https://developers.openai.com/commerce/guides/key-concepts" rel="noreferrer">商务关键概念 · 商品feed与商家流程</a>
+      <p>支持公告时的商家成交费、用户免费，以及商品、库存、履约和退售后责任；不证明当前广泛采用或盈利。访问：2026-10-07。</p>
+    </article>
+
+    <article id="s10" class="source" tabindex="-1">
+      <h3>[S10] 补充背景：既有情绪选歌场景</h3>
+      <a href="https://newsroom.spotify.com/2019-05-30/a-day-in-the-life-based-on-the-playlists-you-listen-to/" rel="noreferrer">Spotify · 2019-05-30歌单与收听观察</a>
+      
+    </article>
+  </div>
+
+  <div class="sources">
+    <article id="s11" class="source" tabindex="-1">
+      <h3>[S11] 内容合作与现有许可工具</h3>
+      <p>用途：证明合作与工具存在。合同金额、普通创作者收益及规模化盈利未在本报告核验。访问：2026-10-07。</p>
+      <a href="https://openai.com/index/content-partnership-with-financial-times/" rel="noreferrer">OpenAI与FT · 2024-04-29</a><br>
+      <a href="https://docs.tollbit.com/docs/setting-rates" rel="noreferrer">TollBit · 设置访问许可与价格</a>
+    </article>
+    <article id="s12" class="source" tabindex="-1">
+      <h3>[S12] Cloudflare · 收款与结算</h3>
+      
+      <a href="https://developers.cloudflare.com/ai-crawl-control/features/pay-per-crawl/use-pay-per-crawl-as-site-owner/manage-payouts/" rel="noreferrer">Manage payouts · 官方文档</a>
+    </article>
+  </div>
+
+  <div class="warning">
+    <p><strong>原始材料缺口：</strong>视频原始URL、发布日期与作者不可得；本报告按随附转录要点重建抽象论证，不能核验原视频语境，也不粘贴整段转录。</p>
+    
+  </div>
+</section>
+
+
+
+</main>
+
+<footer class="shell footer">
+  <p>本报告区分披露事实、条件预测与创业假设。情景计算不代表实际收入；计算器只在本页运行，不保存输入。</p>
+  <p><a href="#main">返回正文开头</a> · 键盘可用Tab定位控件，Enter执行按钮；原生下拉框与折叠说明支持键盘操作。</p>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  // 仅操作本页DOM；不请求网络，不存储输入，不执行客户外联。
+  const defaults = Object.freeze({
+    N: 10000,
+    F: 100,
+    q: 0.2,
+    h: 0.8,
+    p: 0.001,
+    c: 0.05,
+    r: 0.2
+  });
+
+  const keys = Object.keys(defaults);
+  const fields = Object.fromEntries(
+    keys.map(key => [key, document.getElementById(key)])
+  );
+  const form = document.getElementById('econ-form');
+  const status = document.getElementById('calc-status');
+  const results = [
+    'paid', 'content', 'inference', 'revenue', 'contribution',
+    'ratio', 'cost', 'budget', 'seller'
+  ];
+
+  const numberFormat = new Intl.NumberFormat('zh-CN', {
+    maximumFractionDigits: 3
+  });
+  const moneyFormat = new Intl.NumberFormat('zh-CN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6
+  });
+  const ratioFormat = new Intl.NumberFormat('zh-CN', {
+    maximumFractionDigits: 2
+  });
+
+  const number = value => {
+    const absolute = Math.abs(value);
+    return value !== 0 && (absolute < 0.001 || absolute >= 1e12)
+      ? value.toExponential(4)
+      : numberFormat.format(value);
+  };
+
+  const money = value => {
+    const absolute = Math.abs(value);
+    return 'US$ ' + (
+      value !== 0 && (absolute < 0.000001 || absolute >= 1e12)
+        ? value.toExponential(4)
+        : moneyFormat.format(Object.is(value, -0) ? 0 : value)
+    );
+  };
+
+  const write = (name, value) => {
+    document.getElementById('out-' + name).textContent = value;
+  };
+
+  function clearResults(message) {
+    results.forEach(name => write(name, '--'));
+    document.getElementById('budget-note').textContent =
+      '输入无效，暂不计算预算。';
+
+    ['contribution-tile', 'ratio-tile'].forEach(id => {
+      document.getElementById(id).classList.remove('positive', 'negative');
+    });
+
+    status.textContent = message;
+  }
+
+  function calculate(announce = false) {
+    const values = {};
+    const invalid = [];
+
+    keys.forEach(key => {
+      const input = fields[key];
+      const value = input.valueAsNumber;
+      let error = '';
+
+      if (input.value.trim() === '' || !Number.isFinite(value)) {
+        error = '请输入有效数字，不能留空。';
+      } else if (
+        value < Number(input.min) ||
+        value > Number(input.max)
+      ) {
+        error = '须在 ' + input.min + ' 与 ' + input.max + ' 之间。';
+      } else if (
+        (key === 'N' || key === 'F') &&
+        !Number.isInteger(value)
+      ) {
+        error = '任务数与候选抓取次数须为整数。';
+      }
+
+      document.getElementById('error-' + key).textContent = error;
+      input.setAttribute('aria-invalid', String(Boolean(error)));
+
+      if (error) {
+        invalid.push(input);
+      } else {
+        values[key] = value;
+      }
+    });
+
+    if (invalid.length) {
+      const first = invalid[0];
+      clearResults(
+        '有 ' + invalid.length + ' 项输入需修正，结果已清空。' +
+        first.labels[0].textContent + '：' +
+        document.getElementById('error-' + first.id).textContent
+      );
+      if (announce) {
+        document.getElementById('calc-announcement').textContent = status.textContent;
+        first.focus();
+      }
+      return;
+    }
+
+    const {N, F, q, h, p, c, r} = values;
+
+    // 同一计费事件在买方侧是内容成本，在来源合计侧是理论毛收入。
+    const paid = N * F * q * (1 - h);
+    const content = paid * p;
+    const inference = N * c;
+    const revenue = N * r;
+    const cost = inference + content;
+    const contribution = revenue - cost;
+    const budget = Math.max(0, revenue - inference);
+
+    if (
+      ![paid, content, inference, revenue, cost, contribution, budget]
+        .every(Number.isFinite)
+    ) {
+      clearResults('结果超出可计算范围，请缩小输入。');
+      return;
+    }
+
+    // 零营收不定义贡献率；极小非零营收也需防止比值溢出。
+    const rate = revenue === 0 ? null : contribution / revenue * 100;
+
+    if (rate !== null && !Number.isFinite(rate)) {
+      clearResults('营收过小，贡献率超出数值范围，请调整输入。');
+      return;
+    }
+
+    const ratio = rate === null ? '--' : ratioFormat.format(rate) + '%';
+
+    write('paid', number(paid));
+    write('content', money(content));
+    write('inference', money(inference));
+    write('revenue', money(revenue));
+    write('contribution', money(contribution));
+    write('ratio', ratio);
+    write('cost', money(cost));
+    write('budget', money(budget));
+    write('seller', money(content));
+
+    document.getElementById('budget-note').textContent =
+      inference > revenue
+        ? '推理成本已超过营收，即使内容免费仍有缺口。'
+        : '这是算术上限，不是采购承诺。';
+
+    ['contribution-tile', 'ratio-tile'].forEach(id => {
+      const tile = document.getElementById(id);
+      tile.classList.toggle('negative', contribution < 0);
+      tile.classList.toggle('positive', contribution >= 0 && revenue > 0);
+    });
+
+    status.textContent =
+      (announce ? '计算结果：' : '已按当前输入更新：') +
+      '付费抓取 ' + number(paid) + ' 次，贡献 ' +
+      money(contribution) + '，贡献率 ' +
+      (revenue === 0 ? '--（营收为零，不定义）' : ratio) + '。';
+    if (announce) document.getElementById('calc-announcement').textContent = status.textContent;
+  }
+
+  form.querySelector('button.primary').addEventListener('click', event => {
+    event.preventDefault();
+    calculate(true);
+  });
+
+  keys.forEach(key => {
+    fields[key].addEventListener('input', () => calculate(false));
+  });
+
+  document.getElementById('reset-econ').addEventListener('click', () => {
+    keys.forEach(key => {
+      fields[key].value = String(defaults[key]);
+    });
+    calculate(true);
+  });
+
+  document.querySelectorAll('[data-cache]').forEach(button => {
+    button.addEventListener('click', () => {
+      fields.h.value = button.dataset.cache;
+      calculate(true);
+    });
+  });
+
+  // 事件绑定成功后才启用编辑；无JS时保留可阅读的默认情景。
+  document.getElementById('econ-fields').disabled = false;
+  calculate(false);
+
+  const cards = Array.from(
+    document.querySelectorAll('[data-evidence]')
+  );
+
+  document.getElementById('evidence-filter')
+    .addEventListener('change', event => {
+      let visible = 0;
+
+      cards.forEach(card => {
+        const show =
+          event.target.value === 'all' ||
+          card.dataset.evidence.split(' ').includes(event.target.value);
+
+        card.hidden = !show;
+        if (show) visible++;
+      });
+
+      document.getElementById('audit-count').textContent =
+        '显示 ' + visible + ' / ' + cards.length + ' 项';
+    });
+
+  document.getElementById('audit-tools').hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="将知识、经验、见识、资源与能量连接到客户验证，区分匿名自述、研究证据与可执行建议的独立经营研究报告。" name="description"/>
+<title>学习赚钱的五板块系统：从个人成长到真实商业闭环</title>
+<style>
+/*
+ * 设计约定：颜色、字体、尺寸、间距、图表比例与布局轨道统一在 :root 定义。
+ * 组件规则只引用令牌；display、position 等结构性关键字不是视觉尺度。
+ * 唯一宽度断点为 760px，集中在样式表末尾。--breakpoint-editorial 是文档令牌；
+ * 原生 @media 不能读取 CSS 自定义属性，因此媒体查询仅在该处写一次字面值。
+ * 移动端为默认布局；不锁定页面宽度、不裁切横向溢出来掩盖布局问题。
+ */
+:root {
+  color-scheme: light;
+
+  --color-paper: #f5f1e7;
+  --color-surface: #fffdf7;
+  --color-ink: #193c31;
+  --color-muted: #56665b;
+  --color-forest: #183e32;
+  --color-on-forest: #fff8e9;
+  --color-on-forest-muted: #d5e0d4;
+  --color-accent: #ac471e;
+  --color-accent-soft: #f6e5d6;
+  --color-mint: #e7eee4;
+  --color-rule: #cdd5c7;
+  --color-focus: #9c3b14;
+  --color-link-hover: #753313;
+  --color-shadow: rgb(25 60 49 / 0.05);
+  --color-svg-line: var(--color-accent);
+  --color-chart-primary: var(--color-forest);
+  --color-chart-secondary: var(--color-accent);
+
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-serif: ui-serif, "Songti SC", "STSong", "SimSun", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-caption: 0.8125rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: 1.125rem;
+  --text-card-title: 1.375rem;
+  --text-section: clamp(1.625rem, 2.6vw, 2.375rem);
+  --text-display: clamp(2.15rem, 4.3vw, 3.875rem);
+  --text-subtitle: clamp(1.25rem, 2.5vw, 2rem);
+  --text-marker: 2.25rem;
+  --text-hero-number: 4.25rem;
+  --weight-regular: 400;
+  --weight-medium: 600;
+  --weight-bold: 700;
+  --leading-body: 1.85;
+  --leading-compact: 1.6;
+  --leading-heading: 1.3;
+  --leading-solid: 1;
+  --tracking-kicker: 0.1em;
+
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-18: 4.5rem;
+  --space-22: 5.5rem;
+
+  --size-full: 100%;
+  --width-page: 78rem;
+  --width-reading: 70ch;
+  --control-min: 2.875rem;
+  --icon-inline: 1.25rem;
+  --icon-block: 2rem;
+
+  --rule-width: 1px;
+  --accent-rule-width: 4px;
+  --focus-width: 3px;
+  --focus-offset: 4px;
+  --underline-width: 1px;
+  --underline-offset: 0.2em;
+  --radius-zero: 0;
+  --radius-small: 0.375rem;
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+  --shadow-card: 0 0.25rem 1.25rem var(--color-shadow);
+  --stroke-svg: 2;
+
+  --a11y-pixel: 1px;
+  --a11y-clip: inset(50%);
+  --skip-rest: translateY(-220%);
+  --skip-active: translateY(0);
+  --layer-skip: 10;
+
+  --grid-one: minmax(0, 1fr);
+  --grid-two: repeat(2, minmax(0, 1fr));
+  --grid-three: repeat(3, minmax(0, 1fr));
+  --grid-five: repeat(5, minmax(0, 1fr));
+  --grid-seven: repeat(7, minmax(0, 1fr));
+  --grid-hero-wide: minmax(0, 1.8fr) minmax(0, 1fr);
+  --grid-span-all: 1 / -1;
+
+  --claim-width: 28%;
+  --claim-status-width: 17%;
+  --mentor-width: 22%;
+  --source-name-width: 23%;
+  --source-date-width: 18%;
+  --source-coverage-width: 31%;
+
+  --chart-height: 0.875rem;
+  /* 图表数据映射：共同绘图区为 0%—40%，30/40=75%，11/40=27.5%。 */
+  --chart-initiative-width: 75%;
+  --chart-traditional-width: 27.5%;
+
+  --breakpoint-editorial: 760px;
+
+  /* 移动端语义别名；桌面只在文末唯一媒体查询内重定向。 */
+  --page-gutter: var(--space-5);
+  --section-space: var(--space-14);
+  --card-padding: var(--space-5);
+  --hero-space: var(--space-12);
+  --hero-columns: var(--grid-one);
+  --content-columns: var(--grid-one);
+  --map-columns: var(--grid-one);
+  --loop-columns: var(--grid-one);
+  --legend-columns: var(--grid-one);
+  --basics-columns: var(--grid-one);
+  --audit-columns: var(--grid-one);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--color-paper); }
+
+body {
+  margin: var(--space-0);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  overflow-wrap: anywhere;
+}
+
+h1, h2, h3, h4, p, figure, dl { margin: var(--space-0); }
+
+h1, h2 {
+  font-family: var(--font-serif);
+  line-height: var(--leading-heading);
+  font-weight: var(--weight-bold);
+}
+
+h2 { font-size: var(--text-section); }
+
+h3 {
+  font-size: var(--text-card-title);
+  line-height: var(--leading-heading);
+}
+
+h4 {
+  font-size: var(--text-body);
+  line-height: var(--leading-compact);
+}
+
+p + p { margin-block-start: var(--space-3); }
+strong, dt { font-weight: var(--weight-bold); }
+dd { margin: var(--space-0); }
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: var(--underline-width);
+  text-underline-offset: var(--underline-offset);
+}
+
+a:hover { color: var(--color-link-hover); }
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+[id] { scroll-margin-block-start: var(--space-6); }
+button, select { font: inherit; }
+button, summary { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+
+button {
+  min-block-size: var(--control-min);
+  padding: var(--space-3) var(--space-5);
+  border: var(--rule-width) solid var(--color-forest);
+  border-radius: var(--radius-small);
+  background: var(--color-forest);
+  color: var(--color-on-forest);
+  font-weight: var(--weight-medium);
+  white-space: normal;
+}
+
+button:hover:not(:disabled) { background: var(--color-ink); }
+
+button:disabled {
+  background: var(--color-mint);
+  color: var(--color-muted);
+  border-color: var(--color-rule);
+}
+
+select {
+  display: block;
+  inline-size: var(--size-full);
+  min-inline-size: var(--space-0);
+  min-block-size: var(--control-min);
+  padding: var(--space-2);
+  border: var(--rule-width) solid var(--color-muted);
+  border-radius: var(--radius-small);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  font-size: var(--text-body);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  overflow-wrap: anywhere;
+}
+
+.container {
+  inline-size: calc(var(--size-full) - var(--page-gutter) - var(--page-gutter));
+  max-inline-size: var(--width-page);
+  margin-inline: auto;
+  min-inline-size: var(--space-0);
+}
+
+.skip-link {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-start: var(--page-gutter);
+  z-index: var(--layer-skip);
+  transform: var(--skip-rest);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--radius-small);
+}
+
+.skip-link:focus { transform: var(--skip-active); }
+
+.hero {
+  padding-block: var(--hero-space);
+  background: var(--color-forest);
+  color: var(--color-on-forest);
+}
+
+.hero-layout {
+  display: grid;
+  grid-template-columns: var(--hero-columns);
+  gap: var(--space-10);
+  align-items: end;
+}
+
+.eyebrow {
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-kicker);
+}
+
+.hero .eyebrow, .hero-meta { color: var(--color-on-forest-muted); }
+
+h1 {
+  margin-block: var(--space-5);
+  font-size: var(--text-display);
+}
+
+.title-primary, .title-secondary { display: block; }
+
+.title-secondary {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-subtitle);
+}
+
+.hero-lead {
+  max-inline-size: var(--width-reading);
+  font-size: var(--text-lead);
+}
+
+.hero-meta {
+  margin-block-start: var(--space-6);
+  font-size: var(--text-small);
+}
+
+.hero-note {
+  padding: var(--card-padding);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-radius: var(--radius-card);
+}
+
+.hero-note-number {
+  display: block;
+  color: var(--color-accent);
+  font-family: var(--font-serif);
+  font-size: var(--text-hero-number);
+  line-height: var(--leading-solid);
+  margin-block-end: var(--space-4);
+}
+
+.hero-note p { font-size: var(--text-small); }
+
+.toc {
+  padding-block: var(--space-5);
+  border-block-end: var(--rule-width) solid var(--color-rule);
+}
+
+.toc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-0);
+  padding: var(--space-0);
+  list-style: none;
+}
+
+.toc a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--control-min);
+  padding: var(--space-2) var(--space-3);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: var(--text-small);
+}
+
+.toc a:hover { background: var(--color-mint); }
+
+.report-section {
+  padding-block: var(--section-space);
+  border-block-end: var(--rule-width) solid var(--color-rule);
+}
+
+.section-heading { margin-block-end: var(--space-7); }
+
+.section-index {
+  display: block;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-kicker);
+  margin-block-end: var(--space-3);
+}
+
+.section-intro {
+  max-inline-size: var(--width-reading);
+  margin-block-start: var(--space-4);
+}
+
+.lead { font-size: var(--text-lead); }
+
+.muted, .note {
+  color: var(--color-muted);
+  font-size: var(--text-small);
+}
+
+.note { line-height: var(--leading-compact); }
+
+.badge {
+  display: inline-block;
+  margin-block-end: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-mint);
+  color: var(--color-ink);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+}
+
+.badge-action {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.callout {
+  padding: var(--card-padding);
+  background: var(--color-accent-soft);
+  border-inline-start: var(--accent-rule-width) solid var(--color-accent);
+  border-radius: var(--radius-small);
+  margin-block: var(--space-6);
+}
+
+.callout-green {
+  background: var(--color-mint);
+  border-inline-start-color: var(--color-forest);
+}
+
+.callout h3 { margin-block-end: var(--space-3); }
+
+.legend {
+  display: grid;
+  grid-template-columns: var(--legend-columns);
+  gap: var(--space-4);
+  margin-block-start: var(--space-6);
+}
+
+.legend > div {
+  padding-inline-start: var(--space-4);
+  border-inline-start: var(--rule-width) solid var(--color-rule);
+}
+
+.legend dt { font-size: var(--text-small); }
+
+.legend dd {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.card, .module, .system-map {
+  padding: var(--card-padding);
+  background: var(--color-surface);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  min-inline-size: var(--space-0);
+}
+
+.system-map { margin-block-start: var(--space-6); }
+
+.map-nodes {
+  display: grid;
+  grid-template-columns: var(--map-columns);
+  gap: var(--space-3);
+}
+
+.map-node {
+  padding: var(--space-4);
+  background: var(--color-paper);
+  border-radius: var(--radius-small);
+}
+
+.map-node strong, .map-node span { display: block; }
+.map-node strong { font-size: var(--text-lead); }
+
+.map-node span {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.arrow-bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-block: var(--space-5);
+  font-size: var(--text-small);
+}
+
+.diagram-arrow {
+  flex-shrink: var(--space-0);
+  inline-size: var(--icon-inline);
+  block-size: var(--icon-block);
+  fill: none;
+  stroke: var(--color-svg-line);
+  stroke-width: var(--stroke-svg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.loop-steps {
+  display: grid;
+  grid-template-columns: var(--loop-columns);
+  gap: var(--space-3);
+  padding: var(--space-0);
+  margin: var(--space-0);
+  list-style: none;
+}
+
+.loop-steps li {
+  min-inline-size: var(--space-0);
+  padding: var(--space-3);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-small);
+}
+
+.loop-steps strong, .loop-steps small, .step-id { display: block; }
+
+.loop-steps small {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.step-id {
+  font-family: var(--font-mono);
+  color: var(--color-accent);
+  font-size: var(--text-caption);
+}
+
+.feedback {
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  border: var(--rule-width) dashed var(--color-forest);
+  background: var(--color-mint);
+  border-radius: var(--radius-small);
+  font-size: var(--text-small);
+}
+
+.system-map figcaption {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.modules {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.module-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-block-end: var(--space-5);
+}
+
+.module-number {
+  color: var(--color-accent);
+  font-family: var(--font-serif);
+  font-size: var(--text-marker);
+  line-height: var(--leading-solid);
+}
+
+.module-spec {
+  display: grid;
+  grid-template-columns: var(--content-columns);
+  gap: var(--space-5) var(--space-8);
+}
+
+.module-spec dt {
+  margin-block-end: var(--space-2);
+  font-size: var(--text-small);
+  color: var(--color-accent);
+}
+
+.module-spec > div { min-inline-size: var(--space-0); }
+.wide { grid-column: var(--grid-span-all); }
+
+.basics {
+  display: grid;
+  grid-template-columns: var(--basics-columns);
+  gap: var(--space-3);
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  background: var(--color-paper);
+  border-radius: var(--radius-small);
+}
+
+.basics p {
+  margin: var(--space-0);
+  font-size: var(--text-small);
+}
+
+.source-near {
+  margin-block-start: var(--space-5);
+  padding-block-start: var(--space-4);
+  border-block-start: var(--rule-width) solid var(--color-rule);
+  font-size: var(--text-small);
+}
+
+details {
+  margin-block-start: var(--space-5);
+  padding: var(--space-4);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-small);
+  background: var(--color-paper);
+}
+
+summary {
+  min-block-size: var(--control-min);
+  align-content: center;
+  font-weight: var(--weight-medium);
+}
+
+summary::marker { color: var(--color-accent); }
+
+details[open] > :not(summary) {
+  margin-block-start: var(--space-3);
+}
+
+cite { font-style: normal; }
+
+.stack-table {
+  display: block;
+  inline-size: var(--size-full);
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--text-small);
+  line-height: var(--leading-compact);
+}
+
+.stack-table caption {
+  display: block;
+  inline-size: var(--size-full);
+  text-align: start;
+  font-weight: var(--weight-medium);
+  margin-block-end: var(--space-4);
+}
+
+.stack-table thead {
+  position: absolute;
+  inline-size: var(--a11y-pixel);
+  block-size: var(--a11y-pixel);
+  overflow: hidden;
+  clip-path: var(--a11y-clip);
+  white-space: nowrap;
+}
+
+.stack-table tbody {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.stack-table tr {
+  display: grid;
+  grid-template-columns: var(--grid-one);
+  padding: var(--space-4);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+}
+
+.stack-table th, .stack-table td {
+  display: block;
+  min-inline-size: var(--space-0);
+  padding-block: var(--space-2);
+  text-align: start;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.stack-table td::before {
+  content: attr(data-label);
+  display: block;
+  margin-block-end: var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+}
+
+.status {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-radius: var(--radius-small);
+  font-weight: var(--weight-medium);
+}
+
+.table-followup { margin-block-start: var(--space-5); }
+
+.case-grid, .week-grid, .question-grid, .scenario-grid {
+  display: grid;
+  grid-template-columns: var(--content-columns);
+  gap: var(--space-5);
+}
+
+.card h3 { margin-block-end: var(--space-4); }
+.card p + p { margin-block-start: var(--space-3); }
+
+.chart { margin-block: var(--space-5); }
+
+.chart figcaption {
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  margin-block-end: var(--space-4);
+}
+
+.chart-row + .chart-row { margin-block-start: var(--space-5); }
+
+.chart-label, .chart-axis {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-small);
+}
+
+.chart-label { margin-block-end: var(--space-2); }
+
+.chart-axis {
+  margin-block-start: var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.bar-track {
+  block-size: var(--chart-height);
+  background: var(--color-paper);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.bar-fill {
+  block-size: var(--size-full);
+  border-radius: var(--radius-pill);
+}
+
+.bar-initiative {
+  inline-size: var(--chart-initiative-width);
+  background: var(--color-chart-primary);
+}
+
+.bar-traditional {
+  inline-size: var(--chart-traditional-width);
+  background: var(--color-chart-secondary);
+}
+
+.scenario { margin-block-start: var(--space-6); }
+
+.scenario-grid {
+  margin-block-start: var(--space-5);
+  padding-inline-start: var(--space-6);
+}
+
+.scenario-grid li { padding-inline-start: var(--space-2); }
+
+.scenario-grid strong {
+  display: block;
+  margin-block-end: var(--space-2);
+}
+
+.question-panel { margin-block-start: var(--space-7); }
+
+.question-grid {
+  padding-inline-start: var(--space-6);
+  margin-block: var(--space-4);
+}
+
+.question-grid li { padding-inline-start: var(--space-2); }
+.week-grid { margin-block-start: var(--space-5); }
+
+.week-time {
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: var(--rule-width) solid var(--color-rule);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.decision-rules {
+  display: grid;
+  grid-template-columns: var(--basics-columns);
+  gap: var(--space-5);
+  margin-block-start: var(--space-6);
+}
+
+.decision-rules > div {
+  padding: var(--space-4);
+  border-inline-start: var(--accent-rule-width) solid var(--color-forest);
+  background: var(--color-mint);
+}
+
+.decision-rules dt { margin-block-end: var(--space-2); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: var(--audit-columns);
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.audit-field { min-inline-size: var(--space-0); }
+
+.audit-field label {
+  display: block;
+  margin-block-end: var(--space-2);
+  font-weight: var(--weight-bold);
+}
+
+.audit-field p {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.audit-result {
+  margin-block: var(--space-5);
+  padding: var(--card-padding);
+  background: var(--color-mint);
+  border-radius: var(--radius-card);
+  border: var(--rule-width) solid var(--color-rule);
+}
+
+.audit-result ul {
+  margin-block: var(--space-3) var(--space-0);
+  padding-inline-start: var(--space-6);
+}
+
+.audit-result li + li { margin-block-start: var(--space-2); }
+
+.source-url {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  overflow-wrap: anywhere;
+}
+
+.local-coverage { margin-block-start: var(--space-8); }
+.local-coverage h3 { margin-block-end: var(--space-4); }
+
+.footer {
+  padding-block: var(--space-8);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.delivery-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin-block: var(--space-4);
+}
+
+.delivery-status span {
+  padding: var(--space-2) var(--space-3);
+  border: var(--rule-width) solid var(--color-rule);
+  border-radius: var(--radius-small);
+}
+
+/* 唯一响应式宽度分界：760px。所有桌面轨道与表格切换集中在这里。 */
+@media (min-width: 760px) {
+  :root {
+    --page-gutter: var(--space-10);
+    --section-space: var(--space-18);
+    --card-padding: var(--space-8);
+    --hero-space: var(--space-22);
+    --hero-columns: var(--grid-hero-wide);
+    --content-columns: var(--grid-two);
+    --map-columns: var(--grid-five);
+    --loop-columns: var(--grid-seven);
+    --legend-columns: var(--grid-five);
+    --basics-columns: var(--grid-three);
+    --audit-columns: var(--grid-three);
+  }
+
+  .stack-table { display: table; }
+  .stack-table caption { display: table-caption; }
+
+  .stack-table thead {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  .stack-table tbody { display: table-row-group; }
+
+  .stack-table tr {
+    display: table-row;
+    padding: var(--space-0);
+    border: none;
+    border-radius: var(--radius-zero);
+  }
+
+  .stack-table th, .stack-table td {
+    display: table-cell;
+    padding: var(--space-4);
+    border-block-end: var(--rule-width) solid var(--color-rule);
+  }
+
+  .stack-table thead th { background: var(--color-mint); }
+  .stack-table td::before { display: none; }
+
+  .claim-table th:first-child { inline-size: var(--claim-width); }
+  .claim-table thead th:nth-child(2) { inline-size: var(--claim-status-width); }
+  .mentor-table th:first-child { inline-size: var(--mentor-width); }
+  .source-table th:first-child { inline-size: var(--source-name-width); }
+  .source-table thead th:nth-child(2) { inline-size: var(--source-date-width); }
+  .source-table thead th:nth-child(3) { inline-size: var(--source-coverage-width); }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到报告正文</a>
+<header class="hero">
+<div class="container hero-layout">
+<div>
+<p class="eyebrow">独立经营研究 · 创作者 / 独立开发者 / 小团队</p>
+<h1><span class="title-primary">学习赚钱的五板块系统：</span><span class="title-secondary">从个人成长到真实商业闭环</span></h1>
+<p class="hero-lead">保留“没有捷径”的提醒，把成长叙事接到客户问题、真实交付与可核对的经营记录。</p>
+<p class="hero-meta">研究日期 <time datetime="2026-10-05">2026-10-05</time> · 匿名转写分析 · 非收益承诺</p>
+</div>
+<aside aria-label="报告核心判断" class="hero-note">
+<span aria-hidden="true" class="hero-note-number">05</span>
+<p><strong>五项输入，不是一张收入保证书。</strong></p>
+<p>知识、经验、见识、资源、能量值得一起建设；是否产生商业价值，仍需由客户行为与收支记录检验。</p>
+</aside>
+</div>
+</header>
+<nav aria-label="报告目录" class="container toc">
+<ul class="toc-list">
+<li><a href="#insight">01 核心判断</a></li>
+<li><a href="#system">02 系统图</a></li>
+<li><a href="#modules">03 五项建设</a></li>
+<li><a href="#claims">04 主张审计</a></li>
+<li><a href="#cases">05 证据与情境</a></li>
+<li><a href="#mentors">06 访谈工具</a></li>
+<li><a href="#plan">07 行动计划</a></li>
+<li><a href="#self-audit">08 自我检查</a></li>
+<li><a href="#sources">09 来源范围</a></li>
+<li><a href="#appendix">10 原文附录</a></li>
+</ul>
+</nav>
+<main class="container" id="main" tabindex="-1">
+<section aria-labelledby="insight-title" class="report-section" id="insight">
+<header class="section-heading">
+<span class="section-index">01 / EXECUTIVE INSIGHT</span>
+<h2 id="insight-title">成长是投入，交易才是外部检验</h2>
+</header>
+<p class="lead">五板块可作为查漏补缺的<strong>启发式框架</strong>，不是已经充分验证的“赚钱理论”。它提醒人不要只囤知识，也要积累行动、判断、协作与持续投入的条件；但五项俱全，仍可能选错客户或做出无人愿付费的产品。</p>
+<p>原述强调无捷径、自我成长与长期积累，这一方向值得保留。问题在于把个人经历升级为最快路径、唯一方法或一年保证。本文不否定努力，而是把<strong>叙事、解释与证据</strong>分开；所有“原述”均据<a href="#source-t0">用户提供文字 T0</a>，不是独立核验的事实。</p>
+<div class="callout">
+<h3>补上缺失的一圈：客户验证</h3>
+<p>客户问题 → 服务或产品方案 → 获客 → 交付 → 付款 → 复购／留存 → 单位经济。每一步都留下可观察记录，再反过来修正五项输入，而不是用阅读时长或社交次数代替经营结果。</p>
+<p class="note">单位经济看一单或一位客户是否值得服务：逐项记录净收款、获客支出、人工、工具、退款与支持成本，再看余量能否承担固定费用。收入、利润、现金回款不能互换。</p>
+</div>
+<h3 id="legend-title">证据图例：五种话语，不混为一谈</h3>
+<dl aria-labelledby="legend-title" class="legend">
+<div>
+<dt>原述自报</dt>
+<dd>提供材料中的经历、数字或承诺，未经独立核实。</dd>
+</div>
+<div>
+<dt>研究证据</dt>
+<dd>在限定样本、任务与情境中得到的结果，不能无条件外推。</dd>
+</div>
+<div>
+<dt>案例叙述</dt>
+<dd>亲历文章或公司陈述，能说明做法，未必证明成功原因。</dd>
+</div>
+<div>
+<dt>分析推断</dt>
+<dd>本页对条件、反例与迁移边界的解释，不冒充实验结论。</dd>
+</div>
+<div>
+<dt>行动建议</dt>
+<dd>供试用的步骤、模板与阈值，需要用自己的客户证据修订。</dd>
+</div>
+</dl>
+</section>
+<section aria-labelledby="system-title" class="report-section" id="system">
+<header class="section-heading">
+<span class="section-index">02 / SYSTEM MAP</span>
+<h2 id="system-title">五项输入，共用一个反馈回路</h2>
+<p class="section-intro">以下是分析者构建的工作地图，不是已验证的因果模型。箭头表示建议的工作顺序与反馈关系，没有权重、乘法评分或收入预测。</p>
+</header>
+<figure aria-labelledby="map-caption" class="system-map">
+<div class="map-nodes">
+<div class="map-node"><strong>知识</strong><span>提供可选方案</span></div>
+<div class="map-node"><strong>经验</strong><span>校准行动判断</span></div>
+<div class="map-node"><strong>见识</strong><span>确定优先次序</span></div>
+<div class="map-node"><strong>资源</strong><span>促成授权协作</span></div>
+<div class="map-node"><strong>能量</strong><span>维持可持续试验</span></div>
+</div>
+<div class="arrow-bridge">
+<svg aria-hidden="true" class="diagram-arrow" focusable="false" viewbox="0 0 20 32">
+<path d="M10 3V27M3 20L10 27L17 20"></path>
+</svg>
+<span>把输入用于一次有边界的客户试验</span>
+</div>
+<ol aria-label="客户验证的七个环节" class="loop-steps">
+<li><span class="step-id">01 →</span><strong>客户问题</strong><small>具体任务与阻碍</small></li>
+<li><span class="step-id">02 →</span><strong>方案</strong><small>可交付的结果</small></li>
+<li><span class="step-id">03 →</span><strong>获客</strong><small>有来源的接触</small></li>
+<li><span class="step-id">04 →</span><strong>交付</strong><small>按约完成与验收</small></li>
+<li><span class="step-id">05 →</span><strong>付款</strong><small>实收而非口头赞许</small></li>
+<li><span class="step-id">06 →</span><strong>复购／留存</strong><small>真实再次使用</small></li>
+<li><span class="step-id">07 ↺</span><strong>单位经济</strong><small>成本与净收款</small></li>
+</ol>
+<p class="feedback"><strong>↺ 反馈回到全部五项：</strong>补概念、改做法、重排优先级、调整协作与工作负荷。任一环节没有证据，就保留为假设，不用下一环的想象补齐。</p>
+<figcaption id="map-caption">图 01 · 成长输入—商业验证系统图。编号仅标示顺序；分析推断，不代表已证实的因果效应。</figcaption>
+</figure>
+</section>
+<section aria-labelledby="modules-title" class="report-section" id="modules">
+<header class="section-heading">
+<span class="section-index">03 / FIVE MODULES</span>
+<h2 id="modules-title">把五个抽象词，变成五类可检查产物</h2>
+<p class="section-intro">下列定义、反例与方法属于分析推断或行动建议；“原述”保留其立场，但不为其真实性背书。</p>
+</header>
+<div class="modules">
+<article aria-labelledby="knowledge-title" class="module">
+<header class="module-header">
+<span aria-hidden="true" class="module-number">01</span>
+<h3 id="knowledge-title">知识：从书单转向问题单</h3>
+</header>
+<dl class="module-spec">
+<div>
+<dt>定义</dt>
+<dd>能解释问题、比较方案并支持行动的概念与技能，不是收藏量或读完的页数。</dd>
+</div>
+<div>
+<dt>原述</dt>
+<dd>主张读书最快、知识尽在书中，并用密集阅读解释管理能力的形成。</dd>
+</div>
+<div>
+<dt>值得保留</dt>
+<dd>系统阅读可用来建立经营的共同语言，避免只学一个渠道技巧就把它当成全部商业。</dd>
+</div>
+<div>
+<dt>越界与反例</dt>
+<dd>一本书无法替你知道某位客户今天的采购限制；会复述管理原则，也不等于带队与交付已经有效。</dd>
+</div>
+<div>
+<dt>有边界的获取法</dt>
+<dd>围绕一个卡点读一小节，合书写三条要点，隔天再回想，应用到一位潜在客户；不把“先读完所有书”设成行动前提。</dd>
+</div>
+<div>
+<dt>具体产物</dt>
+<dd>一页六格经营卡：问题、产品、营销、销售、财务、运营；每格写当前假设与待问的问题。</dd>
+</div>
+<div class="wide">
+<dt>观察检查</dt>
+<dd>不看书解释六格，并指出哪一格因客户反馈而改变。记忆表现是学习证据，仍不是成交证据。</dd>
+</div>
+</dl>
+<div aria-label="六项经营基础" class="basics">
+<p><strong>问题：</strong>谁在什么场景受阻？</p>
+<p><strong>产品：</strong>交付什么具体结果？</p>
+<p><strong>营销：</strong>怎样触达合适的人？</p>
+<p><strong>销售：</strong>谁决定购买，依据什么？</p>
+<p><strong>财务：</strong>收入、成本、利润与回款。</p>
+<p><strong>运营：</strong>如何稳定、按约交付？</p>
+</div>
+<p class="source-near"><span class="badge">限定研究</span> S1 综述评估十种学习法，练习测试与分散练习效用较高，划重点与反复重读较低。对象主要是教育学习任务，<strong>不证明读书是创业最快路径</strong>。上述客户应用步骤是本页建议。<a href="https://www.psychologicalscience.org/publications/journals/pspi/learning-techniques.html" rel="noreferrer">S1 · 阅读 APS 学习方法综述介绍</a></p>
+<details open="">
+<summary>按当前缺口选读：书名建议，不是必读门槛</summary>
+<p>针对客户访谈、财务理解与经营流程，可分别查阅 <a href="https://www.momtestbook.com/" rel="noreferrer">The Mom Test（作者官网）</a>、<a href="https://store.hbr.org/product/financial-intelligence-for-entrepreneurs-what-you-really-need-to-know-about-the-numbers/1915" rel="noreferrer">Financial Intelligence for Entrepreneurs（出版方介绍）</a>、<a href="https://michaelegerbercompanies.com/product/the-e-myth-revisited/" rel="noreferrer">The E-Myth Revisited（作者公司介绍）</a>。本次已打开三处官方介绍；这是按主题匹配的选读建议，未核对译本、版本、库存或价格，也不宣称最有效。</p>
+</details>
+</article>
+<article aria-labelledby="experience-title" class="module">
+<header class="module-header">
+<span aria-hidden="true" class="module-number">02</span>
+<h3 id="experience-title">经验：访谈与亲自行动相互校验</h3>
+</header>
+<dl class="module-spec">
+<div>
+<dt>定义</dt>
+<dd>在具体情境中，经过行动、反馈和复盘形成的判断；自己的尝试也是来源。</dd>
+</div>
+<div>
+<dt>原述</dt>
+<dd>找最近两年做出结果、起点相似、低成本起步的小创业者，进行三至五小时深谈。</dd>
+</div>
+<div>
+<dt>值得保留</dt>
+<dd>追问顺序、卡点与取舍，比只听“坚持就行”更有用；相近条件有助于讨论可迁移性。</dd>
+</div>
+<div>
+<dt>越界与反例</dt>
+<dd>访谈可能包含记忆偏差、幸存者偏差与事后解释，无法完整转移技能；还应比较失败或已经关停的项目。</dd>
+</div>
+<div>
+<dt>有边界的获取法</dt>
+<dd>先征得同意，以三十至四十五分钟聚焦一次成交和一次失误，按未解问题补访；同时亲自做一次小样测试，不设三至五小时硬门槛。</dd>
+</div>
+<div>
+<dt>具体产物</dt>
+<dd>实验日志：原假设／行动／实际反馈／耗费／下次只改变什么；把受访者说法与自己观察分栏。</dd>
+</div>
+<div class="wide">
+<dt>观察检查</dt>
+<dd>记录一个改动是否减少返工、促成验收或揭示拒绝原因。聊天时长、认识人数都不能代替这条行动记录。</dd>
+</div>
+</dl>
+</article>
+<article aria-labelledby="perspective-title" class="module">
+<header class="module-header">
+<span aria-hidden="true" class="module-number">03</span>
+<h3 id="perspective-title">见识：学习原则，也写出不适用条件</h3>
+</header>
+<dl class="module-spec">
+<div>
+<dt>定义</dt>
+<dd>识别约束、取舍和优先次序的能力，不是知道多少大公司故事。</dd>
+</div>
+<div>
+<dt>原述</dt>
+<dd>向小创业者学习具体做法，向独角兽企业学习战略与长期方向。</dd>
+</div>
+<div>
+<dt>值得保留</dt>
+<dd>区分“现在怎么做”和“为什么选这条路”，可以避免把短期招数当长期战略。</dd>
+</div>
+<div>
+<dt>越界与反例</dt>
+<dd>若一种打法依赖品牌、资本补贴与专职团队，个人照搬可能先耗尽预算；规模大不是每个建议都适用的证明。</dd>
+</div>
+<div>
+<dt>有边界的获取法</dt>
+<dd>每研究一个案例，就写“可迁移原则—依赖的规模条件—本地小试验”，优先检验最不确定的条件。</dd>
+</div>
+<div>
+<dt>具体产物</dt>
+<dd>一张迁移矩阵，注明哪些能力已有、哪些缺失；战略判断与营收、利润、回款记录分别保存。</dd>
+</div>
+<div class="wide">
+<dt>观察检查</dt>
+<dd>能否说清这次不做什么、为什么不做，以及哪条客户证据会让自己改变优先级。</dd>
+</div>
+</dl>
+<p class="callout note">原转写为“和小创业者学术，和大创业者学到”。本文暂按<strong>“学术（方法）／学道（战略）”</strong>理解；这是上下文解释，不是已确认的原词，也不擅自改写原文。</p>
+<table class="stack-table" role="table">
+<caption>迁移矩阵示例 · 原则参考 S7，小团队试验为分析者建议</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">可借原则</th>
+<th role="columnheader" scope="col">不能默认的规模条件</th>
+<th role="columnheader" scope="col">本地小试验</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">以客户结果为先</th>
+<td data-label="规模条件" role="cell">既有品牌、渠道与研究团队。</td>
+<td data-label="小试验" role="cell">直接观察一位客户完成任务，用验收结果修订方案。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">加快可逆决策</th>
+<td data-label="规模条件" role="cell">损失缓冲与成熟组织支持。</td>
+<td data-label="小试验" role="cell">只缩短可撤回小样的决策；不把隐私或对外承诺当作可随意撤回。</td>
+</tr>
+</tbody>
+</table>
+<p class="note table-followup"><a href="https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders" rel="noreferrer">S7 · 查看亚马逊 2016 年股东信的原则语境</a>；它是公司陈述，不是成功因果证明。</p>
+</article>
+<article aria-labelledby="resources-title" class="module">
+<header class="module-header">
+<span aria-hidden="true" class="module-number">04</span>
+<h3 id="resources-title">资源：自愿协作，不是隐形欠账</h3>
+</header>
+<dl class="module-spec">
+<div>
+<dt>定义</dt>
+<dd>经许可可以调动的信息、技能与合作支持，不是通讯录的长度。</dd>
+</div>
+<div>
+<dt>原述</dt>
+<dd>先帮助别人，三至五轮互助后成为朋友，约半年形成互助网络。</dd>
+</div>
+<div>
+<dt>值得保留</dt>
+<dd>用具体贡献开启交流，重视互相理解；技术能力本身也能成为协作资产。</dd>
+</div>
+<div>
+<dt>越界与反例</dt>
+<dd>帮忙不能隐含“你必须回报我”；对方可能没有资源、时间或合作意愿。技术强不是应被排除的理由。</dd>
+</div>
+<div>
+<dt>有边界的获取法</dt>
+<dd>先询问对方是否需要，在自己的时间上限内做一件小事。允许拒绝，不追讨回报，不擅自索取客户资料或公开对话。</dd>
+</div>
+<div>
+<dt>具体产物</dt>
+<dd>协作卡：可提供什么／需要什么／授权范围／投入上限／双方下一步。</dd>
+</div>
+<div class="wide">
+<dt>观察检查</dt>
+<dd>双方是否自愿继续、理解范围并按约兑现；不要以互动轮次推算友情或收益。</dd>
+</div>
+</dl>
+<p class="source-near"><span class="badge">限定研究</span> S3 的 LinkedIn 随机推荐实验覆盖五年、逾两千万人；弱连接对工作传递的影响非线性，且依行业不同。它不是创业利润的因果证据，也不证明帮助必有回报。<a href="https://pubmed.ncbi.nlm.nih.gov/36107999/" rel="noreferrer">S3 · 阅读弱连接研究的 PubMed 摘要</a></p>
+</article>
+<article aria-labelledby="energy-title" class="module">
+<header class="module-header">
+<span aria-hidden="true" class="module-number">05</span>
+<h3 id="energy-title">能量：能持续的注意，而非拼时长</h3>
+</header>
+<dl class="module-spec">
+<div>
+<dt>定义</dt>
+<dd>在生活约束内维持注意、行动与恢复的能力，应通过可持续安排观察。</dd>
+</div>
+<div>
+<dt>原述</dt>
+<dd>把希望与相信自己能成长视作能量来源。</dd>
+</div>
+<div>
+<dt>值得保留</dt>
+<dd>把目标拆小，让进步可见；遇到困难时允许调整节奏，而不是只依赖激励。</dd>
+</div>
+<div>
+<dt>越界与反例</dt>
+<dd>不能把中年人、疲惫者或持异议者归为“低能量”。指出成本漏洞的建设性批评者，可能比一味赞许更有帮助。</dd>
+</div>
+<div>
+<dt>有边界的获取法</dt>
+<dd>先保护睡眠、休息与原有学习或工作，再安排有限注意时段；不复制每天十五小时阅读，也不把过载当投入证明。</dd>
+</div>
+<div>
+<dt>具体产物</dt>
+<dd>一周注意记录：计划时段／实际可用注意／完成物／疲劳感／恢复安排。</dd>
+</div>
+<div class="wide">
+<dt>观察检查</dt>
+<dd>能否按上限结束、次周仍可投入，且不挤压睡眠与重要责任；做不到就缩小项目，而非给人格打分。这是工作安排建议，不是医疗判断。</dd>
+</div>
+</dl>
+</article>
+</div>
+</section>
+<section aria-labelledby="claims-title" class="report-section" id="claims">
+<header class="section-heading">
+<span class="section-index">04 / CLAIM AUDIT</span>
+<h2 id="claims-title">十二项主张：保留价值，撤回过度保证</h2>
+<p class="section-intro">“未证实”不等于“已证伪”。以下审计针对表达的证据强度与适用范围，不评价叙述者的人品。</p>
+</header>
+<table class="stack-table claim-table" role="table">
+<caption>原述据 T0；状态与改写为分析判断，研究支撑另列来源。</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">原述或推论</th>
+<th role="columnheader" scope="col">审计状态</th>
+<th role="columnheader" scope="col">更稳妥的改写</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">01 读书是最快方式</th>
+<td data-label="状态" role="cell"><span class="status">普遍最优未证</span></td>
+<td data-label="改写" role="cell">按任务选择阅读、练习或客户观察。<a href="https://www.psychologicalscience.org/publications/journals/pspi/learning-techniques.html" rel="noreferrer">S1 学习综述介绍</a>不比较创业变现速度。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">02 所有知识都在书里</th>
+<td data-label="状态" role="cell"><span class="status">绝对化</span></td>
+<td data-label="改写" role="cell">书籍可学原理；具体客户限制、隐性操作与新变化仍需补查和实践。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">03 经验只能来自活人</th>
+<td data-label="状态" role="cell"><span class="status">定义过窄</span></td>
+<td data-label="改写" role="cell">访谈是一种来源；自己的行动、失败记录和关停项目复盘也应进入经验库。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">04 通过读书成为管理者</th>
+<td data-label="状态" role="cell"><span class="status">因果未证</span></td>
+<td data-label="改写" role="cell">个人归因需要团队绩效与业务记录支持；阅读经历本身不证明管理成效。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">05 只找最近两年成功的人</th>
+<td data-label="状态" role="cell"><span class="status">时间切线无据</span></td>
+<td data-label="改写" role="cell">核对当下客户、渠道与成本条件。视频日期未知，“近两年”不能直接换算成 2024—2026 年。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">06 不要找太技术的人</th>
+<td data-label="状态" role="cell"><span class="status">筛选偏窄</span></td>
+<td data-label="改写" role="cell">看商业问题与条件是否匹配；技术深度可能是优势，不是资格障碍。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">07 访谈必须三至五小时</th>
+<td data-label="状态" role="cell"><span class="status">无硬阈值证据</span></td>
+<td data-label="改写" role="cell">可先用三十至四十五分钟聚焦一个问题，是否加深取决于需要与双方许可。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">08 导师年营收 20亿→50亿→近百亿；企业与拼多多同年获腾讯投资，并获人民网报道</th>
+<td data-label="状态" role="cell"><span class="status">无独立可靠证据</span></td>
+<td data-label="改写" role="cell">全部保留为匿名自述；不猜导师或公司。投资年份、报道与营收均待可信记录，营收更不能替代利润和回款。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">09 三至五轮互助、半年建网</th>
+<td data-label="状态" role="cell"><span class="status">个人预期</span></td>
+<td data-label="改写" role="cell">信任没有固定建设期；互助需自愿，不能承诺友情、引荐或回报。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">10 用高低认知简单区分人</th>
+<td data-label="状态" role="cell"><span class="status">标签代替观察</span></td>
+<td data-label="改写" role="cell">讨论具体判断及修正能力，不以年龄、职业或是否赞同自己给人分层。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">11 唯一有效的长期方法；一年脱胎换骨</th>
+<td data-label="状态" role="cell"><span class="status">排他与保证无据</span></td>
+<td data-label="改写" role="cell">五板块是一种整理方式，不排除其他路径，不保证一年内变现或发生戏剧性改变。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">12 自报实践 16000 小时；每天读书 15 小时、持续 18 个月、合计 6800 小时</th>
+<td data-label="状态" role="cell"><span class="status">数字口径待澄清</span></td>
+<td data-label="改写" role="cell">按每月 30 天粗算：15×18×30≈8100 小时；6800÷540≈12.6 小时／日。差异可能来自约数、有效阅读与日历时长口径，不足以证明说谎；16000 小时也不证明投入的收益效应。</td>
+</tr>
+</tbody>
+</table>
+<p class="note table-followup">另有把“更偏好读书而非听课”的观点归于芒格的说法，确切出处未核实，本页不以该归因为论据。</p>
+</section>
+<section aria-labelledby="cases-title" class="report-section" id="cases">
+<header class="section-heading">
+<span class="section-index">05 / EVIDENCE &amp; APPLICATION</span>
+<h2 id="cases-title">研究能支持哪一步，不能替你跨过哪一步</h2>
+</header>
+<div class="case-grid">
+<article aria-labelledby="case-science-title" class="card">
+<span class="badge">研究证据 · 摘要级</span>
+<h3 id="case-science-title">科学决策：允许淘汰想法</h3>
+<p>Camuffo 等的四项随机试验覆盖 759 家企业。摘要报告：科学化决策提高了想法终止，战略调整更倾向少数几次，而非完全不变或反复转向。</p>
+<p><strong>可借之处：</strong>本页建议先写客户假设、反证信号与停止条件。<strong>边界：</strong>这些结果不保证更高营收或成功率；只作摘要级核验，本次全文访问超时，采用已打开的摘要。</p>
+<p class="source-near"><a href="https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/smj.3580" rel="noreferrer">S2 · 阅读 2024 年《战略管理期刊》研究摘要</a></p>
+</article>
+<article aria-labelledby="case-togo-title" class="card">
+<span class="badge">研究证据 · 研究者解读</span>
+<h3 id="case-togo-title">主动性训练：不是“想积极点”</h3>
+<p>多哥 1500 家微型企业随机分为个人主动性训练、传统商业训练和对照组。研究者报告的利润相对差异如下；训练是结构化干预，不是单靠积极想象。</p>
+<figure aria-describedby="togo-limit" aria-labelledby="togo-caption" class="chart">
+<figcaption id="togo-caption">图 02 · 利润相对对照组的百分比差异</figcaption>
+<div class="chart-row">
+<div class="chart-label">
+<span>个人主动性训练</span>
+<strong>约 +30%</strong>
+</div>
+<div aria-hidden="true" class="bar-track">
+<div class="bar-fill bar-initiative"></div>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>传统商业训练</span>
+<strong>约 +11% · 统计上不显著</strong>
+</div>
+<div aria-hidden="true" class="bar-track">
+<div class="bar-fill bar-traditional"></div>
+</div>
+</div>
+<div aria-hidden="true" class="chart-axis">
+<span>0%</span>
+<span>共同尺度上限 40%</span>
+</div>
+<p class="note">口径补充：研究者博客写约 30%；<a href="https://microdata.worldbank.org/catalog/2860" rel="noreferrer">世界银行数据目录摘要</a>报告 31%，并明确传统训练的 11% 统计上不显著。本图沿用博客的近似数值，未重分析原始数据。</p></figure>
+<p class="note" id="togo-limit">对照组是比较基准，不代表零利润。条长不是绝对收入、成功概率或中国效应；未绘制置信区间。“不显著”不等于证明效应为零。</p>
+<p><strong>可借之处：</strong>把主动性变成可练习的识别问题、行动与复盘。<strong>边界：</strong>当地训练效果不能套到每位创作者。<a href="https://blogs.worldbank.org/en/africacan/a-better-way-to-train-small-business-owners-using-psychology-to-teach-personal-initiative" rel="noreferrer">S4 · 查看世界银行研究者的 2017 年解读</a></p>
+<p class="note">七年随访显示影响因性别而异，且有样本流失限制，进一步提醒我们不要普遍化。<a href="https://blogs.worldbank.org/en/impactevaluations/personal-initiative-training-continues-to-yield-positive-benefit" rel="noreferrer">S5 · 查看 2025 年长期随访解读</a></p>
+</article>
+<article aria-labelledby="case-service-title" class="card">
+<span class="badge">案例叙述 · 亲历文章</span>
+<h3 id="case-service-title">早期服务：先观察具体摩擦</h3>
+<p>Paul Graham 的 2013 年文章记述：Airbnb 创始人到纽约接触房东并改善照片；Stripe 创始人为同意试用的人当场完成设置。</p>
+<p><strong>可借之处：</strong>本页建议先手工服务少量用户，观察阻力，再考虑自动化。<strong>边界：</strong>这是创业者／投资人的案例叙述，没有对照试验，不能证明这些做法导致最终成功，也不要求无限免费服务。</p>
+<p class="source-near"><a href="https://www.paulgraham.com/ds.html" rel="noreferrer">S6 · 阅读《Do Things that Don't Scale》原文</a></p>
+</article>
+<article aria-labelledby="case-strategy-title" class="card">
+<span class="badge">案例叙述 · 公司陈述</span>
+<h3 id="case-strategy-title">大企业：借原则，不借资本打法</h3>
+<p>亚马逊 2016 年股东信于 2017 年发布，强调客户关注、警惕流程替代结果、拥抱外部趋势与快速处理可逆决策。</p>
+<p><strong>可借之处：</strong>把“完成多少打卡”换成“客户完成了什么任务”，只加快低损失、可撤回的试验。<strong>边界：</strong>公司公开主张不等于成功的因果证明；战略表达与可核对营收记录是两种材料。</p>
+<p class="source-near"><a href="https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders" rel="noreferrer">S7 · 阅读亚马逊 2016 年股东信</a></p>
+</article>
+</div>
+<article aria-labelledby="scenario-title" class="card scenario">
+<span class="badge badge-action">设计情境 · <span lang="en">DESIGN SCENARIO</span></span>
+<h3 id="scenario-title">创作者为小工作室提供 AI 辅助素材整理服务</h3>
+<p><strong>这是虚构的流程演练，不代表真实客户、已确认需求、订单或收入。</strong>设想整理获授权的采访材料，提供带出处的初稿并人工核校；先访谈，再决定这个方案是否值得制作。</p>
+<ol class="scenario-grid">
+<li>
+<strong>客户问题 → 访谈</strong>
+        询问现有整理流程、返工发生在哪、由谁决策。未确认优先问题前，不假定“用了 AI 就有需求”。
+      </li>
+<li>
+<strong>方案 → 小样</strong>
+        只用自有或获许可的去标识材料制作一份对照样品，人工检查事实；不擅自上传客户资料。
+      </li>
+<li>
+<strong>获客 → 试点协议</strong>
+        在对方许可下展示样品，商定范围、验收、修改、数据处理、付款与退款退出条件；价格须双方另行确认。
+      </li>
+
+<li class="wide">
+<strong>再次使用 → 单位经济</strong>
+        观察下一次真实任务是否继续使用，逐单列工具、获客、制作、校对、售后人工与退款。净收款扣除这些支出后，仍需考虑固定费用；不能把营收当利润。
+      </li>
+</ol>
+</article>
+</section>
+<section aria-labelledby="mentors-title" class="report-section" id="mentors">
+<header class="section-heading">
+<span class="section-index">06 / MENTOR &amp; INTERVIEW</span>
+<h2 id="mentors-title">选参照对象，不选“成功光环”</h2>
+<p class="section-intro">以下是行动建议。每格记“匹配／不明／不适配”，不求总分。先邀请愿意免费交流的人，说明目的、时长与保密边界；可拒绝、可跳题，不施压，也不以提供私密数据为交流条件。</p>
+</header>
+<table class="stack-table mentor-table" role="table">
+<caption>参照对象选择矩阵 · 先核对条件，再讨论可迁移做法</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">核对维度</th>
+<th role="columnheader" scope="col">可询问或查看的内容</th>
+<th role="columnheader" scope="col">暂缓参考的信号</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">目标客户与渠道</th>
+<td data-label="核对" role="cell">是否同类决策者、需求与获客入口？</td>
+<td data-label="暂缓信号" role="cell">把粉丝数量当作付款客户证据。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">预算与技能起点</th>
+<td data-label="核对" role="cell">资金、时间、技术能力与现有团队是否接近？</td>
+<td data-label="暂缓信号" role="cell">默认你已有品牌、关系或专职团队。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">当前适用证据</th>
+<td data-label="核对" role="cell">记录日期、客户与渠道条件是否仍成立？</td>
+<td data-label="暂缓信号" role="cell">只有年代标签，不能说明条件变化。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">失败讨论意愿</th>
+<td data-label="核对" role="cell">愿否讲终止、返工与无效步骤？</td>
+<td data-label="暂缓信号" role="cell">只讲胜利，把一切失败归于不努力。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">利润与现金</th>
+<td data-label="核对" role="cell">能否区分营收、人工成本、退款与实际回款？</td>
+<td data-label="暂缓信号" role="cell">只展示无法解释口径的营收截图。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">资料可核对性</th>
+<td data-label="核对" role="cell">经同意查看去标识样例、交付或汇总记录。</td>
+<td data-label="暂缓信号" role="cell">要求泄露客户隐私；无法核对则保留未知。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">利益关系</th>
+<td data-label="核对" role="cell">建议是否关联卖课、佣金、融资或其他激励？</td>
+<td data-label="暂缓信号" role="cell">以收益保证催促付费，或不愿说明利益关系。</td>
+</tr>
+</tbody>
+</table>
+<div class="question-panel">
+<h3>十个聚焦问题：围绕一次真实经营过程</h3>
+<ol class="question-grid">
+<li>第一批客户从哪里来，哪个渠道真正带来了付款？</li>
+<li>第一笔付费订单解决了什么问题，当时怎样约定交付？</li>
+<li>这单有哪些工具、渠道、外包和其他直接成本？</li>
+<li>获客、制作、修改和售后各花了多少人工时间？</li>
+<li>出现过哪些退款或争议，原因与处理结果是什么？</li>
+<li>哪些客户实际再次购买或使用，间隔与原因是什么？</li>
+<li>试过但失败或停止了哪些步骤，什么证据触发了停止？</li>
+<li>起步前有哪些品牌、资金、技能、关系或家庭支持？</li>
+<li>哪些说法可用经许可的去标识记录核对，哪些只能回忆？</li>
+<li>现在重做，哪些旧办法已经无效，条件变在何处？</li>
+</ol>
+
+</div>
+</section>
+<section aria-labelledby="plan-title" class="report-section" id="plan">
+<header class="section-heading">
+<span class="section-index">07 / THIRTY-DAY PLAN</span>
+<h2 id="plan-title">三十天：只验证一个方案</h2>
+<p class="section-intro">建议每周六小时，可降至两小时并缩小范围、顺延未完成事项。三至五次访谈只是探索样本目标，不是统计证明；一个试点只是争取目标，不保证获得。</p>
+</header>
+<div class="callout callout-green">
+<p><strong>先写投入边界：</strong>预算由你设定，最高不超过可承受全部损失的金额，也可以为零。优先现有工具，不借债、不默认购买或自动花费，不以挤压睡眠、学业或工作换取进度。</p>
+</div>
+<div class="week-grid">
+<article class="card">
+<span class="badge badge-action">第 1 周 · 问题</span>
+<h3>确定客户与待验证假设</h3>
+<p>只选一种客户、一个问题，邀请访谈并记录对方现有替代办法。产物是六格经营卡初稿，不是完整产品。</p>
+<p class="week-time">六小时：学习一小时、访谈三小时、整理两小时。两小时版：一次许可访谈与问题卡。</p>
+</article>
+<article class="card">
+<span class="badge badge-action">第 2 周 · 样品</span>
+<h3>将问题变成一个可看见的结果</h3>
+<p>前两周合计争取三至五次访谈，只做一个小样，标明范围与验收条件。记录反对意见，不把礼貌称赞算作购买。</p>
+<p class="week-time">六小时：补访两小时、小样三小时、反馈一小时。两小时版：低完成度小样，只核对最关键条件。</p>
+</article>
+
+<article class="card">
+<span class="badge badge-action">第 4 周 · 决策</span>
+<h3>核对回款、成本与再次使用</h3>
+<p>并列实际收支、退款和全部人工，询问下一次任务；形成继续、调整或停止的书面理由，而不是只数活动次数。</p>
+<p class="week-time">六小时：成本两小时、复用反馈两小时、决策两小时。两小时版：核算与决策，其余顺延。</p>
+</article>
+</div>
+<dl class="decision-rules">
+<div>
+<dt>继续：出现交易证据</dt>
+<dd>已有验收与实收、出现复用需求，计入人工后单次贡献可接受，才小步继续。一个客户仍不足以支持扩大投入。</dd>
+</div>
+<div>
+<dt>调整：问题在，方案不对</dt>
+<dd>客户能说清问题，但拒绝方案、交付或价格；只改一个关键假设再试，不因点赞或打卡数量调整方向。</dd>
+</div>
+<div>
+<dt>停止或暂缓：依据不足或超界</dt>
+<dd>在约定范围内仍无优先问题或付款意愿，成本无法改善，或投入超过上限，就停止当前假设，不否定自己。</dd>
+</div>
+</dl>
+<p class="table-followup"><strong>九十天延伸只是一项提案：</strong>接下来检验不同客户是否重复出现同一问题、交付是否稳定、收入能否覆盖完整成本，再讨论扩大。转型前先验证业务并保留退路，这是<a href="#source-l2">本地二次摘要 L2</a>提供的定性提醒，不是一年蜕变承诺。</p>
+</section>
+<section aria-labelledby="self-audit-title" class="report-section" id="self-audit">
+<header class="section-heading">
+<span class="section-index">08 / EVIDENCE SELF-AUDIT</span>
+<h2 id="self-audit-title">你最缺的，是哪一项的可见证据？</h2>
+<p class="section-intro" id="audit-help">每项默认“未知／未验证”。0、1、2 只是证据档位编码，不加总、不计算赚钱分数或成功概率，也不衡量人格。并列最低项全部列出，任选一项开始，不必同时补齐。</p>
+<p class="note">只在当前页面内计算，不保存、不上传；重新加载后回到默认值。页面自身不联网，外部来源仅在主动点击链接时访问。</p>
+</header>
+<div aria-describedby="audit-help" aria-labelledby="self-audit-title" role="group">
+<div class="audit-grid">
+<div class="audit-field">
+<label for="audit-knowledge">知识 · 经营卡</label>
+<select aria-describedby="help-knowledge" id="audit-knowledge">
+<option selected="" value="0">0 · 未知／未验证</option>
+<option value="1">1 · 小产物已验证</option>
+<option value="2">2 · 已反复证明</option>
+</select>
+<p id="help-knowledge">是否有可解释、经客户反馈修订的六格卡？</p>
+</div>
+<div class="audit-field">
+<label for="audit-experience">经验 · 实验日志</label>
+<select aria-describedby="help-experience" id="audit-experience">
+<option selected="" value="0">0 · 未知／未验证</option>
+<option value="1">1 · 小产物已验证</option>
+<option value="2">2 · 已反复证明</option>
+</select>
+<p id="help-experience">是否记录亲自行动、反馈与下一次改动？</p>
+</div>
+<div class="audit-field">
+<label for="audit-perspective">见识 · 迁移矩阵</label>
+<select aria-describedby="help-perspective" id="audit-perspective">
+<option selected="" value="0">0 · 未知／未验证</option>
+<option value="1">1 · 小产物已验证</option>
+<option value="2">2 · 已反复证明</option>
+</select>
+<p id="help-perspective">是否区分可借原则与自己缺少的条件？</p>
+</div>
+<div class="audit-field">
+<label for="audit-resources">资源 · 协作卡</label>
+<select aria-describedby="help-resources" id="audit-resources">
+<option selected="" value="0">0 · 未知／未验证</option>
+<option value="1">1 · 小产物已验证</option>
+<option value="2">2 · 已反复证明</option>
+</select>
+<p id="help-resources">是否有自愿、范围清楚并实际履行的协作？</p>
+</div>
+<div class="audit-field">
+<label for="audit-energy">能量 · 注意记录</label>
+<select aria-describedby="help-energy" id="audit-energy">
+<option selected="" value="0">0 · 未知／未验证</option>
+<option value="1">1 · 小产物已验证</option>
+<option value="2">2 · 已反复证明</option>
+</select>
+<p id="help-energy">是否按可持续上限行动并保留恢复安排？</p>
+</div>
+</div>
+<button disabled="" id="reset-audit" type="button">重置五项到“未知／未验证”</button>
+</div>
+<div aria-atomic="true" aria-live="polite" class="audit-result" id="audit-result" role="status">
+<p><strong>当前五项均为“未知／未验证”，都是并列待补证据项。</strong>这不表示能力低，先选一项行动即可。</p>
+<ul>
+<li><strong>知识：</strong>写或修订六格经营卡，向一位潜在客户核对其中一个问题。</li>
+<li><strong>经验：</strong>记录一次新的小样测试的预测、实际反馈和下一步。</li>
+<li><strong>见识：</strong>写下一条可借原则及自己尚不具备的规模条件。</li>
+<li><strong>资源：</strong>征得一位同行同意，在时间上限内提供一次具体小帮助。</li>
+<li><strong>能量：</strong>记录一个不挤压睡眠的注意时段，并保留恢复时间。</li>
+</ul>
+</div>
+<noscript>
+<div class="callout">
+<p><strong>JavaScript 已禁用。</strong>下拉选项不会刷新上方初始结果，重置按钮不可用。请用下表手动挑出证据最少的一项；全部正文和原生折叠内容仍可阅读。</p>
+</div>
+<table class="stack-table" role="table">
+<caption>无脚本静态对照表 · 未知／已验证小产物／反复证明，任选最低档的一项</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">模块</th>
+<th role="columnheader" scope="col">下一步行动</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">知识</th>
+<td data-label="行动" role="cell">写或修订六格经营卡，向一位潜在客户核对其中一个问题。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">经验</th>
+<td data-label="行动" role="cell">记录一次新的小样测试的预测、实际反馈和下一步。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">见识</th>
+<td data-label="行动" role="cell">写下一条可借原则及自己尚不具备的规模条件。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">资源</th>
+<td data-label="行动" role="cell">征得一位同行同意，在时间上限内提供一次具体小帮助。</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">能量</th>
+<td data-label="行动" role="cell">记录一个不挤压睡眠的注意时段，并保留恢复时间。</td>
+</tr>
+</tbody>
+</table>
+</noscript>
+</section>
+<section aria-labelledby="sources-title" class="report-section" id="sources">
+<header class="section-heading">
+<span class="section-index">09 / SOURCE COVERAGE</span>
+<h2 id="sources-title">来源范围：读到了什么，也说明没读到什么</h2>
+<p class="section-intro">外部访问日期为 <time datetime="2026-10-05">2026-10-05</time>。已实际打开下列 11 个页面（8 个研究／案例／数据目录页，3 个官方书籍介绍），搜索引擎用于发现入口，未系统扩展检索、未重算原始数据；这不是系统综述，也不代表覆盖了截至当日的全部研究。局部支持不能合成对“五板块赚钱理论”的整体验证。</p>
+</header>
+<table class="stack-table source-table" role="table">
+<caption>公开来源 · 日期、证据层级与实际覆盖</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">编号与来源</th>
+<th role="columnheader" scope="col">日期／层级</th>
+<th role="columnheader" scope="col">访问与采用边界</th>
+<th role="columnheader" scope="col">原始网址</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr id="source-s1" role="row">
+<th role="rowheader" scope="row">S1 · Dunlosky 等<br/>APS 学习方法综述介绍</th>
+<td data-label="日期／层级" role="cell">2013-01-07<br/>研究证据／综述介绍</td>
+<td data-label="覆盖" role="cell">已读 APS 介绍页，非论文全文逐页核验；用于说明学习法的限定证据，不作创业速度排序。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://www.psychologicalscience.org/publications/journals/pspi/learning-techniques.html" rel="noreferrer">https://www.psychologicalscience.org/publications/journals/pspi/learning-techniques.html</a></td>
+</tr>
+<tr id="source-s2" role="row">
+<th role="rowheader" scope="row">S2 · Camuffo 等<br/>科学化创业决策研究</th>
+<td data-label="日期／层级" role="cell">2024-03-25<br/>研究证据／四项随机试验</td>
+<td data-label="覆盖" role="cell">已读期刊摘要；仅摘要级核验。本次全文访问超时，未将摘要当全文；不承诺收益。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/smj.3580" rel="noreferrer">https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/smj.3580</a></td>
+</tr>
+<tr id="source-s3" role="row">
+<th role="rowheader" scope="row">S3 · Rajkumar 等<br/>弱连接的因果检验</th>
+<td data-label="日期／层级" role="cell">2022-09-16<br/>研究证据／随机推荐实验</td>
+<td data-label="覆盖" role="cell">已读 PubMed 摘要，非全文；研究结果是工作传递，不是创始人利润或互惠必然性。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://pubmed.ncbi.nlm.nih.gov/36107999/" rel="noreferrer">https://pubmed.ncbi.nlm.nih.gov/36107999/</a></td>
+</tr>
+<tr id="source-s4" role="row">
+<th role="rowheader" scope="row">S4 · 世界银行研究者<br/>个人主动性训练解读</th>
+<td data-label="日期／层级" role="cell">2017-09-22<br/>随机试验的研究者解读</td>
+<td data-label="覆盖" role="cell">已读解读正文，非原始数据重分析；图 02 为文中相对差异的简化呈现，不是个体收入预测。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://blogs.worldbank.org/en/africacan/a-better-way-to-train-small-business-owners-using-psychology-to-teach-personal-initiative" rel="noreferrer">https://blogs.worldbank.org/en/africacan/a-better-way-to-train-small-business-owners-using-psychology-to-teach-personal-initiative</a></td>
+</tr>
+<tr id="source-s5" role="row">
+<th role="rowheader" scope="row">S5 · 世界银行研究者<br/>主动性训练长期随访</th>
+<td data-label="日期／层级" role="cell">2025-03-03<br/>后续研究的研究者解读</td>
+<td data-label="覆盖" role="cell">已读解读正文；只采用性别异质性和样本流失提醒，不新增未核验数字。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://blogs.worldbank.org/en/impactevaluations/personal-initiative-training-continues-to-yield-positive-benefit" rel="noreferrer">https://blogs.worldbank.org/en/impactevaluations/personal-initiative-training-continues-to-yield-positive-benefit</a></td>
+</tr>
+<tr id="source-s6" role="row">
+<th role="rowheader" scope="row">S6 · Paul Graham<br/><cite lang="en">Do Things that Don't Scale</cite></th>
+<td data-label="日期／层级" role="cell">2013-07<br/>案例叙述／亲历文章</td>
+<td data-label="覆盖" role="cell">已读作者文章；采用早期服务案例，未核对公司账目，不作终局成功的因果证明。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://www.paulgraham.com/ds.html" rel="noreferrer">https://www.paulgraham.com/ds.html</a></td>
+</tr>
+<tr id="source-s7" role="row">
+<th role="rowheader" scope="row">S7 · 亚马逊<br/>2016 年股东信</th>
+<td data-label="日期／层级" role="cell">2016 年度信／2017 年发布<br/>案例叙述／公司陈述</td>
+<td data-label="覆盖" role="cell">已读公司刊载正文；仅借原则，不把公司主张视作经独立验证的成功机制。</td>
+<td data-label="原始网址" role="cell"><a class="source-url" href="https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders" rel="noreferrer">https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders</a></td>
+</tr>
+<tr id="source-s8" role="row"><th role="rowheader" scope="row">S8 · 世界银行数据目录</th><td data-label="日期／层级" role="cell">2025-01-30 更新<br/>官方介绍／范围核对</td><td data-label="覆盖" role="cell">已打开研究摘要与样本说明；用于确认 31% 与统计显著性口径，未下载或重分析数据。</td><td data-label="原始网址" role="cell"><a class="source-url" href="https://microdata.worldbank.org/catalog/2860" rel="noreferrer">https://microdata.worldbank.org/catalog/2860</a></td></tr><tr id="source-b1" role="row"><th role="rowheader" scope="row">B1 · The Mom Test 作者官网</th><td data-label="日期／层级" role="cell">2026-10-05 访问<br/>官方介绍／范围核对</td><td data-label="覆盖" role="cell">已读官方介绍；仅核对书名与选读主题，不核对购买信息。</td><td data-label="原始网址" role="cell"><a class="source-url" href="https://www.momtestbook.com/" rel="noreferrer">https://www.momtestbook.com/</a></td></tr><tr id="source-b2" role="row"><th role="rowheader" scope="row">B2 · Financial Intelligence 出版方</th><td data-label="日期／层级" role="cell">2026-10-05 访问<br/>官方介绍／范围核对</td><td data-label="覆盖" role="cell">已读 HBR 介绍；选读主题为财务理解，不保证经营效果。</td><td data-label="原始网址" role="cell"><a class="source-url" href="https://store.hbr.org/product/financial-intelligence-for-entrepreneurs-what-you-really-need-to-know-about-the-numbers/1915" rel="noreferrer">https://store.hbr.org/product/financial-intelligence-for-entrepreneurs-what-you-really-need-to-know-about-the-numbers/1915</a></td></tr><tr id="source-b3" role="row"><th role="rowheader" scope="row">B3 · The E-Myth Revisited 作者公司</th><td data-label="日期／层级" role="cell">2026-10-05 访问<br/>官方介绍／范围核对</td><td data-label="覆盖" role="cell">已读官方介绍；选读主题为经营流程，不把宣传话术当效果证据。</td><td data-label="原始网址" role="cell"><a class="source-url" href="https://michaelegerbercompanies.com/product/the-e-myth-revisited/" rel="noreferrer">https://michaelegerbercompanies.com/product/the-e-myth-revisited/</a></td></tr></tbody>
+</table>
+
+</section>
+<section aria-labelledby="appendix-title" class="report-section" id="appendix">
+<header class="section-heading">
+<span class="section-index">10 / TRANSCRIPT APPENDIX</span>
+<h2 id="appendix-title">完整原文附录</h2>
+</header>
+<details>
+<summary>展开完整原文（保留自述、原词与转写歧义）</summary>
+<p class="note">以下仅保存用户提供的文字，不代表核实其中的人物、数字或承诺。“学到”等原词按收到的文字保留。</p>
+<div id="original-transcript"><p>今天这个视频是我压箱底的干货，是我花了16000个小时实践得出的结论。三年之前我就像疯了一样尝试了市面上所有学习赚钱的方法。今天的视频提取出来哪些是有效的。这个视频非常长，非常干。</p><p>学习赚钱是一个系统，碎片化啥也干不成。我们千万不要想着速成，不努力还能拿到结果，这样特别容易成就韭菜。很多年轻人是想要长期主义的，但是就不知道这个系统是如何搭建的。你要想方设法的给自己补上五大板块：知识、经验、见识、资源、能量。这五个如何一一获取？我们一个一个说啊。</p><p>第三是见识。我们能够得到的叫经验，我们够不到的叫见识。我学习经验的对象一定是和我大差不差的，就是领先我一到两年的小前辈。我学习见识的对象一定是疯狂增长的独角兽。比如我师父，他是和拼多多同年拿腾讯投资的中国最早做知识付费平台的创始人。但是他们前几年有低谷，我亲眼看着他近一两年从年营业额20亿到50亿到差不多百亿吧人民网都报道了。能近距离知道这种人是如何思考战略的这就是一种见识。那我们千万不要把经验和见识搞混。有的人面对小创业者看不上人家，哎呀这个才挣个一两百万我看他干嘛呀我要学雷军。雷军的资源你有吗？你能学得上雷军的术。然后面对快速增长的独角兽又觉得啊这对我有什么参考价值啊对我有啥用啊说这么多废话干嘛呀。和小创业者学术，和大创业者学到。</p></div>
+</details>
+</section>
+</main>
+
+<script>
+/* 仅更新当前 DOM；不读写持久存储，不请求网络，不推断收入或成功率。 */
+(() => {
+  "use strict";
+
+  const modules = [
+    {
+      id: "knowledge",
+      name: "知识",
+      action: "写或修订六格经营卡，向一位潜在客户核对其中一个问题。"
+    },
+    {
+      id: "experience",
+      name: "经验",
+      action: "记录一次新的小样测试的预测、实际反馈和下一步。"
+    },
+    {
+      id: "perspective",
+      name: "见识",
+      action: "写下一条可借原则及自己尚不具备的规模条件。"
+    },
+    {
+      id: "resources",
+      name: "资源",
+      action: "征得一位同行同意，在时间上限内提供一次具体小帮助。"
+    },
+    {
+      id: "energy",
+      name: "能量",
+      action: "记录一个不挤压睡眠的注意时段，并保留恢复时间。"
+    }
+  ];
+
+  const controls = modules.map(item =>
+    document.getElementById(`audit-${item.id}`)
+  );
+  const result = document.getElementById("audit-result");
+  const resetButton = document.getElementById("reset-audit");
+  const levelNames = ["未知／未验证", "小产物已验证", "已反复证明"];
+
+  if (
+    !result ||
+    !(resetButton instanceof HTMLButtonElement) ||
+    !controls.every(control => control instanceof HTMLSelectElement)
+  ) {
+    return;
+  }
+
+  function render(wasReset = false) {
+    const values = controls.map(control => {
+      const value = Number(control.value);
+      return Number.isInteger(value) && value >= 0 && value <= 2
+        ? value
+        : 0;
+    });
+
+    const lowest = Math.min(...values);
+    const weakest = modules.filter(
+      (item, index) => values[index] === lowest
+    );
+
+    const summary = document.createElement("p");
+    const heading = document.createElement("strong");
+    const tiedLabel = weakest.length > 1
+      ? "并列待检查项"
+      : "待检查项";
+
+    heading.textContent =
+      `${wasReset ? "已重置。" : ""}` +
+      `当前最低证据档为“${levelNames[lowest]}”；` +
+      `${tiedLabel}：${weakest.map(item => item.name).join("、")}。`;
+
+    summary.appendChild(heading);
+    summary.appendChild(
+      document.createTextNode(
+        lowest === 2
+          ? " 五项都选择了反复证明，仍不能推出赚钱保证；请选择一项检验旧证据是否仍适用。"
+          : " 这只是相对证据缺口，不表示能力低；先选一项行动即可。"
+      )
+    );
+
+    const list = document.createElement("ul");
+
+    weakest.forEach(item => {
+      const li = document.createElement("li");
+      const name = document.createElement("strong");
+      name.textContent = `${item.name}：`;
+      li.appendChild(name);
+      li.appendChild(document.createTextNode(item.action));
+      list.appendChild(li);
+    });
+
+    result.replaceChildren(summary, list);
+  }
+
+  controls.forEach(control => {
+    control.value = "0";
+    control.addEventListener("change", () => render());
+  });
+
+  resetButton.addEventListener("click", () => {
+    controls.forEach(control => {
+      control.value = "0";
+    });
+    render(true);
+  });
+
+  resetButton.disabled = false;
+  render();
+})();
+</script>
+</body>
+</html>

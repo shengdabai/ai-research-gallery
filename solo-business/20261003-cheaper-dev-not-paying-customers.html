@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light" name="color-scheme"/>
+<meta content="面向独立开发者与小企业主的 AI 商业研究报告：从买方问题、付费验证和单位经济性出发，再选择工作流与工具。" name="description"/>
+<title>开发更便宜，不等于有人付费｜AI 商业研究报告</title>
+<style>
+    /*
+     * 设计令牌：颜色、字体、尺寸、间距与布局常量统一定义于 :root。
+     *
+     * 断点注册表（按浏览器默认字号，48rem 约为 768px）：
+     * BP-EDITORIAL：宽度 > 48rem，默认双栏证据卡、完整表格。
+     * BP-COMPACT：宽度 <= 48rem，单栏卡片、表格逐行堆叠；覆盖 390px。
+     *
+     * 原生 CSS 媒体查询不能引用 var()；唯一宽度查询集中在样式表末尾，
+     * 其 48rem 字面量须与 --breakpoint-compact 文档令牌同步。
+     */
+    :root {
+      --paper: #f6f1e7;
+      --surface: #fcf9f2;
+      --ink: #222b25;
+      --muted: #536055;
+      --green: #215842;
+      --green-soft: #e8eee3;
+      --line: #d5d9cc;
+      --focus: #174d36;
+
+      --font-body: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-heading: ui-serif, "Songti SC", "STSong", serif;
+      --font-code: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+      --text-xs: 0.8125rem;
+      --text-sm: 0.875rem;
+      --text-table: 0.9375rem;
+      --text-base: 1rem;
+      --text-lead: 1.125rem;
+      --text-h1: clamp(2.1rem, 5.3vw, 3.6rem);
+      --text-h2: clamp(1.4rem, 2.6vw, 1.9rem);
+      --text-h3: 1.125rem;
+      --text-metric: 1.9rem;
+
+      --leading-body: 1.85;
+      --leading-compact: 1.6;
+      --leading-title: 1.22;
+      --weight-regular: 400;
+      --weight-medium: 600;
+      --weight-bold: 700;
+      --tracking-title: -0.025em;
+      --tracking-label: 0.07em;
+
+      --s1: 0.25rem;
+      --s2: 0.5rem;
+      --s3: 0.75rem;
+      --s4: 1rem;
+      --s5: 1.5rem;
+      --s6: 2rem;
+      --s7: 3rem;
+      --s8: 4rem;
+
+      --page-gutter: clamp(1rem, 4vw, 3rem);
+      --page-max: 72rem;
+      --reading-max: 76ch;
+      --border-thin: 1px;
+      --border-strong: 2px;
+      --border-accent: 3px;
+      --radius: 0.3rem;
+      --focus-width: 3px;
+      --focus-offset: 3px;
+      --underline-width: 1px;
+      --underline-offset: 0.2em;
+      --touch-min: 2.75rem;
+
+      --grid-one: minmax(0, 1fr);
+      --grid-two: repeat(2, minmax(0, 1fr));
+      --grid-six: repeat(6, minmax(0, 1fr));
+      --claim-original-width: 24%;
+      --claim-judgement-width: 16%;
+      --workflow-step-width: 15%;
+      --workflow-input-width: 21%;
+      --workflow-output-width: 22%;
+      --workflow-owner-width: 12%;
+      --mobile-label-width: 4.5rem;
+
+      --sr-size: 1px;
+      --sr-margin: -1px;
+      --sr-clip: inset(50%);
+      --skip-hidden-top: -12rem;
+      --skip-layer: 10;
+      --breakpoint-compact: 48rem;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      font-weight: var(--weight-regular);
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration-thickness: var(--underline-width);
+      text-underline-offset: var(--underline-offset);
+    }
+
+    a:hover {
+      text-decoration-thickness: var(--border-strong);
+    }
+
+    :focus-visible {
+      outline: var(--focus-width) solid var(--focus);
+      outline-offset: var(--focus-offset);
+      border-radius: var(--radius);
+    }
+
+    ::selection {
+      background: var(--green-soft);
+      color: var(--ink);
+    }
+
+    h1, h2, h3, p, ol, ul, dl, blockquote {
+      margin: 0;
+    }
+
+    h1, h2 {
+      font-family: var(--font-heading);
+    }
+
+    h1 {
+      font-size: var(--text-h1);
+      line-height: var(--leading-title);
+      letter-spacing: var(--tracking-title);
+      margin-block: var(--s4) var(--s5);
+    }
+
+    h2 {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s3);
+      font-size: var(--text-h2);
+      line-height: var(--leading-title);
+      margin-bottom: var(--s5);
+    }
+
+    h3 {
+      font-size: var(--text-h3);
+      line-height: var(--leading-compact);
+    }
+
+    p + p {
+      margin-top: var(--s3);
+    }
+
+    strong, b {
+      font-weight: var(--weight-bold);
+    }
+
+    small {
+      font-size: var(--text-sm);
+    }
+
+    section, [id] {
+      scroll-margin-top: var(--s5);
+    }
+
+    .page {
+      max-width: var(--page-max);
+      margin-inline: auto;
+      padding: var(--s7) var(--page-gutter);
+    }
+
+    .skip-link {
+      position: fixed;
+      inset-block-start: var(--skip-hidden-top);
+      inset-inline-start: var(--s4);
+      z-index: var(--skip-layer);
+      padding: var(--s3) var(--s4);
+      background: var(--surface);
+      border: var(--border-strong) solid var(--green);
+    }
+
+    .skip-link:focus {
+      inset-block-start: var(--s3);
+    }
+
+    .eyebrow, .section-number {
+      color: var(--green);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-label);
+    }
+
+    .section-number {
+      flex-shrink: 0;
+    }
+
+    .deck {
+      max-width: var(--reading-max);
+      font-size: var(--text-lead);
+    }
+
+    .metadata {
+      margin-top: var(--s5);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .contents {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1) var(--s5);
+      padding-block: var(--s4);
+      margin-top: var(--s5);
+      border-block: var(--border-thin) solid var(--line);
+    }
+
+    .contents a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--touch-min);
+      font-size: var(--text-sm);
+    }
+
+    .report-section {
+      margin-top: var(--s8);
+    }
+
+    .report-section + .report-section {
+      border-top: var(--border-thin) solid var(--line);
+      padding-top: var(--s7);
+    }
+
+    .subheading {
+      margin-block: var(--s5) var(--s3);
+    }
+
+    .muted, .note {
+      color: var(--muted);
+    }
+
+    .note {
+      font-size: var(--text-sm);
+    }
+
+    .citation {
+      white-space: nowrap;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .value-chain {
+      display: grid;
+      grid-template-columns: var(--grid-six);
+      gap: var(--s2);
+      list-style: none;
+      padding: 0;
+      margin-block: var(--s5);
+    }
+
+    .value-chain li {
+      padding: var(--s3);
+      border-top: var(--border-strong) solid var(--green);
+      background: var(--green-soft);
+    }
+
+    .value-chain b, .value-chain span {
+      display: block;
+    }
+
+    .value-chain b {
+      font-size: var(--text-table);
+    }
+
+    .value-chain span {
+      margin-top: var(--s1);
+      color: var(--muted);
+      font-size: var(--text-xs);
+    }
+
+    .callout {
+      margin-top: var(--s5);
+      padding: var(--s4) var(--s5);
+      border-inline-start: var(--border-accent) solid var(--green);
+      background: var(--surface);
+    }
+
+    .callout h3 {
+      margin-bottom: var(--s2);
+    }
+
+    .table-wrap {
+      margin-top: var(--s5);
+    }
+
+    .report-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: var(--text-table);
+      line-height: var(--leading-compact);
+    }
+
+    .report-table caption {
+      text-align: start;
+      color: var(--muted);
+      font-size: var(--text-sm);
+      padding-bottom: var(--s3);
+    }
+
+    .report-table th, .report-table td {
+      padding: var(--s4) var(--s3);
+      vertical-align: top;
+      text-align: start;
+      border-bottom: var(--border-thin) solid var(--line);
+    }
+
+    .report-table thead th {
+      background: var(--green-soft);
+      font-weight: var(--weight-bold);
+    }
+
+    .report-table tbody th {
+      font-weight: var(--weight-medium);
+    }
+
+    .claim-table thead th:nth-child(1) {
+      width: var(--claim-original-width);
+    }
+
+    .claim-table thead th:nth-child(2) {
+      width: var(--claim-judgement-width);
+    }
+
+    .workflow-table thead th:nth-child(1) {
+      width: var(--workflow-step-width);
+    }
+
+    .workflow-table thead th:nth-child(2) {
+      width: var(--workflow-input-width);
+    }
+
+    .workflow-table thead th:nth-child(3) {
+      width: var(--workflow-output-width);
+    }
+
+    .workflow-table thead th:nth-child(4) {
+      width: var(--workflow-owner-width);
+    }
+
+    .judgement {
+      color: var(--green);
+      font-weight: var(--weight-bold);
+    }
+
+    .mobile-label {
+      display: none;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: var(--grid-two);
+      gap: var(--s5);
+      margin-block: var(--s5);
+    }
+
+    .card {
+      min-width: 0;
+      padding: var(--s5);
+      border: var(--border-thin) solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .card h3 {
+      margin-block: var(--s2) var(--s3);
+    }
+
+    .metric {
+      display: block;
+      margin-block: var(--s3);
+      font-size: var(--text-metric);
+      line-height: var(--leading-title);
+      color: var(--green);
+      font-weight: var(--weight-bold);
+    }
+
+    .metric small {
+      color: var(--ink);
+      font-weight: var(--weight-regular);
+    }
+
+    .formula-list {
+      margin-block: var(--s5);
+    }
+
+    .formula-list > div {
+      padding: var(--s5);
+      background: var(--green-soft);
+    }
+
+    .formula-list > div + div {
+      margin-top: var(--s3);
+    }
+
+    .formula-list dt {
+      font-weight: var(--weight-bold);
+      color: var(--green);
+    }
+
+    .formula-list dd {
+      margin: var(--s2) 0 0;
+      font-size: var(--text-lead);
+    }
+
+    .brief {
+      margin-top: var(--s5);
+      padding: var(--s5);
+      border: var(--border-thin) solid var(--line);
+      background: var(--surface);
+    }
+
+    .brief > div + div {
+      margin-top: var(--s3);
+      padding-top: var(--s3);
+      border-top: var(--border-thin) solid var(--line);
+    }
+
+    .brief dt {
+      font-weight: var(--weight-bold);
+    }
+
+    .brief dd {
+      margin: var(--s1) 0 0;
+    }
+
+    blockquote {
+      margin-block: var(--s4);
+      padding-inline-start: var(--s4);
+      border-inline-start: var(--border-strong) solid var(--line);
+    }
+
+    .experiment {
+      display: grid;
+      grid-template-columns: var(--grid-two);
+      gap: var(--s5);
+      list-style: none;
+      padding: 0;
+      margin-block: var(--s5);
+    }
+
+    .experiment li {
+      border-top: var(--border-strong) solid var(--green);
+      padding-top: var(--s4);
+    }
+
+    .experiment h3 {
+      margin-bottom: var(--s2);
+    }
+
+    .source-list {
+      list-style: none;
+      padding: 0;
+      font-size: var(--text-sm);
+    }
+
+    .source-list li {
+      padding-block: var(--s3);
+      border-bottom: var(--border-thin) solid var(--line);
+    }
+
+    .source-key {
+      color: var(--green);
+      font-weight: var(--weight-bold);
+      margin-inline-end: var(--s2);
+    }
+
+    .coverage {
+      margin-top: var(--s5);
+      font-size: var(--text-sm);
+    }
+
+    .coverage h3 {
+      margin-bottom: var(--s3);
+    }
+
+    .review-note {
+      margin-top: var(--s5);
+      padding: var(--s4);
+      border: var(--border-thin) dashed var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .review-note h3 {
+      margin-bottom: var(--s2);
+      font-size: var(--text-base);
+    }
+
+    .footer {
+      margin-top: var(--s7);
+      padding-top: var(--s4);
+      border-top: var(--border-thin) solid var(--line);
+      color: var(--muted);
+      font-size: var(--text-xs);
+    }
+
+    .handoff {
+      font-family: var(--font-code);
+      font-size: inherit;
+      overflow-wrap: anywhere;
+    }
+
+    /* BP-COMPACT：所有窄屏布局覆盖集中于此，断点见顶部注册表。 */
+    @media (max-width: 48rem) {
+      .page {
+        padding-block: var(--s5);
+      }
+
+      .report-section {
+        margin-top: var(--s7);
+      }
+
+      .report-section + .report-section {
+        padding-top: var(--s6);
+      }
+
+      .contents {
+        column-gap: var(--s4);
+      }
+
+      .value-chain {
+        grid-template-columns: var(--grid-two);
+      }
+
+      .cards, .experiment {
+        grid-template-columns: var(--grid-one);
+      }
+
+      .card, .callout, .brief, .formula-list > div {
+        padding: var(--s4);
+      }
+
+      .report-table, .report-table tbody, .report-table tr {
+        display: block;
+        width: 100%;
+      }
+
+      .report-table caption {
+        display: block;
+      }
+
+      .report-table thead {
+        position: absolute;
+        width: var(--sr-size);
+        height: var(--sr-size);
+        padding: 0;
+        margin: var(--sr-margin);
+        overflow: hidden;
+        clip-path: var(--sr-clip);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .report-table tbody tr {
+        margin-bottom: var(--s4);
+        border: var(--border-thin) solid var(--line);
+        background: var(--surface);
+      }
+
+      .report-table tbody th {
+        display: block;
+        padding: var(--s3);
+        background: var(--green-soft);
+        border-bottom: var(--border-thin) solid var(--line);
+      }
+
+      .report-table tbody td {
+        display: grid;
+        grid-template-columns: var(--mobile-label-width) minmax(0, 1fr);
+        gap: var(--s2);
+        padding: var(--s3);
+      }
+
+      .report-table tbody td:last-child {
+        border-bottom: 0;
+      }
+
+      .mobile-label {
+        display: block;
+        color: var(--muted);
+        font-size: var(--text-sm);
+        font-weight: var(--weight-medium);
+      }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到报告正文</a>
+<div class="page">
+<header>
+<p class="eyebrow">AI 商业研究备忘录 · 独立开发者与小企业主</p>
+<h1>开发更便宜，<br/>不等于有人付费</h1>
+<p class="deck">先确认谁愿意为哪种结果付费，再判断工作流中哪些任务适合 AI，最后选择工具。软件成本下降，不能替代对买方、问题和价值的验证。</p>
+<p class="metadata">研究整理日期：<time datetime="2026-10-03">2026-10-03</time> · 基于所供材料 · 未进行客户需求与付款验证</p>
+<nav aria-label="报告目录" class="contents">
+<a href="#section-1">01 核心判断</a>
+<a href="#section-2">02 主张复核</a>
+<a href="#section-3">03 研究边界</a>
+<a href="#section-4">04 商业账本</a>
+<a href="#section-5">05 脚本案例</a>
+<a href="#section-6">06 任务简报</a>
+<a href="#section-7">07 两类行动</a>
+<a href="#section-8">08 两周试验</a>
+<a href="#section-9">09 来源与覆盖</a>
+</nav>
+</header>
+<main id="main" tabindex="-1">
+<section aria-labelledby="heading-1" class="report-section" id="section-1">
+<h2 id="heading-1"><span class="section-number">01</span>先找价值，再找实现方式</h2>
+<p>即使某些开发环节变便宜，买方的预算、信任和切换意愿也不会自动出现。<strong>任务提效、产品卖得出、客户持续付费，是三个不同命题。</strong>商业验证必须沿着下面的链条前进，而不是从“能做什么功能”倒推需求。</p>
+<ol aria-label="从买方到留存与利润的价值验证链" class="value-chain">
+<li><b>1 · 买方</b><span>谁使用，谁付款</span></li>
+<li><b>2 · 痛点</b><span>当前损失与替代</span></li>
+<li><b>3 · 可衡量结果</b><span>改变什么，如何计量</span></li>
+<li><b>4 · 付费试验</b><span>为明确范围真付款</span></li>
+<li><b>5 · 可重复交付</b><span>质量、成本可复现</span></li>
+<li><b>6 · 留存／利润</b><span>继续使用，算清全账</span></li>
+</ol>
+<aside aria-labelledby="seller-example" class="callout">
+<h3 id="seller-example">假设例子：菜贩未必需要网站</h3>
+<p>减少订单错误、损耗或遗漏复购，也许比“拥有网站”更有意义。但这些只是候选问题：需要观察商户如何接单、核对和回访，了解现有替代方案，再做付费测试。最后的交付可以是人工服务、表格、消息模板或网站；这里没有已验证需求的证据。</p>
+</aside>
+</section>
+<section aria-labelledby="heading-2" class="report-section" id="section-2">
+<h2 id="heading-2"><span class="section-number">02</span>把绝对判断改成可检验主张</h2>
+<div class="table-wrap">
+<table class="report-table claim-table" role="table">
+<caption>原主张按所供摘要归纳，不作为讲者逐字引文；修订中的商业判断属于条件推断。</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">原主张</th>
+<th role="columnheader" scope="col">判断</th>
+<th role="columnheader" scope="col">修订后主张</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">AI 只帮助已有研发团队，从不帮助个人</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">证据不足</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>收益随任务、技能、上下文和工作流变化。特定写作任务的提效与特定编码任务的减速，均不能支持“个人无益”的断言。<a aria-label="参见来源 S1，专业写作实验" class="citation" href="#s1">[S1]</a> <a aria-label="参见来源 S2，编码实验" class="citation" href="#s2">[S2]</a> <a aria-label="参见来源 S3，后续研究更新" class="citation" href="#s3">[S3]</a></span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">开发越容易，变现门槛必然越高</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">条件推断</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>供给增长可能加剧竞争，也可能使原本不经济的细分需求变得可行。成本下降如何影响变现，要看替代品、分发和服务成本；所供材料没有普遍必然性的实证证明。</span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">个人无法在技术上胜过大公司</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">过度概括</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>领域知识、客户接入、分发与支持都可能形成差异；能解决困难任务的技术优势仍重要。应比较具体问题上的交付能力，而非按公司规模预判输赢。</span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">数千次 Git 提交乘每次两三分钟，就证明开发成本</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">度量错误</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>commit、push、模型执行不同，频率与串行等待也不固定。仅作算术示意：<strong>1000 次真正串行等待 × 2 分钟 ≈ 33.3 小时</strong>，不代表典型情况。应测交付历时、主动工时、失败返工、支持负担与采用情况。</span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">给目标、数据、规则、标准与反馈，就保证稳定输出</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">不能保证</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>还应加入正反例、检索与数据质量检查、留出评测、拒答及不确定性处理、人工核验和版本追踪。这是降低风险的验证设计，不是稳定性保证书。</span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">界面不重要，教学永远比工具好</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">视场景而定</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>界面可以降低认知负担、把约束写进操作流程；服务、培训与软件可以互补。应以客户能否独立完成、是否重复使用来取舍，而不是以一次演示或满意表态下结论。</span>
+</td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">企业实施语境中的 FTE，以及数据清洗的简化表述</th>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">判断</span>
+<span class="judgement">术语待确认</span>
+</td>
+<td role="cell">
+<span aria-hidden="true" class="mobile-label">修订</span>
+<span>原稿写的是 <strong>FTE</strong>，通常指 full-time equivalent（全职当量）；此处可能想说 <strong>FDE</strong>（Forward Deployed Engineer，前线部署工程师），须原讲者确认，不能静默替换。FDE 不只是清洗数据：官方描述还涉及客户问题、流程、数据、逻辑、行动、安全与部署反馈。<a aria-label="参见来源 S5，Palantir 架构说明" class="citation" href="#s5">[S5]</a> <a aria-label="参见来源 S6，FDE 岗位说明" class="citation" href="#s6">[S6]</a></span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section aria-labelledby="heading-3" class="report-section" id="section-3">
+<h2 id="heading-3"><span class="section-number">03</span>研究区分：任务效率、业务发现与利润</h2>
+<div class="cards">
+<article aria-labelledby="writing-evidence" class="card">
+<p class="eyebrow">S1 · 专业写作随机实验</p>
+<h3 id="writing-evidence">短而有边界的任务出现提效</h3>
+<p>2023-03-10 的 Noy／Zhang MIT 工作论文，所引为未同行评审版本：444 名受过大学教育的专业人士参与专业写作任务。</p>
+<p class="metric">27 → 17 <small>分钟，平均任务时间</small></p>
+<p>约减少 37%；质量提高 0.45 个标准差，见原稿第 3—4 页。<a aria-label="参见来源 S1，第 3 至 4 页" class="citation" href="#s1">[S1]</a></p>
+<p class="note">边界：短任务的时间与质量结果，不是创业收入、长期协作或最新模型的证据。</p>
+</article>
+<article aria-labelledby="coding-evidence" class="card">
+<p class="eyebrow">S2 · 成熟开源仓库编码实验</p>
+<h3 id="coding-evidence">熟悉代码库的开发者反而更慢</h3>
+<p>METR 2025 年论文：16 名有经验的开源开发者，在各自熟悉的成熟仓库中处理 246 项任务，使用 2025 年 2—6 月的前沿工具。</p>
+<p class="metric">多用 19% <small>任务完成时间</small></p>
+<p>这是该历史场景下的结果，不代表所有开发者、所有任务或今天的工具。<a aria-label="参见来源 S2，研究设置及结果" class="citation" href="#s2">[S2]</a></p>
+<p class="note">边界：真实编码工作不等于写作短任务，更不等于个人创业成败。</p>
+</article>
+</div>
+<p><strong>不能合成一个“AI 收益率”。</strong>分钟、相对耗时变化和质量标准差不是同一指标；两项研究的人群、任务、工具时期也不同，不应混画共同条形图或简单相减。</p>
+<aside aria-labelledby="metr-update" class="callout">
+<h3 id="metr-update">S3 · 必须一起读的更新：2026-02-24</h3>
+<p>METR 后续原始估计提示可能提速，但招募与任务选择偏差、并行代理的计时问题，使当前效应难以可靠估计。因此，不能用 S2 证明“当下 AI 不能帮助个人”。<a aria-label="参见来源 S3，2026 年 2 月更新" class="citation" href="#s3">[S3]</a></p>
+</aside>
+<p class="callout"><strong>S4 · 工程边界。</strong>Anthropic 在 2024-12-19 的工程文章中建议：从最简单且够用的方法开始，复杂性会增加延迟和费用，并应配置评测与人工检查点。这是官方工程经验，不是受控因果证据；页面也提示 2024 年以来工具已经变化。<a aria-label="参见来源 S4，智能体工程经验" class="citation" href="#s4">[S4]</a></p>
+<h3 class="subheading">任务适配：本文建议先问四个问题</h3>
+<p>输入能否获准取得？正确与错误能否判定？检查输出是否比重做更省力？失败是否可逆，并有明确的人接管？答案不清楚时，先缩小范围或人工执行；能写成提示词，不等于适合交给 AI。</p>
+<p>可确定的计算、校验和状态转换，优先考虑规则或普通代码；有资料依据的整理与候选生成，可试用模型。先用单次调用或固定流程，只有简单方案达不到验收、增加复杂度的净收益又可测时，才考虑更自主的代理。对外发布、承诺报价和修改业务记录，都要明确审批边界。</p>
+<section aria-labelledby="latest-heading" id="latest-research">
+<h3 class="subheading" id="latest-heading">补充研究｜把时间节省与商业结果分开</h3>
+<p><strong>企业调查 · 自报数据：</strong>麦肯锡 2026 年调查于 5 月 4 日至 6 月 8 日进行，覆盖 97 国 1,719 名受访者。报告正文称，80% 的受访者自报 AI 提高了自己的生产率；37% 将至少部分企业 EBIT（息税前利润）影响归因于 AI。约 6% 同时达到“至少 5% 的 EBIT 归因于 AI”及“显著价值”的高绩效定义。它支持区分个人效率与企业财务结果；<strong>不能解释为其余 94% 都不挣钱</strong>，也不能代表中国个人创业者收入。不同问题的比例不是同一条转化漏斗。<a aria-label="查看来源 S8" class="citation" href="#s8">[S8]</a> 比例沿用报告问项口径；本报告未逐题复核有效答题分母，不将其直接乘以总样本量计算人数。</p>
+<p><strong>现场实验 · 时间节省：</strong>另一项覆盖 66 家企业、7,137 名知识工作者的研究发现：六个月实验后半段，使用工具的受处理员工每周少花约两小时处理邮件；研究未检测到任务数量或结构的变化。这说明“省下时间之后发生了什么”仍须单独测量，不能将省时直接记为新增收入，也不能据此断定企业没有获利。<a aria-label="查看来源 S7" class="citation" href="#s7">[S7]</a></p>
+<p><strong>直接观察企业结果 · 工作论文：</strong>INSEAD/HBS 的 2026 年现场实验覆盖 515 家高增长初创企业；两组均获 AI 使用权限、额度与技术培训；处理组额外获得其他企业围绕 AI 重组业务的案例，对照组参加一般创业工作坊。机构摘要报告，其营收约为对照组的 1.9 倍，收益更多集中在高分位企业。这为“发现有价值的应用位置”提供了比单纯省时更接近商业结果的证据；并非所有企业收入都会翻倍，更不证明只要改善提问就能挣钱。本报告核验了机构摘要与研究团队所在机构的解读，未审核完整原始数据。<a aria-label="查看来源 S9" class="citation" href="#s9">[S9]</a> </p>
+<p><strong>本报告建议：</strong>对同一任务同时记录主动工时、端到端周期、返工、客户验收和真实收款。选题更快但合格线索不变、代码更快但客户仍不会使用，都意味着价值链后续环节尚未改善。</p>
+</section></section>
+<section aria-labelledby="heading-4" class="report-section" id="section-4">
+<h2 id="heading-4"><span class="section-number">04</span>客户与提供方，要各算一本账</h2>
+
+<dl class="formula-list">
+<div>
+<dt>客户净收益</dt>
+<dd>可归因新增毛利 ＋ 可实际利用的节省成本 ＋ 预期避免损失<br/>− 工具、实施、核验与切换成本</dd>
+</div>
+<div>
+<dt>提供方现金贡献</dt>
+<dd>收款额（未扣退款）− 实付交付人工、API、外包、返工、支持、支付／平台手续费、交易相关税费与退款</dd>
+</div>
+<div><dt>提供方完整贡献（含时间价值）</dt><dd>现金贡献 − 未计入实付成本的本人主动工时 × 时薪／机会成本假设</dd></div></dl>
+<p><strong>省下工时，不会自动变成现金。</strong>先确认是否减少支出或释放可用产能；未兑现的便利可以单列。同一收益不能重复计入：某段工时若已贡献新增毛利，就不能再全额计作人工节省；减少损耗也不能同时在两项收益中重复记账。</p>
+<p>先区分现金口径与含时间价值的经济口径。已支付的人工、返工及支持成本只计一次；自己的工时若已计入实付人工，也不能在完整贡献中再次扣除。贡献为正仍不等于企业盈利，还需另计获客与固定成本，并保持同一核算口径。税费按实际承担与收入口径列示，不将代收税额当收益。</p>
+<p><strong>归因要留余地。</strong>季节、渠道、产品／促销方案与样本选择都可能干扰前后对比。尽量保留同类任务基线或同期可比组，记录变化原因；不能把收入增长全部归给 AI。预期避免损失还应列明概率与损失假设。</p>
+
+<h3 class="subheading">完整交付的成本清单</h3><p>写出功能之外，还要估算需求确认、集成与数据处理、评测和返工、上线配置、可靠性与权限、培训与支持、持续维护。成本大小取决于交付范围，不能用 commit 数量替代。先做一个有边界的任务，再决定哪些成本值得长期承担。</p></section>
+<section aria-labelledby="heading-5" class="report-section" id="section-5">
+<h2 id="heading-5"><span class="section-number">05</span>脚本网站：从生成内容到业务闭环</h2>
+<aside aria-labelledby="speaker-experience" class="callout">
+<h3 id="speaker-experience">用户提供的经历 · 不是研究证据</h3>
+<p>讲者做过选题／脚本网站，随后意识到客户在发散与收敛思考上存在差异：定位、选题、脚本规则应贴合各自业务，还要教客户表达意图、判断输出。材料没有提供可核验的客户、营收或成功结果，不能补写成商业案例。</p>
+</aside>
+<p class="callout"><strong>以下为编辑模拟：</strong>为本地商品摄影工作室设计面向社区小店的获客脚本流程。各步骤是待执行方案，不代表已观察到的表现。</p>
+<div class="table-wrap">
+<table class="report-table workflow-table" role="table">
+<caption>每一步都写明输入、输出、责任人和验收；AI 起草不等于 AI 承担业务责任。</caption>
+<thead role="rowgroup">
+<tr role="row">
+<th role="columnheader" scope="col">步骤</th>
+<th role="columnheader" scope="col">输入</th>
+<th role="columnheader" scope="col">输出</th>
+<th role="columnheader" scope="col">责任人</th>
+<th role="columnheader" scope="col">验收</th>
+</tr>
+</thead>
+<tbody role="rowgroup">
+<tr role="row">
+<th role="rowheader" scope="row">1 · 受众／服务</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>买方观察、服务清单</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>目标社区小店店主与服务范围</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>工作室负责人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>使用者、付款人与服务边界明确，否则暂停</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">2 · 定位规则</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>能力、服务边界、禁区</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>定位一句话与禁用承诺</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>工作室负责人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>不夸大、不超出交付能力</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">3 · 选题</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>获准使用的问题与材料</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>候选选题、取舍理由</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>策划</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>对应客户问题，依据可追溯</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">4 · 脚本初稿</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>选题、规则、事实资料</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>开场、说明、证据、行动</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>策划；AI 起草</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>事实有出处，缺项明确标注</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">5 · 审校</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>初稿、原资料、正反例</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>核准稿或拒发理由</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>业务审核人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>事实、授权、报价与承诺过关</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">6 · 发布</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>核准稿、授权素材</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>带版本与渠道标识的内容</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>运营</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>授权有效，咨询入口可用</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">7 · 合格线索</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>咨询内容、来源与联系许可</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>按预定标准筛选的线索</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>接待</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>需求明确、服务可覆盖；去重</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">8 · 咨询</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>线索需求、可交付能力</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>确认需求与报价方案</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>工作室负责人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>范围、时点、费用双方确认</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">9 · 成交</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>确认方案、客户决定</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>订单与收款记录</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>工作室负责人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>以实收为准，记录取消／退款</span></td>
+</tr>
+<tr role="row">
+<th role="rowheader" scope="row">10 · 反馈</th>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输入</span><span>漏斗、工时、返工与异议</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">输出</span><span>更新规则、继续或停止</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">责任人</span><span>负责人</span></td>
+<td role="cell"><span aria-hidden="true" class="mobile-label">验收</span><span>检查贡献与复用，不只看播放</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="callout"><strong>播放量是代理指标，不是收入。</strong>线索、咨询、收款、退款与复购分层记录。对发散型客户，先限定受众、目标和禁区，再做选择；对卡住的客户，给出有材料依据的备选方向。把思考偏好当协作假设，不给客户贴固定标签。</p>
+</section>
+<section aria-labelledby="heading-6" class="report-section" id="section-6">
+<h2 id="heading-6"><span class="section-number">06</span>可复用任务简报，不是万能提示词</h2>
+<dl class="brief">
+<div>
+<dt>买方与目标</dt>
+<dd>〔谁付款、谁使用；业务结果、当前基线、本次范围〕</dd>
+</div>
+<div>
+<dt>数据与来源</dt>
+<dd>〔资料出处、日期、授权、缺失；检索结果如何核对原文〕</dd>
+</div>
+<div>
+<dt>规则与禁止事项</dt>
+<dd>〔事实边界、表达风格；不得编造案例、价格、承诺或隐私信息〕</dd>
+</div>
+<div>
+<dt>执行顺序</dt>
+<dd>〔先核资料，再选题、起草、核验；哪些步骤必须停下请人确认〕</dd>
+</div>
+<div>
+<dt>输出与验收</dt>
+<dd>〔交付格式、必需字段、合格示例、失败示例及判定理由〕</dd>
+</div>
+<div>
+<dt>既往反馈</dt>
+<dd>〔上一版问题、修改理由、仍未解决的冲突；不可照搬旧错误〕</dd>
+</div>
+<div>
+<dt>不确定性与负责人</dt>
+<dd>〔缺信息就标注并追问；无依据的断言不生成；明确人工审核与升级责任人〕</dd>
+</div>
+</dl>
+<aside aria-labelledby="simulated-brief" class="callout">
+<h3 id="simulated-brief">模拟简报与输出：商品摄影咨询脚本</h3>
+<p><strong>假设输入：</strong>工作室负责人仅确认“提供到店商品拍摄”；价格、档期和授权作品未提供。目标是让有相关需求的社区小店店主发起咨询，不承诺转化。按“问题→服务说明→下一步”起草，由工作室负责人审核。</p>
+<blockquote>
+<p>菜单或上新页要换照片，却不清楚该准备什么？我们提供到店商品拍摄。咨询时请说明店铺类型、拍摄用途和希望交付的时间，我们先确认是否适合，再沟通范围与报价。</p>
+</blockquote>
+<p><strong>通过：</strong>服务范围与假设资料一致，不补写价格、档期与作品；待确认项另列。<strong>失败：</strong>编造客户背书，或写“保证销量翻倍”。这段模拟文案没有发布或转化验证。</p>
+</aside>
+<p class="callout">上线前，用<strong>未参与调试的任务</strong>做留出评测，覆盖缺资料、资料冲突与越界要求。记录数据、模型、提示词、规则版本及审稿结果；事实不明时追问、拒绝无依据断言或转人工。好简报减少歧义，不能消除模型与数据的不确定性。</p>
+</section>
+<section aria-labelledby="heading-7" class="report-section" id="section-7">
+<h2 id="heading-7"><span class="section-number">07</span>同一原则，两条起步路径</h2>
+<div class="cards">
+<article aria-labelledby="developer-path" class="card">
+<p class="eyebrow">给技术型独立开发者</p>
+<h3 id="developer-path">先做付费陪跑，再考虑应用</h3>
+<p>观察问题与现成替代，确认客户接触渠道、数据许可和交付能力。先做范围清楚的人工／AI 辅助试点，验证结果与付款，再把重复工作软件化。技术要用于难点，不把功能数量误当市场优势。</p>
+</article>
+<article aria-labelledby="owner-path" class="card">
+<p class="eyebrow">给小企业主</p>
+<h3 id="owner-path">只画一条痛苦流程，不先改造全企业</h3>
+<p>写清负责人、数据、交接、异常和验收，保留不用 AI 的基线。小范围试点后，依据独立完成、错误、支持成本和复用情况，决定继续、改培训、改界面或停止。服务与软件不必二选一。</p>
+</article>
+</div>
+<p><strong>最小数据就绪卡：</strong>来源；字段定义；唯一标识；责任人；缺失、重复与过期状况；访问权限及同意依据；输入输出接口；纠错和回写方式。先准备这一条流程真正需要的数据，不必等待全企业数据完美。</p>
+<p><strong>交付形式也要试：</strong>问题还不清楚时，可用服务共同梳理；客户欠缺判断方法时，可加入训练与示例；规则稳定、任务重复时，再把约束做进软件。让客户不靠开发者临场提示完成一次真实任务，并观察再次使用，才能检验培训和界面是否真的有效。</p>
+<section aria-labelledby="decision-boundaries-heading" id="decision-boundaries">
+<h3 class="subheading" id="decision-boundaries-heading">决策边界｜先验证价值，也允许用小原型学习</h3>
+<p>“先验证”不等于付费前不能写任何代码。一个有限、可丢弃的原型可以帮助验证技术可行性、演示真实任务或发现资料缺口；关键是给它限定时间与验收问题，避免把“开发已经做了很多”当成继续投入的理由。</p>
+<p>客户愿意学习 AI 时，训练目标应是他能独立完成任务并判断结果；客户不愿学习、任务频率低或责任重大时，代交付与人工审核也可能更合适。流程重复、输入输出稳定、规则可检验、支持成本可控时，再考虑用软件承载。<strong>服务、训练、软件的取舍要由实际完成率、复用和付费决定。</strong></p>
+<p>个人交付还要计算自己的主动工时与机会成本。现金贡献为正，并不自动代表投入时间划算；风险损失的减少属于带概率假设的估计，不应当作已经发生的收入。“高端市场需求未满足”目前只是待验证线索，要找到具体决策人、替代方案、预算及试单证据。</p>
+</section></section>
+<section aria-labelledby="heading-8" class="report-section" id="section-8">
+<h2 id="heading-8"><span class="section-number">08</span>14 天建议试验：逐关取得证据</h2>
+<p class="note">以下节奏、人数和判断规则是编辑建议，不是科学验证的普适阈值；两周也不足以证明长期留存。</p>
+<ol class="experiment">
+<li>
+<h3>第 1—3 天 · 观察真实任务</h3>
+<p>观察 3—5 位目标买方的任务与替代做法，问清上一次问题、后果和付款决策人。记录不值得解决的理由，不只问“会不会用”。</p>
+</li>
+<li>
+<h3>第 4—6 天 · 交付一个工作结果</h3>
+<p>人工或 AI 辅助完成一项任务，与同类基线比较。记录交付历时、主动工时、错误、返工和支持；先判适用性，不急着加代理或功能。</p>
+</li>
+<li>
+<h3>第 7—10 天 · 寻求真实付费</h3>
+<p>提出范围、价格、交付、验收和退出条件明确的试点。记录实际付款，也记录拒付、无数据、信任不足或替代更好的理由；口头兴趣不算付款。</p>
+</li>
+<li>
+<h3>第 11—14 天 · 检查重复与全账</h3>
+<p>换一个同类任务，检查交付能否重复、客户能否独立完成及是否主动再用。核算完整单位经济性，把继续观察留存列入后续计划。</p>
+</li>
+</ol>
+<aside aria-labelledby="decision-gates" class="callout">
+<h3 id="decision-gates">停止、改范围，还是软件化？</h3>
+<p>没有明确买方、没有获准使用的数据，或无法形成正向贡献时，应停止或调整范围。只有相同任务反复出现、验收规则逐渐稳定，才值得建设可复用软件。</p>
+<p><strong>原型可运行 ≠ 结果被验证 ≠ 有人付款 ≠ 形成留存。</strong>四道关分别记证据，不用前一关替代后一关。</p>
+<p>试点付款仍需拆解：客户买的是结果、定制支持，还是软件本身？优惠试点价不能自动外推到常规定价。记录客户再次付费需要哪些条件，避免把创始人的超额陪跑，误认成可扩展的产品能力。</p>
+</aside>
+</section>
+<section aria-labelledby="heading-9" class="report-section" id="section-9">
+<h2 id="heading-9"><span class="section-number">09</span>来源、覆盖与未解决事项</h2>
+<ol aria-label="九项研究与官方来源，十个核验网址" class="source-list">
+<li id="s1">
+<span class="source-key">S1</span><a href="https://economics.mit.edu/sites/default/files/inline-files/Noy_Zhang_1_0.pdf" rel="noopener noreferrer">Noy／Zhang · MIT 专业写作实验工作论文（PDF）</a>。2023-03-10，未同行评审版本；统计见第 3—4 页，仅支持所测任务的时间与质量结论。
+          </li>
+<li id="s2">
+<span class="source-key">S2</span><a href="https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf" rel="noopener noreferrer">METR · 2025 年初 AI 与有经验开源开发者研究（PDF）</a>。2025 年论文；历史工具与特定成熟仓库场景，须结合 S3 阅读。
+          </li>
+<li id="s3">
+<span class="source-key">S3</span><a href="https://metr.org/blog/2026-02-24-uplift-update/" rel="noopener noreferrer">METR · 开发者生产率研究更新</a>。2026-02-24；后续估计受招募、任务选择与并行计时问题影响，不能确定当前总体效应。
+          </li>
+<li id="s4">
+<span class="source-key">S4</span><a href="https://www.anthropic.com/engineering/building-effective-agents" rel="noopener noreferrer">Anthropic · Building effective agents</a>。2024-12-19；官方工程经验，非受控因果证据，页面注明此后工具已有变化。
+          </li>
+<li id="s5">
+<span class="source-key">S5</span><a href="https://www.palantir.com/docs/foundry/architecture-center/overview" rel="noopener noreferrer">Palantir · Foundry 架构官方概览</a>。未标日期；本次访问日 2026-10-03。产品与方法描述，不是独立投资回报测量。
+          </li>
+<li id="s6">
+<span class="source-key">S6</span><a href="https://job-boards.greenhouse.io/anthropic/jobs/5391016008" rel="noopener noreferrer">Anthropic · FDE 官方岗位说明</a>。未标日期；本次访问日 2026-10-03。涉及生产应用、客户流程、部署支持与可复用模式，不证明所有公司需要 FDE，也不证明市场支付某种价格。
+          </li>
+<li id="s7"><span class="source-key">S7</span><a href="https://www.nber.org/papers/w33795" rel="noopener noreferrer">NBER · Shifting Work Patterns with Generative AI</a>。2025-05，2025-11 修订；66 家企业、7,137 名知识工作者，时间与工作模式的现场实验，不能直接外推利润。</li>
+<li id="s8"><span class="source-key">S8</span><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" rel="noopener noreferrer">McKinsey · 2026 年 AI 调查</a>。2026-08-25；2026-05-04 至 06-08 调查，1,719 名受访者、97 国，按各国 GDP 贡献加权；自报调查，非审计利润或因果证明。</li>
+<li id="s9"><span class="source-key">S9</span><a href="https://www.insead.edu/faculty-research/publications/working-papers/mapping-ai-production-a-field-experiment-firm" rel="noopener noreferrer">INSEAD · Mapping AI into Production 研究摘要</a>。2026-03 工作论文；515 家高增长初创企业，AI 重组案例信息干预；另核验 <a href="https://aiinstitute.hbs.edu/everyone-has-ai-which-firms-are-going-to-win/" rel="noopener noreferrer">HBS AI Institute 的研究设计解读</a>（2026-04-07）。非代表性个体创业样本；本次未复核完整原始数据。</li></ol>
+<section aria-labelledby="coverage-title" class="coverage">
+<h3 id="coverage-title">本次来源覆盖与限制</h3>
+
+<p>公共研究使用 web search 与 AnySearch 发现线索，再逐项读取原论文、机构摘要或官方页面。九项来源共十个引用网址已打开核验；NBER 页面通过直接抓取读取。全部访问于 2026-10-03。未验证的辅助数据源未用于结论；检索不构成全网穷尽。</p>
+<p>没有进行客户访谈、付款或留存观察。原文经历属于用户提供的信息；开场“很多人研究 AI 却不挣钱”没有总体收入统计支持。原始发言结尾截断，本文行动方案属于编辑补充，不能当作讲者逐字结论。FTE/FDE 原意仍待原讲者确认。</p>
+</section>
+<aside aria-labelledby="review-title" class="review-note">
+
+
+</aside>
+</section>
+</main>
+<footer class="footer">本报告为研究与行动建议；客户价值、付款及留存须由真实业务验证。</footer>
+</div>
+</body>
+</html>

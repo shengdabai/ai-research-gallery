@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>两条定位路线口播核对：从我出发会自嗨，从市场出发会不想做</title>
+<style>
+/* ============================================================
+   TOKENS（唯一设计值来源）
+   结构：primitive（原始刻度）→ semantic（语义角色）→ 组件只消费语义角色。
+   断点阈值：CSS 不允许 var() 进 @media，本页只用两个断点，
+   统一登记于此：--bp-md = 760px（平板）、--bp-sm = 480px（手机）。
+   图表色取自 dataviz 参考调色板 slot 1–3（已跑 validate_palette，PASS；
+   aqua 对比度 2.74 低于 3:1，按 relief 规则所有图形均带可见文字标签）。
+   ============================================================ */
+:root{
+  color-scheme: light;
+  /* --- primitive: color --- */
+  --p-gray-0:#fcfcfb; --p-gray-1:#f4f4f1; --p-gray-2:#e6e6e1; --p-gray-3:#c9c9c2;
+  --p-gray-6:#6b6a66; --p-gray-7:#52514e; --p-gray-9:#0b0b0b; --p-white:#ffffff;
+  --p-blue:#2a78d6; --p-blue-soft:#e4eefb; --p-orange:#eb6834; --p-orange-soft:#fdeae2;
+  --p-aqua:#1baf7a; --p-aqua-soft:#dff5ec; --p-amber:#b36b00; --p-amber-soft:#fff2d6;
+  --p-red:#c0392b; --p-red-soft:#fbe3e0;
+  --p-aqua-deep:#0f6e4c; --p-amber-deep:#7a4800; --p-red-deep:#a32d20;
+  /* --- primitive: space (4px 基数) --- */
+  --sp-0:0; --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  /* --- primitive: type --- */
+  --font-sans:-apple-system,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --fs-xs:12px; --fs-sm:13px; --fs-base:15px; --fs-md:17px; --fs-lg:20px; --fs-xl:26px; --fs-2xl:32px;
+  --lh-tight:1.25; --lh-base:1.65; --lh-loose:1.8;
+  --fw-regular:400; --fw-medium:500; --fw-bold:700;
+  /* --- primitive: shape / depth / motion --- */
+  --radius-sm:6px; --radius-md:10px; --radius-lg:14px; --radius-pill:999px;
+  --bw-1:1px; --bw-2:2px; --bw-3:3px;
+  --shadow-card:0 1px 2px rgba(11,11,11,.06),0 4px 14px rgba(11,11,11,.05);
+  --opacity-0:0; --opacity-muted:.55; --opacity-1:1;
+  --dur-fast:120ms; --dur-base:200ms; --ease-std:cubic-bezier(.2,.7,.2,1); --motion-none:none;
+  --z-base:0; --z-sticky:10; --z-tip:20;
+  /* --- primitive: layout --- */
+  --w-page:1080px; --w-prose:760px; --w-cell-min:150px; --w-cell-wide:220px; --w-table-min:720px; --w-tap:44px;
+  --h-bar:36px; --h-ladder:14px;
+  --track:minmax(0,1fr); --w-full:100%; --cols-2:2; --cols-3:3; --flex-fill:1 1;
+  /* --- semantic: color roles --- */
+  --color-bg:var(--p-gray-1); --color-surface:var(--p-white); --color-surface-alt:var(--p-gray-0);
+  --color-border:var(--p-gray-2); --color-border-strong:var(--p-gray-3);
+  --color-text:var(--p-gray-9); --color-text-2:var(--p-gray-7); --color-text-3:var(--p-gray-6);
+  --color-link:var(--p-blue); --color-focus:var(--p-blue);
+  --series-self:var(--p-blue); --series-self-soft:var(--p-blue-soft);       /* 路线一：从我出发 */
+  --series-market:var(--p-orange); --series-market-soft:var(--p-orange-soft); /* 路线二：从市场出发 */
+  --series-evidence:var(--p-aqua); --series-evidence-soft:var(--p-aqua-soft); /* 反馈 / 证据 */
+  --status-partial:var(--p-aqua); --status-partial-soft:var(--p-aqua-soft); --status-partial-text:var(--p-aqua-deep);
+  --status-infer:var(--p-amber); --status-infer-soft:var(--p-amber-soft); --status-infer-text:var(--p-amber-deep);
+  --status-unverified:var(--p-red); --status-unverified-soft:var(--p-red-soft); --status-unverified-text:var(--p-red-deep);
+  --status-neutral:var(--p-gray-6); --status-neutral-soft:var(--p-gray-2);
+}
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:var(--sp-0);background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--fs-base);line-height:var(--lh-base);font-weight:var(--fw-regular)}
+a{color:var(--color-link);text-decoration-thickness:var(--bw-1);text-underline-offset:var(--sp-1)}
+h1,h2,h3{line-height:var(--lh-tight);margin:var(--sp-0)}
+h1{font-size:var(--fs-2xl);font-weight:var(--fw-bold)}
+h2{font-size:var(--fs-xl);font-weight:var(--fw-bold);margin-bottom:var(--sp-4)}
+h3{font-size:var(--fs-md);font-weight:var(--fw-bold);margin-bottom:var(--sp-2)}
+p{margin:var(--sp-0) var(--sp-0) var(--sp-3)}
+ul,ol{margin:var(--sp-0) var(--sp-0) var(--sp-3);padding-left:var(--sp-5)}
+li{margin-bottom:var(--sp-1)}
+code{font-family:var(--font-mono);font-size:var(--fs-sm);background:var(--p-gray-1);padding:var(--sp-0) var(--sp-1);border-radius:var(--radius-sm)}
+:focus-visible{outline:var(--bw-2) solid var(--color-focus);outline-offset:var(--bw-2)}
+@media (prefers-reduced-motion:reduce){*{transition:var(--motion-none)}}
+/* ============ LAYOUT ============ */
+.page{max-width:var(--w-page);margin:var(--sp-0) auto;padding:var(--sp-8) var(--sp-5) var(--sp-16)}
+.section{background:var(--color-surface);border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);padding:var(--sp-6);margin-bottom:var(--sp-6)}
+.prose{max-width:var(--w-prose)}
+.muted{color:var(--color-text-2)}
+.mt-3{margin-top:var(--sp-3)} .mt-5{margin-top:var(--sp-5)} .mt-6{margin-top:var(--sp-6)}
+.sw-partial{background:var(--status-partial)} .sw-infer{background:var(--status-infer)} .sw-unverified{background:var(--status-unverified)}
+.small{font-size:var(--fs-sm)}
+.note{font-size:var(--fs-sm);color:var(--color-text-2);border-left:var(--bw-3) solid var(--color-border-strong);padding:var(--sp-2) var(--sp-3);margin:var(--sp-3) var(--sp-0);background:var(--color-surface-alt);border-radius:var(--radius-sm)}
+/* header */
+.hero{padding:var(--sp-6) var(--sp-0) var(--sp-8)}
+.hero .kicker{font-size:var(--fs-sm);color:var(--color-text-3);margin-bottom:var(--sp-2)}
+.hero .lead{font-size:var(--fs-md);color:var(--color-text-2);margin-top:var(--sp-4);max-width:var(--w-prose)}
+.meta{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--color-text-3);margin-top:var(--sp-4)}
+.toc{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-top:var(--sp-5)}
+.toc a{font-size:var(--fs-sm);padding:var(--sp-1) var(--sp-3);border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-pill);background:var(--color-surface);text-decoration:none;color:var(--color-text-2)}
+.toc a:hover{border-color:var(--color-border-strong);color:var(--color-text)}
+/* verdict box */
+.verdict{display:grid;grid-template-columns:repeat(var(--cols-3),var(--track));gap:var(--sp-4)}
+.verdict .card{border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);background:var(--color-surface-alt)}
+.verdict .card h3{font-size:var(--fs-base)}
+.verdict .card p{margin:var(--sp-0);font-size:var(--fs-sm);color:var(--color-text-2)}
+/* stacked bar (single-series distribution, direct-labeled) */
+.bar{display:flex;height:var(--h-bar);border-radius:var(--radius-sm);overflow:hidden;gap:var(--bw-2);background:var(--color-surface);margin:var(--sp-4) var(--sp-0) var(--sp-2)}
+.bar span{display:flex;align-items:center;justify-content:center;font-size:var(--fs-sm);font-weight:var(--fw-medium);color:var(--color-text);white-space:nowrap;overflow:hidden}
+.bar .b-partial{background:var(--status-partial-soft);border-bottom:var(--bw-3) solid var(--status-partial)}
+.bar .b-infer{background:var(--status-infer-soft);border-bottom:var(--bw-3) solid var(--status-infer)}
+.bar .b-unverified{background:var(--status-unverified-soft);border-bottom:var(--bw-3) solid var(--status-unverified)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--color-text-2)}
+.legend i{display:inline-block;width:var(--sp-3);height:var(--sp-3);border-radius:var(--bw-2);margin-right:var(--sp-1);vertical-align:middle}
+/* badges */
+.badge{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-medium);padding:var(--sp-0) var(--sp-2);border-radius:var(--radius-pill);border:var(--bw-1) solid;white-space:nowrap;line-height:var(--lh-loose)}
+.badge-partial{color:var(--status-partial-text);border-color:var(--status-partial);background:var(--status-partial-soft)}
+.badge-infer{color:var(--status-infer-text);border-color:var(--status-infer);background:var(--status-infer-soft)}
+.badge-unverified{color:var(--status-unverified-text);border-color:var(--status-unverified);background:var(--status-unverified-soft)}
+.badge-neutral{color:var(--status-neutral);border-color:var(--status-neutral);background:var(--status-neutral-soft)}
+/* tables */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-md)}
+table{border-collapse:collapse;width:var(--w-full);font-size:var(--fs-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw-1) solid var(--color-border)}
+th{background:var(--color-surface-alt);font-weight:var(--fw-bold);color:var(--color-text-2)}
+tbody tr:hover td{background:var(--color-surface-alt)}
+.t-wide{min-width:var(--w-table-min)}
+td.q{font-style:normal;color:var(--color-text)}
+/* route comparison */
+.routes{display:grid;grid-template-columns:repeat(var(--cols-2),var(--track));gap:var(--sp-4)}
+.route{border:var(--bw-1) solid var(--color-border);border-top:var(--bw-3) solid;border-radius:var(--radius-md);padding:var(--sp-4);background:var(--color-surface)}
+.route-self{border-top-color:var(--series-self)}
+.route-market{border-top-color:var(--series-market)}
+.route h3{display:flex;align-items:center;gap:var(--sp-2)}
+.route h3 i{display:inline-block;width:var(--sp-3);height:var(--sp-3);border-radius:var(--radius-pill)}
+.route-self h3 i{background:var(--series-self)}
+.route-market h3 i{background:var(--series-market)}
+.route dl{margin:var(--sp-0);font-size:var(--fs-sm)}
+.route dt{font-weight:var(--fw-bold);color:var(--color-text-2);margin-top:var(--sp-3)}
+.route dd{margin:var(--sp-1) var(--sp-0) var(--sp-0)}
+/* flow */
+.flow{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:stretch;margin:var(--sp-4) var(--sp-0)}
+.step{flex:var(--flex-fill) var(--w-cell-min);min-width:var(--w-cell-min);border:var(--bw-1) solid var(--color-border);border-left:var(--bw-3) solid var(--series-evidence);border-radius:var(--radius-md);padding:var(--sp-3);background:var(--color-surface-alt);font-size:var(--fs-sm)}
+.step b{display:block;font-size:var(--fs-base);margin-bottom:var(--sp-1)}
+.step .fail{color:var(--status-unverified-text);margin-top:var(--sp-2)}
+.step .fail::before{content:"失败信号：";color:var(--color-text-3)}
+/* ladder (native table; stacks on mobile) */
+.ladder-t{border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-md);overflow:hidden}
+.ladder-t th:first-child{width:var(--w-cell-min)}
+.ladder-t tbody th{background:var(--color-surface);text-align:left}
+.ladder-t .lv{font-weight:var(--fw-bold);color:var(--color-text);white-space:nowrap}
+.ladder-t .lv i{display:inline-block;width:var(--h-ladder);height:var(--h-ladder);border-radius:var(--bw-2);background:var(--series-evidence);opacity:var(--opacity-1);margin-right:var(--sp-2);vertical-align:middle}
+.ladder-t .lv.weak i{opacity:var(--opacity-muted)}
+/* self check */
+.check{display:grid;grid-template-columns:repeat(var(--cols-3),var(--track));gap:var(--sp-4)}
+.qcard{border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);background:var(--color-surface-alt)}
+.qcard h3{font-size:var(--fs-base)}
+.qcard .item{margin:var(--sp-3) var(--sp-0);font-size:var(--fs-sm);border:var(--sp-0);padding:var(--sp-0);min-width:var(--sp-0)}
+.qcard .item legend{padding:var(--sp-0);margin-bottom:var(--sp-1)}
+.qcard .opts{display:flex;gap:var(--sp-1)}
+.qcard .opts label{position:relative;flex:var(--flex-fill) auto;display:flex;align-items:center;justify-content:center;min-height:var(--sp-8);border:var(--bw-1) solid var(--color-border-strong);border-radius:var(--radius-sm);background:var(--color-surface);cursor:pointer;font-size:var(--fs-xs);transition:background var(--dur-fast) var(--ease-std),border-color var(--dur-fast) var(--ease-std)}
+.qcard .opts input{position:absolute;opacity:var(--opacity-0);width:var(--sp-0);height:var(--sp-0)}
+.qcard .opts input:focus-visible+span{outline:var(--bw-2) solid var(--color-focus);outline-offset:var(--bw-1);border-radius:var(--radius-sm)}
+.qcard .opts label span{display:block;width:var(--w-full);text-align:center;padding:var(--sp-1)}
+.qcard .opts label.on-yes{background:var(--series-evidence-soft);border-color:var(--series-evidence)}
+.qcard .opts label.on-no{background:var(--status-unverified-soft);border-color:var(--status-unverified)}
+.qcard .opts label.on-unknown{background:var(--status-infer-soft);border-color:var(--status-infer)}
+.qcard .need{font-size:var(--fs-xs);color:var(--color-text-3);margin-top:var(--sp-1)}
+.result{margin-top:var(--sp-4);border:var(--bw-1) solid var(--color-border-strong);border-radius:var(--radius-md);padding:var(--sp-4);background:var(--color-surface)}
+.result h3{font-size:var(--fs-md)}
+.result .r-line{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--color-text-2);margin-bottom:var(--sp-2)}
+.btn{font:inherit;font-size:var(--fs-sm);padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-sm);border:var(--bw-1) solid var(--color-border-strong);background:var(--color-surface);color:var(--color-text);cursor:pointer;min-height:var(--sp-8)}
+.btn:hover{border-color:var(--color-text-3)}
+/* ledger filter */
+.chips{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.chip{font:inherit;font-size:var(--fs-sm);padding:var(--sp-1) var(--sp-3);border-radius:var(--radius-pill);border:var(--bw-1) solid var(--color-border-strong);background:var(--color-surface);cursor:pointer;color:var(--color-text-2);min-height:var(--sp-8)}
+.chip[aria-pressed="true"]{background:var(--color-text);color:var(--color-surface);border-color:var(--color-text)}
+.ledger tr.hide{display:none}
+.ledger td:first-child{color:var(--color-text-3);white-space:nowrap}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(var(--cols-3),var(--track));gap:var(--sp-4)}
+.gate{border:var(--bw-1) solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);background:var(--color-surface-alt);font-size:var(--fs-sm)}
+.gate .n{display:inline-flex;align-items:center;justify-content:center;width:var(--sp-6);height:var(--sp-6);border-radius:var(--radius-pill);background:var(--status-partial-text);color:var(--color-surface);font-weight:var(--fw-bold);font-size:var(--fs-xs);margin-right:var(--sp-2)}
+/* sources */
+.sources li{margin-bottom:var(--sp-2);font-size:var(--fs-sm)}
+.sources .u{word-break:break-all;color:var(--color-text-3)}
+footer{font-size:var(--fs-sm);color:var(--color-text-3);padding-top:var(--sp-4)}
+/* ============ RESPONSIVE（阈值登记见 TOKENS 注释：760 / 480）============ */
+@media (max-width:760px){
+  .page{padding:var(--sp-5) var(--sp-3) var(--sp-12)}
+  .section{padding:var(--sp-4);border-radius:var(--radius-md)}
+  h1{font-size:var(--fs-xl)} h2{font-size:var(--fs-lg)}
+  .verdict,.routes,.check,.gates{grid-template-columns:var(--track)}
+  .ladder-t thead{display:none}
+  .ladder-t tr,.ladder-t td,.ladder-t tbody th{display:block;width:var(--w-full)}
+  .ladder-t th:first-child{width:var(--w-full)}
+  .ladder-t tr{border-top:var(--bw-2) solid var(--color-border)}
+  .ladder-t td{border-bottom:var(--sp-0)}
+  .ladder-t td.cell::before{content:attr(data-h) "：";color:var(--color-text-3)}
+  .step{flex-basis:var(--w-full)}
+}
+@media (max-width:480px){
+  .bar span{font-size:var(--fs-xs)}
+  .toc a{font-size:var(--fs-xs)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <div class="kicker">口播核对 · 一人生意 · 2026-10-23</div>
+  <h1>两条定位路线：从我出发会自嗨，从市场出发会不想做</h1>
+  <p class="lead">一段第三方口播转述抖音创作者「姜胡说」的方法，并引用 dontbesilent 的做法。本页把口播拆成 22 条主张，逐条标明哪些有外部材料对应、哪些是讲述者自己的推断、哪些只能算自述；再把能用的部分整理成两张对照表、一个反馈回路和一张自检卡。</p>
+  <div class="note prose">适用范围：本页结论只针对<strong>内容创作和一人业务的定位与验证</strong>。口播开头说的「普通人应该怎么做成事情」范围更大，正文实际只讨论了内容定位与商业模式选择，本页不替它扩展。</div>
+  <div class="meta">
+    <span>口播来源：第三方讲述者（非姜胡说本人），2026-10-23 收到</span>
+    <span>外部事实核对日期：2026-10-23</span>
+    <span>判定词：部分对应 / 讲述者推断 / 自述未核实</span>
+  </div>
+  
+</header>
+
+
+<section class="section" id="s0">
+  <h2>先说结论</h2>
+  <div class="verdict">
+    <div class="card"><h3>框架可作假设，效果证据不足</h3><p>「从我出发会自嗨、从市场出发会不想做、用反馈回路补救」这套框架内部自洽，可以当工作假设。但这一段以方法解释和个人自述为主，没有提供可独立核验的他人结果或商业结果。</p></div>
+    <div class="card"><h3>只有两条有外部事实对应，而且被说满了</h3><p>脑白金「送礼」定位、帆书与罗振宇的规模，这两处事实查到了来源，口播把它们推到了「不是健康」「干不过」这类更大的结论。《定位》原话也查到了，但它反驳的是口播，不是支持。</p></div>
+    <div class="card"><h3>dontbesilent 的部分是转述拼接</h3><p>「反馈回路」「搞清楚＋说清楚」「对标即降维模仿」能在他公开的 100 条里找到；「每天解决自己的问题→翻译→反馈」这条完整链路没有找到原话，是讲述者整合出来的模型。</p></div>
+  </div>
+  <h3 class="mt-6">22 条主张的判定分布</h3>
+  <div class="bar" role="img" aria-label="22 条主张：部分对应 2 条，讲述者推断 17 条，自述未核实 3 条">
+    <span class="b-partial" data-n="2">部分对应 2</span>
+    <span class="b-infer" data-n="17">讲述者推断 17</span>
+    <span class="b-unverified" data-n="3">自述未核实 3</span>
+  </div>
+  <div class="legend">
+    <span><i class="sw-partial"></i>部分对应：主张的事实部分有来源，结论部分超出来源</span>
+    <span><i class="sw-infer"></i>讲述者推断：口播里确实说了，但没有外部证据，含框架主张与经验法则</span>
+    <span><i class="sw-unverified"></i>自述未核实：个人经历或数字，无法复核</span>
+  </div>
+  <p class="small muted mt-3">只有 2 条的事实部分有直接来源，没有一条达到「主张原样成立且有直接证据」。这不是说口播讲错了，而是它讲的是方法，方法要靠后面的反馈才能被证明。</p>
+</section>
+
+
+<section class="section" id="s1">
+  <h2>两条定位路线对照</h2>
+  <p class="prose muted">口播的核心是两条起点不同的路线各有一种失败方式。下面把口播说的内容和本页补的「继续前需要什么证据」放在一起，补的部分用 ＋ 标出。</p>
+  <div class="routes">
+    <article class="route route-self">
+      <h3><i></i>路线一：从「我是谁」出发</h3>
+      <dl>
+        <dt>起点</dt><dd>我过去解决过什么问题、有什么痛点，把它表达出去。</dd>
+        <dt>好处（口播）</dt><dd>做的是自己真想解决的事，表达真实，容易持续。</dd>
+        <dt>坏处（口播）</dt>
+        <dt>失败方式</dt><dd>发了很多内容，没有人照着做，也没有人付费，但自己觉得讲得很好。</dd>
+        <dt>补救动作（口播）</dt><dd>每天解决一个自己的具体问题 → 把解法「翻译」成别人能听懂的痛点描述 → 只收「对方有没有做、做了有没有效」这种反馈 → 迭代成产品。</dd>
+        <dt>＋ 继续前需要什么证据</dt>
+        <dt>适合谁（口播）</dt><dd>「研究性人格」：做事纯粹为了搞懂为什么。否则会误以为自己搞懂了、误以为有效。</dd>
+      </dl>
+    </article>
+    <article class="route route-market">
+      <h3><i></i>路线二：从市场需求出发</h3>
+      <dl>
+        <dt>起点</dt><dd>不看自己是什么人，只看市场上什么最赚钱、能不能看清它怎么赚钱、凭什么轮到我。</dd>
+        <dt>好处（口播）</dt><dd>需求量大，胜率高，模仿对象现成。</dd>
+        <dt>坏处（口播）</dt><dd>大概率是自己不想解决的事：「那些什么屎尿屁呀……需求量最大，但是你会天然的觉得你不想解决。」</dd>
+        <dt>失败方式</dt><dd>找了一个「跟我一样的人」当对标，而他赚钱恰恰因为跟你不一样；或者看不清对方到底卖的是什么。</dd>
+        <dt>补救动作（口播）</dt><dd>三个考核：什么最赚钱 → 我能不能看清商业模式（谁付钱、买的是什么）→ 凭什么是我（生态位）。</dd>
+        <dt>＋ 继续前需要什么证据</dt>
+        <dt>适合谁（口播）</dt><dd>口播没说。本页补：能接受先做不喜欢的事、以结果倒推的人。</dd>
+      </dl>
+    </article>
+  </div>
+  
+</section>
+
+
+<section class="section" id="s2">
+  <h2>反馈回路：从自己的问题到产品</h2>
+  <p class="prose muted">口播把路线一的补救办法讲成一条链。每一步都有一个典型的失败信号，看到信号就该停下来，而不是继续往后做。</p>
+  <div class="flow" aria-label="反馈回路七步">
+    <div class="step"><b>1 自己的具体问题</b>例：「我拍的视频没人看」「我学了很多但生活没变」。<div class="fail">问题写成了方向词（「做 IP」「找赛道」），说不出具体场景。</div></div>
+    <div class="step"><b>2 解决它</b>自己先把这个问题真的解掉。<div class="fail">没解掉就开始教，拿的是想法不是解法。</div></div>
+    <div class="step"><b>3 翻译：痛点描述</b>把解法改写成对方躺着刷视频时也能被唤醒的痛点场景。口播说「不能强行制造痛点，只能匹配」。</div>
+    <div class="step"><b>4 发布</b>发出去，先拿负反馈。<div class="fail">反复打磨不发布，用准备代替执行。</div></div>
+    <div class="step"><b>5 收行为反馈</b>只看两件事：对方有没有照着做、做了有没有效。<div class="fail">把播放量和点赞当成验证。</div></div>
+    <div class="step"><b>6 迭代</b>按反馈改解法，而不是改标题。<div class="fail">只改封面开头，解法本身没动。</div></div>
+    <div class="step"><b>7 产品</b>口播的标准：不管谁用都能拿到结果。本页收窄为：能被他人复用并产生可验证结果。<div class="fail">把「把我的经验传出去」当成产品。</div></div>
+  </div>
+  <h3 class="mt-6">反馈阶梯：每一层能回答什么、不能证明什么</h3>
+  <p class="small muted">口播说「你要得到的不是播放量，不是点赞」。这句话容易被理解成播放量没用。更准确的说法是：每一层反馈回答的问题不同，低层不能替代高层。</p>
+  <div class="table-scroll"><table class="ladder-t"><thead><tr><th scope="col">反馈层级</th><th scope="col">能回答的问题</th><th scope="col">不能证明的结论</th></tr></thead><tbody><tr><th class="lv weak" scope="row"><i></i>点赞 / 评论</th><td class="cell" data-h="能回答">内容是否引起共情，哪句话被记住。</td><td class="cell" data-h="不能证明">有人会照着做。</td></tr><tr><th class="lv" scope="row"><i></i>结果</th><td class="cell" data-h="能回答">做了之后对方的问题有没有变化（口播要的第二层）。</td><td class="cell" data-h="不能证明">换一个人也能拿到同样结果。</td></tr><tr><th class="lv" scope="row"><i></i>付费 / 持续使用</th><td class="cell" data-h="能回答">对方认为这个结果值钱，或值得持续投入时间。</td><td class="cell" data-h="不能证明">市场规模；利润能覆盖交付成本。</td></tr></tbody></table></div>
+  <p class="small muted mt-3">口播里「反馈」只到「行为」和「结果」两层，没有谈付费与持续使用。dontbesilent 公开写的「只关心动作-数据这个反馈回路」（第二期 046）支持重视反馈这个方向，但不能证明他主张完全不看播放和点赞。</p>
+</section>
+
+
+
+
+
+<section class="section" id="s4">
+  
+  <p class="prose muted">「口播原话」一列可以回到原文核对。「判定」只说明证据状态，不说明对错。「依据与范围」写清来源支持到哪一步、不支持哪一步。</p>
+  <div class="chips" role="group" aria-label="按判定筛选">
+    <button class="chip" type="button" data-f="all" aria-pressed="true">全部 22</button>
+    <button class="chip" type="button" data-f="partial" aria-pressed="false">部分对应 2</button>
+    <button class="chip" type="button" data-f="infer" aria-pressed="false">讲述者推断 17</button>
+    <button class="chip" type="button" data-f="unverified" aria-pressed="false">自述未核实 3</button>
+  </div>
+  <div class="table-scroll">
+  <table class="ledger t-wide">
+    <thead><tr><th>#</th><th>口播原话（摘）</th><th>判定</th><th>依据与范围</th><th>来源不支持的结论</th></tr></thead>
+    <tbody>
+      <tr data-f="unverified"><td>1</td><td class="q">「400万大V姜胡说」</td><td><span class="badge badge-unverified">自述未核实</span></td><td>第三方博主数据页显示 420 万至 463 万粉丝（页面快照，日期不一）。未取得抖音官方数字。</td><td>粉丝数与方法有效性之间的关系。</td></tr>
+      <tr data-f="unverified"><td>2</td><td class="q">「所有的资料，我用Claude Code全部整理了一遍，一共有一千三百万字」</td><td><span class="badge badge-unverified">自述未核实</span></td><td>讲述者自述的工作量，无法复核。</td><td>「整理过」等于「转述准确」。</td></tr>
+      <tr data-f="infer"><td>3</td><td class="q">「我们去看所有的那些定位的书，它最终会回到一个点叫做“我是谁”」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>过度泛化。Ries 与 Trout《定位》第 2 页原话：定位不是对产品做什么，而是对潜在顾客的心智做什么。讲述者批评的是一种常见误用，不是书的原意。</td><td>「所有定位书」都以自我认知为终点。</td></tr>
+      <tr data-f="infer"><td>4</td><td class="q">「基于我是谁……你就会陷入到一种自嗨……并不清楚自己的那个解决方案别人需不需要」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>逻辑成立的风险描述：缺乏外部反馈时容易高估自身方案。</td><td>「所有从自己出发的人都会自嗨」这种必然性。</td></tr>
+      
+      <tr data-f="infer"><td>6</td><td class="q">「有一个人叫做dontbesilent……我每天我都搞定我自己的问题……我要把这个东西告诉别人……就会存在一个翻译问题」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>相关公开观点：「只关心动作-数据这个反馈回路」（第二期 046，2026-01-17）；「知识博主的核心工作只有两件事：把事情搞清楚、把事情说清楚」（第一期 097，2025-11-27）。「每天解决自己的问题→翻译→反馈」这条完整链路没有找到原话。</td><td>这条完整链路是 dontbesilent 的原话或完整方法。</td></tr>
+      <tr data-f="infer"><td>7</td><td class="q">「你前三秒你快速的激活它的这个痛点」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>传播经验法则。第三方运营资料称抖音创作者后台有「3 秒完播率」类指标（官方定义页未取得）。指标存在不等于「前 3 秒讲痛点」这个策略有效。</td><td>策略效果。</td></tr>
+      <tr data-f="infer"><td>8</td><td class="q">「一分钟的视频，你可能有50秒是在描述这个痛点的」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>无来源的个人示例比例。口播没有给适用条件和效果证据。痛点铺太长会挤压解法展示，这个张力口播没有处理。</td><td>把 50 秒当通用建议。</td></tr>
+      <tr data-f="infer"><td>9</td><td class="q">「你不可能强行制造痛点……真正你要解决的就是你去匹配出有这个需求的人」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>「先确认需求真实存在」是常见的需求分析做法，本页第五节按此整理，但这不是外部来源。「只能匹配」是绝对化表述。</td><td>需求只能通过匹配已有痛点来满足。</td></tr>
+      <tr data-f="infer"><td>10</td><td class="q">「这里所谓的真诚其实是你去讲传递痛点的一个方法」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>讲述者对「真诚」的工具性解释，不是对真诚的普遍定义。</td><td>真诚的通用功能。</td></tr>
+      <tr data-f="infer"><td>11</td><td class="q">「我的这个痛会引发别人的痛，就是别人会共情」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>真诚 → 共情 → 传播 这条因果链是口播的传播机制假设，没有给证据。</td><td>共情必然带来传播或行为。</td></tr>
+      <tr data-f="infer"><td>12</td><td class="q">「你要得到的不是播放量，不是别人的点赞，你要得到的是……他有没有去做这个事情，他做这个事情有没有效」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>主张优先看行为与结果。dontbesilent 第二期 046「动作-数据」是相关观点，不是这句话的来源。</td><td>dontbesilent 主张完全不看播放与点赞。</td></tr>
+      <tr data-f="infer"><td>13</td><td class="q">「这个解决方案不管是谁，他都能够拿到结果，那么这个才称之为产品」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>讲述者的产品判断标准。本页收窄为：方案能否被他人复用并产生可验证结果。</td><td>「稳定对所有人成功」是产品成立的必要条件。</td></tr>
+      <tr data-f="infer"><td>14</td><td class="q">「这个方式它其实适合研究性人格……纯粹为了解决问题，我纯粹想知道为什么」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>讲述者划定的适用范围，没有点名理论来源。建议核实：是否有意借用 Holland 职业兴趣理论里的「研究型」。</td><td>存在可测量的人格类型与方法有效性的对应关系。</td></tr>
+      <tr data-f="infer"><td>15</td><td class="q">「我总是去找跟我一样的人，然后他还能赚钱……他赚钱就因为他跟我不一样啊」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>修辞性推断，反对机械地找同类当对标。相关外部观点：dontbesilent「找对标的本质是降维模仿」（第一期 003 / 第二期 049），以及他 2026-05-29 公开的对标表按「赚钱最多、我模仿最容易」排序。这些是相关观点，不是这句话的证据。</td><td>同类对标一定不可行。</td></tr>
+      <tr data-f="infer"><td>16</td><td class="q">「我要去看什么东西是最赚钱的……第二个就是我能看清楚它的商业模式……凭什么是我？」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>框架主张，口播原文可核对，内部逻辑可讨论，预测效果待验证。「最赚钱」与「大概率能成」之间缺利润、获客、交付成本、竞争强度、个人执行条件。</td><td>三考核通过等于胜率高。</td></tr>
+      <tr data-f="partial"><td>17</td><td class="q">「脑白金……其实我买的是一种跟父母的那种情感。那可能它的商业模式是在卖这种玩意儿……你都没搞清楚这个东西是老人买还是子女买的孝顺给老人」</td><td><span class="badge badge-partial">部分对应</span></td><td>史玉柱 1997 年试销调研：老人不愿为自己花钱、保健品多由子女购买，于是定下「送礼」定位（新浪财经 2019-12-10 转述）。送礼场景是商业定位的重要解释之一。口播自己也用了「可能」。</td><td>所有购买都出于孝顺情感；健康需求可以排除。</td></tr>
+      <tr data-f="partial"><td>18</td><td class="q">「像樊登老师或者是罗胖罗振宇老师，他们把这个市场已经做得足够大了。我能干得过他们吗？我干不过」</td><td><span class="badge badge-partial">部分对应</span></td><td>规模有据：帆书 APP 截至 2025 年 6 月注册用户超 7700 万（新浪财经 2025-06-17）；罗振宇 2026 跨年演讲当晚视频号观看超 3200 万人次、抖音 800 万人次（21 世纪经济报道 2026-01-03）。</td><td>市场已饱和；新进入者必败。规模说明的是传播量，不是胜率。</td></tr>
+      <tr data-f="unverified"><td>19</td><td class="q">「我有ADHD，我有阅读障碍……从五年制的大专，然后考上了专升本，然后现在是研究生学历……每天看8个小时10个小时的书」</td><td><span class="badge badge-unverified">自述未核实</span></td><td>讲述者本人经历，无外部材料。注意这是讲述者的经历，不是姜胡说的。</td><td>学习方法论已经对他人有效。</td></tr>
+      <tr data-f="infer"><td>20</td><td class="q">「他要的不是专家，他要的是离他最近的人」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>讲述者的经验判断。教学、陪伴类需求里相似度可能占优；医疗、理财等高风险领域里资质与可验证能力需要另行核查。</td><td>「距离近」是普遍优先条件。</td></tr>
+      <tr data-f="infer"><td>21</td><td class="q">「这个所谓的凭什么是我其实是生态位」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>类比：用「生态位」描述个人能力、目标人群与竞争环境的交集。</td><td>概念等同。</td></tr>
+      <tr data-f="infer"><td>22</td><td class="q">「他一直到现在教大家怎么做自媒体啊，包括怎么做商业定位啊，包括普通人应该怎么做成事情」</td><td><span class="badge badge-infer">讲述者推断</span></td><td>这句是口播对自身范围的描述，没有外部材料。口播实际内容覆盖了自媒体与商业定位两项；「普通人怎么做成事情」只在定位与验证范围内被讨论。</td><td>本页结论适用于所有「做成事情」。</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted mt-3">判定标准：「部分对应」要求存在与主张事实部分直接匹配的来源；仅逻辑合理或只有相关材料的，归「讲述者推断」。</p>
+</section>
+
+
+<section class="section" id="s5">
+  <h2>把「不能制造痛点」落成三道门</h2>
+  <p class="prose muted">口播说痛点只能匹配、不能制造。换成可以反复跑的检查，就是下面三道门。三道门分别回答三个不同的问题，不能互相替代。付费不是唯一信号，对方持续投入时间也算。</p>
+  <div class="gates">
+    <div class="gate"><span class="n">1</span><strong>问题真实性</strong><p class="muted">回答「有人需要」。不回答「需要你」。</p></div>
+    <div class="gate"><span class="n">2</span><strong>新增方案缺口</strong><p>现有办法（头部专家、免费内容、手工凑合）对这群人为什么不够用。口播的答案是「他们觉得专家太强，成不了」，这需要对方亲口说过。</p><p class="muted">回答「需要一个新的」。不回答「能赚钱」。</p></div>
+    <div class="gate"><span class="n">3</span><strong>商业证据</strong><p>至少一次付费，或一段时间的持续使用与复用。口播的反馈回路到「结果」为止，这一道门它没有谈。</p><p class="muted">回答「有人为此付出」。不回答「市场够大」。</p></div>
+  </div>
+  <div class="note">三个维度要分开用词：<strong>个人适配</strong>（适不适合我做）、<strong>市场需求</strong>（有没有人要）、<strong>商业可行</strong>（能不能盈利）。口播里的「自嗨」是把第一个当成了第二个；「找跟我一样的人」是把第一个当成了第三个。</div>
+</section>
+
+
+<section class="section" id="s6">
+  <h2>这套说法哪里会错</h2>
+  <ul class="prose">
+    <li><strong>讲述者这一段没有提供过第三道门的证据。</strong>ADHD 学习法的案例只讲了个人经历和方法，没有给出他人结果或付费证据；有没有，口播没说。整段口播是方法论，不是结果汇报。</li>
+    
+    
+    <li><strong>痛点描述可能挤掉解法。</strong>「50 秒描述痛点」如果成为习惯，内容会只剩共情没有方法，反馈回路第 5 步就没有东西可以被「照着做」。</li>
+    <li><strong>反馈回路默认了「翻译」是瓶颈。</strong>如果问题本身不是别人的问题（第一道门没过），翻译得再好也没有反馈；这时该换问题，不是换表达。</li>
+    <li><strong>本页的「真需求」只是观察视角。</strong>三道门是待验证的检查方法，用来整理口播里哪些地方缺证据，不代表需求、付费或盈利已经成立。</li>
+    <li><strong>对 dontbesilent 的引用是拼接。</strong>把他的几条公开观点串成一条完整方法，是讲述者的整合；他本人批评过「把人蒸馏成 skill」是魔法思维（2026-05-12 公开帖），认为只有验证过的方法论才能做成 skill。</li>
+  </ul>
+</section>
+
+
+<section class="section" id="s7">
+  <h2>来源与核实状态</h2>
+  <p class="small muted">每条写明来源类型、支持范围和不能支持的结论，并逐项标注核实状态（核实日期 2026-10-23）。</p>
+  <ol class="sources">
+    <li><strong>口播原文</strong>，第三方讲述者，2026-10-23 收到。类型：转述。状态：已直接核对（逐字稿）。支持范围：22 条主张的原话；不支持：姜胡说本人的原话。</li>
+    <li><strong>新浪财经《史玉柱：我每天吃脑白金，说它骗人我很冤枉》</strong>，2019-12-10。类型：媒体转述。状态：已直接打开核对。支持：1997 年试销调研、子女购买、「送礼」定位；不支持：购买动机全部是孝顺。<div class="u">https://finance.sina.cn/2019-12-10/detail-iihnzahi6592856.d.html</div></li>
+    <li><strong>新浪财经《"文化润疆"再添书香注脚！帆书"书卷里的中国"首进新疆》</strong>，2025-06-17。类型：媒体引用公司数据。状态：已直接打开核对。支持：截至 2025 年 6 月注册用户超 7700 万；不支持：活跃或付费规模。<div class="u">https://finance.sina.com.cn/jjxw/2025-06-17/doc-infaiwtn0053327.shtml</div></li>
+    <li><strong>21 世纪经济报道《罗振宇跨年演讲卖出超10万本书，瘦了100斤，转型AI叙事》</strong>，2026-01-03。类型：媒体报道。状态：已直接打开核对。支持：当晚视频号观看超 3200 万人次、抖音 800 万人次；不支持：市场饱和。<div class="u">https://www.21jingji.com/article/20260103/herald/4b846e755fb75dec4e851b6129271589.html</div></li>
+    <li><strong>Ries &amp; Trout《Positioning: The Battle for Your Mind》</strong>，2001 年 McGraw-Hill 版第 2 页，经 AZQuotes 转引。类型：原著引文（二手页面）。状态：已打开转引页；未核对原书页面。支持：定位的落点是潜在顾客心智；不支持：全部定位文献的立场。<div class="u">https://www.azquotes.com/quote/1395751</div></li>
+    
+    <li><strong>豆瓣书评《胡子哥靠这3个技能，实现了财务自由！你愿意学吗？（价值心法）》</strong>，2023-06-22。类型：读者旁证。状态：已直接打开核对。支持：姜胡说中专毕业、北大旁听、自学编程并发笔记；不支持：粉丝数与方法效果。<div class="u">https://book.douban.com/review/15247634/</div></li>
+    <li><strong>第三方博主数据页（weelume）</strong>。类型：第三方快照。状态：未核实（本次未能打开）。支持：粉丝 420 万至 463 万的区间仅作参考；不支持：官方数字。</li>
+    <li><strong>抖音「3 秒完播率」</strong>：蝉妈妈运营圈等第三方资料称该指标仅抖音官方后台可见。类型：第三方运营资料。状态：未核实（未找到官方定义）。支持：第三方称指标存在；不支持：指标确实存在、官方定义与策略效果。</li>
+  </ol>
+  <h3 class="mt-5">同一主题的相关页面</h3>
+  <ul class="small">
+    
+    <li><a href="20261010-0912-普通人赚钱路线图-从看见问题到验收证据.html">普通人赚钱路线图：从看见问题到验收证据（2026-10-10）</a></li>
+  </ul>
+</section>
+
+<footer>
+  
+  
+</footer>
+</div>
+
+<script>
+(function(){
+  // ---- 判定分布条：宽度是数据值（条数），不是设计值 ----
+  document.querySelectorAll('.bar span').forEach(function(sp){var n=Number(sp.getAttribute('data-n'));if(Number.isFinite(n)&&n>0){sp.style.flexGrow=String(n);}});
+  // ---- 自检卡：三态选项 ----
+  var opts=[['yes','是'],['no','否'],['unknown','未知']];
+  var items=document.querySelectorAll('#checkForm .item');
+  items.forEach(function(item,idx){
+    var box=item.querySelector('.opts');
+    opts.forEach(function(o){
+      var lab=document.createElement('label');
+      var inp=document.createElement('input');
+      inp.type='radio';inp.name='q'+idx;inp.value=o[0];
+      var sp=document.createElement('span');sp.textContent=o[1];
+      lab.appendChild(inp);lab.appendChild(sp);box.appendChild(lab);
+      inp.addEventListener('change',update);
+    });
+  });
+  var resetBtn=document.getElementById('resetBtn');
+  resetBtn.addEventListener('click',function(){
+    document.querySelectorAll('#checkForm input').forEach(function(i){i.checked=false;});
+    update();
+  });
+  function groupOf(idx){return idx<3?0:(idx<6?1:2);}
+  function update(){
+    var yes=0,no=0,unk=0,answered=0;
+    var groupNo=[0,0,0],groupUnk=[0,0,0];
+    document.querySelectorAll('#checkForm label').forEach(function(l){l.className='';});
+    items.forEach(function(item,idx){
+      var sel=item.querySelector('input:checked');
+      if(!sel)return;
+      answered++;
+      sel.parentNode.className='on-'+sel.value;
+      if(sel.value==='yes')yes++;
+      else if(sel.value==='no'){no++;groupNo[groupOf(idx)]++;}
+      else{unk++;groupUnk[groupOf(idx)]++;}
+    });
+    document.getElementById('cYes').textContent=yes;
+    document.getElementById('cNo').textContent=no;
+    document.getElementById('cUnk').textContent=unk;
+    var h=document.querySelector('#result h3');var t=document.getElementById('rText');
+    var names=['市场指标','商业模式','生态位'];
+    if(answered<items.length){
+      h.textContent='结果：已答 '+answered+' / '+items.length+' 项';
+      t.textContent='答完 9 项再看结论。';
+      return;
+    }
+    var worst=0;for(var g=1;g<3;g++){if(groupNo[g]+groupUnk[g]>groupNo[worst]+groupUnk[worst])worst=g;}
+    var worstNo=0;for(var k=1;k<3;k++){if(groupNo[k]>groupNo[worstNo])worstNo=k;}
+    if(no===0&&unk===0){
+      h.textContent='结果：你把 9 项都选为「是」，可以做一个最小动作';
+      t.textContent='这只是你的自评，页面没有核验材料。先逐项核对下方「证据」提示，再在 7 天内拿一次行为反馈（有人照着做）或一次付费。这不是成功概率。';
+    }else if(no>=3||groupNo[1]>=2){
+      h.textContent='结果：先别做，换对标或换问题';
+      t.textContent='「否」集中在'+names[worstNo]+'（'+groupNo[worstNo]+' 项）。尤其商业模式看不清时，模仿只会复制表面动作。先回到路线一的第一步，重新写一个具体问题。';
+    }else{
+      h.textContent='结果：先补证据，再决定';
+      t.textContent='缺口主要在'+names[worst]+'（否 '+groupNo[worst]+' 项、未知 '+groupUnk[worst]+' 项）。按每项下方「证据」提示去补，未知不要当成是。';
+    }
+  }
+  // ---- 台账筛选 ----
+  var chips=document.querySelectorAll('.chip');
+  var rows=document.querySelectorAll('.ledger tbody tr');
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      chips.forEach(function(x){x.setAttribute('aria-pressed','false');});
+      c.setAttribute('aria-pressed','true');
+      var f=c.getAttribute('data-f');
+      rows.forEach(function(r){
+        var show=(f==='all')||(r.getAttribute('data-f')===f);
+        r.classList.toggle('hide',!show);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
