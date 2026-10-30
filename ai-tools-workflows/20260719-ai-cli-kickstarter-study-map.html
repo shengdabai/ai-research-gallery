@@ -333,7 +333,6 @@
         <div class="metric"><span class="value">14</span><span class="label">提交，均在 2026-07-18</span></div>
         <div class="metric"><span class="value">3×3</span><span class="label">3 款 CLI × 3 个操作系统</span></div>
         <div class="metric"><span class="value">2</span><span class="label">镜像状态机：Bash / PowerShell</span></div>
-        <div class="metric"><span class="value">14/14</span><span class="label">本机离线冒烟断言通过</span></div>
       </div>
     </section>
 
@@ -515,7 +514,7 @@ LastError    错误说明</pre>
       </div>
       <div class="test-flow">
         <div class="test-step"><small>01</small><h3>脚本化 stdin</h3><p>精确模拟选择、确认、退出和 EOF。</p></div>
-        <div class="test-step"><small>02</small><h3>隔离 HOME / PATH</h3><p>避免读取真实配置或找到本机已有 CLI。</p></div>
+        <div class="test-step"><small>02</small><h3>隔离 HOME / PATH</h3><p>避免读取真实配置或找到已安装的 CLI。</p></div>
         <div class="test-step"><small>03</small><h3>curl stub</h3><p>网络探针固定 204；安装下载可成功或失败。</p></div>
         <div class="test-step"><small>04</small><h3>验证退出码 / 输出</h3><p>15 秒超时捕捉无限循环回归。</p></div>
       </div>
@@ -532,8 +531,7 @@ LastError    错误说明</pre>
         </table>
       </div>
       <div class="verdict">
-        <div class="pass"><strong>14 / 14</strong><h3>本机离线冒烟断言通过</h3><p>同时完成 Bash 语法检查；测试没有联网，也没有执行真实安装器。</p></div>
-        <div class="limit"><strong>未全覆盖</strong><h3>本机缺少 ShellCheck 与 PowerShell</h3><p>因此未在本机复验 ShellCheck、PSScriptAnalyzer 和 Windows 功能流程；CI 配置包含前两项，但 PowerShell 目前仍只有静态 lint。</p></div>
+        <div class="limit"><strong>未全覆盖</strong><h3>测试覆盖范围</h3><p>项目测试未覆盖 ShellCheck、PSScriptAnalyzer 和 Windows 功能流程；CI 配置包含前两项，但 PowerShell 目前仍只有静态 lint。</p></div>
       </div>
       <div class="alert" style="margin-top:24px"><h3>不要把 exit 0 当成“安装已成功”</h3><p>VERIFY 找不到命令时只显示提示，随后仍进入 HANDOFF，用户也可以正常退出。因此退出码代表启动器流程结束，不证明新 CLI 已可用；旧的同名命令还可能造成验证假阳性。</p></div>
       <h3 style="margin-top:32px">CI 的三条跑道</h3>

@@ -7,7 +7,7 @@ Each page was generated from my own reading, notes and data analysis with Claude
 
 **Browse online:** https://shengdabai.github.io/ai-research-gallery/ (GitHub Pages)
 
-**59 pages** across 9 categories. Rating ★ = how reusable the page is for someone who is not me (4–5 only).
+**54 pages** across 9 categories. Rating ★ = how reusable the page is for someone who is not me (4–5 only).
 
 ## AI Industry & Models / AI 行业与模型研究
 
@@ -21,7 +21,6 @@ Each page was generated from my own reading, notes and data analysis with Claude
 | 2026-09-29 | [DHH Rails World 2026｜观点与证据地图](ai-industry-models/20260929-dhh-rails-world-2026.html) | ★★★★ |
 | 2026-08-18 | [20260818-1021-Sutskever 30｜AI 核心思想可运行地图](ai-industry-models/20260818-sutskever-30-ai-ideas-map.html) | ★★★★ |
 | 2026-07-25 | [20260725-1116-前沿 AI 模型全面对比 · 2026 年 7 月](ai-industry-models/20260725-frontier-models-comparison-2026-07.html) | ★★★★ |
-| 2026-06-08 | [20260608-1616-2028 - 全球 AI 领导权的两种情景(Anthropic)](ai-industry-models/20260608-anthropic-2028-ai-leadership.html) | ★★★★ |
 | 2026-06-08 | [20260608-1616-RankUp - 面向大规模广告推荐系统的高排名表示(腾讯)](ai-industry-models/20260608-rankup-ads-recsys-paper.html) | ★★★★ |
 | 2026-06-08 | [20260608-1616-华为「韬定律」全面分析 · 从摩尔定律到时间缩微](ai-industry-models/20260608-huawei-tau-law-analysis.html) | ★★★★ |
 | 2026-06-08 | [20260608-1616-自动驾驶：纯视觉 vs 激光雷达专业分析](ai-industry-models/20260608-autonomous-driving-vision-vs-lidar.html) | ★★★★ |
@@ -40,7 +39,6 @@ Each page was generated from my own reading, notes and data analysis with Claude
 | 2026-10-02 | [Claude Code Mods 完整指南(官方资料核验版)](ai-tools-workflows/20261002-claude-code-mods-guide.html) | ★★★★ |
 | 2026-09-30 | [七大 AI 订阅：价格、额度与真实体验｜2026-09-30](ai-tools-workflows/20260930-ai-subscriptions-price-comparison.html) | ★★★★ |
 | 2026-09-29 | [Claude Code 下一阶段：一场访谈的五张地图](ai-tools-workflows/20260929-claude-code-interview-five-maps.html) | ★★★★ |
-| 2026-09-28 | [GPT Image 2.5 创作玩法全景图](ai-tools-workflows/20260928-gpt-image-creative-playbook.html) | ★★★★ |
 | 2026-09-12 | [20260912-0902-Grok Bot 最佳实践指南 · 从一个结果到一支团队](ai-tools-workflows/20260912-grok-bot-operator-guide.html) | ★★★★ |
 | 2026-08-22 | [20260822-1103-Claude Academy 全课程学习指南](ai-tools-workflows/20260822-claude-academy-course-guide.html) | ★★★★ |
 | 2026-08-22 | [20260822-1243-操作系统 × AI：全景选择指南](ai-tools-workflows/20260822-os-ai-selection-guide.html) | ★★★★ |
@@ -67,7 +65,6 @@ Each page was generated from my own reading, notes and data analysis with Claude
 
 | Date | Page | ★ |
 |---|---|---|
-| 2026-10-09 | [Intuit 小企业铁三角:Goodarzi 访谈原稿核对与一人公司适用指南](enterprise-ai/20261009-intuit-small-business-triangle.html) | ★★★★ |
 | 2026-10-01 | [AI 原生组织拆解：七家大模型公司的架构与协作](enterprise-ai/20261001-ai-native-org-seven-labs.html) | ★★★★ |
 | 2026-09-23 | [麦肯锡 2026 年 AI 现状：从采用到投资回报｜可视化调研](enterprise-ai/20260923-mckinsey-state-of-ai-2026.html) | ★★★★★ |
 
@@ -85,7 +82,6 @@ Each page was generated from my own reading, notes and data analysis with Claude
 | Date | Page | ★ |
 |---|---|---|
 | 2026-10-21 | [Stella 显化音频 App 全方位研究：视频说法核对、增长路径、订阅经济与可迁移条件](opportunities-products/20261021-stella-manifestation-audio-app.html) | ★★★★ |
-| 2026-10-12 | [Oki Home 与「记住一切」的 AI 硬件：能做什么、靠什么赚钱、为什么贵](opportunities-products/20261012-oki-memory-computer.html) | ★★★★ |
 | 2026-10-06 | [Ghost × Core｜把个人 AI 放进家里](opportunities-products/20261006-ghost-core-home-ai.html) | ★★★★ |
 | 2026-10-05 | [用排除法找赚钱赛道，究竟能排除什么？](opportunities-products/20261005-elimination-method-niches.html) | ★★★★ |
 | 2026-10-04 | [墨本 Moben 与"专注无打扰"硬件赛道](opportunities-products/20261004-moben-distraction-free-hardware.html) | ★★★★ |
@@ -110,7 +106,6 @@ Each page was generated from my own reading, notes and data analysis with Claude
 | 2026-10-09 | [AI 时代做 App:从做出来到赚到钱,中间还有哪些门槛——五家 App 工厂的打法与三种可能的优势机制](solo-business/20261009-ai-app-factories-thresholds.html) | ★★★★ |
 | 2026-10-09 | [40 人变 2 人之后：Aaron Levie 视频说法核对与启示](solo-business/20261009-aaron-levie-40-to-2-check.html) | ★★★★ |
 | 2026-10-03 | [Demo 通胀:演示越来越便宜,产品没有同比例变多?](solo-business/20261003-demo-inflation.html) | ★★★★ |
-| 2026-10-02 | [AI 时代,真是「行业叛徒」的机会吗?——一段视频的拆解、例证与修订](solo-business/20261002-industry-insider-ai-opportunity.html) | ★★★★ |
 | 2026-09-27 | [AI 应用创业进入幻灭期了吗？｜事实核查与创业决策](solo-business/20260927-ai-app-startup-disillusionment.html) | ★★★★ |
 
 ---
