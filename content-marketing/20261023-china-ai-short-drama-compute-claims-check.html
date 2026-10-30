@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>中国 AI 拍短剧是浪费算力？——王煜全文章逐条核对与补充案例</title>
+<style>
+/* ===== Design tokens：全部设计值在此定义。断点 720px 是 CSS 不允许 var() 的唯一字面值（见 @media 注释）。
+   结构：primitive（色阶/字号/间距）→ 语义角色（surface/ink/line/状态/系列）→ 组件只消费角色 token。
+   图表系列色经 dataviz 校验脚本（light 3 色 / dark 3 色）全部 PASS。 ===== */
+:root{
+  --surface:#fcfcfb; --surface-2:#f3f2ef; --surface-3:#e9e8e3;
+  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#7a7872; --ink-on-accent:#ffffff;
+  --line:#dcdad4; --line-strong:#b8b6ae;
+  --series-1:#2a78d6; --series-2:#c7731d; --series-3:#5f5bb5; --series-rest:#b8b6ae;
+  --good:#1f7a3f; --good-bg:#e4f3e9;
+  --warn:#8a5200; --warn-bg:#fbefd9;
+  --serious:#b3261e; --serious-bg:#fbe3e1;
+  --neutral:#4b3fa3; --neutral-bg:#e9e6f7;
+  --tag-first:#0f6b78; --tag-first-bg:#dcf0f3;
+  --tag-second:#8a5200; --tag-second-bg:#fbefd9;
+  --tag-view:#4b3fa3; --tag-view-bg:#e9e6f7;
+  --grid:#e4e2dc; --axis:#b8b6ae;
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --fs-xs:12px; --fs-sm:13.5px; --fs-base:16px; --fs-md:18px; --fs-lg:22px; --fs-xl:30px; --fs-hero:36px;
+  --lh-tight:1.25; --lh-snug:1.5; --lh-base:1.75; --lh-none:1; --lh-tip:1.4;
+  --fw-regular:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+  --sp-0:0; --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:72px;
+  --radius-sm:4px; --radius:8px; --radius-lg:12px;
+  --w-max:980px; --w-full:100%;
+  --border-w:1px; --border-w-strong:2px; --hairline:1px;
+  --shadow:0 1px 2px rgba(0,0,0,.06);
+  --tip-w:240px; --tip-offset:14px; --z-tip:10;
+  --svg-fs-lbl:12px; --svg-fs-val:13.5px;
+  --mark-radius:4px; --mark-gap:2px; --bar-h:26px;
+  --col-1:1; --col-2:2; --col-3:3; --col-4:4;
+  --opacity-0:0; --opacity-1:1; --opacity-muted:.72; --hover-bright:1.1; --dur:.12s; --ease:ease-out; --motion-none:none; --track:minmax(0,1fr);
+  --underline-offset:3px; --table-min-w:640px; --score-w:64px;
+  --timeline-dot:12px; --timeline-rail:2px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface:#1a1a19; --surface-2:#222221; --surface-3:#2c2c2a;
+    --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#9a988f; --ink-on-accent:#101010;
+    --line:#3a3a37; --line-strong:#56554f;
+    --series-1:#3987e5; --series-2:#c97722; --series-3:#7f7ad8; --series-rest:#56554f;
+    --good:#7fd39a; --good-bg:#1d3326;
+    --warn:#f0b35a; --warn-bg:#3b2d14;
+    --serious:#ff8f85; --serious-bg:#44201d;
+    --neutral:#b8adf3; --neutral-bg:#2b2747;
+    --tag-first:#7fd0dc; --tag-first-bg:#17333a;
+    --tag-second:#f0b35a; --tag-second-bg:#3b2d14;
+    --tag-view:#b8adf3; --tag-view-bg:#2b2747;
+    --grid:#2f2f2d; --axis:#56554f;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+/* ===== Base ===== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:var(--w-full)}
+body{margin:var(--sp-0);background:var(--surface);color:var(--ink);font-family:var(--font);font-size:var(--fs-base);line-height:var(--lh-base);overflow-x:hidden}
+a{color:var(--series-1);text-decoration:underline;text-underline-offset:var(--underline-offset);overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:var(--sp-0) var(--sp-0) var(--sp-4);font-weight:var(--fw-bold)}
+h1{font-size:var(--fs-hero)}
+h2{font-size:var(--fs-xl);margin-top:var(--sp-8);padding-top:var(--sp-5);border-top:var(--border-w) solid var(--line)}
+h3{font-size:var(--fs-lg);margin-top:var(--sp-6)}
+h4{font-size:var(--fs-md);margin-top:var(--sp-5)}
+p{margin:var(--sp-0) var(--sp-0) var(--sp-4)}
+ul,ol{margin:var(--sp-0) var(--sp-0) var(--sp-4);padding-left:var(--sp-5)}
+li{margin-bottom:var(--sp-2)}
+.wrap{max-width:var(--w-max);margin:var(--sp-0) auto;padding:var(--sp-6) var(--sp-5) var(--sp-8)}
+.lede{font-size:var(--fs-md);color:var(--ink-2)}
+.meta{color:var(--ink-3);font-size:var(--fs-sm);margin-bottom:var(--sp-5)}
+.scope{border:var(--border-w) dashed var(--line-strong);border-radius:var(--radius);padding:var(--sp-4);color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-5)}
+/* ===== Cards / grids ===== */
+.card{background:var(--surface-2);border:var(--border-w) solid var(--line);border-radius:var(--radius-lg);padding:var(--sp-5);margin:var(--sp-0) var(--sp-0) var(--sp-5)}
+.card h3,.card h4{margin-top:var(--sp-0)}
+.grid{display:grid;gap:var(--sp-4);margin:var(--sp-0) var(--sp-0) var(--sp-5)}
+.grid-2{grid-template-columns:repeat(var(--col-2),var(--track))}
+.grid-3{grid-template-columns:repeat(var(--col-3),var(--track))}
+.grid .card{margin:var(--sp-0)}
+.verdict{border-left:var(--border-w-strong) solid var(--line-strong)}
+.verdict-good{border-left-color:var(--good);background:var(--good-bg)}
+.verdict-warn{border-left-color:var(--warn);background:var(--warn-bg)}
+.verdict-serious{border-left-color:var(--serious);background:var(--serious-bg)}
+.verdict-neutral{border-left-color:var(--neutral);background:var(--neutral-bg)}
+.verdict .vt{display:block;font-weight:var(--fw-bold);margin-bottom:var(--sp-2)}
+.verdict-good .vt{color:var(--good)}
+.verdict-warn .vt{color:var(--warn)}
+.verdict-serious .vt{color:var(--serious)}
+.verdict-neutral .vt{color:var(--neutral)}
+/* ===== Tags ===== */
+.tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-semibold);line-height:var(--lh-none);padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-sm);vertical-align:middle;margin-right:var(--sp-1);white-space:nowrap}
+.tag-good{color:var(--good);background:var(--good-bg)}
+.tag-warn{color:var(--warn);background:var(--warn-bg)}
+.tag-serious{color:var(--serious);background:var(--serious-bg)}
+.tag-view{color:var(--tag-view);background:var(--tag-view-bg)}
+.tag-first{color:var(--tag-first);background:var(--tag-first-bg)}
+.tag-second{color:var(--tag-second);background:var(--tag-second-bg)}
+.legend-tags{display:flex;flex-wrap:wrap;gap:var(--sp-3);font-size:var(--fs-sm);color:var(--ink-2);margin-bottom:var(--sp-5)}
+.legend-tags span{display:inline-flex;align-items:center;gap:var(--sp-1)}
+/* ===== Timeline ===== */
+.timeline{list-style:none;margin:var(--sp-0) var(--sp-0) var(--sp-5);padding:var(--sp-0) var(--sp-0) var(--sp-0) var(--sp-5);border-left:var(--timeline-rail) solid var(--line-strong)}
+.timeline li{position:relative;margin-bottom:var(--sp-4);font-size:var(--fs-sm)}
+.timeline li::before{content:"";position:absolute;left:calc(-1 * var(--sp-5) - var(--timeline-dot) / 2 - var(--timeline-rail) / 2);top:var(--sp-2);width:var(--timeline-dot);height:var(--timeline-dot);border-radius:var(--radius-sm);background:var(--series-1)}
+.timeline b{display:block;color:var(--ink);font-weight:var(--fw-semibold)}
+/* ===== Check table (details) ===== */
+.check{border:var(--border-w) solid var(--line);border-radius:var(--radius);background:var(--surface-2);margin-bottom:var(--sp-3)}
+.check summary{cursor:pointer;padding:var(--sp-3) var(--sp-4);display:flex;gap:var(--sp-3);align-items:flex-start;list-style:none}
+.check summary::-webkit-details-marker{display:none}
+.check summary .no{color:var(--ink-3);font-size:var(--fs-sm);font-weight:var(--fw-semibold);flex:none}
+.check summary .claim{flex:1}
+.check summary .tag{flex:none;margin-top:var(--sp-1)}
+.check .body{padding:var(--sp-0) var(--sp-4) var(--sp-4);font-size:var(--fs-sm);color:var(--ink-2);border-top:var(--border-w) solid var(--line)}
+.check .body p{margin:var(--sp-3) var(--sp-0) var(--sp-0)}
+.check .body b{color:var(--ink)}
+/* ===== Tables ===== */
+.table-scroll{overflow-x:auto;margin:var(--sp-0) var(--sp-0) var(--sp-5)}
+table{border-collapse:collapse;width:var(--w-full);font-size:var(--fs-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-3);border-bottom:var(--border-w) solid var(--line)}
+th{color:var(--ink-2);font-weight:var(--fw-semibold);background:var(--surface-2)}
+.wide{min-width:var(--table-min-w)}
+td.r,th.r{text-align:right;white-space:nowrap}
+/* ===== Charts ===== */
+figure{margin:var(--sp-0) var(--sp-0) var(--sp-5);background:var(--surface-2);border:var(--border-w) solid var(--line);border-radius:var(--radius-lg);padding:var(--sp-4)}
+figure .ft{font-weight:var(--fw-bold);margin-bottom:var(--sp-1)}
+figure .fs{color:var(--ink-2);font-size:var(--fs-sm);margin-bottom:var(--sp-3)}
+figure svg{width:var(--w-full);height:auto;display:block;overflow:visible}
+figcaption{color:var(--ink-3);font-size:var(--fs-xs);margin-top:var(--sp-3);line-height:var(--lh-snug)}
+.s1{fill:var(--series-1)} .s2{fill:var(--series-2)} .s3{fill:var(--series-3)} .srest{fill:var(--series-rest)}
+.mark{rx:var(--mark-radius);transition:filter var(--dur) var(--ease)}
+.mark:hover{filter:brightness(var(--hover-bright))}
+.gridline{stroke:var(--grid);stroke-width:var(--hairline)}
+.axis{stroke:var(--axis);stroke-width:var(--hairline)}
+.lbl{fill:var(--ink-2);font-size:var(--svg-fs-lbl);font-family:var(--font)}
+.lbl-val{fill:var(--ink);font-size:var(--svg-fs-val);font-weight:var(--fw-semibold);font-family:var(--font)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-3);font-size:var(--fs-sm);color:var(--ink-2);margin:var(--sp-2) var(--sp-0) var(--sp-0)}
+.legend i{display:inline-block;width:var(--sp-3);height:var(--sp-3);border-radius:var(--mark-gap);margin-right:var(--sp-1);vertical-align:middle}
+.legend .k1 i{background:var(--series-1)} .legend .k2 i{background:var(--series-2)} .legend .k3 i{background:var(--series-3)} .legend .krest i{background:var(--series-rest)}
+.btn{font:inherit;font-size:var(--fs-sm);padding:var(--sp-1) var(--sp-3);border:var(--border-w) solid var(--line-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);cursor:pointer;transition:background var(--dur) var(--ease)}
+.btn[aria-pressed="true"]{background:var(--series-1);color:var(--ink-on-accent);border-color:var(--series-1)}
+.btn:focus-visible{outline:var(--border-w-strong) solid var(--series-1);outline-offset:var(--mark-gap)}
+.chart-table{display:none;margin-top:var(--sp-3)}
+.chart-table.on{display:block}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);font-size:var(--fs-xs);line-height:var(--lh-tip);padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);max-width:var(--tip-w);box-shadow:var(--shadow);opacity:var(--opacity-0);transition:opacity var(--dur) var(--ease);z-index:var(--z-tip)}
+#tip.on{opacity:var(--opacity-1)}
+/* ===== Quadrant ===== */
+.quad{display:grid;grid-template-columns:repeat(var(--col-2),var(--track));gap:var(--sp-3);margin:var(--sp-0) var(--sp-0) var(--sp-5)}
+.quad .q{border:var(--border-w) solid var(--line);border-radius:var(--radius);padding:var(--sp-4);background:var(--surface-2);font-size:var(--fs-sm)}
+.quad .q b{display:block;color:var(--ink);margin-bottom:var(--sp-2)}
+.quad .q.empty{border-style:dashed;color:var(--ink-3)}
+/* ===== Scorer ===== */
+.scorer select{font:inherit;font-size:var(--fs-sm);padding:var(--sp-1) var(--sp-2);border:var(--border-w) solid var(--line-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);width:var(--score-w)}
+.scorer td.total{font-weight:var(--fw-bold);color:var(--ink)}
+.scorer .note{font-size:var(--fs-xs);color:var(--ink-3)}
+/* ===== Steps ===== */
+.steps{list-style:none;padding:var(--sp-0);margin:var(--sp-0) var(--sp-0) var(--sp-5);counter-reset:step}
+.steps>li{position:relative;padding:var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-7);border:var(--border-w) solid var(--line);border-radius:var(--radius);background:var(--surface-2);margin-bottom:var(--sp-3);counter-increment:step}
+.steps>li::before{content:counter(step);position:absolute;left:var(--sp-4);top:var(--sp-4);width:var(--sp-5);height:var(--sp-5);border-radius:var(--radius-sm);background:var(--series-1);color:var(--ink-on-accent);font-weight:var(--fw-bold);font-size:var(--fs-sm);display:flex;align-items:center;justify-content:center}
+.steps h4{margin:var(--sp-0) var(--sp-0) var(--sp-2)}
+.steps p{margin-bottom:var(--sp-2)}
+.steps p:last-child{margin-bottom:var(--sp-0)}
+/* ===== Sources ===== */
+.src{font-size:var(--fs-sm);color:var(--ink-2)}
+.src li{margin-bottom:var(--sp-2)}
+/* ===== Responsive：720px 为唯一断点字面值（CSS 媒体查询不能使用 var()，此处作为文档化例外） ===== */
+@media (max-width:720px){
+  :root{--fs-hero:28px;--fs-xl:24px;--fs-lg:19px}
+  .wrap{padding:var(--sp-5) var(--sp-4) var(--sp-7)}
+  .grid-2,.grid-3,.quad{grid-template-columns:repeat(var(--col-1),var(--track))}
+  .check summary{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion: reduce){
+  .mark,.btn,#tip{transition:var(--motion-none)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>中国 AI 拍短剧是浪费算力？——文章逐条核对与补充案例</h1>
+<p class="lede">对象：公众号「创新地图」2026 年 10 月 23 日文章《中国AI拍短剧是浪费算力？但它将会帮中国试出新的生意！》（作者王煜全）。本页把文中每条事实主张逐条核对，补上文章没有的正反案例，再把作者提出的「新标尺」做成可以自己打分的工具。</p>
+<p class="meta">制作：2026-10-23 · 判定四级：成立 / 部分成立 / 证据不足 / 不成立 · 作者观点单独标注，不做事实判定 · 所有数字附来源与口径</p>
+
+<div class="scope"><b>范围说明。</b>只核对文章正文，不含文末 CES 2027 观展团与科技特训营推广。「成立」只表示该事实被可靠来源记录，不表示背后的因果解释成立；凡是口径不同（Token 份额、算力占比、收入、流水、GMV、ARR、估值）的数字，本页分开陈列，不相加、不算倍数。</p></div>
+
+<h2>一句话结论</h2>
+<div class="grid grid-3">
+  <div class="card verdict verdict-warn"><span class="vt">55% 与 10% 不能对比</span>中文在线的 55% 是「输出 Token 份额」，字节的 10% 是「视频模型占总算力」。分子分母都不同，两个数字可以同时为真。「中国 AI 做短剧、美国 AI 做科技」的对比目前没有可追溯的美国数据。</div>
+  <div class="card verdict verdict-good"><span class="vt">文章事实大多有据</span>12 条事实主张里 8 条成立、3 条部分成立、1 条证据不足；另有 1 条作者观点不作判定。说过头的一处是「智谱 GLM 辅助 Hugging Face 挖掘和修复漏洞」：官方材料只明确支持 GLM-5.2 参与入侵事件取证分析，是否辅助漏洞发现或修复，现有证据未确认。</div>
+  <div class="card verdict verdict-warn"><span class="vt">「小单快反」有案例，完整 IP 开发链路尚未核实</span>SHEIN 的 100–200 件首单能证明「先小批量试」是真实商业实践；TikTok 先有短视频、后有电商的先后顺序也成立。但「网文 IP → AI 短剧试水 → 真人精品剧 → 动画/游戏」是作者提出的开发路径，本页没有找到走完整条链路的公开个案。读者可以借用这个思路，不能把它当成已验证的公式。</div>
+</div>
+
+<h2>争论是怎么来的：时间线</h2>
+<ul class="timeline">
+  <li><b>2026-06-03 · 中文在线投资者关系活动记录表</b>披露「行业 Token 调用数据」：AI 短剧与视频生成 55%、电商营销 24%、软件开发 15%。公司称是一季度自身 AI 内容生产用量与外部研究报告合算，未列明外部报告名称。</li>
+  <li><b>2026-09-30 · 中国信通院 Token 经济报告</b>沿用同一组数字（据财新、首尔经济报道）。</li>
+  <li><b>2026-10 月中旬 · Big Think 长文</b>《China is mass-producing slop at a scale the world has never seen》（作者 Afra Wang，substack 版标 10 月 13 日），提出「Industrial-Slop Complex」说法，引云南创作者与南京 AI 视频公司案例。</li>
+  <li><b>2026-10-16 · 国内刷屏</b>「国内一半算力被指在造爽剧，真正用于研发只有 15%」（新浪科技、界面、腾讯新闻）。同时流传「美国约 58% Token 用于编程、科研」的对比，查不到原始出处。</li>
+  <li><b>2026-10-19 · 字节跳动回应</b>豆包公关负责人在微博标「不实」：视频生成模型训练与推理占字节总算力约 10%。</li>
+  <li><b>2026-10-21/22 · 财新、首尔经济、亚洲经济</b>跟进报道，给出上半年 AI 短剧日均 1,519 部等数字。</li>
+  <li><b>2026-10-23 · 本文发表</b>，立场：短剧不是浪费，而是「小单快反」式的低成本试错。</li>
+</ul>
+
+<h2>口径对照：两个数字分别在数什么</h2>
+<div class="grid grid-2">
+<figure>
+  <div class="ft">中文在线披露：国内 Token 消耗份额（2026 Q1 口径）</div>
+  <div class="fs">单位：输出 Token 占比。来源：中文在线投资者关系活动记录表，2026-06-03。</div>
+  <svg id="c-token" viewBox="0 0 440 200" role="img" aria-label="Token 份额条形图：短剧与视频生成 55%，电商营销 24%，软件开发 15%，其他 6%"></svg>
+  <div class="legend"><span class="k1"><i></i>短剧与视频生成</span><span class="k2"><i></i>电商与广告营销</span><span class="k3"><i></i>软件开发</span><span class="krest"><i></i>其他（按差额推算）</span></div>
+  <figcaption>公司称数据来自「自身 AI 内容生产 Token 用量 + 外部研究报告」合算，方法与外部来源不透明，不能视为全国行业普查。「其他 6%」是 100% 减去三项的差额，公司未单独披露。</figcaption>
+</figure>
+<figure>
+  <div class="ft">字节跳动回应：视频生成模型占总算力比例</div>
+  <div class="fs">单位：算力占比（含训练与推理）。来源：豆包公关负责人微博，2026-10-19。</div>
+  <svg id="c-compute" viewBox="0 0 440 200" role="img" aria-label="算力占比条形图：视频生成模型约 10%，其他约 90%"></svg>
+  <div class="legend"><span class="k1"><i></i>视频生成模型训练与推理</span><span class="krest"><i></i>其他（含预训练等）</span></div>
+  <figcaption>这是公司回应口径，未经独立审计。算力占比的分母包含大模型预训练等不产生对外 Token 的消耗，统计主体、计量单位和分子都与左图不同。两个比例不能直接比较，也不能相减。</figcaption>
+</figure>
+</div>
+<p><button class="btn" data-toggle="t-ratio" aria-pressed="false">查看数据表</button></p>
+<div class="chart-table" id="t-ratio"><div class="table-scroll"><table><thead><tr><th>数字</th><th>统计主体</th><th>分子</th><th>分母</th><th>期间</th><th>来源等级</th></tr></thead><tbody>
+<tr><td>55%</td><td>中文在线（援引「行业数据」）</td><td>AI 短剧与视频生成消耗的输出 Token</td><td>国内全部输出 Token</td><td>2026 Q1</td><td><span class="tag tag-second">媒体转述公司披露</span>方法不透明</td></tr>
+<tr><td>约 10%</td><td>字节跳动</td><td>视频生成模型训练 + 推理算力</td><td>字节总算力</td><td>未说明</td><td><span class="tag tag-second">媒体转述公司回应</span>未经审计</td></tr>
+<tr><td>约 58%</td><td>不明</td><td>「编程、科研及材料研究」</td><td>美国 Token</td><td>不明</td><td><span class="tag tag-second">网传</span>查不到出处</td></tr>
+</tbody></table></div></div>
+
+<h2>产量与播放：22 万部里有多少达到参考线</h2>
+<figure>
+  <div class="ft">2026 上半年抖音新增 AI 剧：每 1 万部里的去向</div>
+  <div class="fs">按 DataEye 剧查查《2026 上半年国内 AI 剧漫剧数据报告》口径折算到每 1 万部。原始值：新增 221,900 部；达到 5,000 万播放参考线 2,886 部；破亿 1,055 部。</div>
+  <svg id="c-funnel" viewBox="0 0 440 150" role="img" aria-label="漏斗条形图：每一万部中 10000 部上线，130 部达到五千万播放参考线，48 部播放破亿"></svg>
+  <div class="legend"><span class="k1"><i></i>柱长 = 每 1 万部中的数量，按实际比例绘制；小值柱很短，用圆点标记位置</span></div>
+  <figcaption>「5,000 万播放盈亏线」是该报告设定的参考线，不是逐部核算的成本与收入；本页称它为「参考线」。Big Think 引证券日报说破亿率 0.16%，分母是全平台全部 AI 短剧，与抖音口径不同。</figcaption>
+</figure>
+<p><button class="btn" data-toggle="t-funnel" aria-pressed="false">查看数据表</button></p>
+<div class="chart-table" id="t-funnel"><div class="table-scroll"><table><thead><tr><th>指标</th><th class="r">原始值</th><th class="r">占比</th><th>来源</th></tr></thead><tbody>
+<tr><td>抖音上半年新增 AI 剧</td><td class="r">221,900 部</td><td class="r">100%</td><td>DataEye 剧查查，2026-09-18 发布</td></tr>
+<tr><td>达到 5,000 万播放参考线</td><td class="r">2,886 部</td><td class="r">1.3%</td><td>同上</td></tr>
+<tr><td>累计播放破亿</td><td class="r">1,055 部</td><td class="r">0.48%</td><td>同上；文章写「1000 多部、不到 0.5%」</td></tr>
+<tr><td>3 月单月峰值</td><td class="r">46,700 部</td><td class="r">—</td><td>同上（约 1,500 部/天）</td></tr>
+<tr><td>全平台上半年微短剧</td><td class="r">367,000 部</td><td class="r">AI 占 74% 以上</td><td>中国网络视听协会，经财新/首尔经济转述</td></tr>
+<tr><td>真人短剧</td><td class="r">上线量约为 AI 剧 1/50</td><td class="r">总播放约为 AI 剧 25 倍</td><td>DataEye 报告转述（腾讯新闻）</td></tr>
+</tbody></table></div></div>
+
+<h2>逐条核对：文章 12 条事实主张与 1 条作者观点</h2>
+<div class="legend-tags"><span><span class="tag tag-good">成立</span>事实被可靠来源记录</span><span><span class="tag tag-warn">部分成立</span>事实有据但范围或因果说过头</span><span><span class="tag tag-serious">证据不足</span>找不到可核实的依据</span><span><span class="tag tag-view">作者观点</span>不做事实判定</span></div>
+
+<details class="check"><summary><span class="no">1</span><span class="claim">「中国 AI 做短剧」依据是中文在线 6 月投资者交流披露的 55%</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>中文在线 2026-06-03 投资者关系活动记录表：AI 短剧与视频生成 55%、电商营销 24%、软件开发 15%。公司说明是「一季度自身 AI 内容生产 Token 用量 + 外部研究报告」合算，未列明外部报告。信通院 9 月报告沿用。</p>
+<p><b>限定。</b>公司披露口径可追溯，但统计方法与外部数据来源不透明，不足以代表中国整体市场。文章说「美国侧缺数据」是对的：网传「美国 58% 用于编程」查不到原始出处，中美应用结构的直接比较证据不足。</p>
+<p>来源：证券时报 2026-06-04；财新 2026-10-21；首尔经济 2026-10-22。</p></div></details>
+
+<details class="check"><summary><span class="no">2</span><span class="claim">字节跳动回应：视频生成模型训练与推理只占总算力约 10%</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>2026-10-19 豆包公关负责人刘星微博标「不实」，原话「视频生成模型训练和推理占字节总算力约 10%」。</p>
+<p><b>限定。</b>「成立」只指回应内容被可靠来源记录，不是独立证实了字节内部算力结构。原文只列举了两组数字，没有解释口径差异；本页补充说明：55% 数的是输出 Token，10% 数的是物理算力（含预训练），统计主体与计量口径不同，即使都准确也不能比大小。</p>
+<p>来源：新浪科技 2026-10-16、2026-10-19。</p></div></details>
+
+<details class="check"><summary><span class="no">3</span><span class="claim">Big Think 长文称中国低质 AI 视频为「工业化垃圾内容综合体」；云南拍婚礼的年轻人用 AI 做 3 分钟短片，花 10 天，视频生成成本约 3000 元</span><span class="tag tag-warn">部分成立</span></summary><div class="body">
+<p><b>报道存在：成立。</b>Big Think 文章作者 Afra Wang，题为《China is mass-producing slop at a scale the world has never seen》，原话「Industrial-Slop Complex」。案例人物：28 岁云南乡镇婚礼摄影师，网名 Mx-Shell，用 Seedance 2.0 花 10 天做出 3 分钟短片《Zombie Scavenger》，Token 成本约 3,000 元（约 442 美元），抖音播放超 7,000 万，海外约 1,200–1,300 万。文章转述准确。</p>
+<p><b>案例数字：待独立核验。</b>成本、播放量、身份都只由这一篇报道提供。3,000 元是报道所述 Token 成本，不等于完整制作成本（不含人工 10 天）。</p>
+<p><b>文章漏掉的部分。</b>Big Think 还引南风窗 2026 年 4 月报道：南京一家 AI 视频公司员工「Yuan」每月要产 10 部、每部约 30 分钟，做法是下载爆款、提取台词、复刻一版；前几集免费，后面付费或看广告解锁。这是「工业化」一词的具体所指。</p>
+<p>来源：bigthink.com；bigthinkmedia.substack.com（标 2026-10-13）。</p></div></details>
+
+<details class="check"><summary><span class="no">4</span><span class="claim">上半年抖音新上线 AI 剧约 22 万部，破亿 1000 多部，不到 0.5%</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>DataEye 剧查查报告：新增 221,900 部，破亿 1,055 部，1,055 ÷ 221,900 ≈ 0.48%。算术成立。</p>
+<p><b>限定。</b>按该报告定义的作品口径；作品去重方法、播放统计截止日未公开。报告另给「达到 5,000 万播放参考线 2,886 部（1.3%）」，播放量不等于盈利，本页不把它说成「98.7% 不回本」。</p>
+<p>来源：腾讯新闻 2026-09-18；虎嗅；知乎转载报告。</p></div></details>
+
+<details class="check"><summary><span class="no">5a</span><span class="claim">TikTok 先有内容，再有电商</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实（先后顺序）。</b>TikTok 国际版 2017 年上线，以短视频起家；TikTok Shop 2021 年先在印尼、英国上线，2023 年 9 月进入美国。先有内容、后有电商的顺序成立。</p>
+<p><b>另列（规模，不用于证明顺序）。</b>TikTok Shop 2025 年全球 GMV 643 亿美元（同比 +94%），美国 151 亿美元（+68%），东南亚 456 亿美元（Momentum Works × Tabcut）。不同追踪商的美国数字相差 20–30%。GMV 只说明电商规模，不证明内容与交易之间的因果。</p>
+<p>来源：TikTok Shop 各市场上线公开报道；thelowdown.momentum.asia。</p></div></details>
+
+<details class="check"><summary><span class="no">5b</span><span class="claim">SHEIN 先做一两百件试卖，卖得好再追加</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>SHEIN 官网 process 页：首批「100 到 200 件」；招股说明称之为 LATR（大规模自动化测试与补单），常在 5 天内补单；年上新约 150 万款（对比 Zara 约 4 万款，统计年份以第三方整理为准）。</p>
+<p><b>限定。</b>机制层面成立：这是小批量测试的真实商业实践。它不证明 SHEIN 的整体成功主要由这一机制造成，也不是 AI 短剧模式会成功的证明。</p>
+<p>来源：sheingroup.com/process；shenglufashion.com 2026-08-08。</p></div></details>
+
+<details class="check"><summary><span class="no">5c</span><span class="claim">网文 IP → AI 短剧试水 → 真人精品短剧 → 动画/游戏</span><span class="tag tag-warn">部分成立</span></summary><div class="body">
+<p><b>核实。</b>阅文 2026 上半年：总收入 35.31 亿元（+10.7%），净利润 1.35 亿元（2024、2025 年亏损后首次盈利）；短剧与 AI 漫剧收入超 4.3 亿元（+230%）；2025 年产出近千部漫剧、12 部破亿；CEO 侯晓楠称 IP 开发率不足千分之一。中文在线 2026 上半年：净亏损 4,299.53 万元（收窄 81%），短剧及 IP 衍生品收入 4.11 亿元（+108.72%）。以上为公司总收入、分部收入分别列示。</p>
+<p><b>限定。</b>网文改编短剧、漫剧已有商业实践，收入数字可核。但「先用 AI 短剧测试，有潜力再追加投入做真人剧、动画、游戏」是作者提出的开发路径；本页没有找到走完整条链路、且顺序可确认的公开个案，也没有转化率和对照数据。投资者讨论中的《山海契约》是 3D 漫剧与真人剧同步开发，非公司公告，也不是「先测后投」的顺序。</p>
+<p>来源：阅文集团 2026 中期业绩，经网易 2026-08 转述；中文在线 2026 中报，经证券时报转述。两份公告原文本页未直接核对，数字属「媒体转述公司披露」。</p></div></details>
+
+<details class="check"><summary><span class="no">6a</span><span class="claim">美国也有 Meta Muse 这样的消费级 AI</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>Meta 2026-09-08 在美国发布 Muse（iOS/Android/网页/WhatsApp），模型 Muse Spark，免费、20 美元 Power、100 美元 Maximum 三档；9 月 23 日公布 Muse Charm 钥匙扣设备，预计 12 月发货（截至本页制作尚未交付）；10 月 21 日美加账号超 1,000 万。</p>
+<p><b>限定。</b>判定对象是「美国存在面向消费者的 AI 产品」，这一点成立。它与「美国 AI 主要做科技」的占比问题是两个不同对象；一个案例不能用来判断两国产业结构，产品细节仍依赖媒体报道。</p>
+<p>来源：pymnts.com；cdomagazine.tech；Wikipedia「Muse (AI agent)」。</p></div></details>
+
+<details class="check"><summary><span class="no">6b</span><span class="claim">智谱 GLM 辅助 Hugging Face 挖掘和修复漏洞；图注「在应对 OpenAI 的攻击中起关键作用」</span><span class="tag tag-warn">部分成立</span></summary><div class="body">
+<p><b>核实。</b>Hugging Face 官方 2026-07-16 披露：一次「端到端由自主 AI 智能体系统驱动」的入侵进入了部分生产基础设施。取证时先用商业闭源 API，被提供商安全护栏拒答（护栏分不清事件响应者和攻击者），于是改用自托管开放权重 GLM-5.2 分析 17,000 多条攻击动作记录。官方博客没有点名攻击模型来自哪家。后续智谱 GLM-5.3（2026 年 8 月）在 269 个开源项目发现 2,436 个漏洞并开放免费审计。</p>
+<p><b>拆成三件事。</b>①事件取证：成立，官方材料明确写 GLM-5.2 参与分析攻击记录。②漏洞挖掘：官方材料未提 GLM 在本事件中发现漏洞；GLM-5.3 审计其他开源项目是后续的独立案例，不能证明它在 Hugging Face 事件中挖掘漏洞。③漏洞修复：官方材料未提 GLM 参与修复，现有证据不能确认，也不能否定。文章「挖掘和修复」超出现有证据。</p>
+<p><b>图注。</b>「应对 OpenAI 的攻击」是中文媒体（爱范儿、新浪）的说法，官方披露未确认攻击方；建议改为「Hugging Face 使用 GLM-5.2 辅助分析 AI 智能体入侵事件」。</p>
+<p>来源：huggingface.co/blog/security-incident-july-2026；ifanr.com/1672746；新浪财经 2026-08-14。</p></div></details>
+
+<details class="check"><summary><span class="no">6c</span><span class="claim">豆包手机去年年底发布</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>2025-12-01 豆包团队发布「豆包手机助手技术预览版」，载体是中兴努比亚 M153 工程样机，3,499 元，首批约 3 万台售罄。系统级 Agent 持有 INJECT_EVENTS 权限，可跨 App 比价下单。12 月 5 日因触发微信、银行 App 风控，下线金融类操作。字节强调不是自研手机。</p>
+<p><b>限定。</b>成立的是「技术预览版与工程样机发布」这一事实；首批售罄不等于已形成规模化手机业务。</p>
+<p>来源：财联社 2025-12-02；澎湃新闻；新浪财经 2025-12-05。</p></div></details>
+
+<details class="check"><summary><span class="no">6d</span><span class="claim">千问与阿里生态打通，可直接下单</span><span class="tag tag-good">成立</span></summary><div class="body">
+<p><b>核实。</b>2026-01-15 千问 App 接入淘宝、淘宝闪购、支付宝、飞猪、高德，一句话点外卖；2026-05-11 与淘宝全面互通，覆盖找货、比价、下单、物流、售后。</p>
+
+</div></details>
+
+<details class="check"><summary><span class="no">6e</span><span class="claim">中国 AI 做新药研发</span><span class="tag tag-serious">证据不足</span></summary><div class="body">
+<p><b>原因。</b>原文只给方向，没有可核实的公司、药物或研发成果，当前不足以对具体事实作判定。这不等于该领域没有真实案例；本页不替作者补造案例。</p></div></details>
+
+<details class="check"><summary><span class="no">7</span><span class="claim">判断 AI 应用的新标尺：降低什么成本、满足哪些原来难满足的需求、能否低成本试错开出新市场；「未来最有价值的生意现在未必有名字」</span><span class="tag tag-view">作者观点</span></summary><div class="body">
+<p><b>定位。</b>作者的分析框架，不适用事实四级判定。本页在下方把它做成可打分的工具，读者给案例打的分是主观判断，不是可验证数据。</p></div></details>
+
+<h2>补充案例：文章之外的正反面</h2>
+<p>每条都标出口径与来源等级。收入、流水、GMV、ARR、估值是五种不同指标，本页不用它们互相换算。</p>
+<div class="legend-tags"><span><span class="tag tag-first">一手</span>本页直接核对过的公司官网、官方博客、原始报道；「一手」只针对来源直接记录的内容，不代表其中全部数字已独立核验</span><span><span class="tag tag-second">二手 / 媒体转述公司披露 / 待复核</span>媒体转述，本页未直接核对公告原文</span></div>
+
+<div class="table-scroll"><table class="wide"><thead><tr><th>案例</th><th>数字（口径）</th><th>说明什么</th><th>来源</th></tr></thead><tbody>
+<tr><td><b>可灵 AI（快手）</b><br>正面</td><td>实际收入：2025 年约 10 亿元；2026 Q1 超 6.5 亿元（+300%）；Q2 超 8.5 亿元（+200%）。<br>ARR：2026 年 3 月时点年化近 5 亿美元（时点运行水平，不是已实现收入）。<br>估值：2026 年 7 月融资近 30 亿美元，投后约 180 亿美元。<br>用户：6 月全球破 1 亿，企业客户近 5 万家。</td><td>视频生成本身已是可计费生意；收入来自 B 端 API 与个人订阅，两者各占多少公司未拆分。</td><td><span class="tag tag-second">媒体转述公司披露</span>快手 2025 年报、2026 Q1/Q2 业绩会内容，经财联社 2026-03-25、新浪 2026-05-28、京报网 2026-08-19 转述；本页未直接核对公告原文</td></tr>
+<tr><td><b>《波斯复仇记》</b><br>待核实案例</td><td>报道称制作成本约 3,000 元，海外 72 小时 GMV 约 50 万美元。GMV 是交易总额，不是制作方收入；3,000 元可能只是 Token 成本；交易主体、分账和全成本均未确认；本页不计算倍数。</td><td>媒体报道的 AI 短剧出海交易规模案例，净收益未知，不能据此认定商业成功。</td><td><span class="tag tag-second">二手转述</span>新浪财经 2026-06-03，原文未能复核交易主体与分账</td></tr>
+<tr><td><b>酱油文化（AI 漫剧公司）</b><br>反面</td><td>员工从约 1,200 人缩到 600 多人；约 150 部作品卡在平台未上线，对应制作成本约 1,200 万元（《第一财经》杂志 2026 年 8 月采访口径）。<br>「年营收利润减半」为创始人预估；「3 月以后入场者 99% 亏本」为受访者判断，未见独立行业统计。</td><td>据采访，该公司出现作品积压与人员收缩。积压的原因、走量模式是否失灵、是否设有退出机制，都是待验证的问题，不能从这一家推到行业。</td><td><span class="tag tag-second">二手转述</span>投资界 2026-10-19 转述《第一财经》杂志</td></tr>
+<tr><td><b>平台清退</b><br>反面</td><td>红果 2026 年 5 月下架低质漫剧 20,941 部、8 月 8,689 部；媒体合计「行业下架约 5.6 万部」。是否跨平台重复计数、是否去重，未公开。</td><td>媒体报道了下架行动；分成调整是否普遍、是否压缩走量空间，仍待核实。</td><td><span class="tag tag-second">待复核</span>投资界、知乎转载报告</td></tr>
+<tr><td><b>海外短剧平台</b><br>对照</td><td>ReelShort：2025 年流水约 12 亿美元（第三方估算，口径为用户支付总额）；媒体转述中文在线 2025 年报称海外短剧业务收入 57.2 亿元（财报口径、报表主体为上市公司合并范围，与流水不是同一指标，本页未核对年报原文）。<br>DramaBox：2024 年收入 3.23 亿美元、利润约 1,000 万美元（维基百科引述，利润主体与利润类型未说明）。<br>Deloitte 预计 2026 年全球应用内短剧约 78 亿美元。</td><td>所列数字未拆分真人剧与 AI 剧，不能据此判断海外收入结构；「AI 短剧在海外多数亏损」是行业人士说法，无样本数据。</td><td><span class="tag tag-second">待复核</span>filmustage、shortdramatop、Wikipedia「DramaBox」</td></tr>
+<tr><td><b>好莱坞入场</b><br>对照</td><td>Fox Entertainment 入股 Holywater（My Drama），承诺两年制作 200 多部竖屏剧（制作承诺）；Holywater 2026 年 1 月 A 轮 2,200 万美元（融资额）；CEO 称 AI 生成内容的留存与真人剧接近（经营主张，未给指标与样本）。James Franco 2026 年 9 月主演短剧《Love, Lies & Frank》（Shortical）。</td><td>说明部分海外影视机构正在参与竖屏短剧；三类材料（入股与制作承诺、融资额、经营主张）强度不同，都不足以证明「中国先试出模式、海外跟进」的承接关系。</td><td><span class="tag tag-second">部分待复核</span>Hollywood Reporter、Deadline 2026-05、TheWrap</td></tr>
+<tr><td><b>算力成本口径</b><br>解释</td><td>媒体称一部 12 集 AI 短剧算力成本近 20 万元；财新称 5 秒 1080p 视频约 8 万 Token/秒（单位含义待确认）；真人仿真剧 Token 约是 720p 漫剧的 2–3 倍。</td><td>视频天然「吃 Token」。澎湃的看法「55% 反映媒介密度而非方向跑偏」是待检验的解释，不是结论。</td><td><span class="tag tag-second">待复核</span>新浪科技 2026-10-16；财新 2026-10-21；澎湃</td></tr>
+<tr><td><b>市场规模</b><br>背景</td><td>前 5 个月 AI 剧漫剧市场 220 亿元，全年预计 400 亿元（2026-09-18 成都 AI 文娱大会）。与 Deloitte 的全球 78 亿美元覆盖不同市场与渠道，不可相加比较。</td><td>国内市场体量背景。</td><td><span class="tag tag-second">二手</span>腾讯新闻 2026-09-18</td></tr>
+</tbody></table></div>
+
+<h2>「二分法」有问题：四格对照</h2>
+<p>文章说「AI 做科技 vs 做短剧」的二分法不成立。把文中案例按「国家 × 产品层次」摆开，可以看到每格都有东西，只是文章没有填美国的科技格。</p>
+<div class="quad">
+  <div class="q"><b>美国 · 消费级</b>Meta Muse（2026-09 发布，三档订阅，美加账号超 1,000 万）。证明存在，不证明占比。</div>
+  <div class="q"><b>中国 · 消费级</b>豆包手机助手（2025-12，工程样机）；千问 App 接淘宝下单（2026-01 / 05）；AI 短剧（上半年抖音 22 万部）。</div>
+  <div class="q"><b>中国 · 科技级</b>GLM-5.2 用于 Hugging Face 事件取证（2026-07）；GLM-5.3 开源漏洞审计（2026-08）；新药研发（文中无案例）。</div>
+  <div class="q empty"><b>美国 · 科技级</b>文章未展开。网传「58% Token 用于编程」无出处，本页不补数字。</div>
+</div>
+
+<h2>新标尺：自己给案例打分</h2>
+
+<div class="table-scroll scorer"><table class="wide" id="scorer"><thead><tr><th>案例</th><th>降低成本</th><th>满足新需求</th><th>低成本试错</th><th class="r">总分</th><th>一句话依据</th></tr></thead><tbody>
+<tr data-row><td>AI 短剧走量（酱油文化模式）</td><td><select data-s aria-label="AI 短剧走量（酱油文化模式）：降低成本"><option>0</option><option>1</option><option>2</option><option selected>3</option></select></td><td><select data-s aria-label="AI 短剧走量（酱油文化模式）：满足新需求"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></td><td><select data-s aria-label="AI 短剧走量（酱油文化模式）：低成本试错"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></td><td class="r total"></td><td class="note">成本降了；据采访约有 150 部积压。是否设有退出条件、执行情况如何，现有材料未说明。</td></tr>
+<tr data-row><td>云南创作者 3 分钟短片</td><td><select data-s aria-label="云南创作者 3 分钟短片：降低成本"><option>0</option><option>1</option><option>2</option><option selected>3</option></select></td><td><select data-s aria-label="云南创作者 3 分钟短片：满足新需求"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></td><td><select data-s aria-label="云南创作者 3 分钟短片：低成本试错"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td class="r total"></td><td class="note">10 天、约 3,000 元 Token 换 7,000 万播放，但只有一例，变现未知。</td></tr>
+<tr data-row><td>阅文 网文 IP → 短剧/漫剧</td><td><select data-s aria-label="阅文 网文 IP → 短剧/漫剧：降低成本"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td><select data-s aria-label="阅文 网文 IP → 短剧/漫剧：满足新需求"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></td><td><select data-s aria-label="阅文 网文 IP → 短剧/漫剧：低成本试错"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td class="r total"></td><td class="note">分部收入 +230%，IP 开发率不足千分之一说明试错空间大，但转真人剧链路未证。</td></tr>
+<tr data-row><td>可灵 AI 视频生成服务</td><td><select data-s aria-label="可灵 AI 视频生成服务：降低成本"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td><select data-s aria-label="可灵 AI 视频生成服务：满足新需求"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td><select data-s aria-label="可灵 AI 视频生成服务：低成本试错"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></td><td class="r total"></td><td class="note">已披露季度收入的视频生成服务，自身不是试错工具而是卖工具的人。</td></tr>
+
+<tr data-row><td>SHEIN 100–200 件首单</td><td><select data-s aria-label="SHEIN 100–200 件首单：降低成本"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></td><td><select data-s aria-label="SHEIN 100–200 件首单：满足新需求"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></td><td><select data-s aria-label="SHEIN 100–200 件首单：低成本试错"><option>0</option><option>1</option><option>2</option><option selected>3</option></select></td><td class="r total"></td><td class="note">小批量测试有官网与招股书证据，是作者类比的原型。</td></tr>
+</tbody></table></div>
+
+<h2>给读者的判断与行动</h2>
+<ol class="steps">
+  <li><h4>看 Token 数据，先问分母</h4><p>遇到「X% 算力用在 Y」的说法，先问：统计主体是谁、分子是 Token 还是算力、分母包不包括预训练、期间是哪个季度。55% 和 10% 的争论里，这四个问题的答案都不同。</p></li>
+  <li><h4>看短剧公司，看参考线达标率不看产量</h4><p>22 万部里 1.3% 达到 5,000 万播放参考线。产量翻倍不会让这个比例翻倍。酱油文化据采访有约 150 部积压，是否因为产量先于分发，报道没有给出证据，需要分开核实。平台分成向精品倾斜的说法来自同一组采访，是否普遍待复核。</p></li>
+  <li><h4>想用 AI 短剧试 IP，先定试错预算和退出条件</h4><p>作者说短剧是「小单快反」，SHEIN 的做法是 100–200 件首单、卖得好常在 5 天内补单。短剧不能照搬这个时长，要另设自己的观察期、全成本预算（Token 加人工）和退出条件：每个 IP 定一个预算和一个播放参考线，不达标就停，达标再谈真人剧。目前没有公开数据证明这条链路能跑通，所以它是实验设计，不是公式。</p></li>
+</ol>
+
+
+<ol class="src">
+  <li><span class="tag tag-second">对象</span>王煜全《中国AI拍短剧是浪费算力？但它将会帮中国试出新的生意！》创新地图，2026-10-23。<a href="https://mp.weixin.qq.com/s/-s1bG6ozrnnuDM0Cnw2vdg">mp.weixin.qq.com</a></li>
+  <li><span class="tag tag-second">媒体转述公司披露</span>中文在线投资者关系活动记录表（2026-06-03），经证券时报 2026-06-04 报道。<a href="https://www.stcn.com/article/detail/3944638.html">stcn.com</a></li>
+  <li><span class="tag tag-second">二手</span>财新《China churns out 1,519 AI short dramas a day》2026-10-21（付费）；首尔经济英文版 2026-10-22。<a href="https://en.sedaily.com/international/2026/10/22/china-churns-out-1519-ai-short-dramas-a-day-token-data-shows">en.sedaily.com</a></li>
+  <li><span class="tag tag-second">二手</span>新浪科技《国内一半AI算力被指在造爽剧》2026-10-16；字节回应报道 2026-10-19。<a href="https://finance.sina.com.cn/tech/roll/2026-10-16/doc-inivksmv8327579.shtml">finance.sina.com.cn</a></li>
+  <li><span class="tag tag-first">一手</span>Afra Wang, "China is mass-producing slop at a scale the world has never seen", Big Think, 2026-10。<a href="https://bigthinkmedia.substack.com/p/china-is-mass-producing-slop-at-a">bigthinkmedia.substack.com</a></li>
+  <li><span class="tag tag-second">二手</span>DataEye 剧查查《2026 上半年国内 AI 剧漫剧数据报告》，经腾讯新闻 2026-09-18 报道。<a href="https://news.qq.com/rain/a/20260918A0B9OU00">news.qq.com</a></li>
+  <li><span class="tag tag-first">一手</span>Hugging Face, "Security incident, July 2026", 2026-07-16。<a href="https://huggingface.co/blog/security-incident-july-2026">huggingface.co</a></li>
+  <li><span class="tag tag-second">二手</span>爱范儿、新浪财经关于 GLM-5.2 取证与 GLM-5.3 漏洞审计的报道，2026-07-21、2026-08-14。<a href="https://www.ifanr.com/1672746">ifanr.com</a></li>
+  <li><span class="tag tag-first">一手</span>SHEIN 官网 process 页。<a href="https://www.sheingroup.com/process">sheingroup.com</a></li>
+  <li><span class="tag tag-second">二手</span>Momentum Works × Tabcut, TikTok Shop 2025 GMV 报告。<a href="https://thelowdown.momentum.asia/new-report-tiktok-shop-u-s-gmv-grew-68-to-reach-us15-1b-in-2025/">thelowdown.momentum.asia</a></li>
+  <li><span class="tag tag-second">二手</span>Meta Muse：pymnts.com、cdomagazine.tech、Wikipedia「Muse (AI agent)」。<a href="https://en.wikipedia.org/wiki/Muse_(AI_agent)">en.wikipedia.org</a></li>
+  <li><span class="tag tag-second">二手</span>豆包手机助手：财联社 2025-12-02；澎湃新闻；新浪财经 2025-12-05。<a href="https://www.cls.cn/detail/2216608">cls.cn</a></li>
+  
+  <li><span class="tag tag-second">媒体转述公司披露</span>快手 2025 年报、2026 Q1/Q2 业绩会，经财联社、新浪、京报网报道。<a href="https://www.cls.cn/detail/2324868">cls.cn</a></li>
+  <li><span class="tag tag-second">媒体转述公司披露</span>阅文集团 2026 中期业绩，经网易报道；中文在线 2026 中报，经证券时报报道。<a href="https://www.163.com/dy/article/L430MI4U0556BZ5E.html">163.com</a></li>
+  <li><span class="tag tag-second">二手</span>投资界《AI短剧走到十字路口》2026-10-19，转述《第一财经》杂志 2026-08。<a href="https://news.pedaily.cn/202610/570484.shtml">news.pedaily.cn</a></li>
+  <li><span class="tag tag-second">二手</span>《波斯复仇记》：新浪财经 2026-06-03。<a href="https://finance.sina.com.cn/jjxw/2026-06-03/doc-iniacaew1066881.shtml">finance.sina.com.cn</a></li>
+  <li><span class="tag tag-second">二手</span>Holywater / Fox：Hollywood Reporter；Deadline 2026-05；TheWrap。<a href="https://deadline.com/2026/05/microdrama-holywater-chiefs-on-investment-walt-disney-1236915433/">deadline.com</a></li>
+</ol>
+
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  'use strict';
+  var css = getComputedStyle(document.documentElement);
+  function tok(name, fallback){ var v = parseFloat(css.getPropertyValue(name)); return Number.isFinite(v) ? v : fallback; }
+  var GAP = tok('--mark-gap', 2), BARH = tok('--bar-h', 26);
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; }
+  var tip = document.getElementById('tip');
+  function bindTip(node, html){
+    node.addEventListener('mousemove', function(ev){ tip.innerHTML = html; tip.classList.add('on'); var off = tok('--tip-offset', 14); tip.style.left = (ev.clientX + off) + 'px'; tip.style.top = (ev.clientY + off) + 'px'; });
+    node.addEventListener('mouseleave', function(){ tip.classList.remove('on'); });
+  }
+  /* 单行堆叠条：份额图（数据驱动的宽度是运行时值，不是设计 token） */
+  function stacked(id, parts, note){
+    var svg = document.getElementById(id); if (!svg) return;
+    var W = 440, x0 = 8, usable = W - 16, y = 40, total = parts.reduce(function(a,p){ return a + p.v; }, 0), x = x0;
+    svg.appendChild(el('text', {x: x0, y: 24, 'class': 'lbl'}, note));
+    parts.forEach(function(p){
+      var w = usable * p.v / total - GAP;
+      var r = el('rect', {x: x, y: y, width: Math.max(w, 0), height: BARH, 'class': 'mark ' + p.cls});
+      bindTip(r, '<b>' + p.n + '</b><br>' + p.v + '%' + (p.extra ? '<br>' + p.extra : ''));
+      svg.appendChild(r);
+      if (p.v >= 10) svg.appendChild(el('text', {x: x + w / 2, y: y + BARH / 2 + 5, 'text-anchor': 'middle', 'class': 'lbl-val', fill: 'var(--ink-on-accent)'}, p.v + '%'));
+      x += w + GAP;
+    });
+    svg.appendChild(el('line', {x1: x0, x2: W - 8, y1: y + BARH + 12, y2: y + BARH + 12, 'class': 'axis'}));
+    parts.forEach(function(p, i){
+      svg.appendChild(el('text', {x: x0, y: y + BARH + 36 + i * 18, 'class': 'lbl'}, p.n + '：' + p.v + '%' + (p.extra ? '（' + p.extra + '）' : '')));
+    });
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (y + BARH + 44 + parts.length * 18));
+  }
+  stacked('c-token', [
+    {n: '短剧与视频生成', v: 55, cls: 's1'},
+    {n: '电商与广告营销', v: 24, cls: 's2'},
+    {n: '软件开发', v: 15, cls: 's3'},
+    {n: '其他', v: 6, cls: 'srest', extra: '差额推算'}
+  ], '分母：国内全部输出 Token（2026 Q1，公司合算口径）');
+  stacked('c-compute', [
+    {n: '视频生成模型训练与推理', v: 10, cls: 's1', extra: '公司口径约数'},
+    {n: '其他', v: 90, cls: 'srest', extra: '含预训练等'}
+  ], '分母：字节跳动总算力（公司回应口径，期间未说明）');
+  /* 横条漏斗：每 1 万部 */
+  (function(){
+    var svg = document.getElementById('c-funnel'); if (!svg) return;
+    var rows = [
+      {n: '上线', v: 10000, raw: '221,900 部', cls: 's1'},
+      {n: '达到 5,000 万播放参考线', v: 130, raw: '2,886 部（1.3%）', cls: 's1'},
+      {n: '播放破亿', v: 48, raw: '1,055 部（0.48%）', cls: 's1'}
+    ];
+    var W = 440, labelW = 150, x0 = labelW, usable = W - labelW - 96, rowH = BARH + 14, y = 10, max = rows[0].v, MARKR = tok('--mark-radius', 4);
+    rows.forEach(function(r){
+      svg.appendChild(el('text', {x: x0 - 8, y: y + BARH / 2 + 5, 'text-anchor': 'end', 'class': 'lbl'}, r.n));
+      var w = usable * r.v / max;
+      var tipHtml = '<b>' + r.n + '</b><br>每 1 万部中 ' + r.v + ' 部<br>原始值 ' + r.raw + '<br>柱长按实际比例';
+      var rect = el('rect', {x: x0, y: y, width: w, height: BARH, 'class': 'mark ' + r.cls});
+      bindTip(rect, tipHtml);
+      svg.appendChild(rect);
+      if (w < MARKR * 2) {
+        /* 小值柱不足一个标记宽：加位置标记，比例不变，只补可见性与悬停热区 */
+        var dot = el('circle', {cx: x0 + w, cy: y + BARH / 2, r: MARKR, 'class': 'mark pos ' + r.cls});
+        bindTip(dot, tipHtml);
+        svg.appendChild(dot);
+      }
+      svg.appendChild(el('text', {x: x0 + w + 8, y: y + BARH / 2 + 5, 'class': 'lbl-val'}, r.v.toLocaleString('zh-CN') + ' 部'));
+      y += rowH;
+    });
+    svg.appendChild(el('line', {x1: x0, x2: x0, y1: 10, y2: y - 14 + 4, 'class': 'axis'}));
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + (y + 4));
+  })();
+  /* 表格切换 */
+  document.querySelectorAll('[data-toggle]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = document.getElementById(b.getAttribute('data-toggle')); if (!t) return;
+      var on = t.classList.toggle('on'); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? '隐藏数据表' : '查看数据表';
+    });
+  });
+  /* 打分表 */
+  var scorer = document.getElementById('scorer');
+  if (scorer) {
+    function recalc(){
+      scorer.querySelectorAll('[data-row]').forEach(function(tr){
+        var sum = 0;
+        tr.querySelectorAll('[data-s]').forEach(function(s){ var v = parseInt(s.value, 10); if (Number.isFinite(v)) sum += v; });
+        tr.querySelector('.total').textContent = sum + ' / 9';
+      });
+    }
+    scorer.addEventListener('change', recalc); recalc();
+  }
+})();
+</script>
+</body>
+</html>
