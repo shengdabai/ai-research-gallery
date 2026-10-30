@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="两类老年用户的手机操作障碍、国内现有方案、AI助手边界与低成本产品验证。">
+<title>让老人自己把事办成｜手机助手需求与市场决策</title>
+<style>
+/* TOKEN SOURCE. Primitive scales -> semantic roles. No vendor CSS or external assets.
+   Structural CSS uses keywords/0/100%/1fr. Named responsive threshold: compact = 48rem;
+   CSS media queries cannot consume var(), so this sole threshold is centralized below. */
+:root{--white:#fff;--ink:#182b3a;--slate:#4e6271;--blue:#145c92;--green:#176047;--red:#a52d37;--line:#cdd9e1;--paper:#eef3f7;--tint:#e7f2ee;--hint:#e5eff8;--color-bg:var(--paper);--color-surface:var(--white);--color-text:var(--ink);--color-muted:var(--slate);--color-link:var(--blue);--color-good:var(--green);--color-bad:var(--red);--color-border:var(--line);--color-accent:var(--hint);--color-positive:var(--tint);--font-body:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;--fs-small:.875rem;--fs-body:1rem;--fs-lead:1.15rem;--fs-h3:1.25rem;--fs-h2:1.7rem;--fs-title:clamp(2rem,5vw,3.4rem);--fs-number:2rem;--lh-body:1.75;--lh-title:1.2;--weight-body:400;--weight-strong:650;--space-1:.35rem;--space-2:.65rem;--space-3:1rem;--space-4:1.5rem;--space-5:2rem;--space-6:3rem;--width-page:76rem;--width-text:48rem;--width-table:68rem;--width-mini:42rem;--width-input:11rem;--height-control:2.75rem;--border-width:1px;--focus-width:3px;--radius:.5rem;--radius-small:.25rem;--tracking:.02em;--layer-nav:2;--motion-fast:120ms;--ease:ease-out;--shadow:0 .35rem 1.1rem #182b3a0d;--print-body:10pt;--print-title:24pt;--print-margin:12mm}
+/* BASE */
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--color-bg);color:var(--color-text);font:var(--weight-body) var(--fs-body)/var(--lh-body) var(--font-body)}a{color:var(--color-link);text-underline-offset:var(--space-1)}a:hover{text-decoration-thickness:var(--border-width)}button,input,select{font:inherit;color:inherit}button,select,input[type=search],input[type=number]{min-height:var(--height-control);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-small);background:var(--color-surface);padding:var(--space-2) var(--space-3)}button{cursor:pointer}button:hover{background:var(--color-accent)}:focus-visible{outline:var(--focus-width) solid var(--color-link);outline-offset:var(--space-1)}p{margin:var(--space-2) 0 var(--space-3)}h1,h2,h3{line-height:var(--lh-title);font-weight:var(--weight-strong)}h1{font-size:var(--fs-title);margin:var(--space-3) 0 var(--space-4)}h2{font-size:var(--fs-h2);margin:0 0 var(--space-4)}h3{font-size:var(--fs-h3);margin:0 0 var(--space-2)}strong{font-weight:var(--weight-strong)}ul,ol{padding-left:var(--space-4)}li{margin-bottom:var(--space-2)}[hidden]{display:none}section{scroll-margin-top:var(--space-6)}
+/* LAYOUT + COMPONENTS */
+.skip{position:absolute;top:0;left:0;transform:translateY(-100%);background:var(--color-surface);padding:var(--space-3);z-index:var(--layer-nav)}.skip:focus{transform:none}.wrap{max-width:var(--width-page);margin:auto;padding:var(--space-5)}.hero{padding:var(--space-6) 0 var(--space-4);border-bottom:var(--border-width) solid var(--color-border)}.eyebrow,.small{font-size:var(--fs-small);color:var(--color-muted)}.eyebrow{letter-spacing:var(--tracking)}.lead{max-width:var(--width-text);font-size:var(--fs-lead)}.verdict{border-left:var(--focus-width) solid var(--color-good);background:var(--color-positive);padding:var(--space-4);margin:var(--space-4) 0}.nav{display:flex;flex-wrap:wrap;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:var(--border-width) solid var(--color-border)}.nav a{font-size:var(--fs-small)}.section{margin-top:var(--space-6)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--width-input)),1fr));gap:var(--space-3)}.duo{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}.card{background:var(--color-surface);border:var(--border-width) solid var(--color-border);border-radius:var(--radius);padding:var(--space-4);box-shadow:var(--shadow)}.stat strong{display:block;font-size:var(--fs-number);line-height:var(--lh-title);margin-bottom:var(--space-2)}.note{background:var(--color-accent);padding:var(--space-3) var(--space-4);border-radius:var(--radius-small)}.danger{color:var(--color-bad)}.good{color:var(--color-good)}.label{font-weight:var(--weight-strong);font-size:var(--fs-small)}.table-wrap{max-width:100%;overflow-x:auto;background:var(--color-surface);border:var(--border-width) solid var(--color-border);border-radius:var(--radius)}table{border-collapse:collapse;width:100%;font-size:var(--fs-small)}.market{min-width:var(--width-table)}.wide{min-width:var(--width-mini)}caption{text-align:left;padding:var(--space-3);font-weight:var(--weight-strong)}th,td{text-align:left;vertical-align:top;padding:var(--space-3);border-bottom:var(--border-width) solid var(--color-border)}thead{background:var(--color-accent)}th{font-weight:var(--weight-strong)}tbody tr:last-child td{border-bottom:0}td a{white-space:nowrap}.tools{display:flex;align-items:end;flex-wrap:wrap;gap:var(--space-3);margin:var(--space-3) 0}.field{display:flex;flex-direction:column;gap:var(--space-1)}.field input{width:var(--width-input);max-width:100%}.field.search{flex:1}.field.search input{width:100%}.count{font-size:var(--fs-small);color:var(--color-muted)}.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--width-input)),1fr));gap:var(--space-3)}.step{background:var(--color-surface);padding:var(--space-4);border-top:var(--focus-width) solid var(--color-link)}details{border-bottom:var(--border-width) solid var(--color-border);padding:var(--space-3) 0}summary{cursor:pointer;font-weight:var(--weight-strong)}.calc-output{padding:var(--space-4);background:var(--color-positive);margin-top:var(--space-3)}.calc-output strong{font-size:var(--fs-number)}.sources{column-count:2;column-gap:var(--space-5)}.sources li{break-inside:avoid;font-size:var(--fs-small);overflow-wrap:anywhere}.footer{margin-top:var(--space-6);padding-top:var(--space-4);border-top:var(--border-width) solid var(--color-border)}.print-only{display:none}.status{padding:var(--space-3);background:var(--color-accent);margin-bottom:var(--space-3)}
+/* Named compact threshold: 48rem (sole authored breakpoint). */
+@media(max-width:48rem){.wrap{padding:var(--space-3)}.hero{padding-top:var(--space-4)}.duo{grid-template-columns:1fr}.sources{column-count:1}.tools{display:grid;grid-template-columns:1fr;align-items:stretch}.field input{width:100%}.section{margin-top:var(--space-5)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{@page{margin:var(--print-margin)}body{background:var(--color-surface);font-size:var(--print-body)}.wrap{max-width:none;padding:0}.hero{padding-top:0}h1{font-size:var(--print-title)}.nav,.tools,.no-print,.skip{display:none}.print-only{display:block}.table-wrap{overflow:visible;border:0}.market,.wide{min-width:0}table{font-size:var(--print-body);table-layout:fixed}th,td{overflow-wrap:anywhere;padding:var(--space-2)}.card{box-shadow:none}tr,.card{break-inside:avoid}h2,h3{break-after:avoid}.sources{column-count:1}#products tbody tr[hidden]{display:table-row}.section{margin-top:var(--space-4)}a{color:var(--color-text)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="wrap">
+<header class="hero">
+<div class="eyebrow">产品需求与市场研究 · 中国大陆优先 · 核查日 2026-09-26 · 修订稿 v4</div>
+<h1>让老人自己把事办成</h1>
+<p class="lead">目标不是多一个会聊天的 AI，而是让老人不用反复求助，也能联系家人、听懂信息、享受内容，并在出错时回得来。</p>
+<div class="verdict"><strong>结论：有条件成立，整体置信度低。</strong><p>操作障碍有研究和既有产品支持；但“你能以低价提供明显优于免费设置的结果，并覆盖支持成本”尚未证实。建议先观察两类家庭并测试免费设置，必要时制作少数机型原型做对照，再决定是否规模化投入软件、服务或硬件。当前不建议从自研手机或万能代操作智能体起步。</p></div>
+<p class="small">两类人群均纳入：A 不识字/识字少且能听说；B 识字但不熟悉手机流程。视力、听力、方言、动作与认知情况另行记录，不能以年龄或识字程度推断能力。本报告供产品决策使用，不是老年人操作教程。</p>
+</header>
+<nav class="nav" aria-label="报告目录"><a href="#decision">核心判断</a><a href="#segments">用户分组</a><a href="#products">产品对比</a><a href="#iphone">iPhone 答案</a><a href="#boundary">技术边界</a><a href="#proposal">建议产品</a><a href="#economics">低价账本</a><a href="#pilot">验证实验</a><a href="#review">讨论与审核</a><a href="#sources">来源</a></nav>
+<main id="main">
+<section class="section" id="decision">
+<div class="grid">
+<article class="card stat"><strong>3.2338 亿</strong><div>2025 年末 60 岁及以上人口</div><p class="small">占全国人口 23.0%。这是年龄分母，不能当作手机助手潜在付费人数。<a href="#s1">[1]</a></p></article>
+<article class="card stat"><strong>53.7%</strong><div>2025 年末 60 岁及以上群体互联网使用率</div></article>
+<article class="card stat"><strong>3775.02 万</strong><div>2020 年 15 岁及以上文盲人口</div><p class="small">旧普查数据，含非老年人；不能与老年人口直接相乘或相加。未获得当前“老人 × 识字能力 × 有智能手机”的交叉统计。<a href="#s3">[3]</a></p></article>
+</div>
+<div class="duo section">
+<article class="card"><h3>事实与支持证据</h3><ul><li>低识字交互研究通过语音、视频、图形组合降低文字依赖；微软研究汇总涉及 570 位参与者、700 多小时田野工作。研究来自海外且较早，只支持设计方向。<a href="#s4">[4]</a></li><li>Apple、华为等已经提供简化界面、读屏、语音和亲情协助，说明问题存在，也构成免费竞争。<a href="#s5">[5]</a><a href="#s9">[9]</a></li><li>手机厂商系统助手已经能执行部分任务；第三方独立产品必须证明自己的额外价值。<a href="#s10">[10]</a><a href="#s11">[11]</a><a href="#s14">[14]</a></li></ul></article>
+<article class="card"><h3>反证与尚缺证据</h3><ul><li>大字体、照片联系人、语音唤醒和家人设置可能已解决多数日常需求，额外订阅未必值得。</li><li>一句话能聊，不代表老人知道该怎么问；错误恢复、联系人确认、登录和授权可能比识别文字更难。</li><li>子女购买后老人不用、方言误识别、后台被系统关闭、应用更新失效，都可能让低价生意亏在支持上。</li></ul></article>
+</div>
+<div class="table-wrap"><table><caption>机会评分：研究判断，不能当作测量结果</caption><thead><tr><th scope="col">维度</th><th scope="col">暂评</th><th scope="col">依据与限制</th><th scope="col">产品含义</th></tr></thead><tbody><tr><td>广泛</td><td>2/5 · 未通过</td><td>宏观群体大，但没有验证可重复获客渠道及可支持机型覆盖。</td><td>先证明社区/手机店等一个渠道能稳定触达，再谈普及。</td></tr><tr><td>刚需</td><td>2/5 · 未通过</td><td>家庭联系等可能有实质成本，但本细分人群的实际求助与紧迫性未测。</td><td>按真实受阻任务选范围，不能把陪聊自动定义为刚需。</td></tr><tr><td>高频</td><td>2/5 · 未通过</td><td>联系/内容可能每日发生，但“困难发生频率”和“助手使用频率”未知；一次设置不是高频购买。</td><td>用两周任务日记判断持续产品是否成立。</td></tr></tbody></table></div>
+
+</section>
+
+<section class="section" id="products"><h2>现有产品与免费替代方案</h2>
+<p>这是一份有来源的代表性清单，不声称穷尽全国产品。<strong>“上市/有官方支持”与“适合这两类老人”分开判断。</strong>下表适合度是待验证假设；多数产品没有本细分群体的独立成功率数据。“未核价”比猜一个价格更可靠。</p>
+<div class="tools no-print">
+<label class="field search">搜索产品、任务或限制<input id="query" type="search" placeholder="例如：微信、方言、Beta"></label>
+<label class="field">方案类别<select id="category"><option value="all">全部类别</option><option value="baseline">免费/内置基线</option><option value="agent">系统 AI 助手</option><option value="hardware">家庭硬件</option><option value="adjacent">邻近产品/待核实</option></select></label>
+<button id="reset" type="button">清除筛选</button><button id="print" type="button">打印 / 存为 PDF</button>
+</div><p id="count" class="count no-print" aria-live="polite"></p><p class="print-only">打印包含全部产品条目；页面筛选只影响屏幕显示。</p>
+<p class="small no-print">手机上可左右滑动表格，查看其余栏目。</p><div class="table-wrap" tabindex="0" aria-label="产品对比，可横向滚动"><table class="market"><caption>产品名称 · 发布状态 · 两类用户适用性 · 操作/授权 · 成本 · 证据边界</caption><thead><tr><th scope="col">产品 / 状态</th><th scope="col">能解决什么</th><th scope="col">A / B 适配假设</th><th scope="col">操作与授权限制</th><th scope="col">价格 / 总成本</th><th scope="col">来源与可信边界</th></tr></thead><tbody>
+<tr data-cat="baseline"><td><strong>iPhone 辅助访问</strong><br>已提供系统功能；所引手册版本 iOS 26</td><td>精选应用、简化布局、大网格、图像通信；联系人首屏。</td><td>A：值得测；B：值得测。官方主要为认知障碍设计，不能直接推断适合所有老人。</td><td>家人可协助设置；未适配第三方 App 保持原始设计；不是代操作微信。</td><td>支持机型上功能无单独收费；新买 iPhone、设置与维护另计。</td><td><a href="#s5">[5]</a><a href="#s6">[6]</a><a href="#s7">[7]</a><br>官方功能文档，未做老人实机测试。</td></tr>
+<tr data-cat="baseline"><td><strong>iPhone 旁白 VoiceOver</strong><br>成熟系统读屏</td><td>触摸朗读、按顺序浏览、无视觉操作。</td><td>A：仅愿意学习手势者；B：有视觉需求者优先。</td><td>轻点选中、双击激活、三指滚动等改变习惯；读出按钮不等于解释流程。</td><td>内置无单独收费；训练时间和应用无障碍质量影响成本。</td><td><a href="#s8">[8]</a><br>机制明确，不能当作通用低识字方案。</td></tr>
+<tr data-cat="baseline"><td><strong>Android TalkBack / Reading mode</strong><br>已提供，机型/GMS有差异</td><td>TalkBack读屏；Reading mode朗读部分长文、调整显示。</td><td>A：读屏训练后可测；B：阅读辅助可测。</td><td>Reading mode不支持聊天消息、邮件、PDF、社交信息流；大陆安装/服务条件需核查。</td><td>功能本身通常无单独费用；不能假定所有国产手机预装可用。</td><td><a href="#s16">[16]</a><a href="#s17">[17]</a><br>官方限制，别混为一个产品。</td></tr>
+<tr data-cat="baseline"><td><strong>华为简易模式 / 长辈关怀</strong><br>已有官方方案</td><td>简化布局、大图标、大字、通话等入口；畅连共享屏幕辅助教学。</td><td>A：大字不足，配照片/语音；B：优先免费基线。</td><td>机型与系统有差别；共享屏幕指导不是任意远程代点。</td><td>支持设备上的内置设置；通信、设备、家人时间另计。</td><td><a href="#s9">[9]</a><br>官方助老指南，版本需现场检查。</td></tr>
+<tr data-cat="baseline"><td><strong>微信关怀模式 / 听文字消息</strong><br>2022已有发布记录</td><td>更易看/点；聊天文字可听，减少识字依赖。</td><td>A：单任务价值高；B：常用微信基线。</td><td>只覆盖微信部分体验，不会完成多步骤任务。2026入口名称和可用性未实机核验。</td><td>模式无独立订阅；流量、家人配置另计。</td><td><a href="#s18">[18]</a><br>信通院2022记录；历史证据，需当前版本验证。</td></tr>
+
+<tr data-cat="agent"><td><strong>荣耀 YOYO 智能体</strong><br>MagicOS 10已有执行文档；官网已展示11</td><td>一句话管理通知、点饮品等任务；可中断执行。</td><td>A：能清楚表达意图者可测；B：流程简化对照。</td><td>需联网与兼容系统；旧手机覆盖和具体应用另核。当前11宣传不能当作全量升级完成。</td><td>需兼容荣耀设备；未核具体机型购机价或所有技能费用。</td><td><a href="#s11">[11]</a><a href="#s12">[12]</a><br>支持文档强于泛营销承诺。</td></tr>
+<tr data-cat="agent"><td><strong>OPPO 小布 / 小布 Next</strong><br>小布已有；Next仍技术预览</td><td>部分生活任务、识屏/拍摄、记忆与建议。</td><td>A/B：基础能力可做对照；Next不宜当作成熟默认方案。</td><td>所有AI数据使用需授权；Next通过招募体验，不能当作免费普适量产能力。</td><td>兼容设备与服务；未核收费；非任意Android安装即用。</td><td><a href="#s13">[13]</a><br>官网明确区分预览版。</td></tr>
+<tr data-cat="agent"><td><strong>vivo 蓝心小V</strong><br>已有助手；原系统7新能力2026-09-16发布</td><td>新小V Pro任务拆解、跨应用/跨端；设置诊断与部分生活服务。</td><td>A：方言、按钮、错误恢复待测；B：值得对照。</td><td>发布≠你手里的旧机已升级；新能力机型名单、灰度和任务范围需核。</td><td>兼容机型；未核新Pro能力费用及升级覆盖。</td><td><a href="#s15">[15]</a><br>官方近期发布证据，非长期适老表现。</td></tr>
+<tr data-cat="agent"><td><strong>小米超级小爱</strong><br>澎湃OS2已有官方年度报告说明</td><td>全生态系统AI助手、记忆/推理、系统任务操控。</td><td>A/B：现有小米家庭先试内置功能。</td><td>版本、机型和第三方接口限制；不能推断任意操作微信或付款。</td><td>兼容设备；语音/内容/新设备费用另核。</td><td><a href="#s19">[19]</a><br>官方报告支持存在，不证明当前每项可用。</td></tr>
+
+<tr data-cat="hardware"><td><strong>小度智能屏（X10 Ultra/X9/1S Plus等）</strong><br>官方旗舰店有当前系列入口</td><td>语音、内容、家庭沟通；适合家中固定场景。</td><td>A：可减少手机操作；B：家中使用可测。</td><td>具体视频通话/联系人与方言按型号核实；不是外出随身手机助手。</td><td>本次未获取可核验SKU结算价；硬件+内容会员+网络+配网时间。</td><td><a href="#s21">[21]</a><a href="#s22">[22]</a><br>店铺当前系列，功能历史官方资料；不跨型号承诺。</td></tr>
+<tr data-cat="hardware"><td><strong>小米智能家庭屏10 / 小爱触屏音箱</strong><br>官方生态列有设备</td><td>家中声音入口；官方隐私政策描述微信/家庭屏音视频通话。</td><td>A/B：需要家中沟通者可比较。</td><td>支持型号与固件、账号/通信链路逐项核实；配网和授权仍需有人完成。</td><td>未核当前售价；设备、Wi-Fi、会员与支持另计。</td><td><a href="#s23">[23]</a><a href="#s24">[24]</a><br>证明生态与相关功能，不证明每台老设备可用。</td></tr>
+<tr data-cat="hardware"><td><strong>TP-LINK TL-IPC167SX-F4GE 双模版</strong><br>当前官方产品页</td><td>固定通话按键、语音接听/挂断、呼叫预设家人；Wi-Fi+4G。</td><td>A：联系家人切口强；B：只需通话时可能已足够。</td><td>需要绑定、设默认联系人与联网；摄像隐私需老人知情；不是全能生成式AI。</td><td>官方称微信视频通话功能免费；设备价格未核、4G流量另计。</td><td><a href="#s25">[25]</a><br>已描述明确任务闭环，是新产品的强反证。</td></tr>
+<tr data-cat="adjacent"><td><strong>点明安卓</strong><br>专业读屏，官方有产品介绍</td><td>语音/手势/AI识别，面向视障及部分老人。</td><td>A/B：伴随视力障碍者重点比较；不默认适合所有人。</td><td>无障碍授权与手势训练；版本适配需要持续维护。</td><td>本次未核授权/会员价格，不能说全免费。</td><td><a href="#s26">[26]</a><br>官方搜索摘录；正文抓取超时，证据弱于完整文档。</td></tr>
+<tr data-cat="adjacent"><td><strong>豆包等通用语音聊天App</strong><br>已有公开服务</td><td>问答、视觉解释、内容陪伴；可提供操作建议。</td><td>A：先解决进入/唤醒；B：解释有用，需验证能否完成。</td><td>聊天App不自动拥有跨应用执行权；不能由手机助手能力推导App权限。</td><td>基础/增值费用以当前App为准，本次未核所有套餐。</td><td><a href="#s27">[27]</a><a href="#s14">[14]</a><br>产品形态区分，非适老成效证明。</td></tr>
+
+<tr data-cat="adjacent"><td><strong>ElliQ</strong><br>海外老人陪伴硬件，会员租赁</td><td>主动陪伴、提醒、联系家人和生活活动。</td><td>A/B：可借鉴主动入口与服务运营。</td><td>官网FAQ限定美国、英语；不是中国低价手机代操作产品，也不是紧急设备。</td><td>FAQ列一次性租赁启动费<strong>$249</strong>，另加会员；本次未核完整月费。</td><td><a href="#s30">[30]</a><br>限定地理/语言，不直接外推中国支付意愿。</td></tr>
+<tr data-cat="adjacent"><td><strong>蚂蚁AQ / 阿福</strong><br>AI健康邻近产品，非老人专属</td><td>健康咨询、报告解释与健康服务，不是手机通用操作帮助。</td><td>A/B：健康交互可作研究参考，不纳入首版任务。</td><td>医疗信息不能替代临床诊断；语音入口及老人实际使用待测。</td><td>未核当前增值/服务收费。</td><td><a href="#s31">[31]</a><a href="#s32">[32]</a><br>官方发布/名称证据；AQ正文抓取超时。</td></tr>
+
+</tbody></table></div><p id="empty" class="note no-print" hidden>没有匹配产品。请换关键词或清除筛选。</p>
+<p class="small">价格均为核查时特定条件下的页面信息，不是长期报价。分类包含传统无障碍/固定功能硬件，因它们是实际替代方案；没有把它们包装成生成式AI。未购买任何设备、没有亲测老人操作，也未统计销量。</p>
+</section>
+<section class="section" id="iphone"><h2>iPhone 的盲人模式，适不适合？</h2>
+<div class="duo"><article class="card"><h3>旁白：解决“看不见界面”</h3><p>你提到的“点一下就读出声音”确实存在。旁白触摸读出元素，双击激活，滚动等操作也改了手势。它擅长让视障用户掌控原有界面，但不会自动把复杂流程变成简单任务。<a href="#s8">[8]</a></p><p><strong>建议：</strong>如果老人有明显视力障碍、愿意训练，单独测试；否则不要一上来改掉全部触控习惯。</p></article><article class="card"><h3>辅助访问：解决“界面太复杂”</h3><p>它提供精选应用、图像网格，以及专门简化的通话/相机/信息等。信息可用视频或表情交流，部分语言支持轻点听消息。家人可协助配置。<a href="#s5">[5]</a><a href="#s7">[7]</a></p><p><strong>边界：</strong>微信等未适配App仍保留原始设计；信息App的能力不是微信能力。语言与机型需实际核验。<a href="#s6">[6]</a></p></article></div>
+<p class="note">已有 iPhone：先测试“辅助访问 + 照片联系人 + 必要语音功能”，再测试旁白。已有国产手机：先用该品牌简易模式/语音助手和微信阅读功能。能用免费设置达标，就不应为了做产品强行增加订阅。</p>
+</section>
+<section class="section" id="boundary"><h2>“能操作手机”有四个层级</h2>
+<div class="table-wrap"><table class="wide"><caption>独立开发者能做什么，不能承诺什么</caption><thead><tr><th scope="col">层级</th><th scope="col">实际含义</th><th scope="col">优点</th><th scope="col">关键约束</th></tr></thead><tbody><tr><td>听懂与解释</td><td>语音问答、读文字、解释截屏。</td><td>易验证，少执行风险。</td><td>仍要解决唤醒、共享截图和“下一步怎么做”；低识字用户不能读纠错提示。</td></tr><tr><td>本应用/明确接口执行</td><td>应用内提醒、内容播放；用拨号入口或合作服务接口。</td><td>固定任务可控制，结果可核验，适合先试。</td><td>“打开”与“办成”分开记；拨号可能还要系统确认，不能伪报已经接通。</td></tr><tr><td>界面代操作</td><td>读取屏幕、选择控件、模拟点击。</td><td>理论上覆盖更多App。</td><td>Android需要用户启用相关服务；控件、弹窗、更新、后台、风控会失效。授权并不等于可靠。</td></tr><tr><td>厂商系统级/生态智能体</td><td>与系统、设备认证、第三方工具深度整合。</td><td>更强调用和安全边界。</td><td>厂商/版本绑定；独立App不能复制同等系统权限。发布文案不是老人完成率。</td></tr></tbody></table></div>
+<details open><summary>Android 与 iOS 的产品边界</summary><p><strong>Android：</strong>AccessibilityService能够检查界面并代表用户交互，但需要专门的服务与配置，不能用它来规避首次授权。应用商店/厂商政策、系统后台与版本适配需要逐渠道审核。<a href="#s33">[33]</a></p><p><strong>Google Play 的规则只约束其分发渠道：</strong>普通应用不能借无障碍API自主发起、规划和执行任意操作；确定规则自动化不同。经验证的无障碍工具有核心助残目的下的例外，但“不识字/年纪大”不会自动取得例外资格。不能把这条政策说成中国所有应用市场的统一禁令。<a href="#s34">[34]</a></p></details>
+<p><strong>鸿蒙需独立核查：</strong>招募记录区分旧版HarmonyOS、HarmonyOS NEXT/原生鸿蒙与Android，不能把Android安装包和AccessibilityService路线外推到原生鸿蒙。首轮只测试设备已经提供的免费方案；自研适配另核官方接口、安装与发布条件，不承诺现成兼容。</p><p><strong>Android 13及以上的受限设置：</strong>部分安装来源下启用无障碍还会遇到额外限制与安全提示，应按实际机型记录首次配置成本，不能承诺零授权。<a href="#s36">[36]</a></p><p>“只授权一次”也不能保证以后不再遇到权限、登录、系统确认。更诚实的产品承诺是：首次由老人知情同意、家人协助完成配置；平时把授权需求降到最低，失败时清楚说出原因，并能停止和返回。</p>
+</section>
+<section class="section" id="proposal"><h2>建议先测试：家人配置，老人独立使用</h2>
+<p class="lead">暂定方向：在现有手机上提供一个固定、少文字的任务入口。核心承诺是“最常用的几件事，自己能完成”，AI只用于语音理解、简短解释或不确定表达的澄清。</p>
+<div class="steps"><article class="step"><h3>找家人</h3><p>真人照片配称呼；触摸后念出“这是女儿”；确认后发起电话。试点记录打对人、接通/未接通与返回。</p></article><article class="step"><h3>听信息</h3><p>优先复用系统/微信已提供朗读；自己的消息能力只读老人主动提供的信息，不默认全量读取微信。</p></article><article class="step"><h3>听内容</h3><p>家人选好少量音乐、戏曲、音频；固定入口、暂停/继续、明确音量。内容授权/会员费用需提前讲清。</p></article><article class="step"><h3>我不会了</h3><p>一句话或固定按钮进入帮助。先用语音指导；老人主动同意再联系家人。不会自动监控、操作或上传整屏。</p></article></div>
+<div class="duo section"><article class="card"><h3>A组交互准则</h3><ul><li>照片比陌生抽象图标更值得测试；真人称呼先朗读，位置不自动重排。</li><li>一次只说一个动作，出错时提供“重听 / 返回 / 找人”固定出口。</li><li>语音不是唯一入口：嘈杂、不会描述、忘记唤醒词时仍能点。</li><li>不要求读验证码、输入长句、理解云端登录或复杂许可页。</li></ul></article><article class="card"><h3>B组交互准则</h3><ul><li>短文字配语音，显示“现在在哪、下一步做什么”。</li><li>任务卡优先于应用目录；保持系统的熟悉手势。</li><li>指导随练习减少，不让每次操作都变成长对话。</li><li>共享底座，分别记录A/B表现；不能用B组平均成绩掩盖A组失败。</li></ul></article></div>
+<div class="table-wrap"><table><caption>开发路线与取舍：都是建议，未实施</caption><thead><tr><th scope="col">路线</th><th scope="col">判断</th><th scope="col">何时改变判断</th></tr></thead><tbody><tr><td>免费设置 + 一次性配置服务</td><td>先试。可迅速得到真实任务与支持成本；不需要先开发App。</td><td>免费基线已达标，则业务可能只是一项配置服务，持续订阅不成立。</td></tr><tr><td>按试点系统分布选择少数机型的任务入口</td><td>条件通过后开发。先选择试点实际占比高、能稳定支持的机型与一组方言。</td><td>对照显示明显增益，且安装成功率、权限接受度、支持成本通过。</td></tr><tr><td>iOS版自有任务界面</td><td>可另测，但不承诺跨App代点；先用辅助访问作对照。</td><td>有足够iPhone家庭且自有任务能提供额外价值。</td></tr><tr><td>实体按钮/蓝牙附件</td><td>第二阶段。按钮不会解决授权和第三方App执行限制；可先借现成附件测试。</td><td>唯一主要障碍确实是找不到唤醒入口，且屏幕版任务已有效。</td></tr><tr><td>万能跨App自动代理</td><td>不作为首版承诺。范围和维护成本难锁定，且厂商正快速补齐。</td><td>明确合作接口、可支持矩阵、低失败率和可测支持成本同时成立。</td></tr></tbody></table></div>
+<p class="note">首版不自动转账、付款、处理密码/验证码、决定就医或药物、承诺紧急救援。涉及收费/发消息等操作采用短语音确认；不会的任务坦率退出。这里是具体产品范围建议，不表示本次已建立应用或读取任何老人手机。</p>
+</section>
+<section class="section" id="economics"><h2>低价的难点，可能是每月帮助15分钟</h2>
+
+<div class="duo"><article class="card"><h3>一户每月的示例账</h3><div class="table-wrap"><table><thead><tr><th scope="col">项目</th><th scope="col">假设</th></tr></thead><tbody><tr><td>售价</td><td>¥19</td></tr><tr><td>语音/模型成本</td><td>¥3</td></tr><tr><td>基础服务与监控</td><td>¥1</td></tr><tr><td>支付/渠道变动成本</td><td>¥0.5</td></tr><tr><td>退款/故障预留</td><td>¥2</td></tr><tr><td>支持15分钟，人工¥60/小时</td><td>¥15</td></tr><tr><td><strong>月贡献</strong></td><td><strong class="danger">-¥2.5</strong></td></tr></tbody></table></div><p class="small">¥0.5不是手机店分成报价；若额外渠道分成占月价10%/20%/30%，示例贡献还需减¥1.9/3.8/5.7。尚未计税、研发、设备测试、获客、上门交通、首次安装。低价不能靠忽略这些成本成立。</p></article>
+<article class="card"><h3>调整假设，看盈亏变化</h3><div class="tools"><label class="field">月价（元）<input type="number" id="price" min="0" max="200" step="1" value="19"></label><label class="field">每月支持（分钟）<input type="number" id="minutes" min="0" max="180" step="1" value="15"></label><label class="field">人工成本（元/小时）<input type="number" id="wage" min="0" max="500" step="1" value="60"></label></div><div class="calc-output" id="calc" aria-live="polite"></div><p class="small">公式：月价 − ¥6.5示例变动成本合计 − 支持分钟×时薪÷60。参数只作敏感性分析，真实成本应按户记录。</p><p>若支持降到5分钟，上述示例月贡献为¥7.5；这仍不是净利润。¥99配置价也要减去安装、渠道、交通和承诺期支持，不能当作¥99毛利。</p></article></div>
+<p><strong>商业路径假设：</strong>子女为方便联系与减少重复求助付费；社区/手机店可能提供安装与信任。最强反证是“配置后不再需要你”或“人工支持压不下来”。对应结果可以是一次性服务、机构购买或停止，不一定必须做订阅软件。</p>
+</section>
+<section class="section" id="pilot"><h2>两周对照试点，允许得出“不该做”</h2>
+<p>后续对照阶段另招募20户，A/B各10户，仅限事先确认能安装并完成三项任务的Android机型；原生鸿蒙/iOS观察户不计入这20户，名单和排除原因事前登记，不在测试失败后随意换人。每户指定一名主要受测老人，有现有手机与愿意参与的家人。私下自报阅读困难，并在本人同意下试认联系人称呼、理解一条短提示；能读懂但导航受阻者归B，阅读本身阻碍任务者归A。混合障碍单列，不强行归组。记录系统、语言、听视力与动作条件。20户是选择性探索样本，不能估算全国需求。</p>
+<p>预先固定三项共同任务：找到指定照片联系人并发起正确拨号（不以对方接听为成功条件）；播放约定音频并暂停；打开约定信息并听懂其关键内容。每个条件每项任务在不同日期各试2次，共6次。每次3分钟内达成目标且不误拨/误发算成功；系统语音提示允许，家人或研究员指路算失败。两条件采用同样内容难度、标准与训练时长；信息任务由家人经同一真实渠道发送，每次换等难度内容，以一道预设关键内容复述题判断理解；老人主动提供消息的操作计入全程，不预塞进原型。原型若不能接入该渠道，此机型不具备入组资格；不能删任务来补过关。原型自己的语音指导允许，联系家人或人工接管算失败；单项任务仅作描述，不能据2次尝试推断长期可靠性。</p>
+<p><strong>最佳免费对照：</strong>iOS用辅助访问、照片联系人和已可用朗读；华为用实际系统的简易/长辈功能、小艺和已有共享屏幕指导；其他Android品牌用各自简易模式、照片联系人、系统语音助手，以及当前微信可用的听文字能力。先核现场能用哪些，不把缺失能力补成事实。对照与原型给予每条件配置最多30分钟、训练10分钟（预设预算）；记录所有没配成的步骤，不能拿未经配置的默认界面充当强对照。</p><div class="table-wrap"><table class="wide"><caption>实验方案；阈值为待执行的项目预设，非行业标准</caption><thead><tr><th scope="col">阶段</th><th scope="col">安排</th><th scope="col">证据</th></tr></thead><tbody>
+<tr><td>第1—2天</td><td>观察过去7天受阻任务，记录原有使用与帮助。</td><td>失败位置、耗时、现有帮助；录像另获同意，不默认上传。</td></tr>
+<tr><td>第3天</td><td>按上方的最佳免费清单配置对照和可交付原型，只配置，不计完成率。每组随机分配5户先对照、5户先原型；工作人员预配置，但老人只在对应条件首日测试前训练10分钟。对照期间隐藏/停用原型，原型期间停用实验对照入口；设备必要系统功能不移除。</td><td>机型/系统、授权与安装工时、分配顺序。</td></tr>
+<tr><td>第4—7天</td><td>两条件各2天，每天各做3项任务一次。统一训练；承认学习效应无法完全消除，按顺序分层报告。</td><td>每条件6次、每户共12次成功/失败、耗时与人工求助；主指标为逐户原型减对照完成率差的中位数。</td></tr>
+<tr><td>第8—14天</td><td>家庭单选主要方案，不每日催用；选留与自然使用按先后顺序层分别报告，承认近因偏差。两条件均用统一家人日记，设备日志只作核对。</td><td>选留原型户数、原型主动使用日、家人帮助分钟/户/周、运营方支持分钟/户/月、退出与权限故障。每组分母固定入组10户，退出/未选原型计未达标。</td></tr>
+
+</tbody></table></div>
+<div class="duo section"><article class="card"><h3>继续开发需同时达到</h3><ul>
+<li>每组至少8/10户，原型6次测试至少成功5次，且三项任务均至少成功一次。</li>
+
+<li>每组至少7/10户选择原型且最后7天≥3天自主使用。此门槛仅检验这三个预设日常任务；偶发任务需另立验证，不事后换口径。</li>
+<li>¥19首月服务净成交至少6/20户，各组至少3/10；报价、范围、退出条款一致。只能证明本样本首月支付，不能证明续费或陌生渠道转化。</li>
+<li>家人帮助时间只作独立性/价值指标，不进入运营成本；运营方支持分钟才按时薪计成本。两周只记支持负担，不据此外推月成本过关。至少完整付费月后，以首月实际付费户（退款/中途退出仍计入）为固定分母，至少80%付费户月贡献非负且付费户合计非负；各组另报结果。未付费户不填零收入成本帮门槛过关，其支持成本和试点安装/研究成本单列为获客与研究支出；再另检验含获客/安装摊销的整体经济性。付费样本少于10户时报全部支持时长与最大值，不伪装稳定90分位；样本足够再报分位数、渠道与退款。</li>
+</ul><p>示例¥19模型的支持盈亏平衡为12.5分钟/户/月；5分钟/户/月只是目标，不是每周5分钟。实际非人工成本变动后须重新计算。</p></article><article class="card"><h3>停止或收窄</h3><ul>
+<li>免费方案已足够：转配置服务或停止App。</li><li>A失败、B成功：只推进B，不能声称解决低识字用户。</li><li>依赖家人接管、误拨/误发严重、实际月成本亏损：暂停对应承诺，修正范围再测试。</li><li>退出户计为未达标；任一户对照配对次数缺失时不填零补中位数，该组增益标“未验证”。任何关键指标缺数据：标“未验证”，不能当通过。20户零严重事件不能证明安全。</li>
+</ul></article></div>
+<details><summary>六个可直接使用的访谈问题</summary><ol><li>上周最近一次不会用手机是做什么？可以照当时的方式试一下吗？</li><li>当时卡在哪一步，后来怎么解决，找了谁，花多久？</li><li>哪三件事最希望自己做？哪些宁愿一直让家人帮？</li><li>以前试过大字模式或语音助手吗？为什么继续用或不用？</li><li>哪些信息不愿让家人/应用看见？哪里希望先问你再做？</li><li>给子女：过去一周帮了几次、多久？看完确切服务范围后，愿不愿现在付费购买？</li></ol></details>
+<p>试点后至少再观察一个完整付费周期。真实续费、支持尾部、渠道转化与应用更新后的稳定性，才决定是否做长期产品。没有通过门槛时，不投入自研硬件。</p>
+</section>
+
+<section class="section" id="sources"><h2>来源与证据口径</h2><p>核查日统一为2026-09-26；下列年份是材料的数据或发布年份，不能被核查日期“刷新”。官方来源证明其声明和功能边界，不能单凭它证明效果。涉及售卖价/动态页面，按本次页面状态记录。</p>
+<ol class="sources">
+<li id="s1"><a href="https://www.stats.gov.cn/sj/zxfb/202602/t20260228_1962662.html" target="_blank" rel="noopener">国家统计局：2025年统计公报</a>，2026-02-28；人口分母。</li>
+<li id="s2"><a href="https://www3.cnnic.cn/n4/2026/0304/c88-11549.html" target="_blank" rel="noopener">CNNIC第57次报告发布页</a>，报告2026-02-05；2025年底互联网使用率。</li>
+<li id="s3"><a href="https://www.stats.gov.cn/zt_18555/zdtjgz/zgrkpc/dqcrkpc/ggl/202302/t20230215_1904002.html" target="_blank" rel="noopener">第七次人口普查教育程度公报</a>，2020数据；15岁以上文盲人口。</li>
+<li id="s4"><a href="https://www.microsoft.com/en-us/research/project/uis-low-literate-users/" target="_blank" rel="noopener">Microsoft Research：UIs for Low-Literate Users</a>，始于2006；海外研究，非中国老人商业验证。</li>
+<li id="s5"><a href="https://support.apple.com/zh-cn/guide/assistive-access-iphone/welcome/ios" target="_blank" rel="noopener">Apple：辅助访问使用手册</a>，所引手册版本iOS26。</li>
+<li id="s6"><a href="https://support.apple.com/zh-cn/guide/assistive-access-iphone/devd7d3e3b512/ios" target="_blank" rel="noopener">Apple：添加、移除和自定义App</a>，其他App采用原始形式。</li>
+<li id="s7"><a href="https://support.apple.com/zh-cn/guide/assistive-access-iphone/dev4b42da3b1/ios" target="_blank" rel="noopener">Apple：辅助访问中的信息</a>，视觉输入和朗读，语言有限制。</li>
+<li id="s8"><a href="https://support.apple.com/zh-hans/guide/iphone/iph3e2e2281/ios" target="_blank" rel="noopener">Apple：旁白手势</a>，点击/激活/滚动机制。</li>
+<li id="s9"><a href="https://www.huawei.com/cn/tech4all/stories/for-parents" target="_blank" rel="noopener">华为TECH4ALL：教爸妈用手机</a>，简易模式、小艺和共享屏幕；旧指南需核版本。</li>
+<li id="s10"><a href="https://consumer.huawei.com/cn/mobileservices/celia/" target="_blank" rel="noopener">华为小艺当前产品页</a>，方言、朗读和任务等厂商声明。</li>
+<li id="s11"><a href="https://www.honor.com/cn/support/content/zh-cn15886169/" target="_blank" rel="noopener">荣耀：任务自动执行</a>，MagicOS10支持文档。</li>
+
+<li id="s13"><a href="https://www.oppo.com/cn/discover/technology/oppo-ai/" target="_blank" rel="noopener">OPPO AI官网</a>，小布、授权及Next技术预览标注。</li>
+<li id="s14"><a href="https://o.doubao.com/" target="_blank" rel="noopener">豆包手机助手官网</a>，应用内浏览器读取动态正文；消费者版、Beta、支持范围/城市。</li>
+<li id="s15"><a href="https://www.vivo.com.cn/brand/news/detail?id=1389&amp;type=0" target="_blank" rel="noopener">vivo：AI战略与原系统7</a>，2026-09-16；发布与升级分开。</li>
+<li id="s16"><a href="https://support.google.com/accessibility/android/answer/6283677?hl=en-GB" target="_blank" rel="noopener">Google：TalkBack入门</a>，设备/版本有差异。</li>
+<li id="s17"><a href="https://support.google.com/accessibility/android/answer/13026948?hl=en" target="_blank" rel="noopener">Google：Reading mode</a>，Android9+，不支持若干内容类别。</li>
+<li id="s18"><a href="https://www.caict.ac.cn/kxyj/qwfb/qwsj/202204/P020220429558681182263.pdf" target="_blank" rel="noopener">中国信通院2022材料</a>，微信“听文字消息”发布记录；未证实2026入口。</li>
+<li id="s19"><a href="https://ir.mi.com/static-files/ad1290a8-475f-4375-8281-a86f8bb79f67" target="_blank" rel="noopener">小米官方2024年度报告</a>，超级小爱与Action框架。</li>
+<li id="s20"><a href="https://www.ztemall.com/cn/goodsdetail/1608?fromout=doubao" target="_blank" rel="noopener">中兴商城：NaviX Ultra</a>，应用内浏览器核到12GB+512GB白色标配¥5999。</li>
+<li id="s21"><a href="https://dumall.jd.com/?from=pc" target="_blank" rel="noopener">小度官方旗舰店</a>，当前智能屏系列入口，未获得SKU结算价。</li>
+<li id="s22"><a href="https://dueros.baidu.com/html/2019/activity_0805/332.html" target="_blank" rel="noopener">DuerOS：语音通话功能</a>，2019-08-05，旧型号资料不外推所有新屏。</li>
+<li id="s23"><a href="https://os.mi.com/continuity/abilities/ab0006" target="_blank" rel="noopener">小米HyperConnect设备列表</a>，列有家庭屏等。</li>
+<li id="s24"><a href="https://privacy.mi.com/micoapp/zh_CN/micoapp隐私政策.pdf" target="_blank" rel="noopener">小米音箱App隐私政策</a>，描述微信/家庭屏音视频通信的数据条件。</li>
+<li id="s25"><a href="https://www.tp-link.com.cn/product_4515.html" target="_blank" rel="noopener">TP-LINK TL-IPC167SX-F4GE 双模版</a>，官方具体型号、预设联系人、语音与双网络。</li>
+<li id="s26"><a href="https://www.dmrjkj.com/software_detail.do?id=1" target="_blank" rel="noopener">点明安卓官方产品页</a>，本次仅官方搜索摘录，正文超时。</li>
+<li id="s27"><a href="https://www.doubao.com/" target="_blank" rel="noopener">豆包公开服务入口</a>，与系统手机助手区分。</li>
+<li id="s28"><a href="https://www.bemyeyes.com/bme-ai/" target="_blank" rel="noopener">Be My AI官方介绍</a>，视觉描述/真人协助。</li>
+<li id="s29"><a href="https://support.bemyeyes.com/hc/en-us/articles/360006070777-Do-I-have-to-pay-for-Be-My-Eyes" target="_blank" rel="noopener">Be My Eyes费用FAQ</a>，官方免费声明。</li>
+<li id="s30"><a href="https://elliq.com/pages/faqs" target="_blank" rel="noopener">ElliQ FAQ</a>，美国英语、租赁启动费、非紧急设备。</li>
+<li id="s31"><a href="https://www.antgroup.com/news-media/press-releases/1750924800000" target="_blank" rel="noopener">蚂蚁AQ发布材料</a>，2025；本次搜索摘录，正文抓取超时。</li>
+<li id="s32"><a href="https://www.antgroup.com/hk/press-releases/1778054400000" target="_blank" rel="noopener">蚂蚁集团当前阿福相关公告</a>，2026；仅用于名称和产品存在，不采信其规模作本品需求。</li>
+<li id="s33"><a href="https://developer.android.com/guide/topics/ui/accessibility/service" target="_blank" rel="noopener">Android开发文档：AccessibilityService</a>，辅助服务能力与配置边界。</li>
+<li id="s34"><a href="https://support.google.com/googleplay/android-developer/answer/10964491?hl=en" target="_blank" rel="noopener">Google Play：无障碍API政策</a>，包含经过验证的无障碍工具例外，仅按其渠道解释。</li>
+<li id="s35"><a href="https://developer.apple.com/documentation/appintents" target="_blank" rel="noopener">Apple Developer：App Intents</a>，应用公开自身动作，非通用界面代点权限。</li>
+<li id="s36"><a href="https://support.google.com/android/answer/12623953?hl=en" target="_blank" rel="noopener">Google：受限设置</a>，Android 13及以上部分步骤；首次配置限制。</li>
+</ol>
+</section>
+</main>
+<footer class="footer"><p><strong>下一步建议：</strong>先做20户免费方案观察；仍受阻才制作兼容机型原型并另做对照。通过独立操作、支付与成本门槛后，才规模化开发。研究完成不等于需求验证完成。</p></footer>
+</div>
+<script>
+"use strict";
+const rows=Array.from(document.querySelectorAll('#products tbody tr'));
+const query=document.getElementById('query'),category=document.getElementById('category');
+function filter(){const term=query.value.trim().toLocaleLowerCase();let n=0;for(const row of rows){const show=(category.value==='all'||row.dataset.cat===category.value)&&row.textContent.toLocaleLowerCase().includes(term);row.hidden=!show;if(show)n++;}document.getElementById('count').textContent=`显示 ${n} / ${rows.length} 项；适配为研究假设，非实机测评。`;document.getElementById('empty').hidden=n!==0;}
+query.addEventListener('input',filter);category.addEventListener('change',filter);document.getElementById('reset').addEventListener('click',()=>{query.value='';category.value='all';filter();});document.getElementById('print').addEventListener('click',()=>window.print());filter();
+const inputs=['price','minutes','wage'].map(id=>document.getElementById(id));
+function calculate(){const out=document.getElementById('calc');if(inputs.some(el=>el.value.trim()===''||!el.checkValidity())){out.textContent='请输入范围内的非负整数；没有有效输入时不计算利润。';return;}const[p,m,w]=inputs.map(el=>Number(el.value));const contribution=p-6.5-m*w/60;out.textContent='';const label=document.createElement('div');label.textContent=`每户每月示例贡献（月价¥${p}；支持${m}分钟；人工¥${w}/小时）`;const strong=document.createElement('strong');strong.textContent=`¥${contribution.toFixed(2)}`;strong.className=contribution<0?'danger':'good';const text=document.createElement('p');text.textContent='未扣获客、税费、研发、首次安装与交通；不是净利润。';out.append(label,strong,text);}
+inputs.forEach(el=>el.addEventListener('input',calculate));calculate();
+</script>
+</body></html>

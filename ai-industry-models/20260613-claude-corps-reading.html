@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>20260613-0758-Claude Corps 介绍 · 中文精读</title>
+<style>
+  :root{
+    --ivory:#F0EEE6;
+    --paper:#FBFAF6;
+    --ink:#141413;
+    --ink2:#3D3A34;
+    --muted:#75716A;
+    --clay:#CC785C;
+    --clay-d:#B45F44;
+    --rust:#8C5A45;
+    --line:#E2DDD0;
+    --sky:#3B6E8F;
+    --gold:#C68B3C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--ivory);}
+  body{
+    width:1280px;
+    margin:0 auto;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,sans-serif;
+    color:var(--ink);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:Georgia,"Times New Roman","Songti SC",serif;}
+  .wrap{padding:0 84px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 520px at 78% -10%, rgba(204,120,92,.20), transparent 60%),
+      linear-gradient(160deg,#15140F 0%,#211C15 55%,#2B231A 100%);
+    color:#F5F1E8;
+    padding:74px 84px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-120px;bottom:-160px;
+    width:560px;height:560px;border-radius:50%;
+    border:1px solid rgba(204,120,92,.28);
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:14px;letter-spacing:.18em;color:#E7BCA6;
+    border:1px solid rgba(204,120,92,.45);
+    padding:7px 16px;border-radius:999px;text-transform:uppercase;
+  }
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--clay);}
+  .hero h1{
+    font-size:74px;line-height:1.04;margin:26px 0 14px;letter-spacing:-1px;
+    font-weight:700;
+  }
+  .hero h1 .en{display:block;font-size:30px;color:#C9A78F;font-weight:400;letter-spacing:.04em;margin-top:12px;}
+  .hero .lede{font-size:21px;color:#D9D2C4;max-width:880px;line-height:1.66;}
+  .hero .meta{margin-top:26px;font-size:15px;color:#9B9384;letter-spacing:.02em;}
+  .hero .meta b{color:#E7BCA6;font-weight:600;}
+
+  /* ---------- STAT STRIP ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:0;background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .stat{padding:34px 30px;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-size:46px;font-weight:700;color:var(--clay-d);letter-spacing:-1px;line-height:1;}
+  .stat .num small{font-size:22px;color:var(--rust);font-weight:600;}
+  .stat .lab{margin-top:11px;font-size:15px;color:var(--ink2);}
+  .stat .sub{font-size:13px;color:var(--muted);margin-top:3px;}
+
+  /* ---------- SECTION ---------- */
+  section{padding:58px 0;}
+  .kicker{
+    display:flex;align-items:center;gap:14px;margin-bottom:26px;
+  }
+  .kicker .idx{
+    font-family:Georgia,serif;font-size:15px;color:#fff;background:var(--clay);
+    width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;
+  }
+  .kicker h2{font-size:28px;font-weight:700;letter-spacing:-.2px;}
+  .kicker .en{font-size:14px;color:var(--muted);letter-spacing:.06em;margin-left:auto;text-transform:uppercase;}
+
+  .lead-p{font-size:18px;color:var(--ink2);line-height:1.85;max-width:1000px;}
+  .lead-p + .lead-p{margin-top:16px;}
+  .hl{color:var(--clay-d);font-weight:600;}
+
+  .quote-band{
+    margin-top:30px;background:#fff;border:1px solid var(--line);
+    border-left:5px solid var(--clay);border-radius:12px;padding:26px 32px;
+    font-size:18px;color:var(--ink2);line-height:1.8;
+  }
+  .quote-band .src{display:block;margin-top:10px;font-size:14px;color:var(--muted);}
+
+  /* ---------- PARTNER CARDS ---------- */
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .pcard{
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 28px;
+    position:relative;overflow:hidden;
+  }
+  .pcard .tag{font-size:13px;letter-spacing:.14em;color:var(--clay-d);font-weight:700;text-transform:uppercase;}
+  .pcard h3{font-size:24px;margin:8px 0 6px;font-weight:700;}
+  .pcard .role{font-size:15px;color:var(--muted);margin-bottom:16px;}
+  .pcard ul{list-style:none;}
+  .pcard li{font-size:16px;color:var(--ink2);padding-left:22px;position:relative;margin-bottom:9px;line-height:1.6;}
+  .pcard li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--clay);}
+  .pcard .bigmark{position:absolute;right:-10px;top:-26px;font-size:130px;font-family:Georgia,serif;color:var(--ivory);font-weight:700;}
+
+  /* ---------- BENEFIT GRID ---------- */
+  .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .bcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px 24px;}
+  .bcard .ico{font-size:26px;}
+  .bcard h4{font-size:19px;margin:10px 0 5px;font-weight:700;}
+  .bcard p{font-size:15px;color:var(--muted);line-height:1.6;}
+  .bcard.amount{background:linear-gradient(150deg,#CC785C,#B45F44);border:none;color:#fff;}
+  .bcard.amount h4,.bcard.amount p{color:#fff;}
+
+  /* ---------- TIMELINE ---------- */
+  .tl{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;margin-top:10px;}
+  .tl::before{content:"";position:absolute;top:22px;left:7%;right:7%;height:2px;background:var(--line);}
+  .tstep{text-align:center;padding:0 22px;position:relative;}
+  .tstep .node{width:46px;height:46px;border-radius:50%;background:#fff;border:3px solid var(--clay);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-weight:700;color:var(--clay-d);position:relative;z-index:2;font-family:Georgia,serif;}
+  .tstep.first .node{background:var(--clay);color:#fff;}
+  .tstep .when{font-size:20px;font-weight:700;color:var(--ink);}
+  .tstep .who{font-size:16px;color:var(--clay-d);font-weight:600;margin:4px 0 8px;}
+  .tstep .desc{font-size:14px;color:var(--muted);line-height:1.6;}
+
+  /* ---------- APPLY ---------- */
+  .apply{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;}
+  .abox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 32px;}
+  .abox h3{font-size:21px;margin-bottom:18px;font-weight:700;display:flex;align-items:center;gap:10px;}
+  .abox h3 .e{font-size:24px;}
+  .reqs{list-style:none;}
+  .reqs li{font-size:16px;color:var(--ink2);padding:11px 0 11px 30px;position:relative;border-bottom:1px dashed var(--line);}
+  .reqs li:last-child{border-bottom:none;}
+  .reqs li::before{content:"✓";position:absolute;left:0;top:11px;color:#fff;background:var(--clay);width:19px;height:19px;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center;}
+  .keyfact{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+  .keyfact .k{font-size:13px;color:var(--muted);letter-spacing:.05em;}
+  .keyfact .v{font-size:18px;color:var(--ink);font-weight:700;margin-top:3px;}
+  .keyfact .v small{font-weight:400;font-size:14px;color:var(--muted);}
+
+  /* ---------- HOSTS ---------- */
+  .hostnote{font-size:16px;color:var(--ink2);margin-bottom:20px;}
+  .hostgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .hchip{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .hchip .n{font-size:16px;font-weight:700;color:var(--ink);}
+  .hchip .loc{font-size:13px;color:var(--clay-d);margin:2px 0 6px;}
+  .hchip .d{font-size:13px;color:var(--muted);line-height:1.5;}
+
+  /* ---------- NEXT ---------- */
+  .next{background:linear-gradient(160deg,#1B1710,#2A2218);color:#EFE9DC;border-radius:20px;padding:46px 50px;}
+  .next h2{font-size:30px;font-weight:700;margin-bottom:8px;color:#fff;}
+  .next .sub{color:#B9AF9C;font-size:15px;margin-bottom:30px;letter-spacing:.05em;}
+  .nlist{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .nitem{display:flex;gap:16px;align-items:flex-start;}
+  .nitem .e{font-size:24px;flex-shrink:0;margin-top:2px;}
+  .nitem h4{font-size:18px;color:#F0D9CC;margin-bottom:4px;}
+  .nitem p{font-size:15px;color:#C2B8A6;line-height:1.65;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--paper);border-top:1px solid var(--line);padding:30px 84px;color:var(--muted);font-size:13px;line-height:1.7;}
+  footer b{color:var(--ink2);}
+  footer a{color:var(--clay-d);text-decoration:none;}
+
+  .divider{height:1px;background:var(--line);margin:0 84px;}
+</style>
+</head>
+<body>
+
+  
+  <div class="hero">
+    <span class="badge"><span class="dot"></span>Anthropic 官方公告 · 政策</span>
+    <h1 class="serif">Claude Corps 公益团
+      <span class="en">Introducing Claude Corps</span>
+    </h1>
+    <p class="lede">面向职业生涯早期、希望把 AI 红利带给全美社区的年轻人，Anthropic 推出一项全国性 fellowship（公益研究员）计划：培训 <b>1,000 名</b> 成员熟练使用 Claude，把他们派驻到全美非营利组织，全职、现场工作一年，帮助这些组织推进使命。</p>
+    <p class="meta">发布日期：<b>2026 年 6 月 11 日</b> &nbsp;·&nbsp; 来源：anthropic.com/news/claude-corps &nbsp;·&nbsp; 与「AI 对就业影响政策框架」同步发布</p>
+  </div>
+
+  
+  <div class="stats">
+    <div class="stat">
+      <div class="num">$1.5<small>亿</small></div>
+      <div class="lab">初始投入资金</div>
+      <div class="sub">$150M · 目标远超此规模</div>
+    </div>
+    <div class="stat">
+      <div class="num">1,000<small>名</small></div>
+      <div class="lab">公益研究员（Fellows）</div>
+      <div class="sub">分三批招募</div>
+    </div>
+    <div class="stat">
+      <div class="num">400<small>+ 家</small></div>
+      <div class="lab">主办非营利组织</div>
+      <div class="sub">未来 12 个月内</div>
+    </div>
+    <div class="stat">
+      <div class="num">$8.5<small>万</small></div>
+      <div class="lab">研究员全职年薪</div>
+      <div class="sub">$85,000 + 福利</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    
+    <section>
+      <div class="kicker"><span class="idx">01</span><h2>这是一个什么样的计划</h2><span class="en">The Mission</span></div>
+      <p class="lead-p">Claude Corps 有两个并行目标：让<span class="hl">主办组织获得有价值的工具与系统</span>，同时让<span class="hl">研究员积累将受益终身的 AI 技能</span>。每位研究员先接受密集培训，再被派驻到一家非营利组织，用一整年时间把 Claude 真正用到实处。</p>
+      <p class="lead-p">Anthropic 的判断是：变革性 AI 系统带来红利的同时，也可能造成显著的社会冲击。构建这项技术的公司，有责任确保红利被充分实现、被广泛共享，并直接投资于正在承受这场变化的劳动者——这正是这笔 1.5 亿美元初始投入的逻辑。</p>
+      <div class="quote-band">
+        如果 Claude Corps 行得通，我们就为更大的事情打下了基础：一个在巨大经济变迁时期、把 AI 红利扩展到更广人群的范本。
+        <span class="src">—— Anthropic（公告原文要点编译）</span>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section>
+      <div class="kicker"><span class="idx">02</span><h2>三方合作架构</h2><span class="en">The Partnership</span></div>
+      <div class="cards3">
+        <div class="pcard">
+          <span class="bigmark">A</span>
+          <span class="tag">出资 · 战略</span>
+          <h3>Anthropic</h3>
+          <div class="role">项目发起方</div>
+          <ul>
+            <li>为整个项目提供资金</li>
+            <li>主导项目整体战略方向</li>
+            <li>提供 Claude 技术专长与答疑</li>
+          </ul>
+        </div>
+        <div class="pcard">
+          <span class="bigmark">C</span>
+          <span class="tag">雇主 · 培训</span>
+          <h3>CodePath</h3>
+          <div class="role">官方雇主（Employer of Record）</div>
+          <ul>
+            <li>担任研究员的法定雇主</li>
+            <li>主导 fellowship 期间的培训项目</li>
+            <li>美国最大的高校计算机教育提供者</li>
+          </ul>
+        </div>
+        <div class="pcard">
+          <span class="bigmark">S</span>
+          <span class="tag">评估 · 扩展</span>
+          <h3>Social Finance</h3>
+          <div class="role">非营利组织 & 注册投资顾问</div>
+          <ul>
+            <li>负责项目的测量与评估</li>
+            <li>搭建长期金融工具</li>
+            <li>支撑项目未来规模化扩展</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section>
+      <div class="kicker"><span class="idx">03</span><h2>研究员能得到什么</h2><span class="en">The Fellow Experience</span></div>
+      <p class="lead-p" style="margin-bottom:26px;">每段 fellowship 持续 <span class="hl">12 个月</span>。开始时由 Anthropic 与 CodePath 提供「如何在非营利场景使用 Claude」的密集培训；派驻后每周保留 <span class="hl">5 小时</span> 持续培训，其余时间投入主办组织的工作。</p>
+      <div class="bgrid">
+        <div class="bcard amount">
+          <div class="ico">💰</div>
+          <h4>$85,000 年薪 + 福利</h4>
+          <p>全职薪资与完整福利待遇</p>
+        </div>
+        <div class="bcard">
+          <div class="ico">🧭</div>
+          <h4>CodePath 导师</h4>
+          <p>全程一对一导师支持</p>
+        </div>
+        <div class="bcard">
+          <div class="ico">🛠️</div>
+          <h4>Anthropic Office Hours</h4>
+          <p>技术问题专属答疑时段</p>
+        </div>
+        <div class="bcard">
+          <div class="ico">🎟️</div>
+          <h4>充足 Claude Token 预算</h4>
+          <p>放手实践、不受额度束缚</p>
+        </div>
+        <div class="bcard">
+          <div class="ico">👔</div>
+          <h4>组织经理指导</h4>
+          <p>来自主办组织的专业引导</p>
+        </div>
+        <div class="bcard">
+          <div class="ico">📚</div>
+          <h4>每周 5 小时培训</h4>
+          <p>派驻后持续提升技能</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section>
+      <div class="kicker"><span class="idx">04</span><h2>三批招募时间线</h2><span class="en">Cohorts & Timeline</span></div>
+      <div class="tl">
+        <div class="tstep first">
+          <div class="node">1</div>
+          <div class="when">2026 年 10 月</div>
+          <div class="who">第一批 · 100 名</div>
+          <div class="desc">申请已开放，<b>7 月 17 日截止</b>。首批 100 名研究员于 10 月正式上岗。</div>
+        </div>
+        <div class="tstep">
+          <div class="node">2</div>
+          <div class="when">2027 年 1 月</div>
+          <div class="who">第二批</div>
+          <div class="desc">滚动招募中，名额于此节点启动。</div>
+        </div>
+        <div class="tstep">
+          <div class="node">3</div>
+          <div class="when">2027 年 8 月</div>
+          <div class="who">第三批</div>
+          <div class="desc">滚动招募中，三批合计培养 1,000 名研究员。</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section>
+      <div class="kicker"><span class="idx">05</span><h2>谁可以申请</h2><span class="en">Who Can Apply</span></div>
+      <div class="apply">
+        <div class="abox">
+          <h3><span class="e">📋</span>申请门槛</h3>
+          <ul class="reqs">
+            <li>年满 18 岁，全职工作经验不足 2 年</li>
+            <li>不设学历要求（无论教育背景如何均可申请）</li>
+            <li>拥有美国合法工作授权</li>
+            <li>能够熟练使用 Claude 开展工作</li>
+            <li>愿意按需搬迁（提供搬迁支持）</li>
+          </ul>
+          <p style="margin-top:16px;font-size:14px;color:var(--muted);">选拔标准：与 AI 的经验、沟通能力、以及投身社会议题的动力。</p>
+        </div>
+        <div>
+          <div class="keyfact"><div class="k">研究员申请</div><div class="v">即日开放 <small>第一批 7/17 截止</small></div></div>
+          <div class="keyfact"><div class="k">主办组织申请</div><div class="v">即日开放 <small>覆盖全部批次</small></div></div>
+          <div class="keyfact"><div class="k">承诺形式</div><div class="v">全职 · 现场 · 12 个月</div></div>
+          <div class="keyfact"><div class="k">招募方式</div><div class="v">第二、三批滚动申请</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section>
+      <div class="kicker"><span class="idx">06</span><h2>部分主办组织</h2><span class="en">Host Organizations</span></div>
+      <p class="hostnote">未来 12 个月，至少 <span class="hl">400 家</span> 非营利组织将接收 Claude Corps 研究员，覆盖教育、就业、食品安全、退伍军人、海洋保护、政务等领域。下列为公告点名的部分主办方：</p>
+      <div class="hostgrid">
+        <div class="hchip"><div class="n">Braven</div><div class="loc">伊利诺伊州 · 芝加哥</div><div class="d">帮助第一代大学生与低收入学生找到优质第一份工作</div></div>
+        <div class="hchip"><div class="n">Code the Dream</div><div class="loc">北卡州 · 达勒姆</div><div class="d">提供免费编程教育与带薪软件学徒岗位</div></div>
+        <div class="hchip"><div class="n">Heartland Forward</div><div class="loc">阿肯色州 · 本顿维尔</div><div class="d">聚焦加速美国中部腹地经济增长的智库</div></div>
+        <div class="hchip"><div class="n">Montgomery County Food Bank</div><div class="loc">德州 · 康罗</div><div class="d">通过 100+ 食物分发点服务儿童、老人与家庭</div></div>
+        <div class="hchip"><div class="n">Team Red, White &amp; Blue</div><div class="loc">印第安纳州</div><div class="d">通过活动与项目促进退伍军人身心健康</div></div>
+        <div class="hchip"><div class="n">REEF</div><div class="loc">佛州 · 基拉戈</div><div class="d">开展水下调查、保护珊瑚礁的海洋保护组织</div></div>
+        <div class="hchip"><div class="n">SoundOff</div><div class="loc">德州 · 圣安东尼奥</div><div class="d">为现役军人提供匿名心理咨询与同伴支持</div></div>
+        <div class="hchip"><div class="n">StriveTogether</div><div class="loc">俄亥俄州 · 辛辛那提</div><div class="d">以数据驱动本地协作，帮助年轻人成长</div></div>
+        <div class="hchip"><div class="n">YMCA of Greater Charlotte</div><div class="loc">北卡州 · 夏洛特</div><div class="d">14 个中心，年服务近 30 万儿童家庭与老人</div></div>
+      </div>
+      <p style="margin-top:16px;font-size:14px;color:var(--muted);">公告中还展示了 Goodwill、RAINN、Year Up United、Code for America、International Rescue Committee、Pacific Community Ventures、MyFriendBen 等组织的参与寄语。</p>
+    </section>
+
+    <div class="divider"></div>
+
+    
+    <section style="padding-bottom:64px;">
+      <div class="kicker"><span class="idx">07</span><h2>接下来会怎样</h2><span class="en">What's Next</span></div>
+      <div class="next">
+        <h2>把范本做大，走向全国乃至全球</h2>
+        <div class="sub">Anthropic 的目标是让计划规模远超 1,000 名研究员</div>
+        <div class="nlist">
+          <div class="nitem"><span class="e">📊</span><div><h4>严格量化评估</h4><p>持续测量主办组织使命推进程度，以及研究员的技能成长与职业前景，据此决定计划如何演进。</p></div></div>
+          <div class="nitem"><span class="e">🔓</span><div><h4>开源核心技术</h4><p>计划开源支撑该计划运转的核心技术与基础设施，让他人能据此搭建类似的全国性行动。</p></div></div>
+          <div class="nitem"><span class="e">🌍</span><div><h4>可复制到他国</h4><p>希望打造一个能在美国以外其他国家被复制的模式。</p></div></div>
+          <div class="nitem"><span class="e">📜</span><div><h4>配套政策框架</h4><p>本计划与 Anthropic「应对 AI 对就业影响」的政策框架同步发布。</p></div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <b>信息来源</b>：Anthropic 官方公告《Introducing Claude Corps》，2026 年 6 月 11 日发布 · anthropic.com/news/claude-corps &nbsp;|&nbsp; 申请入口 anthropic.com/claude-corps<br>
+    本页为中文精读与可视化整理，关键数据（$150M / 1,000 名 / 400+ 家 / $85,000 / 三批时间线）均来自官方原文。机构名称与地名保留英文原称以便核对。
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>20260606-1938-主流 Agent 平台全景对比 2026</title>
+  <style>
+    :root {
+      --paper: #f7f3e8;
+      --paper-2: #fffaf0;
+      --ink: #1d2521;
+      --muted: #69716b;
+      --line: #d9d0be;
+      --teal: #04746f;
+      --green: #557a31;
+      --rose: #b44b55;
+      --gold: #c2841a;
+      --blue: #355c9a;
+      --violet: #7550a5;
+      --shadow: 0 18px 55px rgba(45, 37, 20, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(29,37,33,.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(29,37,33,.035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    .page { min-height: 100vh; }
+
+    header {
+      padding: clamp(28px, 5vw, 72px) clamp(18px, 5vw, 72px) 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,250,240,.84), rgba(247,243,232,.92));
+    }
+
+    .mast {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+      gap: clamp(26px, 5vw, 64px);
+      align-items: end;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 92px);
+      line-height: .92;
+      margin: 0 0 18px;
+      letter-spacing: 0;
+      max-width: 920px;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      color: #3b443f;
+      font-size: clamp(16px, 1.4vw, 21px);
+      margin: 0;
+    }
+
+    .stamp {
+      border-left: 4px solid var(--ink);
+      padding: 14px 0 14px 18px;
+      color: #3c443e;
+      background: rgba(255,250,240,.56);
+    }
+
+    .stamp strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    main {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 28px clamp(18px, 5vw, 72px) 72px;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) repeat(4, minmax(130px, 180px));
+      gap: 10px;
+      padding: 14px;
+      margin: 0 0 24px;
+      background: rgba(247,243,232,.94);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    input, select, button {
+      width: 100%;
+      border: 1px solid #c8bda8;
+      background: var(--paper-2);
+      color: var(--ink);
+      min-height: 42px;
+      border-radius: var(--radius);
+      padding: 0 12px;
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--ink);
+      color: var(--paper-2);
+      border-color: var(--ink);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .metric {
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,250,240,.72);
+    }
+
+    .metric b {
+      display: block;
+      font-size: clamp(28px, 3.5vw, 52px);
+      line-height: .95;
+      margin-bottom: 9px;
+      letter-spacing: 0;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    section {
+      margin: 28px 0;
+      padding-top: 2px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: rgba(255,250,240,.78);
+      padding: clamp(16px, 2vw, 24px);
+      box-shadow: 0 12px 34px rgba(45,37,20,.08);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(22px, 2.4vw, 34px);
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .brief {
+      color: #4f594f;
+      margin: 0 0 16px;
+      max-width: 820px;
+    }
+
+    .bars { display: grid; gap: 10px; }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 118px 1fr 42px;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .bar-track {
+      height: 16px;
+      background: #e7decb;
+      border: 1px solid #d0c3ad;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      background: var(--teal);
+      transition: width .35s ease;
+    }
+
+    .matrix-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    canvas {
+      width: 100%;
+      min-height: 330px;
+      border: 1px solid var(--line);
+      background: #fbf5e8;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      vertical-align: middle;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .rec {
+      border: 1px solid var(--line);
+      padding: 16px;
+      background: #fff8e9;
+      min-height: 174px;
+    }
+
+    .rec small {
+      display: inline-block;
+      color: var(--paper-2);
+      background: var(--ink);
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+    }
+
+    .rec b {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .rec p {
+      margin: 0;
+      color: #4e574f;
+      font-size: 14px;
+    }
+
+    .table-shell {
+      border: 1px solid var(--line);
+      background: rgba(255,250,240,.8);
+      overflow: auto;
+      max-height: 760px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1280px;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e1d7c4;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #efe5d0;
+      color: #2a312d;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    tbody tr:hover { background: #fff5dc; }
+
+    .name-cell b {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 1px 7px;
+      margin: 0 4px 4px 0;
+      border: 1px solid #cdbf9f;
+      border-radius: 99px;
+      background: #fbf2dc;
+      color: #4b554c;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .score {
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .heat {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 3px;
+      min-width: 132px;
+    }
+
+    .heat span {
+      display: block;
+      height: 9px;
+      background: #e8ddca;
+      border: 1px solid #d5c7ae;
+    }
+
+    .heat span.on { background: var(--teal); border-color: var(--teal); }
+
+    .source-grid {
+      columns: 2 360px;
+      column-gap: 28px;
+      font-size: 14px;
+      color: #4b544c;
+    }
+
+    .source-grid a {
+      display: block;
+      break-inside: avoid;
+      padding: 6px 0;
+      color: #1f4f82;
+    }
+
+    .note {
+      border-left: 4px solid var(--gold);
+      padding: 12px 14px;
+      background: #fff4d6;
+      color: #5c4b21;
+      margin: 14px 0 0;
+    }
+
+    .flow {
+      overflow: auto;
+      padding: 16px;
+      border: 1px dashed #c8bda8;
+      background: #fbf4e4;
+      color: #303a33;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+    }
+
+    footer {
+      padding: 24px clamp(18px, 5vw, 72px) 42px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1100px) {
+      .mast, .grid-2 { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .metrics { grid-template-columns: repeat(3, 1fr); }
+      .recommendations { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      header, main, footer { padding-left: 14px; padding-right: 14px; }
+      .toolbar { position: static; grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .recommendations { grid-template-columns: 1fr; }
+      .metric { min-height: 98px; }
+      canvas { min-height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="mast">
+        <div>
+          <h1>主流 Agent 平台全景对比</h1>
+          <p class="subtitle">覆盖编程 Agent、通用助手、企业办公、自动化工作流、低代码 Bot 构建器和开源 Agent 框架。重点比较优势、短板、费用口径、中国可用性、团队落地场景与选型建议。</p>
+        </div>
+        <div class="stamp">
+          <strong>2026.06.06</strong>
+          <div>资料以官方页面和公开文档为主；价格、额度、模型和地区可用性变化很快，采购前应再次核对官网。</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar" aria-label="筛选工具栏">
+        <input id="search" type="search" placeholder="搜索平台、厂商、场景，例如 Cursor / 中国 / RAG" />
+        <select id="category"></select>
+        <select id="region"></select>
+        <select id="price"></select>
+        <button id="reset" type="button">重置筛选</button>
+      </div>
+
+      <section class="metrics" id="metrics"></section>
+
+      <section class="grid-2">
+        <div class="panel">
+          <h2>类别分布</h2>
+          <p class="brief">把“Agent”按实际使用入口拆开：写代码、做研究、连业务系统、做企业知识/流程。不要只看模型强弱，入口和权限边界往往更决定能否落地。</p>
+          <div class="bars" id="categoryBars"></div>
+        </div>
+
+        <div class="panel">
+          <h2>能力-成本矩阵</h2>
+          <p class="brief">横轴是成本友好度，越右越便宜或更可控；纵轴是 Agent 深度，越高越接近能规划、调用工具、改文件或跑流程。</p>
+          <div class="matrix-wrap">
+            <canvas id="matrix" width="900" height="430"></canvas>
+            <div class="legend" id="legend"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>推荐结论</h2>
+        <div class="recommendations">
+          <div class="rec">
+            <small>个人开发者</small>
+            <b>Cursor / Claude Code / Codex / Trae</b>
+            <p>需要高质量代码理解与多文件修改时选 Cursor、Claude Code 或 Codex；中国网络和中文生态优先时 Trae、通义灵码、Comate 更省心。</p>
+          </div>
+          <div class="rec">
+            <small>研发团队</small>
+            <b>GitHub Copilot / Cursor Teams / CodeBuddy / JetBrains AI</b>
+            <p>团队采购看权限、审计、代码隐私、IDE 兼容和账单可控性。已有 GitHub/Microsoft 体系时 Copilot 管理成本低。</p>
+          </div>
+          <div class="rec">
+            <small>业务自动化</small>
+            <b>n8n / Zapier / Make / Dify / Coze</b>
+            <p>轻量 SaaS 集成选 Zapier/Make；需要自托管、复杂逻辑和可控成本选 n8n；做知识库 Bot 和应用工作流选 Dify/Coze。</p>
+          </div>
+          <div class="rec">
+            <small>企业办公</small>
+            <b>Microsoft 365 Copilot / Google Workspace Gemini / Salesforce Agentforce</b>
+            <p>大企业优先考虑数据权限、合规、审计、现有软件栈和身份系统，而不是单点模型能力。</p>
+          </div>
+        </div>
+        <div class="note">一句话选型：写代码看“仓库理解 + 多文件执行 + 测试闭环”；做运营看“连接器 + 权限 + 异常处理”；做企业看“数据边界 + 审计 + 成本上限”。</div>
+      </section>
+
+      <section>
+        <div class="panel" style="margin-bottom: 12px;">
+          <h2>全量对比表</h2>
+          <p class="brief">评分为 1-10 的选型参考分，综合公开能力、产品定位、易用性、生态和费用口径。不是性能基准测试，也不代表所有地区可购买。</p>
+        </div>
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>平台</th>
+                <th>类别 / 地区</th>
+                <th>费用口径</th>
+                <th>优势特点</th>
+                <th>短板风险</th>
+                <th>适合场景</th>
+                <th>评分</th>
+                <th>来源</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="panel">
+          <h2>落地流程</h2>
+          <pre class="flow">[业务/研发需求]
+   |
+   v
+[判断入口: IDE / 聊天 / 工作流 / 企业套件]
+   |
+   +--> 代码生产: Cursor / Claude Code / Codex / Copilot / Trae
+   |
+   +--> 业务流程: n8n / Zapier / Make / Dify / Coze
+   |
+   +--> 企业知识: Microsoft 365 Copilot / Gemini / Agentforce
+   |
+   v
+[检查数据边界、权限、费用、审计、可回滚]
+   |
+   v
+[小范围试点 -> 记录节省时间 -> 扩大采购]</pre>
+        </div>
+        <div class="panel">
+          <h2>采购检查表</h2>
+          <p class="brief">正式采用前建议按这 8 项过一遍，避免“演示很好、落地失控”。</p>
+          <div id="checklist"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>官方来源索引</h2>
+        <p class="brief">页面内每个平台也有直达链接。下面列出本报告核对过的主要官方来源；部分国内产品价格页会按地区、账号或活动变化。</p>
+        <div class="source-grid" id="sources"></div>
+      </section>
+    </main>
+
+    <footer>
+      生成时间：2026-06-06。此文件为静态选型报告，不会联网、不收集数据、不调用任何 API。所有价格和额度仅作初筛参考。
+    </footer>
+  </div>
+
+  <script>
+    const platforms = [
+      {
+        name: "Cursor", vendor: "Anysphere", category: "编程 Agent", region: "海外", priceTier: "个人付费",
+        pricing: "Hobby 免费；Individual 约 $20/月；Teams 约 $40/用户/月；Enterprise 定制；高阶模型和超额 Agent 用量按额度/用量消耗。",
+        strengths: ["AI-first IDE", "多文件修改", "Background Agents", "模型选择丰富"],
+        limits: ["重度 Agent 用量成本不确定", "团队合规需看企业条款", "中国直连稳定性不确定"],
+        bestFor: "个人开发者、初创团队、前端/全栈快速迭代",
+        scores: { coding: 9, automation: 6, enterprise: 7, ease: 8, cost: 5, local: 5 },
+        depth: 9, costScore: 5, china: "弱", url: "https://cursor.com", pricingUrl: "https://cursor.com/pricing"
+      },
+      {
+        name: "Trae", vendor: "ByteDance / SPRING", category: "编程 Agent", region: "中国/海外", priceTier: "免费+付费",
+        pricing: "中国版个人功能以免费/限免为主；企业版按官网选型定价；海外版价格和额度以当地页面为准。",
+        strengths: ["中文体验好", "VS Code 生态", "Solo/Builder 模式", "国内模型与网络友好"],
+        limits: ["跨境版本策略不同", "企业合规需单独评估", "国际生态弱于 Cursor/Copilot"],
+        bestFor: "中国开发者、中文需求、预算敏感的 AI IDE 试点",
+        scores: { coding: 8, automation: 5, enterprise: 7, ease: 8, cost: 9, local: 8 },
+        depth: 8, costScore: 9, china: "强", url: "https://www.trae.cn", pricingUrl: "https://www.trae.cn/pricing"
+      },
+      {
+        name: "Google Antigravity", vendor: "Google", category: "编程 Agent", region: "海外", priceTier: "订阅",
+        pricing: "与 Google AI Pro/Ultra、Google Cloud/企业 Agent 平台权益相关，具体额度以 Antigravity 官方价格页为准。",
+        strengths: ["Gemini 深度集成", "Agent-first IDE", "Google Cloud 生态", "长上下文与多模态潜力"],
+        limits: ["产品和套餐变化快", "中国可用性弱", "团队采购需看 Google 账号体系"],
+        bestFor: "Google Cloud 用户、Gemini 重度用户、云原生研发",
+        scores: { coding: 8, automation: 6, enterprise: 7, ease: 7, cost: 5, local: 3 },
+        depth: 8, costScore: 5, china: "弱", url: "https://antigravity.google", pricingUrl: "https://antigravity.google/pricing?app=antigravity-ide"
+      },
+      {
+        name: "OpenAI Codex", vendor: "OpenAI", category: "编程 Agent", region: "海外", priceTier: "订阅+用量",
+        pricing: "随 ChatGPT Free/Plus/Pro/Business/Enterprise 等计划提供，Codex 额度和弹性价格以 ChatGPT/Codex 价格页和 rate card 为准。",
+        strengths: ["异步多 Agent", "CLI/桌面/ChatGPT 入口", "代码审查与任务委派", "模型能力强"],
+        limits: ["用量和额度规则变化快", "企业需治理代码权限", "中国直连受限"],
+        bestFor: "复杂工程任务、代码审查、长期异步开发任务",
+        scores: { coding: 9, automation: 7, enterprise: 8, ease: 7, cost: 5, local: 3 },
+        depth: 9, costScore: 5, china: "弱", url: "https://openai.com/codex", pricingUrl: "https://chatgpt.com/codex/pricing"
+      },
+      {
+        name: "Claude Code", vendor: "Anthropic", category: "编程 Agent", region: "海外", priceTier: "订阅/API",
+        pricing: "Claude Pro 约 $20/月可用 Claude Code；Max 5x 约 $100/月，Max 20x 约 $200/月；API/Console 按 token。",
+        strengths: ["代码理解强", "终端工作流", "长上下文", "权限确认机制清晰"],
+        limits: ["重度使用可能成本高", "中国直连弱", "CLI 学习成本高于聊天客户端"],
+        bestFor: "资深工程师、重构、代码库理解、测试驱动修改",
+        scores: { coding: 10, automation: 7, enterprise: 7, ease: 6, cost: 4, local: 3 },
+        depth: 9, costScore: 4, china: "弱", url: "https://claude.com/product/claude-code", pricingUrl: "https://claude.com/pricing"
+      },
+      {
+        name: "Claude 客户端", vendor: "Anthropic", category: "通用/研究 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "Free、Pro、Max、Team、Enterprise 等计划；Max 面向高频和更大容量用户。",
+        strengths: ["长文档处理", "写作和分析强", "项目/Artifacts", "桌面扩展与 Claude Code 联动"],
+        limits: ["自动执行能力弱于 IDE/工作流工具", "地区可用性有限", "团队数据策略需配置"],
+        bestFor: "研究、写作、产品分析、代码解释、个人知识工作",
+        scores: { coding: 7, automation: 5, enterprise: 7, ease: 9, cost: 6, local: 3 },
+        depth: 6, costScore: 6, china: "弱", url: "https://claude.ai", pricingUrl: "https://support.claude.com/en/articles/11049762-choose-a-claude-plan"
+      },
+      {
+        name: "GitHub Copilot", vendor: "GitHub / Microsoft", category: "编程 Agent", region: "全球", priceTier: "免费+付费",
+        pricing: "Free；Pro 约 $10/月；Pro+ 约 $39/月；Max 约 $100/月；Business/Enterprise 组织版；Agent、review、CLI 等消耗 AI Credits。",
+        strengths: ["GitHub 原生", "IDE 覆盖广", "企业管理成熟", "代码审查/PR 集成"],
+        limits: ["高级模型和 Agent 成本趋向用量化", "复杂仓库自主性不一定最强", "需关注训练/数据设置"],
+        bestFor: "GitHub 团队、企业研发、希望少折腾的标准化采购",
+        scores: { coding: 8, automation: 6, enterprise: 9, ease: 8, cost: 6, local: 5 },
+        depth: 8, costScore: 6, china: "中", url: "https://github.com/features/copilot", pricingUrl: "https://github.com/features/copilot/plans"
+      },
+      {
+        name: "Windsurf", vendor: "Cognition", category: "编程 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Windsurf 已并入 Devin Desktop 路线；Free、Pro、Max、Teams/Enterprise 等以 Devin/Windsurf 官方最新价格为准。",
+        strengths: ["Cascade Agent", "上下文感知", "AI IDE 体验成熟", "适合快速改代码"],
+        limits: ["品牌迁移中资料易过期", "企业功能需高阶计划", "中国访问稳定性不确定"],
+        bestFor: "个人和小团队 AI IDE、快速原型、代码迁移",
+        scores: { coding: 8, automation: 5, enterprise: 7, ease: 8, cost: 6, local: 4 },
+        depth: 8, costScore: 6, china: "弱", url: "https://windsurf.com", pricingUrl: "https://devin.ai/pricing"
+      },
+      {
+        name: "Replit Agent", vendor: "Replit", category: "编程 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "Starter 免费含每日 Agent credits；Core 约 $20/月年付含 monthly credits；Pro 约 $95/月年付；Agent 按 effort-based pricing。",
+        strengths: ["浏览器开发环境", "从需求到部署一体化", "适合非专业开发者", "内置托管"],
+        limits: ["复杂工程可控性弱于本地 IDE", "平台锁定", "生产级架构仍需工程审查"],
+        bestFor: "MVP、教学、个人工具、无本地环境开发",
+        scores: { coding: 7, automation: 6, enterprise: 5, ease: 9, cost: 6, local: 4 },
+        depth: 8, costScore: 6, china: "弱", url: "https://replit.com/ai", pricingUrl: "https://replit.com/pricing"
+      },
+      {
+        name: "Devin", vendor: "Cognition", category: "编程 Agent", region: "海外", priceTier: "团队/企业",
+        pricing: "Free/Pro/Max/Teams/Enterprise 分层；Teams 通常有团队费和开发席位费；超额按 API/用量规则。",
+        strengths: ["自主软件工程 Agent", "任务规划到 PR", "云端执行环境", "适合独立任务委派"],
+        limits: ["成本高", "需要清晰任务边界", "不适合完全无审查上线"],
+        bestFor: "工程团队处理 backlog、修 bug、代码迁移和重复任务",
+        scores: { coding: 9, automation: 8, enterprise: 8, ease: 6, cost: 3, local: 3 },
+        depth: 10, costScore: 3, china: "弱", url: "https://devin.ai", pricingUrl: "https://devin.ai/pricing"
+      },
+      {
+        name: "腾讯 CodeBuddy", vendor: "腾讯云", category: "编程 Agent", region: "中国", priceTier: "免费+企业",
+        pricing: "个人体验版含月度 Credits；个人专业版约 ¥58/人/月；企业旗舰/专有云按席位和 Credits，具体以腾讯官方为准。",
+        strengths: ["国内网络友好", "混元/DeepSeek 等模型", "Plan/Design/Coding/Deploy Agent", "企业私有化"],
+        limits: ["国际生态较弱", "具体额度需看账号和活动", "复杂开源生态覆盖需验证"],
+        bestFor: "中国企业研发、政企/金融合规、腾讯云生态",
+        scores: { coding: 8, automation: 6, enterprise: 8, ease: 7, cost: 8, local: 9 },
+        depth: 8, costScore: 8, china: "强", url: "https://www.codebuddy.cn", pricingUrl: "https://www.codebuddy.cn/docs/ide/Account/pricing"
+      },
+      {
+        name: "MarsCode", vendor: "ByteDance", category: "编程 Agent", region: "中国/海外", priceTier: "免费+付费",
+        pricing: "云 IDE 和 AI 编程能力按官方活动与版本策略提供，价格需看官网。",
+        strengths: ["云端开发环境", "AI 助手", "零配置", "适合教学和轻量项目"],
+        limits: ["本地大型工程迁移成本", "企业合规要评估云端代码", "市场声量下降"],
+        bestFor: "云端实验、教学、快速小项目、浏览器编程",
+        scores: { coding: 7, automation: 5, enterprise: 5, ease: 8, cost: 8, local: 7 },
+        depth: 7, costScore: 8, china: "强", url: "https://www.marscode.com", pricingUrl: "https://www.marscode.com"
+      },
+      {
+        name: "通义灵码", vendor: "阿里云", category: "编程 Agent", region: "中国", priceTier: "免费+付费",
+        pricing: "个人免费使用；企业免费开通入口和企业方案并行，专属/VPC/企业治理以官方或销售报价为准。",
+        strengths: ["中文和阿里云生态强", "多 IDE 插件", "企业知识库", "AI 程序员能力"],
+        limits: ["海外生态弱", "深度 Agent 能力需看 Beta 额度", "企业部署要采购沟通"],
+        bestFor: "中国后端团队、Java/云原生、阿里云客户",
+        scores: { coding: 8, automation: 5, enterprise: 8, ease: 8, cost: 8, local: 9 },
+        depth: 7, costScore: 8, china: "强", url: "https://lingma.aliyun.com", pricingUrl: "https://lingma.aliyun.com/pricing"
+      },
+      {
+        name: "百度 Comate", vendor: "百度智能云", category: "编程 Agent", region: "中国", priceTier: "免费+付费",
+        pricing: "个人标准版免费；个人专业版约 59 元/月；企业专业版约 150 元/人/月；专属版按年/预约服务。",
+        strengths: ["国内价格透明", "编程智能体", "Spec/Figma 转代码", "企业安全管控"],
+        limits: ["国际影响力弱", "模型生态依赖百度云", "复杂跨仓库任务需实测"],
+        bestFor: "中国企业研发、低成本个人试用、需要私有化咨询的团队",
+        scores: { coding: 8, automation: 5, enterprise: 8, ease: 8, cost: 8, local: 9 },
+        depth: 8, costScore: 8, china: "强", url: "https://comate.baidu.com/en", pricingUrl: "https://comate.baidu.com/en/pricing"
+      },
+      {
+        name: "CodeGeeX", vendor: "智谱/清华 KEG 生态", category: "编程 Agent", region: "中国", priceTier: "免费/开源",
+        pricing: "官网插件和开源模型路线为主，商业和企业服务以官方说明为准。",
+        strengths: ["免费友好", "多语言代码", "IDE 插件", "可本地/开源生态探索"],
+        limits: ["Agent 深度弱于 Cursor/Claude Code", "企业治理能力有限", "模型能力需按版本验证"],
+        bestFor: "学生、预算敏感开发者、开源/本地化探索",
+        scores: { coding: 6, automation: 3, enterprise: 4, ease: 7, cost: 10, local: 8 },
+        depth: 5, costScore: 10, china: "强", url: "https://www.codegeex.cn", pricingUrl: "https://www.codegeex.cn"
+      },
+      {
+        name: "JetBrains AI", vendor: "JetBrains", category: "编程 Agent", region: "全球", priceTier: "订阅",
+        pricing: "随 JetBrains AI / IDE 订阅和企业授权提供，具体按地区和组织合同。",
+        strengths: ["JetBrains IDE 原生", "代码索引强", "企业用户熟悉", "多语言开发体验好"],
+        limits: ["Agent 自主性弱于 AI-first IDE", "需 JetBrains 生态", "费用叠加 IDE 订阅"],
+        bestFor: "Java/Kotlin/Python/企业 IDE 用户",
+        scores: { coding: 7, automation: 4, enterprise: 8, ease: 8, cost: 6, local: 6 },
+        depth: 6, costScore: 6, china: "中", url: "https://www.jetbrains.com/ai/", pricingUrl: "https://www.jetbrains.com/ai/"
+      },
+      {
+        name: "Qodo", vendor: "Qodo", category: "编程 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Free、Teams、Enterprise 等计划，围绕测试、代码质量和 PR 审查。",
+        strengths: ["测试生成", "代码质量", "PR 审查", "团队流程"],
+        limits: ["通用编码 Agent 不如 Cursor/Claude Code", "中文生态弱", "价值更偏 QA"],
+        bestFor: "测试覆盖、代码审查、质量门禁",
+        scores: { coding: 7, automation: 5, enterprise: 7, ease: 7, cost: 7, local: 4 },
+        depth: 6, costScore: 7, china: "弱", url: "https://www.qodo.ai", pricingUrl: "https://www.qodo.ai/pricing/"
+      },
+      {
+        name: "Tabnine", vendor: "Tabnine", category: "编程 Agent", region: "全球", priceTier: "免费+付费",
+        pricing: "Dev、Enterprise 等计划，强调私有化、合规和代码隐私。",
+        strengths: ["企业隐私", "本地/私有模型选项", "多 IDE", "代码补全稳"],
+        limits: ["Agent 深度弱于新一代 AI IDE", "体验偏传统助手", "复杂任务能力有限"],
+        bestFor: "强隐私团队、受监管行业、保守引入 AI 编程",
+        scores: { coding: 6, automation: 3, enterprise: 8, ease: 7, cost: 7, local: 6 },
+        depth: 5, costScore: 7, china: "中", url: "https://www.tabnine.com", pricingUrl: "https://www.tabnine.com/pricing"
+      },
+      {
+        name: "Amazon Q Developer", vendor: "AWS", category: "编程 Agent", region: "全球", priceTier: "免费+付费",
+        pricing: "Free 和 Pro/企业用量；AWS 控制台、IDE、CLI 场景按官方价格。",
+        strengths: ["AWS 原生", "云资源理解", "安全扫描", "企业身份集成"],
+        limits: ["非 AWS 项目吸引力下降", "Agent IDE 体验不如专门工具", "中国区需看 AWS 服务可用性"],
+        bestFor: "AWS 团队、云运维、IaC、安全修复",
+        scores: { coding: 7, automation: 6, enterprise: 8, ease: 7, cost: 7, local: 5 },
+        depth: 7, costScore: 7, china: "中", url: "https://aws.amazon.com/q/developer/", pricingUrl: "https://aws.amazon.com/q/developer/pricing/"
+      },
+      {
+        name: "Sourcegraph Cody", vendor: "Sourcegraph", category: "编程 Agent", region: "海外", priceTier: "免费+企业",
+        pricing: "个人和企业计划，企业常与 Sourcegraph 代码搜索平台绑定。",
+        strengths: ["大代码库搜索", "企业代码图谱", "上下文检索", "代码问答"],
+        limits: ["写代码 Agent 深度一般", "部署和索引成本", "更适合已有 Sourcegraph 团队"],
+        bestFor: "大型代码库理解、遗留系统、平台工程团队",
+        scores: { coding: 7, automation: 4, enterprise: 8, ease: 6, cost: 6, local: 4 },
+        depth: 6, costScore: 6, china: "弱", url: "https://sourcegraph.com/cody", pricingUrl: "https://sourcegraph.com/pricing"
+      },
+      {
+        name: "ChatGPT", vendor: "OpenAI", category: "通用/研究 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "Free、Go/Plus/Pro、Business、Enterprise；Agent、Deep Research、Codex、Connectors 等能力按计划和 credits 限制。",
+        strengths: ["通用能力强", "工具/连接器生态", "Deep Research", "Agent 与 Codex 联动"],
+        limits: ["企业数据边界需配置", "价格和额度变化快", "中国直连弱"],
+        bestFor: "个人知识工作、研究、代码、自动化任务入口",
+        scores: { coding: 8, automation: 7, enterprise: 8, ease: 9, cost: 6, local: 3 },
+        depth: 8, costScore: 6, china: "弱", url: "https://chatgpt.com", pricingUrl: "https://openai.com/chatgpt/pricing/"
+      },
+      {
+        name: "Google Gemini", vendor: "Google", category: "通用/研究 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "Free、Google AI Pro、Google AI Ultra 等订阅；含 Gemini App、Deep Research、部分 Google 生态权益。",
+        strengths: ["Google 生态", "长上下文", "搜索与多模态", "与 Workspace/Antigravity 协同"],
+        limits: ["套餐命名和权益变化频繁", "中国直连弱", "企业和个人计划分离"],
+        bestFor: "Google 生态用户、研究、多模态创作、云端开发",
+        scores: { coding: 7, automation: 6, enterprise: 8, ease: 8, cost: 6, local: 3 },
+        depth: 7, costScore: 6, china: "弱", url: "https://gemini.google.com", pricingUrl: "https://gemini.google/us/subscriptions/"
+      },
+      {
+        name: "Perplexity", vendor: "Perplexity AI", category: "通用/研究 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "免费；Pro 常见约 $20/月或 $200/年；Enterprise Pro/Max 按席位；API 另按请求、上下文和模型计费。",
+        strengths: ["搜索问答", "引用来源", "研究效率", "Comet 浏览器 Agent 方向"],
+        limits: ["业务系统执行弱", "内容版权争议需关注", "复杂自动化不如工作流平台"],
+        bestFor: "资料检索、竞品研究、快速事实核查、网页研究",
+        scores: { coding: 5, automation: 5, enterprise: 6, ease: 9, cost: 6, local: 4 },
+        depth: 6, costScore: 6, china: "弱", url: "https://www.perplexity.ai", pricingUrl: "https://docs.perplexity.ai/getting-started/pricing"
+      },
+      {
+        name: "Perplexity Comet", vendor: "Perplexity AI", category: "通用/研究 Agent", region: "海外", priceTier: "订阅",
+        pricing: "Comet 浏览器可下载；高级 Comet Agent 查询随 Perplexity Pro/Enterprise 分层和额度。",
+        strengths: ["浏览器内执行", "网页理解", "搜索引用", "邮件/购物/研究任务"],
+        limits: ["浏览器凭证风险需管控", "自动操作额度有限", "企业合规要评估"],
+        bestFor: "网页研究、跨标签总结、浏览器内轻量任务委托",
+        scores: { coding: 4, automation: 7, enterprise: 6, ease: 8, cost: 5, local: 3 },
+        depth: 7, costScore: 5, china: "弱", url: "https://www.perplexity.ai/comet", pricingUrl: "https://www.perplexity.ai/enterprise/pricing"
+      },
+      {
+        name: "Opera Neon", vendor: "Opera", category: "通用/研究 Agent", region: "海外", priceTier: "订阅",
+        pricing: "Agentic browser 订阅制，公开访问和价格以 Opera Neon 官方结账页为准。",
+        strengths: ["Do/Make/Research", "网页执行", "浏览器上下文", "内容和代码任务"],
+        limits: ["实验性较强", "企业治理仍需验证", "价格和地区可用性变化快"],
+        bestFor: "个人浏览器工作流、网页研究、轻量自动化和创作",
+        scores: { coding: 5, automation: 7, enterprise: 4, ease: 7, cost: 5, local: 3 },
+        depth: 7, costScore: 5, china: "弱", url: "https://www.operaneon.com/", pricingUrl: "https://www.operaneon.com/"
+      },
+      {
+        name: "Dia Browser", vendor: "The Browser Company", category: "通用/研究 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Dia 可下载使用；Pro/Work/企业价格以 Dia 官方结账页或销售为准。",
+        strengths: ["读取标签页", "连接 GSuite/Slack", "Morning Brief", "工作浏览器"],
+        limits: ["Arc 已转维护方向", "macOS 优先", "企业能力仍演进"],
+        bestFor: "SaaS 工作流、浏览器上下文问答、会议/报告整理",
+        scores: { coding: 3, automation: 6, enterprise: 5, ease: 8, cost: 6, local: 3 },
+        depth: 6, costScore: 6, china: "弱", url: "https://www.diabrowser.com/", pricingUrl: "https://www.diabrowser.com/"
+      },
+      {
+        name: "Manus", vendor: "Monica / Manus", category: "通用/研究 Agent", region: "中国/海外", priceTier: "免费+订阅",
+        pricing: "消费级订阅和额度制为主，具体以官网账号页为准。",
+        strengths: ["浏览器执行", "任务规划", "面向非技术用户", "报告/网页/数据任务"],
+        limits: ["结果稳定性依赖任务定义", "复杂企业权限有限", "价格和额度透明度需看账号"],
+        bestFor: "个人自动化、网页调研、轻量数据处理、内容任务",
+        scores: { coding: 5, automation: 8, enterprise: 5, ease: 8, cost: 5, local: 6 },
+        depth: 8, costScore: 5, china: "中", url: "https://manus.im", pricingUrl: "https://manus.im"
+      },
+      {
+        name: "Genspark", vendor: "Genspark", category: "通用/研究 Agent", region: "海外", priceTier: "免费+订阅",
+        pricing: "免费和付费计划，围绕 AI 搜索、报告、表格、幻灯片和 Agent 能力。",
+        strengths: ["AI 搜索", "自动生成页面/报告", "多 Agent 研究", "适合内容输出"],
+        limits: ["企业系统连接弱", "深度代码能力一般", "资料准确性仍需复核"],
+        bestFor: "研究报告、内容策划、轻量办公生成",
+        scores: { coding: 4, automation: 6, enterprise: 5, ease: 8, cost: 6, local: 4 },
+        depth: 7, costScore: 6, china: "中", url: "https://www.genspark.ai", pricingUrl: "https://www.genspark.ai"
+      },
+      {
+        name: "Microsoft 365 Copilot", vendor: "Microsoft", category: "企业办公 Agent", region: "全球", priceTier: "企业订阅",
+        pricing: "Copilot Chat 随合格 M365 订阅提供；Microsoft 365 Copilot/Copilot Business 按用户/月；Agent/Studio/credits 另计。",
+        strengths: ["Office/Teams/Outlook 原生", "企业权限", "Agent Builder", "Entra 身份体系"],
+        limits: ["依赖 Microsoft 365 数据质量", "复杂 Agent 还要 Copilot Studio/credits", "成本按席位放大"],
+        bestFor: "已经重度使用 Microsoft 365 的企业",
+        scores: { coding: 4, automation: 7, enterprise: 10, ease: 8, cost: 5, local: 6 },
+        depth: 7, costScore: 5, china: "中", url: "https://www.microsoft.com/en-us/microsoft-365-copilot", pricingUrl: "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing"
+      },
+      {
+        name: "Google Workspace Gemini", vendor: "Google", category: "企业办公 Agent", region: "全球", priceTier: "企业订阅",
+        pricing: "Workspace 商业/企业计划中的 Gemini 能力与独立 Google AI 计划区分，价格按 Workspace 版本。",
+        strengths: ["Gmail/Docs/Sheets 集成", "Google Drive 数据", "企业搜索", "Vertex AI 衔接"],
+        limits: ["中国可用性弱", "企业权限配置复杂", "与个人 Gemini 权益容易混淆"],
+        bestFor: "Google Workspace 企业、教育组织、全球团队协作",
+        scores: { coding: 4, automation: 6, enterprise: 9, ease: 8, cost: 6, local: 3 },
+        depth: 6, costScore: 6, china: "弱", url: "https://workspace.google.com/solutions/ai/", pricingUrl: "https://workspace.google.com/pricing.html"
+      },
+      {
+        name: "腾讯 WorkBuddy", vendor: "腾讯", category: "企业办公 Agent", region: "中国", priceTier: "待公开/企业",
+        pricing: "腾讯办公智能体工作台，完整公开价格需以腾讯官方和企业销售为准。",
+        strengths: ["本地执行型办公 Agent", "腾讯生态", "中文任务", "适合桌面办公自动化"],
+        limits: ["公开资料和价格有限", "成熟度需试点验证", "跨企业系统权限需打通"],
+        bestFor: "中国办公自动化、数据处理、内容创作、桌面任务执行",
+        scores: { coding: 4, automation: 8, enterprise: 7, ease: 7, cost: 6, local: 9 },
+        depth: 8, costScore: 6, china: "强", url: "https://workbuddy.tencent.com", pricingUrl: "https://workbuddy.tencent.com"
+      },
+      {
+        name: "飞书/豆包/扣子生态", vendor: "ByteDance", category: "企业办公 Agent", region: "中国", priceTier: "免费+企业",
+        pricing: "飞书 AI、豆包、扣子和企业能力分别计费，企业采购以飞书/火山引擎/扣子官方为准。",
+        strengths: ["中文内容生态", "飞书协作", "知识库/流程", "Coze Bot 分发"],
+        limits: ["产品线分散", "企业数据边界需配置", "跨系统连接要开发"],
+        bestFor: "飞书组织、内容团队、内部知识助手和流程助手",
+        scores: { coding: 5, automation: 7, enterprise: 8, ease: 8, cost: 7, local: 9 },
+        depth: 7, costScore: 7, china: "强", url: "https://www.feishu.cn", pricingUrl: "https://www.feishu.cn"
+      },
+      {
+        name: "钉钉 AI 助理", vendor: "阿里巴巴", category: "企业办公 Agent", region: "中国", priceTier: "企业订阅",
+        pricing: "随钉钉商业化版本、AI 助理和企业服务套餐变化，按官方页面和销售报价。",
+        strengths: ["组织通讯录", "审批/流程", "宜搭/钉钉生态", "中国企业普及度高"],
+        limits: ["跨钉钉外部系统需集成", "通用模型能力取决于阿里生态", "复杂自定义要配置"],
+        bestFor: "中国中小企业、审批流程、行政和销售协同",
+        scores: { coding: 3, automation: 7, enterprise: 8, ease: 8, cost: 7, local: 9 },
+        depth: 6, costScore: 7, china: "强", url: "https://www.dingtalk.com", pricingUrl: "https://www.dingtalk.com"
+      },
+      {
+        name: "Notion AI", vendor: "Notion", category: "企业办公 Agent", region: "全球", priceTier: "订阅",
+        pricing: "随 Notion 计划和 AI 加购/套餐提供，企业按组织授权。",
+        strengths: ["文档知识库", "项目管理", "写作总结", "团队知识问答"],
+        limits: ["执行外部动作弱", "复杂权限要整理空间", "不适合深度编码"],
+        bestFor: "团队知识库、项目文档、内容规划",
+        scores: { coding: 3, automation: 4, enterprise: 7, ease: 9, cost: 7, local: 5 },
+        depth: 5, costScore: 7, china: "中", url: "https://www.notion.com/product/ai", pricingUrl: "https://www.notion.com/pricing"
+      },
+      {
+        name: "Slack AI", vendor: "Salesforce", category: "企业办公 Agent", region: "全球", priceTier: "企业订阅",
+        pricing: "随 Slack 付费计划和 AI add-on/企业套餐提供。",
+        strengths: ["消息总结", "频道知识", "企业沟通入口", "Salesforce 生态"],
+        limits: ["更像协作智能层", "流程执行需 Workflow/集成", "中文企业普及度较低"],
+        bestFor: "海外团队、跨时区沟通、客服/销售协作",
+        scores: { coding: 2, automation: 5, enterprise: 8, ease: 8, cost: 6, local: 4 },
+        depth: 5, costScore: 6, china: "弱", url: "https://slack.com/features/ai", pricingUrl: "https://slack.com/pricing"
+      },
+      {
+        name: "Salesforce Agentforce", vendor: "Salesforce", category: "企业办公 Agent", region: "全球", priceTier: "企业/用量",
+        pricing: "Agentforce add-ons、行业云、企业授权和按交互/用量的组合，具体见 Salesforce 价格页。",
+        strengths: ["CRM 原生", "销售/客服 Agent", "权限和审计", "企业流程深"],
+        limits: ["实施成本高", "依赖 Salesforce 数据治理", "不适合小团队轻量使用"],
+        bestFor: "销售、客服、服务云、已有 Salesforce 的大企业",
+        scores: { coding: 2, automation: 8, enterprise: 10, ease: 5, cost: 3, local: 4 },
+        depth: 8, costScore: 3, china: "弱", url: "https://www.salesforce.com/agentforce/", pricingUrl: "https://www.salesforce.com/service/ai/agentforce-for-service-pricing/"
+      },
+      {
+        name: "ServiceNow AI Agents", vendor: "ServiceNow", category: "企业办公 Agent", region: "全球", priceTier: "企业",
+        pricing: "随 Now Platform、行业产品和企业合同计费。",
+        strengths: ["ITSM/工单流程", "企业流程编排", "权限审计", "大型组织落地"],
+        limits: ["实施周期长", "成本高", "离开 ServiceNow 生态价值下降"],
+        bestFor: "IT 服务台、人力流程、企业运营工单",
+        scores: { coding: 2, automation: 8, enterprise: 10, ease: 5, cost: 3, local: 4 },
+        depth: 8, costScore: 3, china: "弱", url: "https://www.servicenow.com/products/ai-agents.html", pricingUrl: "https://www.servicenow.com"
+      },
+      {
+        name: "Airtable AI", vendor: "Airtable", category: "企业办公 Agent", region: "全球", priceTier: "订阅",
+        pricing: "随 Airtable Team/Business/Enterprise 和 AI credits/功能限制。",
+        strengths: ["数据表+应用", "轻量业务系统", "AI 字段/自动化", "非工程团队友好"],
+        limits: ["复杂后端能力有限", "大规模权限和成本需规划", "中国访问一般"],
+        bestFor: "运营系统、CRM 原型、内容库、低代码数据应用",
+        scores: { coding: 2, automation: 7, enterprise: 7, ease: 9, cost: 6, local: 4 },
+        depth: 6, costScore: 6, china: "弱", url: "https://www.airtable.com/platform/ai", pricingUrl: "https://www.airtable.com/pricing"
+      },
+      {
+        name: "n8n", vendor: "n8n", category: "自动化/低代码 Agent", region: "全球", priceTier: "开源+云付费",
+        pricing: "Community 可自托管；Cloud Starter/Pro/Business/Enterprise 按 workflow execution 等维度计费。",
+        strengths: ["自托管", "复杂工作流", "代码节点", "AI Agent/工具调用灵活"],
+        limits: ["自托管要运维", "权限和错误处理要自己设计", "商业嵌入需看许可证"],
+        bestFor: "技术团队、自动化工作室、成本可控的业务流程 Agent",
+        scores: { coding: 5, automation: 10, enterprise: 7, ease: 6, cost: 8, local: 8 },
+        depth: 8, costScore: 8, china: "强", url: "https://n8n.io", pricingUrl: "https://n8n.io/pricing/"
+      },
+      {
+        name: "Zapier", vendor: "Zapier", category: "自动化/低代码 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Free、Pro、Team、Enterprise；按 tasks、表单、表格、MCP、Agents/Chatbots 等计划计费。",
+        strengths: ["连接器最多", "上手快", "SaaS 生态强", "AI orchestration"],
+        limits: ["复杂逻辑成本高", "自定义能力不如 n8n", "中国 SaaS 覆盖有限"],
+        bestFor: "海外 SaaS 运营、市场销售自动化、非技术团队",
+        scores: { coding: 2, automation: 9, enterprise: 8, ease: 10, cost: 5, local: 3 },
+        depth: 7, costScore: 5, china: "弱", url: "https://zapier.com", pricingUrl: "https://zapier.com/pricing"
+      },
+      {
+        name: "Make", vendor: "Make", category: "自动化/低代码 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Free 含 1,000 credits/月；付费计划按 credits/月和功能计费，入门档常见约 $9-$12/月起。",
+        strengths: ["可视化强", "价格比 Zapier 友好", "AI Toolkit/AI Agents", "流程调试好"],
+        limits: ["企业治理弱于大厂", "复杂脚本仍需技术", "中国本地应用连接少"],
+        bestFor: "中小团队自动化、营销运营、可视化流程编排",
+        scores: { coding: 3, automation: 9, enterprise: 7, ease: 8, cost: 7, local: 3 },
+        depth: 7, costScore: 7, china: "弱", url: "https://www.make.com", pricingUrl: "https://www.make.com/en/pricing"
+      },
+      {
+        name: "Dify", vendor: "Dify", category: "自动化/低代码 Agent", region: "中国/全球", priceTier: "开源+云付费",
+        pricing: "开源可自托管；Cloud Free、Professional、Team 等按 message credits、应用数、知识库容量计费。",
+        strengths: ["LLM 应用平台", "RAG/知识库", "工作流", "模型供应商灵活"],
+        limits: ["复杂流程稳定性要工程化", "云版额度限制", "企业生产需部署和监控"],
+        bestFor: "知识库问答、内部 AI 应用、RAG Bot、模型网关",
+        scores: { coding: 4, automation: 8, enterprise: 7, ease: 7, cost: 8, local: 8 },
+        depth: 8, costScore: 8, china: "强", url: "https://dify.ai", pricingUrl: "https://dify.ai/pricing"
+      },
+      {
+        name: "Coze / 扣子", vendor: "ByteDance", category: "自动化/低代码 Agent", region: "中国/海外", priceTier: "免费+付费",
+        pricing: "国内扣子和海外 Coze 版本权益不同，Bot 构建、插件、知识库和发布渠道按官方说明。",
+        strengths: ["Bot 构建快", "插件和工作流", "多渠道发布", "中文生态强"],
+        limits: ["复杂企业权限有限", "跨版本能力差异", "生产级运维需要补齐"],
+        bestFor: "客服 Bot、内容助手、微信/飞书/网站渠道机器人",
+        scores: { coding: 3, automation: 8, enterprise: 6, ease: 9, cost: 8, local: 9 },
+        depth: 7, costScore: 8, china: "强", url: "https://www.coze.cn", pricingUrl: "https://www.coze.cn"
+      },
+      {
+        name: "Flowise", vendor: "FlowiseAI", category: "自动化/低代码 Agent", region: "全球", priceTier: "开源+云付费",
+        pricing: "开源可自托管；Cloud 常见 Free、Starter、Pro 等档位，企业计划以官方为准。",
+        strengths: ["可视化 LangChain 流程", "开源", "快速搭 RAG/Agent", "社区活跃"],
+        limits: ["安全补丁和暴露面要重视", "生产治理弱", "复杂应用需开发能力"],
+        bestFor: "技术团队原型、RAG Demo、内部 Agent 实验",
+        scores: { coding: 4, automation: 7, enterprise: 5, ease: 7, cost: 8, local: 8 },
+        depth: 7, costScore: 8, china: "中", url: "https://flowiseai.com", pricingUrl: "https://flowiseai.com"
+      },
+      {
+        name: "Langflow", vendor: "DataStax / Langflow", category: "自动化/低代码 Agent", region: "全球", priceTier: "开源+云付费",
+        pricing: "开源项目和托管服务并行，企业能力按 DataStax/Langflow 官方说明。",
+        strengths: ["可视化 LLM 流程", "Python 生态", "组件化", "适合教学和原型"],
+        limits: ["生产部署仍需工程化", "安全和权限要自己管", "业务连接器不如 Zapier/n8n"],
+        bestFor: "Agent 原型、RAG 学习、模型链路实验",
+        scores: { coding: 4, automation: 7, enterprise: 5, ease: 7, cost: 8, local: 8 },
+        depth: 7, costScore: 8, china: "中", url: "https://www.langflow.org", pricingUrl: "https://www.langflow.org"
+      },
+      {
+        name: "Microsoft Copilot Studio", vendor: "Microsoft", category: "自动化/低代码 Agent", region: "全球", priceTier: "企业/用量",
+        pricing: "Microsoft 365 Copilot 按用户/月；独立 Copilot Studio 可按 credit pack 或 pay-as-you-go 计费。",
+        strengths: ["企业 Agent Builder", "Power Platform", "M365 集成", "权限审计"],
+        limits: ["授权复杂", "credits 成本需建模", "非微软生态吸引力下降"],
+        bestFor: "Microsoft 365 企业、内部流程 Agent、客服/知识助手",
+        scores: { coding: 3, automation: 9, enterprise: 10, ease: 6, cost: 4, local: 5 },
+        depth: 8, costScore: 4, china: "中", url: "https://www.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-studio", pricingUrl: "https://www.microsoft.com/en-us/microsoft-365/copilot/pricing/copilot-studio"
+      },
+      {
+        name: "Vertex AI Agent Builder", vendor: "Google Cloud", category: "自动化/低代码 Agent", region: "全球", priceTier: "云用量",
+        pricing: "Google Cloud 按 Agent Builder、Search、模型调用、存储和部署资源用量计费。",
+        strengths: ["Google Cloud 原生", "企业搜索/RAG", "ADK", "Gemini 模型"],
+        limits: ["云账单复杂", "中国可用性弱", "需要 GCP 工程能力"],
+        bestFor: "GCP 企业、搜索/RAG Agent、云端客户服务",
+        scores: { coding: 5, automation: 8, enterprise: 9, ease: 5, cost: 4, local: 3 },
+        depth: 8, costScore: 4, china: "弱", url: "https://cloud.google.com/products/agent-builder", pricingUrl: "https://cloud.google.com/vertex-ai/pricing"
+      },
+      {
+        name: "AWS Bedrock Agents", vendor: "AWS", category: "自动化/低代码 Agent", region: "全球", priceTier: "云用量",
+        pricing: "按 Bedrock 模型调用、Agent、知识库、Guardrails、存储和云资源用量计费。",
+        strengths: ["AWS 企业生态", "模型选择", "IAM 权限", "知识库和工具调用"],
+        limits: ["配置复杂", "账单需治理", "非 AWS 用户门槛高"],
+        bestFor: "AWS 企业、合规 Agent、后端系统自动化",
+        scores: { coding: 5, automation: 8, enterprise: 9, ease: 5, cost: 5, local: 5 },
+        depth: 8, costScore: 5, china: "中", url: "https://aws.amazon.com/bedrock/agents/", pricingUrl: "https://aws.amazon.com/bedrock/pricing/"
+      },
+      {
+        name: "阿里云百炼", vendor: "阿里云", category: "自动化/低代码 Agent", region: "中国", priceTier: "云用量",
+        pricing: "按模型调用、应用开发、知识库、插件/工具和企业服务计费，具体看阿里云百炼价格。",
+        strengths: ["通义模型", "中国云生态", "企业知识库", "应用构建"],
+        limits: ["跨云生态弱", "价格和能力随云服务变化", "需要云开发经验"],
+        bestFor: "中国企业 AI 应用、RAG、智能客服、内部助手",
+        scores: { coding: 4, automation: 8, enterprise: 8, ease: 6, cost: 7, local: 9 },
+        depth: 8, costScore: 7, china: "强", url: "https://bailian.console.aliyun.com", pricingUrl: "https://help.aliyun.com/zh/model-studio/"
+      },
+      {
+        name: "百度千帆 AppBuilder", vendor: "百度智能云", category: "自动化/低代码 Agent", region: "中国", priceTier: "云用量",
+        pricing: "按千帆模型、应用构建、知识库和企业服务计费。",
+        strengths: ["文心模型", "智能体应用", "企业知识库", "百度云生态"],
+        limits: ["国际生态弱", "需要云平台治理", "复杂 Agent 需开发能力"],
+        bestFor: "中国企业 RAG、搜索问答、客服和行业应用",
+        scores: { coding: 4, automation: 8, enterprise: 8, ease: 6, cost: 7, local: 9 },
+        depth: 8, costScore: 7, china: "强", url: "https://cloud.baidu.com/product/wenxinworkshop", pricingUrl: "https://cloud.baidu.com/product/wenxinworkshop/price"
+      },
+      {
+        name: "腾讯元器", vendor: "腾讯云", category: "自动化/低代码 Agent", region: "中国", priceTier: "免费+企业",
+        pricing: "智能体创建、分发和企业服务按腾讯云/元器官方说明。",
+        strengths: ["腾讯生态", "微信/QQ/企业微信潜力", "中文 Bot", "低代码创建"],
+        limits: ["公开价格和企业能力需核对", "复杂业务系统接入需开发", "生态开放度需验证"],
+        bestFor: "中文 Bot、私域运营、腾讯生态智能体",
+        scores: { coding: 3, automation: 7, enterprise: 7, ease: 8, cost: 8, local: 9 },
+        depth: 7, costScore: 8, china: "强", url: "https://yuanqi.tencent.com", pricingUrl: "https://yuanqi.tencent.com"
+      },
+      {
+        name: "FastGPT", vendor: "FastGPT", category: "自动化/低代码 Agent", region: "中国/全球", priceTier: "开源+云付费",
+        pricing: "开源可自托管；商业版/云版按团队、知识库、模型用量和企业服务。",
+        strengths: ["中文 RAG", "自托管", "知识库问答", "成本可控"],
+        limits: ["通用连接器少", "工程质量靠团队维护", "复杂 Agent 能力有限"],
+        bestFor: "企业知识库、客服问答、私有部署 RAG",
+        scores: { coding: 3, automation: 7, enterprise: 7, ease: 7, cost: 8, local: 9 },
+        depth: 6, costScore: 8, china: "强", url: "https://fastgpt.in", pricingUrl: "https://fastgpt.in"
+      },
+      {
+        name: "Botpress", vendor: "Botpress", category: "自动化/低代码 Agent", region: "全球", priceTier: "免费+付费",
+        pricing: "Pay-as-you-go 免费起步并另计 AI spend；Plus、Team、Managed 等计划。",
+        strengths: ["聊天机器人平台", "知识库", "可视化流程", "托管和白标选项"],
+        limits: ["AI spend 难预估", "复杂业务系统需集成", "更偏对话 Bot"],
+        bestFor: "网站客服 Bot、客户支持、交互式问答",
+        scores: { coding: 2, automation: 7, enterprise: 7, ease: 8, cost: 6, local: 4 },
+        depth: 7, costScore: 6, china: "弱", url: "https://botpress.com", pricingUrl: "https://botpress.com/pricing"
+      },
+      {
+        name: "Voiceflow", vendor: "Voiceflow", category: "自动化/低代码 Agent", region: "海外", priceTier: "免费+付费",
+        pricing: "Free、Pro、Teams、Enterprise，按 seats、tokens/credits、项目能力和企业支持。",
+        strengths: ["对话设计", "原型协作", "客服 Agent", "非技术团队友好"],
+        limits: ["深度后端执行需集成", "中国本地渠道弱", "复杂逻辑不如代码框架"],
+        bestFor: "客服对话、语音/聊天体验设计、产品原型",
+        scores: { coding: 2, automation: 7, enterprise: 7, ease: 9, cost: 6, local: 3 },
+        depth: 6, costScore: 6, china: "弱", url: "https://www.voiceflow.com", pricingUrl: "https://www.voiceflow.com/pricing"
+      },
+      {
+        name: "CrewAI", vendor: "CrewAI", category: "开源 Agent 框架", region: "全球", priceTier: "开源+企业",
+        pricing: "开源框架可免费使用；企业平台和云服务按官方商业计划。",
+        strengths: ["多 Agent 协作", "Python 生态", "角色/任务编排", "适合定制"],
+        limits: ["需要工程能力", "观测/权限/成本要自建", "不是开箱业务产品"],
+        bestFor: "自研多 Agent 系统、研究原型、后台自动化",
+        scores: { coding: 6, automation: 8, enterprise: 5, ease: 5, cost: 8, local: 8 },
+        depth: 8, costScore: 8, china: "中", url: "https://www.crewai.com", pricingUrl: "https://www.crewai.com"
+      },
+      {
+        name: "AutoGen", vendor: "Microsoft Research", category: "开源 Agent 框架", region: "全球", priceTier: "开源",
+        pricing: "开源框架免费；实际成本来自模型 API、托管、工具和工程维护。",
+        strengths: ["多 Agent 对话", "研究基础强", "可扩展", "微软生态"],
+        limits: ["生产化要大量工程", "非低代码", "业务连接器需自建"],
+        bestFor: "研究、实验型多 Agent、企业内部框架探索",
+        scores: { coding: 6, automation: 8, enterprise: 5, ease: 4, cost: 8, local: 8 },
+        depth: 8, costScore: 8, china: "中", url: "https://microsoft.github.io/autogen/", pricingUrl: "https://microsoft.github.io/autogen/"
+      },
+      {
+        name: "LangGraph", vendor: "LangChain", category: "开源 Agent 框架", region: "全球", priceTier: "开源+云付费",
+        pricing: "开源框架免费；LangSmith/LangGraph Platform 托管、观测和企业能力另计费。",
+        strengths: ["有状态 Agent 图", "可控编排", "生产化思路强", "生态成熟"],
+        limits: ["学习曲线高", "需要代码开发", "成本取决于模型和部署"],
+        bestFor: "生产级自研 Agent、复杂流程、人机协同",
+        scores: { coding: 7, automation: 9, enterprise: 7, ease: 4, cost: 7, local: 8 },
+        depth: 9, costScore: 7, china: "中", url: "https://www.langchain.com/langgraph", pricingUrl: "https://www.langchain.com/pricing"
+      },
+      {
+        name: "OpenAI Agents SDK", vendor: "OpenAI", category: "开源 Agent 框架", region: "全球", priceTier: "开源+API",
+        pricing: "SDK 免费；实际成本为 OpenAI 模型 API、工具调用、托管和存储。",
+        strengths: ["与 OpenAI 模型/工具紧密", "Tracing", "函数工具", "适合产品内 Agent"],
+        limits: ["依赖 OpenAI API 可用性", "企业治理要自己设计", "中国直连弱"],
+        bestFor: "开发者构建自定义 Agent、SaaS 内嵌智能体",
+        scores: { coding: 7, automation: 8, enterprise: 7, ease: 6, cost: 6, local: 3 },
+        depth: 8, costScore: 6, china: "弱", url: "https://openai.github.io/openai-agents-python/", pricingUrl: "https://openai.com/api/pricing/"
+      },
+      {
+        name: "Mastra", vendor: "Mastra", category: "开源 Agent 框架", region: "全球", priceTier: "开源+云付费",
+        pricing: "TypeScript 框架开源；Platform Starter 免费，Teams/Enterprise 按官方商业计划。",
+        strengths: ["TypeScript 友好", "工作流/Agent/RAG", "现代 Web 栈", "开发者体验好"],
+        limits: ["生态比 LangChain 年轻", "需要工程能力", "生产治理需补齐"],
+        bestFor: "Node/TypeScript 团队、自研 Agent 应用",
+        scores: { coding: 7, automation: 8, enterprise: 5, ease: 6, cost: 8, local: 8 },
+        depth: 8, costScore: 8, china: "中", url: "https://mastra.ai", pricingUrl: "https://mastra.ai"
+      }
+    ];
+
+    const sourceLinks = [
+      ["Cursor pricing", "https://cursor.com/pricing"],
+      ["OpenAI Codex pricing", "https://chatgpt.com/codex/pricing"],
+      ["OpenAI Codex rate card", "https://help.openai.com/articles/20001106-codex-rate-card"],
+      ["Google Antigravity pricing", "https://antigravity.google/pricing?app=antigravity-ide"],
+      ["Claude plan guide", "https://support.claude.com/en/articles/11049762-choose-a-claude-plan"],
+      ["Claude Code product/pricing", "https://claude.com/product/claude-code"],
+      ["GitHub Copilot plans", "https://github.com/features/copilot/plans"],
+      ["Devin / Windsurf pricing", "https://devin.ai/pricing"],
+      ["腾讯 CodeBuddy pricing", "https://www.codebuddy.cn/docs/ide/Account/pricing"],
+      ["通义灵码价格", "https://lingma.aliyun.com/pricing"],
+      ["百度 Comate 价格", "https://comate.baidu.com/en/pricing"],
+      ["n8n pricing", "https://n8n.io/pricing/"],
+      ["Zapier pricing", "https://zapier.com/pricing"],
+      ["Make pricing", "https://www.make.com/en/pricing"],
+      ["Dify pricing", "https://dify.ai/pricing"],
+      ["Botpress pricing", "https://botpress.com/pricing"],
+      ["Microsoft 365 Copilot pricing", "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing"],
+      ["Copilot Studio pricing", "https://www.microsoft.com/en-us/microsoft-365/copilot/pricing/copilot-studio"],
+      ["Microsoft agents docs", "https://learn.microsoft.com/en-us/copilot/agents"],
+      ["Google Gemini subscriptions", "https://gemini.google/us/subscriptions/"],
+      ["Google Vertex AI pricing", "https://cloud.google.com/vertex-ai/pricing"],
+      ["Salesforce Agentforce pricing", "https://www.salesforce.com/service/ai/agentforce-for-service-pricing/"],
+      ["ChatGPT agent help", "https://help.openai.com/en/articles/11752874-chatgpt-agent"],
+      ["Perplexity API pricing", "https://docs.perplexity.ai/getting-started/pricing"]
+      ,["Perplexity Comet", "https://www.perplexity.ai/comet"]
+      ,["Opera Neon", "https://www.operaneon.com/"]
+      ,["Dia Browser", "https://www.diabrowser.com/"]
+      ,["Replit pricing", "https://replit.com/pricing"]
+      ,["Mastra pricing", "https://mastra.ai/pricing"]
+    ];
+
+    const checklist = [
+      "是否会接触源代码、客户数据、财务数据或个人隐私？",
+      "是否支持企业身份、权限、审计、日志和数据不训练选项？",
+      "费用是按席位、额度、tokens、credits、workflow execution 还是任务计费？",
+      "能否设置预算上限、速率限制和人工审批？",
+      "失败时是否可回滚，是否有测试、沙箱和预发布环境？",
+      "中国网络、支付、发票、合规、私有化是否满足要求？",
+      "是否能导出数据和工作流，避免平台锁定？",
+      "是否有真实业务指标：节省时间、减少缺陷、提升转化或减少工单？"
+    ];
+
+    const categoryColor = {
+      "编程 Agent": "#04746f",
+      "通用/研究 Agent": "#355c9a",
+      "企业办公 Agent": "#b44b55",
+      "自动化/低代码 Agent": "#c2841a",
+      "开源 Agent 框架": "#557a31"
+    };
+
+    const state = {
+      search: "",
+      category: "全部类别",
+      region: "全部地区",
+      price: "全部价格"
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function averageScore(item) {
+      const s = item.scores;
+      return Math.round((s.coding + s.automation + s.enterprise + s.ease + s.cost + s.local) / 6 * 10) / 10;
+    }
+
+    function setupFilters() {
+      const cats = ["全部类别", ...Array.from(new Set(platforms.map(p => p.category)))];
+      const regions = ["全部地区", ...Array.from(new Set(platforms.map(p => p.region)))];
+      const prices = ["全部价格", ...Array.from(new Set(platforms.map(p => p.priceTier)))];
+      $("category").innerHTML = cats.map(v => `<option>${v}</option>`).join("");
+      $("region").innerHTML = regions.map(v => `<option>${v}</option>`).join("");
+      $("price").innerHTML = prices.map(v => `<option>${v}</option>`).join("");
+
+      $("search").addEventListener("input", (e) => { state.search = e.target.value.trim().toLowerCase(); render(); });
+      $("category").addEventListener("change", (e) => { state.category = e.target.value; render(); });
+      $("region").addEventListener("change", (e) => { state.region = e.target.value; render(); });
+      $("price").addEventListener("change", (e) => { state.price = e.target.value; render(); });
+      $("reset").addEventListener("click", () => {
+        state.search = "";
+        state.category = "全部类别";
+        state.region = "全部地区";
+        state.price = "全部价格";
+        $("search").value = "";
+        $("category").value = state.category;
+        $("region").value = state.region;
+        $("price").value = state.price;
+        render();
+      });
+    }
+
+    function filtered() {
+      return platforms.filter(p => {
+        const blob = [p.name, p.vendor, p.category, p.region, p.priceTier, p.pricing, p.bestFor, p.strengths.join(" "), p.limits.join(" ")].join(" ").toLowerCase();
+        return (!state.search || blob.includes(state.search))
+          && (state.category === "全部类别" || p.category === state.category)
+          && (state.region === "全部地区" || p.region === state.region)
+          && (state.price === "全部价格" || p.priceTier === state.price);
+      }).sort((a, b) => averageScore(b) - averageScore(a));
+    }
+
+    function renderMetrics(data) {
+      const chinaStrong = data.filter(p => p.china === "强").length;
+      const open = data.filter(p => p.priceTier.includes("开源") || p.priceTier.includes("免费")).length;
+      const codingTop = data.filter(p => p.scores.coding >= 8).length;
+      const enterpriseTop = data.filter(p => p.scores.enterprise >= 8).length;
+      const automationTop = data.filter(p => p.scores.automation >= 8).length;
+      const avg = data.length ? (data.reduce((sum, p) => sum + averageScore(p), 0) / data.length).toFixed(1) : "0";
+      const metrics = [
+        [data.length, "当前筛选平台数"],
+        [chinaStrong, "中国可用性强"],
+        [open, "免费/开源友好"],
+        [codingTop, "编程能力 8 分以上"],
+        [automationTop, "自动化能力 8 分以上"],
+        [avg, "平均综合分"]
+      ];
+      $("metrics").innerHTML = metrics.map(([num, label]) => `<div class="metric"><b>${num}</b><span>${label}</span></div>`).join("");
+    }
+
+    function renderBars(data) {
+      const counts = {};
+      data.forEach(p => counts[p.category] = (counts[p.category] || 0) + 1);
+      const max = Math.max(1, ...Object.values(counts));
+      $("categoryBars").innerHTML = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([cat, count]) => `
+          <div class="bar-row">
+            <span>${cat}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${count / max * 100}%; background:${categoryColor[cat] || "#04746f"}"></div></div>
+            <b>${count}</b>
+          </div>
+        `).join("");
+    }
+
+    function renderMatrix(data) {
+      const canvas = $("matrix");
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(700, Math.floor(rect.width * dpr));
+      canvas.height = Math.floor(430 * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#fbf5e8";
+      ctx.fillRect(0, 0, w, h);
+      const pad = { l: 54, r: 24, t: 24, b: 48 };
+      ctx.strokeStyle = "#d6c8b0";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(pad.l, pad.t);
+      ctx.lineTo(pad.l, h - pad.b);
+      ctx.lineTo(w - pad.r, h - pad.b);
+      ctx.stroke();
+      ctx.fillStyle = "#69716b";
+      ctx.font = "13px Avenir Next, sans-serif";
+      ctx.fillText("Agent 深度", 12, 24);
+      ctx.fillText("成本友好度", w - 98, h - 16);
+      for (let i = 1; i <= 10; i++) {
+        const x = pad.l + (w - pad.l - pad.r) * i / 10;
+        const y = h - pad.b - (h - pad.t - pad.b) * i / 10;
+        ctx.strokeStyle = i === 5 ? "#c7b89d" : "#eee2ce";
+        ctx.beginPath();
+        ctx.moveTo(x, pad.t);
+        ctx.lineTo(x, h - pad.b);
+        ctx.moveTo(pad.l, y);
+        ctx.lineTo(w - pad.r, y);
+        ctx.stroke();
+      }
+      data.forEach((p, idx) => {
+        const x = pad.l + (w - pad.l - pad.r) * p.costScore / 10;
+        const y = h - pad.b - (h - pad.t - pad.b) * p.depth / 10;
+        const jitter = ((idx % 5) - 2) * 3;
+        ctx.fillStyle = categoryColor[p.category] || "#04746f";
+        ctx.beginPath();
+        ctx.arc(x + jitter, y, 6.5, 0, Math.PI * 2);
+        ctx.fill();
+        if (averageScore(p) >= 8 || data.length <= 16) {
+          ctx.fillStyle = "#26302a";
+          ctx.font = "12px Avenir Next, sans-serif";
+          ctx.fillText(p.name, x + 9 + jitter, y + 4);
+        }
+      });
+      $("legend").innerHTML = Object.entries(categoryColor).map(([cat, color]) => `<span><i class="dot" style="background:${color}"></i>${cat}</span>`).join("");
+    }
+
+    function heat(score) {
+      const n = Math.round(score / 10 * 6);
+      return `<div class="heat">${Array.from({ length: 6 }, (_, i) => `<span class="${i < n ? "on" : ""}"></span>`).join("")}</div>`;
+    }
+
+    function renderRows(data) {
+      $("rows").innerHTML = data.map(p => `
+        <tr>
+          <td class="name-cell">
+            <b>${p.name}</b>
+            <span>${p.vendor}</span>
+          </td>
+          <td>
+            <span class="pill">${p.category}</span>
+            <span class="pill">${p.region}</span>
+            <span class="pill">中国可用：${p.china}</span>
+          </td>
+          <td>${p.pricing}</td>
+          <td>${p.strengths.map(s => `<span class="pill">${s}</span>`).join("")}</td>
+          <td>${p.limits.map(s => `<span class="pill">${s}</span>`).join("")}</td>
+          <td>${p.bestFor}</td>
+          <td>
+            <div class="score">${averageScore(p)} / 10</div>
+            ${heat(averageScore(p))}
+          </td>
+          <td>
+            <a href="${p.url}" target="_blank" rel="noopener">官网</a><br>
+            <a href="${p.pricingUrl}" target="_blank" rel="noopener">价格/文档</a>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function renderSources() {
+      $("sources").innerHTML = sourceLinks.map(([label, url]) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`).join("");
+      $("checklist").innerHTML = checklist.map(item => `<span class="pill">${item}</span>`).join("");
+    }
+
+    function render() {
+      const data = filtered();
+      renderMetrics(data);
+      renderBars(data);
+      renderMatrix(data);
+      renderRows(data);
+    }
+
+    window.addEventListener("resize", () => renderMatrix(filtered()));
+    setupFilters();
+    renderSources();
+    render();
+  </script>
+</body>
+</html>

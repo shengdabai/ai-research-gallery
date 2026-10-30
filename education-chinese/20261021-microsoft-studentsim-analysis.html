@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>微软 StudentSim「AI 学生模拟器」全面分析：原文核对、论文数字与边界</title>
+<style>
+/* ===== 1. Design tokens（唯一真源；本页所有设计值均引用此处） ===== */
+:root{
+  /* 1a 原始色阶 */
+  --c-ink-900:#14181f; --c-ink-700:#3a4150; --c-ink-500:#6b7384; --c-ink-300:#b9bfca; --c-ink-150:#e3e6ec; --c-ink-50:#f5f6f8; --c-white:#ffffff;
+  --c-blue-700:#1d4f91; --c-blue-500:#2f6fd0; --c-blue-100:#e2ecfb;
+  --c-teal-600:#0f766e; --c-teal-100:#d9f1ee;
+  --c-amber-600:#b45309; --c-amber-100:#fdeccc;
+  --c-rose-600:#b42339; --c-rose-100:#fbe0e4;
+  --c-violet-600:#5b3fb8; --c-violet-100:#e8e2f8;
+  /* 1b 语义角色 */
+  --color-bg:var(--c-white); --color-bg-alt:var(--c-ink-50); --color-surface:var(--c-white);
+  --color-text:var(--c-ink-900); --color-text-2:var(--c-ink-700); --color-text-3:var(--c-ink-500);
+  --color-border:var(--c-ink-150); --color-border-strong:var(--c-ink-300);
+  --color-brand:var(--c-blue-700); --color-brand-soft:var(--c-blue-100); --color-accent:var(--c-blue-500);
+  --color-ok:var(--c-teal-600); --color-ok-soft:var(--c-teal-100);
+  --color-warn:var(--c-amber-600); --color-warn-soft:var(--c-amber-100);
+  --color-bad:var(--c-rose-600); --color-bad-soft:var(--c-rose-100);
+  --color-note:var(--c-violet-600); --color-note-soft:var(--c-violet-100);
+  /* 1c 图表系列色（分类，≤4 组） */
+  --chart-s1:var(--c-blue-700); --chart-s2:var(--c-blue-500); --chart-s3:var(--c-ink-300); --chart-s4:var(--c-teal-600);
+  --chart-track:var(--c-ink-150);
+  /* 1d 字体与字号 */
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --fs-xs:.78rem; --fs-sm:.88rem; --fs-md:1rem; --fs-lg:1.2rem; --fs-xl:1.55rem; --fs-2xl:2.1rem;
+  --fw-regular:400; --fw-medium:500; --fw-bold:700;
+  --lh-tight:1.3; --lh-body:1.75;
+  /* 1e 间距与尺寸 */
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem; --sp-6:2rem; --sp-7:3rem; --sp-8:4rem;
+  --radius-sm:4px; --radius-md:10px; --radius-lg:16px;
+  --bw-thin:1px; --bw-thick:3px;
+  --shadow-ink:20,24,31; --shadow-a:.06;
+  --shadow-card:0 1px 2px rgba(var(--shadow-ink),var(--shadow-a)),0 6px 20px rgba(var(--shadow-ink),var(--shadow-a));
+  --op-hero-text:.92; --op-hero-kicker:.8; --ls-kicker:.04em; --measure-hero:52rem; --lh-tag:1.8;
+  --bar-label:7.5rem; --bar-val:3rem; --bar-label-sm:5.5rem; --bar-val-sm:2.6rem; --dot-size:.7rem;
+  --table-min:40rem; --full:100%; --fr:1fr; --clear:transparent; --zero:0; --radius-round:50%; --col-idx:3%; --col-claim:30%; --col-verdict:12%;
+  --measure:68rem; --bar-h:.9rem; --kpi-min:11rem; --col-min:16rem;
+  --dur-fast:.15s; --ease-std:ease-out;
+  --z-sticky:10;
+  /* 断点：640px 手机 / 900px 平板；@media 不能用 var()，数值与此处注释保持一致 */
+}
+/* ===== 2. Base ===== */
+*{box-sizing:border-box} html{-webkit-text-size-adjust:var(--full)}
+body{margin:0;background:var(--color-bg-alt);color:var(--color-text);font-family:var(--font-sans);font-size:var(--fs-md);line-height:var(--lh-body);word-break:break-word}
+a{color:var(--color-accent);text-decoration:none;border-bottom:var(--bw-thin) solid var(--clear);transition:border-color var(--dur-fast) var(--ease-std)} a:hover{border-bottom-color:var(--color-accent)}
+h1,h2,h3{line-height:var(--lh-tight);margin:0 0 var(--sp-3);font-weight:var(--fw-bold)}
+h1{font-size:var(--fs-2xl)} h2{font-size:var(--fs-xl);margin-top:0} h3{font-size:var(--fs-lg)}
+p{margin:0 0 var(--sp-4)} ul,ol{margin:0 0 var(--sp-4);padding-left:var(--sp-5)} li{margin-bottom:var(--sp-2)}
+strong{font-weight:var(--fw-bold)} small{font-size:var(--fs-sm);color:var(--color-text-3)}
+/* ===== 3. Layout ===== */
+.wrap{max-width:var(--measure);margin:0 auto;padding:var(--sp-5) var(--sp-4) var(--sp-8)}
+.hero{background:var(--color-brand);color:var(--c-white);padding:var(--sp-7) 0 var(--sp-6)}
+.hero .wrap{padding-top:0;padding-bottom:0}
+.hero p{color:var(--c-white);opacity:var(--op-hero-text);max-width:var(--measure-hero)}
+.hero .kicker{font-size:var(--fs-sm);letter-spacing:var(--ls-kicker);opacity:var(--op-hero-kicker);margin-bottom:var(--sp-3)}
+.toc{position:sticky;top:0;z-index:var(--z-sticky);background:var(--color-surface);border-bottom:var(--bw-thin) solid var(--color-border)}
+.toc .wrap{padding:var(--sp-2) var(--sp-4);display:flex;gap:var(--sp-3);overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.toc a{color:var(--color-text-2);font-size:var(--fs-sm);padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-sm)} .toc a:hover{background:var(--color-bg-alt);border-bottom-color:var(--clear)}
+section{margin-top:var(--sp-7)} section:first-of-type{margin-top:var(--sp-6)}
+.card{background:var(--color-surface);border:var(--bw-thin) solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp-5);box-shadow:var(--shadow-card)}
+.grid{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),var(--fr)))}
+.kpis{display:grid;gap:var(--sp-3);grid-template-columns:repeat(auto-fit,minmax(var(--kpi-min),var(--fr)));margin:var(--sp-5) 0}
+.kpi{background:var(--color-surface);border:var(--bw-thin) solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)}
+.kpi .v{font-size:var(--fs-xl);font-weight:var(--fw-bold);color:var(--color-brand);line-height:var(--lh-tight)}
+.kpi .l{font-size:var(--fs-sm);color:var(--color-text-3);margin-top:var(--sp-1)}
+.lead{font-size:var(--fs-lg);color:var(--color-text-2)}
+.callout{border-left:var(--bw-thick) solid var(--color-brand);background:var(--color-brand-soft);padding:var(--sp-4) var(--sp-5);border-radius:var(--radius-md);margin:var(--sp-4) 0}
+.callout.warn{border-left-color:var(--color-warn);background:var(--color-warn-soft)}
+.callout.note{border-left-color:var(--color-note);background:var(--color-note-soft)}
+/* 标签 */
+.tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-medium);padding:0 var(--sp-2);border-radius:var(--radius-sm);line-height:var(--lh-tag);white-space:nowrap}
+.tag.ok{background:var(--color-ok-soft);color:var(--color-ok)} .tag.part{background:var(--color-warn-soft);color:var(--color-warn)}
+.tag.bad{background:var(--color-bad-soft);color:var(--color-bad)} .tag.note{background:var(--color-note-soft);color:var(--color-note)}
+/* 表格 */
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:var(--full);border-collapse:collapse;font-size:var(--fs-sm);background:var(--color-surface)}
+th,td{padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw-thin) solid var(--color-border);text-align:left;vertical-align:top}
+th{background:var(--color-bg-alt);color:var(--color-text-2);font-weight:var(--fw-medium);white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--color-brand-soft);font-weight:var(--fw-medium)}
+.wide{min-width:var(--table-min)}
+/* 条形图（纯 CSS，宽度为数据值，属运行时数据） */
+.bars{display:grid;gap:var(--sp-2);margin:var(--sp-3) 0 var(--sp-4)}
+.bar{display:grid;grid-template-columns:var(--bar-label) var(--fr) var(--bar-val);align-items:center;gap:var(--sp-3);font-size:var(--fs-sm)}
+.bar .t{height:var(--bar-h);background:var(--chart-track);border-radius:var(--radius-sm);overflow:hidden}
+.bar .f{height:var(--full);background:var(--chart-s3);border-radius:var(--radius-sm)}
+.bar.s1 .f{background:var(--chart-s1)} .bar.s2 .f{background:var(--chart-s2)} .bar.s4 .f{background:var(--chart-s4)}
+.bar .n{text-align:right;font-variant-numeric:tabular-nums}
+.chart-title{font-size:var(--fs-sm);color:var(--color-text-2);font-weight:var(--fw-medium);margin:var(--sp-4) 0 0}
+/* 流程 */
+.flow{display:grid;gap:var(--sp-3);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),var(--fr)));counter-reset:step}
+.step{background:var(--color-surface);border:var(--bw-thin) solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);position:relative}
+.step h3{font-size:var(--fs-md);margin-bottom:var(--sp-2)} .step p{margin:0;font-size:var(--fs-sm);color:var(--color-text-2)}
+.step::before{counter-increment:step;content:"第" counter(step) "步";display:inline-block;font-size:var(--fs-xs);color:var(--color-brand);background:var(--color-brand-soft);padding:0 var(--sp-2);border-radius:var(--radius-sm);margin-bottom:var(--sp-2)}
+/* 对比两栏 */
+.vs{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),var(--fr)))}
+.vs .card h3{display:flex;align-items:center;gap:var(--sp-2)}
+.dot{width:var(--dot-size);height:var(--dot-size);border-radius:var(--radius-round);display:inline-block;background:var(--color-ok)} .dot.bad{background:var(--color-bad)}
+/* 来源 */
+.src{font-size:var(--fs-sm)} .src li{margin-bottom:var(--sp-2)}
+footer{margin-top:var(--sp-8);padding-top:var(--sp-4);border-top:var(--bw-thin) solid var(--color-border);font-size:var(--fs-sm);color:var(--color-text-3)}
+@media (max-width:640px){
+  :root{--fs-2xl:1.6rem;--fs-xl:1.3rem;--sp-7:2rem;--sp-8:3rem}
+  .hero{padding-top:var(--sp-6)} .card{padding:var(--sp-4)} .bar{grid-template-columns:var(--bar-label-sm) var(--fr) var(--bar-val-sm)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">论文核对 · 原文逐条判定 · 2026-10-21</div>
+    <h1>微软 StudentSim「AI 学生模拟器」：先让 AI 学会当学生，然后呢？</h1>
+    <p class="lead">一篇流传的科普短文说：微软给每个孩子造了一个数字分身，老师以后可以先在分身上试讲解。本页对照 arXiv 论文、微软研究院博客和开源代码库逐条核对，给出每句话的证据等级，并补上原文没有展开的数字、边界和对教育从业者的含义。</p>
+  </div>
+</header>
+<nav class="toc"><div class="wrap">
+  <a href="#s1">结论</a><a href="#s2">它是什么</a><a href="#s3">数字</a><a href="#s4">原文核对</a><a href="#s5">虚拟筛选类比</a><a href="#s6">三个词</a><a href="#s7">边界</a><a href="#s8">对你意味着什么</a><a href="#s9">来源</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="s1">
+  <h2>一句话结论</h2>
+  <div class="callout"><p style="margin:0"><strong>原文的方向判断成立，细节说满了两处。</strong>StudentSim 确实是「为每个学生各训练一个模拟器」，并且在三个领域都比让 GPT-5.4 扮演学生更像真学生。但它目前是给 <strong>AI 导师研究者</strong>用的研究框架，不是给教师用的工具；被建模的 60 名学生是公开数据集里记录最多的一批，不是「每个孩子」。「只预测单步行为、不是学习效果」这句边界，论文结论里有原话支撑。一句话概括：<strong>在限定任务上，模拟指标和导师输出的专家评分有所改善，尚未证明真人学习获益。</strong></p></div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">60</div><div class="l">被单独建模的学生数（棋 30、写作 15、数学 15）</div></div>
+    <div class="kpi"><div class="v">4B</div><div class="l">基座模型参数量（Qwen3-4B-Instruct + LoRA）</div></div>
+    <div class="kpi"><div class="v">3 / 3</div><div class="l">三个领域两项指标全部高于 GPT-5.4 扮演学生</div></div>
+    <div class="kpi"><div class="v">0</div><div class="l">真实课堂部署数（据媒体转述微软表述：未部署、不替代教师）</div></div>
+  </div>
+  <p><strong>证据等级说明：</strong><span class="tag ok">成立</span> 论文或官方页面有原话或数据；<span class="tag part">部分成立</span> 方向对但表述简化或说满；<span class="tag note">作者推演</span> 原文的引申，官方材料没有这样说；<span class="tag bad">不成立</span> 与来源冲突。</p>
+</section>
+
+<section id="s2">
+  <h2>StudentSim 是什么</h2>
+  <p>论文《StudentSim: Training LLM-based Student Simulators》由微软研究院与伊利诺伊大学厄巴纳-香槟分校的研究者于 2026 年 9 月 1 日提交到 arXiv（编号 2609.01591），微软研究院 2026 年 10 月 12 日发博客介绍，代码以 MIT 协议开源。它要解决的问题是：想让 AI 导师因人施教，就得知道「这句指导对这个学生有没有用」，而这种证据「稀疏、慢、贵」。</p>
+  <h3>两阶段训练：先学「学生一般怎么错」，再学「这个学生怎么错」</h3>
+  <div class="flow">
+    <div class="step"><h3>池化训练</h3><p>每个领域用很多学生的记录训练一个共享 LoRA 适配器，学会该领域学生常见的答题方式与错误模式。</p></div>
+    <div class="step"><h3>个体专精</h3><p>在共享适配器上，用某个学生自己的记录继续训练，得到只属于这个学生的模拟器。论文称直接用少量个人数据训练会过拟合，所以先池化。</p></div>
+    
+    <div class="step"><h3>用作导师训练的奖励</h3><p>把训练好的模拟器冻结，当作强化学习环境：AI 导师的讲解让模拟学生改对了，导师就得到奖励。注意这一步用的是第一阶段的群体模型，不是某个人的专精模型，并且还叠加了「风格」和「看对棋盘」两个奖励头。论文只在国际象棋上做了这一步。</p></div>
+  </div>
+  <h3 style="margin-top:var(--sp-5)">三个领域与数据来源</h3>
+  <div class="tscroll"><table>
+    <thead><tr><th>领域</th><th>数据来源</th><th class="num">专精学生数</th><th>每人全部历史记录</th><th class="num">实际进入专精训练的记录</th><th>模拟任务</th></tr></thead>
+    <tbody>
+      <tr><td>国际象棋</td><td>Lichess 公开对局库（2025 年 5 月快照，CC0）</td><td class="num">30</td><td>Lichess 公开对局，按棋手筛出数据充足者</td><td class="num">1,000</td><td>预测这位棋手下一步会走什么，以及看到教练的文字提示后会不会改</td></tr>
+      <tr><td>二语英语写作</td><td>EFCAMDAT 错误标注子语料（62 万篇作文，11.6 万学习者）</td><td class="num">15</td><td>平均 92.4 篇作文（语料整体中位数只有 3 篇）</td><td class="num">73</td><td>写出错误类型与这位学习者一致的作文；预测老师批改后他会怎么改</td></tr>
+      <tr><td>中学数学</td><td>基础辅导（FA）公开记录（5,000 名学生，175 万次作答）</td><td class="num">15</td><td>平均 404.9 次作答，其中约 123 题答错可带纠正回合</td><td class="num">153</td><td>四选一作答；收到讲解后是否改对</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><p style="margin:0"><strong>这里要看清一个反差：</strong>论文的卖点是「从稀疏数据造个体模拟器」，但被专精的 15 名写作学习者每人有约 90 篇作文，是语料中位数的 30 倍。「稀疏」指的是整个人群的分布，真正被造出分身的，是记录最多的那批学生。一个只写过 3 篇作文的普通学生能不能被建模，论文没有验证。</p></div>
+</section>
+
+<section id="s3">
+  <h2>论文数字：比 GPT-5.4 扮演学生更像真学生，但幅度因领域而异</h2>
+  <p>下面两组图是论文表 2 与表 3 的数字。对照组里，Maia2 是专门模仿人类棋手的国际象棋模型；GPT-5.4 和 GPT-4o 是用提示词让它们「扮演这位学生」。各方法在相同的留出记录上打分，但得到的条件不同：StudentSim 经过训练，GPT 系列只靠学生资料提示，Maia2 直接拿现成模型用。象棋里 StudentSim 的学生资料还多一行 Maia2 给出的候选走法概率，GPT 的提示里没有这一行。</p>
+  <div class="grid">
+    <div class="card">
+      <h3>行为保真度 F（越高越像本人）</h3>
+      <p class="chart-title">国际象棋 · 下一步命中率</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:51.5%"></div></div><span class="n">0.52</span></div>
+        <div class="bar s4"><span>Maia2</span><div class="t"><div class="f" style="width:45.4%"></div></div><span class="n">0.45</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:23.2%"></div></div><span class="n">0.23</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:21.6%"></div></div><span class="n">0.22</span></div>
+      </div>
+      <p class="chart-title">二语写作 · 错误画像匹配度</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:56.2%"></div></div><span class="n">0.56</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:51.4%"></div></div><span class="n">0.51</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:47.2%"></div></div><span class="n">0.47</span></div>
+        <div class="bar"><span>未专精基座</span><div class="t"><div class="f" style="width:51.3%"></div></div><span class="n">0.51</span></div>
+      </div>
+      <p class="chart-title">数学 · 四选一作答命中率</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:63.8%"></div></div><span class="n">0.64</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:61.2%"></div></div><span class="n">0.61</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:51.2%"></div></div><span class="n">0.51</span></div>
+        <div class="bar"><span>未专精基座</span><div class="t"><div class="f" style="width:49.2%"></div></div><span class="n">0.49</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>指导响应度 R（越高越会按指导改）</h3>
+      <p class="chart-title">国际象棋 · 按提示改对的比例</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:90.7%"></div></div><span class="n">0.91</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:76.6%"></div></div><span class="n">0.77</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:71.9%"></div></div><span class="n">0.72</span></div>
+        <div class="bar s4"><span>Maia2</span><div class="t"><div class="f" style="width:27.2%"></div></div><span class="n">0.27</span></div>
+      </div>
+      <p class="chart-title">二语写作 · 按批改重写的匹配度</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:64.2%"></div></div><span class="n">0.64</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:59.5%"></div></div><span class="n">0.60</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:38.8%"></div></div><span class="n">0.39</span></div>
+        <div class="bar"><span>未专精基座</span><div class="t"><div class="f" style="width:2%"></div></div><span class="n">0.02</span></div>
+      </div>
+      <p class="chart-title">数学 · 讲解后改对的比例</p>
+      <div class="bars">
+        <div class="bar s1"><span>StudentSim</span><div class="t"><div class="f" style="width:91.8%"></div></div><span class="n">0.92</span></div>
+        <div class="bar s2"><span>GPT-5.4</span><div class="t"><div class="f" style="width:71%"></div></div><span class="n">0.71</span></div>
+        <div class="bar"><span>GPT-4o</span><div class="t"><div class="f" style="width:69.4%"></div></div><span class="n">0.69</span></div>
+        <div class="bar"><span>未专精基座</span><div class="t"><div class="f" style="width:61.3%"></div></div><span class="n">0.61</span></div>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:var(--sp-4)"><strong>怎么读这两组图：</strong>两种对照组各失败在一头。Maia2 像棋手但看不懂文字提示，所以 F 高 R 低；GPT-5.4 听得懂提示但不像这个人，所以 R 尚可 F 低。StudentSim 两头都占。但写作与数学的 F 只比 GPT-5.4 高 0.03 到 0.05，拉开差距的主要是国际象棋和「指导响应度」。还要知道：「导师指导」文字的来源分领域不同。象棋由 GPT-4o 或 GPT-5.1 按四种风格生成，数学由 GPT-5.4 按三种风格生成，写作则直接套用真实教师的批注，用两种模板改写措辞，没有大模型参与。R 的目标是标准答案，不是真学生的实际回应。另外本页按论文表 2 的 0.5150 把象棋 F 显示为 0.52；摘要另写 0.51。所以「听到讲解后会怎么改」在论文里的含义是「这句指导能否把他推到正确答案」。</p>
+
+  <h3>概念验证：用模拟学生训练出的象棋导师，专家评分最高</h3>
+  <div class="tscroll"><table>
+    <thead><tr><th>导师训练方式</th><th class="num">无误导性事实错误的回答占比</th><th class="num">指导质量（1–5）</th><th class="num">个性化（1–5）</th></tr></thead>
+    <tbody>
+      <tr><td>不做强化学习（起点模型）</td><td class="num">75.7%</td><td class="num">2.99</td><td class="num">2.80</td></tr>
+      <tr><td>用 GPT-5.4 扮演的学生当奖励</td><td class="num">71.6%</td><td class="num">3.08</td><td class="num">2.42</td></tr>
+      <tr class="hl"><td>用 StudentSim 当奖励</td><td class="num">90.5%</td><td class="num">3.31</td><td class="num">3.93</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>来源：论文表 4。8 位标注者共 74 条标注的均值，作者自称 proof of concept，只做了国际象棋。StudentSim 这一组的奖励是「群体模拟器 × 风格门 × 棋盘感知门」三项相乘，所以提升不能只归功于学生模拟器本身。值得注意的是，用 GPT-5.4 扮演学生当奖励，导师的事实准确率反而低于不训练。</small></p>
+</section>
+
+<section id="s4">
+  <h2>原文逐句核对</h2>
+  <div class="tscroll"><table class="wide">
+    <thead><tr><th style="width:var(--col-idx)">#</th><th style="width:var(--col-claim)">原文说法</th><th style="width:var(--col-verdict)">判定</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>微软推出「AI 学生模拟器」StudentSim</td><td><span class="tag ok">成立</span></td><td>微软研究院 + UIUC 论文，arXiv 2026-09-01，博客 2026-10-12，GitHub 开源（MIT）。</td></tr>
+      <tr><td>2</td><td>给每个孩子造一个数字分身，模仿他怎么答题、爱犯什么错、听讲解后怎么改</td><td><span class="tag part">部分成立</span></td><td>「按个体训练、同时看 F 与 R」与论文一致。但只有 60 名学生被建模，且是数据最多的学生；「每个孩子」是说满。「听到讲解后会怎么改」在论文里是「能否被推到标准答案」，训练用的指导文字在象棋和数学由大模型生成，写作来自真实教师批注。「数字分身」是作者用语，论文叫 student simulator。</td></tr>
+      <tr><td>3</td><td>老师想试一句讲解有没有用，先让分身试一遍</td><td><span class="tag note">作者推演</span></td><td>论文与博客把使用者定为 AI 导师研究者，用途是在真人实验前测试导师策略、做强化学习奖励。未部署课堂，没有教师端工具；据 Unite.ai 与 dig.watch 转述，微软表示「不替代教师，不免除真人研究」。</td></tr>
+      <tr><td>4</td><td>过去的 AI 导师只会看答案对错</td><td><span class="tag part">部分成立</span></td><td>论文批评的是两类先前方法：知识追踪类模型能跟踪状态但处理不了自然语言讲解与纠正；提示型 LLM 扮演学生又不像真人。这不能概括所有过去的 AI 导师，智能辅导系统一直有按技能图建模学生的传统，论文自己也提到 ALEKS、Carnegie Learning 等。「只看对错」是过度概括。</td></tr>
+      <tr><td>5</td><td>StudentSim 预测的是学生接到提示后会怎么反应</td><td><span class="tag part">部分成立</span></td><td>指导响应度 R 的记录结构是「问题→错答→导师指导→标准修正答案」，衡量的是模拟器能否被指导推到标准答案，而不是复现真学生听完这句话后的真实反应；论文承认后者的数据「少有机构能承担」。</td></tr>
+      <tr><td>6</td><td>Recursion 的 AI 平台让合成化合物数量比行业标准少 90%</td><td><span class="tag part">部分成立</span></td><td>Recursion 2026 年 SEC 8-K 自述每项目约 330 个化合物、17 个月，对比行业平均 2,500 个以上、42 个月，算下来约 87%；公司网站写「约 90%」。全部为公司口径，本次未见独立核验。</td></tr>
+      <tr><td>7</td><td>它证明不了学生真学会了，但能把无效讲解挡在真人实验外</td><td><span class="tag part">部分成立</span></td><td>前半句与论文结论一致。后半句更稳的说法是「有望辅助早期比较，筛除效果仍待真人验证」：论文没有在任何领域测量「筛掉了多少无效讲解」，只有象棋导师的专家评分。</td></tr>
+      <tr><td>8</td><td>差异化是分群，个性化是盯着一个孩子长期跟踪；StudentSim 走后者</td><td><span class="tag part">部分成立</span></td><td>「按个体建模」对。但教育学里「个性化学习」通常含学生自主选目标与路径，差异化也不只是分群，还包括按准备度、兴趣调整内容与过程；StudentSim 只模拟行为，「长期跟踪」也不对，论文明说只建模一步更新，更准确的说法是「利用历史记录做个体适配」。详见下文三词对照。</td></tr>
+      <tr><td>9</td><td>它现在预测的只是单步行为，还不是学习效果</td><td><span class="tag ok">成立</span></td><td>论文结论原话：F 与 R 捕捉的是学生状态及其在指导下的一步更新；长期的习得、保持与遗忘是未来方向。</td></tr>
+      <tr><td>10</td><td>像训练老师的风洞，AI 家教进课堂前得先有它</td><td><span class="tag part">部分成立</span></td><td>「AI 导师研发的风洞」贴切：博客说模拟器属于开发流程更早阶段、在昂贵的真人研究之前。但「训练老师」不是已验证的用途，风洞也替代不了试飞，微软没有说它是上课堂的前置条件。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s5">
+  <h2>虚拟筛选类比：哪里像，哪里不像</h2>
+  <p>原文拿制药的虚拟筛选作比。这个类比的有效部分是「把高成本的真人实验往后挪」，失效部分在于两者验证闭环的完整度不同。</p>
+  <div class="vs">
+    <div class="card"><h3><span class="dot"></span>相同点</h3>
+      <ul>
+        <li><strong>都想在真实实验前过一道便宜的筛子。</strong>Recursion 用模型先排掉不值得合成的分子；StudentSim 拟用于导师策略的早期比较，筛选效果还没有在真人身上验证。</li>
+        <li><strong>都不保证最终效果。</strong>过筛的分子仍要进临床，过筛的讲解仍要看真学生有没有学会。</li>
+        <li><strong>都靠大量历史数据建模型。</strong>一个靠细胞图像与化学数据，一个靠 Lichess、作文、作答日志。</li>
+      </ul></div>
+    <div class="card"><h3><span class="dot bad"></span>不同点</h3>
+      <ul>
+        <li><strong>药物有临床试验这个终点，这项研究还没有对应的真人终点。</strong>本次仅在象棋验证了导师强化学习，因为引擎能判走法好坏；迁移到作文和开放数学回答，还需要可靠的奖励函数，论文自己也这么说。</li>
+        <li><strong>「少 90%」有项目级统计，StudentSim 没有。</strong>Recursion 给出的是每项目化合物数（公司口径）；StudentSim 没有报告「少做了多少真人实验」。所以这只是流程类比，制药那边的成效数字不能移植过来。</li>
+        <li><strong>分子不会被模型改变，学生会。</strong>老师对着分身优化讲解，讲解再作用于真人，真人又偏离分身。这是原文结尾那个问题的技术根源。</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="s6">
+  <h2>差异化、个性化、个体化：三个词要分开</h2>
+  <p>原文用「差异化 vs 个性化」划线。教育学里常见的是三个词，StudentSim 最接近第三个。</p>
+  <div class="tscroll"><table>
+    <thead><tr><th>术语</th><th>谁主导</th><th>单位</th><th>目标是否统一</th><th>StudentSim 对应吗</th></tr></thead>
+    <tbody>
+      <tr><td>差异化 Differentiated（Tomlinson）</td><td>教师</td><td>小组或个人</td><td>统一目标，多条路径</td><td>仅做个体行为建模，尚未验证差异化教学</td></tr>
+      <tr><td>个性化 Personalized</td><td>学生参与选目标、进度、方式</td><td>个人</td><td>目标可以不同</td><td>只对应一半：按个人建模，但学生没有任何自主权，被模拟的是「反应」</td></tr>
+      <tr><td>个体化 Individualized</td><td>教师或系统</td><td>个人</td><td>统一目标，节奏与讲法因人而异</td><td>最接近，但只是「个体建模」而非「个体化教学」：它给研究者比较讲法用，自己不教学</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>差异化定义引自 Tomlinson 等（2003）；三词区分采用 Edmentum、HMH 等教育出版机构的常用框架，不同学者口径不完全一致。系统综述显示差异化教学在小学阶段「实施得当时有一定效果」，中学阶段证据稀少。个性化学习的大样本证据同样有限。这意味着原文暗含的「个性化优于差异化」并没有现成的教育学证据背书。</small></p>
+</section>
+
+<section id="s7">
+  <h2>边界与没解决的问题</h2>
+  <div class="grid">
+    <div class="card"><h3>单步更新 ≠ 学习</h3><p>模拟器回答的是「听完这句话，他这一题会不会改对」。改对可能是抄明白了，这正是原文开头批评的问题。论文把「习得、保持、遗忘」列为未来方向，等于承认当前版本没有碰学习效果。</p></div>
+    <div class="card"><h3>数据门槛不低</h3><p>被专精的学生每人有几十篇作文或几百次作答。大多数学生达不到，论文也没有报告数据少到什么程度模拟器会失效。</p></div>
+    <div class="card"><h3>导师训练只在象棋验证过</h3><p>本次仅在象棋验证了导师强化学习，因为引擎能客观判断走法好坏。迁移到作文和开放数学回答，还需要可靠的奖励函数，例如作文质量评分或数学推理核验，论文把这列为待解问题。</p></div>
+    <div class="card"><h3>风洞不等于试飞</h3><p>微软的说法是模拟器用在「更早阶段」，真人研究仍然需要，学习效果、安全、可用性、课堂适配都要在真人身上测。</p></div>
+    <div class="card"><h3>模拟器会被「钻空子」</h3><p>用模拟学生当强化学习奖励时，导师可能学会让模拟器改对、而不是让人改对。论文用专家人工评分做了一次对照，但这只覆盖象棋，也只有 74 条标注。</p></div>
+    <div class="card"><h3>指导文字大多是大模型写的</h3><p>象棋的「导师指导」由大模型按错误纠正、对比、策略、苏格拉底式四种风格生成，数学按三种风格生成；只有写作直接用真实教师的批注，套两种模板改写。模拟器学的是「看到这类话会不会改对」。真实教师即兴讲解和课堂语境是否也能被同样响应，论文没有测。</p></div>
+    <div class="card"><h3>没有历史记录的新学生怎么办</h3><p>论文说零记录的学生直接使用第一阶段的群体模型，有记录后再专精，所以不需要单独的冷启动机制。但群体模型对某个具体新生的行为模拟准确性，论文没有验证。</p></div>
+    <div class="card"><h3>算力不算贵，但有门槛</h3><p>论文主实验约 390 个 A100 GPU 小时（40GB 版），其中 60 名学生的个体专精只占约 20 小时，按 60 名学生分摊约每人 20 GPU 分钟，这是算力用量，不代表实际运行耗时；整个项目含失败与消融约 1,000 GPU 小时。做产品还要加上持续采集与更新的成本，论文未报告。</p></div>
+    <div class="card"><h3>隐私与同意</h3><p>论文用的是公开、去标识的研究数据集。换成真实学校的每个孩子，就涉及持续采集作答记录、建个人行为模型的同意与留存问题。原文没有提，官方材料也没有展开。</p></div>
+  </div>
+</section>
+
+<section id="s8">
+  <h2>对一线教师和做 AI 教育产品的人意味着什么</h2>
+  <div class="vs">
+    <div class="card"><h3>如果你是教师</h3>
+      <ul>
+        <li>现在没有任何面向教师的 StudentSim 工具，短期内也不要期待「在分身上试讲」。</li>
+        
+        <li>原文结尾的问题有一个可操作的答案：研究者拟将分身用于讲法的早期比较，其比较结果与真人效果是否一致仍待验证，真正的判断仍然来自真人课堂的反馈。</li>
+      </ul></div>
+    <div class="card"><h3>如果你在做 AI 教育产品</h3>
+      <ul>
+        <li>代码开源，4B 模型 + LoRA 的成本不高，可以复现象棋流程来理解方法；但搬到学科教学要先解决「谁来判分」。</li>
+        <li>从论文里最值得抄的是评测协议 StudentSimEval：先定义 F 与 R，再谈个性化，否则个性化只是宣传词。</li>
+        <li>「用 GPT 扮演学生当奖励会让导师事实错误更多」这个结果提醒：拿大模型自演自评做训练信号，有真实风险。</li>
+      </ul></div>
+  </div>
+  <div class="callout note"></div>
+</section>
+
+<section id="s9">
+  <h2>来源</h2>
+  <ol class="src">
+    <li>Ke Yang 等，《StudentSim: Training LLM-based Student Simulators》，arXiv:2609.01591，2026-09-01。<a href="https://arxiv.org/abs/2609.01591">arxiv.org/abs/2609.01591</a>；微软研究院 PDF：<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2026/09/StudentSim.pdf">microsoft.com/…/StudentSim.pdf</a>。本页数字取自摘要、表 2、表 3、表 4、第 5.1 节与附录语料统计。</li>
+    <li>微软研究院博客《StudentSim》，2026-10-12。<a href="https://www.microsoft.com/en-us/research/blog/studentsim/">microsoft.com/en-us/research/blog/studentsim/</a>（「属于开发流程更早阶段」「不替代教师」等定位表述，本页按 <a href="https://www.unite.ai/microsoft-research-introduces-studentsim-for-ai-tutor-training/">Unite.ai</a> 与 dig.watch 的转述标注，未取得博客原文全文）。</li>
+    <li>代码库 microsoft/StudentSim（MIT）。<a href="https://github.com/microsoft/StudentSim">github.com/microsoft/StudentSim</a></li>
+    <li>The Decoder，《Simulated students that make realistic mistakes help AI tutors learn faster》，2026-09-20。<a href="https://the-decoder.com/simulated-students-that-make-realistic-mistakes-help-ai-tutors-learn-faster/">the-decoder.com</a></li>
+    <li>Unite.ai，《Microsoft Research Introduces StudentSim for AI Tutor Training》。<a href="https://www.unite.ai/microsoft-research-introduces-studentsim-for-ai-tutor-training/">unite.ai</a></li>
+    <li>Recursion Pharmaceuticals，Form 8-K 附件（FY2025 业绩），约 330 个化合物 / 17 个月对比行业 2,500+ / 42 个月。<a href="https://www.sec.gov/Archives/edgar/data/1601830/000160183026000038/exhibit991-10xk25.htm">sec.gov</a>；公司官网「约 90%」表述：<a href="https://www.recursion.com/">recursion.com</a></li>
+    <li>Smale-Jacobse 等，《Differentiated Instruction in Secondary Education: A Systematic Review》，2019。<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6883934/">PMC6883934</a>；Tomlinson 差异化定义经 Nordic Journal 综述转引：<a href="https://www.tandfonline.com/doi/full/10.1080/20020317.2022.2039351">tandfonline.com</a></li>
+    <li>Edmentum，《Personalized vs. Differentiated vs. Individualized Learning》。<a href="https://www.edmentum.com/articles/personalized-learning-vs-differentiated-instruction-vs-individualized-learning-breaking-down-the-differences/">edmentum.com</a></li>
+  </ol>
+  
+</section>
+
+</main>
+<footer class="wrap">成稿 2026-10-21 · 单文件 HTML，无外部依赖 · 设计值由页首 token 定义，例外：媒体查询断点字面量（与 token 注释一致）、条形宽度数据值、零值重置。</footer>
+</body>
+</html>

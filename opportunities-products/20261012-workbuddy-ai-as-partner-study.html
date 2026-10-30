@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WorkBuddy 现象与「把 AI 当合伙人」：问题空间与成长环境</title>
+<style>
+/* ==========================================================
+   TOKENS — 本页唯一的设计值来源
+   原始色阶（--c-*）→ 语义角色（--color-*）→ 组件只用语义角色。
+   间距 --space-*、字号 --text-*、圆角 --radius-*、阴影 --shadow-*、
+   版心与列宽 --layout-* / --measure-* / --col-*。
+   断点：唯一断点 760px（媒体查询不能用 var()，在此登记，正文只出现这一个数值）。
+   扩展：新增颜色先加原始色阶，再映射到语义角色。
+   例外：无运行时数据宽度；本页没有按数据绘制的条形图。
+   ========================================================== */
+:root{
+  --c-ink-950:#0f172a; --c-ink-800:#1e293b; --c-ink-700:#334155; --c-ink-600:#475569;
+  --c-ink-200:#e2e8f0; --c-ink-100:#f1f5f9; --c-ink-50:#f8fafc; --c-white:#ffffff;
+  --c-teal-700:#0f766e; --c-teal-100:#ccfbf1;
+  --c-amber-800:#92400e; --c-amber-100:#fef3c7;
+  --c-red-700:#b91c1c; --c-red-100:#fee2e2;
+  --c-blue-700:#1d4ed8; --c-blue-100:#dbeafe;
+  --c-violet-700:#6d28d9; --c-violet-100:#ede9fe;
+  --c-sky-300:#7dd3fc;
+  --c-ink-950-a6:rgba(15,23,42,.06); --c-ink-950-a5:rgba(15,23,42,.05);
+
+  --color-bg:var(--c-ink-100);
+  --color-surface:var(--c-white);
+  --color-surface-alt:var(--c-ink-50);
+  --color-text:var(--c-ink-950);
+  --color-text-muted:var(--c-ink-700);
+  --color-text-subtle:var(--c-ink-600);
+  --color-border:var(--c-ink-200);
+  --color-hero-bg:var(--c-ink-950);
+  --color-hero-panel:var(--c-ink-800);
+  --color-hero-text:var(--c-white);
+  --color-hero-muted:var(--c-ink-200);
+  --color-hero-accent:var(--c-sky-300);
+  --color-link:var(--c-blue-700);
+  --color-ok-fg:var(--c-teal-700);   --color-ok-bg:var(--c-teal-100);
+  --color-warn-fg:var(--c-amber-800); --color-warn-bg:var(--c-amber-100);
+  --color-bad-fg:var(--c-red-700);   --color-bad-bg:var(--c-red-100);
+  --color-info-fg:var(--c-blue-700); --color-info-bg:var(--c-blue-100);
+  --color-alt-fg:var(--c-violet-700); --color-alt-bg:var(--c-violet-100);
+  --color-arrow:var(--c-ink-600);
+  --color-focus:var(--c-blue-700);
+  --color-shadow-near:var(--c-ink-950-a6); --color-shadow-far:var(--c-ink-950-a5);
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  --text-xs:12px; --text-sm:14px; --text-md:16px; --text-lg:19px; --text-xl:24px; --text-2xl:30px; --text-3xl:38px;
+  --leading-tight:1.3; --leading-body:1.7;
+  --weight-normal:400; --weight-semibold:600; --weight-bold:700;
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:12px;
+  --border-w:1px; --border-accent-w:4px;
+  --shadow-card:0 1px 2px var(--color-shadow-near),0 4px 12px var(--color-shadow-far);
+  --layout-max:1080px; --layout-gutter:var(--space-5);
+  --table-min:760px;
+  --focus-w:2px; --focus-offset:2px;
+  --measure-lead:60em; --measure-body:52em;
+  --col-layer-label:11em;
+}
+
+/* ===== BASE ===== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--text-md);line-height:var(--leading-body)}
+h1,h2,h3{line-height:var(--leading-tight);margin:0}
+h2{font-size:var(--text-2xl);font-weight:var(--weight-bold);margin-bottom:var(--space-3)}
+h3{font-size:var(--text-lg);font-weight:var(--weight-semibold);margin-bottom:var(--space-2)}
+p{margin:0 0 var(--space-3)}
+ul,ol{margin:0 0 var(--space-3);padding-left:var(--space-5)}
+li{margin-bottom:var(--space-1)}
+a{color:var(--color-link);word-break:break-word}
+a:focus-visible{outline:var(--focus-w) solid var(--color-focus);outline-offset:var(--focus-offset)}
+strong{font-weight:var(--weight-semibold)}
+.src{color:var(--color-text-muted);font-size:var(--text-xs);white-space:nowrap}
+.wrap{max-width:var(--layout-max);margin:0 auto;padding:0 var(--layout-gutter)}
+
+/* ===== HERO ===== */
+.hero{background:var(--color-hero-bg);color:var(--color-hero-text);padding:var(--space-8) 0 var(--space-7)}
+.hero h1{font-size:var(--text-3xl);font-weight:var(--weight-bold);margin-bottom:var(--space-4)}
+.hero .lead{color:var(--color-hero-muted);font-size:var(--text-lg);max-width:var(--measure-lead)}
+.hero .verdict{margin-top:var(--space-5);background:var(--color-hero-panel);border-left:var(--border-accent-w) solid var(--color-hero-accent);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5)}
+.hero .verdict p{margin:0 0 var(--space-2)}
+.hero .verdict p:last-child{margin:0}
+.hero .meta{margin-top:var(--space-4);color:var(--color-hero-muted);font-size:var(--text-sm)}
+.hero a{color:var(--color-hero-accent)}
+.hero .src{color:var(--color-hero-muted)}
+
+/* ===== SECTION / CARD ===== */
+.section{padding:var(--space-7) 0 0}
+.section:last-of-type{padding-bottom:var(--space-8)}
+.section .intro{color:var(--color-text-muted);max-width:var(--measure-body)}
+.card{background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);padding:var(--space-5);margin-top:var(--space-4)}
+.card p:last-child,.card ul:last-child,.card ol:last-child{margin-bottom:0}
+.grid{display:grid;gap:var(--space-4);grid-template-columns:repeat(2,1fr);margin-top:var(--space-4)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid .card{margin-top:0}
+.note{font-size:var(--text-sm);color:var(--color-text-subtle)}
+.callout{border-left:var(--border-accent-w) solid var(--color-ok-fg);background:var(--color-ok-bg);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);margin-top:var(--space-4)}
+.callout.warn{border-left-color:var(--color-warn-fg);background:var(--color-warn-bg)}
+.callout.info{border-left-color:var(--color-info-fg);background:var(--color-info-bg)}
+.callout p:last-child,.callout ul:last-child{margin:0}
+
+/* ===== BADGE（矩形标签） ===== */
+.badge{display:inline-block;font-size:var(--text-xs);font-weight:var(--weight-semibold);padding:var(--space-1) var(--space-2);border-radius:var(--radius-sm);white-space:nowrap}
+.b-ok{color:var(--color-ok-fg);background:var(--color-ok-bg)}
+.b-warn{color:var(--color-warn-fg);background:var(--color-warn-bg)}
+.b-bad{color:var(--color-bad-fg);background:var(--color-bad-bg)}
+.b-info{color:var(--color-info-fg);background:var(--color-info-bg)}
+.b-alt{color:var(--color-alt-fg);background:var(--color-alt-bg)}
+
+/* ===== TABLE ===== */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:var(--space-4);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
+table{width:100%;border-collapse:collapse;font-size:var(--text-sm);min-width:var(--table-min)}
+th,td{text-align:left;vertical-align:top;padding:var(--space-3);border-bottom:var(--border-w) solid var(--color-border)}
+th{background:var(--color-surface-alt);font-weight:var(--weight-semibold);color:var(--color-text-muted)}
+tr:last-child td{border-bottom:0}
+.table-hint{display:none;font-size:var(--text-xs);color:var(--color-text-subtle);margin-top:var(--space-2)}
+
+/* ===== DATA-FLOW LAYERS ===== */
+.layers{display:grid;gap:var(--space-2);margin-top:var(--space-4)}
+.layer{display:grid;grid-template-columns:var(--col-layer-label) 1fr;gap:var(--space-4);align-items:start;background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-left:var(--border-accent-w) solid var(--color-ok-fg);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4)}
+.layer .name{font-weight:var(--weight-bold)}
+.layer p{margin:0;color:var(--color-text-muted);font-size:var(--text-sm)}
+.layer.out{border-left-color:var(--color-warn-fg)}
+.layer.away{border-left-color:var(--color-bad-fg)}
+
+/* ===== VALUE CHAIN ===== */
+.chain{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-2);margin-top:var(--space-4)}
+.link{background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-top:var(--border-accent-w) solid var(--color-info-fg);border-radius:var(--radius-md);padding:var(--space-3);font-size:var(--text-sm)}
+.link strong{display:block;margin-bottom:var(--space-1);font-size:var(--text-md)}
+.link span{color:var(--color-text-muted)}
+.governance{margin-top:var(--space-2);background:var(--color-alt-bg);color:var(--color-alt-fg);border-radius:var(--radius-md);padding:var(--space-2) var(--space-4);font-size:var(--text-sm);font-weight:var(--weight-semibold);text-align:center}
+.formula{margin-top:var(--space-4);background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);font-size:var(--text-lg);font-weight:var(--weight-semibold);text-align:center}
+.formula .plus{color:var(--color-ok-fg)}
+.formula .minus{color:var(--color-bad-fg)}
+
+/* ===== MATURITY COLUMNS ===== */
+.tier-col h3{display:flex;align-items:center;gap:var(--space-2)}
+.tier-col.t-ok{border-top:var(--border-accent-w) solid var(--color-ok-fg)}
+.tier-col.t-warn{border-top:var(--border-accent-w) solid var(--color-warn-fg)}
+.tier-col.t-bad{border-top:var(--border-accent-w) solid var(--color-bad-fg)}
+.tier-col li{font-size:var(--text-sm)}
+
+/* ===== DECISION FLOW ===== */
+.flow{display:grid;gap:var(--space-2);margin-top:var(--space-4)}
+.step{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-3);background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:var(--text-sm)}
+.step .q{font-weight:var(--weight-semibold);font-size:var(--text-md)}
+.step .yes,.step .no{color:var(--color-text-muted)}
+.arrow{text-align:center;color:var(--color-arrow);font-size:var(--text-sm)}
+
+/* ===== SUBHEAD ===== */
+.sub{margin-top:var(--space-6)}
+
+/* ===== SOURCES ===== */
+.sources ol{font-size:var(--text-sm);color:var(--color-text-muted)}
+.sources li{margin-bottom:var(--space-2)}
+
+/* ===== RESPONSIVE（唯一断点 760px） ===== */
+@media (max-width:760px){
+  :root{--layout-gutter:var(--space-4)}
+  .hero{padding:var(--space-7) 0 var(--space-6)}
+  .hero h1{font-size:var(--text-2xl)}
+  .hero .lead{font-size:var(--text-md)}
+  h2{font-size:var(--text-xl)}
+  .grid,.grid-3{grid-template-columns:1fr}
+  .layer{grid-template-columns:1fr;gap:var(--space-1)}
+  .chain{grid-template-columns:1fr 1fr}
+  .step{grid-template-columns:1fr}
+  .formula{font-size:var(--text-md)}
+  .table-hint{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>WorkBuddy 现象与「把 AI 当合伙人」：问题空间与成长环境</h1>
+    <p class="lead">一位一人公司（OPC）创业者在视频里讲了三件事：腾讯 WorkBuddy 为什么火、为什么他认为它留不住用户，以及普通人怎么把 AI 从工具变成合伙人。本页逐条核对他的判断，并把他最后两条建议扩展成可以照着练的方法。</p>
+    <div class="verdict">
+      <p><strong>两条建议值得试验：</strong>「提问能力决定方向」与「给自己搭持续成长的环境」方向可取，其中部分训练方法有研究支持；研究支持的是「部分可以练、需要测量」，不支持「教不了」或「一百倍速」。<span class="src"><a href="#s19">[S19]</a><a href="#s22">[S22]</a><a href="#s26">[S26]</a></span></p>
+      <p><strong>用来铺垫的判断大多缺证据：</strong>5%/30% 用户分层、「两年续费周期」是讲者的假说；「半年千万日活」在所查来源中没有可核验的依据，腾讯称，按日活衡量，WorkBuddy 是中国使用最广的效率类 AI 智能体服务，未披露具体日活数字。<span class="src"><a href="#s2">[S2]</a><a href="#s5">[S5]</a></span></p>
+      
+    </div>
+    
+  </div>
+</header>
+
+<main>
+
+
+<section class="section" id="verdicts">
+  <div class="wrap">
+    <h2>逐条判定：讲者说了什么，证据到哪一步</h2>
+    <p class="intro">「命题类型」和「证据强弱」分开标：修辞不等于说错，只是不能当统计用；预测要等时间检验。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>讲者的说法</th><th>类型</th><th>核对结果</th><th>证据</th></tr></thead>
+        <tbody>
+          <tr><td>前 5% 的 AI 使用者是用命令行的程序员；全球开发者占计算机用户的 2%–5%</td><td><span class="badge b-info">事实＋推断</span></td><td>「计算机用户」没有权威分母，2%–5% 无法验证。作为口径示例：开发者约 4,720 万人，按约 60 亿网民算约 0.8%，但这不能验证原比例。而且职业占比推不出 AI 能力分位。<span class="src"><a href="#s8">[S8]</a><a href="#s9">[S9]</a></span></td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>中间 30% 是白领中产，是 WorkBuddy 的用户</td><td><span class="badge b-alt">假说</span></td><td>讲者未提供能验证 30% 比例的代表性用户样本；媒体访谈个案也不能说明整体分布。只能写「定位人群」，不能写「谁在用」。</td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>这类产品续费周期大概两年，之后用户要么升级去自建，要么退订</td><td><span class="badge b-alt">预测</span></td><td>待检验。还漏了第三条路：会自建的人也可能持续购买省心的服务。</td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>WorkBuddy 核心是壳不是模型，壳对模型是「冷兵器对热武器」</td><td><span class="badge b-alt">修辞</span></td><td>「薄功能会被上游吸收」的担忧合理；但 WorkBuddy 的核心价值在哪里，公开资料不足以判断，需要具体分析。「冷兵器对热武器」是类比，不能证明应用层必然失去价值（另一个应用自建模型的例子见下文 Cursor）。</td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>今年推出后半年多，日活拉到千万级</td><td><span class="badge b-info">事实断言</span></td><td>腾讯称按日活衡量它是中国使用最广的效率类 AI 智能体服务，未披露具体日活数字；流传的 1,300 万日活出自非公开渠道；媒体转述的腾讯方面说法是「上百万日活」，是模糊数量表述，无法确认千万级。<span class="src"><a href="#s2">[S2]</a><a href="#s4">[S4]</a><a href="#s5">[S5]</a></span></td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>这就是克里斯滕森说的创新者的窘境</td><td><span class="badge b-info">理论引用</span></td><td>「在位者偏爱确定收益」这一面与理论相通；但理论的核心是新进入者从被忽视的低端或新市场切入后向上走，讲者没有讲这条路径。<span class="src"><a href="#s10">[S10]</a></span></td><td><span class="badge b-warn">部分</span></td></tr>
+          <tr><td>OPC 做的是大厂今天、明天都做不了的事</td><td><span class="badge b-alt">预测</span></td><td>讲者没有给出依据；建议改写成「现阶段不经济或不愿做」，见 <a href="#dilemma">创新者窘境一节</a>。</td><td><span class="badge b-bad">证据不足，建议改写</span></td></tr>
+          <tr><td>AI 在工作中参与率低于 50%，说明工作含金量不高</td><td><span class="badge b-alt">修辞</span></td><td>没有找到 50% 门槛的依据；研究显示同一工具在能力边界内外效果相反。<span class="src"><a href="#s14">[S14]</a></span></td><td><span class="badge b-bad">证据不足</span></td></tr>
+          
+          <tr><td>多数人过去被当工具人用，所以不会把 AI 当合伙人</td><td><span class="badge b-alt">心理归因</span></td><td>本次没有找到验证这一因果的研究。</td><td><span class="badge b-bad">证据不足</span></td></tr>
+          <tr><td>提问能力决定方向；问题空间决定答案的可行性</td><td><span class="badge b-alt">观点</span></td><td>与评论文章「问题表述比提示词技巧更重要」的论点相呼应；这是观点层面的一致，不是实证。<span class="src"><a href="#s19">[S19]</a></span></td><td><span class="badge b-info">观点呼应</span></td></tr>
+          <tr><td>找问题空间的能力「教不了」</td><td><span class="badge b-alt">观点</span></td><td>四项创业随机试验显示，训练能改变项目终止与转向决策，部分方法可教。<span class="src"><a href="#s22">[S22]</a></span></td><td><span class="badge b-warn">部分反证</span></td></tr>
+          <tr><td>行业以一百倍的速度进步</td><td><span class="badge b-alt">修辞</span></td><td>行业快速进步这一面成立；但不同指标量级不同：达到给定基准表现的实际推理成本约每年下降 13 倍，任务长度约 7 个月翻倍。<span class="src"><a href="#s23">[S23]</a><a href="#s24">[S24]</a></span></td><td><span class="badge b-warn">部分</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+  </div>
+</section>
+
+
+<section class="section" id="workbuddy">
+  <div class="wrap">
+    <h2>WorkBuddy 到底多大：官方说法、流传数字与价格</h2>
+    <p class="intro">WorkBuddy 是腾讯云 CodeBuddy 团队做的桌面办公 agent。规模数字的口径差得很远：访问量、月活、日活不能互相换算。</p>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>时间线</h3>
+        <ul>
+          <li>2026-01-19 内测，02-06 公测，03-09 正式上线 <span class="src"><a href="#s3">[S3]</a></span></li>
+          <li>2026-06-05 企业版，07-18 独立 App <span class="src"><a href="#s3">[S3]</a></span></li>
+          <li>团队从十几人扩到约百人；线下广告投入接近 1 亿元（媒体估计）<span class="src"><a href="#s4">[S4]</a></span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>官方说法（一手）</h3>
+        <ul>
+          <li>2026-05-13 一季度业绩："WorkBuddy was the most popular productivity AI agent service in China, measured by DAU." <span class="src"><a href="#s2">[S2]</a></span></li>
+          <li>同一公告称「增长快、留存健康」，这句说的是腾讯云效率类 AI 智能体解决方案整体，不是 WorkBuddy 单独的数据；没有给出用户数或留存率 <span class="src"><a href="#s2">[S2]</a></span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>价格（官方页）</h3>
+        <ul>
+          <li>2026-07-01 起：标准版 ¥99/月、高级版 ¥199/月、旗舰版 ¥999/月；免费额度每月 500 积分；另有连续订阅折扣和加量包 <span class="src"><a href="#s6">[S6]</a></span></li>
+          <li>媒体报道的个人版升级与上面三档标价一致（媒体）<span class="src"><a href="#s7">[S7]</a></span></li>
+          <li>讲者说的「每月几百块」并非所有用户的订阅成本；实际支出取决于档位、折扣和加量包</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>数字</th><th>口径</th><th>出处</th><th>能不能当「千万日活」证据</th></tr></thead>
+        <tbody>
+          <tr><td>885 万次（3 月）→ 2,097 万次（6 月）</td><td>PC 端月访问量（易观榜单）</td><td>媒体转述 <a href="#s5">[S5]</a></td><td><span class="badge b-bad">不能</span> 访问量不是日活</td></tr>
+          <tr><td>1,300 万日活</td><td>流传说法</td><td>S5 作者称来自非公开渠道物料，腾讯未披露 <a href="#s5">[S5]</a></td><td><span class="badge b-bad">不能</span> 出处不可核</td></tr>
+          <tr><td>2,000 万月活</td><td>流传说法</td><td>S4 转述其他媒体报道，原始出处未核实 <a href="#s4">[S4]</a></td><td><span class="badge b-bad">不能</span> 出处不可核</td></tr>
+          <tr><td>「上百万日活」</td><td>腾讯首席 AI 科学家 7 月的说法（媒体转述）</td><td><a href="#s4">[S4]</a></td><td><span class="badge b-warn">不能确认千万级</span> 只有模糊数量表述，缺少精确数值和可比口径</td></tr>
+          <tr><td>约 217 万</td><td>App 7 月月活（AI 产品榜估算）</td><td><a href="#s4">[S4]</a></td><td><span class="badge b-warn">只覆盖 App</span></td></tr>
+          <tr><td>活跃留存超 60%、付费留存超 80%</td><td>CodeBuddy 与 WorkBuddy 合并口径</td><td>媒体 <a href="#s5">[S5]</a></td><td><span class="badge b-warn">口径混合</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+    <p class="note">用户画像：媒体采访的个人用户多数用免费档，一位每月付 ¥70；企业侧有券商先买 30 个席位、后扩到 100 个。这些是个案，不是用户分布。<span class="src"><a href="#s4">[S4]</a></span></p>
+  </div>
+</section>
+
+
+<section class="section" id="decide">
+  <div class="wrap">
+    <h2>用不用 WorkBuddy：按任务选「自建 / 购买 / 委托」</h2>
+    <p class="intro">讲者提出「前 5% 程序员、中间 30% 白领」的分层，这个比例没有数据支撑。更实用的问法是按任务判断，同一个人可以在不同任务上分别自建、购买和委托。</p>
+    <div class="flow">
+      <div class="step"><div class="q">这件事每周重复，而且你最懂它的流程？</div><div class="yes">是 → 值得评估自建（脚本、命令行 agent）：比较同一任务的建设、维护与采购总成本后再定，购买仍是可选项</div><div class="no">否 → 看下一问</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">现成产品能覆盖大部分需求，出错代价低？</div><div class="yes">是 → 购买（WorkBuddy 这类），用钱买省心和维护</div><div class="no">否 → 看下一问</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">结果需要专业判断，有人为结果付钱？</div><div class="yes">是 → 委托给懂行的人；这正是 OPC 的生意</div><div class="no">否 → 先手工做三次，再回到第一问</div></div>
+    </div>
+    <div class="callout info">
+      <p><strong>能自建 ≠ 不买。</strong>讲者说会自建的人「没必要用别家的产品」，但自建有维护成本；很多会写代码的人仍会为省心的服务付费。所以「两年后升级或退订」至少还漏了「继续付费」这一种结局。</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="shell">
+  <div class="wrap">
+    <h2>壳与模型：两个常被引用的例子</h2>
+    <p class="intro">保留讲者较合理的担忧：只是把模型包一层界面的薄功能，容易被上游吸收。但两个例子都不能推出「所有应用必死」。</p>
+    <div class="grid">
+      <div class="card tier-col t-warn">
+        <h3>Jasper：受挫，但没有消失 <span class="badge b-info">媒体</span></h3>
+        <ul>
+          <li>2022 年 10 月以 15 亿美元估值融资 1.25 亿美元 <span class="src"><a href="#s11">[S11]</a></span></li>
+          <li>2023 年 7 月裁员，CEO 称要把团队重塑为营销团队的 AI copilot <span class="src"><a href="#s11">[S11]</a></span></li>
+          <li>受挫 ≠ 死亡；它的后续营收只有二手估算，本页不引用</li>
+        </ul>
+      </div>
+      <div class="card tier-col t-ok">
+        <h3>Cursor：不是纯套壳 <span class="badge b-info">官方＋媒体</span></h3>
+        <ul>
+          <li>2025-10-29 随 Cursor 2.0 发布第一个自研编码模型 Composer <span class="src"><a href="#s13">[S13]</a></span></li>
+          <li>2026-06-16 SpaceX 宣布以股票收购，交易价约 600 亿美元 <span class="src"><a href="#s12">[S12]</a></span></li>
+          <li>收购价 ≠ 盈利；两个例子也识别不出成败原因</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warn">
+      <p><strong>压力测试：上游免费提供同功能后，客户为何仍付费？</strong>能答上来的通常是这几类：你掌握客户的私有数据或流程；你对结果负责（返工、合规、交付期）；你在某个行业里有模型拿不到的判断和信任。答不上来，就是讲者担心的「壳」。</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="dilemma">
+  <div class="wrap">
+    <h2>创新者的窘境：讲者的用法与理论原意</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>理论原意 <span class="badge b-info">理论文章／HBR</span></h3>
+        <p>在位企业专注最挑剔、最赚钱的客户，持续改进产品；新进入者先在被忽视的低端或新市场站稳，再向上走。克里斯滕森本人还提醒，「颠覆」这个词常被乱用，并举了 Uber 不算典型颠覆的例子。<span class="src"><a href="#s10">[S10]</a></span></p>
+      </div>
+      <div class="card">
+        <h3>讲者的用法 <span class="badge b-alt">视频</span></h3>
+        <p>大厂资源多、人才多，容易摘到低处的果实，所以永远错过明天。这描述的是「资源让大厂偏爱确定收益」，和理论里「切入路径」不是一回事；腾讯主动入场，也不能据此判定它是持续性创新还是颠覆。</p>
+      </div>
+    </div>
+    <div class="callout info">
+      <p><strong>OPC 机会的更准确表述：</strong>把「大厂做不了」改成「现阶段不经济或不愿做」。例子：客单小、需要行业深知识、需要有人亲自对结果负责的定制交付。创始人亲自交付既是信任来源，也是产能瓶颈；一旦标准化到可以做成功能，大厂就可能进来。</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="value">
+  <div class="wrap">
+    <h2>AI 参与率与工作含金量：该问什么</h2>
+    
+    <div class="formula">撤掉我的判断，客户结果差多少？　<span class="plus">客户愿付价格变多少？</span></div>
+    <p class="note">任务表现、就业变化、商业价值是三件事，下面的研究分别回答其中一件，不能互相替代。</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>能力边界：BCG 顾问 <span class="badge b-ok">论文</span></h3>
+        <p>758 名顾问。边界内任务：完成数 +12.2%、快 25.1%、质量高 40% 以上；边界外任务：正确率低 19 个百分点。<span class="src"><a href="#s14">[S14]</a></span></p>
+        <p class="note">任务：咨询类模拟任务。版本：GPT-4（2023）。限制：边界随模型变化。</p>
+      </div>
+      <div class="card">
+        <h3>队友效应：宝洁 <span class="badge b-ok">论文</span></h3>
+        <p>776 名员工。个人＋AI 的表现接近无 AI 的团队；团队＋AI 更可能做出前 10% 的方案。<span class="src"><a href="#s15">[S15]</a></span></p>
+        <p class="note">任务：真实产品创新提案。限制：单一公司、一天的工作坊。</p>
+      </div>
+      <div class="card">
+        
+        <p>16 名资深开源开发者、246 个真实任务：用 AI 反而慢 19%，事后仍自认快了 20%。<span class="src"><a href="#s16">[S16]</a></span></p>
+        <p class="note">版本：2025 年初工具。限制：METR 自称是一个时点快照。</p>
+      </div>
+      <div class="card">
+        <h3>就业：斯坦福「金丝雀」仪表盘 <span class="badge b-warn">描述性</span></h3>
+        <p>2025-08 首版：高暴露职业中 22–25 岁就业相对下降 13%。2026 年 2 月更新写明早期下降 "likely driven by non-AI factors"；2026 年 8 月更新称差距扩大到 19%。<span class="src"><a href="#s17">[S17]</a></span></p>
+        <p class="note">样本：美国 ADP 薪资数据中的企业，不代表整个劳动力市场。限制：描述性数据，不是因果结论，不能换算成个人替代率。</p>
+      </div>
+      <div class="card">
+        <h3>用法结构：Anthropic 经济指数 <span class="badge b-info">公司研究</span></h3>
+        <p>2025 年 11 月 Claude.ai 对话中，增强型（人机协作）占 52%，自动化（直接交办）占 45%。<span class="src"><a href="#s18">[S18]</a></span></p>
+        <p class="note">限制：单一产品的使用样本，不代表全体劳动者。</p>
+      </div>
+      <div class="card">
+        
+        <p>参与率本身说明不了价值。先判断任务在不在 AI 的能力边界内，再用盲评和客户反应测结果；自我感觉不可靠。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="ask">
+  <div class="wrap">
+    <h2>建议一深化：提问能力，练的是「可被推翻的判断」</h2>
+    <p class="intro">讲者的这个判断值得作为工作假设：你问什么问题，决定 AI 带你往哪走。补两点：一是宏大的问法未必更好；二是这项能力可以部分训练，只是不能指望复制出顶级洞察。</p>
+
+    <h3>一个问题至少写清六件事</h3>
+    <div class="chain">
+      <div class="link"><strong>目标</strong><span>要改变什么结果</span></div>
+      <div class="link"><strong>期限</strong><span>多久内见分晓</span></div>
+      <div class="link"><strong>约束</strong><span>钱、时间、技能、风险底线</span></div>
+      <div class="link"><strong>谁付钱</strong><span>具体的人或组织</span></div>
+      <div class="link"><strong>关键假设</strong><span>哪一条错了全盘皆输</span></div>
+      <div class="link"><strong>改主意的证据</strong><span>看到什么就换方向</span></div>
+    </div>
+    <div class="governance">前三项让 AI 缩小搜索范围；后三项让答案能被现实检验</div>
+
+    <h3 class="sub">同一个关于钱的问题，三种问法</h3>
+    <div class="flow">
+      <div class="step"><div class="q">原问：「我怎么提高自己的收入？」</div><div class="yes">没有期限、约束和对象，更容易得到通用建议，也可能需要补问</div><div class="no">讲者的对照例子之一</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">讲者版：「五年内实现财务自由，我该做什么？」</div><div class="yes">讲者用它说明：问法不同，AI 给的路线完全不同</div><div class="no">本页补充：它改变了目标并加了期限，但仍没说谁付钱、靠什么假设，未必比「增收」更好</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">可验证版：「两周内，五名目标客户中，是否至少两名实际付款购买「减少周报返工」的试用？」</div><div class="yes">有对象、期限、付费动作和通过线</div><div class="no">答案是「是 / 否」，能直接决定下一步</div></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>案例：马斯克的电池问题 <span class="badge b-warn">访谈二手整理</span></h3>
+        <p>2012 年接受 Kevin Rose 访谈时，马斯克说电池包历史价格约 600 美元/千瓦时，而按伦敦金属交易所现货价算，原材料只值约 80 美元/千瓦时。他把「电池太贵」改问成「材料成本和成品价格之间的差距从哪来」。<span class="src"><a href="#s20">[S20]</a></span></p>
+        <p class="note">这是「换问题空间」的例子；它说明方法，不证明讲者说的「一年十万还是十个亿」这种因果。</p>
+      </div>
+      <div class="card">
+        <h3>研究：问题表述比提示词技巧更持久 <span class="badge b-info">评论文章</span></h3>
+        <p>Oguz Acar 在 HBR 撰文认为，随着模型更懂自然语言，「提示词工程」会退潮，更持久的能力是问题表述：诊断问题、拆解问题、换角度重述、设计约束。<span class="src"><a href="#s19">[S19]</a></span></p>
+      </div>
+      <div class="card">
+        <h3>辟谣：「爱因斯坦 55 分钟想问题」 <span class="badge b-warn">归属无可靠证据</span></h3>
+        <p>这句常被用来强调提问的话，引语查证网站没有找到它出自爱因斯坦的实质证据；归到他名下最早见于 1973 年。该网站 2026 年更新补了一条 1945 年小册子的相似说法线索，但那是 Google Books 片段，纸本未核实。引用时别把它当爱因斯坦原话。<span class="src"><a href="#s21">[S21]</a></span></p>
+      </div>
+      <div class="card">
+        <h3>反证「教不了」：创业随机试验 <span class="badge b-ok">论文</span></h3>
+        <p>Camuffo 等人 2024 年汇总 4 项随机对照试验、759 家企业（涵盖早期创业项目及较成熟的小企业）：接受「科学方法」训练的一组更常终止项目；转向更集中于少数次，而不是不转向或反复转向。说明「怎么验证一个问题」可以教。<span class="src"><a href="#s22">[S22]</a></span></p>
+        <p class="note">限制：对象已经有创业想法，不能扩大成「顶级洞察都能复制」。</p>
+      </div>
+    </div>
+
+    <h3 class="sub">每天 20 分钟练习</h3>
+    <div class="flow">
+      <div class="step"><div class="q">1. 独立写下客户问题（5 分钟）</div><div class="yes">先不开 AI，用上面六件事写一段话</div><div class="no">写不出「谁付钱」就说明还没想清楚</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">2. 列三种解释（5 分钟）</div><div class="yes">客户为什么有这个问题，给三个互相竞争的原因</div><div class="no">只有一个解释，最容易自我确认</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">3. 让 AI 反驳（5 分钟）</div><div class="yes">指令：「找出我最可能错的假设，并说明什么证据能推翻它」</div><div class="no">不让 AI 直接给答案</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">4. 定一个最小测试（5 分钟）</div><div class="yes">针对最危险的假设，设计本周能做完的验证</div><div class="no">例如给五个人同一份具体报价，分别记录口头意愿与实际付款</div></div>
+    </div>
+
+    <div class="callout info">
+      <p><strong>让 AI 反驳的指令模板：</strong>「下面是我要解决的客户问题和三种解释。请不要给方案，只做三件事：指出我最可能错的那条假设；说明什么证据能推翻它；给一个一周内能做完、花费最少的验证办法。」</p>
+    </div>
+    <div class="callout">
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="grow">
+  <div class="wrap">
+    <h2>建议二深化：成长环境，要变成一个测量回路</h2>
+    
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>指标</th><th>速度</th><th>说明</th><th>来源</th></tr></thead>
+        <tbody>
+          <tr><td>达到给定基准表现的实际推理成本</td><td>约每季度降 47%，约合每年 13 倍</td><td>Epoch 2026-09 估算</td><td><a href="#s24">[S24]</a></td></tr>
+          <tr><td>达到给定基准表现的模型每 token 价格</td><td>按基准不同，每年降 9 倍到 900 倍</td><td>Epoch 2025-03，区间极宽；与上一行口径不同，不能直接比较</td><td><a href="#s25">[S25]</a></td></tr>
+          <tr><td>AI 以 50% 成功率完成的任务时间跨度（按人类专家完成所需时间计）</td><td>约每 7 个月翻一倍</td><td>METR 2025-03，软件类任务；50% 成功率不等于可靠完成</td><td><a href="#s23">[S23]</a></td></tr>
+          <tr><td>个人学习速度</td><td>没有可比的统一指标</td><td>成本下降、模型能力和个人学习速度不能共用一把倍数尺</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>案例：AI 帮你练，还是替你练 <span class="badge b-ok">论文</span></h3>
+        <p>PNAS 2025 一项高中数学实验：练习时用普通 GPT-4 的学生练习成绩 +48%，用带护栏的「GPT Tutor」+127%；撤掉 AI 后考试，普通版那组比从没用过的学生差 17%，护栏版大体抵消了这种伤害。<span class="src"><a href="#s26">[S26]</a></span></p>
+        <p class="note">护栏包括教师写好的答案和常见错误纠正，不只是一句「只给提示」；数学结果也不能直接外推到创业。</p>
+      </div>
+      <div class="card">
+        <h3>每周固定节奏</h3>
+        <ul>
+          <li>两次：读少量一手材料（论文、官方文档、财报原文），不读转述</li>
+          
+          <li>一次：不用 AI 做一个新任务，测迁移能力（同类型、难度相近，按固定评分表打分）</li>
+          <li>做题顺序：先独立作答 → 再用 AI 提示 → 最后复述并重做</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layers">
+      <div class="layer"><div class="name">有 AI 的交付</div><p>记「质量 / 总耗时」，质量用盲评打分，耗时含复核和返工。</p></div>
+      <div class="layer"><div class="name">无 AI 的迁移</div><p>每周新任务的得分，单独记，不和有 AI 的结果相加。任务要同类型、难度相近，按同一份固定评分表打分。</p></div>
+      <div class="layer out"><div class="name">环境记录</div></div>
+      <div class="layer away"><div class="name">不计入</div><p>读了多少资讯、收藏了多少工具。资讯量不是成长。</p></div>
+    </div>
+
+    <h3 class="sub">一手资讯源：每周两次读这些，而不是读转述</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>看什么</th><th>回答什么问题</th><th>怎么读</th><th>本页用到的</th></tr></thead>
+        <tbody>
+          <tr><td>METR 研究报告</td><td>AI 以一定成功率能完成多长的任务（按人类耗时计）；实际工作中是否真的提速</td><td>先看方法和样本，再看结论</td><td><a href="#s16">[S16]</a><a href="#s23">[S23]</a></td></tr>
+          <tr><td>Epoch AI 数据</td><td>算力、价格、模型能力的长期趋势</td><td>看指标定义，别把不同指标的倍数混用</td><td><a href="#s24">[S24]</a><a href="#s25">[S25]</a></td></tr>
+          <tr><td>Anthropic 经济指数</td><td>人们实际拿 AI 做什么任务、协作还是交办</td><td>注意是单一产品样本</td><td><a href="#s18">[S18]</a></td></tr>
+          <tr><td>斯坦福金丝雀仪表盘</td><td>哪些职业、哪些年龄段就业在变化</td><td>只当描述性信号，不当因果</td><td><a href="#s17">[S17]</a></td></tr>
+          <tr><td>公司财报与官方定价页</td><td>产品规模与价格的官方口径</td><td>看原文措辞，区分「第一」和具体数字</td><td><a href="#s2">[S2]</a><a href="#s6">[S6]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+    <div class="callout warn">
+      <p><strong>调整规则：</strong>无 AI 迁移得分连续两周下降，就改练习方式（比如加大先独立作答的比例）。类型或难度不可比的任务只记作观察，不计入这条两周趋势判断。作品记录脱敏保存即可，不必公开。</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="plan">
+  <div class="wrap">
+    <h2>30 天试验：只跑一个高频、低风险的流程</h2>
+    <p class="intro">把上面两条建议落到一个真实工作流程上（比如周报、报价单、客户回访纪要）。不先造平台。</p>
+    <div class="callout warn">
+      <p><strong>开始前的隔离条件：</strong>只用获得授权或已脱敏的资料；先在测试副本上跑，再碰真实交付；所有交给客户的结果都经人工验收；用于评估的任务不拿来调提示词；同一轮内固定模型、版本和评分标准。</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>阶段</th><th>要做的事</th><th>产出</th></tr></thead>
+        <tbody>
+          <tr><td>第 1–7 天</td><td>访谈 5 名目标客户；手工做一遍，记录人工基线（耗时、返工次数）</td><td>问题陈述（六件事齐全）＋人工基线</td></tr>
+          <tr><td>第 8–14 天</td><td>手工服务＋AI 试交付；用「每天 20 分钟」练习修正问题表述</td><td>可交付的流程草稿</td></tr>
+          <tr><td>第 15–21 天</td><td>把难度相近的新任务随机分成有 AI / 无 AI 两组；请人盲评验收；复核、返工和费用都计入</td><td>对照数据</td></tr>
+          <tr><td>第 22–30 天</td><td>向客户争取付费复用</td><td>付费与复购记录</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+
+    <div class="callout warn">
+      <p><strong>红线（试验全过程随时适用）：</strong>出现重大交付错误或客户数据、隐私越界，发现即停止相关流程，不等到第 30 天。</p>
+    </div>
+    <p class="note">第 30 天按下面顺序做经营判断，命中一条就停止往下看。全程上限 90 天：初始 30 天之后，延长与调整轮合计不超过 60 天；剩余时间不足时，不再延长或启动新一轮，直接暂停。第 0 天先定好「付费观察期」（从交付到能看到付款与复购需要多久，不超过 30 天）。「1 组对照」指一对难度相近的新任务，随机分配一件用 AI、一件不用 AI，都经盲评。</p>
+    <div class="flow">
+      <div class="step"><div class="q">1. 样本不够判断（有效对照少于 6 组，或尚未走完预定的付费观察期）？</div><div class="yes">是 → 延长机会未用且全程剩余时间够：延长一次，最多 30 天，预先定好费用上限，到期后从第 1 条重判；延长机会已用过或全程到期：暂停</div><div class="no">否 → 看第 2 条</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">2. 四条继续条件是否全满足？</div><div class="yes">全满足 → 继续，扩大到更多客户</div><div class="no">否 → 看第 3 条</div></div>
+      <div class="arrow">↓</div>
+      <div class="step"><div class="q">3. 满足其中一部分？</div><div class="yes">是 → 只改一个变量（客户群、交付方式或定价）再跑一轮，每轮不超过 30 天，最多两轮，且只在全程剩余时间够一轮时启动；每轮结束都从第 1 条重新判定（样本门槛＋四条继续条件全部重查），两轮用完或全程到期仍未全满足则暂停</div><div class="no">一条都不满足 → 暂停这个流程，换一个流程</div></div>
+    </div>
+    <div class="card tier-col t-ok">
+      <h3>四条继续条件 <span class="badge b-ok">全满足才继续</span></h3>
+      <ul>
+        <li>盲评质量不降</li>
+        <li>交付与维护工时降 20% 以上（两组同口径）</li>
+        <li>计入交付、维护与获客工时后仍有正收益</li>
+        <li>至少两名客户付费，且一名复购</li>
+      </ul>
+    </div>
+
+    <h3 class="sub">每周记录表（30 天共 4–5 行）</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>周次</th><th>有效对照组数</th><th>验证次数</th><th>因证据改变的决定</th><th>有 AI 组：盲评质量 / 交付与维护工时</th><th>无 AI 对照组：盲评质量 / 交付与维护工时</th><th>收入</th><th>直接费用</th><th>获客工时</th><th>无 AI 迁移得分</th><th>模型与版本</th><th>付费 / 复购</th></tr></thead>
+        <tbody>
+          <tr><td>示例行</td><td>2</td><td>3</td><td>1（换掉一个客户群）</td><td>4.2 分 / 3.5 小时</td><td>4.1 分 / 5 小时</td><td>¥600</td><td>¥80</td><td>2 小时</td><td>3.8 分</td><td>记下当周所用模型</td><td>1 / 0</td></tr>
+          <tr><td>第 1 周</td><td></td><td></td><td></td><td>—</td><td>人工基线</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>第 2 周</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>第 3 周</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>第 4 周</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-hint">表格可左右滑动查看。</p>
+    
+    <p class="note">20%、两名客户这些阈值是试验规则，不是统计定论；样本这么小，结果只用于决定下一步，不用于对外宣称。</p>
+  </div>
+</section>
+
+
+
+
+
+<section class="section sources" id="sources">
+  <div class="wrap">
+    <h2>来源</h2>
+    <p class="note">S1 为用户提供的视频逐字稿，视频发布日期未知。其余外部来源按性质标注；「媒体」表示二手报道，「二手整理」表示第三方转录。</p>
+    <ol>
+      <li id="s1">S1 视频逐字稿（用户提供；讲者自述与观点）</li>
+      <li id="s2">S2 一手公告 · Tencent Announces 2026 First Quarter Results（2026-05-13）<a href="https://www.prnewswire.com/apac/news-releases/tencent-announces-2026-first-quarter-results-302770779.html">prnewswire.com</a></li>
+      <li id="s3">S3 百科 · WorkBuddy 词条（时间线）<a href="https://baike.baidu.com/item/WorkBuddy/67362053">baike.baidu.com</a></li>
+      <li id="s4">S4 媒体 · 降噪NoNoise，发表于澎湃号：WorkBuddy 用户与规模报道（2026-08-20）<a href="https://m.thepaper.cn/newsDetail_forward_33765968">thepaper.cn</a></li>
+      <li id="s5">S5 媒体 · 象先志，发表于钛度号（钛媒体平台）《字节阿里都没防住：腾讯WorkBuddy四个月“偷”下AI办公智能体第一》（2026-07-29）<a href="https://www.tmtpost.com/8083780.html">tmtpost.com</a></li>
+      <li id="s6">S6 官方页面 · WorkBuddy 定价说明 <a href="https://www.workbuddy.cn/docs/workbuddy/Pricing">workbuddy.cn</a></li>
+      <li id="s7">S7 媒体 · 新浪财经 WorkBuddy 个人版升级报道（2026-06-17）<a href="https://finance.sina.com.cn/roll/2026-06-17/doc-inictaet3901134.shtml">finance.sina.com.cn</a></li>
+      <li id="s8">S8 行业调研 · SlashData, Global developer population trends 2025 <a href="https://www.slashdata.co/post/global-developer-population-trends-2025-how-many-developers-are-there">slashdata.co</a></li>
+      <li id="s9">S9 国际组织 · ITU Facts and Figures 2025（2025-11-17）<a href="https://www.itu.int/en/mediacentre/Pages/PR-2025-11-17-Facts-and-Figures.aspx">itu.int</a></li>
+      <li id="s10">S10 理论文章／HBR · Christensen 等, What Is Disruptive Innovation?, HBR 2015-12 <a href="https://hbr.org/2015/12/what-is-disruptive-innovation">hbr.org</a></li>
+      <li id="s11">S11 媒体 · Voicebot, Jasper AI laying off staff（2023-07-17）<a href="https://voicebot.ai/2023/07/17/jasper-ai-laying-off-staff-9-months-after-125m-raise/">voicebot.ai</a></li>
+      <li id="s12">S12 媒体 · CNBC, SpaceX Cursor acquisition（2026-06-16）<a href="https://www.cnbc.com/2026/06/16/spacex-spcx-cursor-acquisition-ipo.html">cnbc.com</a></li>
+      <li id="s13">S13 官方页面 · Cursor, Introducing Cursor 2.0 and Composer（2025-10-29）<a href="https://cursor.com/blog/2-0">cursor.com</a></li>
+      <li id="s14">S14 论文 · Dell'Acqua 等, Navigating the Jagged Technological Frontier, HBS WP 24-013 <a href="https://doi.org/10.2139/ssrn.4573321">doi.org</a></li>
+      <li id="s15">S15 论文 · The Cybernetic Teammate, Organization Science <a href="https://doi.org/10.1287/orsc.2025.20702">doi.org</a></li>
+      <li id="s16">S16 研究报告 · METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity（2025-07-10）<a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">metr.org</a></li>
+      <li id="s17">S17 研究数据 · Stanford Digital Economy Lab, Canaries dashboard <a href="https://digitaleconomy.stanford.edu/project/indicators/canaries-dashboard/">stanford.edu</a></li>
+      <li id="s18">S18 公司研究 · Anthropic Economic Index, January 2026 report <a href="https://www.anthropic.com/research/anthropic-economic-index-january-2026-report">anthropic.com</a></li>
+      <li id="s19">S19 评论文章 · Acar, AI Prompt Engineering Isn't the Future, HBR 2023-06-06 <a href="https://hbr.org/2023/06/ai-prompt-engineering-isnt-the-future">hbr.org</a></li>
+      <li id="s20">S20 二手整理 · Startup Archive, Elon Musk explains first principles thinking（2012 年 Kevin Rose 访谈转录）<a href="https://www.startuparchive.org/p/elon-musk-explains-first-principles-thinking">startuparchive.org</a></li>
+      <li id="s21">S21 引语查证 · Quote Investigator, solve a problem in one hour（2014-05-22）<a href="https://quoteinvestigator.com/2014/05/22/solve/">quoteinvestigator.com</a></li>
+      <li id="s22">S22 论文 · Camuffo 等, A scientific approach to entrepreneurial decision-making, Strategic Management Journal 2024 <a href="https://sms.onlinelibrary.wiley.com/doi/full/10.1002/smj.3580">wiley.com</a></li>
+      <li id="s23">S23 研究报告 · METR, Measuring AI Ability to Complete Long Tasks（2025-03-19）<a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/">metr.org</a></li>
+      <li id="s24">S24 研究报告 · Epoch AI, The plunging price of thought（2026-09-22）<a href="https://epoch.ai/publications/the-plunging-price-of-thought">epoch.ai</a></li>
+      <li id="s25">S25 研究数据 · Epoch AI, LLM inference price trends（2025-03）<a href="https://epoch.ai/data-insights/llm-inference-price-trends">epoch.ai</a></li>
+      <li id="s26">S26 论文 · Bastani 等, Generative AI without guardrails can harm learning, PNAS 2025 <a href="https://www.pnas.org/doi/10.1073/pnas.2422633122">pnas.org</a></li>
+      
+      
+      
+    </ol>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

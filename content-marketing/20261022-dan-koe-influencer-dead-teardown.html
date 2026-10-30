@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dan Koe 网红已死长文：原文拆解与中文视频转述核对</title>
+<style>
+/* 设计 token 体系：所有颜色、字号、间距、圆角、边框、尺寸、时长、百分比、fr 列宽都在 :root 里定义为 CSS 自定义属性，组件规则只引用 var()。运行时例外只有两个：每根条形的行内 --v（数据值），每张图的行内 --bar-max（该图的刻度上限）。断点只有一个 640px，写在文末媒体查询里。页面只有浅色模式。 */
+:root{
+/* ===== 颜色：底色与文字（浅色默认） ===== */
+--c-page:#f4f6f9;--c-surface:#ffffff;--c-surface-2:#eef1f5;--c-line:#dde2e9;--c-line-strong:#c3cad4;--c-text:#0f1720;--c-text-2:#4a5563;--c-text-3:#5d6672;--c-on-strong:#ffffff;--c-link:#1c5cab;--c-focus:#2a78d6;--c-accent:#2a78d6;--c-accent-soft:#e3edfb;--c-none:transparent;--c-shadow:rgba(15,23,32,.06);
+/* ===== 颜色：判定标签与提示框 ===== */
+--tag-own:#e3edfb;--tag-act:#e9edf2;--tag-ext:#e3f3ea;--tag-infer:#eee8f8;--tag-todo:#fbf0dc;--c-tip-bg:#0f1720;--c-tip-fg:#ffffff;
+/* ===== 颜色：图表（分类色两色按固定顺序；灰色是上下文色，不进分类色序列；坐标轴；按钮按下态） ===== */
+--c-dan:#2a78d6;--c-other:#eb6834;--c-gray:#898781;--c-axis:#c3c2b7;--c-pressed:#1c5cab;
+/* ===== 字体与字号 ===== */
+--f-sans:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+--fs-xs:.8125rem;--fs-sm:.875rem;--fs-base:1rem;--fs-md:1.0625rem;--fs-lg:1.1875rem;--fs-xl:1.375rem;--fs-2xl:clamp(1.375rem,1.1rem + 1.2vw,1.875rem);--fs-hero:clamp(1.625rem,1.1rem + 2.6vw,2.625rem);
+/* ===== 字重、行高、字距 ===== */
+--fw-regular:400;--fw-medium:500;--fw-bold:700;--lh-tight:1.3;--lh-snug:1.5;--lh-base:1.75;--ls-wide:.04em;
+/* ===== 间距 ===== */
+--sp-0:0;--sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-7:3rem;
+/* ===== 圆角、边框、阴影 ===== */
+--r-sm:4px;--r-md:8px;--r-lg:12px;--bw-1:1px;--bw-2:2px;--bw-accent:4px;--sh-card:0 1px 2px var(--c-shadow);
+/* ===== 层级与时长（提示框时长是毫秒数，由脚本读取） ===== */
+--z-nav:10;--z-tip:20;--t-fast:150ms;--tip-offset:10;--tip-delay:120;--tip-grace:240;
+/* ===== 尺寸与百分比 ===== */
+--w-full:100%;--pct-bar-room:78%;--w-page:72rem;--w-prose:46rem;--w-label:12rem;--w-tile:13rem;--w-day:5.5rem;--w-tip:18rem;--w-swatch:2rem;--w-chip:12rem;--w-step:7rem;--w-index:15rem;--w-tagcol:5.5rem;--sz-row:2rem;--h-bar:16px;--h-swatch:.875rem;--h-toc:3.5rem;--bar-max:52;--sz-touch:44px;--ul-offset:.2em;
+/* ===== 栅格列宽（fr） ===== */
+--col-1:minmax(0,1fr);--col-2:repeat(2,minmax(0,1fr));--col-3:repeat(3,minmax(0,1fr));--col-tiles:repeat(auto-fit,minmax(var(--w-tile),1fr));--col-index:repeat(auto-fit,minmax(var(--w-index),1fr));--col-ci:var(--w-tagcol) minmax(0,1fr);--span-all:1/-1;--col-bar:var(--w-label) minmax(0,1fr);--col-day:var(--w-day) minmax(0,1fr);--col-head:auto minmax(0,1fr);--col-museum:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);--col-flow:repeat(auto-fill,minmax(var(--w-chip),1fr));--col-ladder:var(--w-step) minmax(0,1fr);
+}
+
+/* ===== 基础 ===== */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{color-scheme:light;-webkit-text-size-adjust:var(--w-full);text-size-adjust:var(--w-full)}
+body{margin:var(--sp-0);background:var(--c-page);color:var(--c-text);font-family:var(--f-sans);font-size:var(--fs-base);line-height:var(--lh-base)}
+a{color:var(--c-link);text-underline-offset:var(--ul-offset);overflow-wrap:anywhere}
+a:hover{color:var(--c-text)}
+:focus-visible{outline:var(--bw-2) solid var(--c-focus);outline-offset:var(--bw-2)}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:var(--sp-0)}
+p{margin:var(--sp-0) var(--sp-0) var(--sp-3)}
+ul,ol{margin:var(--sp-0) var(--sp-0) var(--sp-3);padding-left:var(--sp-5)}
+li{margin-bottom:var(--sp-1)}
+strong{font-weight:var(--fw-bold)}
+.wrap{max-width:var(--w-page);margin:var(--sp-0) auto;padding-inline:var(--sp-5)}
+.prose{max-width:var(--w-prose)}
+.muted{color:var(--c-text-3)}
+.small{font-size:var(--fs-sm)}
+.xs{font-size:var(--fs-xs)}
+.en{overflow-wrap:anywhere}
+
+/* ===== 页首、结论、目录 ===== */
+.hero{background:var(--c-surface);border-bottom:var(--bw-1) solid var(--c-line);padding-block:var(--sp-7) var(--sp-6)}
+.kicker{font-size:var(--fs-sm);color:var(--c-text-2);letter-spacing:var(--ls-wide);margin-bottom:var(--sp-3)}
+.hero h1{font-size:var(--fs-hero);font-weight:var(--fw-bold);margin-bottom:var(--sp-4)}
+.lede{font-size:var(--fs-md);color:var(--c-text-2);max-width:var(--w-prose)}
+.verdict{margin-top:var(--sp-5);background:var(--c-accent-soft);border-left:var(--bw-accent) solid var(--c-accent);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5)}
+.verdict h2{font-size:var(--fs-lg);margin-bottom:var(--sp-3)}
+.verdict ol{margin-bottom:var(--sp-4)}
+.verdict li{margin-bottom:var(--sp-3)}
+.toc{position:sticky;top:var(--sp-0);z-index:var(--z-nav);background:var(--c-surface);border-bottom:var(--bw-1) solid var(--c-line)}
+.toc ul{display:flex;gap:var(--sp-1);list-style:none;margin:var(--sp-0) auto;padding:var(--sp-1) var(--sp-5);max-width:var(--w-page);overflow-x:auto;white-space:nowrap}
+.toc li{margin:var(--sp-0)}
+.toc a{display:flex;align-items:center;min-height:var(--sz-touch);padding:var(--sp-0) var(--sp-3);border-radius:var(--r-sm);color:var(--c-text-2);text-decoration:none;font-size:var(--fs-sm)}
+.toc a:hover{background:var(--c-surface-2);color:var(--c-text)}
+
+/* ===== 小节、卡片、栅格、判定标签 ===== */
+.sec{padding-block:var(--sp-7) var(--sp-2)}
+.sec h2{font-size:var(--fs-2xl);margin-bottom:var(--sp-3)}
+.sec-lead{color:var(--c-text-2);max-width:var(--w-prose);margin-bottom:var(--sp-5)}
+.card{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--sh-card)}
+.card h3{font-size:var(--fs-lg);margin-bottom:var(--sp-3)}
+.card h4{font-size:var(--fs-md);margin-bottom:var(--sp-2)}
+.card dl{margin:var(--sp-0)}
+.card dt{font-size:var(--fs-sm);color:var(--c-text-2);font-weight:var(--fw-bold);margin-top:var(--sp-3)}
+.card dd{margin:var(--sp-1) var(--sp-0) var(--sp-0)}
+.g2{display:grid;grid-template-columns:var(--col-2);gap:var(--sp-4)}
+.g3{display:grid;grid-template-columns:var(--col-3);gap:var(--sp-4)}
+.stack{display:grid;gap:var(--sp-4)}
+.note{margin-top:var(--sp-4);border-left:var(--bw-accent) solid var(--c-line-strong);padding:var(--sp-2) var(--sp-4);color:var(--c-text-2);background:var(--c-surface);border-radius:var(--r-sm)}
+.tag{display:inline-block;font-size:var(--fs-xs);line-height:var(--lh-snug);padding:var(--sp-0) var(--sp-2);border-radius:var(--r-sm);color:var(--c-text);background:var(--tag-act)}
+.tag.own{background:var(--tag-own)}
+.tag.act{background:var(--tag-act)}
+.tag.ext{background:var(--tag-ext)}
+.tag.infer{background:var(--tag-infer)}
+.tag.todo{background:var(--tag-todo)}
+.legend-tags{display:grid;grid-template-columns:var(--col-head);gap:var(--sp-2) var(--sp-3);align-items:baseline;font-size:var(--fs-sm);color:var(--c-text-2)}
+.group-title{font-size:var(--fs-lg);margin:var(--sp-6) var(--sp-0) var(--sp-3)}
+
+/* ===== 图表：条形图、图例、提示框、数据表 ===== */
+.chart-title{font-size:var(--fs-md);font-weight:var(--fw-bold);margin-bottom:var(--sp-1)}
+.chart-cap{font-size:var(--fs-sm);color:var(--c-text-3);margin-bottom:var(--sp-4)}
+[data-tip]{cursor:default}
+#tip{position:fixed;left:var(--sp-0);top:var(--sp-0);z-index:var(--z-tip);max-width:var(--w-tip);background:var(--c-tip-bg);color:var(--c-tip-fg);font-size:var(--fs-sm);line-height:var(--lh-snug);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-md)}
+.hbars{display:grid;gap:var(--sp-2)}
+.hrow{display:grid;grid-template-columns:var(--col-bar);gap:var(--sp-3);align-items:center}
+.hlabel{font-size:var(--fs-sm);color:var(--c-text)}
+.htrack{display:flex;align-items:center;gap:var(--sp-2);min-width:var(--sp-0);border-left:var(--bw-1) solid var(--c-axis)}
+.hbar{flex:none;height:var(--h-bar);width:calc(var(--v) / var(--bar-max) * var(--pct-bar-room));background:var(--c-dan);border-radius:var(--sp-0) var(--r-sm) var(--r-sm) var(--sp-0)}
+.hbar.other{background:var(--c-other)}
+.hbar.gray{background:var(--c-gray)}
+.hval{font-size:var(--fs-sm);color:var(--c-text-2);white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--c-text-2);margin-bottom:var(--sp-3)}
+.legend span{display:inline-flex;align-items:center;gap:var(--sp-2)}
+.legend i{display:inline-block;width:var(--w-swatch);height:var(--h-swatch);border-radius:var(--r-sm)}
+.sw-dan{background:var(--c-dan)}
+.sw-other{background:var(--c-other)}
+.table-scroll{overflow-x:auto}
+details{margin-top:var(--sp-3)}
+details summary{min-height:var(--sz-touch);padding-block:var(--sp-2);color:var(--c-link);cursor:pointer;font-size:var(--fs-sm)}
+.dtable{width:var(--w-full);border-collapse:collapse;font-size:var(--fs-sm);font-variant-numeric:tabular-nums;background:var(--c-surface)}
+.dtable caption{text-align:left;font-size:var(--fs-sm);color:var(--c-text-3);padding-bottom:var(--sp-2)}
+.dtable th,.dtable td{text-align:left;padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw-1) solid var(--c-line);vertical-align:top}
+.dtable thead th{background:var(--c-surface-2);color:var(--c-text-2);font-weight:var(--fw-medium);white-space:nowrap}
+.dtable td.r{text-align:right;white-space:nowrap}
+
+/* ===== 数字卡片与对照表 ===== */
+.tiles{display:grid;grid-template-columns:var(--col-tiles);gap:var(--sp-3)}
+.tiles.t3{grid-template-columns:var(--col-3)}
+.tile{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4)}
+.tile .num{font-size:var(--fs-xl);font-weight:var(--fw-bold);line-height:var(--lh-tight)}
+.tile .lbl{font-size:var(--fs-sm);color:var(--c-text-2);margin-top:var(--sp-1)}
+.stack-table{width:var(--w-full);border-collapse:collapse;background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);font-size:var(--fs-sm);line-height:var(--lh-snug)}
+.stack-table caption{text-align:left;font-size:var(--fs-sm);color:var(--c-text-3);padding-bottom:var(--sp-2)}
+.stack-table th,.stack-table td{text-align:left;vertical-align:top;padding:var(--sp-3);border-bottom:var(--bw-1) solid var(--c-line)}
+.stack-table thead th{background:var(--c-surface-2);color:var(--c-text-2);font-weight:var(--fw-medium)}
+.stack-table tbody th{font-weight:var(--fw-bold)}
+
+/* ===== 核对卡片与筛选按钮 ===== */
+.filters{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.fbtn{min-height:var(--sz-touch);padding:var(--sp-0) var(--sp-3);border:var(--bw-1) solid var(--c-line-strong);border-radius:var(--r-sm);background:var(--c-surface);color:var(--c-text);font:inherit;font-size:var(--fs-sm);cursor:pointer}
+.fbtn:hover{background:var(--c-surface-2)}
+.fbtn[aria-pressed="true"]{background:var(--c-pressed);border-color:var(--c-pressed);color:var(--c-on-strong)}
+.count{font-size:var(--fs-sm);color:var(--c-text-2);margin-bottom:var(--sp-4)}
+.claim-group{margin-bottom:var(--sp-5)}
+.claim-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-2);margin-bottom:var(--sp-2)}
+.loc{font-size:var(--fs-xs);color:var(--c-text-3)}
+.claim dl{display:grid;grid-template-columns:var(--col-2);gap:var(--sp-3) var(--sp-5)}
+.claim .pair dt{margin-top:var(--sp-0)}
+.claim .pair.judge{grid-column:var(--span-all);border-top:var(--bw-1) solid var(--c-line);padding-top:var(--sp-3)}
+.claim .pair.judge dt{color:var(--c-text)}
+.ci{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-0) var(--sp-5) var(--sp-4);margin:var(--sp-0) var(--sp-0) var(--sp-5);box-shadow:var(--sh-card)}
+.ci summary{font-size:var(--fs-base);font-weight:var(--fw-bold);color:var(--c-text)}
+.ci-grid{display:grid;grid-template-columns:var(--col-index);gap:var(--sp-4) var(--sp-5);margin-top:var(--sp-2)}
+.ci-title{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-text-2);margin-bottom:var(--sp-1)}
+.ci-list{list-style:none;padding-left:var(--sp-0);margin:var(--sp-0)}
+.ci-item{margin:var(--sp-0)}
+.ci-item a{display:grid;grid-template-columns:var(--col-ci);gap:var(--sp-2);align-items:center;min-height:var(--sz-row);padding-block:var(--sp-1);font-size:var(--fs-sm);line-height:var(--lh-snug);color:var(--c-text);text-decoration:none;border-radius:var(--r-sm)}
+.ci-item a:hover{background:var(--c-surface-2)}
+.ci-item a:hover span:last-child{text-decoration:underline}
+.ci-item .tag{justify-self:start}
+
+/* ===== 论证链、想法博物馆、证据阶梯 ===== */
+.flow{display:grid;grid-template-columns:var(--col-flow);gap:var(--sp-3);list-style:none;padding-left:var(--sp-0);margin:var(--sp-0) var(--sp-0) var(--sp-5)}
+.chip{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-left:var(--bw-accent) solid var(--c-line-strong);border-radius:var(--r-md);padding:var(--sp-3);margin:var(--sp-0);font-size:var(--fs-sm);line-height:var(--lh-snug)}
+.chip b{display:block;font-size:var(--fs-base);color:var(--c-text);margin-bottom:var(--sp-1)}
+.chip .hd{display:block;color:var(--c-text-3);font-size:var(--fs-xs);margin-bottom:var(--sp-1)}
+.chip.eden{border-left-color:var(--c-accent)}
+.chip .flag{display:inline-block;margin-top:var(--sp-2);font-size:var(--fs-xs);padding:var(--sp-0) var(--sp-2);border-radius:var(--r-sm);background:var(--c-accent-soft);color:var(--c-text)}
+.museum{display:grid;grid-template-columns:var(--col-museum);gap:var(--sp-3);align-items:center}
+.mbox{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3);font-size:var(--fs-sm);line-height:var(--lh-snug)}
+.mbox b{display:block;margin-bottom:var(--sp-1)}
+.mbox.out{background:var(--c-accent-soft);border-color:var(--c-accent)}
+.op{font-size:var(--fs-xl);color:var(--c-text-2);text-align:center}
+.op-v{display:none}
+.ladder{list-style:none;padding-left:var(--sp-0);margin:var(--sp-0);display:grid;gap:var(--sp-2)}
+.ladder li{display:grid;grid-template-columns:var(--col-ladder);gap:var(--sp-3);align-items:baseline;padding:var(--sp-3);border-radius:var(--r-md);background:var(--c-accent-soft);border:var(--bw-1) solid var(--c-accent-soft);margin:var(--sp-0)}
+.ladder li.miss{background:var(--c-surface);border:var(--bw-1) dashed var(--c-line-strong)}
+.ladder span{font-size:var(--fs-sm);color:var(--c-text-2)}
+
+/* ===== 7 天建议、来源、页脚 ===== */
+.days{list-style:none;padding-left:var(--sp-0);margin:var(--sp-0)}
+.days li{display:grid;grid-template-columns:var(--col-day);gap:var(--sp-3);padding-block:var(--sp-3);border-top:var(--bw-1) solid var(--c-line);margin:var(--sp-0)}
+.days li:first-child{border-top:var(--sp-0)}
+.days b{color:var(--c-text)}
+.src li{font-size:var(--fs-sm)}
+footer{margin-top:var(--sp-7);padding-block:var(--sp-5) var(--sp-7);border-top:var(--bw-1) solid var(--c-line);color:var(--c-text-3);font-size:var(--fs-sm)}
+.sec,.verdict,.claim,h3[id]{scroll-margin-top:var(--h-toc)}
+
+/* ===== 动效偏好 ===== */
+@media (prefers-reduced-motion:reduce){:root{--tip-delay:0} *{transition:none !important;scroll-behavior:auto !important}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth} .toc a{transition:background var(--t-fast)}}
+
+/* 断点：唯一断点 640px（媒体查询不能读取 var()，阈值只写在文末一处）。≤640px：两列和三列栅格改为一列；条形图标签移到条形上方；对照表每行改成一张卡片，用 data-label 显示列名；想法博物馆改为上下排列，箭头改为向下；核对卡片的视频说和原文改为上下排列；价格卡改为两列；一览的内边距收窄。 */
+@media (max-width:640px){
+.wrap{padding-inline:var(--sp-4)}
+.toc ul{padding-inline:var(--sp-4)}
+.g2,.g3{grid-template-columns:var(--col-1)}
+.hrow{grid-template-columns:var(--col-1);gap:var(--sp-1)}
+.days li{grid-template-columns:var(--col-1);gap:var(--sp-1)}
+.verdict{padding:var(--sp-4)}
+.card{padding:var(--sp-4)}
+.stack-table,.stack-table tbody,.stack-table tr,.stack-table td,.stack-table tbody th{display:block;width:var(--w-full)}
+.stack-table thead{display:none}
+.stack-table{border:var(--sp-0);background:var(--c-none)}
+.stack-table tr{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);margin-bottom:var(--sp-3)}
+.stack-table td,.stack-table tbody th{border-bottom:var(--sp-0);padding:var(--sp-2) var(--sp-3)}
+.stack-table td::before,.stack-table tbody th::before{content:attr(data-label);display:block;font-size:var(--fs-xs);color:var(--c-text-3);font-weight:var(--fw-medium)}
+.museum{grid-template-columns:var(--col-1)}
+.op-h{display:none}
+.op-v{display:inline}
+.ladder li{grid-template-columns:var(--col-1)}
+.claim dl{grid-template-columns:var(--col-1)}
+.tiles.t3{grid-template-columns:var(--col-2)}
+.ci{padding:var(--sp-0) var(--sp-4) var(--sp-3)}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<p class="kicker">Dan Koe 长文拆解 · 中文视频转述核对</p>
+<h1>Dan Koe 网红已死长文：原文拆解与中文视频转述核对</h1>
+<p class="lede">Dan Koe 于 2026-10-21（北京时间）在 Substack 发表长文 <span class="en" lang="en">The influencer is dead. The Age of Experience is here.</span>（网红已死，经验时代来了）。AI小平的中文视频把它浓缩成三个观点。本页逐句对照原文，核对视频的 28 条说法，并补充播放量、Eden 定价、作者旧文和行业收入调查。</p>
+<div class="verdict" id="verdict">
+<h2>先看结论</h2>
+<ol>
+<li><strong>视频把作者的个人判断写成了正在发生的趋势。</strong>原文写的是 <span class="en" lang="en">I believe social media has the potential to become a decentralized education system. Moreso than it already is.</span>（我相信社交媒体有潜力成为去中心化的教育系统，比现在更进一步）。作者承认现在已经部分如此，但这句的重点是他相信的潜力。视频说成「相反社交媒体正在演变成一个庞大的去中心化教育系统」。28 条说法里有 13 条改动了原文的意思或强度。</li>
+<li><strong>成功案例没有独立证据。</strong>开头的妈妈发售案例没有姓名、时间和金额口径。能用外部数据核对的只有同题视频的播放量，见<a href="#c-f6">99% 选题</a>那条核对。</li>
+<li><strong>内容表现好不等于有人付钱。</strong>原文的 4 周计划到收集邮箱、再用产品提示词做一个更大的版本为止，没有说明怎样确认有人愿意付款。本页另给了一个<a href="#plan">7 天验证方案</a>。</li>
+</ol>
+<p class="small">本页用 5 种判定标签：</p>
+<div class="legend-tags">
+<span class="tag own">原文对得上</span><span>原文明确陈述，可以逐句定位。</span>
+<span class="tag infer">转述有改动</span><span>视频推演或修辞包装，原文没有直接支持。</span>
+<span class="tag act">作者自报</span><span>作者自述，未独立验证，不等于虚假。</span>
+<span class="tag ext">外部可核</span><span>外部资料可核验，有独立来源支持。</span>
+<span class="tag todo">无法核实</span><span>现有证据不足，无法下结论。</span>
+</div>
+</div>
+</div>
+</header>
+
+<nav class="toc" aria-label="页面目录">
+<ul>
+<li><a href="#verdict">结论</a></li>
+<li><a href="#id">原文身份卡</a></li>
+<li><a href="#chain">论证链</a></li>
+<li><a href="#claims">28 条核对</a></li>
+<li><a href="#method">方法</a></li>
+<li><a href="#biz">商业背景</a></li>
+<li><a href="#plan">7 天建议</a></li>
+<li><a href="#gaps">缺口</a></li>
+<li><a href="#src">来源</a></li>
+</ul>
+</nav>
+
+<main class="wrap">
+
+<section class="sec" id="id">
+<h2>原文身份卡</h2>
+<p class="sec-lead">先确认原文是什么、什么时候发表、抓取时有多少互动。</p>
+<div class="stack">
+<div class="g2">
+<div class="card">
+<h3>基本信息</h3>
+<dl>
+<dt>标题</dt><dd><span class="en" lang="en">The influencer is dead. The Age of Experience is here.</span>（网红已死，经验时代来了）</dd>
+<dt>副标题</dt><dd><span class="en" lang="en">Influencers are no longer entertaining. Personal brands are no longer personal.</span>（网红不再有娱乐性，个人品牌不再个人化）</dd>
+<dt>作者</dt><dd>Dan Koe</dd>
+<dt>发表位置</dt><dd>作者在 Substack 上的通讯（letters.thedankoe.com）</dd>
+<dt>发表时间</dt><dd>2026-10-20 16:43 UTC，即北京时间 2026-10-21 00:43</dd>
+<dt>长度</dt><dd>约 2952 个英文词</dd>
+<dt>链接</dt><dd><a href="https://letters.thedankoe.com/p/the-influencer-is-dead-the-age-of">原文链接</a></dd>
+</dl>
+</div>
+<div class="card">
+<h3>抓取时的互动数据</h3>
+<div class="g3">
+<div class="tile"><div class="num">656</div><div class="lbl">赞</div></div>
+<div class="tile"><div class="num">50</div><div class="lbl">评论</div></div>
+<div class="tile"><div class="num">86</div><div class="lbl">转发</div></div>
+</div>
+<p class="small muted">本篇，2026-10-22 18:12 抓取，当时发表约 41.5 小时。</p>
+<div class="g3">
+<div class="tile"><div class="num">1245</div><div class="lbl">赞</div></div>
+<div class="tile"><div class="num">63</div><div class="lbl">评论</div></div>
+<div class="tile"><div class="num">171</div><div class="lbl">转发</div></div>
+</div>
+<p class="small muted">近 11 篇（含本篇）中位数。</p>
+</div>
+</div>
+
+<div class="card">
+<p class="chart-title">近 11 篇长文的赞数（抓取时）</p>
+<p class="chart-cap">2026-10-22 18:12 抓取；蓝色是本篇，灰色是其他 10 篇；日期按 UTC；本篇赞数取归档接口的 655，正文页显示 656，两个接口相差 1，按抓取时的原值记录。</p>
+<div class="hbars" style="--bar-max:3400">
+<div class="hrow" data-tip="2026-10-20 · 本篇 · 655 赞 · 50 评论 · 86 转发 · 抓取时已发表约 41.5 小时"><span class="hlabel">2026-10-20 本篇</span><span class="htrack"><span class="hbar" style="--v:655"></span><span class="hval">655</span></span></div>
+<div class="hrow" data-tip="2026-10-05 · 975 赞 · 32 评论 · 102 转发 · 抓取时已发表约 17 天"><span class="hlabel">2026-10-05</span><span class="htrack"><span class="hbar gray" style="--v:975"></span><span class="hval">975</span></span></div>
+<div class="hrow" data-tip="2026-09-19 · 1,416 赞 · 75 评论 · 224 转发 · 抓取时已发表约 33 天"><span class="hlabel">2026-09-19</span><span class="htrack"><span class="hbar gray" style="--v:1416"></span><span class="hval">1,416</span></span></div>
+<div class="hrow" data-tip="2026-09-12 · 1,648 赞 · 84 评论 · 224 转发 · 抓取时已发表约 40 天"><span class="hlabel">2026-09-12</span><span class="htrack"><span class="hbar gray" style="--v:1648"></span><span class="hval">1,648</span></span></div>
+<div class="hrow" data-tip="2026-09-06 · 687 赞 · 20 评论 · 68 转发 · 抓取时已发表约 46 天"><span class="hlabel">2026-09-06</span><span class="htrack"><span class="hbar gray" style="--v:687"></span><span class="hval">687</span></span></div>
+<div class="hrow" data-tip="2026-08-27 · 1,773 赞 · 82 评论 · 348 转发 · 抓取时已发表约 56 天"><span class="hlabel">2026-08-27</span><span class="htrack"><span class="hbar gray" style="--v:1773"></span><span class="hval">1,773</span></span></div>
+<div class="hrow" data-tip="2026-08-19 · 897 赞 · 51 评论 · 155 转发 · 抓取时已发表约 64 天"><span class="hlabel">2026-08-19</span><span class="htrack"><span class="hbar gray" style="--v:897"></span><span class="hval">897</span></span></div>
+<div class="hrow" data-tip="2026-08-08 · 3,362 赞 · 111 评论 · 544 转发 · 抓取时已发表约 75 天"><span class="hlabel">2026-08-08</span><span class="htrack"><span class="hbar gray" style="--v:3362"></span><span class="hval">3,362</span></span></div>
+<div class="hrow" data-tip="2026-07-25 · 902 赞 · 35 评论 · 123 转发 · 抓取时已发表约 89 天"><span class="hlabel">2026-07-25</span><span class="htrack"><span class="hbar gray" style="--v:902"></span><span class="hval">902</span></span></div>
+<div class="hrow" data-tip="2026-07-15 · 1,245 赞 · 63 评论 · 171 转发 · 抓取时已发表约 99 天"><span class="hlabel">2026-07-15</span><span class="htrack"><span class="hbar gray" style="--v:1245"></span><span class="hval">1,245</span></span></div>
+<div class="hrow" data-tip="2026-07-03 · 1,620 赞 · 110 评论 · 258 转发 · 抓取时已发表约 111 天"><span class="hlabel">2026-07-03</span><span class="htrack"><span class="hbar gray" style="--v:1620"></span><span class="hval">1,620</span></span></div>
+</div>
+<details>
+<summary>看表格：11 篇长文的互动数据</summary>
+<div class="table-scroll">
+<table class="dtable">
+<caption>2026-10-22 18:12 抓取，日期按 UTC</caption>
+<thead><tr><th scope="col">日期</th><th scope="col">标题</th><th scope="col">赞</th><th scope="col">评论</th><th scope="col">转发</th><th scope="col">抓取时已发表</th></tr></thead>
+<tbody>
+<tr><td>2026-10-20</td><td><a href="https://letters.thedankoe.com/p/the-influencer-is-dead-the-age-of"><span class="en" lang="en">The influencer is dead. The Age of Experience is here.</span></a>（本篇）</td><td class="r">655</td><td class="r">50</td><td class="r">86</td><td>约 41.5 小时</td></tr>
+<tr><td>2026-10-05</td><td><a href="https://letters.thedankoe.com/p/full-course-how-to-turn-your-interests"><span class="en" lang="en">Full Course: How To Turn Your Interests Into Profitable a Lifestyle Business</span></a></td><td class="r">975</td><td class="r">32</td><td class="r">102</td><td>约 17 天</td></tr>
+<tr><td>2026-09-19</td><td><a href="https://letters.thedankoe.com/p/how-to-launch-into-a-completely-new-ef8"><span class="en" lang="en">How to launch into a completely new life</span></a></td><td class="r">1,416</td><td class="r">75</td><td class="r">224</td><td>约 33 天</td></tr>
+<tr><td>2026-09-12</td><td><a href="https://letters.thedankoe.com/p/you-need-to-be-delusional-if-you"><span class="en" lang="en">You need to be delusional if you want to succeed</span></a></td><td class="r">1,648</td><td class="r">84</td><td class="r">224</td><td>约 40 天</td></tr>
+<tr><td>2026-09-06</td><td><a href="https://letters.thedankoe.com/p/the-one-human-business-how-to-earn"><span class="en" lang="en">The One-Human Business: How To Earn In The Age of AI</span></a></td><td class="r">687</td><td class="r">20</td><td class="r">68</td><td>约 46 天</td></tr>
+<tr><td>2026-08-27</td><td><a href="https://letters.thedankoe.com/p/we-are-in-the-middle-of-the-digital"><span class="en" lang="en">We are in the middle of the digital renaissance, please take advantage of it</span></a></td><td class="r">1,773</td><td class="r">82</td><td class="r">348</td><td>约 56 天</td></tr>
+<tr><td>2026-08-19</td><td><a href="https://letters.thedankoe.com/p/give-me-20-minutes-and-ill-make-you"><span class="en" lang="en">Give me 20 minutes and i’ll make you impossible to manipulate</span></a></td><td class="r">897</td><td class="r">51</td><td class="r">155</td><td>约 64 天</td></tr>
+<tr><td>2026-08-08</td><td><a href="https://letters.thedankoe.com/p/strategy-vs-tactics-how-to-actually"><span class="en" lang="en">The Art Of Strategic Thinking (How To Become Wildly Successful)</span></a></td><td class="r">3,362</td><td class="r">111</td><td class="r">544</td><td>约 75 天</td></tr>
+<tr><td>2026-07-25</td><td><a href="https://letters.thedankoe.com/p/how-to-remember-everything-you-read"><span class="en" lang="en">How to remember everything you read... don't</span></a></td><td class="r">902</td><td class="r">35</td><td class="r">123</td><td>约 89 天</td></tr>
+<tr><td>2026-07-15</td><td><a href="https://letters.thedankoe.com/p/the-writing-habit-that-saved-my-brain"><span class="en" lang="en">The writing habit that saved my brain (and my future)</span></a></td><td class="r">1,245</td><td class="r">63</td><td class="r">171</td><td>约 99 天</td></tr>
+<tr><td>2026-07-03</td><td><a href="https://letters.thedankoe.com/p/the-most-profitable-skill-of-the"><span class="en" lang="en">The most profitable skill of the 21st century (not AI)</span></a></td><td class="r">1,620</td><td class="r">110</td><td class="r">258</td><td>约 111 天</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+</div>
+<p class="note">本篇抓取时只发表约 41.5 小时，其他 10 篇已发表约 17 到 111 天，所以这张图只说明抓取时的状态，不说明最终影响。</p>
+</div>
+</section>
+
+<section class="sec" id="chain">
+<h2>原文论证链</h2>
+<p class="sec-lead">原文有一段无标题的开头和 10 个小标题，最后一句单独列出，所以下图共 12 块。4 个小节在正文里点名 Eden，30 天计划里的产品提示词也链到 Eden 上的笔记。</p>
+<ol class="flow" aria-label="原文 12 块内容的顺序">
+<li class="chip"><b>开头</b>作者说常看到不懂技术的 40 多岁妈妈靠简单数字产品做到百万美元发售；人们认同处境相近的人；劝读者利用接下来 12 个月。</li>
+<li class="chip"><b>没人想当网红</b><span class="hd en" lang="en">Nobody wants to be an influencer anymore.</span>几年前人人想当 YouTuber；作者认为社交媒体有潜力成为去中心化教育系统，人们更适合向领先一两步的人学习。</li>
+<li class="chip"><b>个人品牌不再个人</b><span class="hd en" lang="en">Personal brands are no longer personal.</span>把创作者分为网红、个人品牌和工匠，区别在于是什么掌控了他们；作者相信未来属于工匠。</li>
+<li class="chip eden"><b>让头脑吸引想法</b><span class="hd en" lang="en">Build a mind that is a magnet for ideas</span>最终的护城河是观点；AI 只能想别人让它想的东西。作者用 Eden 演示，也说 Apple Notes 或 Notion 都可以。<span class="flag">提到 Eden</span></li>
+<li class="chip"><b>建想法博物馆</b><span class="hd en" lang="en">Build an idea museum</span>随手收集想法，分已验证和最喜欢两个看板，从自己的视角把两者合在一起。</li>
+<li class="chip eden"><b>按密度筛选来源</b><span class="hd en" lang="en">Curate ideas based on density</span>老书或少有人知的书、精选博客和账号、少数值得关注的创作者；作者在 Eden 里用列表跟踪他们。<span class="flag">提到 Eden</span></li>
+<li class="chip"><b>人人说同一件事时怎么脱颖而出</b><span class="hd en" lang="en">How to stand out when everyone is saying the same thing</span>人们追随视角而不是信息；以 99% 选题为例说明没人拥有话题。</li>
+<li class="chip eden"><b>研究已经有效的内容</b><span class="hd en" lang="en">Study what’s already working</span>选 3 个不是名人也不是无名者的创作者，拆解最好的帖子；附一段提示词，在 Eden 或接入 Eden 的 Claude 里用。<span class="flag">提到 Eden</span></li>
+
+<li class="chip eden"><b>用 AI 快速给终身作品变现</b><span class="hd en" lang="en">How to monetize your life’s work, surprisingly fast, with AI</span>产品和内容一样，爆款内容就是市场调研；设想 30 天挑战低价付费社群；产品提示词没有贴在正文。<span class="flag">提到 Eden</span></li>
+<li class="chip"><b>30 天开始终身作品</b><span class="hd en" lang="en">How to start your life’s work in the next 30 days</span>4 周计划，之后坚持 12 个月。</li>
+<li class="chip"><b>结尾</b>网红为注意力优化，个人品牌为转化优化，工匠一次一个想法地积累作品，让社交媒体为它付钱。</li>
+</ol>
+
+<h3 class="group-title">三种创作者</h3>
+<table class="stack-table">
+<caption>原文个人品牌不再个人一节的分类</caption>
+<thead><tr><th scope="col">类型</th><th scope="col">动力来源</th><th scope="col">内容目标</th><th scope="col">原文</th><th scope="col">作者态度</th></tr></thead>
+<tbody>
+<tr><th scope="row" data-label="类型">网红</th><td data-label="动力来源">注意力</td><td data-label="内容目标">被消费然后被忘记</td><td data-label="原文"><span class="en" lang="en">To the influencer, social media is their work.</span>（对网红来说，社交媒体就是工作）<span class="en" lang="en">They are incentivized by attention itself, so the content must be optimized to be consumed and forgotten - cheap dopamine.</span>（他们的动力是注意力本身，所以内容要做成看完就忘的廉价多巴胺）</td><td data-label="作者态度">最负面，认为比 AI 更伤思考</td></tr>
+<tr><th scope="row" data-label="类型">个人品牌</th><td data-label="动力来源">变现</td><td data-label="内容目标">信任和转化</td><td data-label="原文"><span class="en" lang="en">To the personal brand, social media exists to monetize.</span>（对个人品牌来说，社交媒体是为了变现）<span class="en" lang="en">Every post is a funnel step toward a course, a template, or a program.</span>（每条帖子都是通向课程、模板或项目的漏斗一步）</td><td data-label="作者态度">比网红好，<span class="en" lang="en">frankly not a net negative on society</span>（坦白说对社会不是净负面）</td></tr>
+<tr><th scope="row" data-label="类型">工匠（<span class="en" lang="en">artisan</span>）</th><td data-label="动力来源">作品</td><td data-label="内容目标">让作品影响读者</td><td data-label="原文"><span class="en" lang="en">The artisan uses social media to subsidize a body of work.</span>（工匠用社交媒体来补贴自己的作品）</td><td data-label="作者态度">作者相信未来属于这一类</td></tr>
+</tbody>
+</table>
+<p class="note">原文的分类标准是 <span class="en" lang="en">The difference between them lies in what owns them.</span>（区别在于是什么掌控了他们）</p>
+
+<h3 class="group-title">想法博物馆</h3>
+<div class="museum" role="group" aria-label="想法博物馆的两个看板如何合成一条帖子">
+<div class="mbox"><b>已验证想法</b><span class="en" lang="en">Validated = posts that have gone viral.</span>（爆过的帖子）</div>
+<div class="op" aria-hidden="true">+</div>
+<div class="mbox"><b>最喜欢的想法</b><span class="en" lang="en">Favorite = ideas you love.</span>（你喜欢的想法）</div>
+<div class="op" aria-hidden="true"><span class="op-h">→</span><span class="op-v">↓</span></div>
+<div class="mbox out"><b>一条好帖子</b><span class="en" lang="en">When you merge the two together, from your own point of view, that’s when you have a great social post.</span>（从自己的视角把两者合在一起）</div>
+</div>
+<p class="note">视频改动了这两个看板的内容，见<a href="#c-c7">两个看板</a>那条核对。</p>
+</section>
+
+<section class="sec" id="claims">
+<h2>视频 28 条说法逐条核对</h2>
+<p class="sec-lead">本页把视频里能对照原文的说法拆成 28 条，分为 4 组：事实与数量；模态变化，指可能性被说成事实，或个人判断被说成定论；概念增译，指加入原文没有的概念或修饰；商业转化，指从内容到付钱的说法。每条给出视频原话、原文和判断。判定标签的含义见页首结论下方。</p>
+
+<div class="card">
+<p class="chart-title">28 条说法的判定分布</p>
+<p class="chart-cap">每根条形是一种判定的条数，合计 28 条。</p>
+<div class="hbars" style="--bar-max:14">
+<div class="hrow" data-tip="转述有改动 · 13 条 · 占 28 条的 46%"><span class="hlabel">转述有改动</span><span class="htrack"><span class="hbar" style="--v:13"></span><span class="hval">13</span></span></div>
+<div class="hrow" data-tip="原文对得上 · 11 条 · 占 28 条的 39%"><span class="hlabel">原文对得上</span><span class="htrack"><span class="hbar" style="--v:11"></span><span class="hval">11</span></span></div>
+<div class="hrow" data-tip="无法核实 · 2 条 · 占 28 条的 7%"><span class="hlabel">无法核实</span><span class="htrack"><span class="hbar" style="--v:2"></span><span class="hval">2</span></span></div>
+<div class="hrow" data-tip="作者自报 · 1 条 · 占 28 条的 4%"><span class="hlabel">作者自报</span><span class="htrack"><span class="hbar" style="--v:1"></span><span class="hval">1</span></span></div>
+<div class="hrow" data-tip="外部可核 · 1 条 · 占 28 条的 4%"><span class="hlabel">外部可核</span><span class="htrack"><span class="hbar" style="--v:1"></span><span class="hval">1</span></span></div>
+</div>
+<details>
+<summary>看表格：判定分布</summary>
+<div class="table-scroll">
+<table class="dtable">
+<caption>28 条说法按判定统计</caption>
+<thead><tr><th scope="col">判定</th><th scope="col">条数</th><th scope="col">含义</th></tr></thead>
+<tbody>
+<tr><td>转述有改动</td><td class="r">13</td><td>视频推演或修辞包装，原文没有直接支持。</td></tr>
+<tr><td>原文对得上</td><td class="r">11</td><td>原文明确陈述，可以逐句定位。</td></tr>
+<tr><td>无法核实</td><td class="r">2</td><td>现有证据不足，无法下结论。</td></tr>
+<tr><td>作者自报</td><td class="r">1</td><td>作者自述，未独立验证，不等于虚假。</td></tr>
+<tr><td>外部可核</td><td class="r">1</td><td>外部资料可核验，有独立来源支持。</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+</div>
+
+<div class="filters" role="group" aria-label="按判定筛选核对卡片">
+<button type="button" class="fbtn" data-f="all" aria-pressed="true">全部 28</button>
+<button type="button" class="fbtn" data-f="infer" aria-pressed="false">转述有改动 13</button>
+<button type="button" class="fbtn" data-f="own" aria-pressed="false">原文对得上 11</button>
+<button type="button" class="fbtn" data-f="todo" aria-pressed="false">无法核实 2</button>
+<button type="button" class="fbtn" data-f="act" aria-pressed="false">作者自报 1</button>
+<button type="button" class="fbtn" data-f="ext" aria-pressed="false">外部可核 1</button>
+</div>
+<p class="count" id="claim-count" aria-live="polite">显示 28 / 28 条</p>
+<details class="ci" open>
+<summary>28 条一览：点标题跳到对应卡片；上面的筛选按钮也会筛选这份一览</summary>
+<div class="ci-grid">
+<div class="ci-col"><p class="ci-title">事实与数量</p>
+<ol class="ci-list">
+<li class="ci-item" data-label="todo"><a href="#c-f1"><span class="tag todo">无法核实</span><span>引发巨大震动</span></a></li>
+<li class="ci-item" data-label="act"><a href="#c-f2"><span class="tag act">作者自报</span><span>几百万粉丝</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-f3"><span class="tag infer">转述有改动</span><span>宝妈案例</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-f4"><span class="tag infer">转述有改动</span><span>候补群发售</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-f5"><span class="tag infer">转述有改动</span><span>30% 和小店</span></a></li>
+<li class="ci-item" data-label="ext"><a href="#c-f6"><span class="tag ext">外部可核</span><span>99% 选题</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-f7"><span class="tag own">原文对得上</span><span>1500 字</span></a></li>
+<li class="ci-item" data-label="todo"><a href="#c-r"><span class="tag todo">无法核实</span><span>三个六资料包</span></a></li>
+</ol></div>
+<div class="ci-col"><p class="ci-title">模态变化</p>
+<ol class="ci-list">
+<li class="ci-item" data-label="infer"><a href="#c-m1"><span class="tag infer">转述有改动</span><span>社交媒体正在变成教育系统</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-m2"><span class="tag infer">转述有改动</span><span>12 个月红利期</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-m3"><span class="tag infer">转述有改动</span><span>信息已经归零</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-m4"><span class="tag own">原文对得上</span><span>向领先两步的人学</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-m5"><span class="tag own">原文对得上</span><span>工匠也需要流量和变现</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-m6"><span class="tag own">原文对得上</span><span>AI 只能想人喂给它的东西</span></a></li>
+</ol></div>
+<div class="ci-col"><p class="ci-title">概念增译</p>
+<ol class="ci-list">
+<li class="ci-item" data-label="own"><a href="#c-c1"><span class="tag own">原文对得上</span><span>三种创作者</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-c2"><span class="tag infer">转述有改动</span><span>数字工匠是终局</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-c3"><span class="tag own">原文对得上</span><span>被什么掌控</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-c4"><span class="tag own">原文对得上</span><span>比 AI 更伤思考</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-c5"><span class="tag infer">转述有改动</span><span>被数据绑架</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-c6"><span class="tag own">原文对得上</span><span>詹姆斯·克利尔</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-c7"><span class="tag infer">转述有改动</span><span>两个看板</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-c8"><span class="tag infer">转述有改动</span><span>降维打击</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-c9"><span class="tag own">原文对得上</span><span>五维视角法</span></a></li>
+</ol></div>
+<div class="ci-col"><p class="ci-title">商业转化</p>
+<ol class="ci-list">
+<li class="ci-item" data-label="infer"><a href="#c-b1"><span class="tag infer">转述有改动</span><span>愿意掏钱学习</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-b2"><span class="tag own">原文对得上</span><span>评论区当市场调研</span></a></li>
+<li class="ci-item" data-label="own"><a href="#c-b3"><span class="tag own">原文对得上</span><span>AI 拆解同行再采访你</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-b4"><span class="tag infer">转述有改动</span><span>一页纸指南就是第一个产品</span></a></li>
+<li class="ci-item" data-label="infer"><a href="#c-b5"><span class="tag infer">转述有改动</span><span>非常详细的 30 天路线</span></a></li>
+</ol></div>
+</div>
+</details>
+
+<section class="claim-group" aria-labelledby="g-fact">
+<h3 class="group-title" id="g-fact">事实与数量（8 条）</h3>
+<div class="stack">
+
+<article class="card claim" data-label="todo" id="c-f1">
+<div class="claim-head"><span class="tag todo">无法核实</span><span class="loc">原文位置：原文没有对应内容</span></div>
+<h4>引发巨大震动</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>作者「发了一篇刷屏的长文」，并说「这篇文章在国外创作者圈子里引发了巨大的震动」。</dd></div>
+<div class="pair"><dt>原文</dt><dd>原文没有谈自己的传播。2026-10-22 18:12 抓取时，本篇有 656 赞、50 条评论、86 次转发。近 11 篇（含本篇）中位数是 1245 赞、63 条评论、171 次转发。本篇赞数是 11 篇中最低的，见<a href="#id">原文身份卡</a>。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>用两天时的互动量对比近期文章，不能直接证明没有引发震动。发布时间、分发量、受众规模和统计时点都可能不同。所以本页判为无法核实：现有数据既不能证实，也不能否定这个说法。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="act" id="c-f2">
+<div class="claim-head"><span class="tag act">作者自报</span><span class="loc">原文位置：开头</span></div>
+<h4>几百万粉丝</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>视频称作者是「全网几百万粉丝的顶流思想家」。</dd></div>
+<div class="pair"><dt>原文</dt><dd>开头写 <span class="en" lang="en">nobody relates to someone with millions of followers (sucks for me)</span>（没人能认同有几百万粉丝的人，这对我不利）。作者在 2025-02-02 的视频里自报 <span class="en" lang="en">close to 4 million followers across all different platforms</span>（各平台合计接近 400 万粉丝）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>视频的数字与作者自报一致，但这是作者自报（2025-02-02），本页没有找到独立数据。「顶流思想家」和「刷屏」是视频的评价。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-f3">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：开头</span></div>
+<h4>宝妈案例</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「在欧美无数40多岁完全不懂技术的普通宝妈仅仅靠一个极其简单的数字产品，比如带大家做30天专注力打卡，就能跑出几百万美金级别的营收」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">There isn’t a day that goes by where I don’t see a non-technical mom in her 40s clear a million-dollar launch with a simple digital product.</span>（没有一天我看不到一位不懂技术的 40 多岁妈妈，靠一个简单的数字产品做到百万美元发售）。原文举的产品是 <span class="en" lang="en">a 30-day challenge</span>（30 天挑战）。作者后文还写 <span class="en" lang="en">I personally don’t relate with the 40 year old moms</span>（我个人和这些 40 岁的妈妈没有共鸣）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>
+<p>视频改了三处：</p>
+<ol>
+<li>「欧美无数」是视频加的。原文说作者每天都能看到这样的妈妈，没有说她们在欧美，也没有给出数量。</li>
+<li>百万美元发售变成了「几百万美金级别的营收」。</li>
+<li>专注力来自原文后面另一段的设想 <span class="en" lang="en">a little focus tracker</span>（一个小的专注追踪工具），不是开头案例的内容。</li>
+</ol>
+<p>原文提供的是作者的概括性观察，不是可独立核验的成功案例。原文没有给出姓名、时间和金额口径（销售额、回款还是利润）。</p>
+<p>作者 2026-03-11 的旧文用自己的算法说明过百万美元年收入的量级：<span class="en" lang="en">you need 720 people to visit that page a day to make 18 sales on a $150 product.</span>（按 2.5% 转化率，每天要有 720 人访问页面，才能卖出 18 件 150 美元的产品）。按这个速度，一年约 18 × 150 × 365 ≈ 98.6 万美元。</p>
+</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-f4">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：开头</span></div>
+<h4>候补群发售</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「只见了个候补群发几条经过验证的干货，产品一上线就被抢空」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">They create a waitlist.</span> <span class="en" lang="en">They post validated content around that topic.</span> <span class="en" lang="en">They launch to the waitlist and their Instagram account.</span> <span class="en" lang="en">And people eat it up.</span>（她们建一个候补名单，围绕主题发经过验证的内容，再向候补名单和 Instagram 账号发售，人们很买账）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>建候补名单、发内容、向名单发售这三步对得上。「只见了个」很可能是建了个的转写错误。视频把人们买账改成了产品一上线就被抢空；原文没有说售罄，也没有给销量。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-f5">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：开头、没人想当网红</span></div>
+<h4>30% 和小店</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「哪怕你只是掌握了一项刚刚学会的小技能，比如你怎么用AI把工作效率提升了30%，或者你怎么把自己的小店盘活」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">a small skill worth learning, or knowledge that could help someone improve their lives - please take advantage of the next 12 months.</span>（一项值得学的小技能，或能帮别人改善生活的知识，请抓住接下来 12 个月）。作者举的领域是 <span class="en" lang="en">content creation, AI, gardening, or any other interest</span>（内容创作、AI、园艺或任何其他兴趣）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>30% 和小店是视频加的例子。「刚刚学会」也是视频加的，原文只说值得学的小技能。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="ext" id="c-f6">
+<div class="claim-head"><span class="tag ext">外部可核</span><span class="loc">原文位置：人人说同一件事时怎么脱颖而出</span></div>
+<h4>99% 选题</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「同一个话题比如如何超越99%的人，Dan Koe拍火了后来张三李四全都拍了一遍照样是百万播放」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">Years later I turned it into a video, and it became my best performer at 1.7 million views. Then Mark Manson made a video with the same title. Then Alex Hormozi made one. Then Tom Bilyeu. Nobody owns a topic.</span>（几年后我把它做成视频，成了我表现最好的一期，170 万次播放。后来 Mark Manson、Alex Hormozi、Tom Bilyeu 都做了同题视频。没人拥有一个话题）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>
+<p>2026-10-22 抓取时，四个视频都在 160 万次播放以上。作者的视频发布于 2022-12-25，有 1,739,365 次播放，和 170 万对得上。发布顺序也和原文一致。</p>
+<p>Manson 的标题是 <span class="en" lang="en">Forget Monk Mode. Here's How to Actually Beat 99% of People</span>，措辞不完全相同。Bilyeu 那期在他自己的频道，标题末尾写着 Alex Hormozi，可能是请 Hormozi 做嘉宾的一期。</p>
+<p>播放量不能证明他们因这一选题获得成功，也不能证明存在直接借鉴关系。</p>
+<p>视频的「没有人能够垄断话题你只能垄断视角」对应原文 <span class="en" lang="en">Nobody owns a topic.</span>（没人拥有一个话题）。播放数据见<a href="#method">方法</a>一节。</p>
+</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-f7">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：让头脑吸引想法</span></div>
+<h4>1500 字</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「当任何人用AI都能在10秒钟之内生成1500字辞藻华丽的文章时」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">Especially when anyone can generate 1500 nice sounding words in 10 seconds with AI.</span>（尤其是任何人都能用 AI 在 10 秒内生成 1500 个好听的英文词）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>英文的词改成了中文的字，不影响论点。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="todo" id="c-r">
+
+<h4>三个六资料包</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>作者附上了「以及他自己正在用的两套神级的AI逆向拆解和视角挖掘的提示词，直接发给AI就能用」，并说「想要这份完整资料的朋友直接在评论区留言三个六」。</dd></div>
+<div class="pair"><dt>原文</dt><dd>正文完整贴出两段提示词（拆解同行策略、找角度）。产品提示词没有贴出：<span class="en" lang="en">It’s a long prompt, so I’m not pasting it here.</span>（提示词很长，所以不贴在这里）。30 天计划在正文里是 4 行，每周一行。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>本页没有拿到视频作者的资料包，所以无法核实资料包的内容。该设计具有典型的转化漏斗结构；是否构成误导，仍需看领取条件、实际交付和后续营销行为。</dd></div>
+</dl>
+</article>
+
+</div>
+</section>
+
+<section class="claim-group" aria-labelledby="g-modal">
+<h3 class="group-title" id="g-modal">模态变化（6 条）</h3>
+<div class="stack">
+
+<article class="card claim" data-label="infer" id="c-m1">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：没人想当网红</span></div>
+<h4>社交媒体正在变成教育系统</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「相反社交媒体正在演变成一个庞大的去中心化教育系统」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">I believe social media has the potential to become a decentralized education system. Moreso than it already is.</span>（我相信社交媒体有潜力成为去中心化的教育系统，比现在更进一步）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文承认现在已经部分如此，但重点是潜力。视频去掉了 <span class="en" lang="en">I believe</span>（我相信）和 <span class="en" lang="en">has the potential</span>（有潜力），加了「庞大的」。原文的潜力判断不等于正在发生的趋势判断。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-m2">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：开头</span></div>
+<h4>12 个月红利期</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「接下来12个月就是你最大的红利期」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">please take advantage of the next 12 months.</span>（请抓住接下来 12 个月）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>「最大的红利期」是视频加的。原文只是劝读者抓紧，没有解释为什么是 12 个月。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-m3">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：让头脑吸引想法、人人说同一件事时怎么脱颖而出</span></div>
+<h4>信息已经归零</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「在AI时代信息已经归零视角才是无价之宝」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">The ultimate moat, or the final competitive edge worth paying for, in my opinion, is an opinion.</span>（在我看来，最终的护城河、最后值得付钱的竞争优势，是一个观点）。另一处写 <span class="en" lang="en">People don’t follow information, they follow perspectives.</span>（人们追随的不是信息，而是视角）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>视频把观点差异化的论点，强化成了信息失去价值的绝对判断。原文强调受众追随观点，不代表信息本身已没有价值。原文有 <span class="en" lang="en">in my opinion</span>（在我看来），视频没有保留。视频另一句「人们追随的从来不是新信息而是老话题下的新视角」与原文基本一致。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-m4">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：开头、没人想当网红</span></div>
+<h4>向领先两步的人学</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>人们要学的是「跟自己穿同一双鞋刚好比自己多走两步路的人」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">They relate to someone who is in their shoes.</span>（人们认同处境和自己相同的人）。后文又说向 <span class="en" lang="en">someone who is 1-2 steps ahead of them</span>（比他们领先一两步的人）学习更好。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>意思对得上。视频还说人们愿意为此付钱，这一点见<a href="#c-b1">愿意掏钱学习</a>那条核对。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-m5">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>工匠也需要流量和变现</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「他们也需要流量和变现」；「当你把重心放回打磨作品本身，流量和金钱只是你把事情做好之后的副产品」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">They need attention, yes, just like anyone does when they need supporters of their work</span>（他们也需要关注，和任何需要作品支持者的人一样）；<span class="en" lang="en">That does not mean that you ignore the need to garner attention and get paid for your work.</span>（这不代表你可以忽视获取关注和为作品收费）；<span class="en" lang="en">when done well, attention and money are the byproduct of doing good work.</span>（做得好的时候，关注和金钱是把事做好的副产品）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>两句都和原文一致。原文第二句带有做得好的时候这个条件，视频没有保留，但意思没有变。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-m6">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：让头脑吸引想法</span></div>
+<h4>AI 只能想人喂给它的东西</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「因为AI没有人生经历它只能思考人类喂给它的东西」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">because it can only think what it’s told to think.</span>（因为它只能想别人让它想的东西）；<span class="en" lang="en">A perspective that only you can see, because the uniqueness of your life experience created it.</span>（只有你能看到的视角，因为它来自你独特的人生经历）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>视频把两句合成一句，是合理的概括。</dd></div>
+</dl>
+</article>
+
+</div>
+</section>
+
+<section class="claim-group" aria-labelledby="g-concept">
+<h3 class="group-title" id="g-concept">概念增译（9 条）</h3>
+<div class="stack">
+
+<article class="card claim" data-label="own" id="c-c1">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>三种创作者</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「他说现在的互联网上只有三种创作者：网红、个人品牌以及数字工匠」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">There are 3 types of creators on social media.</span>（社交媒体上有 3 类创作者）。第三类原文叫 <span class="en" lang="en">artisans</span>（工匠）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>分类对得上。「只有」是视频加的。原文说的是社交媒体，视频改成了互联网。数字这个修饰见<a href="#c-c2">数字工匠是终局</a>那条核对。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-c2">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：个人品牌不再个人、结尾</span></div>
+<h4>数字工匠是终局</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「而第三种也是Dan Koe认为未来的终局叫做数字工匠」；「文章的最后Dan Koe留下了一句特别有力的话在这个我们正在步入的第二次文艺复兴里未来属于数字工匠」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">In this second renaissance we’re entering, I believe the future belongs to the artisan, because it already did.</span>（在我们正在进入的第二次文艺复兴里，我相信未来属于工匠，因为过去就是如此）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>
+<p>视频改了三处：</p>
+<ol>
+<li>「数字」是解释性增译，原文没有限定媒介。「终局」也是视频加的。</li>
+<li>视频去掉了 <span class="en" lang="en">I believe</span>（我相信）和 <span class="en" lang="en">because it already did</span>（因为过去就是如此）。</li>
+<li>这句在个人品牌不再个人一节，不在文章最后。</li>
+</ol>
+
+</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-c3">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>被什么掌控</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「区分这三种人的标准不是粉丝量而是他们到底沦为了谁的努力」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">The difference between them lies in what owns them.</span>（区别在于是什么掌控了他们）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>意思对得上。「努力」很可能是奴隶的转写错误。「不是粉丝量」是视频加的对比。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-c4">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>比 AI 更伤思考</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「他说这种垃圾内容对人类思考能力的摧毁比AI严重得多，因为你跟AI聊十分钟好歹还有条逻辑线还能学到点新东西」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">This is highly entropic and ruins people’s ability to think far more than AI does.</span>（这种内容高度无序，比 AI 更严重地破坏人的思考能力）；<span class="en" lang="en">At least a conversation with AI has a throughline and potentially teaches you something useful or new.</span>（至少和 AI 的对话有一条主线，还可能教你一些有用或新的东西）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>意思对得上。「十分钟」是视频加的。原文写 <span class="en" lang="en">potentially</span>（可能），视频去掉了这层限定。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-c5">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>被数据绑架</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>个人品牌「这比博眼球的网红好得多」，「但久而久之人很容易被数据绑架」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">They started for the love of the game... then realized they had to survive.</span>（他们起初出于热爱，后来发现要先活下去）。同一节后面写 <span class="en" lang="en">but got distracted with short-term incentives.</span>（网红和个人品牌都被短期激励分了心）。对个人品牌的内容，原文的评价是 <span class="en" lang="en">which is better than the influencer, and frankly not a net negative on society</span>（比网红好，坦白说对社会不是净负面）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文没有提数据，被数据绑架是视频的引申。原文说比网红好，视频说成「好得多」，加强了程度。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-c6">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：个人品牌不再个人</span></div>
+<h4>詹姆斯·克利尔</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「就像掌控习惯的作者詹姆斯克利尔或者那些跨越周期的思想者」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">Think about James Clear, Jordan Peterson, or other public intellectuals.</span>（想想 James Clear、Jordan Peterson 或其他公共知识分子）；<span class="en" lang="en">or a body of work that outlives the algorithm</span>（或比算法更长久的作品）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>对得上。视频省略了 Jordan Peterson。跨越周期的思想者是对公共知识分子和比算法更长久的作品的意译。视频的「一种能住进读者脑子里改变他人行为的理念」也对应原文 <span class="en" lang="en">ideas that live on in the readers head and influence their behavior for the positive</span>（留在读者脑中、正面影响其行为的想法）。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-c7">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：建想法博物馆、按密度筛选来源</span></div>
+<h4>两个看板</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「在笔记软件里建两个看板，一个存已经被市场验证过的爆款选题结构，另一个存你在老书深度博客里读到的高密度思想」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">Validated = posts that have gone viral. Favorite = ideas you love.</span>（已验证是爆过的帖子，最喜欢是你喜欢的想法）。下一节写 <span class="en" lang="en">The most idea-dense sources are old or little-known books, curated blogs and accounts that pick the best ideas for you</span>（想法密度最高的来源是老书或少有人知的书、精选博客和替你挑选好想法的账号）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>视频把下一节的来源并进了第二个看板。原文的第二个看板放的是你喜欢的想法，不限来源。「选题结构」是视频加的，原文存的是爆过的帖子本身。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-c8">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：建想法博物馆</span></div>
+<h4>降维打击</h4>
+<dl>
+<div class="pair"><dt>视频说</dt></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">When you merge the two together, from your own point of view, that’s when you have a great social post.</span>（从自己的视角把两者合在一起，就得到一条好帖子）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文说的是一条好帖子，视频升级成了「降维打击」。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-c9">
+
+<h4>五维视角法</h4>
+<dl>
+<div class="pair"><dt>视频说</dt></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">I do this by writing 5 angles on the same idea:</span>（我对同一个想法写 5 个角度）；<span class="en" lang="en">constraints don’t make you creative, they make you decisive, because the blank page is a decision problem disguised as an inspiration problem.</span>（限制不会让你更有创造力，只会让你更果断，因为白纸是伪装成灵感问题的决策问题）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>意思对得上。五维视角法是视频起的名字。视频只演示了反驳常见观点这一个角度。5 个角度见<a href="#method">方法</a>一节。</dd></div>
+</dl>
+</article>
+
+</div>
+</section>
+
+<section class="claim-group" aria-labelledby="g-biz">
+<h3 class="group-title" id="g-biz">商业转化（5 条）</h3>
+<div class="stack">
+
+<article class="card claim" data-label="infer" id="c-b1">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：没人想当网红</span></div>
+<h4>愿意掏钱学习</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「人们现在真正愿意掏钱学习的是那个跟自己穿同一双鞋刚好比自己多走两步路的人」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">They are much better off learning content creation, AI, gardening, or any other interest from someone who is 1-2 steps ahead of them.</span>（她们向领先一两步的人学习内容创作、AI、园艺或其他兴趣，效果会好得多）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文说的是向谁学更合适，没有说人们愿意为此付钱。「愿意掏钱」是视频加的。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-b2">
+<div class="claim-head"><span class="tag own">原文对得上</span><span class="loc">原文位置：用 AI 快速给终身作品变现、30 天开始终身作品</span></div>
+<h4>评论区当市场调研</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>「第三把AI当成思想审讯官，把评论区当成市场调研」。</dd></div>
+<div class="pair"><dt>原文</dt><dd><span class="en" lang="en">when you research content and see what’s going viral, that is the best market research you could ever do.</span>（研究内容、看什么在爆，就是你能做的最好的市场调研）。第 3 周的计划是 <span class="en" lang="en">keep posting and pay attention to which posts get the most replies and questions.</span>（继续发帖，留意哪些帖子回复和提问最多）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文两处合起来支持这句话。视频把两处合成一句，意思没有改变。同时要注意：回复和提问只说明有人关注，不能证明有人愿意付款，见<a href="#ladder">证据阶梯</a>。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="own" id="c-b3">
+
+<h4>AI 拆解同行再采访你</h4>
+<dl>
+<div class="pair"><dt>视频说</dt></div>
+<div class="pair"><dt>原文</dt><dd>提示词写 <span class="en" lang="en">Research mid-sized creators who are doing well in those topics, then reverse engineer their strategy from their best posts.</span>（研究在这些话题上做得好的中等规模创作者，从他们最好的帖子倒推策略）和 <span class="en" lang="en">Then, interview me for my own perspective and beliefs so we can start to formulate my own strategy.</span>（然后采访我，了解我的视角和信念，开始形成我自己的策略）。找角度的提示词写 <span class="en" lang="en">Don’t write the posts.</span>（不要写帖子）</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>意思对得上。原文给了两种做法：手动把创作者主页链接存进笔记，或在 Eden、接入 Eden 的 Claude 里用提示词。视频说「直接发给AI就能用」，没有提到这一点。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-b4">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：用 AI 快速给终身作品变现、30 天开始终身作品</span></div>
+<h4>一页纸指南就是第一个产品</h4>
+<dl>
+<div class="pair"><dt>视频说</dt></div>
+<div class="pair"><dt>原文</dt><dd>第 4 周的计划是 <span class="en" lang="en">pick one question, make a one-page guide that answers it, and put it out as a free guide to collect emails</span>（选一个问题，写一页指南回答它，作为免费指南发布来收集邮箱），然后再用产品提示词做一个更大的版本。30 天社群出现在另一段设想里：<span class="en" lang="en">a low-ticket paid community</span>（低价付费社群），作者写 <span class="en" lang="en">I already know that would do incredibly well</span>（我已经知道它会做得非常好）。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>原文的顺序是先发布免费的一页纸指南来收集邮箱，再做更大的版本。视频省略了这两个环节。免费指南有人领取，不能证明有人愿意付款。作者对 30 天社群的预测没有给出数据。</dd></div>
+</dl>
+</article>
+
+<article class="card claim" data-label="infer" id="c-b5">
+<div class="claim-head"><span class="tag infer">转述有改动</span><span class="loc">原文位置：让头脑吸引想法、30 天开始终身作品</span></div>
+<h4>非常详细的 30 天路线</h4>
+<dl>
+<div class="pair"><dt>视频说</dt><dd>原文「还附上了一份非常详细的30天创作者启动路线」。</dd></div>
+<div class="pair"><dt>原文</dt><dd>正文的计划是 4 行，每周一行。作者还写 <span class="en" lang="en">but you could do it all in a day.</span>（但你也可以一天做完）。正文另一处说 Eden 试用附带 <span class="en" lang="en">a 30 day creator sprint course</span>（30 天创作者冲刺课程）。Sprint 页把这门课标为 <span class="en" lang="en">a $199 course</span>（一门 199 美元的课程），随每月 5 美元的试用附带。</dd></div>
+<div class="pair judge"><dt>判断</dt><dd>「非常详细」是视频的评价，正文的计划很短。名称相近的 30 天冲刺课程是 Eden 试用附带的课程，本页没有看到课程内容。</dd></div>
+</dl>
+</article>
+
+</div>
+</section>
+</section>
+
+<section class="sec" id="method">
+<h2>方法：原文怎么做，证据到哪一步</h2>
+<p class="sec-lead">这一节核对 99% 选题的播放数据，列出 5 个角度和 3 段提示词，再用证据阶梯检查方法停在哪一步。</p>
+<div class="stack">
+
+<div class="card">
+<p class="chart-title">如何超越 99% 的人：4 个同题视频的播放量</p>
+<p class="chart-cap">2026-10-22 抓取；从上到下按发布日期排列；单位是万次播放。</p>
+<div class="legend"><span><i class="sw-dan" aria-hidden="true"></i>Dan Koe</span><span><i class="sw-other" aria-hidden="true"></i>其他创作者</span></div>
+<div class="hbars" style="--bar-max:500">
+<div class="hrow" data-tip="Dan Koe · 2022-12-25 发布 · 1,739,365 次播放 · 2026-10-22 抓取"><span class="hlabel">Dan Koe</span><span class="htrack"><span class="hbar" style="--v:173.9"></span><span class="hval">173.9 万</span></span></div>
+<div class="hrow" data-tip="Mark Manson · 2023-03-19 发布 · 4,930,478 次播放 · 2026-10-22 抓取"><span class="hlabel">Mark Manson</span><span class="htrack"><span class="hbar other" style="--v:493.0"></span><span class="hval">493.0 万</span></span></div>
+<div class="hrow" data-tip="Alex Hormozi · 2023-07-05 发布 · 1,818,431 次播放 · 2026-10-22 抓取"><span class="hlabel">Alex Hormozi</span><span class="htrack"><span class="hbar other" style="--v:181.8"></span><span class="hval">181.8 万</span></span></div>
+<div class="hrow" data-tip="Tom Bilyeu 频道 · 2023-09-05 发布 · 1,616,209 次播放 · 2026-10-22 抓取"><span class="hlabel">Tom Bilyeu 频道</span><span class="htrack"><span class="hbar other" style="--v:161.6"></span><span class="hval">161.6 万</span></span></div>
+</div>
+<details>
+<summary>看表格：4 个同题视频</summary>
+<div class="table-scroll">
+<table class="dtable">
+<caption>作者的视频 2026-10-22 18:24 抓取，其他 3 个 19:35 抓取</caption>
+<thead><tr><th scope="col">创作者（频道）</th><th scope="col">标题</th><th scope="col">发布日期</th><th scope="col">播放量</th></tr></thead>
+<tbody>
+<tr><td>Dan Koe</td><td><a href="https://www.youtube.com/watch?v=d5RKW3WSEb0"><span class="en" lang="en">How To Get Ahead Of 99% Of People (In 6-12 Months)</span></a></td><td>2022-12-25</td><td class="r">1,739,365</td></tr>
+<tr><td>Mark Manson</td><td><a href="https://www.youtube.com/watch?v=_ZJpU43NA0c"><span class="en" lang="en">Forget Monk Mode. Here's How to Actually Beat 99% of People</span></a></td><td>2023-03-19</td><td class="r">4,930,478</td></tr>
+<tr><td>Alex Hormozi</td><td><a href="https://www.youtube.com/watch?v=Nh8Oc7ERdIU"><span class="en" lang="en">How to Get Ahead of 99% of People</span></a></td><td>2023-07-05</td><td class="r">1,818,431</td></tr>
+<tr><td>Tom Bilyeu</td><td><a href="https://www.youtube.com/watch?v=Tigt75AcLLA"><span class="en" lang="en">It's Actually Pretty Easy to Get Ahead of 99% of People</span></a>（标题末尾还有 Alex Hormozi）</td><td>2023-09-05</td><td class="r">1,616,209</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>看表格：作者自己的 7 个同类标题视频</summary>
+<div class="table-scroll">
+<table class="dtable">
+<caption>作者自己也多次复用这个选题；2026-10-22 18:24 抓取，按播放量从高到低</caption>
+<thead><tr><th scope="col">发布日期</th><th scope="col">标题</th><th scope="col">播放量</th></tr></thead>
+<tbody>
+<tr><td>2022-12-25</td><td><a href="https://www.youtube.com/watch?v=d5RKW3WSEb0"><span class="en" lang="en">How To Get Ahead Of 99% Of People (In 6-12 Months)</span></a></td><td class="r">1,739,365</td></tr>
+<tr><td>2024-03-21</td><td><a href="https://www.youtube.com/watch?v=jCIoQF6PjzM"><span class="en" lang="en">Get Ahead Of 99% Of People With Deep Work &amp; Monk Mode</span></a></td><td class="r">1,232,227</td></tr>
+<tr><td>2024-11-03</td><td><a href="https://www.youtube.com/watch?v=j1Xu3qLI3r0"><span class="en" lang="en">How To Become More Intelligent Than 99% Of People</span></a></td><td class="r">695,413</td></tr>
+<tr><td>2022-12-18</td><td><a href="https://www.youtube.com/watch?v=M5IMu7c5f_E"><span class="en" lang="en">The One Person Business Roadmap (99% Make This Mistake)</span></a></td><td class="r">321,532</td></tr>
+<tr><td>2025-11-27</td><td><a href="https://www.youtube.com/watch?v=xgpLjLHB5sA"><span class="en" lang="en">How To Use AI Better Than 99% Of People (This Changed My Life)</span></a></td><td class="r">304,554</td></tr>
+<tr><td>2025-06-08</td><td><a href="https://www.youtube.com/watch?v=HA6XxtGNOm0"><span class="en" lang="en">How To Build A Better Personal Brand Than 99% Of People</span></a></td><td class="r">276,855</td></tr>
+<tr><td>2025-02-02</td><td><a href="https://www.youtube.com/watch?v=REwaFvbelEk"><span class="en" lang="en">Don’t Quit - How To Get Ahead Of 99% Of Personal Brands</span></a></td><td class="r">123,157</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+</div>
+<p class="note">要区分视频发布日期、播放量的采集日期和作者原文的表述。原文写 1.7 million，本页采集到 1,739,365。作者在 2025-02-02 的视频里自报 <span class="en" lang="en">my top YouTube video now with over 1.6 million views</span>（我播放最多的 YouTube 视频现在超过 160 万次）。本页没有核对他频道的全部视频。</p>
+
+<div class="g2">
+<div class="card">
+<h3>找角度：同一个想法写 5 个角度</h3>
+<ul>
+<li><span class="en" lang="en">How would [a thinker I love] say this?</span>（我喜欢的某位思想者会怎么说）</li>
+<li><span class="en" lang="en">How would I say this to my past self?</span>（我会怎样对过去的自己说）</li>
+<li><span class="en" lang="en">How can I redefine the idea?</span>（我能怎样重新定义这个想法）</li>
+<li><span class="en" lang="en">What is the common perspective, and what do I disagree with?</span>（常见观点是什么，我不同意哪一点）</li>
+<li><span class="en" lang="en">Why does this matter to the everyday person?</span>（这对普通人为什么重要）</li>
+</ul>
+<p class="small muted">视频演示的反驳常见观点，对应第 4 个角度。</p>
+</div>
+<div class="card">
+<h3>挑选研究对象</h3>
+<p><span class="en" lang="en">Pick 3 creators who aren’t celebrities, but aren’t nobodies.</span>（选 3 个不是名人、也不是无名者的创作者）</p>
+<p>手动做法：<span class="en" lang="en">Save a URL to their profile in your notes app.</span>（把他们主页的链接存进笔记应用）</p>
+<p>工具做法：<span class="en" lang="en">Or paste a prompt like this in Eden or Claude connected to Eden</span>（或者把这样的提示词贴进 Eden，或接入 Eden 的 Claude）</p>
+</div>
+</div>
+
+<table class="stack-table">
+<caption>原文涉及的 3 段提示词</caption>
+<thead><tr><th scope="col">提示词</th><th scope="col">原文是否贴出</th><th scope="col">要点</th><th scope="col">使用场景</th></tr></thead>
+<tbody>
+<tr><th scope="row" data-label="提示词">拆解同行</th><td data-label="原文是否贴出">贴出</td><td data-label="要点">先研究中等规模创作者的最好帖子，倒推策略；再采访作者本人，形成自己的策略。</td><td data-label="使用场景">原文说在 Eden 或接入 Eden 的 Claude 里用；也可以手动保存创作者主页。</td></tr>
+<tr><th scope="row" data-label="提示词">找角度</th><td data-label="原文是否贴出">贴出</td><td data-label="要点"><span class="en" lang="en">Help me find new angles on a common idea.</span>（帮我给一个常见想法找新角度）。提示词要 <span class="en" lang="en">Give me 7 angles</span>（给我 7 个角度），正文方法是 5 个。结尾要求不要写帖子。</td><td data-label="使用场景">原文没有指定工具。</td></tr>
+<tr><th scope="row" data-label="提示词">产品</th><td data-label="原文是否贴出">没有贴出，链接到 Eden 上的笔记</td><td data-label="要点">笔记标题 <span class="en" lang="en">Prompt: Validated Product Finder</span>（已验证产品发现器）。本页抓取时只能看到 <span class="en" lang="en">Phase 1. Get to know me</span>（第一阶段：了解我）。</td><td data-label="使用场景"><span class="en" lang="en">connect Eden to your AI tool of choice, like Claude via the MCP</span>（通过 MCP 把 Eden 接到你选的 AI 工具，例如 Claude）</td></tr>
+</tbody>
+</table>
+
+<div class="card">
+<h3 id="ladder">证据阶梯：从关注到付款</h3>
+<p>帖子爆了不代表读者愿意付费；愿意领取免费指南也不代表愿意购买社群；购买者多也不代表扣除获客、交付和工具成本后有利润。</p>
+<p class="small muted">下面按顺序列出 6 级证据。浅蓝底表示原文有对应步骤，虚线框表示原文缺这一级。</p>
+<ol class="ladder">
+<li><b>浏览</b><span>原文建议研究表现超过平时的帖子；Eden 功能页称，帖子按各创作者自己的基线排序。</span></li>
+<li><b>有效互动</b><span>原文有：第 3 周看哪些帖子回复和提问最多。</span></li>
+<li><b>邮箱订阅</b><span>原文有：第 4 周用免费的一页纸指南收集邮箱。</span></li>
+<li class="miss"><b>付费意向</b><span>原文缺：没有说明怎样确认有人愿意付钱。</span></li>
+<li class="miss"><b>实际付款</b><span>原文缺：方法部分没有给出付款记录或转化数据。</span></li>
+<li class="miss"><b>交付后留存</b><span>原文缺：没有提到交付后的使用、续费或复购。</span></li>
+</ol>
+</div>
+
+</div>
+</section>
+
+<section class="sec" id="biz">
+<h2>商业背景：Eden、旧文和行业收入</h2>
+<p class="sec-lead">Eden 是作者自己的产品。2025-11-24 作者宣布 Kortex 转为 Eden。本文有 4 个小节点名 Eden。作者同时写道 <span class="en" lang="en">so that’s what I’ll show you, but Apple Notes or Notion work just fine. The habit matters more than the app.</span>（所以我用它演示，但 Apple Notes 或 Notion 也完全可以；习惯比应用更重要）</p>
+<div class="stack">
+
+<h3 class="group-title">Eden 的价格（2026-10-22 18:26 抓取）</h3>
+<div class="tiles t3">
+<div class="tile"><div class="num">$5/月</div><div class="lbl">新用户试用，含 30 天创作者冲刺课程（Sprint 页标价 $199）</div></div>
+<div class="tile"><div class="num">$299/年</div><div class="lbl">Starter，折合每月 $25</div></div>
+<div class="tile"><div class="num">$790/年</div><div class="lbl">Pro，折合每月 $66，年付含 Creator Bootcamp</div></div>
+<div class="tile"><div class="num">$1,999/年</div><div class="lbl">Max，折合每月 $167，年付含 Creator Bootcamp，店铺抽成 2%</div></div>
+<div class="tile"><div class="num">5%</div></div>
+<div class="tile"><div class="num">10%</div><div class="lbl">Eden Marketplace 销售抽成，任何档位都一样</div></div>
+</div>
+<p class="small muted">另有 $0 的免费档和每月 $9 起的个人档。</p>
+
+<div class="g3">
+<div class="card">
+<h3>可复现性</h3>
+<p>原文的手动做法是 <span class="en" lang="en">Save a URL to their profile in your notes app.</span>（把创作者主页链接存进笔记应用）</p>
+<p>按本页证据推演：没有 Eden 时，要自己翻帖子找表现明显超过平时的帖子，费时但可以做。产品提示词放在 Eden 笔记里，本页抓取时只能看到第一阶段。</p>
+</div>
+<div class="card">
+<h3>测量效度</h3>
+<p>Eden 功能页写 <span class="en" lang="en">Ranked against each creator's own baseline. Not the biggest accounts, the biggest breakouts.</span>（按每个创作者自己的基线排序，看的不是最大的账号，而是最大的突破）</p>
+<p>产品提示词写 <span class="en" lang="en">If a post on a topic is beating its creator's normal numbers, people want that thing.</span>（如果某个话题的帖子超过创作者平时的数据，说明人们想要它）</p>
+<p>这里的已验证指互动高于基线，不是有人付款。</p>
+</div>
+<div class="card">
+<h3>商业利益</h3>
+<p>作者是 Eden 的创始人。本文 4 个小节点名 Eden，30 天冲刺课程随试用提供。</p>
+<p>工具能够读取、整理和生成内容，不等于它能独立验证市场愿意付费。</p>
+</div>
+</div>
+
+<table class="stack-table">
+<caption>Sprint 页的 5 条用户证言（2026-10-22 18:26 抓取）</caption>
+<thead><tr><th scope="col">来源</th><th scope="col">原话</th><th scope="col">指标类型</th></tr></thead>
+<tbody>
+<tr><th scope="row" data-label="来源">一位用户</th><td data-label="原话"><span class="en" lang="en">I went from around 8k–20k impressions per thread to ones capable of landing somewhere between 100k and 600k</span>（每串推文的曝光量从约 8k–20k 提高到 10 万到 60 万之间）</td><td data-label="指标类型">每串推文曝光量</td></tr>
+<tr><th scope="row" data-label="来源">一位用户</th><td data-label="原话"><span class="en" lang="en">My newsletter went from 2,600 readers to 8,700 in just 8 weeks.</span>（通讯读者 8 周内从 2,600 增加到 8,700）</td><td data-label="指标类型">通讯订阅数</td></tr>
+<tr><th scope="row" data-label="来源">一位用户</th><td data-label="原话"><span class="en" lang="en">I reached 2.5 Million in 30 days and gained 700 new followers during the bootcamp</span>（30 天达到 250 万，原话没写单位；训练营期间新增 700 名粉丝）</td><td data-label="指标类型">未注明单位的数量和新增粉丝</td></tr>
+<tr><th scope="row" data-label="来源">一位用户</th><td data-label="原话"><span class="en" lang="en">I've built an audience of over 189,000+ across platforms</span>（各平台受众超过 18.9 万）</td><td data-label="指标类型">全平台受众</td></tr>
+<tr><th scope="row" data-label="来源">一位用户</th><td data-label="原话"><span class="en" lang="en">I was able to hit 180 followers with 62k impressions on Twitter/X after starting from 0 only five weeks ago.</span>（五周前从 0 开始，在 Twitter/X 达到 180 名粉丝和 6.2 万曝光）</td><td data-label="指标类型">粉丝和曝光量</td></tr>
+</tbody>
+</table>
+<p class="note">5 条都只报增长，没有一条报收入。开头案例说的是发售收入。这是两种不同指标的比较：粉丝增长与收入规模不可直接比较。正文也写道 <span class="en" lang="en">Those who have used it so far have mentioned how they finally have clarity on what to post about.</span>（用过的人说终于清楚该发什么了），这同样未经核实。</p>
+
+<h3 class="group-title">作者前后的起步建议</h3>
+<table class="stack-table">
+<caption>作者三个时间点的起步建议</caption>
+<thead><tr><th scope="col">来源</th><th scope="col">起步建议</th><th scope="col">原句</th></tr></thead>
+<tbody>
+<tr><th scope="row" data-label="来源"><a href="https://thedankoe.com/letters/how-my-startup-made-759900-in-6-months-without-launching/">2024-04-20 旧文</a></th><td data-label="起步建议">受众小先卖高价服务</td><td data-label="原句"><span class="en" lang="en">When you don’t have a large audience, it doesn’t make sense to sell a product yet.</span>（受众不大时，还不该卖产品）<span class="en" lang="en">You need to charge $1000-$5000+ per client.</span>（每个客户要收 1000 到 5000 美元以上）</td></tr>
+<tr><th scope="row" data-label="来源"><a href="https://letters.thedankoe.com/p/how-to-start-a-one-person-business">2026-03-11 旧文</a></th><td data-label="起步建议">新手先走客户路线</td><td data-label="原句"><span class="en" lang="en">going the client route is a good option for beginners</span>（对新手来说，走客户路线是好选择）<span class="en" lang="en">As a beginner, it’s much easier to sell a $1000-$5000 service to one person than it is to sell 100-200 Substack subscriptions or courses.</span>（新手把一项 1000 到 5000 美元的服务卖给一个人，比卖出 100 到 200 份订阅或课程容易得多）<span class="en" lang="en">virality usually doesn’t result in a lot of sales.</span>（爆款通常带不来很多销量）</td></tr>
+<tr><th scope="row" data-label="来源">本文（2026-10-20 UTC）</th><td data-label="起步建议">从爆款内容找需求，设想低价付费社群</td><td data-label="原句"><span class="en" lang="en">when you research content and see what’s going viral, that is the best market research you could ever do.</span>（研究内容、看什么在爆，就是最好的市场调研）<span class="en" lang="en">a low-ticket paid community</span>（低价付费社群）<span class="en" lang="en">You already have that solved, because you’re writing good content.</span>（因为你在写好内容，受众问题已经解决）</td></tr>
+</tbody>
+</table>
+<div class="note">
+<p>这是重要发现，但不能仅凭价格高低认定前后矛盾。高客单服务与低价产品可能适用于不同阶段、能力和交付模式。</p>
+<p>两篇旧建议与本文路线存在策略张力；是否构成实质矛盾，取决于目标客户、信任基础、交付能力及获客成本。</p>
+<p>本文没有提到先卖服务这条路线，也没有说明什么条件下该换成低价产品。</p>
+</div>
+
+<div class="card">
+<h3>Kortex 转为 Eden 时作者的自述（2025-11-24）</h3>
+<p><span class="en" lang="en">without the AI chat, Kortex was not worth paying for to almost everyone</span>（没有 AI 对话功能时，几乎所有人都觉得 Kortex 不值得付费）</p>
+<p><span class="en" lang="en">Many people say they love Kortex, but when asked what they use it for and if it's worth paying for, they do not use it any differently than other apps on the market</span>（很多人说喜欢 Kortex，但问到用它做什么、值不值得付钱时，他们的用法和市面上其他应用没有区别）</p>
+<p>按本页证据推演：用户说喜欢不等于愿意付钱。这正好对应证据阶梯里从互动到付款那一级。</p>
+</div>
+
+<h3 class="group-title">行业收入调查</h3>
+<div class="tiles">
+<div class="tile"><div class="num">4%</div><div class="lbl">全球创作者中年收入超过 10 万美元的比例（高盛，2023-04-19）</div></div>
+<div class="tile"><div class="num">12%</div><div class="lbl">全职创作者中年收入超过 5 万美元的比例（Linktree 调查，TechCrunch 报道，2022-04-20）</div></div>
+<div class="tile"><div class="num">46%</div><div class="lbl">全职创作者中年收入低于 1,000 美元的比例（同一调查）</div></div>
+<div class="tile"><div class="num">59%</div><div class="lbl">被 Linktree 归为新手的创作者中还没有变现的比例（同一调查）</div></div>
+</div>
+<p class="small">高盛原句：<span class="en" lang="en">Only about 4% of global creators are deemed professionals, meaning they pull in more than $100,000 a year.</span>（全球创作者中只有约 4% 被视为职业创作者，即年收入超过 10 万美元）</p>
+<p class="small">TechCrunch 原句：<span class="en" lang="en">Only 12% of full-time creators are making more than $50,000 per year, while 46% of full-time creators make less than $1,000 annually</span>（只有 12% 的全职创作者年收入超过 5 万美元，46% 的全职创作者年收入不到 1,000 美元）；<span class="en" lang="en">59% haven’t monetized yet</span>（59% 还没有变现）</p>
+<div class="note">
+<p>两份资料的年份、样本和收入定义不同，不能把比例拼成一个总体结论。</p>
+<p>行业收入分布说明的是结果的不均衡，不能单独证明某种方法无效。它的作用是校准读者的预期，而不是否定所有内容创业实践。</p>
+</div>
+
+</div>
+</section>
+
+<section class="sec" id="plan">
+<h2>7 天建议：先拿到第一笔付款</h2>
+<p class="sec-lead">以下是本页的建议，不是原文主张。适用对象：已有一项可教技能、还没有第一笔付费记录的人。</p>
+<div class="stack">
+<p class="prose">更合理的顺序是：先用真实问题验证需求，再尝试服务型交易；把内容当作获客和研究手段，而不是最终目标。</p>
+<p class="note">按本页证据推演：这个顺序接近作者两篇旧文的先卖服务，同时保留本文的从已验证需求出发。</p>
+<div class="card">
+<ol class="days">
+<li><b>第 1–2 天</b><div>找具体、重复发生的痛点。选一个目标人群，访谈 5 位符合条件的人。问他们最近一次遇到的问题、现在的解决办法、花了多少时间、试过哪些工具。</div></li>
+<li><b>第 3 天</b><div>定义一个有边界的付费服务。把问题变成一项 3–5 天内能交付的小服务。写清交付物、完成时间和试点价格。先不开发完整产品。</div></li>
+<li><b>第 4–5 天</b><div>拿着方案验证购买意愿。向至少 5 位符合条件的潜在客户介绍方案，说明这是付费试点。记录每次是否接受报价、拒绝的理由和主要顾虑。</div></li>
+<li><b>第 6 天</b><div>争取一笔真实付款。如果有人愿意买，确认范围、价格、交付日期和付款方式。如果没人买，先检查问题是否紧迫、报价是否清楚、对象是否正确，不要马上加功能。</div></li>
+<li><b>第 7 天</b><div>复盘并决定下一步。交付已成交的试点，或复盘未成交的原因。记录客户实际使用情况、节省的时间和返工量，再决定继续卖服务、调整需求，还是把重复交付的部分做成产品。</div></li>
+</ol>
+</div>
+<table class="stack-table">
+<caption>7 天里要看的数字</caption>
+<thead><tr><th scope="col">指标</th><th scope="col">7 天目标</th><th scope="col">解释</th></tr></thead>
+<tbody>
+<tr><th scope="row" data-label="指标">目标用户访谈</th><td data-label="7 天目标">5 人</td><td data-label="解释">先确认问题真实存在</td></tr>
+<tr><th scope="row" data-label="指标">描述近期具体痛点的人</th><td data-label="7 天目标">≥3 人</td><td data-label="解释">初步需求信号，不是购买证据</td></tr>
+<tr><th scope="row" data-label="指标">明确服务报价</th><td data-label="7 天目标">1 个</td><td data-label="解释">避免一直停留在抽象讨论</td></tr>
+<tr><th scope="row" data-label="指标">有效付费邀约</th><td data-label="7 天目标">≥5 次</td><td data-label="解释">必须针对符合条件的人，而非泛泛发帖</td></tr>
+<tr><th scope="row" data-label="指标">实际付费客户</th><td data-label="7 天目标">≥1 人</td><td data-label="解释">最强的初步商业验证信号</td></tr>
+<tr><th scope="row" data-label="指标">交付后确认的实际价值</th><td data-label="7 天目标">≥1 个案例</td><td data-label="解释">例如节省时间、减少重复工作或提高可用性</td></tr>
+</tbody>
+</table>
+<div class="note">
+<p>这些数字是建议的实验门槛，不是行业基准，也不是统计学显著性标准。</p>
+<p>如果 5 次有效邀约后无人购买，不能据此宣布市场不存在；应检查客户匹配度、问题紧迫性、报价和信任基础。如果有人口头表示感兴趣，但没有付款，也应如实记录为意向，而不是收入。</p>
+<p>七天未成交不一定是失败；七天结束时仍只有点赞和泛泛好评，却不知道谁愿意为什么付钱，才说明验证环节没有完成。</p>
+</div>
+</div>
+</section>
+
+<section class="sec" id="gaps">
+<h2>本页没能核实的地方</h2>
+<ul class="prose">
+<li>Eden 上的产品提示词笔记，本页抓取时只能看到第一阶段，后面的内容没有核对。</li>
+<li>开头的妈妈发售案例没有姓名、时间和金额口径，无法核对。</li>
+<li>作者的粉丝数和播放量相关说法是自报；本页没有拿到 Social Blade 之类的第三方数据。</li>
+<li>互动数据只在 2026-10-22 抓取了一次，之后会变化。</li>
+<li>本页只核对了 4 个同题视频和作者 7 个同类标题视频，没有核对作者频道的全部视频。</li>
+<li>本页没有拿到视频作者的资料包。</li>
+<li>行业收入调查来自 2022 年和 2023 年，样本和口径不同。</li>
+</ul>
+</section>
+
+<section class="sec" id="src">
+<h2>来源</h2>
+<ul class="src">
+<li>原文：<a href="https://letters.thedankoe.com/p/the-influencer-is-dead-the-age-of"><span class="en" lang="en">The influencer is dead. The Age of Experience is here.</span></a>（2026-10-22 18:12 抓取）</li>
+<li>作者文章归档：<a href="https://letters.thedankoe.com/archive">letters.thedankoe.com/archive</a>（2026-10-22 18:12 抓取）</li>
+<li>Eden 价格页：<a href="https://eden.so/pricing/">eden.so/pricing</a>（2026-10-22 18:26 抓取）</li>
+<li>Eden 30 天冲刺课程页：<a href="https://eden.so/sprint">eden.so/sprint</a>（2026-10-22 18:26 抓取）</li>
+<li>Eden MCP 功能页：<a href="https://eden.so/features/mcp">eden.so/features/mcp</a>（2026-10-22 18:26 抓取）</li>
+<li>Eden 上的产品提示词笔记：<a href="https://app.eden.so/w/dan-s-workspace/notes/9bdd7f65-bd6a-4d30-94ff-4c11f51f135f">笔记链接</a>（2026-10-22 18:18 抓取）</li>
+<li>作者旧文：<a href="https://thedankoe.com/letters/how-my-startup-made-759900-in-6-months-without-launching/">2024-04-20 旧文</a>、<a href="https://letters.thedankoe.com/p/how-to-start-a-one-person-business">2026-03-11 旧文</a>（2026-10-22 18:39 抓取）</li>
+<li>Kortex 转为 Eden 的公告：<a href="https://kortex.co/blog/kortex-to-eden">kortex.co/blog/kortex-to-eden</a>（2025-11-24 发布）</li>
+<li>作者视频：<a href="https://www.youtube.com/watch?v=REwaFvbelEk"><span class="en" lang="en">Don’t Quit - How To Get Ahead Of 99% Of Personal Brands</span></a>（2025-02-02 发布）</li>
+<li>YouTube 播放量：作者的视频 2026-10-22 18:24 抓取，其他 3 个同题视频 19:35 抓取；链接见方法一节的表格。</li>
+<li>高盛：<a href="https://www.goldmansachs.com/insights/articles/the-creator-economy-could-approach-half-a-trillion-dollars-by-2027">创作者经济报告文章</a>（2023-04-19 发布，2026-10-22 19:03 抓取）</li>
+<li>TechCrunch：<a href="https://techcrunch.com/2022/04/20/linktree-creator-economy-report-research/">Linktree 创作者调查报道</a>（2022-04-20 发布，2026-10-22 18:49 抓取）</li>
+<li>AI小平中文视频的转写稿：用户提供。</li>
+</ul>
+</section>
+
+</main>
+
+<footer>
+<div class="wrap">
+<p>2026-10-22 制作。引用原文只用于核对。中文视频作者 AI小平。</p>
+</div>
+</footer>
+
+<div id="tip" role="tooltip" hidden></div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var tip=document.getElementById('tip');
+  var timer=null, graceTimer=null, current=null, pending=null, hoverEl=null, focusEl=null, overTip=false;
+  function cssNum(name){var v=parseFloat(getComputedStyle(root).getPropertyValue(name));return isNaN(v)?0:v;}
+  function place(el){
+    var off=cssNum('--tip-offset');
+    var r=el.getBoundingClientRect();
+    var w=tip.offsetWidth, h=tip.offsetHeight;
+    var left=r.left+r.width/2-w/2;
+    var top=r.top-h-off;
+    if(top<off){top=r.bottom+off;}
+    left=Math.max(off,Math.min(left,window.innerWidth-w-off));
+    top=Math.max(off,Math.min(top,window.innerHeight-h-off));
+    tip.style.left=left+'px';
+    tip.style.top=top+'px';
+  }
+  function inView(el){var r=el.getBoundingClientRect();return r.bottom>0&&r.top<window.innerHeight&&r.right>0&&r.left<window.innerWidth;}
+  function ids(el){return (el.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);}
+  function link(el){var t=ids(el);if(t.indexOf('tip')<0){t.push('tip');}el.setAttribute('aria-describedby',t.join(' '));}
+  function unlink(el){var t=ids(el).filter(function(x){return x!=='tip';});if(t.length){el.setAttribute('aria-describedby',t.join(' '));}else{el.removeAttribute('aria-describedby');}}
+  function display(el){
+    pending=null;
+    if(current&&current!==el){unlink(current);}
+    current=el;
+    tip.textContent=el.getAttribute('data-tip');
+    tip.hidden=false;
+    link(el);
+    place(el);
+  }
+  function hide(){
+    clearTimeout(timer);
+    pending=null;
+    if(current){unlink(current);}
+    current=null;
+    tip.hidden=true;
+  }
+  /* 显示目标：悬停目标 > 鼠标停在提示框上时的当前目标 > 仍在视口内的焦点目标 */
+  function want(){return hoverEl||(overTip?current:null)||(focusEl&&inView(focusEl)?focusEl:null);}
+  function sync(){
+    clearTimeout(graceTimer);
+    var target=want();
+    if(!target){hide();return;}
+    if(target===current){clearTimeout(timer);pending=null;return;}
+    if(target===pending){return;}
+    clearTimeout(timer);
+    pending=target;
+    timer=setTimeout(function(){pending=null;if(want()===target){display(target);}else{sync();}},cssNum('--tip-delay'));
+  }
+  function later(){clearTimeout(graceTimer);graceTimer=setTimeout(sync,cssNum('--tip-grace'));}
+  function dismiss(){clearTimeout(graceTimer);hoverEl=null;overTip=false;focusEl=null;hide();}
+  document.querySelectorAll('[data-tip]').forEach(function(el){
+    if(!el.hasAttribute('tabindex')){el.setAttribute('tabindex','0');}
+    el.addEventListener('pointerenter',function(){hoverEl=el;sync();});
+    el.addEventListener('pointerleave',function(){if(hoverEl===el){hoverEl=null;}if(pending===el&&el!==focusEl){clearTimeout(timer);pending=null;}later();});
+    el.addEventListener('focus',function(){focusEl=el;sync();});
+    el.addEventListener('blur',function(){if(focusEl===el){focusEl=null;}sync();});
+  });
+  tip.addEventListener('pointerenter',function(){overTip=true;sync();});
+  tip.addEventListener('pointerleave',function(){overTip=false;later();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){dismiss();}});
+  /* 滚动时关闭悬停提示；焦点目标在视口内才保留提示，离开视口就隐藏并解除关联 */
+  window.addEventListener('scroll',function(){
+    clearTimeout(graceTimer);
+    hoverEl=null;
+    overTip=false;
+    if(current&&current===want()){place(current);}else{sync();}
+  },{passive:true});
+})();
+(function(){
+  /* 核对卡片筛选：按 data-label 显示或隐藏卡片和一览条目；整组都隐藏时隐藏组标题和一览的对应列；计数用 aria-live 播报 */
+  var btns=document.querySelectorAll('.fbtn[data-f]');
+  var cards=document.querySelectorAll('.claim[data-label]');
+  var groups=document.querySelectorAll('.claim-group');
+  var live=document.getElementById('claim-count');
+  var total=cards.length;
+  var items=document.querySelectorAll('.ci-item[data-label]');
+  var cols=document.querySelectorAll('.ci-col');
+  function apply(f){
+    var n=0;
+    cards.forEach(function(c){var show=f==='all'||c.getAttribute('data-label')===f;c.hidden=!show;if(show){n++;}});
+    groups.forEach(function(g){g.hidden=!g.querySelector('.claim[data-label]:not([hidden])');});
+    items.forEach(function(it){it.hidden=!(f==='all'||it.getAttribute('data-label')===f);});
+    cols.forEach(function(c){c.hidden=!c.querySelector('.ci-item:not([hidden])');});
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===f?'true':'false');});
+    live.textContent='显示 '+n+' / '+total+' 条';
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.getAttribute('data-f'));});});
+  apply('all');
+})();
+</script>
+</body>
+</html>

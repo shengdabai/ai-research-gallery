@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>20260612-0801-AI Agent Engineering 四层对比：Prompt  -  Context  -  Harness  -  Loop</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --ink: #17201c;
+      --muted: #60716a;
+      --line: #d9e1dd;
+      --paper: #fbfcfa;
+      --panel: #ffffff;
+      --soft: #eef4f1;
+      --prompt: #2f6f9f;
+      --context: #147a64;
+      --harness: #8b5a1f;
+      --loop: #934159;
+      --ok: #227f5b;
+      --warn: #b06b18;
+      --bad: #a23b39;
+      --shadow: 0 16px 45px rgba(23, 32, 28, 0.09);
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.62;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    a { color: #0a6280; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--line);
+      background: #f4f7f5;
+      padding: 28px 22px;
+      overflow: auto;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 17px;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+    .mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background:
+        linear-gradient(90deg, var(--prompt) 0 25%, var(--context) 25% 50%, var(--harness) 50% 75%, var(--loop) 75%);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+      flex: 0 0 auto;
+    }
+    .meta {
+      font-size: 12px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+    nav a {
+      display: block;
+      padding: 8px 9px;
+      border-radius: 7px;
+      font-size: 13px;
+      color: #2e3b36;
+      margin: 2px 0;
+    }
+    nav a:hover {
+      background: #e8efeb;
+      text-decoration: none;
+    }
+    main {
+      max-width: 1220px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 34px 42px 80px;
+      min-width: 0;
+    }
+    .hero {
+      padding: 30px 0 22px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(31px, 4.2vw, 58px);
+      line-height: 1.03;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+    .subtitle {
+      max-width: 900px;
+      color: #42524c;
+      font-size: 18px;
+      margin: 0 0 22px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+    .layer-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 8px 25px rgba(23, 32, 28, 0.05);
+      min-height: 190px;
+    }
+    .layer-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .layer-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .prompt { --accent: var(--prompt); }
+    .context { --accent: var(--context); }
+    .harness { --accent: var(--harness); }
+    .loop { --accent: var(--loop); }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 20px 0;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    section.flat {
+      box-shadow: none;
+      background: transparent;
+      border: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    h3 {
+      margin: 22px 0 10px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    h4 {
+      margin: 14px 0 8px;
+      font-size: 16px;
+    }
+    .lead {
+      font-size: 17px;
+      color: #34463f;
+      max-width: 920px;
+    }
+    .callout {
+      border-left: 4px solid #1d6f73;
+      background: #edf6f3;
+      padding: 14px 16px;
+      border-radius: 0 7px 7px 0;
+      margin: 16px 0;
+    }
+    .warning {
+      border-left-color: var(--warn);
+      background: #fff7eb;
+    }
+    .danger {
+      border-left-color: var(--bad);
+      background: #fff1f0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px;
+      background: #fff;
+      min-width: 0;
+    }
+    .mini h3, .mini h4 { margin-top: 0; }
+    .metric {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+      font-size: 13px;
+      color: #32433d;
+    }
+    .bar {
+      height: 9px;
+      border-radius: 99px;
+      background: #e5ece8;
+      overflow: hidden;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: var(--c);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      color: #22312c;
+      background: #edf2ef;
+      border: 1px solid #d5ded9;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin: 2px 4px 2px 0;
+      white-space: nowrap;
+    }
+    .maturity {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .maturity .tag:nth-child(1) { background: #eaf3f8; border-color: #c9dfea; }
+    .maturity .tag:nth-child(2) { background: #e8f5f1; border-color: #c5e3d8; }
+    .maturity .tag:nth-child(3) { background: #faf0df; border-color: #ecd4ae; }
+    .maturity .tag:nth-child(4) { background: #faedf1; border-color: #e7c8d1; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 11px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #eef4f1;
+      font-weight: 750;
+    }
+    tr:nth-child(even) td { background: #fbfcfb; }
+    .wide-table { overflow-x: auto; }
+    .layer-name {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .p { color: var(--prompt); }
+    .c { color: var(--context); }
+    .h { color: var(--harness); }
+    .l { color: var(--loop); }
+
+    .stack-diagram {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+      margin: 12px auto;
+    }
+    .stack-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 170px;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .stack-label {
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      min-height: 58px;
+    }
+    .stack-content {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .stack-question {
+      border: 1px dashed #bcc9c3;
+      border-radius: 8px;
+      padding: 12px;
+      background: #f8faf8;
+      color: #43534e;
+      font-size: 13px;
+    }
+    .flow {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #0f1714;
+      color: #d9f0e8;
+      border-radius: 8px;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    pre {
+      background: #101713;
+      color: #e0f3eb;
+      border-radius: 8px;
+      padding: 15px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+      background: #eef4f1;
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+    pre code { background: transparent; padding: 0; }
+    .chart-wrap {
+      display: grid;
+      grid-template-columns: minmax(280px, 460px) 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+    svg { max-width: 100%; height: auto; }
+    .axis text { fill: #52625c; font-size: 12px; }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 13px;
+    }
+    .legend-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex: 0 0 auto;
+    }
+    .decision {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .decision .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 160px;
+      position: relative;
+    }
+    .decision .step::after {
+      content: "→";
+      position: absolute;
+      right: -15px;
+      top: 46%;
+      color: #72827a;
+      font-weight: 800;
+    }
+    .decision .step:last-child::after { content: ""; }
+    .score {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tabs button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #24342f;
+      border-radius: 7px;
+      padding: 8px 11px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+    }
+    .tabs button.active {
+      background: #14352d;
+      color: #fff;
+      border-color: #14352d;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .source-list li { margin-bottom: 9px; }
+    .footnote {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .review-pass {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .check {
+      border: 1px solid #cddbd5;
+      background: #f8fbf9;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+    }
+    .check strong { color: var(--ok); }
+
+    @media (max-width: 1000px) {
+      .page { grid-template-columns: 1fr; }
+      aside {
+        position: relative;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      nav {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      main { padding: 26px 18px 60px; }
+      h1, h2, h3, p, li, th, td, nav a, .subtitle {
+        overflow-wrap: anywhere;
+        word-break: normal;
+      }
+      .tag {
+        white-space: normal;
+      }
+      .hero-grid, .grid-2, .grid-3, .decision, .review-pass {
+        grid-template-columns: 1fr;
+      }
+      .chart-wrap { grid-template-columns: 1fr; }
+      .stack-row { grid-template-columns: 1fr; }
+      .decision .step::after { content: ""; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    
+
+    <main>
+      <header class="hero">
+        <h1>Loop Engineering、Harness Engineering、Context Engineering、Prompt Engineering 的区别与落地</h1>
+        <p class="subtitle">
+          一句话版：Prompt 管“怎么说”，Context 管“给模型看什么”，Harness 管“模型能怎么做且如何被约束”，Loop 管“系统如何反复发现、执行、验证、记录并继续下一步”。
+        </p>
+        <div class="maturity">
+          <span class="tag">Prompt：成熟术语，官方文档稳定</span>
+          <span class="tag">Context：快速成熟，Anthropic 明确定义</span>
+          <span class="tag">Harness：工程界快速成型，OpenAI 已公开采用</span>
+          <span class="tag">Loop：2026 新热词，实践有价值但定义仍在形成</span>
+        </div>
+        <div class="hero-grid">
+          <article class="layer-card prompt">
+            <h3>Prompt Engineering</h3>
+            <p>设计单次或模板化指令：角色、目标、格式、示例、约束、成功标准。最轻、最快，但不能解决工具、权限、记忆和验证问题。</p>
+          </article>
+          <article class="layer-card context">
+            <h3>Context Engineering</h3>
+            <p>设计推理时进入上下文窗口的信息状态：规则文件、相关代码、文档、检索、工具描述、历史、错误输出和压缩策略。</p>
+          </article>
+          <article class="layer-card harness">
+            <h3>Harness Engineering</h3>
+            <p>设计模型外部的执行系统：工具调用、沙箱、权限、hooks、工作树、日志、测试、可观测性、终止条件和人类审批。</p>
+          </article>
+          <article class="layer-card loop">
+            <h3>Loop Engineering</h3>
+            <p>设计长期运行的闭环：发现任务、分配 agent、执行、验证、修复、记录、复盘、再次触发。核心是让系统替你提示 agent。</p>
+          </article>
+        </div>
+      </header>
+
+      <section id="summary">
+        <h2>1. 结论摘要</h2>
+        <p class="lead">
+          这四个概念不是互斥流派，而是从“单次模型调用”逐步扩展到“长期可治理工作系统”的四层工程。越往上，能解决的问题越复杂，但成本、治理难度和失败面也越大。
+        </p>
+        <div class="grid-2">
+          <div class="mini">
+            <h3>最实用的区分法</h3>
+            <table>
+              <tr><th>你在调什么？</th><th>对应工程</th></tr>
+              <tr><td>一句话、角色、格式、样例、输出标准</td><td><span class="layer-name p">Prompt</span></td></tr>
+              <tr><td>规则文件、代码片段、历史、检索资料、工具说明</td><td><span class="layer-name c">Context</span></td></tr>
+              <tr><td>工具、权限、沙箱、hooks、测试、日志、终止条件</td><td><span class="layer-name h">Harness</span></td></tr>
+              <tr><td>定时、队列、分工、验收、重试、handoff、复盘</td><td><span class="layer-name l">Loop</span></td></tr>
+            </table>
+          </div>
+          <div class="mini">
+            <h3>推荐决策顺序</h3>
+            <ol>
+              <li>输出不稳定但任务简单：先修 Prompt。</li>
+              <li>模型不知道项目事实或反复猜：修 Context。</li>
+              <li>模型会做但执行不可靠：修 Harness。</li>
+              <li>你每次都在手工触发、检查、追问：修 Loop。</li>
+            </ol>
+            <div class="callout">
+              不要把 Loop 当作“更长的 prompt”。Loop 的本质是把发现、执行、验证和下一步决策外化为系统。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="definitions">
+        <h2>2. 四个定义</h2>
+        <div class="grid-2">
+          <div class="mini">
+            <h3 class="p">Prompt Engineering</h3>
+            <p><strong>定义：</strong>写出有效指令，让模型更稳定地产生符合要求的内容。OpenAI 官方定义强调“writing effective instructions”，Anthropic 文档要求先有成功标准和测试方式，再优化 prompt。</p>
+            <p><strong>典型资产：</strong>系统提示词、任务模板、few-shot 示例、输出 JSON schema、审查 rubric、Claude slash command、Codex skill 中的步骤说明。</p>
+            <p><strong>主要收益：</strong>成本低、反馈快、适合知识工作与单次任务。</p>
+            <p><strong>主要局限：</strong>无法保证工具执行、无法自动拿到正确上下文、无法阻止高风险操作、无法长期记忆。</p>
+          </div>
+          <div class="mini">
+            <h3 class="c">Context Engineering</h3>
+            <p><strong>定义：</strong>Anthropic 将 context 定义为采样时进入 LLM 的 token 集合；Context Engineering 是在模型推理时维护最有用的信息集合，包括系统指令、工具、MCP、外部数据和消息历史。</p>
+            <p><strong>典型资产：</strong><code>AGENTS.md</code>、<code>CLAUDE.md</code>、项目地图、检索索引、MCP、相关源文件、错误日志摘要、自动 memory、压缩摘要。</p>
+            <p><strong>主要收益：</strong>减少幻觉、减少重复解释、让 agent 跟随项目事实。</p>
+            <p><strong>主要局限：</strong>容易 context flooding、上下文过期、资料投毒、检索召回错误。</p>
+          </div>
+          <div class="mini">
+            <h3 class="h">Harness Engineering</h3>
+            <p><strong>定义：</strong>广义上是模型之外让 agent 能运行的所有东西。更窄的工程含义是：设计执行层、约束层、反馈层和可观测性，让模型的行动可控、可测、可恢复。</p>
+            
+            <p><strong>主要收益：</strong>把“模型建议”变成“可治理执行系统”。</p>
+            <p><strong>主要局限：</strong>工程投入高，过度约束会降低 agent 能力，维护成本上升。</p>
+          </div>
+          <div class="mini">
+            <h3 class="l">Loop Engineering</h3>
+            <p><strong>定义：</strong>设计让 agent 反复行动、观察、修正、记录并继续的闭环。Addy Osmani 将其描述为“用系统替代你本人去提示 agent”，但也提醒这是早期概念，需要警惕 token 成本。</p>
+            
+            <p><strong>主要收益：</strong>让重复工作、长任务、多 agent 工作流可持续推进。</p>
+            <p><strong>主要局限：</strong>最容易失控：无限循环、重复失败、错误累积、成本膨胀、无人审查时误操作。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="map">
+        <h2>3. 层级关系图</h2>
+        <p class="lead">四层可以理解为逐级包裹，也可以理解为四个控制面。Prompt 是语言控制面，Context 是信息控制面，Harness 是执行控制面，Loop 是时间与组织控制面。</p>
+        <div class="stack-diagram" aria-label="四层关系图">
+          <div class="stack-row">
+            <div class="stack-label" style="background: var(--loop)">Loop</div>
+            <div class="stack-content"><strong>长期过程：</strong>定时发现任务，派发 agent，读取 ledger，执行，验收，记录下一步，必要时升级给人。</div>
+            <div class="stack-question">这个系统下次如何自己继续？</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-label" style="background: var(--harness)">Harness</div>
+            <div class="stack-content"><strong>执行外壳：</strong>工具、权限、沙箱、hooks、测试、工作树、日志、终止条件、人类审批。</div>
+            <div class="stack-question">模型能做什么？不能做什么？如何验证？</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-label" style="background: var(--context)">Context</div>
+            <div class="stack-content"><strong>信息状态：</strong>规则、代码、文档、MCP、检索、历史、错误输出、压缩摘要。</div>
+            <div class="stack-question">模型此刻需要知道什么？</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-label" style="background: var(--prompt)">Prompt</div>
+            <div class="stack-content"><strong>表达方式：</strong>目标、角色、输入、输出格式、示例、约束、成功标准。</div>
+            <div class="stack-question">我要怎样说清楚？</div>
+          </div>
+        </div>
+        <pre class="flow">[用户目标]
+   |
+   v
+[Prompt: 把目标说清楚]
+   |
+   v
+[Context: 装入必要事实、代码、规则、工具说明]
+   |
+   v
+[Harness: 控制工具、权限、沙箱、测试、日志]
+   |
+   v
+[Loop: 发现任务 -> 执行 -> 验证 -> 记录 -> 继续/停止/升级]</pre>
+      </section>
+
+      <section id="comparison">
+        <h2>4. 全面对比</h2>
+        <div class="wide-table">
+          <table>
+            <thead>
+              <tr>
+                <th>维度</th>
+                <th class="p">Prompt Engineering</th>
+                <th class="c">Context Engineering</th>
+                <th class="h">Harness Engineering</th>
+                <th class="l">Loop Engineering</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>核心问题</strong></td>
+                <td>怎么说才让模型听懂？</td>
+                <td>模型现在应该看到哪些信息？</td>
+                <td>模型提出动作后，系统如何执行、约束和验证？</td>
+                <td>如何让系统持续推进任务，而不是等人逐轮提示？</td>
+              </tr>
+              <tr>
+                <td><strong>时间尺度</strong></td>
+                <td>单轮到少量多轮</td>
+                <td>会话级、项目级</td>
+                <td>运行时、项目生命周期</td>
+                <td>天、周、长期工作流</td>
+              </tr>
+              <tr>
+                <td><strong>设计对象</strong></td>
+                <td>指令文本和输出格式</td>
+                <td>上下文窗口和信息供应链</td>
+                <td>agent runtime、工具环境、执行控制</td>
+                <td>任务队列、自动化、子 agent、验收闭环</td>
+              </tr>
+              <tr>
+                <td><strong>最适合</strong></td>
+                <td>改写、总结、结构化输出、一次性分析</td>
+                <td>代码库理解、RAG、长期项目、跨会话一致性</td>
+                <td>自动改代码、跑命令、访问外部系统、生产前流程</td>
+                <td>周报、巡检、批量修复、持续交付、多 agent 工厂</td>
+              </tr>
+              <tr>
+                <td><strong>主要指标</strong></td>
+                <td>格式合格率、准确率、一次通过率</td>
+                <td>引用命中率、幻觉率、上下文 token 效率</td>
+                <td>测试通过率、权限违规率、可恢复率、审计完整性</td>
+                <td>吞吐、人工介入次数、循环终止质量、单位成果成本</td>
+              </tr>
+              <tr>
+                <td><strong>失败模式</strong></td>
+                <td>含糊、过度规定、样例误导、模型版本漂移</td>
+                <td>资料过多、资料过期、召回错误、上下文投毒</td>
+                <td>权限过松/过紧、工具 schema 差、日志不足、无法回滚</td>
+                <td>无限重试、成本爆炸、错误累积、无人类升级点</td>
+              </tr>
+              <tr>
+                <td><strong>人类角色</strong></td>
+                <td>写清楚需求</td>
+                <td>维护事实源和上下文边界</td>
+                <td>设计护栏、验证和审批</td>
+                <td>设定目标、优先级、预算和停止条件</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="radar">
+        <h2>5. 能力雷达与成熟度</h2>
+        <div class="chart-wrap">
+          <svg viewBox="0 0 480 360" role="img" aria-label="四类工程能力雷达图">
+            <rect x="0" y="0" width="480" height="360" rx="8" fill="#fbfcfb"></rect>
+            <g transform="translate(240 178)">
+              <g stroke="#d7e0db" fill="none">
+                <polygon points="0,-135 128,-42 79,109 -79,109 -128,-42"></polygon>
+                <polygon points="0,-101 96,-31 59,82 -59,82 -96,-31"></polygon>
+                <polygon points="0,-67 64,-21 40,55 -40,55 -64,-21"></polygon>
+                <polygon points="0,-34 32,-10 20,27 -20,27 -32,-10"></polygon>
+              </g>
+              <g stroke="#9bad9f" class="axis">
+                <line x1="0" y1="0" x2="0" y2="-145"></line>
+                <line x1="0" y1="0" x2="138" y2="-45"></line>
+                <line x1="0" y1="0" x2="85" y2="118"></line>
+                <line x1="0" y1="0" x2="-85" y2="118"></line>
+                <line x1="0" y1="0" x2="-138" y2="-45"></line>
+                <text x="-38" y="-154">短期收益</text>
+                <text x="119" y="-55">可靠性</text>
+                <text x="55" y="136">可规模化</text>
+                <text x="-147" y="136">治理成本低</text>
+                <text x="-178" y="-55">官方成熟度</text>
+              </g>
+              <polygon points="0,-122 55,-18 26,36 -68,94 -118,-38" fill="rgba(47,111,159,.20)" stroke="#2f6f9f" stroke-width="2"></polygon>
+              <polygon points="0,-101 88,-29 55,76 -51,70 -101,-33" fill="rgba(20,122,100,.20)" stroke="#147a64" stroke-width="2"></polygon>
+              <polygon points="0,-70 114,-37 74,102 -34,47 -76,-25" fill="rgba(139,90,31,.20)" stroke="#8b5a1f" stroke-width="2"></polygon>
+              <polygon points="0,-55 101,-33 85,118 -17,24 -51,-17" fill="rgba(147,65,89,.20)" stroke="#934159" stroke-width="2"></polygon>
+            </g>
+          </svg>
+          <div>
+            <div class="legend">
+              <div class="legend-item"><span class="swatch" style="background:#2f6f9f"></span>Prompt：收益最快，规模化较弱</div>
+              <div class="legend-item"><span class="swatch" style="background:#147a64"></span>Context：可靠性提升显著，依赖资料治理</div>
+              <div class="legend-item"><span class="swatch" style="background:#8b5a1f"></span>Harness：可靠性和治理强，工程成本最高</div>
+              <div class="legend-item"><span class="swatch" style="background:#934159"></span>Loop：吞吐潜力最大，成熟度最低</div>
+            </div>
+            <h3>量化判断</h3>
+            <div class="metric"><span>Prompt 短期收益</span><span>90</span></div><div class="bar"><span style="--w:90%;--c:var(--prompt)"></span></div>
+            <div class="metric"><span>Context 幻觉抑制</span><span>75</span></div><div class="bar"><span style="--w:75%;--c:var(--context)"></span></div>
+            <div class="metric"><span>Harness 可治理性</span><span>85</span></div><div class="bar"><span style="--w:85%;--c:var(--harness)"></span></div>
+            <div class="metric"><span>Loop 长期吞吐</span><span>92</span></div><div class="bar"><span style="--w:92%;--c:var(--loop)"></span></div>
+            <p class="footnote">评分是工程判断，不是官方 benchmark。目的在于帮助选型，而非证明某层绝对更好。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="scenarios">
+        <h2>6. 场景选择矩阵</h2>
+        <div class="decision">
+          <div class="step">
+            <span class="score" style="background:var(--prompt)">1</span>
+            <h3>输出不好</h3>
+            <p>先检查目标、格式、示例、负面约束、验收标准。适合单次写作、总结、分类、代码片段生成。</p>
+          </div>
+          <div class="step">
+            <span class="score" style="background:var(--context)">2</span>
+            <h3>事实不对</h3>
+            <p>检查模型看到的资料是否正确、精简、最新、相关。适合项目规则、代码库、客户材料、检索系统。</p>
+          </div>
+          <div class="step">
+            <span class="score" style="background:var(--harness)">3</span>
+            <h3>执行不稳</h3>
+            <p>加权限、沙箱、测试、hook、日志、回滚、人工 gate。适合改代码、跑脚本、连接外部系统。</p>
+          </div>
+          <div class="step">
+            <span class="score" style="background:var(--loop)">4</span>
+            <h3>重复 babysit</h3>
+            <p>做自动化和 ledger：周期触发、分工、验收、记录、继续。适合巡检、批量交付、客户工作台运维。</p>
+          </div>
+        </div>
+        <div class="wide-table">
+          <table>
+            <thead>
+              <tr><th>场景</th><th>优先工程层</th><th>为什么</th><th>不要过度做什么</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>写一份客户邮件或文章初稿</td><td><span class="p">Prompt</span></td><td>任务边界短，输出质量主要来自目标、口吻、结构和样例。</td><td>不必上 MCP、hooks、长期自动化。</td></tr>
+              <tr><td>让 Codex/Claude Code 理解一个大型仓库</td><td><span class="c">Context</span></td><td>关键是加载正确规则、项目地图、相关文件和测试命令。</td><td>不要把全仓库塞进上下文。</td></tr>
+              <tr><td>自动修 bug 并跑测试</td><td><span class="h">Harness</span></td><td>需要工具、权限、沙箱、测试、diff、回滚和错误反馈。</td><td>不要只靠“请仔细一点”。</td></tr>
+              
+              
+              <tr><td>批量多 agent 生成、审核、修复长内容</td><td><span class="l">Loop</span> + <span class="h">Harness</span></td><td>需要分工、版本、评审、字数/质量验收和中断恢复。</td><td>不要信 agent 自报完成。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      
+
+      <section id="claude">
+        <h2>8. 在 Claude Code 中如何实现</h2>
+        <p class="lead">Claude Code 的优势是 CLAUDE.md/auto memory、slash commands、skills、subagents、hooks、permissions、Agent SDK 和可编程 agent loop。它更适合把 prompt、context、harness 和 loop 拆成可维护的插件化资产。</p>
+        <div class="tabs" data-tabs="claude-tabs">
+          <button class="active" data-tab="claude-prompt">Prompt</button>
+          <button data-tab="claude-context">Context</button>
+          <button data-tab="claude-harness">Harness</button>
+          <button data-tab="claude-loop">Loop</button>
+        </div>
+        <div id="claude-prompt" class="tab-panel active">
+          <h3 class="p">Claude Code Prompt 实现</h3>
+          <ul>
+            <li>把重复工作做成 <code>.claude/commands/*.md</code> slash command。</li>
+            <li>Prompt body 建议用英文、XML 标签、明确输入输出契约；面向用户的 <code>description</code> 可用项目语言。</li>
+            <li>先定义 success criteria 和 eval，再优化 prompt。</li>
+          </ul>
+          <pre><code>---
+description: "审查当前交付物是否可交付"
+allowed-tools: Read(*), Bash(git status), Bash(npm test)
+---
+
+&lt;role&gt;You are a strict delivery reviewer.&lt;/role&gt;
+&lt;checks&gt;
+- Requirements met
+- Tests or validation evidence present
+- No secrets or PII
+- Handoff instructions clear
+&lt;/checks&gt;</code></pre>
+        </div>
+        <div id="claude-context" class="tab-panel">
+          <h3 class="c">Claude Code Context 实现</h3>
+          <ul>
+            <li><code>CLAUDE.md</code> 放每次都要知道的事实：构建命令、项目布局、约定、边界。</li>
+            <li>多步骤流程或只在某类任务使用的知识，放 skill 或 path-scoped rules，不要塞进全局 CLAUDE.md。</li>
+            <li>Claude Code subagents 有独立上下文，适合把研究、日志读取、代码审查从主上下文隔离出去。</li>
+            <li>MCP 用于把 issue tracker、数据库、浏览器、文档系统变成可读可操作上下文。</li>
+          </ul>
+          <pre><code># CLAUDE.md
+
+## Always know
+- Build: pnpm build
+- Test: pnpm test
+- Never commit .env or secrets
+- Public docs require desensitization review
+
+## Pointers
+- Architecture: docs/architecture.md
+- Release checklist: .claude/skills/release/SKILL.md</code></pre>
+        </div>
+        <div id="claude-harness" class="tab-panel">
+          <h3 class="h">Claude Code Harness 实现</h3>
+          <ul>
+            <li>Permissions 用 settings 分层管理；deny 规则优先级高于 allow。</li>
+            <li>Hooks 在会话、每轮、每次工具调用前后触发，可做强制检查、审计、格式化、阻断。</li>
+            <li>Agent SDK 暴露与 Claude Code 相同的 tools、agent loop 和 context management，适合写生产级 agent。</li>
+            
+          </ul>
+          <pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/check_bash_risk.py"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+        </div>
+        <div id="claude-loop" class="tab-panel">
+          <h3 class="l">Claude Code Loop 实现</h3>
+          <ul>
+            <li>用 Agent SDK 在 Python/TypeScript 里编排长任务：设置 allowed tools、permission mode、预算和观察输出。</li>
+            <li>用 <code>claude -p</code>、GitHub Actions、cron/launchd 或插件 monitors 做周期触发。</li>
+            <li>用 subagents 分离“生成者”和“审查者”，避免同一个 agent 自我评分过松。</li>
+            <li>每个 loop 都要有 stop condition、retry budget、human escalation 和外部 ledger。</li>
+          </ul>
+          <pre><code>from claude_agent_sdk import query, ClaudeAgentOptions
+
+async for message in query(
+    prompt="Review open issues and draft a prioritized repair plan.",
+    options=ClaudeAgentOptions(
+        allowed_tools=["Read", "Bash(git status)", "Bash(pnpm test)"]
+    ),
+):
+    print(message)</code></pre>
+        </div>
+      </section>
+
+      <section id="playbooks">
+        <h2>9. 实战 Playbooks</h2>
+        <div class="grid-3">
+          <div class="mini">
+            <h3>Playbook A：单次高质量分析</h3>
+            <p><span class="tag">Prompt-first</span></p>
+            <ol>
+              <li>写清目标、读者、输出结构。</li>
+              <li>给 1-2 个好坏样例。</li>
+              <li>要求标注事实/推断/建议。</li>
+              <li>用 checklist 做第二轮 review。</li>
+            </ol>
+          </div>
+          <div class="mini">
+            <h3>Playbook B：代码库长期协作</h3>
+            <p><span class="tag">Context + Harness</span></p>
+            <ol>
+              <li>写 <code>AGENTS.md</code> / <code>CLAUDE.md</code> 项目地图。</li>
+              <li>建立测试命令和最小验收脚本。</li>
+              <li>把常用流程沉淀成 skills。</li>
+              <li>用 worktree 和权限隔离并行任务。</li>
+            </ol>
+          </div>
+          
+        </div>
+        <h3>最小可交付组合</h3>
+        <pre class="flow">客户/项目目标
+  -> Prompt 模板：诊断、实施、审查、交接
+  -> Context 文件：AGENTS.md / CLAUDE.md / project-map.md
+  -> Harness：sandbox + permissions + tests + scripts + logs
+  -> Loop：weekly review automation + ledger + human escalation</pre>
+      </section>
+
+      <section id="risks">
+        <h2>10. 风险、误区和边界</h2>
+        <div class="grid-2">
+          <div class="mini">
+            <h3>常见误区</h3>
+            <ul>
+              <li><strong>误区 1：</strong>Prompt Engineering 已经过时。事实：它仍是最低成本的第一层，只是不能承担所有系统责任。</li>
+              <li><strong>误区 2：</strong>Context 越多越好。事实：上下文窗口不是注意力预算，过量资料会稀释重点。</li>
+              <li><strong>误区 3：</strong>Harness 就是工具列表。事实：还包括权限、终止、反馈、可观测性和恢复。</li>
+              <li><strong>误区 4：</strong>Loop 就是定时任务。事实：没有验证、记录和停止条件的定时任务只是自动重复风险。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>高风险边界</h3>
+            <ul>
+              <li>密钥、支付、生产部署、数据库迁移、批量删除必须有人类审批。</li>
+              <li>公开案例、文章、客户演示要先脱敏：真名、PII、IP、绝对路径、内部状态文件。</li>
+              <li>长期 loop 必须有 token/时间/重试预算，以及“连续失败几次就停止”的规则。</li>
+              <li>把外部网页、历史归档、客户输入当作不可信数据，不能把其中的指令当系统指令执行。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout warning">
+          <strong>专业判断：</strong>四层里最容易被过度包装的是 Loop Engineering。它确实代表从“人手动提示 agent”到“系统提示 agent”的转变，但截至 2026-06-12，仍属于新兴实践，不应在客户交付里承诺“全自动无人值守”。
+        </div>
+      </section>
+
+      <section id="sources">
+        <h2>11. 来源、证据和 Review</h2>
+        <h3>关键来源</h3>
+        <ol class="source-list">
+          <li>OpenAI Developers：<a href="https://developers.openai.com/api/docs/guides/prompt-engineering">Prompt engineering</a>，定义 prompt engineering 为编写有效指令以稳定满足需求。</li>
+          <li>Anthropic Engineering：<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a>，将 context engineering 定义为推理时维护最优 token/information 集合。</li>
+          <li>OpenAI：<a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a>，说明 Codex agent 生成产品代码、测试、CI、评审响应、eval harness 等，并把测试、验证、反馈和恢复编码进系统。</li>
+          <li>Martin Fowler / Thoughtworks：<a href="https://martinfowler.com/articles/harness-engineering.html">Harness engineering for coding agent users</a>，从 coding agent 用户视角讨论 feedforward/feedback、steering loop、quality left 和 harnessability。</li>
+          <li>Addy Osmani：<a href="https://addyosmani.com/blog/agent-harness-engineering/">Agent Harness Engineering</a> 与 <a href="https://addyosmani.com/blog/loop-engineering/">Loop Engineering</a>，总结“Agent = Model + Harness”和“设计 loops 去提示 agents”的新实践。</li>
+          <li>arXiv：<a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a>，提出 reasoning 和 acting 交错的早期 agent loop 范式。</li>
+          <li>OpenAI Codex Docs：<a href="https://developers.openai.com/codex/guides/agents-md">AGENTS.md</a>、<a href="https://developers.openai.com/codex/skills">Agent Skills</a>、<a href="https://developers.openai.com/codex/app/automations">Automations</a>、<a href="https://developers.openai.com/codex/app/worktrees">Worktrees</a>、<a href="https://developers.openai.com/codex/subagents">Subagents</a>。</li>
+          <li>Claude Code Docs：<a href="https://code.claude.com/docs/en/memory">Memory / CLAUDE.md</a>、<a href="https://code.claude.com/docs/en/hooks">Hooks</a>、<a href="https://code.claude.com/docs/en/sub-agents">Subagents</a>、<a href="https://code.claude.com/docs/en/agent-sdk/overview">Agent SDK</a>、<a href="https://code.claude.com/docs/en/permissions">Permissions</a>、<a href="https://code.claude.com/docs/en/skills">Skills</a>。</li>
+        </ol>
+        <h3>内容 Review 记录</h3>
+        <div class="review-pass">
+          <div class="check"><strong>通过</strong><br>区分官方定义与新兴术语，未把 Loop 伪装成官方标准。</div>
+          <div class="check"><strong>通过</strong><br>Codex 与 Claude Code 的落地方式均引用官方机制。</div>
+          <div class="check"><strong>通过</strong><br>包含优劣势、适用场景、失败模式、实施模板。</div>
+          <div class="check"><strong>通过</strong><br>脱敏检查：无密钥、无客户 PII、无内部 token。</div>
+          <div class="check"><strong>通过</strong><br>离线可打开：CSS/JS 均内联，无 CDN 依赖。</div>
+        </div>
+        <p class="footnote">注：本报告为工程判断型分析，不是法律、安全或供应商采购建议。涉及价格、产品可用性、权限行为和模型版本时，应在正式交付前重新核验官方文档。</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-tabs]").forEach(function(group) {
+      var buttons = group.querySelectorAll("button[data-tab]");
+      buttons.forEach(function(button) {
+        button.addEventListener("click", function() {
+          buttons.forEach(function(b) { b.classList.remove("active"); });
+          button.classList.add("active");
+          var section = group.closest("section");
+          section.querySelectorAll(".tab-panel").forEach(function(panel) {
+            panel.classList.remove("active");
+          });
+          var target = section.querySelector("#" + button.dataset.tab);
+          if (target) target.classList.add("active");
+        });
+      });
+    });
+  </script>
+</body>
+</html>

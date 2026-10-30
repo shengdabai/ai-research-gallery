@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="面向 AI 创业者的 Cloudflare 研究：上游问题、授权执行、免费经济学、产品分层与可检验的创业实验。">
+<title>Cloudflare 给 AI 创业者的启示｜从上游问题到付费结果</title>
+<style>
+:root{
+color-scheme:light;
+--paper:#f7f1e5;--surface:#fffaf1;--ink:#25231f;--muted:#645d52;--orange:#f48120;--tint:#ffe4c9;--rust:#85390c;--line:#d5cabb;--error:#962d24;
+--body-font:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;--title-font:"Songti SC","STSong","Noto Serif CJK SC",serif;--mono-font:ui-monospace,SFMono-Regular,Consolas,monospace;
+--zero:0;--one:1;--full:100%;--s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.5rem;--s6:2rem;--s7:3rem;--s8:4rem;
+--small:.875rem;--body:1.0625rem;--sub:1.2rem;--section:1.85rem;--number:1.85rem;--display:clamp(2.3rem,4.4vw,4rem);--mobile-display:2.35rem;
+--regular:400;--bold:700;--leading:1.8;--tight:1.2;--compact:1.5;--tracking:.06em;--title-tracking:-.025em;
+--page:75rem;--gutter:clamp(1.125rem,3vw,3rem);--measure:49rem;--touch:2.75rem;--radius:.35rem;--pill:99rem;--mark:1rem;--layer:10;
+--rule:1px solid var(--line);--heavy:2px solid var(--ink);--accent-rule:4px solid var(--orange);--focus:3px solid var(--rust);
+--two:repeat(2,minmax(0,1fr));--three:repeat(3,minmax(0,1fr));--four:repeat(4,minmax(0,1fr));--single:minmax(0,1fr);
+--hero:minmax(0,1.45fr) minmax(0,1fr);--flow:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);--dates:6.5rem minmax(0,1fr);
+--turn:rotate(90deg);--skip-away:translateY(-200%);--breakpoint:780px;
+}
+*{box-sizing:border-box;min-inline-size:var(--zero)}
+html{background:var(--paper)}
+body{margin:var(--zero);color:var(--ink);font-family:var(--body-font);font-size:var(--body);line-height:var(--leading);overflow-wrap:anywhere}
+h1,h2,h3,p,figure,dl,dd,ol,ul{margin:var(--zero)}
+h1,h2,h3{line-height:var(--tight);text-wrap:balance}
+h1{font-family:var(--title-font);font-size:var(--display);letter-spacing:var(--title-tracking)}
+h2{font-size:var(--section)}h3{font-size:var(--sub)}
+p+p{margin-block-start:var(--s3)}
+a{color:var(--rust);text-underline-offset:var(--s1)}
+a:hover{text-decoration-thickness:var(--s1)}
+:focus-visible{outline:var(--focus);outline-offset:var(--s1)}
+button,input{font:inherit}
+button{cursor:pointer}
+code{font-family:var(--mono-font);font-size:var(--small);overflow-wrap:anywhere}
+.page{max-inline-size:var(--page);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;inset-inline-start:var(--s4);inset-block-start:var(--s4);z-index:var(--layer);padding:var(--s3);background:var(--ink);color:var(--paper);transform:var(--skip-away)}
+.skip:focus{transform:none}
+.masthead{display:flex;justify-content:space-between;align-items:center;gap:var(--s4);flex-wrap:wrap;padding-block:var(--s5);border-bottom:var(--heavy);font-size:var(--small)}
+.brand{display:flex;align-items:center;gap:var(--s3);font-weight:var(--bold)}
+.mark{inline-size:var(--mark);block-size:var(--mark);background:var(--orange);display:inline-block}
+.eyebrow,.small,.meta,.ref{font-size:var(--small)}
+.eyebrow{font-weight:var(--bold);letter-spacing:var(--tracking)}
+.meta,.small,.muted{color:var(--muted)}
+.hero{display:grid;grid-template-columns:var(--hero);gap:var(--s7);padding-block:var(--s7)}
+.hero h1{margin-block:var(--s4) var(--s5)}
+.hero-note{align-self:start;background:var(--tint);border-top:var(--accent-rule);padding:var(--s5)}
+.hero-note h2{font-size:var(--sub);margin-block-end:var(--s4)}
+.hero-note p+p{padding-block-start:var(--s3);border-top:var(--rule)}
+nav{border-block:var(--rule);padding-block:var(--s4)}
+nav ul{list-style:none;padding:var(--zero);display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5)}
+nav a{display:inline-block;min-block-size:var(--touch);align-content:center;color:var(--ink)}
+section{padding-block:var(--s7);border-bottom:var(--rule)}
+.section-head{display:flex;align-items:baseline;gap:var(--s4);margin-block-end:var(--s5)}
+.section-no{font-family:var(--mono-font);color:var(--rust);font-weight:var(--bold)}
+.lead{max-inline-size:var(--measure)}
+.tags{display:flex;gap:var(--s2);flex-wrap:wrap;margin-block:var(--s4)}
+.tag{display:inline-block;border:var(--rule);border-radius:var(--pill);padding:var(--s1) var(--s3);font-size:var(--small);line-height:var(--compact);font-weight:var(--bold)}
+.tag.company,.tag.proposal{background:var(--tint);color:var(--rust)}
+.grid,.checks,.sources{display:grid;gap:var(--s4)}
+.two,.checks,.sources{grid-template-columns:var(--two)}
+.three{grid-template-columns:var(--three)}
+.four{grid-template-columns:var(--four)}
+.card{padding:var(--s5);border:var(--rule);background:var(--surface)}
+.card h3{margin-block-end:var(--s3)}
+.card .tag{margin-block-end:var(--s3)}
+.checks,.sources{list-style:none;padding:var(--zero)}
+.checks li{padding:var(--s4);border:var(--rule)}
+.checks h3{font-size:var(--body);margin-block-end:var(--s2)}
+.ref{white-space:nowrap;font-weight:var(--bold);margin-inline-start:var(--s1)}
+.note{border-inline-start:var(--accent-rule);padding:var(--s3) var(--s4);margin-block-start:var(--s5);background:var(--tint)}
+.subhead{margin-block:var(--s6) var(--s4)}
+.timeline{list-style:none;padding:var(--zero)}
+.timeline li{display:grid;grid-template-columns:var(--dates);gap:var(--s4);padding-block:var(--s4);border-bottom:var(--rule)}
+.timeline time{font-weight:var(--bold);font-family:var(--mono-font)}
+.steps{padding-inline-start:var(--s5)}
+.steps li+li{margin-block-start:var(--s3)}
+.chain{padding-block:var(--s4);text-align:center;border-block:var(--rule);margin-block:var(--s4);font-weight:var(--bold)}
+.break{margin-block-start:var(--s3);color:var(--muted);font-size:var(--small)}
+.diagram{border:var(--rule);background:var(--surface);padding:var(--s5)}
+.lane+.lane{margin-block-start:var(--s5);padding-block-start:var(--s5);border-top:var(--rule)}
+.flow{display:grid;grid-template-columns:var(--flow);align-items:center;gap:var(--s3);margin-block:var(--s4)}
+.node{padding:var(--s4);border:var(--rule);text-align:center}
+.node.accent{background:var(--tint);border-bottom:var(--accent-rule)}
+.arrow{text-align:center;font-size:var(--sub)}
+figcaption{font-size:var(--small);color:var(--muted);margin-block-start:var(--s4)}
+.stat strong{display:block;font-size:var(--number);line-height:var(--tight);margin-block:var(--s3)}
+.stat span{display:block;font-size:var(--small)}
+.calc{border:var(--heavy);padding:var(--s5);margin-block-start:var(--s6);background:var(--surface)}
+.calc h3{margin-block-end:var(--s4)}
+fieldset{border:var(--rule);padding:var(--s4);margin:var(--s5) var(--zero)}
+legend{padding-inline:var(--s2);font-weight:var(--bold)}
+label{display:block;font-weight:var(--bold);font-size:var(--small)}
+input{display:block;inline-size:var(--full);min-block-size:var(--touch);margin-block-start:var(--s2);padding:var(--s2) var(--s3);border:var(--rule);border-radius:var(--radius);background:var(--paper);color:var(--ink)}
+input:disabled{opacity:var(--one);-webkit-text-fill-color:var(--ink)}
+input[aria-invalid="true"]{outline:var(--focus);border-color:var(--error)}
+button{min-block-size:var(--touch);padding:var(--s2) var(--s5);border:var(--heavy);border-radius:var(--radius);background:var(--orange);color:var(--ink);font-weight:var(--bold)}
+.actions{margin-block-start:var(--s4)}
+.status{margin-block:var(--s3);font-size:var(--small);color:var(--muted)}
+.status.error{color:var(--error)}
+.result{padding:var(--s4);border:var(--rule)}
+.result output{display:block;font-size:var(--number);font-weight:var(--bold);line-height:var(--compact)}
+.result.emphasis{background:var(--tint);border-bottom:var(--accent-rule)}
+.mini{display:grid;grid-template-columns:var(--two);gap:var(--s3);margin-block:var(--s4)}
+.mini>div{padding:var(--s3);border-bottom:var(--rule)}
+.mini dt{font-size:var(--small);color:var(--muted)}
+.mini output{font-weight:var(--bold)}
+.formula{padding:var(--s4);border:var(--rule);margin-block:var(--s4)}
+.sources li{padding-block:var(--s4);border-top:var(--rule);scroll-margin-block:var(--s5)}
+.sources li:target{outline:var(--focus);outline-offset:var(--s1)}
+.sources strong,.sources a{display:block}
+.sources a{font-size:var(--small);overflow-wrap:anywhere;word-break:break-word}
+footer{padding-block:var(--s6);font-size:var(--small);color:var(--muted)}
+/* 响应断点：780px，对应根令牌 --breakpoint。媒体查询条件不能引用 var()，仅在此同值复写。 */
+@media(max-width:780px){
+body{font-size:var(--s4)}
+.hero,.three,.flow{grid-template-columns:var(--single)}
+.hero{gap:var(--s5);padding-block:var(--s6)}
+h1{font-size:var(--mobile-display)}
+.two,.checks,.sources{grid-template-columns:var(--single)}
+.four{grid-template-columns:var(--two)}
+section{padding-block:var(--s6)}
+.section-head{align-items:start}
+.arrow{transform:var(--turn)}
+.card,.diagram,.calc{padding:var(--s4)}
+.timeline li{grid-template-columns:var(--single);gap:var(--s2)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">跳到研究正文</a>
+<header class="page">
+<div class="masthead">
+<div class="brand"><span class="mark" aria-hidden="true"></span>创业研究札记 / CLOUDFLARE</div>
+<p>研究日期 <time datetime="2026-10-04">2026-10-04</time> · 面向 AI 创业者</p>
+</div>
+<div class="hero">
+<div>
+<p class="eyebrow">问题 → 授权执行 → 付费结果</p>
+<h1>先解决上游问题，<br>再让“位置”产生价值</h1>
+<p class="lead">按公司沿革，Project Honey Pot 的参与者不只想追踪恶意行为，还希望有人阻止它。这个具体需求，比“先免费占据入口”更接近 Cloudflare 故事的起点。<a class="ref" href="#s1">S1</a></p>
+<p class="meta">本文依据提供的转录稿及 20 项一手材料，区分技术事实、企业叙事与创业推演；不提供估值或投资建议。</p>
+</div>
+<aside class="hero-note" aria-labelledby="hero-summary">
+<h2 id="hero-summary">给创始人的三个判断</h2>
+<p><strong>先找未完成的任务。</strong>从“看见问题”走向“经授权地解决问题”，才可能提高客户愿意支付的价值。</p>
+<p><strong>把三种机制拆开。</strong>免费是价格安排，开源是许可安排，网络效应是参与者之间的增益机制；它们不能互相替代。</p>
+<p><strong>位置不是价值本身。</strong>只有用户反复需要、权限正当、改善可证明、付款人愿意付费，位置才有商业意义。</p>
+</aside>
+</div>
+<nav aria-label="报告章节导航">
+<ul>
+<li><a href="#conclusions">结论与证据</a></li>
+<li><a href="#factcheck">转录稿核对</a></li>
+<li><a href="#origins">上游方法</a></li>
+<li><a href="#flywheels">三条飞轮</a></li>
+<li><a href="#architecture">代理与缓存</a></li>
+<li><a href="#products">产品与免费</a></li>
+<li><a href="#finance">财务与计算器</a></li>
+<li><a href="#ai-position">AI 内容位置</a></li>
+<li><a href="#experiments">创业实验</a></li>
+<li><a href="#validation">14 天验证</a></li>
+<li><a href="#sources">全部来源</a></li>
+</ul>
+</nav>
+</header>
+
+<main id="main-content" class="page" tabindex="-1">
+<section id="conclusions" aria-labelledby="conclusions-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">01</span><h2 id="conclusions-title">结论成立到哪里，证据就写到哪里</h2></div>
+<div class="grid two">
+<article class="card">
+<span class="tag company">公司自述 → 分析</span>
+<h3>可借鉴的是路径，不是增长神话</h3>
+<p>公司沿革描述了从恶意行为情报到阻止恶意行为的需求；2019 年创始人信则描述了网络设备云化、免费 CDN 与共享网络平台的战略。<a class="ref" href="#s1">S1</a><a class="ref" href="#s4">S4</a></p>
+<p>据此可提出一个创业假设：先解决具体上游问题，再复用已有基础设施与分发关系，交付更多付费结果。但这些企业叙述本身，不独立证明免费、网络规模或某项产品造成了增长。</p>
+</article>
+
+</div>
+<div class="tags" role="group" aria-label="证据类型说明">
+<span class="tag">官方事实：材料直接记载</span>
+<span class="tag company">公司自述：动机与机制解释</span>
+<span class="tag">分析：条件性推演</span>
+<span class="tag proposal">拟议实验：尚未实施</span>
+</div>
+<p class="small">“官方事实”表示可追溯至官方材料，并不等于独立审计。文内 S1—S20 指向文末完整来源；未经证实的说法只标出证据缺口，不反向宣称已经被证伪。</p>
+</section>
+
+<section id="factcheck" aria-labelledby="factcheck-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">02</span><h2 id="factcheck-title">转录稿核对：十二处需要纠正或限缩</h2></div>
+<ol class="checks" aria-label="十二项主张核对">
+<li><h3>01 / 不是单人起源</h3><p>2004 年 Project Honey Pot 的起点涉及 Matthew Prince <strong>与 Lee Holloway</strong>；2009 年 Prince 在哈佛 MBA 期间结识 Michelle Zatlyn。本文未核实其本科履历及具体参与起草反垃圾邮件法律的细节。<a class="ref" href="#s1">S1</a></p></li>
+<li><h3>02 / 关联线索不是完整倒卖链</h3><p>定制标记的诱饵地址，可把访问时间、IP 与收到的垃圾邮件联系起来；这不证明能还原所有中间转售环节或确定真实身份。<strong>IP 不等于一个人。</strong><a class="ref" href="#s2">S2</a></p></li>
+<li><h3>03 / 改 Nameserver 不等于代理所有流量</h3><p>代理状态由记录类型与配置决定。受支持的 A、AAAA、CNAME 记录可代理相关 HTTP/HTTPS 流量；MX、TXT 始终仅作 DNS 解析。<a class="ref" href="#s6">S6</a></p></li>
+<li><h3>04 / 免费不等于无成本，扩张不保证提速</h3><p>公司称免费客户扩大内容覆盖，有助于吸引 ISP 互联或托管并降低部分网络成本；缓存收益仍取决于对象、规则、缓存键与新鲜度，不能保证每新增一名用户都让别人更快。<a class="ref" href="#s3">S3</a><a class="ref" href="#s7">S7</a></p></li>
+<li><h3>05 / 发行价必须与交易价格分开</h3><p>2019 年 9 月 12 日公布的 IPO 发行价为 <strong>15 美元</strong>，9 月 13 日开始交易。转录稿中的 18 美元不能替代发行价；无日期的股价与收益率图不纳入研究。<a class="ref" href="#s5">S5</a></p></li>
+<li><h3>06 / NVIDIA 合作年份与“重发翻倍”</h3><p>合作及 GPU 计划公告日期为 <strong>2021-04-13</strong>，不是 2022 年；公告也不证明全部节点已部署。给定材料未证实“2024 年只改日期重发同稿、随后股价翻倍”，更不能据此建立因果关系。<a class="ref" href="#s12">S12</a></p></li>
+<li><h3>07 / 边缘云 AI 不是端侧 AI</h3><p>Workers AI 于 <strong>2023-09-27</strong> 发布，推理运行于 Cloudflare 数据中心的 GPU，而非用户终端。<a class="ref" href="#s13">S13</a><strong>分析：</strong>共享 CDN 网络不等于免除 GPU 容量及推理成本。</p></li>
+<li><h3>08 / 存储、数据库与验证不能混称</h3><p>R2 是对象存储，D1 是托管 SQL 数据库。Turnstile 是 CAPTCHA 替代方案，可在不代理网站流量的情况下嵌入，也不意味着所有用户都要解高难度题。<a class="ref" href="#s9">S9</a><a class="ref" href="#s10">S10</a><a class="ref" href="#s11">S11</a></p></li>
+<li><h3>09 / 高毛利不是 GAAP 营业盈利</h3><p>2026 年第二季度同时出现 71.8% 的 GAAP 毛利率、GAAP 营业亏损与 non-GAAP 营业利润。不同层级、不同口径的数字必须并列说明，不能互相替换。<a class="ref" href="#s14">S14</a></p></li>
+<li><h3>10 / 内容付费公告不是采用率或收入证明</h3><p>Pay Per Crawl 于 2025-07-01 公布私有测试；Pay Per Use 于 2026-09-30 公布 Beta。后者依赖买方申报使用，不证明普遍强制执行、成熟商业收入或覆盖所有 AI 内容。<a class="ref" href="#s15">S15</a><a class="ref" href="#s16">S16</a></p></li>
+<li><h3>11 / 上线之初就同时有免费与付费</h3><p>2010 年 9 月 27 日的原始发布公告明确写着：核心服务免费，SSL、实时报告和高级安全等附加服务从每月 20 美元起收费。这个历史价格不代表今天的报价。<strong>“先全部免费、积累流量后才考虑收费”不符合上线公告。</strong><a class="ref" href="#s17">S17</a></p></li>
+<li><h3>12 / “第四大云厂商”是战略叙事</h3><p>没有明确市场边界、统计口径和排名数据，不能把“希望成为第四大云厂商”当作已实现的事实。是否占据 AI 内容入口，也要分别验证接入范围、买方参与和实际结算。</p></li>
+</ol>
+</section>
+
+<section id="origins" aria-labelledby="origins-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">03</span><h2 id="origins-title">创立线索：先有上游问题，再有执行产品</h2></div>
+<div class="grid two">
+<article>
+<h3>一条不补写履历的时间线</h3>
+<ol class="timeline">
+<li><time datetime="2004">2004</time><p>Matthew Prince 与 Lee Holloway 发起 Project Honey Pot，研究恶意行为与垃圾邮件相关线索。<a class="ref" href="#s1">S1</a></p></li>
+<li><time datetime="2009">2009</time><p>Prince 在哈佛攻读 MBA 期间结识 Michelle Zatlyn；Cloudflare 的创始团队由这三人构成。<a class="ref" href="#s1">S1</a></p></li>
+<li><time datetime="2010-06">2010-06</time><p>Cloudflare 开始 Beta；同年 <time datetime="2010-09-27">9 月 27 日</time>公开 Beta 上线，免费核心服务与付费附加服务并行。<a class="ref" href="#s17">S17</a><a class="ref" href="#s1">S1</a></p></li>
+<li><time datetime="2019-09">2019-09</time><p>IPO 发行价 15 美元；创始人信系统解释共享网络平台的战略。<a class="ref" href="#s5">S5</a><a class="ref" href="#s4">S4</a></p></li>
+<li><time datetime="2021-04">2021-04</time><p>发布 NVIDIA 合作与 GPU 扩展计划。<a class="ref" href="#s12">S12</a></p></li>
+<li><time datetime="2023-09">2023-09</time><p>发布 Workers AI，把 GPU 推理作为开发者服务提供。<a class="ref" href="#s13">S13</a></p></li>
+<li><time datetime="2025-07">2025-07</time><p>Pay Per Crawl 私有测试公告，探索向爬虫收取访问费。<a class="ref" href="#s15">S15</a></p></li>
+<li><time datetime="2026-09">2026-09</time><p>Pay Per Use 进入 Beta，探索按买方申报的下游使用结算。<a class="ref" href="#s16">S16</a></p></li>
+</ol>
+</article>
+<article class="card">
+<span class="tag">官方技术说明</span>
+<h3>Honey Pot 如何产生上游线索</h3>
+<ol class="steps">
+<li><strong>布置可区分的诱饵。</strong>Unspam Technologies 的分布式系统使用带定制标记的诱饵邮箱地址，并关联访问时间和 IP。<a class="ref" href="#s2">S2</a></li>
+<li><strong>观察后续邮件。</strong>收到垃圾邮件后，利用标记与访问记录，关联地址采集者和发送行为。<a class="ref" href="#s2">S2</a></li>
+<li><strong>识别尚未完成的任务。</strong>网站社区提出：不要只告诉我们谁在作恶，还要帮助阻止他们。<a class="ref" href="#s1">S1</a></li>
+</ol>
+</article>
+</div>
+<p class="note"><strong>分析：</strong>“有情报”与“能执行”是两种产品承诺。前者需要可靠归因边界，后者还需要客户授权、误判处理、回退能力与责任划分。对 AI 创业者而言，下一步不应是抓取更多私有数据，而是确认用户愿意授予哪一种具体、可撤回的操作权限。</p>
+</section>
+
+<section id="flywheels" aria-labelledby="flywheels-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">04</span><h2 id="flywheels-title">三条飞轮，三套证据，三种失效方式</h2></div>
+<p class="lead">把所有规模收益都叫“网络效应”，会掩盖真正要验证的机制。以下安全与工作流链条是分析模型；互联成本链条主要来自公司解释，均不代表已经获得独立的增长因果验证。</p>
+<div class="grid three subhead">
+<article class="card">
+<span class="tag">分析：安全数据反馈</span>
+<h3>更多有效反馈 → 更可靠决策</h3>
+<p class="chain">获授权的反馈<br><span aria-hidden="true">↓</span><br>标签、纠错与留出评估<br><span aria-hidden="true">↓</span><br>更可靠的识别与执行</p>
+<p><strong>必须测：</strong>在相同任务与标签口径下，漏检、误报和人工复核成本是否改善，而不是日志总量是否增长。</p>
+<p><strong>权限条件：</strong>反馈用途单独选择加入；明确处理权利、保留期限与撤回方式。训练或调参不接触冻结的留出集。</p>
+<p class="break"><strong>断裂点：</strong>样本偏差、脏标签、数据越权、误杀超预算或环境变化。数量增长可能放大错误，而不是改善模型。</p>
+</article>
+<article class="card">
+<span class="tag company">公司自述：基础设施经济</span>
+<h3>内容覆盖 → 互联条件 → 部分成本</h3>
+<p class="chain">免费客户扩大内容覆盖<br><span aria-hidden="true">↓</span><br>ISP 更愿意互联或托管<br><span aria-hidden="true">↓</span><br>部分网络单位成本下降</p>
+<p>这是公司对免费方案的解释之一，不只依靠把免费用户转成付费用户；也不等于免费客户没有服务成本。<a class="ref" href="#s3">S3</a></p>
+<p><strong>拟测：</strong>按区域、流量类型和服务质量分组的单位交付成本。规模经济与参与者直接互相增益，应分开统计。</p>
+<p class="break"><strong>断裂点：</strong>流量密度不足、滥用增加、互联条件不成立，或新增 GPU 成本压过网络节省。<strong>分析：</strong>AI 推理不能直接套用 CDN 成本结构。</p>
+</article>
+<article class="card">
+<span class="tag">分析：工作流与分发</span>
+<h3>重复任务 → 复用能力 → 更多结果</h3>
+<p class="chain">进入经授权的高频工作流<br><span aria-hidden="true">↓</span><br>复用连接、策略与分发关系<br><span aria-hidden="true">↓</span><br>交付新的团队付费结果</p>
+<p>共享网络平台是创始人信中的战略方向；它支持提出复用假设，却不独立证明交叉销售或留存提升。<a class="ref" href="#s4">S4</a></p>
+<p><strong>拟测：</strong>重复使用、任务完成时间、真实采购承诺与迁移成本。新增功能数量不等于新增购买理由。</p>
+<p class="break"><strong>断裂点：</strong>任务低频、替代品更省事、用户不授予控制权，或使用者与付款人始终脱节。</p>
+</article>
+</div>
+</section>
+
+<section id="architecture" aria-labelledby="architecture-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">05</span><h2 id="architecture-title">看清两张图：DNS 控制面与 HTTP 数据面</h2></div>
+<figure class="diagram" aria-labelledby="flow-title" aria-describedby="flow-caption">
+<h3 id="flow-title">简化请求路径：域名由谁解析，与请求经不经过代理，是两件事</h3>
+<div class="lane">
+<p><strong>A / DNS 控制面：决定返回什么地址</strong></p>
+<div class="flow">
+<div class="node">域名查询<br><span class="small">省略递归查询与本地缓存细节</span></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="node accent">权威 DNS 配置<br><span class="small">检查记录类型与代理状态</span></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="node">返回解析结果<br><span class="small">实际源站地址，或代理边缘地址</span></div>
+</div>
+<p>DNS-only 解析到实际源站；启用代理的受支持 A、AAAA、CNAME 记录引导相关 HTTP/HTTPS 请求经过边缘。MX、TXT 始终是 DNS-only，不能由“改了 Nameserver”推出所有流量都被代理。<a class="ref" href="#s6">S6</a></p>
+</div>
+<div class="lane">
+<p><strong>B / HTTP 数据面：以已启用代理的访问为例</strong></p>
+<div class="flow">
+<div class="node">访客发起请求</div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="node accent">Cloudflare 边缘<br><span class="small">执行相关规则，判断缓存</span></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="node">实际源站<br><span class="small">需回源且被放行的请求</span></div>
+</div>
+<p>符合条件的缓存命中，可由边缘复用对象并返回；未命中、过期或不适合缓存的内容需要按规则处理或回源。DNS-only 路径则由访客直接访问源站，不经过这里所画的 HTTP 代理。<a class="ref" href="#s6">S6</a><a class="ref" href="#s7">S7</a></p>
+</div>
+<figcaption id="flow-caption">缓存复用取决于规则、缓存键与新鲜度，默认并不缓存 HTML 或 JSON；它们需另行配置合适的缓存规则。私密或个性化内容需要恰当的隔离与缓存保护；本图不表示无关网站共用同一份内容副本，也不表示用户越多、每次访问就必然越快。<a class="ref" href="#s7">S7</a></figcaption>
+</figure>
+<p class="note"><strong>迁移到 AI 产品的判断：</strong>观测权限不等于写入权限，DNS 管理权不等于所有数据使用权。任何“控制点”都必须明确控制的对象、授权范围、拒绝执行的条件与退出路径。</p>
+</section>
+
+<section id="products" aria-labelledby="products-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">06</span><h2 id="products-title">付费阶梯：卖结果，而不是卖架构名词</h2></div>
+<p class="lead">2019 年创始人信将网络设备云化、免费 CDN 和共享网络平台连接起来，这是企业的产品逻辑解释。<a class="ref" href="#s4">S4</a>下面按能力层梳理“可售卖结果假设”，<strong>不是现行价格表，也不表示每项能力都只能付费使用。</strong></p>
+<div class="grid three subhead">
+<article class="card">
+<span class="tag">连接、保护与验证</span>
+<h3>从接入到可信交互</h3>
+<p>代理与缓存处理相关网络访问；Turnstile 提供 CAPTCHA 替代能力，且可独立嵌入，不要求流量都经 Cloudflare 代理。<a class="ref" href="#s6">S6</a><a class="ref" href="#s7">S7</a><a class="ref" href="#s11">S11</a></p>
+<p><strong>付费结果假设：</strong>业务中断更少、误拦更少、团队能解释和管理策略。是否值得买，需要把损失改善与服务成本一起测量。</p>
+</article>
+<article class="card">
+<span class="tag">应用计算与数据</span>
+<h3>从网站流量到应用工作流</h3>
+<p>Workers 提供边缘／无服务器应用计算；R2 提供对象存储；D1 提供托管 SQL 数据库。三者的职责不同。<a class="ref" href="#s8">S8</a><a class="ref" href="#s9">S9</a><a class="ref" href="#s10">S10</a></p>
+<p><strong>付费结果假设：</strong>应用可靠交付、数据管理可控、运维工作减少。客户需要的是任务完成与责任边界，不只是“无服务器”。</p>
+</article>
+<article class="card">
+<span class="tag">AI 推理</span>
+<h3>从共用网络到新增算力</h3>
+<p>Workers AI 在 Cloudflare 数据中心使用 GPU 推理；这属于边缘云，不是设备侧运行。GPU 容量带来额外成本。<a class="ref" href="#s13">S13</a></p>
+<p><strong>付费结果假设：</strong>在质量底线下获得可预测的响应、容量和成本。<strong>分析：</strong>网络距离缩短可能降低网络耗时，但总延迟还受生成时间、GPU 排队与部署位置影响。</p>
+</article>
+</div>
+<p class="note"><strong>创业启发：</strong>公开 Beta 上线时，Cloudflare 已同时提供免费核心服务与每月 20 美元起的付费附加服务。<a class="ref" href="#s17">S17</a><strong>分析：</strong>创业团队可以并行检验免费分发与收费结果，而无需预设所有客户都必须先经过免费漏斗；公告本身没有证明用户转化或付费需求已得到验证。小团队难以直接复制它的全球网络、互联密度、持续资本投入与企业信任积累，适合先复制一个窄任务中的验证方法。</p>
+<h3 class="subhead">免费、开源、社区、网络效应：四张不同的账</h3>
+<div class="grid two">
+<article class="card"><h3>免费：价格与成本承担</h3><p>用户当下支付零价格，不代表服务成本为零。应回答免费服务产生什么可测价值、由谁承担成本、滥用如何受限，而不是只看注册数量。</p></article>
+<article class="card"><h3>开源：代码与许可</h3><p>代码能否查看、修改和分发取决于许可证。免费托管不自动意味着开源；开源也不自动提供免费算力、客户反馈权或私有数据处理权。</p></article>
+<article class="card"><h3>社区：参与与治理</h3><p>社区需要持续参与的理由、贡献规则和维护成本。讨论热度、贡献者数量与团队采购，是不同指标，不能互相充当证据。</p></article>
+<article class="card"><h3>网络效应：参与者之间的增益</h3><p>只有新增合格参与者确实提高其他参与者的价值，才有相应证据。单位成本下降可能只是规模经济；一个包装层、免费入口或开源仓库，都不自动形成护城河。</p></article>
+</div>
+<h3 class="subhead">两个真实对照：收入落在什么环节？</h3>
+<div class="grid two">
+<article class="card"><span class="tag">真实产品配置 · 非收益证明</span><h3>Hugging Face：社区入口与付费算力</h3><p>官方价格页列有模型与数据集社区能力、Team／Enterprise 服务，以及按基础设施计费的 Inference Endpoints。企业能力包括访问控制、管理与支持。<a class="ref" href="#s18">S18</a></p><p><strong>分析：</strong>内容发现与开发者分发，可连接到算力和企业治理需求。这不意味着所有模型都采用开源许可证，也不证明社区用户必然转成付费推理客户；目录规模与交易转化需要分开验证。</p></article>
+
+</div>
+<p class="note"><strong>反向成本也要入账：</strong>供应商锁定、服务故障、价格变化、迁移成本与模型提供商依赖，都应进入产品评估。把依赖关系画出来，比宣称“占据关键位置”更有用。</p>
+</section>
+
+<section id="finance" aria-labelledby="finance-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">07</span><h2 id="finance-title">季度财务与免费经济学：不要把毛利当净利</h2></div>
+<p>以下为公司公布的 <strong>2026 年第二季度</strong>数据，季度截至 <time datetime="2026-06-30">2026-06-30</time>，公告发布于 <time datetime="2026-08-06">2026-08-06</time>。金额均为美元，m 表示百万。<a class="ref" href="#s14">S14</a></p>
+<div role="group" class="grid four subhead" aria-label="2026年第二季度财务指标">
+<article class="card stat"><span>收入</span><strong>$696.1m</strong><span>同比增长 36% <a class="ref" href="#s14">S14</a></span></article>
+<article class="card stat"><span>GAAP 毛利率</span><strong>71.8%</strong><span>不是营业利润率 <a class="ref" href="#s14">S14</a></span></article>
+<article class="card stat"><span>GAAP 营业亏损</span><strong>$205.7m</strong><span>营业结果为负 <a class="ref" href="#s14">S14</a></span></article>
+<article class="card stat"><span>Non-GAAP 营业利润</span><strong>$96.1m</strong><span>不同于 GAAP 口径 <a class="ref" href="#s14">S14</a></span></article>
+</div>
+<p class="small">毛利尚未扣除全部营业费用；non-GAAP 营业利润不能替换 GAAP 营业亏损。本页不补造调整项目、产品分部收入、免费转化率或 AI 产品利润，也不凭总收入增长推断具体产品的因果贡献。</p>
+
+<div id="calculator" class="calc" role="region" aria-labelledby="calculator-title">
+<span class="tag proposal">假设模型 · 非 Cloudflare 实际经营数据</span>
+<h3 id="calculator-title" class="subhead">月度 Freemium 经济学计算器</h3>
+<p>把同一个月、同一用户群的收入和成本放在一起。<strong>N 是该月被服务的总用户数；r 是其中付费用户占比</strong>，不是把月新增注册数与历史累计订阅数混算。所有金额按美元／月计算；单用户成本按美元／人／月输入。</p>
+<p class="small" id="calc-mode">当前显示默认静态算例。启用 JavaScript 后可在本页调整；计算不保存输入，也不发送网络请求。</p>
+<div id="econ-form" role="group" aria-describedby="calc-boundaries">
+<fieldset id="calc-inputs" disabled>
+<legend>模型输入</legend>
+<div class="grid three">
+<div><label for="n">N · 同月总用户数（人）</label><input id="n" name="n" type="number" inputmode="decimal" min="0" step="any" value="10000" required aria-describedby="n-help"><p class="small" id="n-help">必须大于 0；免费与付费属于同一群体。</p></div>
+<div><label for="r">r · 同月付费占比（%）</label><input id="r" name="r" type="number" inputmode="decimal" min="0" max="100" step="any" value="3" required aria-describedby="r-help"><p class="small" id="r-help">该月付费占比，范围 0—100；不是新增注册转化率。</p></div>
+<div><label for="p">P · 付费用户月收入（美元／人）</label><input id="p" name="p" type="number" inputmode="decimal" min="0" step="any" value="20" required></div>
+<div><label for="cf">Cf · 免费用户月成本（美元／人）</label><input id="cf" name="cf" type="number" inputmode="decimal" min="0" step="any" value="0.05" required></div>
+<div><label for="cp">Cp · 付费用户月成本（美元／人）</label><input id="cp" name="cp" type="number" inputmode="decimal" min="0" step="any" value="2" required></div>
+<div><label for="f">F · 固定运营成本（美元／月）</label><input id="f" name="f" type="number" inputmode="decimal" min="0" step="any" value="3000" required></div>
+</div>
+<div class="actions"><button id="reset-calc" type="button">恢复默认参数</button></div>
+</fieldset>
+</div>
+<noscript><p class="note">JavaScript 未启用，输入保持禁用以免产生“已重新计算”的误解。默认结果、固定算例、公式与模型边界仍完整可读。</p></noscript>
+<p id="calc-status" class="status" role="status" aria-live="polite">下方为默认参数对应的结果，不代表已验证的商业表现。</p>
+<div id="calc-results" role="group" aria-label="月度模型计算结果">
+<div class="grid four">
+<div class="result"><label for="orevenue">月收入</label><output id="orevenue" for="n r p">$6,000.00</output></div>
+<div class="result"><label for="ofreecost">免费用户服务成本</label><output id="ofreecost" for="n r cf">$485.00</output></div>
+<div class="result"><label for="opaidcost">付费用户服务成本</label><output id="opaidcost" for="n r cp">$600.00</output></div>
+<div class="result emphasis"><label for="osurplus">扣固定成本后的简化结余</label><output id="osurplus" for="n r p cf cp f">$1,915.00</output></div>
+</div>
+<dl class="mini">
+<div><dt>付费用户数（期望值）</dt><dd><output id="opaid" for="n r">300</output></dd></div>
+<div><dt>免费用户数（期望值）</dt><dd><output id="ofree" for="n r">9,700</output></dd></div>
+<div><dt>本模型已计入的固定成本</dt><dd><output id="ofixed" for="f">$3,000.00</output></dd></div>
+<div><dt>简化盈亏平衡付费占比</dt><dd><output id="obe" for="n p cf cp f">1.939%</output></dd></div>
+</dl>
+</div>
+<div class="formula" role="group" aria-label="计算公式">
+<p><strong>模型公式</strong></p>
+<code>付费人数 = N × r / 100；免费人数 = N − 付费人数<br>
+收入 = 付费人数 × P<br>
+免费成本 = 免费人数 × Cf；付费成本 = 付费人数 × Cp<br>
+简化结余 = 收入 − 免费成本 − 付费成本 − F<br>
+平衡付费占比 = (Cf + F / N) / (P − Cp + Cf) × 100%</code>
+</div>
+<p><strong>固定算例，不随输入变化：</strong>10,000 名用户、3% 付费、每位付费用户月收入 20 美元；Cf 为 0.05 美元、Cp 为 2 美元、F 为 3,000 美元。结果为收入 <strong>6,000</strong>、免费成本 <strong>485</strong>、付费成本 <strong>600</strong>、简化结余 <strong>1,915 美元</strong>；平衡付费占比约 <strong>1.939%</strong>。</p>
+<p class="note" id="calc-boundaries"><strong>这是简化结余，不是净利润。</strong>默认算例不含获客成本、税费、退款、研发、股权薪酬、折旧与资金成本等；F 只是主动纳入的固定运营假设。成本应按实际服务内容估计，不能把 GPU、失败重试、滥用或支持成本默认为零。模型假定价格与单位成本不随规模、使用强度或付费占比变化。</p>
+<p class="small">付费用户不再计入免费组，不额外叠加 Cf。人数按期望值计算，中间值不取整；显示金额保留两位小数。若 P−Cp+Cf≤0，增加付费占比不能改善结余；有成本负担时不可达。分母与成本负担均为零时，全部比例均收支平衡；只有成本负担为零且分母为负时，仅 0% 平衡，增加付费占比会亏损。所需比例大于 100% 时，在当前参数下不可达；接近机器精度的分母按零处理，不展示无意义的大比例。空值、非有限数、负数、N≤0 或 r 超范围均清空动态结果；极端数值超出计算范围也不沿用旧结果。</p>
+</div>
+</section>
+
+<section id="ai-position" aria-labelledby="ai-position-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">08</span><h2 id="ai-position-title">AI 内容位置：从访问控制到使用结算，仍有边界</h2></div>
+<div class="grid two">
+<article class="card">
+<span class="tag">官方发布事实</span>
+<h3>两个不同阶段，不是一个成熟市场</h3>
+<p><strong>2025-07-01 / Pay Per Crawl：</strong>以私有测试形式提出访问／抓取变现。它围绕爬虫访问，不应自动扩写成所有下游用途都被控制。<a class="ref" href="#s15">S15</a></p>
+<p><strong>2026-09-30 / Pay Per Use：</strong>Beta 公告描述由 AI 买方定义下游用途并报价，出版者接受，买方自行报告使用，再由 Cloudflare 计费与结算。<a class="ref" href="#s16">S16</a></p>
+</article>
+<figure class="card" aria-labelledby="settlement-title">
+<h3 id="settlement-title">公告描述的使用结算链</h3>
+<ol class="steps">
+<li>买方说明下游用途，并提出价格。</li>
+<li>出版者决定是否接受所提条件。</li>
+<li>买方报告发生的使用。</li>
+<li>Cloudflare 据此计费并结算。</li>
+</ol>
+<figcaption>这条链依赖买方合作与使用报告，不是对所有互联网 AI 内容的普遍强制追踪。<a class="ref" href="#s16">S16</a></figcaption>
+</figure>
+</div>
+<h3 class="subhead">分析：一个“好位置”至少要通过四道门</h3>
+<p><strong>重复需求：</strong>买方是否持续需要这批内容，而非只做一次试验？<strong>权利清楚：</strong>接入网站不自动证明有权许可全部内容及用途。<strong>改善可测：</strong>授权、报告与结算是否减少真实交易摩擦？<strong>付款成立：</strong>报价、接入与宣布合作，都不能替代实际付款及后续使用。</p>
+<p class="note"><strong>不能跳过的限制：</strong>下游自报的可靠性、可核验性、权利链、争议处理及买卖双方冷启动，决定机制是否可用。公告不证明采用率、收入规模或普遍执行能力。“第四大云”在没有排名定义与相应数据时，只能作为战略愿景理解，不能当作已取得的名次。<a class="ref" href="#s16">S16</a></p>
+<p class="small">对创业者的条件性启示：可以争取成为某一授权内容目录或工作流的可信结算环节，但不能由此推断能捕获全部 AI 互联网内容，更不能把网络接入权等同于内容所有权。</p>
+</section>
+
+<section id="experiments" aria-labelledby="experiments-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">09</span><h2 id="experiments-title">三个创始人提案：先写使用者、付款人和证据</h2></div>
+<p class="lead"><span class="tag proposal">均为拟议实验</span>以下不是已验证客户案例，也没有现成的转化率、收入或增长效果。路线只是待检验的产品假设。</p>
+<div class="grid three subhead">
+<article class="card">
+<h3>A / 文档质量检查 → 团队治理</h3>
+<p><strong>拟议使用者：</strong>反复检查交付文档、流程文档的专员。<strong>潜在付款人：</strong>承担交付或合规流程预算的团队负责人。</p>
+<p class="chain">单份文档检查<br><span aria-hidden="true">↓</span><br>获授权的纠错与评估<br><span aria-hidden="true">↓</span><br>团队合规流程、版本控制</p>
+<p><strong>必须补齐的证据：</strong>在获授权且脱敏的留出文档中，复核时间下降、关键问题检出改善、错误建议没有超过约定预算；修改被实际接受，而不只是生成了更多报告。</p>
+<p class="break"><strong>边界：</strong>不抓取所有私有文件。文档访问、反馈保存、模型改进和自动写回分别授权；先保留人工确认与回退。</p>
+</article>
+<article class="card">
+<h3>B / AI API 成本观测 → 可靠性控制</h3>
+<p><strong>拟议使用者：</strong>维护 AI 应用的工程负责人。<strong>潜在付款人：</strong>拥有云或研发运营预算的部门负责人。</p>
+<p class="chain">调用成本与延迟观测<br><span aria-hidden="true">↓</span><br>授权预算限制与路由控制<br><span aria-hidden="true">↓</span><br>可付费的可靠性结果</p>
+<p><strong>必须补齐的证据：</strong>在相同任务质量底线下，测量真实账单、失败重试、尾部延迟与人工运维时间；证明策略改善了结果，而不是只把成本转移到别处。</p>
+<p class="break"><strong>边界：</strong>模型提供商的价格、接口和可用性仍是依赖。需要保守降级、支出上限、迁移方案与经授权的控制权限。</p>
+</article>
+<article class="card">
+<h3>C / 创作者访问管理 → 授权交易</h3>
+<p><strong>拟议使用者：</strong>拥有明确权利的创作者或小型出版者。<strong>潜在付款人：</strong>需要特定内容的 AI 产品团队。</p>
+<p class="chain">创作者内容访问管理<br><span aria-hidden="true">↓</span><br>授权目录、使用记录与结算<br><span aria-hidden="true">↓</span><br>由买方支付内容许可费</p>
+<p><strong>必须补齐的证据：</strong>权利可核实、买方对具体目录存在需求、用途与价格被接受，并发生可对账的实际付款；不能只拿目录规模当交易能力。</p>
+<p class="break"><strong>边界：</strong>供需双方冷启动、许可范围与自报可信度。先验证小目录和明确用途，不承诺覆盖所有内容或自动追踪全部使用。</p>
+</article>
+</div>
+</section>
+
+<section id="validation" aria-labelledby="validation-title">
+<div class="section-head"><span class="section-no" aria-hidden="true">10</span><h2 id="validation-title">14 天验证计划：提前写门槛，事后不改口径</h2></div>
+<p class="lead"><span class="tag proposal">拟定门槛，不是统计规范</span>从上面只选一个细分场景开展一轮实验。以下人数、比例与时间阈值是建议事先约定的决策条件，不是行业均值、统计功效保证或已经发生的结果。</p>
+<div class="grid two subhead">
+<article class="card">
+<h3>第 1—3 天 / 验证问题与付款角色</h3>
+<p>访谈 8 名目标使用者、3 名具有相关预算权限的潜在付款人，角色可重叠。询问最近一次具体任务、现行替代方案、处理成本与采购路径。</p>
+<p><strong>拟定通过线：</strong>至少 5/8 使用者能描述近 30 天反复发生的同类痛点；至少 2/3 付款人能明确预算责任与审批路径。只有“有意思”，不算需求通过。</p>
+</article>
+<article class="card">
+<h3>第 4—7 天 / 获得授权与基线</h3>
+<p>争取 3 个小规模试点；每个准备至少 20 个有权处理、已标注的留出任务。明确访问、用途、保留期限与删除安排；反馈用于改进须另行选择加入。</p>
+<p><strong>拟定通过线：</strong>3 个试点均完成权限确认，并记录原流程的耗时、质量与资源成本；冻结留出集，不能用评估集调参。拿不到授权就不进入自动执行。</p>
+</article>
+<article class="card">
+<h3>第 8—11 天 / 测效果而不是测日志</h3>
+<p>对同类任务比较基线与原型，尽量打乱顺序并盲评质量；计入模型调用、失败重试与支持成本。记录严重误执行，并保留人工回退。</p>
+<p><strong>拟定通过线：</strong>至少 2/3 试点复核耗时下降 20% 或以上；主任务质量不低于基线；严重误执行为 0；误报率不比基线上升超过 1 个百分点。小样本中的 0 次错误不代表风险为零。</p>
+</article>
+<article class="card">
+<h3>第 12—14 天 / 验证付费，不把兴趣当收入</h3>
+<p>向具预算权的付款人提出明确范围、价格、支持与退出条款的付费试点。记录接受、拒绝和延迟的理由，不用未签字的口头兴趣代替成交。</p>
+<p><strong>拟定通过线：</strong>至少 2 名付款人书面接受具体试点价格，且至少发生 1 笔实际试点付款。采购周期较长的线索记为“待观察”，既不伪装成交，也不据此证明没有需求。</p>
+</article>
+</div>
+<p class="note"><strong>停止与调整规则：</strong>出现越权、权利无法核实或严重误执行，先暂停自动执行；效果不达标就修正方案；有效但没有付款承诺，就重查付款角色与预算归属。两周结果只能提供方向性早期信号，不能证明普遍市场需求或长期增长因果。</p>
+<p class="subhead"><strong>可以借鉴的具体路径是：一个反复发生的问题，一段明确授权的执行过程，一项可对照验证的改善，以及一个真实愿意付钱的人。</strong></p>
+</section>
+
+<section id="sources" aria-labelledby="sources-title">
+<div class="section-head"><h2 id="sources-title">来源索引 / 20 项一手材料</h2></div>
+<p class="small">以下采用可定位的页面标题或描述性题名。日期仅使用给定材料中的日期；未标日期的文档不推定首次发布或更新时间。外部链接仅供主动追溯，页面不自动加载外部资源。公司战略文章与公告不替代独立商业验证。</p>
+<ol class="sources subhead">
+<li id="s1"><strong>S1 · Cloudflare｜Our Story / 公司沿革</strong><p class="small">创始人、Project Honey Pot 起点、社区需求与 2010 年发布节点。</p><a href="https://www.cloudflare.com/our-story/" rel="noreferrer">https://www.cloudflare.com/our-story/</a></li>
+<li id="s2"><strong>S2 · Project Honey Pot｜About Us / 系统与组织说明</strong><p class="small">Unspam Technologies、标记诱饵地址及访问与垃圾邮件关联方法。</p><a href="https://www.projecthoneypot.org/about_us.php" rel="noreferrer">https://www.projecthoneypot.org/about_us.php</a></li>
+<li id="s3"><strong>S3 · Cloudflare｜Reaffirming our commitment to free</strong><p class="small">2024-09-27；免费用户、内容覆盖与互联成本的公司解释。旧文网络规模不作当前规模。</p><a href="https://blog.cloudflare.com/cloudflares-commitment-to-free/" rel="noreferrer">https://blog.cloudflare.com/cloudflares-commitment-to-free/</a></li>
+<li id="s4"><strong>S4 · Cloudflare｜A Letter from Matthew Prince and Michelle Zatlyn / 创始人信</strong><p class="small">2019-09-13；网络设备云化、免费 CDN 与共享网络平台战略。</p><a href="https://blog.cloudflare.com/founders-letter/" rel="noreferrer">https://blog.cloudflare.com/founders-letter/</a></li>
+<li id="s5"><strong>S5 · Cloudflare Announces Pricing of Initial Public Offering</strong><p class="small">2019-09-12；发行价 15 美元，9 月 13 日开始交易。</p><a href="https://www.cloudflare.com/press/press-releases/2019/cloudflare-announces-pricing-of-initial-public-offering/" rel="noreferrer">https://www.cloudflare.com/press/press-releases/2019/cloudflare-announces-pricing-of-initial-public-offering/</a></li>
+<li id="s6"><strong>S6 · Cloudflare DNS 文档｜Proxy status</strong><p class="small">DNS-only、代理状态、受支持记录及 HTTP/HTTPS 路径。</p><a href="https://developers.cloudflare.com/dns/proxy-status/" rel="noreferrer">https://developers.cloudflare.com/dns/proxy-status/</a></li>
+<li id="s7"><strong>S7 · Cloudflare Cache 文档｜Default cache behavior</strong><p class="small">默认缓存行为、可缓存对象与条件边界。</p><a href="https://developers.cloudflare.com/cache/concepts/default-cache-behavior/" rel="noreferrer">https://developers.cloudflare.com/cache/concepts/default-cache-behavior/</a></li>
+<li id="s8"><strong>S8 · Cloudflare Workers｜开发者文档</strong><p class="small">边缘／无服务器应用计算。</p><a href="https://developers.cloudflare.com/workers/" rel="noreferrer">https://developers.cloudflare.com/workers/</a></li>
+<li id="s9"><strong>S9 · Cloudflare R2｜对象存储文档</strong><p class="small">R2 的对象存储产品定位。</p><a href="https://developers.cloudflare.com/r2/" rel="noreferrer">https://developers.cloudflare.com/r2/</a></li>
+<li id="s10"><strong>S10 · Cloudflare D1｜托管 SQL 数据库文档</strong><p class="small">D1 的数据库产品定位。</p><a href="https://developers.cloudflare.com/d1/" rel="noreferrer">https://developers.cloudflare.com/d1/</a></li>
+<li id="s11"><strong>S11 · Cloudflare Turnstile｜开发者文档</strong><p class="small">CAPTCHA 替代方案及无需代理整站的嵌入方式。</p><a href="https://developers.cloudflare.com/turnstile/" rel="noreferrer">https://developers.cloudflare.com/turnstile/</a></li>
+<li id="s12"><strong>S12 · Cloudflare｜Bringing AI to the edge / NVIDIA 合作公告</strong><p class="small">2021-04-13；合作与 GPU 计划，不等于全部节点部署完成。</p><a href="https://blog.cloudflare.com/bringing-ai-to-the-edge/" rel="noreferrer">https://blog.cloudflare.com/bringing-ai-to-the-edge/</a></li>
+<li id="s13"><strong>S13 · Cloudflare｜Workers AI 发布说明</strong><p class="small">2023-09-27；数据中心 GPU 推理与边缘云 AI。</p><a href="https://blog.cloudflare.com/workers-ai/" rel="noreferrer">https://blog.cloudflare.com/workers-ai/</a></li>
+<li id="s14"><strong>S14 · Cloudflare Announces Second Quarter 2026 Financial Results</strong><p class="small">2026-08-06；截至 2026-06-30 的季度收入、GAAP 与 non-GAAP 财务指标。</p><a href="https://www.cloudflare.com/en-gb/press/press-releases/2026/cloudflare-announces-second-quarter-2026-financial-results/" rel="noreferrer">https://www.cloudflare.com/en-gb/press/press-releases/2026/cloudflare-announces-second-quarter-2026-financial-results/</a></li>
+<li id="s15"><strong>S15 · Cloudflare｜Introducing Pay Per Crawl</strong><p class="small">2025-07-01；访问／抓取变现的私有测试公告。</p><a href="https://blog.cloudflare.com/introducing-pay-per-crawl/" rel="noreferrer">https://blog.cloudflare.com/introducing-pay-per-crawl/</a></li>
+<li id="s16"><strong>S16 · Cloudflare｜Pay Per Use / 按下游使用付费的 Beta 说明</strong><p class="small">2026-09-30；买方用途与报价、出版者接受、买方自报、计费及结算。</p><a href="https://blog.cloudflare.com/pay-per-use/" rel="noreferrer">https://blog.cloudflare.com/pay-per-use/</a></li>
+<li id="s17"><strong>S17 · Cloudflare Launches at TechCrunch Disrupt</strong><p class="small">2010-09-27 原始上线公告；免费核心服务与每月 20 美元起的收费附加服务同时存在。</p><a href="https://www.cloudflare.com/press/press-releases/2010/cloudflare-launches-at-techcrunch-disrupt/" rel="noreferrer">https://www.cloudflare.com/press/press-releases/2010/cloudflare-launches-at-techcrunch-disrupt/</a></li>
+<li id="s18"><strong>S18 · Hugging Face｜Pricing</strong><p class="small">2026-10-04 核验；社区、企业功能与付费推理基础设施配置。</p><a href="https://huggingface.co/pricing" rel="noreferrer">https://huggingface.co/pricing</a></li>
+<li id="s19"><strong>S19 · Supabase｜Pricing & Fees</strong><p class="small">2026-10-04 核验；免费与付费托管套餐、资源和功能边界。</p><a href="https://supabase.com/pricing" rel="noreferrer">https://supabase.com/pricing</a></li>
+<li id="s20"><strong>S20 · Supabase｜官方开源仓库</strong><p class="small">2026-10-04 核验；开源工具组合与开发平台定位。</p><a href="https://github.com/supabase/supabase" rel="noreferrer">https://github.com/supabase/supabase</a></li>
+</ol>
+</section>
+
+</main>
+<footer class="page">
+<p>研究日期：2026-10-04。材料中的技术能力、公司解释、本文分析与拟议实验应分别阅读；没有独立证据的增长或商业结果，不因叙事完整而成立。</p>
+</footer>
+<script>
+(function(){
+"use strict";
+const ids=["n","r","p","cf","cp","f"];
+const names={n:"N 总用户数",r:"r 付费占比",p:"P 月收入",cf:"Cf 免费成本",cp:"Cp 付费成本",f:"F 固定成本"};
+const fields=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
+const outIds=["opaid","ofree","orevenue","ofreecost","opaidcost","ofixed","osurplus","obe"];
+const outputs=Object.fromEntries(outIds.map(id=>[id,document.getElementById(id)]));
+const status=document.getElementById("calc-status");
+const form=document.getElementById("econ-form");
+const usd=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2});
+const count=new Intl.NumberFormat("en-US",{maximumFractionDigits:2});
+const rate=new Intl.NumberFormat("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});
+const zero=(value,digits)=>Math.abs(value)<0.5*10**(-digits)?0:value;
+const money=value=>usd.format(zero(value,2));
+const percent=value=>rate.format(zero(value,3))+"%";
+function clear(message){
+outIds.forEach(id=>{outputs[id].textContent="无结果";});
+status.classList.add("error");
+status.textContent=message;
+}
+function calculate(){
+const v={},errors=[];
+ids.forEach(id=>{
+const value=fields[id].valueAsNumber;
+const valid=Number.isFinite(value)&&value>=0&&(id!=="n"||value>0)&&(id!=="r"||value<=100);
+fields[id].setAttribute("aria-invalid",valid?"false":"true");
+v[id]=value;
+if(!valid) errors.push(names[id]+(id==="n"?"须为有限且大于 0 的数":id==="r"?"须在 0—100 之间":"须为有限非负数"));
+});
+if(errors.length){clear(errors.join("；")+"。动态结果已清空。");return;}
+const {n,r,p,cf,cp,f}=v;
+const paid=n*(r/100),free=n-paid;
+const revenue=paid*p,freecost=free*cf,paidcost=paid*cp;
+const surplus=revenue-freecost-paidcost-f;
+const rawDenominator=p-cp+cf;
+const denominator=Math.abs(rawDenominator)<=Number.EPSILON*Math.max(Math.abs(p),Math.abs(cp),Math.abs(cf))*4?0:rawDenominator;
+const threshold=denominator>0?(cf+f/n)/denominator*100:null;
+const values=[paid,free,revenue,freecost,paidcost,surplus,denominator,rawDenominator];
+if(!values.every(Number.isFinite)||(threshold!==null&&!Number.isFinite(threshold))){
+clear("数值超出可计算范围，无法得到有限结果。请调整参数；动态结果已清空。");return;
+}
+outputs.opaid.textContent=count.format(zero(paid,2));
+outputs.ofree.textContent=count.format(zero(free,2));
+outputs.orevenue.textContent=money(revenue);
+outputs.ofreecost.textContent=money(freecost);
+outputs.opaidcost.textContent=money(paidcost);
+outputs.ofixed.textContent=money(f);
+outputs.osurplus.textContent=money(surplus);
+const burden=cf+f/n;
+outputs.obe.textContent=denominator===0&&burden===0?"全部比例均收支平衡":denominator<0&&burden===0?"仅 0% 时平衡；增加付费占比会亏损":threshold===null?"当前参数不可达（增加付费占比不能弥补成本）":threshold>100?"当前参数不可达（所需付费占比超过 100%）":percent(threshold);
+status.classList.remove("error");
+status.textContent="输入有效。结果为同月线性假设下的简化结余，不是净利润或市场验证。";
+}
+
+form.addEventListener("input",calculate);
+document.getElementById("reset-calc").addEventListener("click",()=>{ids.forEach(id=>{fields[id].value=fields[id].defaultValue;});calculate();});
+document.getElementById("calc-inputs").disabled=false;
+document.getElementById("calc-mode").textContent="本地交互已启用：修改任一输入即重新计算。无持久化、无网络请求；固定算例不随输入变化。";
+calculate();
+})();
+</script>
+</body>
+</html>

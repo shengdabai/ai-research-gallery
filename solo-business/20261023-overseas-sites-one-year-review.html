@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>出海一年复盘拆解：4 个站 100 万月访问背后的商业模式与一人公司指导</title>
+<style>
+/* ===== 1. Design tokens：全部设计值的唯一来源。断点 --bp-md:760px 只能在 @media 中以字面量出现（见页脚说明）。 ===== */
+:root{
+  --g-950:#14171c; --g-800:#2a2f38; --g-600:#555c69; --g-400:#8d94a2; --g-200:#d9dde4; --g-100:#eef0f4; --g-050:#f8f9fb; --white:#fff;
+  --teal-700:#0f6e63; --teal-500:#19998a; --teal-100:#dcf3ef;
+  --orange-700:#a1530a; --orange-100:#fdebd6;
+  --rose-700:#a3283f; --rose-100:#fbe2e7;
+  --indigo-700:#3f4bb3; --indigo-100:#e4e6fa;
+  --gold-700:#7a6410; --gold-100:#f7f0cf;
+  --c-text:var(--g-950); --c-text-2:var(--g-800); --c-muted:var(--g-600); --c-faint:var(--g-400);
+  --c-bg:var(--g-050); --c-surface:var(--white); --c-surface-2:var(--g-100); --c-line:var(--g-200);
+  --c-brand:var(--teal-500); --c-brand-deep:var(--teal-700); --c-brand-soft:var(--teal-100);
+  --c-src:var(--indigo-700); --c-src-soft:var(--indigo-100);
+  --c-data:var(--teal-700); --c-data-soft:var(--teal-100);
+  --c-ext:var(--gold-700); --c-ext-soft:var(--gold-100);
+  --c-calc:var(--orange-700); --c-calc-soft:var(--orange-100);
+  --c-claim:var(--rose-700); --c-claim-soft:var(--rose-100);
+  --c-on-dark:var(--white); --c-on-dark-2:var(--g-200);
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --fs-xs:.78rem; --fs-sm:.88rem; --fs-md:1rem; --fs-lg:1.18rem; --fs-xl:1.5rem; --fs-2xl:2rem; --fs-num:1.7rem;
+  --lh-tight:1.3; --lh-body:1.75; --fw-reg:400; --fw-med:500; --fw-bold:700; --ls-wide:.05em;
+  --s-1:.25rem; --s-2:.5rem; --s-3:.75rem; --s-4:1rem; --s-5:1.5rem; --s-6:2rem; --s-7:3rem; --s-8:4rem;
+  --r-sm:6px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+  --bw-1:1px; --bw-2:2px; --bw-4:4px;
+  --shadow-1:0 1px 2px rgba(20,23,28,.06); --shadow-2:0 8px 24px rgba(20,23,28,.08);
+  --w-content:1120px; --w-prose:46rem; --col-min:15rem; --col-min-sm:11rem; --tab-min:40rem; --tab-min-lg:52rem;
+  --bar-h:1.6rem; --bar-label:9rem; --lane-label:7rem; --dot:.7rem; --gate-min:12rem;
+  --dur:.18s; --ease:ease-out;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font-family:var(--font);font-size:var(--fs-md);line-height:var(--lh-body);overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:0 0 var(--s-3)}
+h1{font-size:var(--fs-2xl)} h2{font-size:var(--fs-xl)} h3{font-size:var(--fs-lg)} h4{font-size:var(--fs-md)}
+p{margin:0 0 var(--s-3)} ul,ol{margin:0 0 var(--s-3);padding-left:var(--s-5)} li{margin-bottom:var(--s-1)}
+a{color:var(--c-brand-deep)} a:focus-visible{outline:var(--bw-2) solid var(--c-brand);outline-offset:var(--s-1)}
+.muted{color:var(--c-muted);font-size:var(--fs-sm)}
+.wrap{max-width:var(--w-content);margin:0 auto;padding:0 var(--s-4)}
+section{padding:var(--s-7) 0;border-top:var(--bw-1) solid var(--c-line)}
+.kicker{display:block;color:var(--c-brand-deep);font-size:var(--fs-xs);letter-spacing:var(--ls-wide);font-weight:var(--fw-bold);margin-bottom:var(--s-1)}
+.sec-head{margin-bottom:var(--s-5)} .prose{max-width:var(--w-prose)}
+.grid{display:grid;gap:var(--s-4);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),1fr))}
+.grid-sm{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-sm),1fr))}
+/* hero */
+.hero{background:var(--g-950);color:var(--c-on-dark);padding:var(--s-8) 0 var(--s-7)}
+.hero p{color:var(--c-on-dark-2)} .hero .verdict{color:var(--c-on-dark);font-size:var(--fs-lg);font-weight:var(--fw-med);max-width:var(--w-prose)}
+.hero .meta{font-size:var(--fs-sm)}
+.three{display:grid;gap:var(--s-3);grid-template-columns:repeat(auto-fit,minmax(var(--col-min),1fr));margin:var(--s-5) 0 0;padding:0;list-style:none}
+.three li{background:var(--g-800);border-radius:var(--r-md);padding:var(--s-4);font-size:var(--fs-sm);color:var(--c-on-dark-2)}
+.three li b{display:block;color:var(--c-on-dark);font-size:var(--fs-md);margin-bottom:var(--s-1)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s-2);margin:var(--s-4) 0 0;padding:0;list-style:none;font-size:var(--fs-sm)}
+.tag{display:inline-block;border-radius:var(--r-pill);padding:0 var(--s-2);font-size:var(--fs-xs);font-weight:var(--fw-bold);line-height:1.9;white-space:nowrap}
+.t-src{background:var(--c-src-soft);color:var(--c-src)} .t-data{background:var(--c-data-soft);color:var(--c-data)}
+.t-ext{background:var(--c-ext-soft);color:var(--c-ext)} .t-calc{background:var(--c-calc-soft);color:var(--c-calc)} .t-claim{background:var(--c-claim-soft);color:var(--c-claim)}
+/* cards */
+.card{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--s-4);box-shadow:var(--shadow-1)}
+.card h3{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap}
+.callout{border-left:var(--bw-4) solid var(--c-brand);background:var(--c-surface);padding:var(--s-3) var(--s-4);border-radius:var(--r-sm);margin:var(--s-4) 0}
+.callout.calc{border-left-color:var(--c-calc)} .callout.claim{border-left-color:var(--c-claim)}
+/* stat */
+.stat{display:grid;gap:var(--s-1)} .stat .n{font-size:var(--fs-num);font-weight:var(--fw-bold);line-height:var(--lh-tight);color:var(--c-brand-deep)} .stat .l{font-size:var(--fs-sm);color:var(--c-muted)}
+/* bars：--w 为数据驱动的内联值（登记例外） */
+.bars{display:grid;gap:var(--s-2);margin:0;padding:0;list-style:none}
+.bars li{display:grid;grid-template-columns:var(--bar-label) 1fr;gap:var(--s-3);align-items:center;font-size:var(--fs-sm)}
+.bars .track{background:var(--c-surface-2);border-radius:var(--r-sm);height:var(--bar-h);position:relative;overflow:hidden}
+.bars .fill{position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--c-brand);border-radius:var(--r-sm)}
+.bars .fill.b2b{background:var(--c-calc)}
+.bars .val{position:absolute;inset:0 var(--s-2) 0 auto;display:flex;align-items:center;font-weight:var(--fw-bold);color:var(--c-text-2)}
+/* funnel */
+.funnel{display:grid;gap:var(--s-2);margin:0;padding:0;list-style:none;counter-reset:f}
+.funnel li{counter-increment:f;display:grid;grid-template-columns:auto 1fr auto;gap:var(--s-3);align-items:center;background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-sm);padding:var(--s-2) var(--s-3);font-size:var(--fs-sm)}
+.funnel li::before{content:counter(f);width:var(--s-5);height:var(--s-5);border-radius:var(--r-pill);background:var(--c-brand-soft);color:var(--c-brand-deep);display:grid;place-items:center;font-weight:var(--fw-bold);font-size:var(--fs-xs)}
+.funnel li.na{border-style:dashed;color:var(--c-muted)} .funnel li.na::before{background:var(--c-surface-2);color:var(--c-faint)}
+.funnel .v{font-weight:var(--fw-bold);white-space:nowrap}
+/* tables */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);background:var(--c-surface)}
+table{border-collapse:collapse;width:100%;min-width:var(--tab-min);font-size:var(--fs-sm)}
+table.wide{min-width:var(--tab-min-lg)}
+th,td{padding:var(--s-2) var(--s-3);border-bottom:var(--bw-1) solid var(--c-line);vertical-align:top;text-align:left}
+th{background:var(--c-surface-2);color:var(--c-text-2);font-weight:var(--fw-bold);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0} td.num{white-space:nowrap}
+/* timeline lanes */
+.lanes{display:grid;gap:var(--s-2);margin:0;padding:0;list-style:none}
+.lanes li{display:grid;grid-template-columns:var(--lane-label) 1fr;gap:var(--s-3);background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-sm);padding:var(--s-3);font-size:var(--fs-sm)}
+.lanes .when{font-weight:var(--fw-bold);color:var(--c-brand-deep)}
+.lanes .ev{display:grid;gap:var(--s-1)}
+.lanes .ev span{display:grid;grid-template-columns:auto 1fr;gap:var(--s-2);align-items:start}
+.lanes .ev i{display:inline-block;width:var(--dot);height:var(--dot);border-radius:var(--r-pill);margin-top:var(--s-2)}
+.lanes .p i{background:var(--c-src)} .lanes .a i{background:var(--c-brand)} .lanes .r i{background:var(--c-calc)}
+.legend{display:flex;gap:var(--s-4);flex-wrap:wrap;font-size:var(--fs-xs);color:var(--c-muted);margin-bottom:var(--s-3)}
+.legend i{display:inline-block;width:var(--dot);height:var(--dot);border-radius:var(--r-pill);margin-right:var(--s-1);vertical-align:middle}
+/* gates */
+.gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--gate-min),1fr));gap:var(--s-3);margin:0;padding:0;list-style:none;counter-reset:g}
+.gates li{counter-increment:g;background:var(--c-surface);border:var(--bw-2) solid var(--c-brand-soft);border-radius:var(--r-md);padding:var(--s-3);font-size:var(--fs-sm)}
+.gates li::before{content:"第 " counter(g) " 周";display:block;color:var(--c-brand-deep);font-weight:var(--fw-bold);font-size:var(--fs-xs);letter-spacing:var(--ls-wide);margin-bottom:var(--s-1)}
+.gates li b{display:block;margin-bottom:var(--s-1)} .gates li .gate{margin-top:var(--s-2);padding-top:var(--s-2);border-top:var(--bw-1) dashed var(--c-line);color:var(--c-text-2)}
+.checklist{list-style:none;padding:0;margin:0} .checklist li{padding-left:var(--s-5);position:relative;margin-bottom:var(--s-2)}
+.checklist li::before{content:"✕";position:absolute;left:0;color:var(--c-claim);font-weight:var(--fw-bold)} .checklist.do li::before{content:"✓";color:var(--c-data)}
+.tcard{background:var(--c-surface);border:var(--bw-2) solid var(--c-brand-soft);border-radius:var(--r-lg);padding:var(--s-5);box-shadow:var(--shadow-2)}
+.src{font-size:var(--fs-sm)} .src li{margin-bottom:var(--s-2)}
+footer{padding:var(--s-6) 0 var(--s-8);color:var(--c-muted);font-size:var(--fs-xs);border-top:var(--bw-1) solid var(--c-line)}
+@media (prefers-reduced-motion:no-preference){a{transition:color var(--dur) var(--ease)}}
+/* --bp-md:760px —— 唯一允许的字面量断点 */
+@media (max-width:760px){
+  :root{--fs-2xl:1.55rem;--fs-xl:1.28rem;--s-7:2rem;--s-8:2.5rem;--bar-label:6.5rem;--lane-label:4.5rem}
+  .bars li,.lanes li{grid-template-columns:var(--bar-label) 1fr}
+  .funnel li{grid-template-columns:auto 1fr;grid-template-areas:"n t" "n v"} .funnel .v{grid-area:v}
+}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <small class="meta">拆解对象：「哥飞」公众号的社群成员复盘（发布日期未核实，按文中时间线推测为 2026-10 下旬）《出海一年复盘：注册用户60万+，月访问100万+，我是怎么做到的？》 · 核对日 2026-10-23</small>
+  <h1>出海一年复盘拆解：4 个站、100 万月访问背后的商业模式，以及一人公司能学什么</h1>
+  <p class="verdict">一句话判断：这是一个「以 SEO 获客为主（API 站另有作者自述的 GEO 获客）+ 3 个 C 端工具站（第一大站是 AI 图片编辑，另两站类型未披露）+ 1 个 B 端 API 中转站」的组合；流量数字有第三方截图支撑，收入没有任何绝对数字，四个流量腰斩原因都只是作者归因。可学的是选词、上线节奏和失败记录；不可照搬的是「重金砸外链守成」和「体验比增长重要」这类从单个案例推出的定律。</p>
+  <ul class="three">
+    <li><b>业务现状</b>第一大站约 52 万月访问但 8→9 月已回落近半；第三大站 9 月流量跌 90% 后回到约三分之一；API 站约占四站 9 月估算访问量的 4.2%，作者称其营收等于其他所有站总和，但营收时间范围未披露。</li>
+    <li><b>最大证据缺口</b>未披露营收总额、完整经营成本和利润，也没有付费转化与复购数据；四个下跌原因没有一个附带独立证据。</li>
+    
+  </ul>
+  <ul class="chips" aria-label="标签说明">
+    <li><span class="tag t-src">原文</span> 作者在文中的陈述</li>
+    <li><span class="tag t-data">截图数据</span> 文中 AITDK / GSC 截图读数</li>
+    <li><span class="tag t-ext">外部事实</span> 文章之外可核来源</li>
+    <li><span class="tag t-calc">本文推算</span> 本页据以上数据的计算或推论</li>
+    <li><span class="tag t-claim">作者归因</span> 作者的解释，未经独立证据核实</li>
+  </ul>
+</div></header>
+
+<main>
+<section id="s1"><div class="wrap">
+  <div class="sec-head"><span class="kicker">一、事实基线</span><h2>产品、流量、用户与收入：哪些有数、哪些没数</h2>
+  <p class="prose">作者是哥飞社群的一位成员，不是哥飞本人；在国内做了十几年 App 产品经理，不会写代码。文章发布日期页面未抓到，按文中「整整一年」与时间线推测为 2026 年 10 月下旬，本页不用它计算精确经营周期。流量数字来自文中 AITDK 第三方估算截图（2026 年 9 月）与 Google Search Console（GSC）截图，口径不同，不能混成一条序列。</p></div>
+  <div class="grid">
+    <article class="card"><h3>四个站的月访问（AITDK，2026-09）<span class="tag t-data">截图数据</span></h3>
+      <ul class="bars">
+        <li><span>第一大站 · AI 图片编辑</span><div class="track"><div class="fill" style="--w:100%"></div><span class="val">52.0 万</span></div></li>
+        <li><span>第二大站 · 类型未披露</span><div class="track"><div class="fill" style="--w:41%"></div><span class="val">21.5 万</span></div></li>
+        <li><span>第三大站 · 照片类工具（按截图页面）</span><div class="track"><div class="fill" style="--w:35%"></div><span class="val">18.1 万</span></div></li>
+        <li><span>API 中转站（B 端）</span><div class="track"><div class="fill b2b" style="--w:8%"></div><span class="val">4.0 万</span></div></li>
+      </ul>
+      <p class="muted">四站合计约 95.6 万，作者称加上小站「正好 100 万+」。第一大站曲线：7 月约 10 万 → 8 月接近 100 万 → 9 月 52 万，已在回落。</p></article>
+    <article class="card"><h3>经营指标及缺口（不构成同批用户的转化漏斗）</h3>
+      <ol class="funnel">
+        <li><span>月访问（四站截图相加，2026-09）<span class="tag t-data">截图数据</span></span><span class="v">约 95.6 万</span></li>
+        <li><span>注册用户（邮箱登录，累计，非同月）<span class="tag t-src">原文</span></span><span class="v">29 万 + 14 万 + 14 万 + 小站</span></li>
+        <li class="na"><span>激活 / 完成任务</span><span class="v">未披露</span></li>
+        <li class="na"><span>付费用户数、客单价、月收入</span><span class="v">未披露</span></li>
+        <li class="na"><span>复购 / 留存 / 退款</span><span class="v">未披露</span></li>
+      </ol>
+      <p class="muted">月访问与累计注册不是同一批用户、同一时段，不能据此算注册率或转化率。文中仅有的收入线索：2026-01-02 出 3 单；第三站上线 2 周出 2 单；已放弃的内页站扩页前「也有付费进来」，金额与订单数未披露；会员 9.9（币种未写）；「API 站营收 = 其他所有站营收总和」；截图中有「已经送了 1,000 积分」的后台记录。</p></article>
+  </div>
+  <div class="table-scroll" style="margin-top:var(--s-4)"><table class="wide">
+    <thead><tr><th>站点</th><th>月访问</th><th>跳出率</th><th>页/访</th><th>停留</th><th>域名注册</th><th>注册用户</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>第一大站（主词 ai photo editor，.ai 域名）</td><td class="num">520.37K</td><td class="num">40.43%</td><td class="num">2.78</td><td class="num">1:12</td><td class="num">2025-03-04</td><td class="num">29 万+</td><td>GSC 2025-10 至 2026-07 累计点击 5.56 万、曝光 94.1 万、CTR 5.9%、平均排名 11.4；2026-03 起才明显上升</td></tr>
+      <tr><td>第二大站</td><td class="num">214.6K</td><td class="num">38.94%</td><td class="num">3.16</td><td class="num">1:04</td><td class="num">2026-04-16</td><td class="num">14 万+</td><td>7→9 月快速上升后持平</td></tr>
+      <tr><td>第三大站</td><td class="num">180.85K</td><td class="num">43.98%</td><td class="num">1.93</td><td class="num">0:42</td><td class="num">2026-04-19</td><td class="num">14 万+</td><td>GSC 近 6 个月点击 22.9 万、曝光 252 万、CTR 9.1%、平均排名 6.4；日点击 8 月底约 3,500 → 9 月 26 日前后约 250–500 → 10 月 19 日约 1,300</td></tr>
+      <tr><td>API 中转站（apimodels.app）</td><td class="num">40.21K</td><td class="num">44.00%</td><td class="num">5.37</td><td class="num">4:09</td><td class="num">2026-01-12</td><td class="num">未披露</td><td>7→9 月持续上升；作者称营收等于其他所有站总和</td></tr>
+      <tr><td>内页组合站（已放弃）</td><td class="num">0</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2026-01-04</td><td class="num">—</td><td>3 月最多上 3000+ 内页、一天加 1000+，之后再没起来</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="margin-top:var(--s-3)">访问量估算口径：AITDK 第三方估算可能含重复访问与抓取误差；注册用户数为作者自述；GSC 是站长后台真实点击，但只覆盖 Google 搜索流量。</p>
+</div></section>
+
+<section id="s2"><div class="wrap">
+  <div class="sec-head"><span class="kicker">二、三泳道时间线</span><h2>产品事件、获客动作、业务结果分开看，只看先后，不暗示因果</h2></div>
+  <div class="legend"><span><i style="background:var(--c-src)"></i>产品事件</span><span><i style="background:var(--c-brand)"></i>获客动作</span><span><i style="background:var(--c-calc)"></i>业务结果</span></div>
+  <ol class="lanes">
+    <li><span class="when">2025-03</span><div class="ev"><span class="p"><i></i>用 Cursor 开始做 App；注册后来成为第一大站的 .ai 域名</span></div></li>
+    <li><span class="when">2025 年 App 阶段（具体月份未披露）</span><div class="ev"><span class="r"><i></i>Reddit 两个账号、TikTok 一个账号被封；App「花火计算」重构 7 次仍未获推荐；做了半年多发现 App 最好的获客渠道是自媒体</span></div></li>
+    <li><span class="when">2025-07</span><div class="ev"><span class="p"><i></i>作者原话「Claudecode 横空出世，我才真的觉得我的春天来了」；开始使用的具体月份未明确。<span class="tag t-ext">外部事实</span> Claude Code 2025-02 研究预览、2025-05 正式发布</span></div></li>
+    <li><span class="when">2025-10</span><div class="ev"><span class="r"><i></i>仍未赚到钱</span><span class="p"><i></i>10 月底转做出海网站；两个月内做了四五六个小站（艺术字签名、字体设计、App Store 多语言翻译）</span></div></li>
+    <li><span class="when">2025-12</span><div class="ev"><span class="r"><i></i>12-20：一年没赚一分钱</span><span class="a"><i></i>12-25 入哥飞社群（2600 元/年），看完分享视频后花两三天优化 ai photo editor 站</span></div></li>
+    <li><span class="when">2026-01</span><div class="ev"><span class="r"><i></i>01-02 出 3 单（第一笔收入）</span><span class="p"><i></i>01-04 注册内页组合站域名；01-12 注册 API 站域名</span><span class="a"><i></i>边学边优化主站</span></div></li>
+    <li><span class="when">2026-03</span><div class="ev"><span class="r"><i></i>主站 GSC 开始爬坡</span><span class="a"><i></i>内页站最多上 3000+ 页、一天加 1000+</span><span class="r"><i></i>内页站从此没起来</span></div></li>
+    <li><span class="when">2026-04</span><div class="ev"><span class="p"><i></i>04-16、04-19 注册第二、第三大站域名；第三站先上 1 个首页，收录后 5 天内加到 5 页</span><span class="a"><i></i>发几条博客外链</span><span class="r"><i></i>2 周后出 2 单</span></div></li>
+    <li><span class="when">2026-05–07</span><div class="ev"><span class="a"><i></i>第三站疯狂加内页与博客外链；7 月买 45 个批量外链；7 月在朋友群两次直播分享该站 SEO</span><span class="r"><i></i>第三站 GSC 红框标注的增长区间约为 6 月初至 8 月初；日点击到 8 月底达到约 3,500</span></div></li>
+    <li><span class="when">2026-08–09</span><div class="ev"><span class="r"><i></i>第一大站 8 月接近 100 万访问后回落；第三站 8–9 月增长放缓，9 月中下旬日点击跌到约 250–500（约 −90%）</span><span class="a"><i></i>作者自述「没有警惕，没有继续加外链」</span></div></li>
+    <li><span class="when">2026-10</span><div class="ev"><span class="a"><i></i>复盘四个原因；做内容与高权重外链</span><span class="r"><i></i>第三站日点击回到约 1,300（10 月 19 日）</span></div></li>
+  </ol>
+</div></section>
+
+<section id="s3"><div class="wrap">
+  <div class="sec-head"><span class="kicker">三、商业模式</span><h2>流量怎样变成收入：C 端流量型 vs B 端工具型</h2></div>
+  <div class="table-scroll"><table class="wide">
+    <thead><tr><th>维度</th><th>3 个主要 C 端工具站（类型披露不完整）</th><th>API 中转站（B 端）</th></tr></thead>
+    <tbody>
+      <tr><td>收入模式</td><td>第一大站有会员线索（原文「9.9 的会员」<span class="tag t-src">原文</span>）；截图后台有「送 1,000 积分」记录<span class="tag t-data">截图数据</span>，赠送积分不等于已确认积分收费；其余两站收费方式未披露</td><td>具体计费方式未披露；作者称提供 30 天存储，下游可直接返回给用户；卖点「便宜且稳定、官方原生」<span class="tag t-src">原文</span></td></tr>
+      <tr><td>可确认的付费证据</td><td>首单 3 单、第三站 2 周 2 单；其余未披露</td><td>仅「营收 = 其他站总和」一句；无数字</td></tr>
+      <tr><td>获客</td><td>Google SEO 为主</td><td>SEO + GEO（AI 搜索引用），作者称几乎未在国内推广</td></tr>
+      <tr><td>成本项（文中提到）</td><td>域名、服务器、AI 工具、办卡、45 个批量外链、社群 2600 元/年；上游生图/视频模型推理费未披露</td><td>上游模型调用成本、存储与 CDN、售后；全部未披露</td></tr>
+      <tr><td>复购 / 留存证据</td><td>未披露；截图停留约 1 分钟、2–3 页/访</td><td>未披露；截图 5.37 页/访、停留 4:09</td></tr>
+      <tr><td>主要风险</td><td>单渠道、算法波动、同行复刻、上游模型价格</td><td>上游服务条款与转售许可、模型授权、价格战、稳定性、数据留存合规</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout calc"><strong>情景估算，不是商业结论</strong> <span class="tag t-calc">本文推算</span> 若按作者口径「API 站营收 = 其他站总和」，则 API 站用约 4% 的访问量贡献约 50% 的营收。公式：(50% ÷ 4.0 万) ÷ (50% ÷ 91.6 万) ≈ 22.8，即单位访问营收约为三个 C 端站的 20 倍量级。这个数只在四个前提下成立：第三方流量估算大致准确；作者的营收口径属实；营收关系对应 2026-09 同一月份；「其他所有站」中的小站影响可忽略。文中没有时间范围，所以实际倍数无法确认。解释上的限制：营收不等于利润，API 中转的上游推理成本、退款与售后都未知。它提示的方向是「B 端工具型业务的单位流量价值可能远高于 C 端」，不是「API 中转更赚钱」。</div>
+  <div class="callout claim"><strong>「产品体验远比增长重要」是作者的经营原则，不是本案已证明的结论</strong> <span class="tag t-claim">作者归因</span> 作者用 API 站的营收和其他中转站的倒闭来支持这句话。但 API 站 5.37 页/访、4 分钟停留与 C 端 1 分钟停留不能横向比较：开发者查文档、调接口、排错本来就需要更多页面和时间，停留长也可能代表操作困难。能支持「体验好」的证据是任务完成率、付费转化、重复使用、退款率，文中都没有。</div>
+</div></section>
+
+<section id="s4"><div class="wrap">
+  <div class="sec-head"><span class="kicker">四、增长机制与失败分析</span><h2>选词、上线节奏、外链，以及第三站腰斩的四个归因</h2></div>
+  <div class="grid">
+    <article class="card"><h3>作者的选词与上线节奏 <span class="tag t-src">原文</span></h3>
+      <ul>
+        <li>选词线索：注意到一个竞品流量增长快，且搜索结果前十多为大站的内页，判断自己专门做这个词的站能排进去，并做出比对手更好的体验。</li>
+        <li>上线节奏：先上 1 个首页，等 Google 收录后再加到约 5 页（共 5 天）；发几条博客外链；2 周看到 2 单后才扩内页、加外链。</li>
+        <li>外链：前期纯博客外链，7 月才买 45 个批量外链；事后发现批量外链有有效期。</li>
+      </ul>
+      <p class="muted"><span class="tag t-calc">本文推算</span>「前十多为大站内页」只是调查线索，不能单独证明机会成立；还要看搜索意图、与付费需求的距离、自己能否做出可感知的差异。</p></article>
+    <article class="card"><h3>内页组合站之死 vs 哥飞 2024 年的修正做法 <span class="tag t-ext">外部事实</span></h3>
+      <p>作者 1 月起按「场景 + 载体 + 表达 + 语言」组合批量建页，起初流量和付费都有（金额未披露）；3 月因「付费还不错」而最多上 3000+ 页、一天加 1000+，之后站死。已有付款不能证明扩页策略有效。哥飞 2024-08-13 在社群文章《再聊内链和内页，以及如何做好一个内容型工具站》中已修正过类似做法：按用户生成内容逐条建页，会导致「很多个不同页面可能在抢同一个关键词排名」「每一个页面都不是特别聚焦，文字内容不够」，应改为「挖掘可能会有搜索量的关键词，为每一个关键词生成一个页面」。</p>
+      <p class="muted"><span class="tag t-calc">本文推算</span>这是与该修正做法相符的案例解释。单个站的失败不能证明批量建页就是唯一死因；域名新、无外链、收录预算等因素同样可能。</p></article>
+  </div>
+  <h3 style="margin-top:var(--s-5)">第三站流量跌 90%：作者四个归因的证据矩阵</h3>
+  <div class="table-scroll"><table class="wide">
+    <thead><tr><th>作者提出的解释</th><th>支持证据</th><th>替代解释 / 反证</th><th>本页评估</th><th>怎样进一步验证</th></tr></thead>
+    <tbody>
+      
+      <tr><td>② 7 月直播内容外传，被多人复刻一模一样，新站分流 <span class="tag t-claim">作者归因</span></td><td>作者看到复刻站</td><td>分享在先、下跌在后不足以证明因果；复刻站是否进入同一关键词前十、何时进入未展示</td><td>证据不足</td><td>查复刻站上线时间与关键词重叠度、SERP 前十变化</td></tr>
+      <tr><td>③ 一个相关方向的站 7 月起猛涨，现 150 万月访问，切走流量 <span class="tag t-claim">作者归因</span></td><td>竞品流量上涨</td><td>竞品增长不等于抢走本站流量，需求是否同源未证明</td><td>证据不足</td><td>比较两站共同排名的查询词与各自点击变化</td></tr>
+      <tr><td>④ 谷歌 9 月底–10 月初算法更新，博客外链拖累评分 <span class="tag t-claim">作者归因</span></td><td>作者自述美国排名掉出前十，具体日期未披露</td><td>本页未核实该窗口是否有官方公告的核心更新；所称窗口晚于 9 月 14 日前后的下跌加速起点，不能解释起跌</td><td>证据不足，时间不符</td><td>核对 Google Search Status Dashboard 的更新记录，再对照站内受影响页面类型</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="margin-top:var(--s-3)"><span class="tag t-calc">本文推算</span>「本页评估」是本页对每条因果解释的主观判断，标准：有独立数据对应为「有支持」，只有时间先后与作者自述为「证据不足」，时间对不上为「时间不符」。四个因素可能同时发生，也可能与站内技术问题、内容质量或搜索需求季节变化共同出现。GSC 截图里 9 月 1 日前后已有波动，9 月 14 日起加速下跌；②的直播与③的竞品增长始于下跌之前；①外链失效、②复刻站出现的具体日期未披露，无法确认与下跌的先后关系；④所称窗口晚于下跌加速起点。四者的贡献都无法从截图中分离。</p>
+</div></section>
+
+
+
+<section id="s6"><div class="wrap">
+  <div class="sec-head"><span class="kicker">六、给一人公司的指导</span><h2>学什么、不学什么、怎样用 4 周低成本验证 <span class="tag t-calc">本文推算</span></h2>
+  <p class="prose">以下是本页按案例与证据给出的做法，不是作者原话。前提：你熟悉 AI 编程、没有推广预算、一个人经营。</p></div>
+  <div class="grid">
+    <article class="card"><h3>可以学的</h3>
+      <ul class="checklist do">
+        <li>先验证一个付费任务：1 个首页 → 收录 → 5 页 → 2 周看是否有单，再决定扩页。</li>
+        <li>选词三条线索一起看：竞品增长快、前十多为大站内页、自己能做出可感知的差异；再加一条：这个词离付费有多近。</li>
+        <li>一个关键词一个页面，每页有独立价值；页面数量不是增长成果。</li>
+        
+        <li>公开具体词和站点前，先评估复刻风险与获客收益；缺少其他竞争优势时，可以先不公开。</li>
+        <li>把自己的真实需求做成 B 端工具（作者的 API 站起源于自用）；「工具型业务单位流量价值高于流量型」是本案提出、值得验证的假设。</li>
+      </ul></article>
+    <article class="card"><h3>不要照搬的</h3>
+      <ul class="checklist">
+        <li>「产品验证后不惜利润重金砸外链」：没有推广预算的一人公司应先定风险预算，再按增量收益分阶段投入。</li>
+        <li>「体验比增长重要」当定律：它是经营原则，本案没有证明；先拿任务完成率和付费转化说话。</li>
+        <li>批量组合内页：先查关键词重叠、页面重复度和真实需求，再决定要不要建。</li>
+        <li>做 API 中转：先核上游服务条款与转售许可，再算上游调价后的毛利；不是「便宜且稳定」就能做。</li>
+        <li>把「一年 100 万访问」当目标：访问量不是结果，付费和复购才是。</li>
+      </ul></article>
+  </div>
+  <h3 style="margin-top:var(--s-5)">4 周实验卡：每周一道决策门</h3>
+  <ol class="gates">
+    <li><b>定义问题</b>写清解决谁的什么任务、现有替代方案、为什么会付费；选 3–5 个候选词并记录搜索意图与前十结果类型。同时写下第 4 周的判定标准：样本数、观察期限、通过条件（例如至少 1 笔真实付款）、停止条件。<div class="gate">门：说不清「谁、为什么付费」，或没写判定标准，就不进入第 2 周。</div></li>
+    <li><b>交付核心价值</b>只做一个核心工作流，跑通结果质量、单次成本和关键操作；埋点记录完成率与成本。<div class="gate">门：自己连续用 5 次都愿意继续用，且单次成本可承受。</div></li>
+    
+    <li><b>决定下一步</b>按第 1 周写好的判定标准比较需求、单位成本、付费信号、获客难度，选择继续、调整或停止。<div class="gate">门：SEO 曝光不足时延长观察或换验证渠道，不把「没排名」直接判成「没需求」。</div></li>
+  </ol>
+  <div class="tcard" style="margin-top:var(--s-5)">
+    <ul>
+      <li><b>风险预算：</b>只有出现稳定付费后，才从可支配资金（过去 30 天收入扣除模型调用等履约成本、退款预留和必要支出后的余额）中设一个投入上限做内容与外链，比例自定（例如可支配资金的 20%–30%，仅为示例）；按月复核增量收益，没有增量就停。</li>
+      
+      <li><b>预警：</b>GSC 日点击连续 7 天低于过去 28 天均值的 70%，立即查外链存活、SERP 前十变化、更新公告，不等腰斩再复盘。</li>
+      <li><b>复盘格式：</b>每条解释写「支持证据 / 替代解释 / 置信度 / 下一步验证」，不写「原因是」。</li>
+    </ul></div>
+</div></section>
+
+<section id="s7"><div class="wrap">
+  <div class="sec-head"><span class="kicker">七、证据附录与限制</span><h2>来源、口径与未核实事项</h2></div>
+  <div class="grid">
+    <article class="card"><h3>来源</h3><ul class="src">
+      <li>原文：哥飞公众号《出海一年复盘：注册用户60万+，月访问100万+，我是怎么做到的？》，<a href="https://mp.weixin.qq.com/s/goscuFcIsd3xs5wmzBtrvA" rel="noopener">mp.weixin.qq.com/s/goscuFcIsd3xs5wmzBtrvA</a>，2026-10-23 抓取；作者为社群成员，文中未署名。</li>
+      <li>截图：文中 4 张 AITDK 流量概览（2026-09）、3 张 GSC 曲线、1 张死站流量图；读数由本页人工转录。</li>
+      
+      <li>Claude Code 发布时间：Anthropic 2025-02-24 研究预览、2025-05-22 正式发布（公开公告）。</li>
+    </ul></article>
+    <article class="card"><h3>未核实与限制</h3><ul class="src">
+      <li>文章发布日期；作者身份与站点域名（除 apimodels.app 出现在截图标题栏）。</li>
+      <li>Google 2026 年 9 月底至 10 月初是否有核心更新，本页未查官方状态页。</li>
+      <li>「比官方便宜 1 折」「11 月后官方 6 折」原文表述有歧义，本页不换算。</li>
+      <li>所有收入关系均为作者口径；所有「本文推算」都依赖第三方流量估算。</li>
+    </ul></article>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap"></div></footer>
+</body>
+</html>

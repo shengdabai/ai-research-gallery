@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek 开源推理框架 DeepInfer — 一期视频解说的逐条核对</title>
+<style>
+:root{
+  --font-sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fs-xs:0.75rem; --fs-sm:0.8125rem; --fs-base:0.9375rem; --fs-md:1.0625rem;
+  --fs-lg:1.25rem; --fs-xl:1.625rem; --fs-2xl:2.125rem; --fs-3xl:2.75rem;
+  --lh-tight:1.25; --lh-snug:1.45; --lh-normal:1.75;
+  --w-normal:400; --w-medium:500; --w-semibold:600; --w-bold:700;
+  --ls-tight:-0.01em; --ls-wide:0.04em;
+
+  --c-bg:#f7f8fa; --c-surface:#ffffff; --c-surface-alt:#eff1f5; --c-surface-deep:#1b2130;
+  --c-border:#dfe3ea; --c-border-strong:#c3cad6; --c-rule:#11161f;
+  --c-text:#1b2130; --c-text-soft:#4d5668; --c-text-muted:#79818f;
+  --c-text-invert:#f2f4f8; --c-text-invert-soft:#9aa5b8; --c-border-invert:#3b4354;
+  --c-accent:#1f5fd0; --c-accent-soft:#e6edfb; --c-accent-deep:#143f8e;
+
+  --c-ok:#0f7a5a; --c-ok-bg:#e2f3ec;
+  --c-fix:#a8341f; --c-fix-bg:#fbe8e3;
+  --c-scope:#8a5a00; --c-scope-bg:#fbf0dc;
+  --c-over:#9a3a6e; --c-over-bg:#f9e6f0;
+  --c-unver:#5a5f6b; --c-unver-bg:#e9ebef;
+  --c-opinion:#3f5a8f; --c-opinion-bg:#e9eef8;
+
+  --sp-0:0; --sp-1:0.25rem; --sp-2:0.5rem; --sp-3:0.75rem; --sp-4:1rem;
+  --sp-5:1.5rem; --sp-6:2rem; --sp-7:3rem; --sp-8:4.5rem; --sp-9:6rem;
+  --radius-sm:0.25rem; --radius-md:0.5rem; --radius-lg:0.875rem;
+  --bw:1px; --bw-thick:3px; --bw-rule:4px;
+  --measure:68ch; --page-max:72rem; --narrow-max:46rem;
+  --col-min-wide:17rem; --col-min-mid:13rem; --col-min-narrow:9.5rem; --col-min-legend:19rem;
+  --shadow-sm:0 1px 2px #1b213010;
+  --shadow-md:0 2px 14px #1b213014;
+  --bar-h:0.875rem; --bar-gap:0.375rem; --dot:0.5rem;
+  --tap:2.75rem;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:var(--sp-0); background:var(--c-bg); color:var(--c-text);
+  font-family:var(--font-sans); font-size:var(--fs-base); line-height:var(--lh-normal);
+  overflow-wrap:anywhere;
+}
+.wrap{max-width:var(--page-max); margin-inline:auto; padding-inline:var(--sp-5);}
+header.hero{
+  background:var(--c-surface-deep); color:var(--c-text-invert);
+  padding-block:var(--sp-8) var(--sp-7);
+}
+.kicker{
+  font-size:var(--fs-sm); letter-spacing:var(--ls-wide);
+  color:var(--c-text-invert-soft); margin-block-end:var(--sp-3);
+}
+h1{
+  font-size:var(--fs-3xl); line-height:var(--lh-tight); letter-spacing:var(--ls-tight);
+  font-weight:var(--w-bold); margin-block:var(--sp-0) var(--sp-4); max-width:var(--measure);
+}
+.standfirst{
+  font-size:var(--fs-md); color:var(--c-text-invert); max-width:var(--measure);
+  margin-block:var(--sp-0) var(--sp-5); line-height:var(--lh-snug);
+}
+.hero-meta{
+  font-size:var(--fs-sm); color:var(--c-text-invert-soft);
+  display:flex; flex-wrap:wrap; gap:var(--sp-2) var(--sp-5);
+  border-block-start:var(--bw) solid var(--c-border-invert); padding-block-start:var(--sp-4);
+}
+main{padding-block:var(--sp-7) var(--sp-9);}
+section{margin-block-end:var(--sp-8); scroll-margin-block-start:var(--sp-5);}
+h2{
+  font-size:var(--fs-xl); line-height:var(--lh-tight); letter-spacing:var(--ls-tight);
+  font-weight:var(--w-bold); margin-block:var(--sp-0) var(--sp-3);
+  padding-block-start:var(--sp-4); border-block-start:var(--bw-rule) solid var(--c-rule);
+}
+h3{
+  font-size:var(--fs-lg); line-height:var(--lh-snug); font-weight:var(--w-semibold);
+  margin-block:var(--sp-6) var(--sp-3);
+}
+h4{font-size:var(--fs-base); font-weight:var(--w-semibold); margin-block:var(--sp-4) var(--sp-2);}
+p{margin-block:var(--sp-0) var(--sp-4); max-width:var(--measure);}
+ul,ol{margin-block:var(--sp-0) var(--sp-4); padding-inline-start:var(--sp-5); max-width:var(--measure);}
+li{margin-block-end:var(--sp-2);}
+a{color:var(--c-accent); text-decoration-thickness:var(--bw);}
+a:hover{color:var(--c-accent-deep);}
+strong{font-weight:var(--w-semibold);}
+.lede{font-size:var(--fs-md); color:var(--c-text-soft); max-width:var(--measure);}
+
+.card{
+  background:var(--c-surface); border:var(--bw) solid var(--c-border);
+  border-radius:var(--radius-lg); padding:var(--sp-5); box-shadow:var(--shadow-sm);
+}
+.card + .card{margin-block-start:var(--sp-4);}
+.after-tag{margin-block-start:var(--sp-3);}
+.grid{display:grid; gap:var(--sp-4);}
+.grid-wide{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-wide),1fr));}
+.grid-mid{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-mid),1fr));}
+.grid-legend{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-legend),1fr));}
+.grid-narrow{grid-template-columns:repeat(auto-fit,minmax(var(--col-min-narrow),1fr));}
+
+.stat{
+  background:var(--c-surface); border:var(--bw) solid var(--c-border);
+  border-radius:var(--radius-md); padding:var(--sp-4);
+}
+.stat .num{
+  display:block; font-size:var(--fs-2xl); font-weight:var(--w-bold);
+  line-height:var(--lh-tight); letter-spacing:var(--ls-tight);
+}
+.stat .lab{display:block; font-size:var(--fs-sm); color:var(--c-text-soft); margin-block-start:var(--sp-2);}
+.stat .note{display:block; font-size:var(--fs-xs); color:var(--c-text-muted); margin-block-start:var(--sp-2);}
+
+.tag{
+  display:inline-block; font-size:var(--fs-xs); font-weight:var(--w-semibold);
+  padding:var(--sp-1) var(--sp-2); border-radius:var(--radius-sm); white-space:nowrap;
+}
+.t-ok{background:var(--c-ok-bg); color:var(--c-ok);}
+.t-fix{background:var(--c-fix-bg); color:var(--c-fix);}
+.t-scope{background:var(--c-scope-bg); color:var(--c-scope);}
+.t-over{background:var(--c-over-bg); color:var(--c-over);}
+.t-unver{background:var(--c-unver-bg); color:var(--c-unver);}
+.t-opinion{background:var(--c-opinion-bg); color:var(--c-opinion);}
+
+.table-scroll{
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  border:var(--bw) solid var(--c-border); border-radius:var(--radius-md);
+  background:var(--c-surface);
+}
+table{border-collapse:collapse; width:100%; font-size:var(--fs-sm);}
+caption{
+  text-align:start; font-size:var(--fs-sm); color:var(--c-text-muted);
+  padding:var(--sp-3) var(--sp-4); border-block-end:var(--bw) solid var(--c-border);
+}
+th,td{
+  text-align:start; padding:var(--sp-3) var(--sp-4);
+  border-block-start:var(--bw) solid var(--c-border); vertical-align:top;
+  line-height:var(--lh-snug);
+}
+thead th{
+  background:var(--c-surface-alt); font-weight:var(--w-semibold);
+  font-size:var(--fs-xs); color:var(--c-text-soft); border-block-start:var(--sp-0);
+  position:sticky; top:var(--sp-0);
+}
+td.claim{min-width:var(--col-min-mid);}
+td.verdict{white-space:nowrap;}
+td.why{min-width:var(--col-min-wide); color:var(--c-text-soft);}
+.num-cell{font-variant-numeric:tabular-nums; white-space:nowrap;}
+
+.chart{margin-block:var(--sp-5);}
+.chart-row{display:grid; grid-template-columns:var(--col-min-narrow) 1fr auto; gap:var(--sp-3); align-items:center; margin-block-end:var(--bar-gap);}
+.chart-row .name{font-size:var(--fs-sm); color:var(--c-text-soft);}
+.chart-track{background:var(--c-surface-alt); border-radius:var(--radius-sm); height:var(--bar-h);}
+.chart-fill{display:block; height:var(--bar-h); border-radius:var(--radius-sm);}
+.chart-row .val{font-size:var(--fs-sm); font-variant-numeric:tabular-nums; color:var(--c-text-soft); min-width:var(--sp-5); text-align:end;}
+.f-ok{background:var(--c-ok);} .f-fix{background:var(--c-fix);} .f-scope{background:var(--c-scope);}
+.f-over{background:var(--c-over);} .f-unver{background:var(--c-unver);} .f-opinion{background:var(--c-opinion);}
+
+.flow{display:grid; gap:var(--sp-3); grid-template-columns:repeat(auto-fit,minmax(var(--col-min-mid),1fr));}
+.flow-step{
+  background:var(--c-surface); border:var(--bw) solid var(--c-border);
+  border-inline-start:var(--bw-thick) solid var(--c-accent);
+  border-radius:var(--radius-md); padding:var(--sp-4);
+}
+.flow-step .st{font-size:var(--fs-xs); color:var(--c-text-muted); display:block; margin-block-end:var(--sp-2);}
+.flow-step .sv{font-weight:var(--w-semibold);}
+
+.callout{
+  background:var(--c-accent-soft); border:var(--bw) solid var(--c-border);
+  border-inline-start:var(--bw-thick) solid var(--c-accent);
+  border-radius:var(--radius-md); padding:var(--sp-4) var(--sp-5); margin-block:var(--sp-4);
+}
+.callout p:last-child{margin-block-end:var(--sp-0);}
+.quote{
+  border-inline-start:var(--bw-thick) solid var(--c-border-strong);
+  padding-inline-start:var(--sp-4); margin-block:var(--sp-4); color:var(--c-text-soft);
+}
+.src-list{list-style:none; padding-inline-start:var(--sp-0); max-width:none;}
+.src-list li{
+  border-block-start:var(--bw) solid var(--c-border); padding-block:var(--sp-3);
+  display:grid; gap:var(--sp-1) var(--sp-4); grid-template-columns:var(--col-min-narrow) 1fr;
+}
+.src-list .lvl{font-size:var(--fs-xs); color:var(--c-text-muted);}
+footer{
+  border-block-start:var(--bw) solid var(--c-border); padding-block:var(--sp-5) var(--sp-7);
+  color:var(--c-text-muted); font-size:var(--fs-sm);
+}
+footer p{max-width:var(--measure);}
+@media (max-width:600px){
+  :root{--fs-3xl:2rem; --fs-2xl:1.625rem; --fs-xl:1.375rem;}
+  .wrap{padding-inline:var(--sp-4);}
+  header.hero{padding-block:var(--sp-6) var(--sp-5);}
+  main{padding-block:var(--sp-5) var(--sp-7);}
+  section{margin-block-end:var(--sp-6);}
+  .src-list li{grid-template-columns:1fr;}
+  .chart-row{grid-template-columns:1fr; gap:var(--sp-1);}
+  .chart-row .val{text-align:start;}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">逐条核对 · 2026 年 10 月 21 日</div>
+    <h1>DeepSeek 把推理框架开源之后，那期视频说对了多少</h1>
+    <p class="standfirst">2026 年 10 月 20 日，DeepSeek 开源了支撑其线上服务的推理框架 DeepInfer，并公开了一份部署问答。一期中文视频解说把它称作「把印钞机交出来了」。这里把视频里 18 条可核查的说法，逐条对照官方仓库、官方文章与原始法规。</p>
+    <div class="hero-meta">
+      <span>证据：官方仓库与问答文档、官方技术文章及其数据图、美国联邦公报规则原文</span>
+      <span>核对日期：2026-10-21</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="overview">
+  <h2>一、先说核对规则，再看总览</h2>
+  <p class="lede">「一致」只表示与所引来源吻合，不等于有人独立复现过。六个标签不是从真到假的单一等级，它们回答的是不同问题。</p>
+  <div class="grid grid-legend">
+    <div class="card"><span class="tag t-ok">一致</span><p class="after-tag">说法与官方来源吻合。多数还需要补一句限定，才不会被读歪。</p></div>
+    <div class="card"><span class="tag t-fix">需纠错</span><p class="after-tag">有明确的名称或数字错误，不属于口径之争。</p></div>
+    <div class="card"><span class="tag t-scope">口径不同</span><p class="after-tag">数字本身没错，但需要补明比较基线、统计分母或适用范围。</p></div>
+    <div class="card"><span class="tag t-over">说过头</span><p class="after-tag">把官方的有条件结论扩成了无条件结论。</p></div>
+    <div class="card"><span class="tag t-unver">未证实</span><p class="after-tag">本次没有找到可核验的出处，不等于一定是假的。</p></div>
+    <div class="card"><span class="tag t-opinion">观点</span><p class="after-tag">评价或类比，不能用事实真假来判。</p></div>
+  </div>
+
+  <h3>18 条说法的判定分布</h3>
+  <p>条长按条数等比，最长的一条对应 6 条，不代表占比百分之百。</p>
+  <div class="chart">
+    <div class="chart-row"><span class="name">一致</span><span class="chart-track"><span class="chart-fill f-ok" style="width:100%"></span></span><span class="val">6</span></div>
+    <div class="chart-row"><span class="name">未证实</span><span class="chart-track"><span class="chart-fill f-unver" style="width:66.7%"></span></span><span class="val">4</span></div>
+    <div class="chart-row"><span class="name">需纠错</span><span class="chart-track"><span class="chart-fill f-fix" style="width:50%"></span></span><span class="val">3</span></div>
+    <div class="chart-row"><span class="name">说过头</span><span class="chart-track"><span class="chart-fill f-over" style="width:33.3%"></span></span><span class="val">2</span></div>
+    <div class="chart-row"><span class="name">观点</span><span class="chart-track"><span class="chart-fill f-opinion" style="width:33.3%"></span></span><span class="val">2</span></div>
+    <div class="chart-row"><span class="name">口径不同</span><span class="chart-track"><span class="chart-fill f-scope" style="width:16.7%"></span></span><span class="val">1</span></div>
+  </div>
+  
+
+  <h3>全部 18 条</h3>
+  <div class="table-scroll">
+    <table>
+      <caption>视频说法与官方来源逐条对照。「原因」列给出需要补上的限定。</caption>
+      <thead><tr><th>视频说法</th><th>判定</th><th>原因与应有的说法</th></tr></thead>
+      <tbody>
+        <tr><td class="claim">框架叫「DeepInfra」</td><td class="verdict"><span class="tag t-fix">需纠错</span></td><td class="why">官方仓库名为 DeepInfer。DeepInfra 是另一家美国推理服务商的名字，两者无关。</td></tr>
+        <tr><td class="claim">单集群一天服务 155 万亿 token</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">官方问答原文如此，属 DeepSeek 自报，无第三方核验。是单个集群的在线量，不是全公司，也没有公开输入、输出与缓存命中各占多少。</td></tr>
+        <tr><td class="claim">整体收入每卡每小时 38 美元</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">官方原文为「整体收入是每卡每小时 38 美金（按谷价）」。三个限定缺一不可：按 API 谷时价格计、是收入不是利润、是该部署的整体平均而非单卡独立创收。</td></tr>
+        <tr><td class="claim">折算下来一天六千多元、一个月二十万元</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">算术成立：38 乘 24 等于 912 美元，再乘 30 约 27,360 美元。但这是条件外推，假设该收入率持续不变，且汇率需另核。它不是已实现的月收入。</td></tr>
+        <tr><td class="claim">解码侧用 64 到 182 张卡的超节点</td><td class="verdict"><span class="tag t-fix">需纠错</span></td><td class="why">官方表述是 64 到 128 卡超节点，预填充用普通 8 卡机。182 这个数字在官方材料中不存在。</td></tr>
+        <tr><td class="claim">KV 缓存留 72 小时以上，聊天 7 天、agent 3 天</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">「超过 72 小时」是官方写明的系统设计目标之一；3 天与 7 天是两类流量各自的实际 TTL。两者层级不同，不是同一句话的换算。</td></tr>
+        <tr><td class="claim">投机解码让吞吐提升 4% 到 7%</td><td class="verdict"><span class="tag t-scope">口径不同</span></td><td class="why">数字在官方表里，但缺了比较基线。官方这个区间比的是「变长验证」对「固定验证 5 个草稿 token」，两边都用投机解码，不是「用了比不用快 4% 到 7%」。官方中文文章给的单一数字是 6%。在表中并发最低的那一点，增益为负。</td></tr>
+        <tr><td class="claim">预填充总计算量砍掉将近一半以上</td><td class="verdict"><span class="tag t-over">说过头</span></td><td class="why">官方原文说的是解码层有界回放「接近减半」总预填充计算量。视频的「将近一半以上」比官方表述更满，且减的是计算量，不能读成耗时或费用减半。</td></tr>
+        <tr><td class="claim">等于把整台印钞机都交出来了<br><span class="lvl">（对视频多处表述的概括，非单句原话）</span></td><td class="verdict"><span class="tag t-over">说过头</span></td><td class="why">本次公开的是离线推理引擎。官方明确列出三项未包含：KV 缓存系统、视觉编码与预填充解码的分离部署、数据并行副本间的负载均衡。</td></tr>
+        <tr><td class="claim">9 月 30 日开源了昇腾六件套</td><td class="verdict"><span class="tag t-unver">未证实</span></td><td class="why">日期与六个组件（TileLang、DeepGEMM-Ascend、DeepEP-Ascend、TileKernels、FlashMLA、DeepSelect）只见于一篇技术社区文章，本次未取得 DeepSeek 或华为的官方公告。按本页标准，无官方来源即记为未证实，不等于判定为假。</td></tr>
+        <tr><td class="claim">这套东西就是 DeepSeek 版的 CUDA</td><td class="verdict"><span class="tag t-opinion">观点</span></td><td class="why">生态类比，不属事实判定。该社区文章把这些组件转述为 DeepSeek 做研究的核心工具，并非官方定位表述。能不能替代 CUDA 取决于生态与工具链成熟度，不由几个算子的成绩决定。</td></tr>
+        <tr><td class="claim">注意力算子在昇腾 950 预填充阶段达硬件峰值 95%</td><td class="verdict"><span class="tag t-unver">未证实</span></td><td class="why">视频已带「预填充」限定，与社区文章一致。但该数据只见于那篇技术社区文章，本次未取得一手确认，故记为未证实。该文同时给出解码阶段 360 TFLOPS、约 83%，读的时候两个阶段要分开看。</td></tr>
+        <tr><td class="claim">这套框架能跑在昇腾 950 上</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">README 明确把昇腾 950 列为支持硬件。但批不变推理与确定性采样标注仅限英伟达，README 展示的整框架基准也全部在英伟达 SM100 上测得。</td></tr>
+        <tr><td class="claim">「达里奥真的是太虚伪了」</td><td class="verdict"><span class="tag t-opinion">观点</span></td><td class="why">人物评价不按事实真假判。视频指向的应为 Anthropic 的 Dario Amodei，但转述里只有「达里奥」这一称呼，身份属推断。本次未核验到他在此事上的任何可引用原话，相关访谈的原文与时间戳也未取得，故本页不引用。</td></tr>
+        <tr><td class="claim">据说昇腾的人常驻 DeepSeek</td><td class="verdict"><span class="tag t-unver">未证实</span></td><td class="why">本次未找到任何一方的公开确认。视频自己也用了「据说」。相关的可核事实只有一条：有技术社区文章称 DeepSeek 与华为联合调优过一个 128 卡昇腾 950 超节点。</td></tr>
+        <tr><td class="claim">2022 年 10 月美国禁了最高端的英伟达芯片</td><td class="verdict"><span class="tag t-fix">需纠错</span></td><td class="why">日期与措施要拆开看。日期：2022 年 10 月确有一轮管制规则，这半句成立；补一条时间线，对 A100 与 H100 的限制始于 2022 年 8 月 26 日。措施：实际形式是对特定目的地施加出口许可要求，不是笼统的「禁」。</td></tr>
+        <tr><td class="claim">口号「为善与众行之，为巧与众能之」</td><td class="verdict"><span class="tag t-ok">一致</span></td><td class="why">该句出现在 DeepSeek 本次开源公告中，媒体转载可见。其典籍出处本次未核。</td></tr>
+        <tr><td class="claim">云厂商报不出官方价，就因为这套框架没开源</td><td class="verdict"><span class="tag t-unver">未证实</span></td><td class="why">本次未取回任何可逐句引用的报道原文，无法确认这条因果关系。「所有云厂商都报不出」与「唯一原因」两层主张也都超出现有证据。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="what">
+  <h2>二、这次究竟开源了什么</h2>
+  <p class="lede">一句话：放出来的是离线推理引擎和配套算子，不是一整套能直接接线上流量的生产服务。</p>
+  <div class="grid grid-wide">
+    <div class="card">
+      <h4>包含在内</h4>
+      <ul>
+        <li>优化过的算子、模型与采样器运行时</li>
+        <li>并行策略：注意力数据并行、均衡上下文并行、专家并行与专家负载均衡</li>
+        <li>DSpark 投机解码与置信度调度验证</li>
+        <li>滑动窗口注意力的有界回放</li>
+        <li>异步调度（零开销批调度器）</li>
+        <li>批不变推理与确定性采样（标注仅限英伟达）</li>
+        <li>结构化输出</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>官方明说未包含</h4>
+      <ul>
+        <li>KV 缓存系统</li>
+        <li>视觉编码、预填充、解码的分离部署（官方注明引擎侧所需功能多数已实现）</li>
+        <li>预填充与解码两侧的数据并行副本负载均衡</li>
+      </ul>
+      <p>原因是这两部分与 DeepSeek 内部基础设施耦合太深。视频里「印钞机」的那几项，恰好大半落在这一栏。</p>
+    </div>
+    <div class="card">
+      <h4>边界条件</h4>
+      <ul>
+        <li>许可证 Apache-2.0；同时开源的 token 编解码组件 deepseek-recipe 为另一仓库</li>
+        <li>仅提供离线推理</li>
+        <li>仅支持 DeepSeek-V4.1-Flash，默认权重为 1017 版</li>
+        <li>硬件：英伟达 SM100 或华为昇腾 950</li>
+        <li>环境：Linux、GCC 13 及以上、Python 3.12、CUDA 13 或 CANN 9.2</li>
+        <li>主要基于 vLLM 构建，并参考了 SGLang 与 TensorRT-LLM</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <p><strong>这为什么仍然重要。</strong>此前 DeepSeek 放出的是零件，这次补的是把零件装成整机的调度层。官方同时承诺，后续新模型的推理代码与性能优化会继续放进这个仓库。</p>
+  </div>
+</section>
+
+<section id="money">
+  <h2>三、155 万亿与 38 美元该怎么读</h2>
+  <p class="lede">这两个数字出自官方文章同一句话。读之前要先锁定三件事：统计的是谁、分母是什么、按什么价格计。</p>
+  <div class="quote"><p>目前单一集群的服务吞吐是 155 万亿 Tokens/天，整体收入是每卡每小时 38 美金（按谷价）。</p></div>
+  <div class="grid grid-mid">
+    <div class="stat"><span class="num num-cell">155 万亿</span><span class="lab">单集群每天服务的 token 数</span><span class="note">DeepSeek 自报。是一个集群，不是全公司。</span></div>
+    <div class="stat"><span class="num num-cell">38 美元</span><span class="lab">每 GPU 小时的整体收入</span><span class="note">按 API 谷时价格计。是收入，不是利润。</span></div>
+    <div class="stat"><span class="num num-cell">约 1:1</span><span class="lab">实际部署中预填充与解码的卡数比</span><span class="note">官方图注：不考虑波峰波谷。</span></div>
+  </div>
+  <h3>视频的那笔账，算术没错，口径有问题</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="st">第一步</span><span class="sv">38 美元 × 24 小时</span><p>得 912 美元，约合人民币六千多元。</p></div>
+    <div class="flow-step"><span class="st">第二步</span><span class="sv">× 30 天</span><p>得 27,360 美元，按七元出头的汇率约合二十万元人民币。</p></div>
+    <div class="flow-step"><span class="st">但是</span><span class="sv">三处不能省</span><p>谷时价不是全天价；收入不是利润，没扣硬件折旧、存储、网络与电力；这是整体平均摊到每卡，不是一张卡独立挣到的钱。</p></div>
+  </div>
+  
+  <div class="callout">
+    <p><strong>要回答「赚不赚钱」，这两个数字还不够。</strong>官方没有披露硬件折旧、存储集群、网络、电力、人员与冗余资源的成本。没有成本侧，就不能算毛利，也算不出回本周期。</p>
+  </div>
+</section>
+
+<section id="perf">
+  <h2>四、四种性能数字不能混用</h2>
+  <p class="lede">视频里的速度感来自几个不同量级的数字。它们的统计对象完全不同，放在一起比较会得出错误印象。</p>
+  <div class="table-scroll">
+    <table>
+      
+      <thead></thead>
+      <tbody>
+        <tr><td>预填充</td><td>每卡吞吐（不含缓存命中）</td><td class="num-cell">60K tokens/s</td><td class="why">真正算出来的部分。</td></tr>
+        <tr><td>预填充</td><td>每卡吞吐（含缓存命中）</td><td class="num-cell">1.5M tokens/s</td><td class="why">把命中缓存、无需重算的 token 也计入后的口径，两者相差二十余倍。</td></tr>
+        <tr><td>预填充</td><td>平均输入缓存命中率</td><td class="num-cell">96%</td><td class="why">是否按 token 加权未说明。高命中率依赖那套未开源的缓存系统。</td></tr>
+        <tr><td>预填充</td><td>首字时延平均 / P99</td><td class="num-cell">400 ms / 1000 ms</td><td class="why">官方同时给了平均与 P99 两档。</td></tr>
+        <tr><td>预填充</td><td>平均输入长度</td><td class="num-cell">77K tokens</td><td class="why">解释了为什么缓存命中率这么关键。</td></tr>
+        <tr><td>解码</td><td>每卡吞吐</td><td class="num-cell">14K tokens/s</td><td class="why">是集群运行下归一到每卡的吞吐，不是一张卡单独跑出来的速度。</td></tr>
+        <tr><td>解码</td><td>吐字速度</td><td class="num-cell">230 tokens/s（代码场景 300）</td><td class="why">单个用户感知到的速度。</td></tr>
+        <tr><td>缓存</td><td>不活跃后保存时间</td><td class="num-cell">72 小时</td><td class="why">对应那条「超过 72 小时」的设计目标。</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>官方还公开了两张离线基准曲线，口径与线上数据又不一样。预填充在 4 张 SM100 上、EP4DP4、13.1 万上下文下，每卡非缓存输入吞吐从约 6.6 万升到约 8.6 万 tokens/s 后趋平；解码在 64 张卡、EP64DP64 下，每卡输出吞吐随每用户速度下降而上升，从约 2,500 升到约 26,000 tokens/s。这是吞吐与延迟的取舍曲线，不是单点成绩。</p>
+  <div class="callout">
+    <p><strong>一句话分清。</strong>吐字速度是单个用户的体验，每卡吞吐是集群摊下来的账，集群日服务量是生意规模，算子峰值百分比是芯片利用率。四者互不等价，任何一个都不能代表其余三个。</p>
+  </div>
+</section>
+
+<section id="cache">
+  <h2>五、缓存与部署的真实条件</h2>
+  <p class="lede">高命中率和高吞吐不是下载仓库就能得到的，它们依赖一整套配套资源。</p>
+  <div class="grid grid-wide">
+    <div class="card">
+      <h4>存储规模</h4>
+      
+      <p>注意这是存储集群的容量，不是缓存的实际占用量。</p>
+    </div>
+    <div class="card">
+      <h4>保留策略</h4>
+      <p>agent 流量 TTL 为 3 天，chatbot 流量为 7 天。chatbot 的长尾命中更重，少量缓存会被极多次读取。官方经验值：把 TTL 压到 3 天左右，会让 chatbot 流量的命中率下降 0.5 到 1 个点。</p>
+    </div>
+    <div class="card">
+      <h4>最小部署单位</h4>
+      <p>官方说 1 组预填充加 1 组解码即可部署，实践中两者卡数比约 1:1。由于推荐的解码配置是 64 路专家并行起步，最小的高效部署单位是 64 张预填充卡加 64 张解码卡。</p>
+      <p>这是「高效」的门槛，不是跑起来的最低门槛，也没把存储等配套算进去。</p>
+    </div>
+    <div class="card">
+      <h4>跨机房可行性</h4>
+      <p>因为 V4.1 Flash 大幅压缩了 KV 缓存，把预填充与解码拆到不同数据中心在技术上可行，代价是可靠性下降。官方给的带宽预算是每 8 张卡约 400 Gbps。实际部署在相邻的不同机房。</p>
+    </div>
+  </div>
+</section>
+
+<section id="opt">
+  <h2>六、两项优化到底提升了多少</h2>
+  <p class="lede">视频提到的两个加速手段都是真的。但问题各不相同：投机解码那个数字缺了比较基线，有界回放那句话比官方说法更满。</p>
+
+  <h3>投机解码：比的是「变长验证」对「固定验证 5 个」</h3>
+  
+  <div class="table-scroll">
+    <table>
+      <caption>官方给出的 EP64/DP64 基准数据。并发列的单位是每个 rank 的并发序列数，不是卡数。</caption>
+      <thead><tr><th>并发（序列/rank）</th><th>固定验证 5 个的估算吞吐</th><th>变长验证的估算吞吐</th><th>相对增益</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">16</td><td class="num-cell">4,891</td><td class="num-cell">4,816</td><td class="num-cell">−1.5%</td></tr>
+        <tr><td class="num-cell">32</td><td class="num-cell">8,964</td><td class="num-cell">9,111</td><td class="num-cell">+1.6%</td></tr>
+        <tr><td class="num-cell">48</td><td class="num-cell">12,032</td><td class="num-cell">12,467</td><td class="num-cell">+3.6%</td></tr>
+        <tr><td class="num-cell">60</td><td class="num-cell">13,730</td><td class="num-cell">14,466</td><td class="num-cell">+5.4%</td></tr>
+        <tr><td class="num-cell">72</td><td class="num-cell">14,962</td><td class="num-cell">15,961</td><td class="num-cell">+6.7%</td></tr>
+        <tr><td class="num-cell">96</td><td class="num-cell">16,817</td><td class="num-cell">18,660</td><td class="num-cell">+11.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>官方把生产工作点定在每 rank 约 60 条并发，对应 4% 到 7% 的增益区间；中文版文章给的单一数字是 6%。在表中并发最低的那一点，增益是负的。所以这不是一个「普遍提速 4 到 7 个百分点」的结论，它只在特定并发区间成立，而且基线是另一种投机解码配置。</p>
+
+  <h3>有界回放：减的是计算量，不是耗时</h3>
+  <p>滑动窗口注意力的有界回放只重算最近 128 个 token，并把注意力窗口截断在回放段内，使重算代价变成与上下文长度和层数无关的常数。它用在两处：</p>
+  <ul>
+    <li><strong>编码器侧</strong>：当滑动窗口缓存缺失时，重算命中前缀的最后 128 个 token，与未命中后缀一起前向；块缓存原样复用。</li>
+    <li><strong>解码器侧</strong>：精确重建本来需要把最后 2,560 个 token 过 20 层解码器，改为每次预填充只在解码层重算最后 128 个 token。官方对这一项的表述是「接近减半」总预填充计算量。</li>
+  </ul>
+  <p>两个容易混的参数：128 是滑动窗口长度与重算窗口；README 给的默认保留后缀配置是 140 个 token，因为保留段必须覆盖窗口加上最大回退长度。另外「接近减半」说的是计算量，不能替换成耗时、费用或整体推理成本减半。</p>
+</section>
+
+<section id="ascend">
+  <h2>七、昇腾支持，和「替代 CUDA」之间隔着什么</h2>
+  <p class="lede">支持事实、性能证据、生态类比，是三种强度完全不同的主张。</p>
+  <div class="grid grid-wide">
+    <div class="card">
+      <h4>支持事实</h4>
+      <p>README 把华为昇腾 950 明确列为支持硬件，构建时指定加速器类型即可。这一条成立。</p>
+    </div>
+    <div class="card">
+      <h4>性能证据到哪一层</h4>
+      <p>算子层的数据只来自一篇技术社区文章，没有官方来源：稀疏注意力在昇腾 950 预填充阶段 410 TFLOPS、约 95%，解码阶段 360 TFLOPS、约 83%。整框架层没有公开数据：README 展示的基准全部在英伟达 SM100 上测得，批不变推理与确定性采样也标注仅限英伟达。</p>
+    </div>
+    <div class="card">
+      <h4>9 月 30 日的六个组件</h4>
+      <p>以下组件清单与角色对应同样出自该技术社区文章。TileLang 对应 CUDA C 的角色，DeepGEMM-Ascend 对应矩阵乘法库，DeepEP-Ascend 对应集群通信库，TileKernels 提供通用向量与访存算子，FlashMLA 提供长文本注意力算子，DeepSelect 提供稀疏选择。它们都依赖华为的 CANN 计算软件层才能运行。</p>
+    </div>
+    <div class="card">
+      <h4>还缺什么才叫替代</h4>
+      <p>几个算子打满利用率，和一个生态能承接第三方训练与推理的全部工作负载，是两回事。后者取决于工具链、调试、文档与第三方复测，目前都还没有公开证据。</p>
+    </div>
+  </div>
+</section>
+
+<section id="context">
+  <h2>八、历史、传闻与评价分开放</h2>
+  <div class="grid grid-wide">
+    <div class="card">
+      <h4>出口管制的时间线</h4>
+      <p>按英伟达 8-K 原文：2022 年 8 月 26 日，美国政府通知该公司，对 A100 与即将推出的 H100 向中国（含香港）与俄罗斯的出口施加新的许可要求，即时生效，并覆盖含这些芯片的 DGX 等系统，以及此后达到同等峰值算力与芯片间互联门槛的产品。</p>
+      <p>2022 年 10 月那轮规则于 10 月 13 日在联邦公报公布，其中部分条款 10 月 7 日生效、一项 10 月 12 日生效、先进计算相关条款 10 月 21 日生效。</p>
+      <p>所以这条要拆成两半：「2022 年 10 月出台了一轮管制」成立；需要补的是八月那条时间线，以及实际形式为出口许可要求而非笼统禁售。</p>
+    </div>
+    <div class="card">
+      <h4>人员传闻</h4>
+      <p>「昇腾的人常驻 DeepSeek」本次未找到任何公开确认。相关的唯一线索来自那篇技术社区文章，称 DeepSeek 与华为联合调优了一个 128 卡昇腾 950 超节点。这条本身也未取得一手确认。</p>
+    </div>
+    <div class="card">
+      <p>视频说「达里奥真的是太虚伪了」。这是评价，不按事实真假判。两点要说清：转述里只有「达里奥」这一称呼，指向 Anthropic 的 Dario Amodei 属于推断；本次没有核验到他在开源这件事上任何可引用的原话，因此本页不引用相关表述，也不为这条评价提供背景支撑。</p>
+    </div>
+    <div class="card">
+      <h4>行业影响的说法</h4>
+      <p>本次未取回可逐句引用的报道原文，因此无法确认「框架未开源导致第三方报不出官方价」这条因果关系，本页不作任何方向性背书。「此前所有云厂商都做不到」这类全称结论，更无证据支持。</p>
+    </div>
+  </div>
+</section>
+
+<section id="open">
+  <h2>还没有答案的六个问题</h2>
+  <ol>
+    <li><strong>155 万亿怎么拆。</strong>输入、输出与缓存命中各占多少，集群有多少张卡，收入分母包含哪些 GPU，统计窗口多长。</li>
+    <li><strong>成本侧是多少。</strong>硬件折旧、存储、网络、电力、人员与冗余资源都没披露，因此无法判断盈亏。</li>
+    <li><strong>普通部署能复现到什么程度。</strong>需要多高的并发、多长的输入输出、多少缓存复用，以及什么样的存储与网络条件。</li>
+    <li><strong>近似优化会不会影响输出质量。</strong>有界回放产生的是近似缓存，官方没有公布对应的质量验证。另外 README 给出的确定性采样配置要求关闭变长验证，两者能否同时开启，本次未验证。</li>
+    <li><strong>昇腾验证到了哪一层。</strong>支持矩阵、算子微基准、整框架基准、线上部署与第三方复测，目前只有前两项有公开证据。</li>
+    <li><strong>视频的原始表述。</strong>本次核对基于文字转述，不是原片。个别说法是口误还是转写错误，需要回听才能定；「达里奥」指谁也只能靠推断。</li>
+  </ol>
+</section>
+
+<section id="sources">
+  <h2>来源清单</h2>
+  <p class="lede">按证据强度分三级。标注「未直接打开」的，不作为本页任何判定的唯一依据。</p>
+  <ul class="src-list">
+    <li><span class="lvl">一手 · 官方仓库</span><span><a href="https://github.com/deepseek-ai/DeepInfer">deepseek-ai/DeepInfer README</a>　支持特性、未包含项、环境要求、基准测试条件。已直接读取。</span></li>
+    <li><span class="lvl">一手 · 官方文档</span><span><a href="https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md">DeepSeek V4.1 Flash 推理部署问答</a>　三条设计目标、155 万亿与 38 美元原句、TTL 策略、有界回放、投机解码数据表、最小部署单位。已直接读取。</span></li>
+    
+    <li><span class="lvl">一手 · 法规原文</span><span><a href="https://www.federalregister.gov/documents/2022/10/13/2022-21658/implementation-of-additional-export-controls-certain-advanced-computing-and-semiconductor">美国联邦公报 2022-21658 号规则</a>　公布日 2022-10-13，条款分 10-07、10-12、10-21 生效。已通过官方接口读取公布日期与生效条款。</span></li>
+    <li><span class="lvl">一手 · 公司披露</span><span><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581022000146/nvda-20220826.htm">英伟达 8-K（事件日 2022-08-26）</a>　A100 与 H100 对华及对俄出口许可要求即时生效，覆盖含这些芯片的系统。已直接读取 Item 8.01 原文。</span></li>
+    <li><span class="lvl">二手 · 官方公告转载</span><span><a href="https://www.guancha.cn/CaiJing/2026_10_20_905121.shtml">观察者网转载 DeepSeek 开源公告</a>　含「为善与众行之，为巧与众能之」原句。已直接读取。</span></li>
+    <li><span class="lvl">二手 · 技术社区</span><span><a href="https://hwcomputing.csdn.net/6abfd17105257b0857146cdd.html">鲲鹏昇腾开发者社区：九月三十日六件套解读</a>　410 TFLOPS 与 95%、360 TFLOPS 与 83%、128 卡超节点、内蒙古数据中心计划。已直接读取。该文为社区作者撰写，非华为或 DeepSeek 官方表述。本页涉及昇腾算子成绩、六件套清单与超节点的内容均以此为唯一来源，未取得一手确认。</span></li>
+    <li><span class="lvl">二手 · 口径辨析</span><span><a href="https://post.smzdm.com/p/agg5o7vw/">别被参数带偏：读懂 155 万亿与 38 美金</a>　指出单集群与全公司、收入与利润的区别，以及仓库提交数与昇腾验证程度。已直接读取。</span></li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p>本页只核对公开材料中可验证的部分。视频原片未获取，核对对象是其文字转述；因此个别说法属口误还是转写错误，无法在此判定。</p>
+  <p>判定标签反映的是「与所引来源是否吻合」，不代表独立复现。涉及商业判断的部分，缺少成本侧数据，本页不作盈亏结论。</p>
+</footer>
+
+</body>
+</html>

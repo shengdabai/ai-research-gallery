@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「文章就是源代码」视频拆解：自媒体 × AI × 一人公司的一条链路</title>
+<style>
+/* ===== 设计 token（唯一真源）=====
+   命名：原始刻度 → 语义角色。断点阈值不能用 var()，见下方注释：
+   断点 sm = 640px，md = 900px（媒体查询里的字面值与此处一致）。*/
+:root{
+  --c-bg:#ffffff;
+  --c-bg-soft:#f4f6f8;
+  --c-bg-ink:#14212b;
+  --c-ink:#172029;
+  --c-ink-2:#4a5560;
+  --c-ink-3:#78848f;
+  --c-ink-on-dark:#eef3f7;
+  --c-ink-on-dark-2:#b7c3cd;
+  --c-line:#dde3e8;
+  --c-line-strong:#b9c3cc;
+  --c-accent:#1f5f8b;
+  --c-accent-soft:#e3eef7;
+  --c-accent-ink:#154a6e;
+  --c-ok:#1f7a4d;   --c-ok-soft:#e2f3ea;
+  --c-mid:#8a5a00;  --c-mid-soft:#fbefd4;
+  --c-weak:#9a3b2e; --c-weak-soft:#f9e4df;
+  --c-none:#5a6470; --c-none-soft:#e9edf1;
+  --c-focus:#d97a00;
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:72px;
+
+  --fs-xs:.78rem; --fs-sm:.9rem; --fs-base:1rem; --fs-md:1.15rem; --fs-lg:1.45rem; --fs-xl:2rem; --fs-hero:2.5rem;
+  --lh-tight:1.25; --lh-body:1.7;
+  --fw-regular:400; --fw-medium:500; --fw-bold:700;
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+
+  --r-sm:4px; --r-md:8px; --r-lg:12px;
+  --bw-1:1px; --bw-2:2px; --bw-4:4px;
+  --sh-card:0 1px 2px rgba(23,32,41,.06),0 4px 14px rgba(23,32,41,.06);
+  --op-muted:.72;
+  --z-nav:10;
+  --dur:160ms; --ease:cubic-bezier(.2,.7,.3,1);
+
+  --w-content:1040px; --w-measure:46em;
+  --w-min-card:260px;
+  --w-step-badge:28px;
+  --w-chain-arrow:18px;
+  --h-bar:10px;
+  --tap:40px;
+  --off-focus:2px; --off-underline:.15em; --pad-list:1.4em; --pad-check:1.6em; --ck-size:.8em; --ck-top:.45em; --badge-top:.1em; --lh-tag:1.8;
+}
+/* ===== 基础 ===== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font:var(--fw-regular) var(--fs-base)/var(--lh-body) var(--font-sans)}
+h1,h2,h3,h4{line-height:var(--lh-tight);margin:0 0 var(--sp-3)}
+h1{font-size:var(--fs-hero);font-weight:var(--fw-bold)}
+h2{font-size:var(--fs-xl);font-weight:var(--fw-bold);margin-top:var(--sp-7)}
+h3{font-size:var(--fs-md);font-weight:var(--fw-bold)}
+p{margin:0 0 var(--sp-4)}
+ul,ol{margin:0 0 var(--sp-4);padding-left:var(--pad-list)}
+li{margin-bottom:var(--sp-2)}
+a{color:var(--c-accent);text-decoration-thickness:var(--bw-1);text-underline-offset:var(--off-underline);word-break:break-all}
+a:focus-visible,button:focus-visible{outline:var(--bw-2) solid var(--c-focus);outline-offset:var(--off-focus)}
+strong{font-weight:var(--fw-bold)}
+.wrap{max-width:var(--w-content);margin:0 auto;padding:0 var(--sp-5)}
+.muted{color:var(--c-ink-2)}
+.small{font-size:var(--fs-sm)}
+.note{font-size:var(--fs-sm);color:var(--c-ink-2);border-left:var(--bw-4) solid var(--c-line-strong);padding:var(--sp-2) var(--sp-4);background:var(--c-bg-soft);border-radius:0 var(--r-md) var(--r-md) 0;margin:var(--sp-4) 0}
+/* ===== 头部 ===== */
+.hero{background:var(--c-bg-ink);color:var(--c-ink-on-dark);padding:var(--sp-7) 0 var(--sp-6)}
+.hero .kicker{font-size:var(--fs-sm);color:var(--c-ink-on-dark-2);margin-bottom:var(--sp-3)}
+.hero h1{color:var(--c-ink-on-dark);margin-bottom:var(--sp-4)}
+.hero .verdict{font-size:var(--fs-md);max-width:var(--w-measure);margin-bottom:var(--sp-5)}
+.hero .meta{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-5);font-size:var(--fs-sm);color:var(--c-ink-on-dark-2)}
+.nav{position:sticky;top:0;z-index:var(--z-nav);background:var(--c-bg);border-bottom:var(--bw-1) solid var(--c-line)}
+.nav ul{display:flex;gap:var(--sp-2);list-style:none;margin:0;padding:var(--sp-2) 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav li{margin:0;flex:none}
+.nav a{display:inline-block;padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);text-decoration:none;color:var(--c-ink-2);font-size:var(--fs-sm);min-height:var(--tap);line-height:calc(var(--tap) - 2*var(--sp-2))}
+.nav a:hover{background:var(--c-bg-soft);color:var(--c-ink)}
+/* ===== 摘要卡 ===== */
+.grid{display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(var(--w-min-card),1fr))}
+.card{background:var(--c-bg);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);box-shadow:var(--sh-card)}
+.card h3{margin-bottom:var(--sp-2)}
+.stat{font-size:var(--fs-xl);font-weight:var(--fw-bold);line-height:var(--lh-tight);color:var(--c-accent-ink)}
+.stat-label{font-size:var(--fs-sm);color:var(--c-ink-2)}
+/* ===== 路径 ===== */
+.paths{display:grid;gap:var(--sp-4);grid-template-columns:1fr}
+.path{border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);background:var(--c-bg-soft)}
+.path h3{color:var(--c-accent-ink)}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{position:relative;padding-left:calc(var(--w-step-badge) + var(--sp-3));margin-bottom:var(--sp-3);counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:var(--badge-top);width:var(--w-step-badge);height:var(--w-step-badge);border-radius:var(--r-sm);background:var(--c-accent);color:var(--c-ink-on-dark);font-size:var(--fs-sm);font-weight:var(--fw-bold);display:flex;align-items:center;justify-content:center}
+.steps .q{display:block;color:var(--c-ink-3);font-size:var(--fs-sm)}
+/* ===== 标签 ===== */
+.tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-medium);padding:0 var(--sp-2);border-radius:var(--r-sm);line-height:var(--lh-tag);border:var(--bw-1) solid transparent;white-space:nowrap}
+.t-type{background:var(--c-accent-soft);color:var(--c-accent-ink)}
+.t-ok{background:var(--c-ok-soft);color:var(--c-ok)}
+.t-mid{background:var(--c-mid-soft);color:var(--c-mid)}
+.t-weak{background:var(--c-weak-soft);color:var(--c-weak)}
+.t-none{background:var(--c-none-soft);color:var(--c-none)}
+/* ===== 筛选与主张卡 ===== */
+.filters{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin:var(--sp-4) 0}
+.filters button{font:inherit;font-size:var(--fs-sm);min-height:var(--tap);padding:0 var(--sp-3);border-radius:var(--r-sm);border:var(--bw-1) solid var(--c-line-strong);background:var(--c-bg);color:var(--c-ink-2);cursor:pointer;transition:background var(--dur) var(--ease),color var(--dur) var(--ease)}
+.filters button[aria-pressed="true"]{background:var(--c-accent);border-color:var(--c-accent);color:var(--c-ink-on-dark)}
+.claims{display:grid;gap:var(--sp-3);grid-template-columns:1fr}
+.claim{border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);display:grid;gap:var(--sp-2) var(--sp-5);grid-template-columns:1fr}
+.claim[hidden]{display:none}
+.claim .head{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center}
+.claim .n{font-weight:var(--fw-bold);color:var(--c-accent-ink)}
+.claim .say{font-weight:var(--fw-medium)}
+.claim dl{margin:0;display:grid;grid-template-columns:1fr;gap:var(--sp-1)}
+.claim dt{font-size:var(--fs-xs);color:var(--c-ink-3);margin-top:var(--sp-2)}
+.claim dd{margin:0;font-size:var(--fs-sm)}
+.count{font-size:var(--fs-sm);color:var(--c-ink-2)}
+/* ===== 证据强度条 ===== */
+.bar{height:var(--h-bar);background:var(--c-none-soft);border-radius:var(--r-sm);overflow:hidden;display:flex}
+.bar span{display:block;height:100%}
+.bar .b-ok{background:var(--c-ok)} .bar .b-mid{background:var(--c-mid)} .bar .b-weak{background:var(--c-weak)} .bar .b-none{background:var(--c-none)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);margin-top:var(--sp-2)}
+/* ===== 表格 ===== */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:var(--sp-4) 0}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-sm)}
+th,td{text-align:left;vertical-align:top;padding:var(--sp-2) var(--sp-3);border-bottom:var(--bw-1) solid var(--c-line)}
+th{background:var(--c-bg-soft);font-weight:var(--fw-bold);white-space:nowrap}
+caption{text-align:left;font-size:var(--fs-sm);color:var(--c-ink-2);padding-bottom:var(--sp-2)}
+/* ===== 链条图 ===== */
+.chain{display:grid;gap:var(--sp-3);grid-template-columns:1fr;margin:var(--sp-4) 0}
+.chain .node{border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);background:var(--c-bg)}
+.chain .node h4{margin-bottom:var(--sp-1);font-size:var(--fs-base)}
+.chain .node p{margin:0;font-size:var(--fs-sm);color:var(--c-ink-2)}
+.chain .gap{font-size:var(--fs-xs);color:var(--c-weak);font-weight:var(--fw-medium)}
+/* ===== 清单 ===== */
+.check{list-style:none;padding:0}
+.check li{padding-left:var(--pad-check);position:relative}
+.check li::before{content:"";position:absolute;left:0;top:var(--ck-top);width:var(--ck-size);height:var(--ck-size);border:var(--bw-2) solid var(--c-accent);border-radius:var(--r-sm)}
+.check li.add::before{background:var(--c-accent)}
+.foot{border-top:var(--bw-1) solid var(--c-line);margin-top:var(--sp-8);padding:var(--sp-5) 0 var(--sp-7);font-size:var(--fs-sm);color:var(--c-ink-2)}
+/* ===== 断点（阈值与 token 注释一致：md=900px, sm=640px）===== */
+@media (min-width:900px){
+  .paths{grid-template-columns:1fr 1fr}
+  .claim{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .claim .head{grid-column:1/-1}
+  .chain{grid-template-columns:repeat(6,1fr)}
+}
+@media (max-width:640px){
+  :root{--fs-hero:1.75rem;--fs-xl:1.5rem;--sp-7:32px;--sp-8:48px}
+  .wrap{padding:0 var(--sp-4)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">视频口播拆解 · 2026-10-21 · 来源：一段匿名中文口播转写（作者自述 20 年程序员、拍短视频 6 年，均未核实）</div>
+    <h1>「文章就是源代码」：一条自媒体 × AI × 一人公司的链路，能走到哪一步</h1>
+    <p class="verdict">判定：这是一条可测试的内容与流程沉淀路径，尚不是经过验证的一人公司增长、变现闭环。视频把「写一篇实用文章」放在中心是对的，但从文章到用户、再到付费，中间至少缺四个环节的证据。</p>
+    
+  </div>
+</header>
+
+<nav class="nav" aria-label="页面导航">
+  <div class="wrap">
+    <ul>
+      <li><a href="#s1">1 视频链路</a></li>
+      <li><a href="#s2">2 逐条判定</a></li>
+      <li><a href="#s3">3 案例对照</a></li>
+      <li><a href="#s4">4 缺失环节</a></li>
+      <li><a href="#s5">5 四周试验</a></li>
+      <li><a href="#s6">6 模板与清单</a></li>
+      <li><a href="#src">来源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="s0">
+  <h2>先看结论</h2>
+  <div class="grid">
+    <div class="card"><div class="stat">0 / 15</div><div class="stat-label">主张里「效果已验证」的条数。视频没有给任何可核对的数字或案例。</div></div>
+    <div class="card"><div class="stat">2 条</div><div class="stat-label">属于「工具能做」：AI 读 Markdown 说明执行任务、AI 把混乱录音整理成结构。前者有开放规范对照，后者是常见产品功能，本页未附测试记录。</div></div>
+    <div class="card"><div class="stat">6 条</div><div class="stat-label">属于「方法可执行」：写实用文章、拆块、看评论修稿、逆向工程等。能做，不等于有效。</div></div>
+    <div class="card"><div class="stat">4 个</div><div class="stat-label">从「有文章」到「有收入」之间缺证据的环节：观众→用户、用户→买家、一次交付→稳定交付、单笔→复用收益。</div></div>
+  </div>
+  <p class="note">本页区分三件事：<strong>工具能做</strong>（有规范或产品证明能力存在）、<strong>方法可执行</strong>（步骤清楚、一个人能照做）、<strong>效果已验证</strong>（有可核对的结果）。「话术」是单独标签，意思是用于说服、不进入方法，不等于虚假。</p>
+</section>
+
+<section id="s1">
+  <h2>1 视频说了什么：两条路径、一个中心</h2>
+  
+  <div class="paths">
+    <div class="path">
+      
+      <ol class="steps">
+        <li>选一件做成的小事。<span class="q">视频例子：一篇一万阅读的文章、一个赚了 1000 元的副业、一条十万播放的短视频。</span></li>
+        <li>花一天到一周，写一篇实用文章：背景、问题、怎么解决、为什么。</li>
+        <li>把文章拆成若干块。<span class="q">视频例子：标题怎么吸引人、结构怎么留人、镜头怎么表达、金句怎么写。</span></li>
+        <li>每一块拍成一条短视频。</li>
+        <li>看评论：被关注多的内容重点写；有不同意见的拿回去修文章。</li>
+        <li>修改后的文章成为「基线」或「模板」，再让 AI 检查是否符合，持续进化。<span class="q">（整理者注：作者说「文章就是源代码」，意思是这篇文章可以被 AI 读懂并执行。）</span></li>
+        <li>作者推断：有了内容，就有了产品；有人关注，就有了用户；再做成一件事，雪球滚起来。<span class="q">（整理者注：这一步是推断，视频没有给证据，见第 4 节。）</span></li>
+      </ol>
+    </div>
+    <div class="path">
+      <h3>路径 B：你觉得自己没什么可讲</h3>
+      <ol class="steps">
+        
+        <li>让 AI 总结：这个人做了什么事、困难是什么、怎么解决的、为什么、用了哪些步骤。</li>
+        <li>看懂 AI 的总结后，自己再讲一遍，整理成文章。</li>
+        <li>让 AI 从文章里挑出别人常问、能帮到别人的知识点，拆成小块。</li>
+        <li>逆向工程：找同赛道做得好、设备简单的人，把对方内容交给 AI 拆结构（为什么好、评论在说什么）。</li>
+        <li>用自己的内容填对方的结构，先录音讲，不满意就让 AI 重新梳理，再讲、再改。</li>
+        <li>讲熟了对着镜头再讲一遍，必要时旁边放提示词。回来再改文章。</li>
+        <li>作者说：失败也是经验，等你后来做成了，之前的失败全是资产，都能变成内容。<span class="q">（整理者注：作者同时说，第一次就做成的人「好像没什么可讲」。）</span></li>
+        <li>作者的收尾：「我没成功过怎么办？那就去做成一件事嘛。」<span class="q">（整理者注：所以路径 B 的录音示例仍依赖一段已有经历；真没有做成过事，作者的答案是先做成一件小事，不是直接开讲。）</span></li>
+      </ol>
+    </div>
+  </div>
+  <p class="note">两条路径的可信度不同。路径 A 的文章要写明结果、条件和局限；路径 B 经 AI 整理出来的东西是<strong>学习记录或待验证方案</strong>，不能直接升格为教程。视频里的「小龙虾」指开源 AI agent 框架 OpenClaw 的中文昵称（图标是龙虾钳，曾用名 Clawdbot、Moltbot），这里只作语境释义。</p>
+</section>
+
+<section id="s2">
+  <h2>2 十五条主张逐条判定</h2>
+  <p>每条写四样：视频原话摘要、主张类型、证据强度、必须保留的限定语。点按钮可按类型或证据强度筛选。</p>
+  <div class="bar" role="img" aria-label="15 条主张证据强度分布：强 1 条，中 8 条，弱 3 条，无 3 条">
+    <span class="b-ok" style="width:6.67%"></span><span class="b-mid" style="width:53.33%"></span><span class="b-weak" style="width:20%"></span><span class="b-none" style="width:20%"></span>
+  </div>
+  <div class="legend"><span><span class="tag t-ok">强</span> 有外部规范或原始资料直接支持 · 1</span><span><span class="tag t-mid">中</span> 机制合理，有同类实践，无结果数据 · 8</span><span><span class="tag t-weak">弱</span> 个案、自述或推断 · 3</span><span><span class="tag t-none">无</span> 本页未提供支持证据，或该条不涉及方法成效 · 3</span></div>
+
+  <div class="filters" role="group" aria-label="筛选主张">
+    <button type="button" data-f="all" aria-pressed="true">全部 15</button>
+    <button type="button" data-f="type-tool" aria-pressed="false">工具能做</button>
+    <button type="button" data-f="type-method" aria-pressed="false">方法可执行</button>
+    <button type="button" data-f="type-view" aria-pressed="false">观点</button>
+    <button type="button" data-f="type-talk" aria-pressed="false">话术</button>
+    <button type="button" data-f="ev-ok" aria-pressed="false">证据强</button>
+    <button type="button" data-f="ev-mid" aria-pressed="false">证据中</button>
+    <button type="button" data-f="ev-weak" aria-pressed="false">证据弱</button>
+    <button type="button" data-f="ev-none" aria-pressed="false">证据无</button>
+  </div>
+  <p class="count" id="count" aria-live="polite">显示 15 / 15 条</p>
+
+  <div class="claims" id="claims">
+
+    <article class="claim" data-type="type-tool" data-ev="ev-ok">
+      <div class="head"><span class="n">01</span><span class="say">「文章就是源代码」：把平时怎么做的事写成实用文章，AI 读懂就能做。</span><span class="tag t-type">工具能做</span><span class="tag t-ok">证据强</span></div>
+      <dl><dt>证据</dt><dd>Agent Skills 开放规范：一个技能就是一个目录加一份 <code>SKILL.md</code>，frontmatter（文件开头的元数据区）只要求 name 和 description，正文是 Markdown 指令，agent 按需加载。Karpathy 2025 年 6 月演讲把自然语言提示词称为程序。两份来源都已打开核对。</dd>
+      <dt>判定与限定语</dt><dd>类比成立，但要降级表述：<strong>实用文章可以成为 AI 工作流的说明与测试起点，不等于可执行程序。</strong>规范证明的是封装方式，演讲给的是视角，都不证明任意一篇文章能被稳定执行。一篇文章要变成能跑的 Skill，还得补输入输出、适用条件、工具权限、依赖、验收和异常处理（见第 6 节清单）。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-mid">
+      <div class="head"><span class="n">02</span><span class="say">「二年级可以教一年级」：做成过很小的事就有资格分享。</span><span class="tag t-type">方法可执行</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>swyx 2018 年《Learn in Public》提出同样主张：公开写博客、教程、速查表，制造「学习废气」（learning exhaust，指学习过程中公开留下的记录）。这是实践倡议，不是成效研究。</dd>
+      <dt>判定与限定语</dt><dd>支持「有限经验可以分享」。不支持「分享有限经验能教会别人」或「能收到钱」。页面里不写「二年级教一年级是被证明有效的」。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-mid">
+      <div class="head"><span class="n">03</span><span class="say">实用文章只写背景、问题、怎么解决、为什么；不要文采。</span><span class="tag t-type">方法可执行</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>步骤清楚，一个人能在一周内完成。与 Agent Skills 规范推荐的正文结构（分步指令、输入输出示例、常见边界情况）方向一致。</dd>
+      <dt>判定与限定语</dt><dd>可执行，不等于有效。文章必须附上<strong>结果、条件、局限</strong>三项，否则读者无法判断能不能迁移到自己身上。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-mid">
+      <div class="head"><span class="n">04</span><span class="say">把文章拆成若干块，每块一条短视频。</span><span class="tag t-type">方法可执行</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>机制合理，是常见的内容复用做法。视频没有给拆块后的播放、关注或转化数据。</dd>
+      <dt>判定与限定语</dt><dd>可执行。不能因为可操作就写成「有效」。先发 2 条看反馈，再决定是否扩到 5 条（见第 5 节第三周）。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-mid">
+      <div class="head"><span class="n">05</span><span class="say">看评论：被关注多的重点写，有不同意见的拿回去修文章。</span><span class="tag t-type">方法可执行</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>反馈回路成立。评论人群只代表愿意留言的观众，不代表目标用户，也不代表付费者。</dd>
+      <dt>判定与限定语</dt></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-weak">
+      <div class="head"><span class="n">06</span><span class="say">修改后的文章成为基线和模板，让 AI 检查、不断进化。</span><span class="tag t-type">方法可执行</span><span class="tag t-weak">证据弱</span></div>
+      <dl><dt>证据</dt><dd>「让 AI 检查符不符合」只有口头描述，没有说检查什么、怎么算通过。</dd>
+      <dt>判定与限定语</dt><dd>要先写验收标准，再谈「进化」。<strong>一次复跑成功不代表稳定自动化</strong>；需要用新的正常案例和边界案例各跑一次，并记录人工接管次数。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-talk" data-ev="ev-weak">
+      <div class="head"><span class="n">07</span><span class="say">做成过事又真诚分享，身边「一定」会围很多人（年会过道围人的例子）。</span><span class="tag t-type">话术</span><span class="tag t-weak">证据弱</span></div>
+      <dl><dt>证据</dt><dd>一个现场观察，对象未知，人数未知。</dd>
+      <dt>判定与限定语</dt><dd>个案外推，有选择偏差风险：你只看见被围住的人，看不见同样做成了事、同样真诚、但没人围的人。「一定」这个词不保留。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-view" data-ev="ev-weak">
+      
+      <dl><dt>证据</dt><dd>没有案例。开源协作和社群共建都有真实的协调成本、贡献回报和权益分配问题。</dd>
+      <dt>判定与限定语</dt><dd>「邀请参与」可以试，但必须交代贡献是什么、回报是什么、谁来协调、权益怎么分。不能承诺零成本、人人满意。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-view" data-ev="ev-mid">
+      
+      <dl><dt>证据</dt><dd>这句话可以拆成三个可检验的部分：参与方式、报价、付款结果。Kevin Kelly 的「一千个铁粉」只给了收入条件（与粉丝有直接关系，每位每年平均 100 美元利润），不验证「人们因为参与而付款」这个动机。</dd>
+      <dt>判定与限定语</dt><dd>不是不可检验的口号，而是一个待测假设。第 5 节第四周的购买试验只能回答「有没有人付款」，不能回答「是为结果还是为参与付款」。要测参与因素，需另外写明参与方式（例如共创、试用反馈、署名），并单独记录参与者中付款的人数。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-tool" data-ev="ev-mid">
+      <div class="head"><span class="n">10</span><span class="say">没做成事的人：录音讲给 AI，让 AI 总结事件、困难、步骤、原因，自己再讲一遍，文章就出来了。</span><span class="tag t-type">工具能做</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>语音转写与按提问总结是常见 AI 产品功能，本页未附具体产品资料或复核测试记录，所以不计为「强」。注意作者的录音示例仍是已做成的事（一篇 10 万播放的文章、第一次做副业），不是「什么都没做过」。</dd>
+      <dt>判定与限定语</dt><dd>工具能做。限定语必须留在页面上：<strong>AI 总结需要核对</strong>，它会补全你没说过的步骤和原因。整理出来的是学习记录，不是教程。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-method" data-ev="ev-mid">
+      <div class="head"><span class="n">11</span><span class="say">逆向工程：把同赛道做得好的内容交给 AI 拆结构，用自己的内容填进去。</span><span class="tag t-type">方法可执行</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>方法清楚，可操作。没有数据说明用这个方法做出来的内容效果如何。</dd>
+      <dt>判定与限定语</dt><dd>边界必须写明：<strong>学结构，不搬运内容</strong>。对方的标题句式、段落顺序可以学；对方的案例、金句、素材不能用。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-view" data-ev="ev-mid">
+      <div class="head"><span class="n">12</span><span class="say">失败是资产：等你后来做成了，之前的失败都能变成内容、给别人避坑。</span><span class="tag t-type">观点</span><span class="tag t-mid">证据中</span></div>
+      <dl><dt>证据</dt><dd>Pieter Levels 的公开项目账本把自己 116 个项目标成 Success 9、Okay 11、Failed 19、N/A 71、New 6，并写「我做的大多数东西从未成功或赚钱」。这是一个人的分布，不能外推成大众成功率；N/A 不算失败。</dd>
+      <dt>判定与限定语</dt><dd>失败记录不必等到后来成功才有用，它本身就能帮人避坑。但「有用」不等于「能出售」。视频把失败资产的价值绑在后来的成功上，比实际情况更严。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-view" data-ev="ev-none">
+      <div class="head"><span class="n">13</span><span class="say">第一次就把事做成，「一定」是靠运气。</span><span class="tag t-type">观点</span><span class="tag t-none">证据无</span></div>
+      <dl><dt>证据</dt><dd>无。</dd>
+      <dt>判定与限定语</dt><dd>「一定」没有依据。作者还说第一次就成的人「好像没什么可讲的」；整理者的一种解释是「第一次成功的人往往说不清原因」，这是解释，不是原话。绝对化的说法不保留。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-talk" data-ev="ev-none">
+      <div class="head"><span class="n">14</span><span class="say">「这条视频说不定哪天我就删了，做成收费的。」</span><span class="tag t-type">话术</span><span class="tag t-none">证据无</span></div>
+      <dl><dt>证据</dt><dd>不属于方法。</dd>
+      <dt>判定与限定语</dt><dd>制造稀缺感的话术，不进入分析。</dd></dl>
+    </article>
+
+    <article class="claim" data-type="type-talk" data-ev="ev-none">
+      <div class="head"><span class="n">15</span><span class="say">作者履历：「我做了 20 年程序」「我拍了 6 年」「我天天都是十万播放」。</span><span class="tag t-type">话术</span><span class="tag t-none">证据无</span></div>
+      <dl><dt>证据</dt><dd>自述，未核实，视频也没有给账号或作品。</dd>
+      <dt>判定与限定语</dt><dd>全部保留「自述」二字。履历不能作为方法有效性的证据。</dd></dl>
+    </article>
+
+  </div>
+</section>
+
+<section id="s3">
+  <h2>3 案例对照：每个案例证明什么、不证明什么</h2>
+  
+  <div class="table-scroll">
+  <table>
+    <caption>案例与主张的对应关系</caption>
+    <thead><tr><th>案例</th><th>类型</th><th>对应主张</th><th>它证明什么</th><th>它不证明什么</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A · Agent Skills 规范</strong><br><span class="small muted">agentskills.io，Anthropic 2025-10 发布的开放格式</span></td><td>概念支撑</td><td>01、03、06</td><td>规范定义了技能的封装方式：一个目录加一份 SKILL.md，frontmatter（文件开头的元数据区）写名称和用途，正文是 Markdown 分步指令，可以带脚本和参考资料。它说明「用说明文件驱动 agent」有正式格式，不验证某篇文章的执行能力。</td><td>不证明随便一篇文章都能被执行。规范要求 description 写清「什么时候用」，正文推荐写步骤、输入输出示例和边界情况，这些恰好是口播文章通常没有的。</td></tr>
+      <tr><td><strong>B · Karpathy「Software Is Changing (Again)」</strong><br><span class="small muted">YouTube，2025-06-18 发布，章节「Programming in English」</span></td><td>概念支撑</td><td>01</td><td>给出「软件 3.0：自然语言是编程语言、模型是解释器」的视角，与「文章就是源代码」同一方向。</td><td>演讲同时强调模型不可预测、需要验证和监控。视角不等于「写了就能跑」。</td></tr>
+      <tr><td><strong>C · swyx《Learn in Public》</strong><br><span class="small muted">swyx.io，2018-06-19</span></td><td>实践倡议</td><td>02、04、05</td><td>公开分享有限经验（博客、教程、速查表、公开问答）是程序员社区十多年的常见做法，作者称其为自己传播最广的文章。</td><td>这是倡议，不是对照研究。不证明分享能带来教学成效或收入。</td></tr>
+      
+      <tr><td><strong>E · Pieter Levels 公开项目账本</strong><br><span class="small muted">levels.io/projects</span></td><td>一个人的项目分布</td><td>12</td><td>一位长期公开数据的独立开发者，自己把 116 个项目标为 Success 9（8%）、Okay 11（10%）、Failed 19（16%）、N/A 71（61%）、New 6，并承认大多数没赚钱。失败公开记录本身成了他的内容资产。</td><td>只是他一个人的分布。N/A 不是失败。不能外推成「照做的人也有 8% 成功」，也不能说明他的收入来自分享失败。</td></tr>
+      
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><strong>证据缺口（明确列出，不用假想反例填充）：</strong>本页没有找到「同样照这条链路执行，但没有需求、无人付费或 Skill 复跑失败」的公开记录。缺口不等于不存在；它意味着第 5 节的试验要自己产出这类记录。</div>
+</section>
+
+<section id="s4">
+  <h2>4 从「有文章」到「有收入」缺了哪些环节</h2>
+  <p>视频的推断是：内容有了 → 产品有了 → 用户有了 → 雪球滚起来。下面把这条链拆开，标出每一段需要的证据。红字是视频没有提供的。</p>
+  <div class="chain">
+    <div class="node"><h4>实用文章</h4><p>视频给了写法。需要补：结果、条件、局限。</p></div>
+    <div class="node"><h4>观众</h4><p>短视频播放与评论。<span class="gap">缺：观众不等于用户。</span></p></div>
+    <div class="node"><h4>用户</h4></div>
+    <div class="node"><h4>买家</h4><p>为特定范围和价格付款的人。<span class="gap">缺：报价、付款人数。</span></p></div>
+    
+    <div class="node"><h4>复用收益</h4><p>复用收益超过新增交付与维护负担。<span class="gap">缺：复购或留存、获客投入。</span></p></div>
+  </div>
+  <ul>
+    <li><strong>观众不等于用户，用户不等于买家。</strong>一条十万播放的视频和一个付款的人之间，没有必然关系。</li>
+    <li><strong>一笔订单只验证一次交易。</strong>要谈「雪球」，还得证明重复需求、稳定交付和扣除维护后的工时收益。</li>
+    <li><strong>「邀请参与」要交代成本。</strong>贡献、回报、协调成本、权益分配四项缺一项，就不能写「几乎不花一分钱」。</li>
+    <li><strong>自动化不必然省工。</strong>把文章变成 Skill 以后，要和原来手工做法对照总工时与费用，不能默认更省。</li>
+  </ul>
+</section>
+
+
+
+<section id="s6">
+  <h2>6 文章模板与「文章 → Skill」转换清单</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>实用文章模板（视频四项 + 补三项）</h3>
+      <ol>
+        <li><strong>背景：</strong>当时的条件、资源、起点。</li>
+        <li><strong>问题：</strong>具体卡在哪，之前试过什么。</li>
+        <li><strong>怎么做：</strong>按顺序的步骤，每步有输入和输出。</li>
+        <li><strong>为什么：</strong>每个关键选择的原因，以及放弃的选项。</li>
+        <li><strong>结果（补）：</strong>可核对的数字或产物，区分一次性和重复发生的。</li>
+        <li><strong>条件（补）：</strong>什么情况下这套做法成立。</li>
+        <li><strong>局限（补）：</strong>没解决的、不确定的、靠运气的部分。</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>文章 → SKILL.md 转换清单</h3>
+      <p class="small muted">空框是 Agent Skills 规范已有的项，实框是本页按审稿意见补的项。缺了实框的项，你有的只是说明，没有可靠的执行闭环。</p>
+      <ul class="check">
+        <li>name：小写加连字符，与目录同名</li>
+        <li>description：做什么、什么时候用，含触发关键词</li>
+        <li>正文：分步指令、输入输出示例、常见边界情况</li>
+        <li class="add">输入与输出的格式和位置</li>
+        <li class="add">适用条件与不适用条件</li>
+        <li class="add">需要的工具权限与依赖</li>
+        <li class="add">验收标准：怎么算通过</li>
+        <li class="add">异常处理：失败时做什么、何时交回人工</li>
+        
+      </ul>
+    </div>
+  </div>
+  <p class="note">对照视频主张 06：「让 AI 检查符不符合」只有在验收标准写出来以后才成立。没有验收标准的「进化」只是改字。</p>
+</section>
+
+<section id="src">
+  <h2>来源与方法</h2>
+  <div class="table-scroll">
+  <table>
+    <caption>外部来源均在 2026-10-21 打开原页核对；日期为来源页面显示的发布或修改日期。</caption>
+    <thead><tr><th>编号</th><th>来源</th><th>用在哪</th></tr></thead>
+    <tbody>
+      <tr><td>S1</td><td><a href="https://agentskills.io/specification">Agent Skills · Specification</a>（agentskills.io）</td><td>主张 01、03、06；案例 A；第 6 节清单</td></tr>
+      <tr><td>S2</td><td><a href="https://www.youtube.com/watch?v=LCEmiRjPEtQ">Andrej Karpathy: Software Is Changing (Again)</a>（Y Combinator，YouTube，2025-06-18）</td><td>主张 01；案例 B</td></tr>
+      <tr><td>S3</td><td><a href="https://www.swyx.io/learn-in-public">swyx · Learn in Public</a>（2018-06-19）</td><td>主张 02、04、05；案例 C</td></tr>
+      <tr><td>S4</td><td><a href="https://kk.org/thetechnium/1000-true-fans/">Kevin Kelly · 1000 True Fans</a>（现行版为 2008 原文改写）</td><td>主张 09；案例 D</td></tr>
+      <tr><td>S5</td><td><a href="https://levels.io/projects">Pieter Levels · List of all my projects ever</a></td><td>主张 12；案例 E</td></tr>
+      <tr><td>S6</td><td><a href="https://cloud.tencent.com/developer/article/2647247">万字详解：OpenClaw（俗称“龙虾”）是什么</a>（腾讯云开发者社区，页面修改日期 2026-04-14）</td><td>「小龙虾」释义；曾用名 Clawdbot、Moltbot</td></tr>
+      
+    </tbody>
+  </table>
+  </div>
+  <h3>方法说明</h3>
+  <ul>
+    <li>视频转写由用户提供，作者匿名。页面统称「作者」，履历一律标「自述」。</li>
+    <li>判定分「主张类型」与「证据强度」两个维度。类型：工具能做、方法可执行、效果已验证、观点、话术。强度：强、中、弱、无。15 条里没有一条达到「效果已验证」。</li>
+    
+    
+  </ul>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    
+    <p>本页为自包含 HTML，不加载外部资源。设计值全部来自文件顶部的 token 区；断点阈值 640px 与 900px 在 token 注释中登记。</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filters button');
+  var cards=document.querySelectorAll('#claims .claim');
+  var count=document.getElementById('count');
+  function apply(f){
+    var n=0;
+    cards.forEach(function(c){
+      var show=(f==='all')||c.dataset.type===f||c.dataset.ev===f;
+      c.hidden=!show; if(show)n++;
+    });
+    count.textContent='显示 '+n+' / '+cards.length+' 条';
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===f));});
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.f);});});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="韬定律可视化报告">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>20260608-1616-韬定律可视化报告</title>
+  <style>
+    :root {
+      --paper: #f6efe3;
+      --cream: #fff8ec;
+      --ink: #211b16;
+      --muted: #65594d;
+      --line: #d9c8b0;
+      --red: #c83b31;
+      --amber: #d39b38;
+      --teal: #14746f;
+      --green: #2f6f4e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(216,200,178,.18) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(216,200,178,.14) 1px, transparent 1px),
+        var(--paper);
+      background-size: 44px 44px;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.72;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+    .hero {
+      padding: 34px 0 64px;
+      background: linear-gradient(120deg, rgba(255,248,236,.98), rgba(239,226,206,.88));
+      border-bottom: 1px solid var(--line);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 54px;
+      font-size: 14px;
+    }
+    nav a { text-decoration: none; color: var(--muted); margin-left: 20px; }
+    .brand { color: var(--ink); font-weight: 900; margin-left: 0; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 54px;
+      align-items: center;
+    }
+    .eyebrow, .kicker {
+      margin: 0 0 12px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    h1, h2 {
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 22px; font-size: clamp(44px, 7vw, 82px); }
+    h2 { margin: 0 0 14px; font-size: clamp(30px, 4.8vw, 54px); }
+    h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.25; }
+    p { margin-top: 0; color: var(--muted); }
+    .lead { font-size: 20px; max-width: 760px; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid var(--ink);
+      text-decoration: none;
+      font-weight: 900;
+    }
+    .btn.primary { background: var(--ink); color: var(--cream); }
+    .panel {
+      border: 1px solid var(--ink);
+      background: var(--cream);
+      box-shadow: 0 18px 58px rgba(65,47,28,.14);
+      padding: 24px;
+    }
+    .panel svg, .chart svg { width: 100%; height: auto; display: block; }
+    section { padding: 70px 0; border-bottom: 1px solid var(--line); }
+    .intro { max-width: 900px; margin-bottom: 30px; }
+    .grid-3, .grid-4, .source-grid {
+      display: grid;
+      gap: 18px;
+    }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .source-grid { grid-template-columns: repeat(2, 1fr); }
+    .card {
+      min-height: 180px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,248,236,.78);
+    }
+    .card.red { border-top: 6px solid var(--red); }
+    .card.amber { border-top: 6px solid var(--amber); }
+    .card.teal { border-top: 6px solid var(--teal); }
+    .metric {
+      display: block;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: clamp(42px, 6vw, 70px);
+      font-weight: 900;
+      line-height: .9;
+      margin-bottom: 18px;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(180px, 1fr));
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .time-card {
+      min-height: 245px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,248,236,.78);
+    }
+    .year {
+      display: block;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,248,236,.84);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    th {
+      color: var(--cream);
+      background: var(--ink);
+      text-align: left;
+      font-weight: 900;
+    }
+    th, td {
+      padding: 15px;
+      border: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: .75fr 1.25fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .chart {
+      border: 1px solid var(--line);
+      background: rgba(255,248,236,.82);
+      padding: 20px;
+    }
+    .node-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .node {
+      padding: 17px;
+      border: 1px solid var(--line);
+      background: rgba(255,248,236,.76);
+    }
+    .node strong { display: block; color: var(--red); font-size: 26px; }
+    .source {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,248,236,.78);
+    }
+    .source a { font-weight: 900; color: var(--ink); }
+    footer { padding: 34px 0 60px; color: var(--muted); }
+    .note {
+      padding: 18px 20px;
+      border-left: 6px solid var(--red);
+      background: rgba(255,248,236,.72);
+      color: var(--muted);
+    }
+    @media (max-width: 900px) {
+      .hero-grid, .split { grid-template-columns: 1fr; }
+      .grid-3, .grid-4, .source-grid { grid-template-columns: repeat(2, 1fr); }
+      nav { align-items: flex-start; flex-direction: column; }
+      nav a { margin-left: 0; margin-right: 16px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { padding: 0 18px; }
+      .grid-3, .grid-4, .source-grid, .node-list { grid-template-columns: 1fr; }
+      h1 { font-size: 42px; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; }
+      .buttons { flex-direction: column; }
+      .btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="wrap">
+      <nav>
+        <a class="brand" href="#top">韬定律报告</a>
+        <div>
+          <a href="#summary">结论</a>
+          <a href="#compare">对比</a>
+          <a href="#node">2nm/3nm</a>
+          <a href="#architecture">架构</a>
+          <a href="#sources">来源</a>
+        </div>
+      </nav>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Huawei Tau Scaling · 静态科普版</p>
+          <h1>韬（τ）定律：后摩尔时代，华为想缩短的不只是晶体管尺寸</h1>
+          <p class="lead">摩尔定律关心“同一面积能塞进多少晶体管”。韬定律关心“一个电子系统从输入到结果，要等多久”。它把竞争从制程节点，扩展到器件、电路、芯片、封装、互联和软件的协同优化。</p>
+          <div class="buttons">
+            <a class="btn primary" href="#summary">先看结论</a>
+            <a class="btn" href="#sources">查看资料来源</a>
+          </div>
+        </div>
+        <div class="panel">
+          <svg viewBox="0 0 680 430" role="img" aria-label="从几何缩微到时间缩微的信号路径示意图">
+            <defs>
+              <linearGradient id="pathGradient" x1="0" x2="1">
+                <stop offset="0%" stop-color="#c83b31"/>
+                <stop offset="50%" stop-color="#d39b38"/>
+                <stop offset="100%" stop-color="#14746f"/>
+              </linearGradient>
+            </defs>
+            <text x="520" y="92" font-family="Georgia" font-size="96" fill="rgba(200,59,49,.25)">τ</text>
+            <path d="M80 340 C170 90, 270 360, 385 120 S555 275, 615 82" fill="none" stroke="rgba(33,27,22,.24)" stroke-width="14" stroke-dasharray="18 14"/>
+            <path d="M80 340 C200 250, 270 225, 360 205 S520 150, 615 82" fill="none" stroke="url(#pathGradient)" stroke-width="15"/>
+            <circle cx="80" cy="340" r="16" fill="#211b16"/>
+            <circle cx="615" cy="82" r="16" fill="#211b16"/>
+            <text x="48" y="384" font-size="22" font-weight="900">输入</text>
+            <text x="565" y="54" font-size="22" font-weight="900">结果</text>
+            <text x="110" y="122" font-size="22" font-weight="900">传统缩微：线更细、管更多</text>
+            <text x="270" y="300" font-size="22" font-weight="900">时间缩微：路径更短、等待更少</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="summary">
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">01 · 一句话框架</p>
+          <h2>把芯片竞争从“多塞晶体管”升级为“少等每一跳”</h2>
+          <p>现代芯片的瓶颈经常不是算术单元本身，而是数据移动、互联延迟、缓存命中、内存带宽、功耗和软件调度。韬定律把这些放到同一张图里看。</p>
+        </div>
+        <div class="grid-3">
+          <article class="card red">
+            <h3>韬定律是什么</h3>
+            <p>以时间常数 τ 为核心，把电子系统的演进目标定义为持续压缩信号传播时间。它不是单颗晶体管公式，而是多层电子系统理论。</p>
+          </article>
+          <article class="card amber">
+            <h3>和摩尔定律的关系</h3>
+            <p>摩尔定律仍然重要，但先进制程变贵、变难后，系统级优化会承担更多性能增长任务。韬定律更像后摩尔补充路线。</p>
+          </article>
+          <article class="card teal">
+            <h3>最容易误解的点</h3>
+            <p>“2031 等效 1.4nm 密度”不是已经制造出 1.4nm 工艺；“时间缩微”也不是单个器件发明，而是一组协同设计方法。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">02 · 历史位置</p>
+          <h2>为什么这个概念会在 2026 年出现</h2>
+          <p>越到先进节点，晶体管继续变小的边际成本越高。产业已经从单点制程竞争，转向架构、封装、内存和互联共同竞争。</p>
+        </div>
+        <div class="timeline">
+          <article class="time-card"><span class="year">1965</span><h3>摩尔定律提出</h3><p>Gordon Moore 观察到集成电路上可经济集成的晶体管数量会快速增长。</p></article>
+          <article class="time-card"><span class="year">2000s</span><h3>Dennard 缩放失效</h3><p>晶体管继续变小，但电压和功耗不再同步下降，频率提升越来越困难。</p></article>
+          <article class="time-card"><span class="year">2010s</span><h3>FinFET 与 EUV</h3><p>产业用立体晶体管、EUV 光刻和材料演进继续推进 7nm、5nm、3nm。</p></article>
+          <article class="time-card"><span class="year">2020s</span><h3>Chiplet、HBM、先进封装</h3><p>大芯片成本和良率压力上升，小芯片互联、3D 封装和内存靠近计算成为主战场。</p></article>
+          <article class="time-card"><span class="year">2026</span><h3>华为提出韬（τ）定律</h3><p>华为把缩放目标从“几何尺寸”扩展到“信号传播时间”。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">03 · 定律对比</p>
+          <h2>摩尔定律看面积，韬定律看时间</h2>
+          <p>二者不是二选一：先进制程仍能帮助缩短延迟，但韬定律把更多可优化对象纳入同一系统。</p>
+        </div>
+        <table>
+          <thead><tr><th scope="col">维度</th><th scope="col">摩尔定律</th><th scope="col">韬（τ）定律</th></tr></thead>
+          <tbody>
+            <tr><td>核心变量</td><td>晶体管数量、单位面积成本、几何尺寸</td><td>信号传播时间常数 τ、系统响应延迟、有效计算密度</td></tr>
+            <tr><td>主要手段</td><td>更小制程、更高晶体管密度、光刻和材料演进</td><td>逻辑折叠、互联缩短、分层协同、软硬芯协同</td></tr>
+            <tr><td>评价尺度</td><td>同面积能放多少晶体管</td><td>一次计算从输入到结果要多久、每焦耳能做多少有效工作</td></tr>
+            <tr><td>适用语境</td><td>制造工艺和经济规律</td><td>多层电子系统的架构演进规律</td></tr>
+            <tr><td>关键限制</td><td>光刻、材料、量子效应、成本、良率</td><td>设计复杂度、工具链、生态适配、实际可验证指标</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap split">
+        <div>
+          <p class="kicker">04 · 趋势概念图</p>
+          <h2>性能增长的重心正在迁移</h2>
+          <p>早期主要靠几何缩微。进入后摩尔阶段，系统协同、封装互联、内存靠近计算和软件栈调度变成更高权重的增长来源。</p>
+          
+        </div>
+        <div class="chart">
+          <svg viewBox="0 0 700 360" role="img" aria-label="几何缩微、时延优化和系统协同贡献趋势概念图">
+            <g stroke="#d9c8b0"><line x1="70" y1="300" x2="620" y2="300"/><line x1="70" y1="240" x2="620" y2="240"/><line x1="70" y1="180" x2="620" y2="180"/><line x1="70" y1="120" x2="620" y2="120"/><line x1="70" y1="60" x2="620" y2="60"/></g>
+            <path d="M85 84 L265 130 L445 200 L620 244" fill="none" stroke="#c83b31" stroke-width="7"/>
+            <path d="M85 176 L265 164 L445 148 L620 106" fill="none" stroke="#d39b38" stroke-width="7"/>
+            <path d="M85 252 L265 200 L445 146 L620 94" fill="none" stroke="#14746f" stroke-width="7"/>
+            <g fill="#211b16" font-size="17" font-weight="900"><text x="72" y="330">摩尔早期</text><text x="240" y="330">FinFET</text><text x="426" y="330">3nm</text><text x="590" y="330">后摩尔</text></g>
+            <g font-size="17" font-weight="900"><text x="88" y="34" fill="#c83b31">几何缩微</text><text x="230" y="34" fill="#d39b38">时延优化</text><text x="372" y="34" fill="#14746f">系统协同</text></g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="node">
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">05 · 2nm / 3nm 是什么</p>
+          <h2>今天的纳米节点更像“工艺代际品牌”，不是尺子上的线宽</h2>
+          <p>早期节点名大致对应晶体管某些物理尺寸。进入 FinFET/GAA 时代后，2nm、3nm 更代表晶体管结构、密度、功耗、性能和制造平台的综合代际。</p>
+        </div>
+        <div class="split">
+          <div class="chart">
+            <svg viewBox="0 0 700 360" role="img" aria-label="不同制程节点相对密度示意图">
+              <g stroke="#d9c8b0"><line x1="60" y1="300" x2="640" y2="300"/><line x1="60" y1="240" x2="640" y2="240"/><line x1="60" y1="180" x2="640" y2="180"/><line x1="60" y1="120" x2="640" y2="120"/><line x1="60" y1="60" x2="640" y2="60"/></g>
+              <rect x="88" y="276" width="48" height="24" fill="#8d3f35"/><rect x="178" y="250" width="48" height="50" fill="#a8583b"/><rect x="268" y="203" width="48" height="97" fill="#c77b3b"/><rect x="358" y="150" width="48" height="150" fill="#d39b38"/><rect x="448" y="111" width="48" height="189" fill="#3c8f83"/><rect x="538" y="60" width="48" height="240" fill="#14746f"/>
+              <g fill="#211b16" font-size="17" font-weight="900"><text x="82" y="330">28nm</text><text x="166" y="330">16/14</text><text x="266" y="330">7nm</text><text x="356" y="330">5nm</text><text x="446" y="330">3nm</text><text x="536" y="330">2nm</text></g>
+              <text x="60" y="30" fill="#65594d" font-size="17" font-weight="900">相对密度示意，不代表真实厂商 PDK 数值</text>
+            </svg>
+          </div>
+          <div class="node-list">
+            <div class="node"><strong>28nm</strong><p>成熟平面/早期高性能节点，仍广泛用于模拟、车规和工业芯片。</p></div>
+            <div class="node"><strong>16/14nm</strong><p>FinFET 进入主流，晶体管从平面走向三维栅极。</p></div>
+            <div class="node"><strong>7nm</strong><p>EUV 前后过渡期，先进移动 SoC 和高性能计算大规模使用。</p></div>
+            <div class="node"><strong>5nm</strong><p>EUV 成熟化，旗舰手机和 AI/HPC 芯片常见节点。</p></div>
+            <div class="node"><strong>3nm</strong><p>FinFET 极限区，名字是工艺代际品牌，不等于某条线宽真是 3nm。</p></div>
+            <div class="node"><strong>2nm</strong><p>GAA / nanosheet 时代，主流厂商转向环绕栅、背面供电和更先进互联。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">06 · 华为这次披露了什么</p>
+          <h2>重点不是“宣布一个节点”，而是宣布一条系统级演进路线</h2>
+          
+        </div>
+        <div class="grid-3">
+          <article class="card"><span class="metric">381</span><h3>381 款芯片量产</h3><p>华为官方称过去六年基于该理论设计并量产 381 款芯片。这里视为官方披露事实，不延伸为第三方独立验证结论。</p></article>
+          <article class="card"><span class="metric">2026</span><h3>秋季麒麟逻辑折叠</h3></article>
+          <article class="card"><span class="metric">1.4nm</span><h3>2031 等效密度目标</h3><p>这是“等效晶体管密度”目标，不等同于传统意义上已经获得 1.4nm 代工工艺。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">07 · 国际主流架构对比</p>
+          <h2>韬定律不是 ARM、x86 或 RISC-V 这种指令集</h2>
+          <p>很多新闻容易把“架构”混在一起。这里把指令集、微架构、制程、封装和系统互联分开看。</p>
+        </div>
+        <table>
+          <thead><tr><th scope="col">路线</th><th scope="col">代表</th><th scope="col">优势</th><th scope="col">短板</th><th scope="col">用韬定律怎么看</th></tr></thead>
+          <tbody>
+            <tr><td>x86</td><td>Intel Core/Xeon, AMD EPYC</td><td>软件生态极强，服务器和 PC 基础深</td><td>指令集复杂，能效压力更依赖制程和微架构</td><td>韬定律不替代 x86，而是从系统时延角度评价平台效率。</td></tr>
+            <tr><td>ARM</td><td>Apple M 系列、手机 SoC、鲲鹏等</td><td>能效和 SoC 集成优势明显</td><td>高端服务器生态和软件迁移仍需要时间</td><td>更容易做芯片级和系统级协同，但最终看互联、内存和软件栈。</td></tr>
+            <tr><td>RISC-V</td><td>开放指令集 MCU、AI 控制核、实验型处理器</td><td>开放、可定制、适合专用加速</td><td>高性能生态、工具链和验证体系仍在成长</td><td>适合定制化逻辑折叠，但商业成熟度要单独评估。</td></tr>
+            <tr><td>GPU / NPU</td><td>NVIDIA Blackwell、AMD Instinct、华为昇腾</td><td>并行计算和 AI 训练/推理吞吐强</td><td>受内存带宽、互联、软件框架绑定影响大</td><td>与韬定律最接近：瓶颈常是数据移动时间，而不只是晶体管数量。</td></tr>
+            <tr><td>Chiplet / 3D</td><td>AMD chiplet、Intel Foveros、台积电 CoWoS</td><td>提高良率，组合不同工艺，靠封装扩展系统能力</td><td>封装成本、互联延迟、热设计和供应链复杂</td><td>属于时间缩微的重要手段：让计算、缓存和内存物理距离更短。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">08 · 主流厂商路线</p>
+          <h2>全球竞争的关键词：GAA、背面供电、HBM、Chiplet、系统互联</h2>
+          <p>先进制程仍是硬实力，但 AI 时代的性能越来越依赖封装、内存和集群级互联。</p>
+        </div>
+        <div class="grid-4">
+          <article class="card"><h3>TSMC</h3><p>N2 进入 nanosheet/GAA 时代，继续通过工艺平台服务 Apple、NVIDIA、AMD 等客户。</p></article>
+          <article class="card"><h3>Intel</h3><p>18A 强调 RibbonFET 与 PowerVia，试图用环绕栅和背面供电重夺先进制造节奏。</p></article>
+          <article class="card"><h3>Samsung</h3><p>较早推进 GAA/MBCFET，重点竞争 3nm、2nm 和先进封装客户。</p></article>
+          <article class="card"><h3>NVIDIA / AMD</h3><p>用 GPU、HBM、Chiplet 和高速互联把芯片变成系统平台，尤其服务 AI 训练与推理。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">09 · 风险和边界</p>
+          <h2>最该警惕的三个误读</h2>
+          <p>科普报告最重要的是不把概念讲成神话。下面三条是阅读相关报道时的校准器。</p>
+        </div>
+        <div class="grid-3">
+          <article class="card"><h3>误读一：韬定律取代摩尔定律</h3><p>更准确的说法是补充。先进制程仍然重要，只是性能增长不能再只靠晶体管变小。</p></article>
+          <article class="card"><h3>误读二：等效 1.4nm 就是 1.4nm 工艺</h3><p>等效密度是系统优化后的效果指标，不等于传统代工厂意义上的物理工艺节点。</p></article>
+          <article class="card"><p>路线图需要等待芯片发布、第三方拆解、性能/功耗测试和软件生态验证。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="wrap">
+        <div class="intro">
+          <p class="kicker">10 · 来源与可信度</p>
+          <h2>这份报告如何判断事实</h2>
+          <p>页面基于 2026-05-26 可核验公开资料制作。对未发布芯片、未来路线图和“等效制程密度”的内容，已区分官方披露、科普解释和仍需第三方验证的部分。</p>
+        </div>
+        <div class="source-grid">
+          <div class="source"><a href="https://www.huawei.com/cn/news/2026/5/ieee-iscas-tau-scaling">华为官方新闻：何庭波在 IEEE ISCAS 2026 发表韬定律</a><p>确认发布时间、发布场景、核心定义、381 款芯片、逻辑折叠和 2031 目标等表述。</p></div>
+          <div class="source"><a href="https://chinarxiv.org/items/chinaxiv-202605.00224">ChinaXiv：A Time Scaling Theory for Multi-Layer Electronic Systems</a><p>确认韬定律的论文题名、作者和“时间缩微”理论框架。</p></div>
+          <div class="source"><a href="https://finance.people.com.cn/n1/2026/0526/c1004-40727170.html">人民网：华为发布韬定律</a><p>用于交叉核对发布事件和中文技术摘要。</p></div>
+          <div class="source"><a href="https://spectrum.ieee.org/moores-law">IEEE Spectrum：Moore's Law background</a><p>用于解释摩尔定律的历史语境。</p></div>
+          <div class="source"><a href="https://www.tsmc.com/english/dedicatedFoundry/technology/logic/l_2nm">TSMC N2 technology</a><p>用于对比 2nm 量产节点和纳米片晶体管方向。</p></div>
+          <div class="source"><a href="https://www.intel.com/content/www/us/en/newsroom/resources/intel-18a.html">Intel 18A and process roadmap</a><p>用于对比 RibbonFET、PowerVia 和先进封装路线。</p></div>
+          <div class="source"><a href="https://semiconductor.samsung.com/foundry/process-technology/">Samsung Foundry process technology</a><p>用于对比三星 GAA 与 2nm 节点路线。</p></div>
+          <div class="source"><a href="https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/">NVIDIA Blackwell architecture</a><p>用于对比 GPU、HBM、NVLink 和系统级 AI 计算平台路线。</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      本页是静态 HTML 科普报告，不构成投资建议。更新时间：2026-05-26。文件可直接双击打开，无需本地服务器。
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="把自媒体经验拆成可核验的来源、可选择的路线与有预算边界的小实验。含本地运行的转化与贡献计算器。">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>自媒体从0到1：把涨粉方法变成可验证的生意</title>
+  <style>
+    /* Token source: :root. Semantic colors, shared type/space scales and component dimensions. Structural CSS and chart data retain their own meaning. No external assets. */
+    :root {
+      color-scheme: light;
+      --paper: #f6f1e7;
+      --surface: #fffdf8;
+      --ink: #203b31;
+      --forest: #173f34;
+      --forest-hover: #245342;
+      --sage: #e7ece3;
+      --orange: #ad4928;
+      --orange-soft: #f5e5d8;
+      --muted: #596158;
+      --line: #cdc8bb;
+      --danger: #a13227;
+      --danger-soft: #f9e8e2;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --serif: "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif;
+      --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      --text-xs: .76rem;
+      --text-sm: .875rem;
+      --text-base: 1rem;
+      --text-lead: clamp(1.05rem, 1.5vw, 1.2rem);
+      --text-h1: clamp(2.15rem, 4.5vw, 4rem);
+      --text-h2: clamp(1.45rem, 2.5vw, 2rem);
+      --text-h3: 1.08rem;
+      --text-stat: clamp(2rem, 3.5vw, 3rem);
+      --weight-normal: 400;
+      --weight-medium: 600;
+      --weight-bold: 700;
+      --leading: 1.85;
+      --leading-tight: 1.25;
+      --leading-small: 1.6;
+      --tracking: .08em;
+      --zero: 0;
+      --full: 100%;
+      --fr: 1fr;
+      --s1: .25rem;
+      --s2: .5rem;
+      --s3: .75rem;
+      --s4: 1rem;
+      --s5: 1.25rem;
+      --s6: 1.5rem;
+      --s7: 2rem;
+      --s8: 3rem;
+      --s9: 4rem;
+      --gutter: clamp(1rem, 4vw, 4rem);
+      --section-gap: clamp(2.75rem, 6vw, 5rem);
+      --page-max: 74rem;
+      --measure: 54rem;
+      --hero-min: 23rem;
+      --card-min: 15.5rem;
+      --calc-min: 27rem;
+      --field-min: 11rem;
+      --nav-min: 6.5rem;
+      --table-min: 42rem;
+      --number-col: 2.75rem;
+      --touch: 2.75rem;
+      --radio-size: 1.15rem;
+      --radius-sm: .3rem;
+      --radius-md: .65rem;
+      --radius-lg: 1rem;
+      --rule: 1px solid var(--line);
+      --rule-strong: 2px solid var(--forest);
+      --rule-accent: 3px solid var(--orange);
+      --rule-error: 1px solid var(--danger);
+      --focus-ring: 3px solid var(--orange);
+      --focus-offset: 4px;
+      --skip-away: translateY(-180%);
+      --skip-back: translateY(0);
+      --layer-front: 10;
+      --disabled-opacity: .65;
+      --tap-highlight: transparent;
+      --plot-height: .75rem;
+      --plot-a: 5%;
+      --plot-b: 100%;
+      --two-columns: repeat(auto-fit, minmax(min(var(--full), var(--hero-min)), var(--fr)));
+      --card-columns: repeat(auto-fit, minmax(min(var(--full), var(--card-min)), var(--fr)));
+      --calc-columns: repeat(auto-fit, minmax(min(var(--full), var(--calc-min)), var(--fr)));
+      --field-columns: repeat(auto-fit, minmax(min(var(--full), var(--field-min)), var(--fr)));
+      --nav-columns: repeat(auto-fit, minmax(var(--nav-min), var(--fr)));
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { background: var(--paper); }
+    body {
+      margin: var(--zero);
+      color: var(--ink);
+      font: var(--weight-normal) var(--text-base)/var(--leading) var(--sans);
+    }
+    h1, h2, h3, p, figure, dl, dd { margin: var(--zero); }
+    h1, h2, h3 { text-wrap: balance; }
+    h1, h2 {
+      font-family: var(--serif);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-tight);
+    }
+    h1 { font-size: var(--text-h1); }
+    h2 { font-size: var(--text-h2); }
+    h3 { font-size: var(--text-h3); line-height: var(--leading-small); }
+    p + p { margin-block-start: var(--s4); }
+    a {
+      color: var(--forest);
+      text-underline-offset: var(--s1);
+      overflow-wrap: anywhere;
+    }
+    a:hover { color: var(--orange); }
+    button, input { font: inherit; }
+    button, label { -webkit-tap-highlight-color: var(--tap-highlight); }
+    button { cursor: pointer; }
+    :focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-offset);
+    }
+    ::selection { color: var(--ink); background: var(--orange-soft); }
+    .shell {
+      max-inline-size: var(--page-max);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .skip {
+      position: absolute;
+      inset-block-start: var(--s4);
+      inset-inline-start: var(--s4);
+      z-index: var(--layer-front);
+      padding: var(--s3) var(--s4);
+      background: var(--surface);
+      transform: var(--skip-away);
+    }
+    .skip:focus { transform: var(--skip-back); }
+    .masthead {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--s3);
+      padding-block: var(--s6);
+      border-block-end: var(--rule-strong);
+      font-size: var(--text-sm);
+    }
+    .eyebrow {
+      color: var(--orange);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking);
+    }
+    .muted, .fine { color: var(--muted); }
+    .fine { font-size: var(--text-sm); line-height: var(--leading-small); }
+    .hero { padding-block: var(--s8); }
+    .hero h1 {
+      max-inline-size: var(--measure);
+      margin-block: var(--s4) var(--s5);
+    }
+    .hero h1 span { color: var(--orange); }
+    .lead { max-inline-size: var(--measure); font-size: var(--text-lead); }
+    .index {
+      display: grid;
+      grid-template-columns: var(--nav-columns);
+      gap: var(--s2);
+      padding-block: var(--s5);
+      border-block: var(--rule);
+    }
+    .index a {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      min-block-size: var(--touch);
+      font-size: var(--text-sm);
+      text-decoration: none;
+    }
+    .index span, .number, .time, .equation {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+    }
+    .index span { color: var(--orange); }
+    section {
+      min-inline-size: var(--zero);
+      padding-block: var(--section-gap);
+      scroll-margin-block-start: var(--s5);
+    }
+    section + section { border-block-start: var(--rule); }
+    .section-head {
+      display: grid;
+      grid-template-columns: var(--number-col) minmax(var(--zero), var(--fr));
+      gap: var(--s3);
+      align-items: baseline;
+      margin-block-end: var(--s6);
+    }
+    .number { color: var(--orange); font-size: var(--text-sm); }
+    .section-head p { margin-block-start: var(--s3); color: var(--muted); }
+    .reading { max-inline-size: var(--measure); }
+    .two-col, .cards, .calculator {
+      display: grid;
+      gap: var(--s5);
+      align-items: start;
+    }
+    .two-col { grid-template-columns: var(--two-columns); }
+    .cards { grid-template-columns: var(--card-columns); }
+    .calculator {
+      grid-template-columns: var(--calc-columns);
+      margin-block-start: var(--s6);
+    }
+    .card, .note, .route-panel, .result {
+      padding: var(--s6);
+      border: var(--rule);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    .card p, .note p, .route-panel p { margin-block-start: var(--s3); }
+    .dark {
+      background: var(--forest);
+      color: var(--surface);
+      border-color: var(--forest);
+    }
+    .dark h3 { color: var(--surface); }
+    .dark .eyebrow { color: var(--orange-soft); }
+    .callout {
+      padding: var(--s5);
+      margin-block-start: var(--s5);
+      border-inline-start: var(--rule-accent);
+      background: var(--orange-soft);
+      border-radius: var(--zero) var(--radius-sm) var(--radius-sm) var(--zero);
+    }
+    .tag {
+      display: inline-block;
+      padding: var(--s1) var(--s2);
+      border: var(--rule);
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-size: var(--text-xs);
+    }
+    .source-ref { font-size: var(--text-xs); white-space: nowrap; }
+    .timeline {
+      padding: var(--zero);
+      margin: var(--s5) var(--zero) var(--zero);
+      list-style: none;
+    }
+    .timeline li {
+      border-block-start: var(--rule);
+      padding-block: var(--s5);
+    }
+    .timeline h3 { margin-block: var(--s2); }
+    .time { color: var(--orange); font-size: var(--text-sm); }
+    .table-wrap {
+      overflow-x: auto;
+      margin-block-start: var(--s5);
+      border: var(--rule);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    table {
+      inline-size: var(--full);
+      min-inline-size: var(--table-min);
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+      line-height: var(--leading-small);
+    }
+    caption { padding: var(--s4); text-align: start; color: var(--muted); }
+    th, td {
+      padding: var(--s4);
+      text-align: start;
+      vertical-align: top;
+      border-block-start: var(--rule);
+    }
+    thead th { background: var(--sage); font-weight: var(--weight-medium); }
+    tbody th { font-weight: var(--weight-medium); }
+    fieldset {
+      min-inline-size: var(--zero);
+      border: var(--zero);
+      padding: var(--zero);
+      margin: var(--zero);
+    }
+    legend {
+      padding: var(--zero);
+      margin-block-end: var(--s4);
+      font-weight: var(--weight-bold);
+    }
+    .route-options { margin-block: var(--s5); }
+    .route-choice {
+      display: flex;
+      align-items: start;
+      gap: var(--s3);
+      padding: var(--s5);
+      border: var(--rule);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .route-choice:has(input:checked) {
+      background: var(--sage);
+      border-color: var(--forest);
+    }
+    .route-choice input {
+      inline-size: var(--radio-size);
+      block-size: var(--radio-size);
+      flex-shrink: var(--zero);
+      margin: var(--s1) var(--zero);
+      accent-color: var(--forest);
+    }
+    .route-choice strong, .route-choice small { display: block; }
+    .route-choice small {
+      margin-block-start: var(--s2);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    .route-panel + .route-panel { margin-block-start: var(--s4); }
+    .steps { margin-block: var(--s5); padding-inline-start: var(--s6); }
+    .steps li { padding-inline-start: var(--s2); margin-block: var(--s3); }
+    .plot {
+      padding: var(--s6);
+      border: var(--rule);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      margin-block-start: var(--s5);
+    }
+    .plot h3 { margin-block-end: var(--s5); }
+    .plot-row + .plot-row { margin-block-start: var(--s5); }
+    .plot-label {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--s2);
+      margin-block-end: var(--s2);
+    }
+    .track {
+      block-size: var(--plot-height);
+      background: var(--sage);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .bar {
+      display: block;
+      block-size: var(--full);
+      background: var(--forest);
+    }
+    .bar-a { inline-size: var(--plot-a); background: var(--orange); }
+    .bar-b { inline-size: var(--plot-b); }
+    .equation {
+      font-size: var(--text-sm);
+      margin-block-start: var(--s2);
+      overflow-wrap: anywhere;
+    }
+    figcaption { margin-block-start: var(--s4); }
+    .controls {
+      padding: var(--s6);
+      background: var(--surface);
+      border: var(--rule);
+      border-radius: var(--radius-md);
+    }
+    .fields {
+      display: grid;
+      grid-template-columns: var(--field-columns);
+      gap: var(--s4);
+    }
+    .field { min-inline-size: var(--zero); }
+    .field label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+    }
+    .field small {
+      display: block;
+      font-size: var(--text-xs);
+      color: var(--muted);
+      margin-block: var(--s1) var(--s2);
+    }
+    .field input {
+      inline-size: var(--full);
+      min-block-size: var(--touch);
+      padding: var(--s2) var(--s3);
+      border: var(--rule);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      background: var(--surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .field input[aria-invalid="true"] {
+      border: var(--rule-error);
+      background: var(--danger-soft);
+    }
+    .field-error {
+      display: block;
+      color: var(--danger);
+      font-size: var(--text-xs);
+      margin-block-start: var(--s1);
+    }
+    .field-error:empty { display: none; }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3);
+      margin-block: var(--s5);
+    }
+    button {
+      min-block-size: var(--touch);
+      padding: var(--s2) var(--s4);
+      border: var(--rule);
+      border-color: var(--forest);
+      border-radius: var(--radius-sm);
+      background: var(--forest);
+      color: var(--surface);
+      font-weight: var(--weight-medium);
+    }
+    button:hover { background: var(--forest-hover); }
+    button.secondary { background: var(--surface); color: var(--forest); }
+    button.secondary:hover { background: var(--sage); }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: var(--disabled-opacity);
+    }
+    .errors {
+      padding: var(--s4);
+      margin-block-start: var(--s4);
+      color: var(--danger);
+      background: var(--danger-soft);
+      border-inline-start: var(--rule-accent);
+    }
+    .result { background: var(--sage); }
+    .result + .note { margin-block-start: var(--s5); }
+    .result h3 { margin-block-end: var(--s4); }
+    .results-list > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--s3);
+      padding-block: var(--s3);
+      border-block-end: var(--rule);
+    }
+    .results-list dt { color: var(--muted); }
+    .results-list dd {
+      font-weight: var(--weight-medium);
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+    .contribution {
+      margin-block: var(--s5);
+      padding-block: var(--s4);
+      border-block-end: var(--rule-strong);
+    }
+    .contribution output {
+      display: block;
+      font-size: var(--text-stat);
+      font-family: var(--serif);
+      line-height: var(--leading-tight);
+      margin-block: var(--s3);
+      overflow-wrap: anywhere;
+    }
+    .result[data-tone="negative"] .contribution output { color: var(--danger); }
+    .source-list { padding-inline-start: var(--s6); margin-block: var(--s5); }
+    .source-list li { padding-inline-start: var(--s2); margin-block: var(--s4); }
+    .source-list p { margin-block-start: var(--s1); }
+    footer {
+      border-block-start: var(--rule-strong);
+      padding-block: var(--s7) var(--s8);
+    }
+    .handoff {
+      display: block;
+      margin-block-start: var(--s4);
+      font-size: var(--text-xs);
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell">
+  <header>
+    <div class="masthead">
+      <strong>创作与生意／研究札记 01</strong>
+      <span>2026.10.09 · 原文分析与验证方案</span>
+    </div>
+    <div class="hero">
+      <p class="eyebrow">写给创作者、独立开发者与小团队</p>
+      <h1>自媒体从0到1：<br><span>把涨粉方法变成可验证的生意</span></h1>
+      <p class="lead">不把个人成功故事当作增长定律。把它拆成有来源的判断、有成本的选择，以及能被下一轮事实推翻的小实验。</p>
+    </div>
+    <nav class="index" aria-label="九节阅读导航">
+      <a href="#thesis"><span>01</span>核心判断</a>
+      <a href="#process"><span>02</span>流程地图</a>
+      <a href="#corrections"><span>03</span>证据纠偏</a>
+      <a href="#routes"><span>04</span>路线选择</a>
+      <a href="#benchmark"><span>05</span>对标模板</a>
+      <a href="#topics"><span>06</span>原创工作流</a>
+      <a href="#distribution"><span>07</span>分发与算账</a>
+      <a href="#experiment"><span>08</span>14天实验</a>
+      <a href="#sources"><span>09</span>来源与边界</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="thesis" aria-labelledby="thesis-title">
+      <div class="section-head">
+        <span class="number">01</span>
+        <div>
+          <h2 id="thesis-title">先验证最小交易，再谈规模增长</h2>
+          <p>核心判断：涨粉是中间信号，交付后的贡献才接近生意结果。</p>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="reading">
+          
+          <p>本文建议把目标改写为：<strong>谁在什么情境下，需要哪一种可验收的结果；你能否以可承受的成本重复交付？</strong>表达可以先于产品，但每轮都应说明自己在验证表达、需求，还是交易，避免用一个指标冒充另一个。</p>
+        </div>
+
+        <aside class="note dark" aria-label="决策原则">
+          <p class="eyebrow">让每一步都有可核对的证据</p>
+          <h3>被看见 → 被需要 → 被选择 → 被验收</h3>
+          <p>播放不是需求，咨询不是付款，付款不是验收；贡献为正，也不等于已经形成可持续利润。</p>
+          <p>下文把内容分为来源转述、研究建议与算术假设。所有实验数量和预算都是建议值，不是行业基准。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="process" aria-labelledby="process-title">
+      <div class="section-head">
+        <span class="number">02</span>
+        <div>
+          <h2 id="process-title">40分钟流程，拆成八个决策</h2>
+          <p>按 Biji 分享页的机器转写时间定位；以下均为转述。时间未与视频逐帧校准；时间链接打开原视频，请按文稿时间手动回看。<a class="source-ref" href="#source-2">[2]</a></p>
+        </div>
+      </div>
+
+      <ol class="timeline cards">
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">00:30–02:44</a>
+          <h3>先解真正阻碍开工的问题</h3>
+          <p>讲述者把方向、平台归入A类，把器材、剪辑等归入可边做边解的B类。本文补充：听不清的声音、必要合规与授权，也可能是A类。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">02:44–07:04</a>
+          <h3>分发不是无成本复制</h3>
+          <p>讲述者把“所有平台一起发”称为标准答案，并建议保留原片、衡量适配回报。本文收敛为一个主渠道加一个低成本试验渠道，不把全平台当普遍定律。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">07:04–14:54</a>
+          <h3>对标商业路径，不猜账本</h3>
+          <p>原方法记录账号、所称收入与主观复制难度，并观察产品、直播和评论。收入可记“未知”；看到售卖链路不等于知道实际利润。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">14:54–20:03</a>
+          <h3>表达优先也有资源条件</h3>
+          <p>这条路线需要强动机、持续迭代和承受延迟变现的余地。不是所有人都应先找钱，也不必把表达与商业割裂成二选一。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">20:03–26:53</a>
+          <h3>原创来自概念与边界</h3>
+          <p>澄清术语、寻找反例、检查适用条件，再连接已有理论。批评别人并不自动构成正确或差异化。讲述者也推荐其免费工具 DB skill；已查到署名为创作者的仓库，但未验证工具效果。 <a class="source-ref" href="#source-4">[4]</a></p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">26:53–35:08</a>
+          <h3>让读者价值先出现</h3>
+          <p>把选题、标题、封面与前五秒一起设计，让正文兑现同一个承诺。薄弱材料不能靠夸张标题修好。讲述者称平台大约考核前五秒；本次未核验为任何平台的统一算法门槛。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">35:08–38:10</a>
+          <h3>看匹配，而不只看热度</h3>
+          <p>宽泛传播可能带来不匹配的受众。本文建议追踪合格咨询、付款、验收、贡献与复购，不凭播放量替代后续判断。</p>
+        </li>
+        <li>
+          <a class="time" href="https://www.bilibili.com/video/BV1ukpA6DEAL/">38:10–40:21</a>
+          <h3>发布是开始，不是通关次数</h3>
+          <p>讲述者用发布100条的框架鼓励实践，但没有保证学习或增长的门槛。结尾推广三天线下课，理解建议时应保留这一商业语境。</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="corrections" aria-labelledby="corrections-title">
+      <div class="section-head">
+        <span class="number">03</span>
+        <div>
+          <h2 id="corrections-title">先纠偏，再把经验拿来用</h2>
+          <p>机器转写与另行生成的AI摘要不是同一层证据；摘要中的确定语气尤其需要回退核查。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="证据纠偏表，可横向滚动" tabindex="0">
+        <table>
+          <caption>窄屏可左右滑动表格。 已对照分享页的机器转写与AI摘要；未进行财务审计。<a href="#source-1">[1]</a><a href="#source-2">[2]</a></caption>
+          <thead>
+            <tr>
+              <th scope="col">易误读内容</th>
+              <th scope="col">证据状态</th>
+              <th scope="col">应采用的表述</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">小红书“上市后”</th>
+              <td>摘要把上市意图改成已完成事件。</td>
+              <td>原表述涉及开始考虑上市；不据此认定上市状态，更不能证明平台政策及其因果。</td>
+            </tr>
+            <tr>
+              <th scope="row">23:25／30天涨10万</th>
+              <td>“重新来一次”的假设性自信。</td>
+              <td>不是已经完成的历史结果，不能放进业绩清单。</td>
+            </tr>
+            <tr>
+              <th scope="row">核心信息比例、招聘钩子</th>
+              <td>主观估计或举例，没有统计依据。</td>
+              <td>50%乃至90%的说法不是付费转化占比；99%等口述比例与招聘例子也不能当研究数据。</td>
+            </tr>
+            <tr>
+              <th scope="row">百万粉丝、9名兼职、年入200万</th>
+              <td>标题或讲述者自报，未独立审计。</td>
+              <td>收入不等于利润；没有完整成本、退款及粉丝核验，不推断复制概率。全网粉丝也未做跨平台去重，不等于独立受众人数。</td>
+            </tr>
+            <tr>
+              <th scope="row">买过产品就知道对方赚多少</th>
+              <td>产品体验不等于完整账本。</td>
+              <td>购买也无法揭示全渠道收入、利润与获客成本。本文仅观察公开资料，不授权购买或联系。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    
+
+    <section id="benchmark" aria-labelledby="benchmark-title">
+      <div class="section-head">
+        <span class="number">05</span>
+        <div>
+          <h2 id="benchmark-title">一份允许写“未知”的对标表</h2>
+          <p>对标的产出应是待验证假设，而不是把别人的自报收入搬进自己的预算。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="空白对标模板，可横向滚动" tabindex="0">
+        <table>
+          <caption>窄屏可左右滑动表格。 可照此建立记录；下表没有填入任何真实客户或已完成调查。</caption>
+          <thead>
+            <tr>
+              <th scope="col">记录字段</th>
+              <th scope="col">当前值</th>
+              <th scope="col">应补的证据或边界</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">账号、公开链接、观察日期</th>
+              <td>待填</td>
+              <td>每条观察标来源；自述与可见事实分开。</td>
+            </tr>
+            <tr>
+              <th scope="row">人群、任务、需求强度</th>
+              <td>待验证</td>
+              <td>公开评论只是线索，不能直接当购买意愿。</td>
+            </tr>
+            <tr>
+              <th scope="row">内容→入口→产品→标价</th>
+              <td>公开可见才记录</td>
+              <td>观察公开销售路径、直播及评论；标价不是成交量。</td>
+            </tr>
+            <tr>
+              <th scope="row">交付、验收、退款、使用权限</th>
+              <td>未知</td>
+              <td>写清范围与责任；信息缺口不能靠猜测补齐。</td>
+            </tr>
+            <tr>
+              <th scope="row">收入、利润、获客成本、复购</th>
+              <td><strong>未知／未审计</strong></td>
+              <td>不从粉丝、售价或购买体验反推全部经营结果。</td>
+            </tr>
+            <tr>
+              <th scope="row">复制难度、资源差、持续优势</th>
+              <td>主观判断，待验证</td>
+              <td>区分可学习流程与难复制的能力、口碑、授权和交付体系。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="callout">只记录必要的公开业务信息，不抓取私域、不绕过权限、不主动联系对标。研究模板本身不是购买、联系或采集授权。</p>
+    </section>
+
+    <section id="topics" aria-labelledby="topics-title">
+      <div class="section-head">
+        <span class="number">06</span>
+        <div>
+          <h2 id="topics-title">把观点做成可检查的材料</h2>
+          <p>差异不在于语气更凶，而在于定义更清楚、反例更充分、承诺更可兑现。<a class="source-ref" href="#source-2">[2 · 20:03–35:08]</a></p>
+        </div>
+      </div>
+
+      
+
+      <p class="reading callout">理论只作边界清晰的参照。戈夫曼出版社介绍支持拟剧视角与印象管理；用它解释短视频“活人感”是讲述者类比，不是涨粉因果定律。<a href="#source-3">[3]</a> 讲述者所称“议程设置”偏向内容与商业目标对齐，与经典媒介议题显著性概念不同；大学机构报道所述的经典定义可作对照；术语区别是本文判断；未读1972年论文主文，不能借其权威证明变现方法。<a href="#source-5">[5]</a></p>
+    </section>
+
+    <section id="distribution" aria-labelledby="distribution-title">
+      <div class="section-head">
+        <span class="number">07</span>
+        <div>
+          <h2 id="distribution-title">分发看匹配，算账看贡献</h2>
+          <p>一个主渠道负责学习，一个低成本试验渠道检查适配；不是全平台覆盖竞赛。</p>
+        </div>
+      </div>
+
+      <p class="reading">保留原片与授权记录，按渠道调整格式、封面和开头。记录适配工时，比较可归因的增量贡献与额外成本；无法识别跨平台重合就标“未知”，不把播放量当独立人数。此为本文对多平台建议的收敛，不是平台政策结论。<a class="source-ref" href="#source-2">[2 · 02:44–07:04]</a></p>
+
+      <figure class="plot" aria-labelledby="plot-title">
+        <h3 id="plot-title">两个假设情境：更多播放，不必然意味着更多订单</h3>
+        <div class="plot-row">
+          <div class="plot-label">
+            <strong>A／广泛曝光假设</strong>
+            <span>1笔预期订单</span>
+          </div>
+          <div class="track" aria-hidden="true"><span class="bar bar-a"></span></div>
+          <p class="equation">100,000 × 1%匹配 × 1%咨询 × 10%付款 = 1</p>
+        </div>
+        <div class="plot-row">
+          <div class="plot-label">
+            <strong>B／窄题匹配假设</strong>
+            <span>20笔预期订单</span>
+          </div>
+          <div class="track" aria-hidden="true"><span class="bar bar-b"></span></div>
+          <p class="equation">5,000 × 40%匹配 × 5%咨询 × 20%付款 = 20</p>
+        </div>
+        <figcaption class="fine">条形统一以20笔为满刻度；文字等价为A＝1、B＝20。所有数字均为人为假设，只展示乘法关系，不证明任何渠道的实际表现。</figcaption>
+      </figure>
+
+      <div class="callout" id="formula">
+        <strong>预期订单＝播放量 × 目标匹配率 × 咨询率 × 付款率</strong><br>
+        <strong>贡献＝预期订单 ×（单价－交付－退款－获客成本）－固定内容成本</strong>
+        <p class="fine">后三个比例逐级以上一阶段为分母：咨询率基于匹配观看，付款率基于咨询。播放可能重复，不能自动视为独立样本；真实复盘须统一时间窗与归因口径。</p>
+      </div>
+
+      <div class="calculator" id="calculator">
+        <div id="calc-form" class="controls" role="group" aria-describedby="calc-help">
+          <fieldset id="calc-fields" disabled>
+            <legend>转化与贡献计算器</legend>
+            <p id="calc-help" class="fine">默认使用情境B。所有默认值都是假设，不是预测或建议定价；与下一节14天预算独立。货币单位为人民币元，最多两位小数；比例输入百分数，最多六位小数，不输入百分号。</p>
+
+            <div class="buttons">
+              <button type="button" class="secondary" id="load-a">载入假设A</button>
+              <button type="button" class="secondary" id="load-b">载入假设B</button>
+            </div>
+
+            <div class="fields">
+              <div class="field">
+                <label for="views">播放量</label>
+                <small id="views-hint">0–100,000,000，整数</small>
+                <input id="views" name="views" type="text" inputmode="numeric" value="5000" required maxlength="24" aria-describedby="views-hint views-error">
+                <span class="field-error" id="views-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="fit">目标匹配率（%）</label>
+                <small id="fit-hint">匹配观看 ÷ 全部播放；0–100</small>
+                <input id="fit" name="fit" type="text" inputmode="decimal" value="40" required maxlength="24" aria-describedby="fit-hint fit-error">
+                <span class="field-error" id="fit-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="inquiry">咨询率（%）</label>
+                <small id="inquiry-hint">合格咨询 ÷ 匹配观看；0–100</small>
+                <input id="inquiry" name="inquiry" type="text" inputmode="decimal" value="5" required maxlength="24" aria-describedby="inquiry-hint inquiry-error">
+                <span class="field-error" id="inquiry-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="pay">付款率（%）</label>
+                <small id="pay-hint">付款订单 ÷ 合格咨询；0–100</small>
+                <input id="pay" name="pay" type="text" inputmode="decimal" value="20" required maxlength="24" aria-describedby="pay-hint pay-error">
+                <span class="field-error" id="pay-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="price">单价（元／订单）</label>
+                <small id="price-hint">0–100,000</small>
+                <input id="price" name="price" type="text" inputmode="decimal" value="199" required maxlength="24" aria-describedby="price-hint price-error">
+                <span class="field-error" id="price-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="delivery">单笔交付成本（含工时）</label>
+                <small id="delivery-hint">元／付款订单；0–100,000</small>
+                <input id="delivery" name="delivery" type="text" inputmode="decimal" value="60" required maxlength="24" aria-describedby="delivery-hint delivery-error">
+                <span class="field-error" id="delivery-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="refund">单笔平均退款／售后损失</label>
+                <small id="refund-hint">元／付款订单；0–100,000</small>
+                <input id="refund" name="refund" type="text" inputmode="decimal" value="10" required maxlength="24" aria-describedby="refund-hint refund-error">
+                <span class="field-error" id="refund-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="acquisition">单笔获客成本</label>
+                <small id="acquisition-hint">元／付款订单；0–100,000</small>
+                <input id="acquisition" name="acquisition" type="text" inputmode="decimal" value="20" required maxlength="24" aria-describedby="acquisition-hint acquisition-error">
+                <span class="field-error" id="acquisition-error"></span>
+              </div>
+
+              <div class="field">
+                <label for="fixed">固定内容成本（含制作工时）</label>
+                
+                <input id="fixed" name="fixed" type="text" inputmode="decimal" value="300" required maxlength="24" aria-describedby="fixed-hint fixed-error">
+                <span class="field-error" id="fixed-error"></span>
+              </div>
+            </div>
+
+            <div class="buttons">
+              <button id="calculate" type="button">计算当前假设</button>
+            </div>
+          </fieldset>
+
+          <p id="calc-status" class="fine" role="status" aria-live="polite">启用脚本后可在本地计算；不会发送或保存输入。</p>
+          <div id="calc-errors" class="errors" role="alert" aria-atomic="true" hidden></div>
+        </div>
+
+        <div>
+          <div id="calc-result" class="result" role="region" aria-labelledby="result-title" hidden>
+            <h3 id="result-title">假设计算结果，不是经营实绩</h3>
+            <dl class="results-list">
+              <div><dt>目标匹配观看</dt><dd id="out-fit">—</dd></div>
+              <div><dt>合格咨询</dt><dd id="out-inquiry">—</dd></div>
+              <div><dt>预期付款订单</dt><dd id="out-orders">—</dd></div>
+              <div><dt>退款前销售额</dt><dd id="out-revenue">—</dd></div>
+              <div><dt>单笔贡献（扣变动成本）</dt><dd id="out-unit">—</dd></div>
+            </dl>
+
+            <div class="contribution">
+              <span>扣除固定内容成本后的贡献</span>
+              <output id="out-contribution" for="views fit inquiry pay price delivery refund acquisition fixed">—</output>
+              <p id="out-judgment" class="fine"></p>
+            </div>
+
+            <p id="out-breakeven" class="fine"></p>
+            <p class="fine">预期订单可以是小数，它是模型期望，不是已成交订单。显示值经舍入，内部不先取整；极小值采用科学计数法。</p>
+          </div>
+
+          <aside class="note" aria-label="计算口径说明">
+            <h3>先把成本放对位置</h3>
+            <p class="fine">默认单价199、交付60、退款10、获客20、固定300，全部为假设；单笔贡献109元，A情境贡献为−191元，B为1,880元。</p>
+            <p class="fine">交付成本包含履约工时，固定成本包含制作工时；不要重复计价。退款项是每笔付款的平均损失，可含退回价款；不要再重复扣减退款。获客项只填未计入其他成本的费用。</p>
+            <p class="fine">匹配率无法核实时，保留为假设，分别代入保守与乐观值，不用点赞率替代。本模型未自动扣除税费、其他固定经营费用，也未验证交付产能。因此“贡献”不是净利润，更不是现金到账或可持续收入。</p>
+          </aside>
+
+          <noscript>
+            <p class="callout">脚本未启用，计算表单已禁用。上方公式与A、B完整算术示例仍可阅读。</p>
+          </noscript>
+        </div>
+      </div>
+    </section>
+
+    <section id="experiment" aria-labelledby="experiment-title">
+      <div class="section-head">
+        <span class="number">08</span>
+        <div>
+          <h2 id="experiment-title">14天，只验证一个薄弱环节</h2>
+          <p>以下是待执行方案，不是已完成测试；天数、数量与触发线均为建议，不保证学习或涨粉。</p>
+        </div>
+      </div>
+
+      <p class="reading">预算沿用现金≤300元、工时≤12小时，按假设工时价计入后总经济预算≤900元。先写一条可被推翻的假设，再选路线；不同时更换人群、产品和包装。</p>
+
+      <div class="table-wrap" role="region" aria-label="十四天待执行计划，可横向滚动" tabindex="0">
+        <table>
+          <caption>窄屏可左右滑动表格。 计划发布4条主渠道内容，并选其中2条低成本适配到试验渠道；不是六次独立实验。</caption>
+          <thead>
+            <tr>
+              <th scope="col">阶段</th>
+              <th scope="col">待执行动作</th>
+              <th scope="col">留下什么证据</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">第1–2天</th>
+              <td>限定一个人群、任务和交付结果，核对授权及必要发布规则。</td>
+              <td>假设、预算、验收条件、来源链接与未知项。</td>
+            </tr>
+            <tr>
+              <th scope="row">第3–5天</th>
+              <td>完成前2条内容；标题或开头只改一个变量。</td>
+              <td>版本、制作工时、承诺与正文的一致性。</td>
+            </tr>
+            <tr>
+              <th scope="row">第6–9天</th>
+              <td>完成另2条与2次适配；各用相同的48小时观察窗。</td>
+              <td>分阶段分母、合格咨询、归因缺口。非随机比较不当作因果试验。</td>
+            </tr>
+            <tr>
+              <th scope="row">第10–12天</th>
+              <td>有自愿需求且另行确认交易条件，才考虑最多2笔试交付；表达路线整理反馈。</td>
+              <td>实际耗时、验收、退款与未解决问题；没有发生就记零或未发生。</td>
+            </tr>
+            <tr>
+              <th scope="row">第13–14天</th>
+              <td>按真实记录复算贡献，决定停止、改题或进入下一轮。</td>
+              <td>把事实、估计与未知分开，不只截取最好的一条。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cards route-options">
+        <div class="card">
+          <h3>何时改题</h3>
+          <p>交易路线发完4条仍无合格咨询，先换问题或受众，不加码设备。已有至少5次合格咨询却无付款，检查报价、范围与信任；小样本不足以宣布没有市场。</p>
+        </div>
+        <div class="card">
+          <h3>何时停止</h3>
+          <p>任一预算即将触顶、单笔贡献不为正，或授权与交付边界不清，就暂停扩量。表达路线以是否产生可改进反馈判断，不强套付款门槛。</p>
+        </div>
+        
+      </div>
+
+      <p class="reading">合格咨询指主动提出范围内的具体任务并询问可行性或交易条件；点赞和泛泛评论不算。14天后仍需在后续小周期复测，并覆盖真实复购周期，检查陌生受众需求、退款、工时和贡献是否重复成立，才考虑放大。<strong>短期正数不等于生意已被验证。</strong></p>
+    </section>
+
+    <section id="sources" aria-labelledby="sources-title">
+      <div class="section-head">
+        <span class="number">09</span>
+        <div>
+          <h2 id="sources-title">来源覆盖，与没有做过的事</h2>
+          <p>公开来源负责支持出处；研究建议和假设计算不冒充外部实证。</p>
+        </div>
+      </div>
+
+      <ol class="source-list">
+        <li id="source-1">
+          <a href="https://www.bilibili.com/video/BV1ukpA6DEAL/">主视频：《两年全网涨粉100万，自媒体全流程分享》</a>
+          <p class="fine">作者：dontbesilent聊赚钱。页面显示发布时间2026-10-07 01:22:33。本次已在公开视频页面核验标题、发布者与发布时间；未独立核验全网粉丝及经营数字。</p>
+        </li>
+        
+        <li id="source-3">
+          <a href="https://www.penguinrandomhouse.com/books/61106/the-presentation-of-self-in-everyday-life-by-erving-goffman/">Penguin Random House：戈夫曼《日常生活中的自我呈现》</a>
+          <p class="fine">出版社页面本次可读取；支持拟剧视角、印象管理的概念介绍，不证明短视频表达方式与增长之间的因果关系。</p>
+        </li>
+        <li id="source-4">
+          <a href="https://github.com/dontbesilent2025/dbskill">GitHub：dontbesilent2025/dbskill</a>
+          <p class="fine">仓库本次可读取，支持工具箱存在与创建者署名；不代表已经安装、审计代码或验证其赚钱效果。</p>
+        </li>
+        <li id="source-5">
+          <a href="https://knightcenter.utexas.edu/he-was-a-visionary-journalism-scholars-reflect-on-legacy-of-max-mccombs-at-isoj-research-breakfast/">UT Austin Knight Center：议程设置研究的概念边界</a>
+          <p class="fine">已读取大学机构的现场报道；其中把议程设置解释为媒介对议题关注度的影响。这里用来区分术语，不能证明视频的方法有效。1972年原论文主文未获取，不声称读过。</p>
+        </li>
+      </ol>
+
+      
+    </section>
+  </main>
+
+  
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const byId = (id) => document.getElementById(id);
+
+  // 原生单选组保留方向键操作；关闭脚本时所有路线文本仍可读。
+  const routeInputs = Array.from(document.querySelectorAll('input[name="route"]'));
+  const routePanels = Array.from(document.querySelectorAll('.route-panel'));
+
+  function selectRoute() {
+    const selected = routeInputs.find((input) => input.checked);
+    if (!selected) return;
+    routePanels.forEach((panel) => {
+      panel.hidden = panel.id !== `route-${selected.value}`;
+    });
+  }
+
+  routeInputs.forEach((input) => input.addEventListener('change', selectRoute));
+  selectRoute();
+
+  const form = byId('calc-form');
+  const result = byId('calc-result');
+  const errorSummary = byId('calc-errors');
+  const status = byId('calc-status');
+
+  const specs = [
+    { id: 'views', label: '播放量', max: 100000000, integer: true },
+    { id: 'fit', label: '目标匹配率', max: 100 },
+    { id: 'inquiry', label: '咨询率', max: 100 },
+    { id: 'pay', label: '付款率', max: 100 },
+    { id: 'price', label: '单价', max: 100000, money: true },
+    { id: 'delivery', label: '单笔交付成本', max: 100000, money: true },
+    { id: 'refund', label: '单笔退款损失', max: 100000, money: true },
+    { id: 'acquisition', label: '单笔获客成本', max: 100000, money: true },
+    { id: 'fixed', label: '固定内容成本', max: 100000000, money: true }
+  ];
+
+  const commonCosts = {
+    price: '199',
+    delivery: '60',
+    refund: '10',
+    acquisition: '20',
+    fixed: '300'
+  };
+
+  const scenarios = {
+    a: { views: '100000', fit: '1', inquiry: '1', pay: '10', ...commonCosts },
+    b: { views: '5000', fit: '40', inquiry: '5', pay: '20', ...commonCosts }
+  };
+
+  const decimalPattern = /^\+?(?:\d+(?:\.\d*)?|\.\d+)$/;
+  const numberFormat = new Intl.NumberFormat('zh-CN', {
+    maximumFractionDigits: 4
+  });
+  const moneyFormat = new Intl.NumberFormat('zh-CN', {
+    style: 'currency',
+    currency: 'CNY',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  function numberText(value) {
+    return value !== 0 && Math.abs(value) < 0.0001
+      ? value.toExponential(2)
+      : numberFormat.format(value);
+  }
+
+  function moneyText(value) {
+    return value !== 0 && Math.abs(value) < 0.01
+      ? `约 ¥${value.toExponential(2)}`
+      : moneyFormat.format(value);
+  }
+
+  function clearErrors() {
+    errorSummary.hidden = true;
+    errorSummary.textContent = '';
+    specs.forEach((spec) => {
+      byId(spec.id).removeAttribute('aria-invalid');
+      byId(`${spec.id}-error`).textContent = '';
+    });
+  }
+
+  function readInput(spec) {
+    const raw = byId(spec.id).value.trim();
+
+    if (raw === '') {
+      return { error: `${spec.label}不能为空。` };
+    }
+    if (raw.length > 24) {
+      return { error: `${spec.label}最多输入24个字符。` };
+    }
+    if (!decimalPattern.test(raw) || !Number.isFinite(Number(raw))) {
+      return {
+        error: `${spec.label}须为有限十进制数字；不接受负号、文字、NaN、Infinity、千分位逗号、百分号或科学计数法。`
+      };
+    }
+
+    const value = Number(raw);
+
+    if (value < 0 || value > spec.max) {
+      return {
+        error: `${spec.label}必须在0至${numberFormat.format(spec.max)}之间，不能为负数。`
+      };
+    }
+
+    if (
+      spec.integer &&
+      (!Number.isInteger(value) || /[1-9]/.test(raw.split('.')[1] || ''))
+    ) {
+      return { error: '播放量必须是整数。' };
+    }
+
+    if (
+      !spec.integer &&
+      !spec.money &&
+      (raw.split('.')[1] || '').length > 6
+    ) {
+      return { error: `${spec.label}最多保留六位小数。` };
+    }
+
+    if (spec.money && (raw.split('.')[1] || '').length > 2) {
+      return { error: `${spec.label}最多保留两位小数。` };
+    }
+
+    // 金额转为整数分，避免0.3−0.1−0.2一类浮点误差误判单笔贡献。
+    return { value: spec.money ? Math.round(value * 100) : value };
+  }
+
+  function calculate(focusError = true) {
+    clearErrors();
+
+    const values = {};
+    const invalid = [];
+
+    specs.forEach((spec) => {
+      const parsed = readInput(spec);
+
+      if (parsed.error) {
+        byId(spec.id).setAttribute('aria-invalid', 'true');
+        byId(`${spec.id}-error`).textContent = parsed.error;
+        invalid.push(spec.id);
+      } else {
+        values[spec.id] = parsed.value;
+      }
+    });
+
+    if (invalid.length) {
+      result.hidden = true;
+      errorSummary.textContent =
+        `${invalid.length}项输入有误，已停止计算并隐藏旧结果。请按字段提示更正。`;
+      errorSummary.hidden = false;
+      status.textContent = '未生成有效结果。';
+      if (focusError) byId(invalid[0]).focus();
+      return;
+    }
+
+    const fit = values.views * (values.fit / 100);
+    const inquiry = fit * (values.inquiry / 100);
+    const orders = inquiry * (values.pay / 100);
+    const unitCents =
+      values.price - values.delivery - values.refund - values.acquisition;
+    const revenue = orders * values.price / 100;
+    const contribution = (orders * unitCents - values.fixed) / 100;
+
+    if (
+      ![fit, inquiry, orders, unitCents, revenue, contribution]
+        .every(Number.isFinite)
+    ) {
+      result.hidden = true;
+      errorSummary.textContent =
+        '结果超出有限数值范围，无法计算；请减小输入并重试。';
+      errorSummary.hidden = false;
+      status.textContent = '未生成有效结果。';
+      return;
+    }
+
+    byId('out-fit').textContent = numberText(fit);
+    byId('out-inquiry').textContent = numberText(inquiry);
+    byId('out-orders').textContent = `${numberText(orders)} 笔（期望）`;
+    byId('out-revenue').textContent = moneyText(revenue);
+    byId('out-unit').textContent = moneyText(unitCents / 100);
+    byId('out-contribution').textContent = moneyText(contribution);
+
+    result.dataset.tone = contribution < 0 ? 'negative' : 'neutral';
+
+    byId('out-judgment').textContent = contribution > 0
+      ? '按当前假设，贡献为正；仍需实际验收、成本和退款记录验证。'
+      : contribution < 0
+        ? '按当前假设，贡献为负；不要把更多播放自动当作解决办法。'
+        : '按当前假设恰好持平；尚未产生正贡献。';
+
+    let breakEvenText;
+
+    if (unitCents > 0) {
+      const minimumOrders = Math.ceil(values.fixed / unitCents);
+      breakEvenText =
+        `按当前单笔贡献，覆盖固定内容成本至少需${numberText(minimumOrders)}笔完整付款订单；这不是需求预测。`;
+
+      if (values.fixed === 0) {
+        breakEvenText += '固定成本为0，产生正贡献仍需订单。';
+      }
+      if (values.fit === 0 || values.inquiry === 0 || values.pay === 0) {
+        breakEvenText += '当前存在0%转化环节，模型不会产生订单。';
+      }
+    } else if (unitCents === 0) {
+      breakEvenText =
+        '单笔贡献为0，增加订单不能带来正贡献；存在固定成本时也无法靠销量覆盖。';
+    } else {
+      breakEvenText =
+        '单笔贡献为负，每新增一笔订单都会增加损失；应先改变价格、交付或成本结构。';
+    }
+
+    byId('out-breakeven').textContent = breakEvenText;
+    result.hidden = false;
+    status.textContent =
+      `已按输入假设计算：预期${numberText(orders)}笔，贡献${moneyText(contribution)}。结果不是实绩。`;
+  }
+
+  function loadScenario(key) {
+    const scenario = scenarios[key];
+    if (!scenario) return;
+
+    specs.forEach((spec) => {
+      byId(spec.id).value = scenario[spec.id];
+    });
+    calculate(false);
+  }
+
+  byId('calculate').addEventListener('click', () => calculate(true));
+  form.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
+      event.preventDefault(); calculate(true);
+    }
+  });
+
+  form.addEventListener('input', (event) => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    const changed = event.target;
+    changed.removeAttribute('aria-invalid');
+    const fieldError = byId(`${changed.id}-error`);
+    if (fieldError) fieldError.textContent = '';
+    errorSummary.hidden = true;
+    result.hidden = true;
+    status.textContent = '参数已修改，旧结果已隐藏；请重新计算。';
+  });
+
+  byId('load-a').addEventListener('click', () => loadScenario('a'));
+  byId('load-b').addEventListener('click', () => loadScenario('b'));
+
+  // 只有事件处理就绪后才启用表单；无脚本时保持禁用，避免提交数据。
+  byId('calc-fields').disabled = false;
+  calculate(false);
+})();
+</script>
+</body>
+</html>

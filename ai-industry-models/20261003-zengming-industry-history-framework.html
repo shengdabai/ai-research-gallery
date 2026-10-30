@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="基于分享页可见文稿与已核验的官方、研究资料，分析曾鸣与张小珺对谈中的产业、产品、组织、战略与文明判断。">
+<title>把产业史观当作可检验的战略地图｜曾鸣与张小珺对谈研究报告</title>
+<style>
+/*
+  设计令牌为所有自定义颜色、字体、间距、边框、圆角、尺寸、阴影与动效的唯一来源。
+  命名断点：medium = 48rem；wide = 72rem。
+  媒体查询不能直接使用 CSS 自定义属性，因此在查询处重复上述命名阈值。
+  0、100%、auto、fr、网格列数等为结构值。
+*/
+:root{
+  --paper:#f5f1e8;--surface:#fffdf7;--ink:#252b27;--muted:#5a655e;
+  --rust:#91472f;--rust-soft:#f1e3d8;--teal:#17675f;--teal-soft:#e5eeE8;
+  --line:#ccc7b9;--line-strong:#8b968c;
+  --font-body:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --font-editorial:"Songti SC","STSong","Noto Serif CJK SC",serif;
+  --font-mono:ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --fs-xs:.76rem;--fs-small:.87rem;--fs-card:.96rem;--fs-body:1rem;
+  --fs-lead:1.15rem;--fs-h3:1.28rem;--fs-h2:clamp(1.7rem,3vw,2.65rem);
+  --fs-hero:clamp(2.55rem,5.5vw,4.9rem);--fs-number:2.8rem;--fs-print:10pt;
+  --lh-body:1.85;--lh-card:1.78;--lh-heading:1.3;--lh-hero:1.16;
+  --weight-normal:400;--weight-bold:700;--tracking:.06em;
+  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.5rem;
+  --s6:2rem;--s7:3rem;--s8:4rem;--s9:5.5rem;
+  --stroke:1px;--stroke-strong:3px;--radius:.5rem;--radius-pill:999px;
+  --focus-width:3px;--focus-offset:3px;--underline-offset:.2em;
+  --container:88rem;--gutter:clamp(1rem,3vw,3rem);--measure:72ch;
+  --tap:2.75rem;--checkbox:1.2rem;--table-min:47rem;--search-min:14rem;
+  --shadow:0 .5rem 1.5rem rgb(37 43 39 / 7%);
+  --motion:160ms ease-out;--skip-hide:-200%;--layer-skip:1;--hero-columns:1.55fr 1fr;
+}
+*{box-sizing:border-box}
+html{background:var(--paper);color:var(--ink);scroll-padding-top:var(--s5)}
+body{margin:0;font-family:var(--font-body);font-size:var(--fs-body);line-height:var(--lh-body)}
+main,header,footer,section,article,aside,div{min-width:0}
+a{color:var(--teal);text-underline-offset:var(--underline-offset);overflow-wrap:anywhere}
+a:hover{color:var(--rust)}
+button,input{font:inherit}
+button,a,input,summary{-webkit-tap-highlight-color:var(--teal-soft)}
+:focus-visible{outline:var(--focus-width) solid var(--teal);outline-offset:var(--focus-offset)}
+button{min-height:var(--tap);padding:var(--s2) var(--s4);border:var(--stroke) solid var(--line-strong);border-radius:var(--radius-pill);background:var(--surface);color:var(--ink);cursor:pointer;transition:background var(--motion),color var(--motion)}
+button:hover{background:var(--teal-soft)}
+button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+input[type="search"]{width:100%;min-height:var(--tap);padding:var(--s3) var(--s4);border:var(--stroke) solid var(--line-strong);border-radius:var(--radius);background:var(--surface);color:var(--ink)}
+input[type="checkbox"]{width:var(--checkbox);height:var(--checkbox);accent-color:var(--teal)}
+input[type="range"]{width:100%;min-height:var(--tap);accent-color:var(--teal)}
+h1,h2,h3,h4,p,ul,ol,dl{margin-top:0}
+h1,h2,h3,h4{line-height:var(--lh-heading);text-wrap:balance}
+h1,h2{font-family:var(--font-editorial)}
+h1{font-size:var(--fs-hero);line-height:var(--lh-hero);font-weight:var(--weight-bold);margin-bottom:var(--s6)}
+h2{font-size:var(--fs-h2);margin-bottom:var(--s3)}
+h3{font-size:var(--fs-h3);margin-bottom:var(--s3)}
+h4{font-size:var(--fs-body);margin-bottom:var(--s2)}
+p{margin-bottom:var(--s4)}
+p:last-child{margin-bottom:0}
+ul,ol{padding-left:var(--s5)}
+li+li{margin-top:var(--s2)}
+strong,b{font-weight:var(--weight-bold)}
+small,.small{font-size:var(--fs-small)}
+.wrap{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:var(--gutter);top:var(--s3);padding:var(--s3) var(--s4);background:var(--surface);transform:translateY(var(--skip-hide));z-index:var(--layer-skip)}
+.skip:focus{transform:translateY(0)}
+.hero{padding-block:var(--s8) var(--s7);border-bottom:var(--stroke) solid var(--line)}
+.hero-grid{display:grid;gap:var(--s6);align-items:end}
+.kicker{font-size:var(--fs-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking);color:var(--rust);margin-bottom:var(--s5)}
+.lead{font-size:var(--fs-lead);max-width:var(--measure)}
+.hero-note{padding:var(--s5);background:var(--surface);border-top:var(--stroke-strong) solid var(--rust);box-shadow:var(--shadow)}
+.hero-note p{font-size:var(--fs-card)}
+.meta{color:var(--muted);font-size:var(--fs-small)}
+.contents{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);padding-block:var(--s5);border-bottom:var(--stroke) solid var(--line)}
+.contents a{font-size:var(--fs-small);padding-block:var(--s2)}
+.report-section{padding-block:var(--s7);border-bottom:var(--stroke) solid var(--line);scroll-margin-top:var(--s5)}
+.section-heading{display:grid;grid-template-columns:auto 1fr;gap:var(--s4);align-items:start;margin-bottom:var(--s5)}
+.section-number{font-family:var(--font-editorial);font-size:var(--fs-number);line-height:var(--lh-heading);color:var(--rust)}
+.section-intro{max-width:var(--measure);color:var(--muted)}
+.note,.evidence-note,.decision-note{padding:var(--s5);border:var(--stroke) solid var(--line);border-radius:var(--radius);background:var(--surface);margin-block:var(--s5)}
+.evidence-note{border-left:var(--stroke-strong) solid var(--teal);background:var(--teal-soft)}
+.decision-note{border-left:var(--stroke-strong) solid var(--rust);background:var(--rust-soft)}
+.legend,.two-col,.three-col,.card-grid,.scenario-grid,.source-grid,.enabling-loops{display:grid;gap:var(--s4)}
+.legend{margin-block:var(--s5)}
+.legend>div{padding:var(--s4);border:var(--stroke) solid var(--line);border-radius:var(--radius)}
+.legend p{font-size:var(--fs-small);margin-top:var(--s2)}
+.label{display:inline-block;font-size:var(--fs-xs);font-weight:var(--weight-bold);color:var(--rust);margin-right:var(--s2)}
+.label.inference{color:var(--ink)}
+.label.example{color:var(--muted)}
+.label.advice{color:var(--teal)}
+.causal-flow{display:grid;gap:var(--s3);list-style:none;padding:0;margin-block:var(--s5)}
+.causal-flow li{margin:0;padding:var(--s4);background:var(--surface);border:var(--stroke) solid var(--line);border-top:var(--stroke-strong) solid var(--teal);border-radius:var(--radius)}
+.causal-flow strong{display:block;margin-bottom:var(--s2)}
+.causal-flow p{font-size:var(--fs-small)}
+.flow-next{display:block;color:var(--rust);font-size:var(--fs-small);margin-top:var(--s3)}
+.enabling-loops>div{border-left:var(--stroke-strong) solid var(--rust);padding:var(--s4);background:var(--rust-soft)}
+.enabling-loops p{font-size:var(--fs-card)}
+.enhance-only{display:none}
+.js .enhance-only{display:flex}
+.controls{flex-wrap:wrap;gap:var(--s2);align-items:center;margin-block:var(--s4)}
+.control-box{padding:var(--s5);border:var(--stroke) solid var(--line);border-radius:var(--radius);background:var(--surface);margin-bottom:var(--s5)}
+.control-box.enhance-only{flex-direction:column;align-items:stretch}
+.search-group{flex:1 1 var(--search-min)}
+.search-group label{display:block;font-weight:var(--weight-bold);margin-bottom:var(--s2)}
+.status{font-size:var(--fs-small);color:var(--muted);margin:var(--s3) 0 0}
+.three-col.single-stage{grid-template-columns:1fr}
+.stage-panel{padding:var(--s5);background:var(--surface);border:var(--stroke) solid var(--line);border-radius:var(--radius)}
+.stage-panel p{font-size:var(--fs-card)}
+.stage-tag{font-size:var(--fs-xs);letter-spacing:var(--tracking);color:var(--teal);font-weight:var(--weight-bold)}
+.card-grid{align-items:start}
+.thesis{padding:var(--s5);background:var(--surface);border:var(--stroke) solid var(--line);border-radius:var(--radius);scroll-margin-top:var(--s5)}
+.card-meta{display:flex;justify-content:space-between;gap:var(--s3);align-items:baseline;margin-bottom:var(--s3);font-size:var(--fs-xs)}
+.card-id{font-family:var(--font-mono);color:var(--rust);font-weight:var(--weight-bold)}
+.category{color:var(--muted)}
+.thesis h3{font-size:var(--fs-h3)}
+.time{display:block;font-size:var(--fs-xs);line-height:var(--lh-card);margin-bottom:var(--s4)}
+.thesis p{font-size:var(--fs-card);line-height:var(--lh-card);margin-bottom:var(--s3)}
+.thesis details{border-top:var(--stroke) solid var(--line);margin-top:var(--s4)}
+summary{cursor:pointer;min-height:var(--tap);padding-block:var(--s3);font-weight:var(--weight-bold);font-size:var(--fs-small)}
+summary::marker{color:var(--rust)}
+.detail-body{padding-top:var(--s2)}
+.no-results{padding:var(--s5);border:var(--stroke) dashed var(--line-strong)}
+.scenario{padding:var(--s5);background:var(--surface);border:var(--stroke) solid var(--line);border-radius:var(--radius)}
+.example-flag{font-size:var(--fs-xs);color:var(--rust);font-weight:var(--weight-bold)}
+.path{padding:var(--s3) var(--s4);background:var(--teal-soft);font-size:var(--fs-small);border-radius:var(--radius)}
+.scenario dl{margin-bottom:0}
+.scenario dt{font-weight:var(--weight-bold);margin-top:var(--s4)}
+.scenario dd{margin:var(--s2) 0 0;font-size:var(--fs-card)}
+.diagnostic-list{display:grid;gap:var(--s3);margin-block:var(--s5)}
+.check-item{display:grid;grid-template-columns:auto 1fr;gap:var(--s3);padding:var(--s4);border:var(--stroke) solid var(--line);border-radius:var(--radius);background:var(--surface);min-height:var(--tap);cursor:pointer}
+.check-item input{margin-top:var(--s1)}
+.check-item strong{display:block}
+.check-item span span{display:block;color:var(--muted);font-size:var(--fs-small)}
+.diagnostic-result{padding:var(--s5);background:var(--teal-soft);border-left:var(--stroke-strong) solid var(--teal)}
+.range-controls{flex-direction:column;gap:var(--s4)}
+.range-controls label{display:block;font-weight:var(--weight-bold)}
+.formula{font-family:var(--font-mono);font-size:var(--fs-lead);padding:var(--s4);border:var(--stroke) solid var(--line);background:var(--surface);border-radius:var(--radius);overflow-wrap:anywhere}
+.table-scroll{max-width:100%;overflow:auto;border:var(--stroke) solid var(--line);border-radius:var(--radius);background:var(--surface);margin-block:var(--s5)}
+table{width:100%;min-width:var(--table-min);border-collapse:collapse;font-size:var(--fs-small)}
+caption{text-align:left;padding:var(--s4);font-weight:var(--weight-bold);color:var(--teal)}
+th,td{text-align:left;vertical-align:top;padding:var(--s4);border-bottom:var(--stroke) solid var(--line);overflow-wrap:anywhere}
+thead th{background:var(--teal-soft);font-weight:var(--weight-bold)}
+tbody th{font-weight:var(--weight-bold)}
+tbody tr:last-child>*{border-bottom:0}
+.plan{list-style:none;padding:0;display:grid;gap:var(--s4)}
+.plan li{margin:0;padding:var(--s5);border:var(--stroke) solid var(--line);border-left:var(--stroke-strong) solid var(--rust);border-radius:var(--radius);background:var(--surface)}
+.plan .days{font-family:var(--font-mono);font-size:var(--fs-small);color:var(--rust)}
+.task-contract{padding:var(--s5);border:var(--stroke) dashed var(--line-strong);border-radius:var(--radius);background:var(--surface)}
+.sources{list-style:none;padding:0;margin-bottom:0}
+.source{padding:var(--s4);border:var(--stroke) solid var(--line);border-radius:var(--radius);background:var(--surface);margin:0;scroll-margin-top:var(--s5)}
+.source h3{font-size:var(--fs-body)}
+.source p{font-size:var(--fs-small);margin-bottom:var(--s2)}
+.url{display:block;font-family:var(--font-mono);font-size:var(--fs-xs);overflow-wrap:anywhere;word-break:break-word;margin-bottom:var(--s3)}
+.review{margin-top:var(--s6);padding:var(--s5);border:var(--stroke) solid var(--line-strong);border-radius:var(--radius)}
+.review dl{display:grid;gap:var(--s3);margin-bottom:0}
+.review dt{font-weight:var(--weight-bold)}
+.review dd{margin:0;color:var(--muted)}
+footer{padding-block:var(--s6);font-size:var(--fs-small);color:var(--muted)}
+[hidden]{display:none!important}
+@media(min-width:48rem){/* medium */
+  .hero-grid{grid-template-columns:var(--hero-columns)}
+  .legend,.two-col,.scenario-grid,.source-grid,.enabling-loops,.diagnostic-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .causal-flow,.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .plan{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:72rem){/* wide */
+  .legend{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .causal-flow{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .plan{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  body{font-size:var(--fs-print);background:var(--surface)}
+  .wrap{max-width:100%;padding-inline:0}
+  .hero{padding-top:0}
+  .hero-note{box-shadow:none}
+  .enhance-only,.js .enhance-only,.skip,.no-results{display:none!important}
+  .thesis[hidden],.stage-panel[hidden]{display:block!important}
+  details>*{display:block!important}
+  details::details-content{display:block!important;content-visibility:visible!important}
+  .card-grid,.scenario-grid,.source-grid,.three-col,.plan{display:block}
+  .thesis,.scenario,.source,.stage-panel,.plan li{margin-bottom:var(--s4)}
+  .table-scroll{overflow:visible}
+  table{min-width:0;font-size:var(--fs-print)}
+  th,td{padding:var(--s2)}
+  h2,h3,h4{break-after:avoid}
+  .section-heading{break-after:avoid}
+  .report-section{padding-block:var(--s5)}
+  a{color:var(--ink)}
+  summary{list-style:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到报告正文</a>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">访谈研究报告 · 曾鸣 × 张小珺 · 产业／产品／组织／战略／文明</p>
+      <h1>把产业史观当作<br>可检验的战略地图</h1>
+      <p class="lead">这句话是分析者的综合，不是访谈原话。对谈最值得保留的，不是关于下一位赢家的名单，而是一组可以拆解的条件命题：新技术怎样进入真实任务，任务怎样留下有效反馈，反馈怎样变成更好的能力，以及什么样的组织能持续完成这件事。</p>
+      <p class="meta">证据快照：2026-10-03｜24 张论点卡｜4 个构造场景｜不把预测写成已发生的事实</p>
+    </div>
+    <aside class="hero-note" aria-label="阅读后的三个决策">
+      <h2>先决定要检验什么</h2>
+      <p><strong>创业与产品：</strong>你是在卖一次输出，还是承担一个有验收条件的任务？闭环是否真实，复杂度是否值得？</p>
+      <p><strong>组织与战略：</strong>你缺的是更强模型，还是权限、责任、评测与共同上下文？哪些假设值得继续投入，哪些应当停止？</p>
+      <p><strong>研究与公共讨论：</strong>哪些是受访者的经验判断，哪些能得到外部资料校正，哪些只是有吸引力、尚未成立的历史类比？</p>
+      <p class="small">阅读原则：先看机制，再找必要条件；先写反证，再谈长期信念。非共识、复杂任务和组织变革，都不是成功的充分条件。</p>
+    </aside>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="contents" aria-label="报告目录">
+    <a href="#evidence">00 证据边界</a>
+    <a href="#map">01 因果地图</a>
+    <a href="#theses">02 论点卡</a>
+    <a href="#scenarios">03 场景推演</a>
+    <a href="#diagnostic">04 飞轮诊断</a>
+    <a href="#corrections">05 纠错表</a>
+    <a href="#predictions">06 预测登记</a>
+    <a href="#plan">07 三十天计划</a>
+    <a href="#sources">08 来源与交接</a>
+  </nav>
+</div>
+
+<main id="main" class="wrap">
+<section id="evidence" class="report-section" aria-labelledby="evidence-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">00</span>
+    <div>
+      <h2 id="evidence-title">这份报告能支持什么，不能支持什么</h2>
+      <p class="section-intro">把访谈当作经验与假说的来源，把历史资料当作局部校正，把分析者的推演与建议单独标明。</p>
+    </div>
+  </div>
+
+  <div class="evidence-note">
+    
+    
+    
+  </div>
+
+  <div class="legend" aria-label="证据类型图例">
+    <div><span class="label">原文观点</span><p>对受访者观点的转述。说明他如何理解问题，不自动证明判断正确；企业往事也可能是个人回忆。</p></div>
+    <div><span class="label inference">分析推断</span><p>报告对因果机制、必要假设与反例的拆解。它是可讨论的解释，不冒充原话或实证结论。</p></div>
+    <div><span class="label example">补充例证</span><p>为展示机制而构造的任务与场景。除明确列出的文献事实外，不代表真实客户或市场验证。</p></div>
+    <div><span class="label advice">建议</span><p>供读者设计检验的行动方案。应按行业风险与资源调整，不是得到验证的成功公式。</p></div>
+  </div>
+
+  <p>这场对谈的主线可以理解为：基础设施改善只是机会的起点，应用需要找到新的技术与商业组合；反馈可能带来能力积累，但组织必须把任务、责任和资源连起来。报告不接受其中任何一步“自然发生”的假设。模型进步不等于应用利润，用户增长不等于反馈质量，日志增多不等于模型学习，组织变扁也不等于责任消失。</p>
+  <p>以下将最后一组议题拆成既有企业、创造与教育、社会福祉三张卡，避免把竞争预测、学习方法和价值愿望混为一谈。全文不提供公司估值或收入传闻，不编造成功率、客户数量和市场验证。</p>
+</section>
+
+<section id="map" class="report-section" aria-labelledby="map-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">01</span>
+    <div>
+      <h2 id="map-title">从基础设施到原生产品：一条有断点的因果链</h2>
+      <p class="section-intro">下图是分析者综合，不是访谈中的已验证模型。每个箭头都需要证据；任何一环失效，都可能让下一环只剩叙事。</p>
+    </div>
+  </div>
+
+  <ol class="causal-flow" aria-label="基础设施、任务供给、反馈、能力、信任分发、原生产品的因果路径">
+    <li><strong>基础设施</strong><p>模型、算力与工具降低部分行动成本；价格和可用性不能替代任务质量。</p><span class="flow-next">→ 能否承接任务</span></li>
+    <li><strong>任务供给</strong><p>真实需求、可用权限、明确验收共同形成任务，而不只是演示提示词。</p><span class="flow-next">→ 能否看到结果</span></li>
+    <li><strong>反馈</strong><p>区分成功、失败及原因；保留授权、版本与情境，避免把噪声当经验。</p><span class="flow-next">→ 能否改变行为</span></li>
+    <li><strong>能力</strong><p>记忆、流程、工具或模型得到改进，并在未见任务上经受复测。</p><span class="flow-next">→ 能否获得信任</span></li>
+    <li><strong>信任／分发</strong><p>身份、责任、费用与纠错可理解，用户才可能持续委托并带来新任务。</p><span class="flow-next">→ 能否形成新价值</span></li>
+    <li><strong>原生产品</strong><p>改变任务边界和交互方式，产生旧流程难以提供的价值，而非仅有更大流量。</p><span class="flow-next">↺ 新需求返回上游</span></li>
+  </ol>
+
+  <div class="enabling-loops">
+    <div>
+      <h3>组织使能回路</h3>
+      <p>共同上下文 → 任务契约 → 授权与责任 → 复核与知识沉淀 → 更新共同上下文。组织不是另一张汇报图，而是让判断、行动和反馈能连接起来的安排。</p>
+    </div>
+    <div>
+      <h3>战略使能回路</h3>
+      <p>假设 → 多个候选方案 → 有边界的实验 → 人的取舍 → 资源承诺 → 新证据。战略必须影响正在做的任务，任务结果也必须能改变战略。</p>
+    </div>
+  </div>
+
+  <p class="note"><strong>两条反向关系必须保留：</strong>应用需求会推动基础设施改进，实际失败会反过来改写任务范围。还要控制共同原因：底层模型升级、价格变化和渠道扩张都可能同时改善结果。只看到产品越来越好，不能证明“自有反馈飞轮”已产生独立贡献。</p>
+
+  <h3>三阶段是定位工具，不是产业日历</h3>
+  <p>受访者把新产业的发展概括为基础设施被接受、应用大量试验、原生主导产品形成。报告保留这个分层，却不把谈及的 8—10 年可能跨度当作经验定律。行业、任务与监管环境不同，阶段可能并存，甚至局部倒退。<a href="#src-T1">［文稿 10:43–14:55］</a></p>
+
+  <div class="controls enhance-only" role="group" aria-label="选择查看的产业阶段">
+    <button type="button" data-stage="all" aria-pressed="true" aria-controls="stage-1 stage-2 stage-3">并读三阶段</button>
+    <button type="button" data-stage="stage-1" aria-pressed="false" aria-controls="stage-1">基础设施</button>
+    <button type="button" data-stage="stage-2" aria-pressed="false" aria-controls="stage-2">应用试验</button>
+    <button type="button" data-stage="stage-3" aria-pressed="false" aria-controls="stage-3">原生组合</button>
+  </div>
+  <p id="stage-status" class="status enhance-only" role="status" aria-live="polite">当前并列显示三个阶段。</p>
+
+  <div class="three-col">
+    <article id="stage-1" class="stage-panel">
+      <p class="stage-tag">阶段一 · 基础设施被接受</p>
+      <h3>先让能力可被稳定调用</h3>
+      <p><strong>访谈框架：</strong>新能力不再只是少数人的技术展示，而逐渐成为应用可以依赖的供给。受访者把 2026 年视为第一阶段趋于成熟的观察窗口。</p>
+      <p><strong>分析检验：</strong>关注具体任务的可用性、成本和可接入性，不用 token 使用量替代完成质量。某领域仍可能受数据许可或可靠性限制，不能因其他领域热闹就判定它已经成熟。</p>
+      <p><strong>反向反馈：</strong>应用暴露的长上下文、工具执行与评测问题，会继续塑造基础设施。</p>
+    </article>
+    
+    <article id="stage-3" class="stage-panel">
+      <p class="stage-tag">阶段三 · 新技术与商业组合</p>
+      <h3>改变任务，而非给旧流程加按钮</h3>
+      <p><strong>访谈框架：</strong>主导产品可能由新的技术能力、交互、组织和价值分配共同形成；具体形态仍未知。</p>
+      <p><strong>分析检验：</strong>问用户现在能完成什么过去难以完成的事，谁承担结果责任，价值如何被交付与收费。规模大、调用多或界面新，都不能单独证明原生性。</p>
+      <p><strong>边界：</strong>一个行业的原生产品可能与另一个行业的基础设施探索同时存在，不应给所有团队设同一倒计时。</p>
+    </article>
+  </div>
+</section>
+
+<section id="theses" class="report-section" aria-labelledby="theses-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">02</span>
+    <div>
+      <h2 id="theses-title">二十四张论点卡：把判断拆成可检查的条件</h2>
+      <p class="section-intro">每卡保留原文转述、机制、必要假设、构造例证、反例与检验。分类可交叉；默认全文显示，卡片默认展开。</p>
+    </div>
+  </div>
+
+  <div class="control-box enhance-only">
+    <div class="search-group">
+      <label for="card-search">搜索论点卡全文</label>
+      <input id="card-search" type="search" placeholder="例如：任务、权限、非共识、机器人" autocomplete="off" aria-controls="card-grid">
+    </div>
+    <div class="controls" role="group" aria-label="按论点主题筛选">
+      <button type="button" data-category="全部" aria-pressed="true" aria-controls="card-grid">全部</button>
+      <button type="button" data-category="产业" aria-pressed="false" aria-controls="card-grid">产业</button>
+      <button type="button" data-category="产品" aria-pressed="false" aria-controls="card-grid">产品</button>
+      <button type="button" data-category="组织" aria-pressed="false" aria-controls="card-grid">组织</button>
+      <button type="button" data-category="战略" aria-pressed="false" aria-controls="card-grid">战略</button>
+      <button type="button" data-category="文明" aria-pressed="false" aria-controls="card-grid">文明</button>
+    </div>
+    <div class="controls" role="group" aria-label="论点卡阅读控制">
+      <button type="button" id="expand-cards">展开所有卡片</button>
+      <button type="button" id="collapse-cards">收起所有卡片</button>
+      <button type="button" id="reset-filters">清除搜索与筛选</button>
+    </div>
+    <p id="card-status" class="status" role="status" aria-live="polite" aria-atomic="true">显示全部 24 张论点卡。</p>
+  </div>
+
+  <noscript><p class="note">当前未启用脚本。全部论点、来源和场景仍可阅读；每张卡片可用原生展开控件操作。下方诊断可手工核对，可靠性部分保留完整的默认算例。</p></noscript>
+  <p id="no-results" class="no-results" hidden>没有匹配的卡片。请减少搜索词，或清除搜索与主题筛选。</p>
+
+  <div id="card-grid" class="card-grid">
+
+    <article class="thesis" id="thesis-01" data-categories="战略 组织">
+      <div class="card-meta"><span class="card-id">01</span><span class="category">战略 · 组织</span></div>
+      <h3>战略不是一句选择，而是一叠承诺</h3>
+      <a class="time" href="#src-T1">文稿锚点：04:43–07:18</a>
+      <p><span class="label">原文观点</span>受访者以淘宝、支付宝、阿里云及后续云架构、去 IOE 等选择说明，战略会延伸为相互关联的资源配置和子决策，而不是宣布一个方向就结束。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>方向只有改变预算、责任与取舍，才可能改变行动。<strong>必要假设：</strong>团队有能力落实配套选择，也愿意放弃与方向冲突的工作；否则所谓战略只是增加项目。</p>
+        <p><span class="label example">补充例证</span>小团队试做客服自动化，必须同时决定数据使用权、可调用工具、质检标准、人工升级和成本归属。购买模型接口只完成了其中一个子决策。</p>
+        <p><strong>反例／边界：</strong>资源投入很大也可能方向错误；过早绑定全部配套会放大损失。阿里相关叙述是嘉宾回忆，不是经独立审计的公司史。</p>
+        <p><span class="label advice">建议</span>把一个战略主张写成“因此增加什么、停止什么、谁负责、凭什么验收”。逐项标记可逆性；若所有团队都不必改变工作，就尚未形成真正的承诺。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-02" data-categories="战略">
+      <div class="card-meta"><span class="card-id">02</span><span class="category">战略</span></div>
+      <h3>非共识是回顾线索，不是成功凭证</h3>
+      <a class="time" href="#src-T1">文稿锚点：07:18–08:33；01:31:23–01:34:54</a>
+      <p><span class="label">原文观点</span>受访者区分优秀与卓越，把非共识选择视为其回顾模型中的必要因素，但明确提醒幸存者偏差，也承认无法提前识别谁会成为卓越创业者。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>尚未被普遍理解的机会可能减少同质竞争。<strong>必要假设：</strong>不同判断来自更好的问题理解或证据，而非孤立、自信或拒绝修正；“必要”尤其不意味着“充分”。</p>
+        <p><span class="label example">补充例证</span>团队相信客户需要交付完整研究简报，而不只是搜索结果。合理做法是测试客户是否持续验收、使用并付费，而不是把每次拒绝都解释为对方缺乏远见。</p>
+        <p><strong>反例／边界：</strong>负反馈既可能来自惯性，也可能说明产品没价值。使命能够支持耐心，却不能让错误需求自动成立。</p>
+        <p><span class="label advice">建议</span>为非共识判断写出可证伪假设、有限投入期和停止规则；提前约定什么证据会让团队改变方向，避免失败后无限移动解释边界。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-03" data-categories="产业">
+      <div class="card-meta"><span class="card-id">03</span><span class="category">产业</span></div>
+      <h3>三阶段帮助定位，不负责报时</h3>
+      <a class="time" href="#src-T1">文稿锚点：10:43–14:55</a>
+      <p><span class="label">原文观点</span>受访者把通用技术产业化分为基础设施被接受、大量应用涌现、原生应用三个阶段。他强调第二阶段本身很精彩、有价值，并认为可能还有八年或十年的探索空间。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>技术可用、任务可交付、商业组合可持续，是不同问题。<strong>必要假设：</strong>阶段间存在学习传递，且配套条件能够改善；不能假定基础设施成熟后，所有行业同步进入下一阶段。</p>
+        <p><span class="label example">补充例证</span>同一模型可以让资料整理工具进入稳定试用，却仍不足以让需要现实执行、严格责任或复杂授权的任务进入无人值守状态。</p>
+        <p><strong>反例／边界：</strong>第二阶段可以长期产生有价值的专业服务；原生也不等于规模最大。历史上产品、基础设施与组织经常交错演进，不能只画单向阶梯。</p>
+        <p><span class="label advice">建议</span>以任务而非年份定位：分别检查供给是否稳定、交付是否可靠、价值是否新颖。用跨阶段反馈修改地图，而不是等待日历翻到“原生年”。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-04" data-categories="产业">
+      <div class="card-meta"><span class="card-id">04</span><span class="category">产业</span></div>
+      <h3>2026 是观察判断，token 不是智力刻度</h3>
+      <a class="time" href="#src-T1">文稿锚点：15:04–17:12</a>
+      <p><span class="label">原文观点</span>受访者借 token 成为商业讨论词汇、春节期间 OpenClaw 试验等现象，把对谈中的 2026 年视为第一阶段趋于成熟、第二阶段展开的窗口。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>共同语言与低门槛试用可能扩大参与。<strong>必要假设：</strong>讨论热度能转化为实际可用性和任务需求，而非只形成演示与传播。总结中的 2024 不应覆盖文稿中的时间语境。</p>
+        <p><span class="label example">补充例证</span>两个研究助手即使处理同样多 token，也可能在证据覆盖、事实错误、人工复核和最终可用稿件上表现不同，不能直接按消耗量比较智能。</p>
+        <p><strong>反例／边界：</strong>token 是用量与计费单位，不是跨模型统一的质量或结果单位；更低调用单价也可能被重试、等待和人工返工抵消。</p>
+        <p><span class="label advice">建议</span>用“验收合格的一次任务总成本”观察变化，同时记录质量、等待和返工。把年份判断保留为受访者解释，不作为全行业统一时间戳。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-05" data-categories="产品">
+      <div class="card-meta"><span class="card-id">05</span><span class="category">产品</span></div>
+      <h3>从分享信息，走向委托能力</h3>
+      <a class="time" href="#src-T1">文稿锚点：18:11–19:40</a>
+      <p><span class="label">原文观点</span>受访者认为，skill 与 agent 等形态可能把可执行能力打包传播，让网络不仅共享信息，也共享完成事情的方法与能力。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>可复用的上下文、工具与步骤缩短从知道到完成的距离。<strong>必要假设：</strong>任务边界明确、权限可控、输出可核验，并有人承担错误后果；能力不能只靠演示中的顺利路径定义。</p>
+        <p><span class="label example">补充例证</span>“找到酒店”提供候选信息；“形成可验证的预订草案”还要核对日期、房型、取消条件和费用。提交订单与支付应另设授权，不能因草案完成就默认获得执行权。</p>
+        <p><strong>反例／边界：</strong>信息仍是行动的基础，必须保留出处与时效。生成一段看似完成的回答，不等于现实系统中的状态已经改变。</p>
+        <p><span class="label advice">建议</span>给产品写清楚行动动词、完成证据和禁止动作；演示时同时展示结果回执与失败处理，不只展示流畅对话。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-06" data-categories="产业 产品">
+      <div class="card-meta"><span class="card-id">06</span><span class="category">产业 · 产品</span></div>
+      <h3>浏览器式机会，应拆成多层问题</h3>
+      <a class="time" href="#src-T1">文稿锚点：19:40–22:40；39:08–39:58；02:17:16–02:17:55</a>
+      <p><span class="label">原文观点</span>受访者设想一种同时降低开发者与用户门槛的入口，但明确无法预测具体界面，并将未来约两年出现机会作为可能性判断。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>统一入口可减少接入、发现和使用成本。<strong>必要假设：</strong>协议、分发、执行、信任、计费和评价能相互配合，而不只是连接成功；浏览器类比说明机制，不规定相同历史顺序或单一赢家。</p>
+        <p><span class="label example">补充例证</span>一个研究 agent 能被发现、连接数据库，还需要让用户知道它读了什么、能做什么、费用怎么算，以及错误交付由谁处理。</p>
+        <p><strong>时间口径：</strong>同场访谈分别提到未来两年、三年和五年左右的浏览器式机会或 agent 入口，也说第三阶段可能在八至十年后。这可能对应不同成熟层次，文稿没有统一标尺，不能合并成一条精确倒计时。</p>
+        <p><strong>反例／边界：</strong>MCP 连接助手与数据、工具；A2A 面向 agent 间通信。两者是局部标准例子，不等于完整消费入口已经出现。<a href="#src-S5">［S5］</a><a href="#src-S6">［S6］</a></p>
+        <p><span class="label advice">建议</span>先选一层、一个限定领域减少摩擦；观察用户是否无需理解底层术语就能正确委托，而不是把协议接通视作产品完成。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-07" data-categories="产业">
+      <div class="card-meta"><span class="card-id">07</span><span class="category">产业</span></div>
+      <h3>模型可能走向公用供给，但尚非同质电力</h3>
+      <a class="time" href="#src-T1">文稿锚点：23:38–25:29；32:08–38:19</a>
+      <p><span class="label">原文观点</span>受访者把模型公司定位为未来 AI 云公司。他作出很强的终局判断：公共基础设施成立的商业模式只有寡头垄断加政府强监管，并认为政府一定会介入保障稳定、低成本供给。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>规模经济与标准化可能推动集中，替代性又可能压低部分供给利润。<strong>必要假设：</strong>主要能力在目标任务上趋于可比、迁移成本可控，且规模优势持续超过差异化收益。</p>
+        <p><span class="label example">补充例证</span>团队可以把多家模型用于同一份脱敏客服评测，比较正确处理、失败恢复和总成本，而不是先假定所有供应商都像插座一样可互换。</p>
+        <p><strong>反例／边界：</strong>前沿能力差异、垂直整合与专属生态可能长期并存。公共供给式角色不意味着今天的智能已经完全商品化，也不保证未来采用某一种监管结构。</p>
+        <p><span class="label advice">建议</span>把供应商可替代性列为定期复测项目，分开评估基础供给、产品差异和合同约束；不要把长期类比直接变成当下采购结论。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-08" data-categories="产业 战略">
+      <div class="card-meta"><span class="card-id">08</span><span class="category">产业 · 战略</span></div>
+      <h3>基础设施赢家不必然赢应用，也并非不能赢</h3>
+      <a class="time" href="#src-T1">文稿锚点：25:12–25:55；30:30–32:01；59:00–59:46；01:04:18–01:04:34</a>
+      <p><span class="label">原文观点</span>受访者倾向认为原生应用需要不同于模型建设的能力，但也明确承认模型公司可能成功，结局开放，不能将概率判断改写成不可能。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>用户理解、情境工程与价值交付，不会从模型领先自动生长出来。<strong>必要假设：</strong>这些能力足够重要，而且其他团队能获得可用的底层能力，不被资源或入口彻底阻断。</p>
+        <p><span class="label example">补充例证</span>一个小型研究工具可能更懂审稿与证据追溯；模型企业则可能凭研究、渠道与集成资源补上同一能力。两条路径都应被观察，而不是预先排除。</p>
+        <p><strong>反例／边界：</strong>受访者自己以 GE 跨发电设备与家电的角色举例，恰好提醒历史分类并不稳定；这只能作为访谈内部的论证张力，不能当作已核实的公司史反例。关于创办方式、家电首创和繁荣年数的细节未核验；S1 记录的是 1892 年合并形成 GE。<a href="#src-S1">［S1］</a></p>
+        <p><span class="label advice">建议</span>分别列出模型方与应用方的可获得优势，持续检查它们是否转化为客户价值。利用现有资源，但不把资源或出身当作必胜、必败证明。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-09" data-categories="产品 组织">
+      <div class="card-meta"><span class="card-id">09</span><span class="category">产品 · 组织</span></div>
+      <h3>智能复利首先要说清楚“哪里在学习”</h3>
+      <a class="time" href="#src-T1">文稿锚点：33:43–37:19</a>
+      <p><span class="label">原文观点</span>受访者认为模型实验室已局部使用 AI 辅助模型研发和训练，结合组织聚焦产生智能复利。他明确区分这种局部使用与完全自我驱动学习，认为后者尚未到来。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>辅助工作缩短研究反馈，新的改进又支持下一轮工作。<strong>必要假设：</strong>建议被验证、被采用，并产生净收益。推理记忆、工具编排、提示优化、微调和预训练是不同改进层级。</p>
+        <p><span class="label example">补充例证</span>研究助手记住某类引用错误，可能只是更新校验规则；把审查样本用于微调，则改变模型参数。两者都可能有用，但不能用同一个“自主进化”标签掩盖差别。</p>
+        <p><strong>反例／边界：</strong>存储日志不等于训练，调用模型反思也不等于性能提高。错误标签、数据泄漏和评测污染甚至会制造虚假的进步。</p>
+        <p><span class="label advice">建议</span>在每次改进记录中注明改了哪一层、谁审核、用什么未见样本复测。无法定位改进来源时，只能说观察到变化，不能证明复利。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-10" data-categories="产业">
+      <div class="card-meta"><span class="card-id">10</span><span class="category">产业</span></div>
+      <h3>“3T”与掉队名单属于预测，不是技术门槛</h3>
+      <a class="time" href="#src-T1">文稿锚点：33:01–33:42；35:15–37:42</a>
+      <p><span class="label">原文观点</span>受访者预测，中国模型公司的下一轮淘汰与年末能否跑到 3T 有关，并认为最终留下有限几家。他另在美国竞争讨论中称 xAI、Meta 已掉队或退出竞赛。这些都是他的竞争判断。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>前沿通用竞争可能受到资金、算力、人才和组织效率约束。<strong>必要假设：</strong>既有扩展路线持续有效，其他架构和专业化路线不足以改变竞争边界；访谈没有证明这些条件必然延续。</p>
+        <p><span class="label example">补充例证</span>比较一个总参数较大的稀疏模型与较小的专用模型，仍要看激活参数、任务质量、延迟、数据条件和成本，不能只读一个规模数字。</p>
+        <p><strong>反例／边界：</strong>新建通用前沿实验室很昂贵，不等于禁止小模型、开放模型或新架构产生价值。对企业“掉队”的因果解释也不能当成已证实诊断。</p>
+        <p><span class="label advice">建议</span>把规模与存活判断放入预测登记表，不写入产品硬性验收条件；用目标任务的对比评测替代参数崇拜，不引用未经核实的估值和收入传闻。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-11" data-categories="产品">
+      <div class="card-meta"><span class="card-id">11</span><span class="category">产品</span></div>
+      <h3>复杂任务可能更有价值，复杂本身不是护城河</h3>
+      <a class="time" href="#src-T1">文稿锚点：40:45–44:20</a>
+      <p><span class="label">原文观点</span>受访者认为简单素材、投放等任务很难有长期价值，简单任务会被复杂任务吞掉。他主张创业者假定智能已经够用，寻找大十倍以上的场景，用复杂任务建立智能闭环。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>承担更多结果责任，可能获得更完整的价值与反馈。<strong>必要假设：</strong>额外价值超过可靠性下降、延迟、复核和执行成本；任务变长本身并不会创造差异化。</p>
+        <p><span class="label example">补充例证</span>增长助手从写文案扩展到提假设、安排试验和解释结果，可能更有用；但如果不能处理归因偏差，自动完成更多步骤只会更快放大错误。</p>
+        <p><strong>反例／边界：</strong>简单任务也可能凭流程嵌入、信任和分发成为合理生意。工程指导建议先采用足够简单的方案，并关注自治增加带来的成本与错误。<a href="#src-S7">［S7］</a></p>
+        <p><span class="label advice">建议</span>先锁定狭窄、可验收的子任务，再画扩展地图。每次扩展都重新检查端到端收益，而不是把步骤数、agent 数量或运行时长当成竞争优势。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-12" data-categories="产品">
+      <div class="card-meta"><span class="card-id">12</span><span class="category">产品</span></div>
+      <h3>反馈飞轮必须跨过“记录”与“改善”之间的鸿沟</h3>
+      <a class="time" href="#src-T1">文稿锚点：44:46–46:34</a>
+      <p><span class="label">原文观点</span>受访者把真实世界反馈作为数据飞轮的前提，并强调 agent 应能独立干活、离开人的参与。任务反馈结合算法、上下文、记忆等创新，形成场景内的智能复利，再向其他场景扩展。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>结果被转为可信标签，再进入评测、记忆、流程或模型改进。<strong>必要假设：</strong>数据可合法使用，反馈可靠，任务有可重复部分，改进能迁移且扣除成本后仍有价值。</p>
+        
+        <p><strong>反例／边界：</strong>高满意度不一定代表事实正确，人工修正也可能掩盖系统失败。人工验证的反馈仍可能很有价值，不必为了叙事完整把人全部移除。</p>
+        <p><span class="label advice">建议</span>为每类失败保存原因、版本与复测结果；证明同类未见任务改善后再说形成学习闭环。产品闭环不是完全自主自我改进的同义词。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-13" data-categories="产品">
+      <div class="card-meta"><span class="card-id">13</span><span class="category">产品</span></div>
+      <h3>“黑洞效应”是隐喻，能力迁移才是检验对象</h3>
+      <a class="time" href="#src-T1">文稿锚点：36:47–37:19；47:57–49:18</a>
+      <p><span class="label">原文观点</span>受访者把场景增多、连接复杂化与智力拓展结合，称为网络效应升级后的黑洞效应；他认为这种结构可能迅速扩展并吸收更多场景。他还认为 OpenAI 与 Anthropic 已部分形成这种效应，差距会越来越大，其他模型公司很难再超越；这是受访者的竞争判断。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>多样且相关的案例增加边界覆盖，复用能力可能降低新增任务成本。<strong>必要假设：</strong>案例相关性足够强，质量可控，积累确实带来独特改善，而非主要依赖共同底模升级。</p>
+        <p><span class="label example">补充例证</span>研究简报中的时间核对方法可能迁移到政策梳理；把完全无关、无法核验的聊天记录一起加入，则可能增加噪声而非拓宽可靠能力。</p>
+        <p><strong>反例／边界：</strong>更多数据不自动形成网络效应，更不证明必然垄断。竞争者也能使用相同基础模型，用户还可能同时使用多个服务。</p>
+        <p><span class="label advice">建议</span>冻结底模，用保留集对比有无自有经验层，再测试邻近任务。只有观察到可重复的增益与迁移，才逐步讨论壁垒，不能先用隐喻替代证据。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-14" data-categories="产业 产品">
+      <div class="card-meta"><span class="card-id">14</span><span class="category">产业 · 产品</span></div>
+      <h3>平台价值在于托付判断，不只是陈列 agent</h3>
+      <a class="time" href="#src-T1">文稿锚点：39:08–39:58；49:23–50:32；02:17:16–02:17:55</a>
+      <p><span class="label">原文观点</span>当大量开发者提供不同 agent，用户仍需要匹配、判断和信任服务，因此平台角色可能继续存在，而非被自动执行能力彻底消除。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>平台减少搜索、评估与委托风险。<strong>必要假设：</strong>它能提供身份、来源、权限、争议处理、声誉和费用透明，而不只是把评价排序包装成可信判断。</p>
+        <p><span class="label example">补充例证</span>限定领域的研究服务目录，可以要求提交样例、标注可访问资料、说明人工复核范围，并为错误引用提供纠正流程，比无边界商店更容易建立可核验信任。</p>
+        <p><strong>时间口径：</strong>同场访谈分别提到未来两年、三年和五年左右的浏览器式机会或 agent 入口，也说第三阶段可能在八至十年后。这可能对应不同成熟层次，文稿没有统一标尺，不能合并成一条精确倒计时。</p>
+        <p><strong>反例／边界：</strong>评价可能被操纵，成功用户更愿意留评也会造成自选择偏差。工具标准没有解决责任承担，交易量也不等于可信度。</p>
+        <p><span class="label advice">建议</span>先做有界、精选、能处理失败的领域服务，检查用户是否愿意委托真实任务；不要在验证需求之前先建设通用市场和复杂声誉系统。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-15" data-categories="战略 产业">
+      <div class="card-meta"><span class="card-id">15</span><span class="category">战略 · 产业</span></div>
+      <h3>过渡期需要主动耐心，也需要供应商纪律</h3>
+      <a class="time" href="#src-T1">文稿锚点：54:00–01:04:54</a>
+      <p><span class="label">原文观点</span>受访者认为应用信心不足是阶段落差，创业者需要持续下场积累。他还预测大模型能力将成为大宗商品式基础设施，认为智能体公司无需再训练传统大模型，也不用担心厂商切断，因为随时有合理替代品。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>应用需要时间重组任务与商业模式，实验又推动供给适配。<strong>必要假设：</strong>探索持续产生可用于决策的新证据；单纯等待底模更强并不形成自身能力。</p>
+        <p><span class="label example">补充例证</span>研究助手保留统一任务描述和验收集，定期测试备用模型，并记录格式、延迟、成本及数据治理差别，比口头承诺“随时换 API”更可靠。</p>
+        <p><strong>反例／边界：</strong>接口相似不等于迁移无摩擦。合同、工具格式、行为差异和数据约束都可能锁定使用方式；历史类比也不能推出固定二十年等待期。</p>
+        <p><span class="label advice">建议</span>把耐心转为小范围持续学习，把可移植性转为重复进行的替代评测。保留退路，但不向团队或客户保证不存在供应商风险。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-16" data-categories="组织">
+      <div class="card-meta"><span class="card-id">16</span><span class="category">组织</span></div>
+      <h3>新实验室可以试组织，不能删除责任</h3>
+      <a class="time" href="#src-T1">文稿锚点：01:04:55–01:10:24</a>
+      <p><span class="label">原文观点</span>受访者把 New Lab 看作新组织的早期雏形，并明确预测：科层制管理的公司制度会衰亡。他同时强调，人类分工协作与组织会继续存在，只是形态发生变化。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>共享上下文与自动协调可能替代部分信息传递层级。<strong>必要假设：</strong>系统能够支持跨任务协调，且例外与冲突仍有负责的人处理；岗位减少不能自动证明组织能力提高。</p>
+        <p><span class="label example">补充例证</span>研究小组可以让系统汇总实验记录，由成员共同审阅；但研究问题、结果解释、资源选择和对外承诺仍需要明确负责人。</p>
+        <p><strong>反例／边界：</strong>法律上的公司早于工业时代存在，1600 年的商人公司是校正例子。预测应限定于现代工业科层，而非所有公司形式。雇主义务也不因层级减少而消失。<a href="#src-S10">［S10］</a></p>
+        <p><span class="label advice">建议</span>先找信息重复搬运最严重的环节试验；同时保留决策权、升级路径和问责记录，比较协调质量，而非仅统计少了多少职位。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-17" data-categories="组织">
+      <div class="card-meta"><span class="card-id">17</span><span class="category">组织</span></div>
+      <h3>任务可以成为单元，贡献不能只看可见记录</h3>
+      <a class="time" href="#src-T1">文稿锚点：01:10:27–01:19:40</a>
+      <p><span class="label">原文观点</span>受访者强调任务、高主动性、透明贡献、伙伴式团队和共同上下文，认为这些要素可能支撑不同于传统层级的新型协作。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>工作围绕可交付任务流动，减少部门之间的信息损耗。<strong>必要假设：</strong>任务边界能表达协作关系，成员可以获取必要信息，且有办法承认不可直接计数的支持工作。</p>
+        <p><span class="label example">补充例证</span>一份研究简报的作者、证据复核者、客户沟通者与维护资料库的人共同创造结果；不能因为最终文档只有一个署名，就把其他贡献从评价中删除。</p>
+        <p><strong>反例／边界：</strong>透明不自动带来公平薪酬；可见动作可能挤压辅导、维护和风险预防。高主动性也不意味着个人必须随时工作或独自承担所有责任。</p>
+        <p><span class="label advice">建议</span>采用任务契约：目标、证据、负责人、数据与工具权限、复核人、验收、预算、停止和升级条件。再单独讨论集体贡献与隐性劳动，不把日志直接变成报酬公式。</p>
+      </div><p><span class="label example">现实组织例证</span>Netflix 的文化说明强调提供背景，同时为重要决定指定负责人、征求异议并复盘结果。管理者在危机、伦理风险或成员背景不足时仍可介入。这说明自主权与责任边界可以并存；它不能证明科层制必然消亡。<a href="#src-S12">［S12］</a></p></details>
+    </article>
+
+    <article class="thesis" id="thesis-18" data-categories="组织 战略">
+      <div class="card-meta"><span class="card-id">18</span><span class="category">组织 · 战略</span></div>
+      <h3>组织与战略共演，不是永远先造组织</h3>
+      <a class="time" href="#src-T1">文稿锚点：01:20:29–01:24:53</a>
+      <p><span class="label">原文观点</span>受访者把新的组织形态与新的战略生成方式视为相互依存。他还把创始人亲自重写组织运行体系称为分水岭，认为最早一批真正追求 AI 原生组织的 CEO 大概会自己动手搭建。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>组织的观察能力影响战略，战略重点又决定组织怎样协作。<strong>必要假设：</strong>内部系统解决真实的信息和决策瓶颈，而不是让团队沉迷搭建基础设施。</p>
+        <p><span class="label example">补充例证</span>小团队可以先在现有工单流程增加统一任务描述和失败复盘，再决定是否需要新系统；不必因相信 AI 原生组织，就从零建设整套 ERP。</p>
+        <p><strong>反例／边界：</strong>先大规模迁移系统，可能消耗本应用于客户学习的资源。过于刚性的组织也会把尚未验证的战略固定下来。</p>
+        <p><span class="label advice">建议</span>选一个已有工作流做试点，比较信息可达性、交付质量和迁移成本。能用轻量约定解决的，不先用大平台解决；把组织设计当作假设而非身份宣言。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-19" data-categories="产品 战略">
+      <div class="card-meta"><span class="card-id">19</span><span class="category">产品 · 战略</span></div>
+      <h3>研究能力之外，产品与商业判断更关键</h3>
+      <a class="time" href="#src-T1">文稿锚点：01:27:09–01:31:15</a>
+      <p><span class="label">原文观点</span>受访者强调理解客户、价值、优先级和技术取舍的重要性；研究能力本身不足以完成应用创业，互补伙伴与判断力仍然重要。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>技术可行需要经过需求选择和交付设计，才能转为有人愿意承担成本的价值。<strong>必要假设：</strong>团队能够接触真实使用者，也愿意让外部证据改变自身偏好。</p>
+        <p><span class="label example">补充例证</span>创作者助手原型能自动整理素材，但客户可能真正需要的是可追溯的事实核验。产品判断决定优先补证据链，而不是继续增加生成风格。</p>
+        <p><strong>反例／边界：</strong>使命感、高主动性和漂亮演示都不是需求证据。客户的称赞也可能只是礼貌，不能代替实际使用与重复交付。</p>
+        <p><span class="label advice">建议</span>在原型之后安排客户审阅，询问替代了哪项工作、哪里仍需返工；在真实授权与付费条件下检验重复交付，而不是预先宣布市场成立。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-20" data-categories="战略 组织">
+      <div class="card-meta"><span class="card-id">20</span><span class="category">战略 · 组织</span></div>
+      <h3>战略生成是持续选择，不是让模型接管目标</h3>
+      <a class="time" href="#src-T1">文稿锚点：01:38:35–01:48:59</a>
+      <p><span class="label">原文观点</span>受访者讨论长、中、短期张力与战略生成，强调中间点和里程碑，并区分摸索、成型、成熟、执行四种阶段，而非只追求执行效率。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>共享上下文产生多个想法，经试验与人的选择进入资源配置，再由结果更新方向。<strong>必要假设：</strong>目标、权衡和责任由人明确，模型提议不绕过审查。</p>
+        <p><span class="label example">补充例证</span>小团队可把十年／三年／一年改成三年／一年／季度，并设三个能力里程碑：可信交付、可重复反馈、邻近迁移；时间尺度应服务不确定性，而不是照抄。</p>
+        <p><strong>反例／边界：</strong>年度经常性收入（ARR）的线性外推会忽略留存、上限和竞争。摸索期只优化速度，可能更快执行错误方向；成熟期不停重开方向也会损害交付。</p>
+        <p><span class="label advice">建议</span>标注当前阶段与关键未知，探索期检查学习是否改变判断，执行期检查稳定性与成本；固定复盘中间里程碑，不让长期愿景替代近期证据。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-21" data-categories="产业 产品">
+      <div class="card-meta"><span class="card-id">21</span><span class="category">产业 · 产品</span></div>
+      
+      <a class="time" href="#src-T1">文稿锚点：01:57:54–02:02:52</a>
+      
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>现实环境会检验感知、动作、维护与经济性的整体组合。<strong>必要假设：</strong>示范能力能够转为重复使用，服务与故障处理不会吞掉交付价值。</p>
+        <p><span class="label example">补充例证</span>限定空间的物品分拣，先看重复任务、异常停机、人工介入和维护，再判断扩展。它不需要先证明能够完成所有家庭任务。</p>
+        <p><strong>反例／边界：</strong>嘉宾谈及“卖出一万台”是启发性门槛，不是行业标准。Model T 于 1908 年推出，移动汽车装配线在 1913 年运行，不能把产品、制造与普及混成同一事件。<a href="#src-S2">［S2］</a><a href="#src-S3">［S3］</a></p>
+        <p><span class="label advice">建议</span>按演示、真实重复使用、可维护性、单位经济性逐级取证；比较多种产品形态，不从汽车或家电类比推出某家必胜。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-22" data-categories="产业 组织">
+      <div class="card-meta"><span class="card-id">22</span><span class="category">产业 · 组织</span></div>
+      <h3>既有企业有资源，也可能被自身流程困住</h3>
+      <a class="time" href="#src-T1">文稿锚点：02:02:57–02:18:10</a>
+      <p><span class="label">原文观点</span>受访者认为旧时代成功企业过渡到新一代、仍做得非常好的情形基本没有，只把 IBM 与微软作为少数勉强延续的例子。他认为 all in AI 只是必要条件，资源无法消除组织与时代变革的挑战。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>渠道、数据和客户关系可支持新产品，旧指标、预算归属与审批又可能抑制变化。<strong>必要假设：</strong>组织确实允许新的任务边界、评价方式和价值分配出现。</p>
+        <p><span class="label example">补充例证</span>一家有客服数据的企业，若仍以旧部门工单数量分配资源，可能不愿采用减少转派的新流程；同样的资源，在明确责任与收益分享后也可能成为优势。</p>
+        <p><strong>反例／边界：</strong>层级在高责任场景中可能承担必要复核。关于特定企业掉队的原因，文稿意见不足以建立因果事实，更不能从几个名字外推全部既有企业。</p>
+        <p><span class="label advice">建议</span>检查预算、权限和评价是否随新任务改变；用真实试点比较资源能否转化为交付优势，不用“传统”或“原生”标签代替组织诊断。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-23" data-categories="文明 产品">
+      <div class="card-meta"><span class="card-id">23</span><span class="category">文明 · 产品</span></div>
+      <h3>教育要扩大创造，也要守住知识与验证</h3>
+      <a class="time" href="#src-T1">文稿锚点：02:18:10–02:28:55（教育与创造讨论段）</a>
+      <p><span class="label">原文观点</span>受访者把未来定义为创造力时代，判断所有可结构化处理的知识工作都会被 AI 接管，人的差异将更多来自无中生有、定义复杂问题的创造力。他认为知识灌输为中心的教育必然受到颠覆。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>制作作品能把知识变成可讨论的选择与反馈。<strong>必要假设：</strong>学习者参与问题、验证和解释，而不是把生成结果直接当作自己的理解。</p>
+        <p><span class="label example">补充例证</span>学生制作一份校园节水说明，先学概念、查可用证据、形成问题，再借助 AI 改写表达；最后解释关键选择，并在不依赖原稿的新情境中应用知识。</p>
+        <p><strong>反例／边界：</strong>短篇故事研究发现，AI 创意辅助可提高评价，尤其帮助较低基线参与者，同时使集体产出更相似；结论限于研究任务，不能推广到全部创造。<a href="#src-S9">［S9］</a></p>
+        <p><span class="label advice">建议</span>同时评价知识、提问、作品、证据核验与迁移；保留独立构思和同伴讨论，避免只按生成作品的表面精致度判断学习。</p>
+      </div></details>
+    </article>
+
+    <article class="thesis" id="thesis-24" data-categories="文明">
+      <div class="card-meta"><span class="card-id">24</span><span class="category">文明</span></div>
+      <h3>繁荣与幸福是价值目标，不是技术自动结果</h3>
+      <a class="time" href="#src-T1">文稿锚点：02:02:57–02:18:10；02:18:10–02:28:55</a>
+      <p><span class="label">原文观点</span>受访者估计社会消化 AI 革命需要一代人、二十年起步。他希望技术释放潜能并让人更快乐，也承认会出现新问题，哲学层面快乐的变化不好判断；他对通常衡量指标下的文明进步持强烈乐观。</p>
+      <details open><summary>机制、必要条件与行动检验</summary><div class="detail-body">
+        <p><span class="label inference">分析推断</span><strong>机制：</strong>能力扩展可能释放时间和选择。<strong>必要假设：</strong>收益能够被分享，个体保有自主权，公共与组织制度能处理新的不平等、负担和责任问题。</p>
+        <p><span class="label example">补充例证</span>学习助手减少重复整理后，节省的时间既可能用于探索、合作与休息，也可能被追加任务全部占用；两种安排的技术工具可以完全相同。</p>
+        <p><strong>反例／边界：</strong>结构化任务被自动化，不等于整个职业消失；生产率提高也不能保证分配公平或幸福提升。不能用宏观乐观要求个体接受无边界的效率压力。</p>
+        <p><span class="label advice">建议</span>除产出外，观察学习自主性、时间使用、可获得性与错误负担由谁承担。把福祉作为需要设计和讨论的目标，不把希望包装成可保证的结果。</p>
+      </div></details>
+    </article>
+
+  </div>
+</section>
+
+
+
+<section id="diagnostic" class="report-section" aria-labelledby="diagnostic-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">04</span>
+    <div>
+      <h2 id="diagnostic-title">飞轮诊断：先找证据缺口，不打神奇分数</h2>
+      <p class="section-intro">这是分析者提出的检查表，不是经验证的量表，也不预测创业成败。勾选表示你手中已有相应证据，不表示“准备去做”。</p>
+    </div>
+  </div>
+
+  <div id="flywheel-form" role="group" aria-label="反馈飞轮证据检查">
+    <div class="diagnostic-list">
+      <label class="check-item"><input type="checkbox" name="real"><span><strong>真实需求与任务</strong><span>有明确使用者、可重复任务及费用承担者；不是只有演示兴趣。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="rights"><span><strong>数据与工具权限</strong><span>能够说明哪些资料可读取、存储和用于改进，哪些动作需另行批准。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="result"><span><strong>可观察的结果</strong><span>有完成证据和验收标准，可以识别“说完成”与“确实完成”的差别。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="labels"><span><strong>可信的成功／失败标签</strong><span>能区分系统错误、任务变化、人工修正与客户偏好，并说明审核者。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="replay"><span><strong>回放与保留评测</strong><span>有基线、版本记录和未参与改进的样本，能够检查经验层的独立贡献。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="transfer"><span><strong>相邻任务迁移</strong><span>已经检验新的相关任务，不是仅在熟悉样本上重复获得好结果。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="economics"><span><strong>完整经济性</strong><span>成本包含调用、人工复核、等待、返工和维护，并与实际价值比较。</span></span></label>
+      <label class="check-item"><input type="checkbox" name="owner"><span><strong>责任与恢复</strong><span>有负责人、停止条件、人工升级与错误纠正方式，不让异常无人处理。</span></span></label>
+    </div>
+    <div class="controls enhance-only"><button type="button" id="diagnostic-reset">清空本页勾选</button></div>
+  </div>
+
+  <div id="diagnostic-result" class="diagnostic-result" role="status" aria-live="polite" aria-atomic="true">
+    <p><strong>尚未声明任何条件已获证实。</strong>先补真实任务、数据授权、结果证据和责任安排，再设计受控试验。未勾选表示证据缺口，不等于产品已被判定失败。</p>
+  </div>
+  <p class="small">交互仅在当前页面计算，不保存、不上传。即使全部勾选，也只能说明检查项有对应证据，不能证明复利规模、市场优势或未来收益。</p>
+
+  <div class="two-col">
+    <article class="note">
+      <h3>复杂 ≠ 护城河：一个可靠性算例</h3>
+      <p>假设每一步成功概率均为 <strong>p</strong>，步骤之间<strong>相互独立</strong>，任何一步失败就导致整条任务失败，而且没有重试、纠错或恢复。那么连续 <strong>n</strong> 步全部成功的概率为 <strong>p<sup>n</sup></strong>。</p>
+      <p id="reliability-output" class="formula">假设 p = 95%，n = 10：整链成功概率 = 0.95^10 ≈ 59.9%。</p>
+      <div class="range-controls enhance-only">
+        <div><label for="step-p">假设的单步成功率：<output id="p-output" for="step-p">95%</output></label><input id="step-p" type="range" min="50" max="99" step="1" value="95" aria-describedby="reliability-caveat"></div>
+        <div><label for="step-n">假设的连续步骤数：<output id="n-output" for="step-n">10</output></label><input id="step-n" type="range" min="1" max="20" step="1" value="10" aria-describedby="reliability-caveat"></div>
+      </div>
+      
+    </article>
+
+    <article class="note">
+      <h3>把长任务拆成能恢复的段落</h3>
+      <p>算例不是要求产品永远只做简单任务，而是提醒：增加步骤必须同时增加可观察性、验证和恢复设计。比起让系统一次完成所有动作，更重要的是知道哪里已完成、哪里不确定、失败后能否回到安全状态。</p>
+      <p>一个研究流程可在来源读取、关键事实确认、稿件验收之间设置检查点；客服流程可在草案与执行之间设置授权门。检查点本身也有成本，因此最终仍要比较端到端质量与总成本，而不是默认“更多复核”永远更好。</p>
+      <p><strong>评测方法边界：</strong>METR 的任务完成时域以专家人类完成时间衡量，并报告特定成功率下的任务跨度，主要涉及明确的软件、机器学习与网络安全任务。它不是 AI 可以连续自主运行的小时数，也不是整个职业被替代的时间表。这里仅引用方法，不引用榜单数值。<a href="#src-S8">［S8］</a></p>
+    </article>
+  </div>
+
+  <p><strong>怎样证明不是底模顺风：</strong>保留相同任务与底模版本，比较原流程、加入经验层的流程和人工基线；把参与改进的样本与保留样本分开。模型升级后重新评测，不能把升级前后的整体提升全算给自有数据。即使有局部改善，也还要检查它是否值得维护、能否迁移，以及对手能否轻易复现。</p>
+</section>
+
+<section id="corrections" class="report-section" aria-labelledby="corrections-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">05</span>
+    <div>
+      <h2 id="corrections-title">纠错与证据表：保留洞察，修正支撑方式</h2>
+      <p class="section-intro">纠正一个年份不等于否定整个论点；但若类比依赖错误时间差，就必须重新审视结论。窄屏可在表格区域横向滚动。</p>
+    </div>
+  </div>
+
+  <div class="table-scroll" role="region" aria-label="访谈与总结的事实纠正表，可横向滚动" tabindex="0">
+    <table>
+      <caption>事实、术语与推断强度的校正</caption>
+      <thead><tr><th scope="col">容易误读的表述</th><th scope="col">本报告采用的处理</th><th scope="col">依据与证据边界</th><th scope="col">对论证的影响</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">【智能总结】把 OpenClaw 热潮写在 2024 年春节</th><td>文稿 16:31 所说的“今年春节”处于 2026 年对话语境；不据此断言确切发布日期。</td><td><a href="#src-T1">T1，15:04–17:12</a>；总结与文稿冲突时不能无条件采用总结。</td><td>这是受访者对阶段的解释，不是所有行业统一过线的日期。</td></tr>
+        <tr><th scope="row">【文稿·受访者及智能总结】1892 年商业照明与平方公里说法</th><td>1879 年公开照明演示；1882 年 9 月珍珠街商业电站；服务范围表述为一平方英里。1892 年对应 GE 合并。</td><td><a href="#src-S1">S1，美国国家公园管理局</a>；区分演示、商业供给和公司事件。</td><td>不能从混合日期推出二十年的普遍基础设施—应用时差。</td></tr>
+        <tr><th scope="row">【智能总结】把 1913 当作 Model T 推出</th><td>Model T 于 1908 年推出；移动汽车装配线于 1913 年 10 月在 Highland Park 运行。</td><td><a href="#src-S2">S2</a>、<a href="#src-S3">S3</a>；不扩大为全球首条电力装配线的断言。</td><td>产品推出、制造突破与广泛普及必须分别讨论。</td></tr>
+        <tr><th scope="row">【类比的字面误读】把 1992 理解为没有浏览器</th><td>1990 年圣诞节前已有首个浏览器／编辑器／服务器；Mosaic 预发布在 1993 年 1 月。</td><td><a href="#src-S4">S4，CERN 时间线</a>。</td><td>更合理的类比是等待大众易用入口，不是字面上的技术尚不存在。</td></tr>
+        <tr><th scope="row">【文稿·受访者／术语范围】1993 年 UIUC 是浏览器诞生地</th><td>UIUC 的 NCSA 开发了 Mosaic；首个万维网浏览器此前已在 CERN 完成。应区分 Mosaic 与所有浏览器的起点。</td><td><a href="#src-T1">T1，47:05–47:39</a>；<a href="#src-S4">S4，CERN</a>。</td><td>可以保留其早期使用 Mosaic 的经验叙述，不能把它扩大为首个浏览器的历史定位。</td></tr>
+        <tr><th scope="row">【文稿·受访者】工业时代之前没有公司</th><td>前工业时代已有商人公司，例如 1600 年成立的东印度公司；需限定为现代工业科层组织。</td><td><a href="#src-S10">S10，美国国会图书馆法律博客</a>。</td><td>法律主体、所有权安排与管理层级不是同一个概念。</td></tr>
+        <tr><th scope="row">【文稿·受访者】IBM 的起点写作 1910</th><td>C-T-R 于 1911 年 6 月 16 日成立，1924 年更名为 IBM。</td><td><a href="#src-S11">S11，IBM 公司史</a>；属于局部日期校正。</td><td>不影响“企业随产业变化”的一般讨论，但不能继续复制错误年份。</td></tr>
+        <tr><th scope="row">【文稿·受访者及分析防误读】token 度量衡不等于统一智能</th><td>token 是用量与计费单位；跨模型比较应观察结果、质量和完整成本。</td><td>分析者的术语边界说明；<a href="#src-T1">T1，15:04–17:12</a>提供讨论语境，而非统一智力量表。</td><td>不能据消耗量、单价或增长推导等比例的智能、收益与生产率。</td></tr>
+        <tr><th scope="row">【文稿·对谈及分析防误读】由科层制衰亡推到所有公司消失</th><td>把它限定为对科层结构、协调方式和企业边界变化的预测。</td><td><a href="#src-T1">T1，01:04:55–01:10:24</a>；历史定义另见 <a href="#src-S10">S10</a>。</td><td>层级缩小不取消雇主义务、合同责任和决策问责。</td></tr>
+        <tr><th scope="row">【文稿·受访者】中国模型年底 3T 晋级；美国企业掉队</th><td>保留为受访者当时意见，不确认其已发生，也不承认参数数目构成普遍技术门槛。</td><td><a href="#src-T1">T1，35:15–37:42</a>；没有可据此独立确认竞争结局的证据。</td><td>总参数、激活参数、架构和任务表现不能被一个数代替。</td></tr>
+        <tr><th scope="row">【文稿／总结措辞不同】文稿说出现，总结升级为普及</th><td>本次未取得支持这些具体扩散节点的充分证据，不确认普及日期。</td><td>未纳入事实依据；区分发明、商业化与扩散。</td><td>不能用未经确认的家电日期拼出精确产业周期。</td></tr>
+        <tr><th scope="row">【分析防误读】日志等于训练，闭环等于自主学习</th><td>区分记忆、流程、提示、微调、预训练；必须说明改进发生在哪一层。</td><td><a href="#src-T1">T1，33:43–37:19；44:46–46:34</a>；文稿描述不能被升级为完全自治证明。</td><td>数据量不是学习量，人工反馈并不因此失去价值。</td></tr>
+        <tr><th scope="row">【文稿·受访者及分析防误读】把可能跨度写成固定规律</th><td>分别作为可能跨度与长周期猜测保留，不配上虚构概率或普遍倒计时。</td><td><a href="#src-T1">T1，10:43–14:55；02:02:57–02:28:55</a>。</td><td>应按任务与行业观测更新，而不是只等到某一年再评判。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>这些校正共同改变了论证的使用方法：历史案例能帮助提出“哪些配套条件可能重要”，却不足以推导“同样的公司类型会在同样年数后获胜”。类比应当扩充假设清单，不应替代任务证据，更不能把有限的历史取样变成必然性。</p>
+</section>
+
+<section id="predictions" class="report-section" aria-labelledby="predictions-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">06</span>
+    <div>
+      <h2 id="predictions-title">预测登记：允许观点被未来推翻</h2>
+      <p class="section-intro">以下登记受访者的判断及分析者提出的检查方式，不给出虚构胜率。“未来两年”“年底”等保持相对于对谈的表达，不擅自转成精确发布日期对应的日历期限。</p>
+    </div>
+  </div>
+
+  <div class="table-scroll" role="region" aria-label="预测假设、信号与反证登记，可横向滚动" tabindex="0">
+    <table>
+      <caption>从吸引人的判断，转成可更新的条件命题</caption>
+      <thead><tr><th scope="col">待观察判断</th><th scope="col">成立所需条件</th><th scope="col">可观察信号</th><th scope="col">反证或削弱信号</th><th scope="col">读者的决策用途</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">2026 是应用展开窗口<br><a href="#thesis-04">卡 04</a></th><td>供给改善进入真实任务，授权和交付配套跟上。</td><td>具体领域出现重复委托、清晰验收和完整成本改善，而不只是试用。</td><td>热度退去后使用不持续；主要任务仍被可靠性和权限阻断。</td><td>按细分任务配置试验，不把年份判断变成全面扩张理由。</td></tr>
+        <tr><th scope="row">入口机会有两年／三年／五年等多种口径<br><a href="#thesis-06">卡 06</a></th><td>发现、执行、信任和费用能共同降低双边门槛。</td><td>非技术用户能正确委托，不需要理解协议或逐个拼装工具。</td><td>连接虽然更方便，用户仍需手工协调，或多个领域入口长期分立。</td><td>保留多入口设计；不为等待万能界面暂停客户学习。原文锚点为 21:21、39:08、02:17:26；不同口径可能指不同成熟程度，不能用单一截止日验收。</td></tr>
+        <tr><th scope="row">通用模型供给集中、监管增强<br><a href="#thesis-07">卡 07</a>／<a href="#thesis-10">卡 10</a></th><td>规模优势持续，替代路线不足以重塑边界；监管有明确触发条件。</td><td>目标任务的可用供给、迁移摩擦、定价与规则结构出现持续变化。</td><td>新架构、开放供给或专业模型不断改变成本与能力边界。</td><td>定期评测供应商；不把“两三家”或中国模型的年末“3T”预测当采购规则。他在 02:17:16 又表示不做短期预测，与前面的年末判断存在张力，应分别记录。</td></tr>
+        <tr><th scope="row">基础设施企业未必是原生大赢家<br><a href="#thesis-08">卡 08</a></th><td>用户理解与应用组织能力的重要性高于既有资源可直接弥补的程度。</td><td>独立应用在任务交付与情境积累上持续形成差异。</td><td>模型企业成功补齐产品能力；独立应用难以守住用户或价值。</td><td>同时观察整合与分工，避免根据企业出身下注。</td></tr>
+        <tr><th scope="row">反馈复利产生强吸引与扩展效应<br><a href="#thesis-12">卡 12</a>／<a href="#thesis-13">卡 13</a></th><td>标签可靠、数据可用、增益可迁移且净成本为正。</td><td>冻结底模的保留评测出现改善，邻近任务也受益。</td><td>提升主要来自底模；熟悉样本好看，未见任务不变或恶化。</td><td>先证明经验层增益，再投入更广场景；不提前宣布垄断壁垒。</td></tr>
+        <tr><th scope="row">科层制公司制度会衰亡（受访者强判断）<br><a href="#thesis-16">卡 16</a>／<a href="#thesis-22">卡 22</a></th><td>共享上下文与协调工具减少中转，同时保留责任与例外处理。</td><td>层级变化伴随质量、协作和决策可追溯性改善。</td><td>隐藏协调负担增加，责任模糊，原有层级以新名称回归。</td><td>试验工作流，不以裁减角色数量代替组织成效。</td></tr>
+        
+        <tr><th scope="row">长扩散后创造与福祉改善<br><a href="#thesis-23">卡 23</a>／<a href="#thesis-24">卡 24</a></th><td>收益分享、教育支持、自主性和制度适应同步发展。</td><td>更多人获得能力与选择，节约时间未被单纯转为额外负担。</td><td>能力可得性悬殊、作品趋同、责任转嫁或个体自主性下降。</td><td>把福祉作为设计目标；二十年起步是受访者估计的下限，不是固定规律；幸福期待不是实证保证。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="decision-note">
+    <h3>登记后，如何真正更新观点</h3>
+    <p>为每条你准备据此投入资源的判断，写下负责人、下一次复核的材料和会改变行动的反证。观察信号应尽量来自同一任务口径；不要把公司新闻、演示热度和客户交付混在一起。反证出现时，允许缩小适用范围、延后扩展或停止，而不是用更宏大的时代叙事保护原判断。</p>
+    <p>同时保留预测之间的张力：供给集中不排除应用多样，入口标准化不排除多个平台，组织扁平化也不排除关键审批。产业地图的价值在于帮助选择下一次观察，不在于把所有变化压成一条必然路线。</p>
+  </div>
+</section>
+
+<section id="plan" class="report-section" aria-labelledby="plan-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">07</span>
+    <div>
+      <h2 id="plan-title">三十天行动计划：先完成一个能被拒收的任务</h2>
+      <p class="section-intro">分析者方案，不是访谈中的原定计划，也不是获客承诺。目标是用有限投入形成可复核判断，不是三十天内造出平台。</p>
+    </div>
+  </div>
+
+  <ol class="plan">
+    <li>
+      <p class="days">第 1—3 天｜选择任务</p>
+      <h3>找真实费用承担者</h3>
+      <p>选一个已经有人付费完成、或能获得可核验付费承诺的任务，明确交付物与拒收理由。没有这样的需求证据，就把本阶段定义为需求研究，不把访谈中的机会判断当作收入事实。</p>
+      <p><strong>检查点：</strong>谁需要、现在怎样完成、为什么不满意、谁验收？不能回答时，不进入平台设计。</p>
+    </li>
+    <li>
+      <p class="days">第 4—7 天｜基线与授权</p>
+      <h3>把旧流程和边界写清楚</h3>
+      <p>记录人工或现有工具的质量、等待、复核与总成本，收集获准使用的样例。完成任务契约，将读取、修改、发送与支付类动作分别授权；约定出现哪些情况必须停止或升级。</p>
+      <p><strong>检查点：</strong>基线能否回放？样本能否用于当前用途？无授权的数据不进入试验。</p>
+    </li>
+    <li>
+      <p class="days">第 8—14 天｜受控试点</p>
+      <h3>先回放，再有限执行</h3>
+      <p>用简单可用方案完成狭窄子任务，保留人工复核。先在历史或脱敏材料上回放，再在明确授权下处理有限真实任务。记录版本、工具动作、失败位置和人工补救，不隐藏困难样本。</p>
+      <p><strong>检查点：</strong>有没有真实完成证据？超过预定权限、预算或风险边界时立即停止自动推进。</p>
+    </li>
+    <li>
+      <p class="days">第 15—21 天｜反馈与评测</p>
+      <h3>只改能解释的失败</h3>
+      <p>给错误分类，选择需要修改的记忆、流程、工具或模型层。将改进样本与保留样本分开，以相同口径复测；同时记录人工投入，避免用更多隐性劳动换取表面改善。</p>
+      <p><strong>检查点：</strong>新结果是否优于基线，改善来自哪里？无可重复改善，就重新检查标签和任务定义。</p>
+    </li>
+    <li>
+      <p class="days">第 22—26 天｜有限扩展</p>
+      <h3>只跨一个相邻边界</h3>
+      <p>选择一个相关但未用于改进的任务，测试能力迁移。重新审视授权与失败恢复，不直接继承旧结论；同时测试替代模型或退回人工的路径，检查供应商与流程依赖。</p>
+      <p><strong>检查点：</strong>扩展增加了价值，还是只增加步骤与维护？未通过时保留原任务，不强行扩大范围。</p>
+    </li>
+    <li>
+      <p class="days">第 27—30 天｜价值与成本复盘</p>
+      <h3>作出继续、缩小或停止的选择</h3>
+      <p>向真实需求方审阅交付，核对重复使用与付费情况，比较完整成本和错误负担。把结果映射回战略假设：继续当前任务、改变交付方式、再做需求研究，或停止无收益的复杂度。</p>
+      <p><strong>检查点：</strong>形成一份含反证、未解决风险和下一里程碑的决策记录，不只展示最佳演示。</p>
+    </li>
+  </ol>
+
+  <div class="task-contract">
+    <h3>可复制的任务契约骨架</h3>
+    <p><strong>目标：</strong>要改变的用户结果，而非调用了什么模型。<strong>输入与证据：</strong>资料来源、版本、允许用途与需要补充的缺口。<strong>负责人：</strong>对交付与例外作最终判断的人。<strong>权限：</strong>可读、可写、可发送、需单独批准的动作。</p>
+    <p><strong>验收与复核：</strong>完成证据、质量条件、复核人及拒收理由。<strong>资源：</strong>预算、时限、人工复核和维护成本。<strong>停止与升级：</strong>信息不足、工具状态不明、权限冲突或风险越界时的处理。<strong>反馈用途：</strong>哪些记录可用于改进，何时删除或重新授权。</p>
+    <p>所有通过条件应在试验前由团队与需求方约定，不能在结果出来后挑选有利指标。这个契约不要求先重写 ERP，也不要求先建通用 agent 市场；它只是让一次任务有边界、有责任、有复盘入口。</p>
+  </div>
+
+  <p class="note"><strong>把长期愿景压回三个里程碑：</strong>先证明有人需要且结果可验收，再证明反馈能改善未见任务，最后证明相邻扩展值得新增成本。长期方向可以大胆，近期里程碑必须允许失败。摸索期的高效率是更快发现关键错误，执行期的高效率才是更稳定地交付已被验证的工作。</p>
+</section>
+
+<section id="sources" class="report-section" aria-labelledby="sources-title">
+  <div class="section-heading">
+    <span class="section-number" aria-hidden="true">08</span>
+    <div>
+      <h2 id="sources-title">来源清单、缺失材料与交接状态</h2>
+      <p class="section-intro">下列地址按本次实际取得的证据列出。外部链接仅在点击时打开；页面不自动请求外部资源。来源类型与可支持的范围必须一起阅读。</p>
+    </div>
+  </div>
+
+  <div class="evidence-note">
+    
+  </div>
+
+  <ol class="sources source-grid">
+    
+    <li class="source" id="src-T2">
+      <h3>T2｜分享页指向的视频短链</h3>
+      <a class="url" href="https://b23.tv/gKnK241" target="_blank" rel="noopener noreferrer">https://b23.tv/gKnK241</a>
+      <p><strong>来源类别：</strong>视频定位线索。</p>
+      <p><strong>支持范围：</strong>本次打开短链确认它重定向到 T3。</p>
+      <p><strong>限制：</strong>定位关系不等于对内容、音频或发布日期的独立确认。</p>
+    </li>
+    <li class="source" id="src-T3">
+      <h3>T3｜Bilibili 规范视频地址</h3>
+      <a class="url" href="https://www.bilibili.com/video/BV1XNtJ6UEmm/" target="_blank" rel="noopener noreferrer">https://www.bilibili.com/video/BV1XNtJ6UEmm/</a>
+      <p><strong>来源类别：</strong>公开视频地址。</p>
+      <p><strong>支持范围：</strong>供读者自行查阅原视频；本报告中的时间戳仍按 T1 文稿解释。</p>
+      <p><strong>限制：</strong>没有音视频回放核验；搜索日期信息不一致，不宣称确切发布日期。</p>
+    </li>
+    <li class="source" id="src-S1">
+      <h3>S1｜美国国家公园管理局：爱迪生生平</h3>
+      <a class="url" href="https://www.nps.gov/edis/learn/historyculture/edison-biography.htm?simple=True" target="_blank" rel="noopener noreferrer">https://www.nps.gov/edis/learn/historyculture/edison-biography.htm?simple=True</a>
+      <p><strong>来源类别：</strong>官方历史资料。</p>
+      <p><strong>支持范围：</strong>照明演示、珍珠街商业电站、服务范围与 GE 合并的具体校正，见纠错表。</p>
+      <p><strong>限制：</strong>不能据这些日期推导所有产业都遵循固定基础设施—应用间隔。</p>
+    </li>
+    <li class="source" id="src-S2">
+      <h3>S2｜Ford：Model T</h3>
+      <a class="url" href="https://corporate.ford.com/articles/history/the-model-t.html" target="_blank" rel="noopener noreferrer">https://corporate.ford.com/articles/history/the-model-t.html</a>
+      <p><strong>来源类别：</strong>企业官方历史资料。</p>
+      <p><strong>支持范围：</strong>Model T 于 1908 年推出。</p>
+      <p><strong>限制：</strong>产品推出日期不能代替制造方式变化或社会普及时间。</p>
+    </li>
+    <li class="source" id="src-S3">
+      <h3>S3｜Ford：Highland Park</h3>
+      <a class="url" href="https://corporate.ford.com/articles/history/highland-park.html" target="_blank" rel="noopener noreferrer">https://corporate.ford.com/articles/history/highland-park.html</a>
+      <p><strong>来源类别：</strong>企业官方历史资料。</p>
+      <p><strong>支持范围：</strong>移动汽车装配线于 1913 年 10 月在 Highland Park 运行。</p>
+      
+    </li>
+    <li class="source" id="src-S4">
+      <h3>S4｜CERN：万维网时间线</h3>
+      <a class="url" href="https://timeline-upgrade.web.cern.ch/timeline-header/90" target="_blank" rel="noopener noreferrer">https://timeline-upgrade.web.cern.ch/timeline-header/90</a>
+      <p><strong>来源类别：</strong>官方技术历史资料。</p>
+      <p><strong>支持范围：</strong>首个浏览器／编辑器／服务器在 1990 年圣诞节前完成，Mosaic 预发布为 1993 年 1 月。</p>
+      <p><strong>限制：</strong>用于校正“尚无浏览器”的字面说法，不证明 AI 入口将重复同一路径。</p>
+    </li>
+    <li class="source" id="src-S5">
+      <h3>S5｜Anthropic：Model Context Protocol</h3>
+      <a class="url" href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener noreferrer">https://www.anthropic.com/news/model-context-protocol</a>
+      <p><strong>来源类别：</strong>技术提供方官方公告。</p>
+      <p><strong>支持范围：</strong>2024 年 11 月 25 日发布的开放协议，面向助手连接数据与工具。</p>
+      <p><strong>限制：</strong>它是协议层例子，不是完整信任、交易或消费者入口已经实现的证明。</p>
+    </li>
+    <li class="source" id="src-S6">
+      <h3>S6｜Linux Foundation：A2A 项目</h3>
+      <a class="url" href="https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents" target="_blank" rel="noopener noreferrer">https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents</a>
+      <p><strong>来源类别：</strong>基金会官方公告。</p>
+      <p><strong>支持范围：</strong>2025 年 6 月 23 日启动源自 Google 的 A2A 项目，面向 agent 间通信。</p>
+      <p><strong>限制：</strong>与 MCP 可处于互补层；通信协议不独自完成声誉、授权治理和市场机制。</p>
+    </li>
+    <li class="source" id="src-S7">
+      <h3>S7｜Anthropic：Building effective agents</h3>
+      <a class="url" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">https://www.anthropic.com/engineering/building-effective-agents</a>
+      <p><strong>来源类别：</strong>技术提供方工程指导。</p>
+      <p><strong>支持范围：</strong>区分预定路径的工作流与自主选择过程、工具的 agent；强调简单起步、评测与人工检查点。</p>
+      <p><strong>限制：</strong>这是工程经验，不是独立因果试验，更不是复杂 agent 将占据市场的证据。</p>
+    </li>
+    <li class="source" id="src-S8">
+      <h3>S8｜METR：Task-completion time horizons</h3>
+      <a class="url" href="https://evals.alignment.org/time-horizons/" target="_blank" rel="noopener noreferrer">https://evals.alignment.org/time-horizons/</a>
+      
+      <p><strong>支持范围：</strong>以专家人类完成时间定义任务跨度，区分 50%／80% 成功率下的时域，作为评测口径示例。</p>
+      <p><strong>限制：</strong>任务以明确的软件、机器学习及网络安全任务为主；不代表自由运行时长、所有职业或当前榜单表现。</p>
+    </li>
+    <li class="source" id="src-S9">
+      <h3>S9｜Doshi／Hauser：生成式 AI 与创造性研究</h3>
+      <a class="url" href="https://arxiv.org/abs/2312.00506" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2312.00506</a>
+      <p><strong>来源类别：</strong>研究论文；2023 年预印本，2024 年发表。</p>
+      <p><strong>支持范围：</strong>短篇故事任务中的个体创作评价改善与集体产出相似性问题。</p>
+      <p><strong>限制：</strong>不外推为全部创造领域的定律，不证明 AI 不能创造，也不直接证明某种教育方案有效。</p>
+    </li>
+    <li class="source" id="src-S10">
+      <h3>S10｜美国国会图书馆：十七世纪公司</h3>
+      <a class="url" href="https://blogs.loc.gov/law/2021/11/a-civil-body-politic-the-mayflower-compact-and-17th-century-corporations/" target="_blank" rel="noopener noreferrer">https://blogs.loc.gov/law/2021/11/a-civil-body-politic-the-mayflower-compact-and-17th-century-corporations/</a>
+      <p><strong>来源类别：</strong>官方法律历史介绍。</p>
+      <p><strong>支持范围：</strong>前工业时代已有商人公司，支持对“工业时代前无公司”的纠正。</p>
+      <p><strong>限制：</strong>历史法人形式不能与现代科层管理结构直接画等号。</p>
+    </li>
+    <li class="source" id="src-S11">
+      <h3>S11｜IBM：C-T-R 与 IBM</h3>
+      <a class="url" href="https://www.ibm.com/history/ctr-and-ibm" target="_blank" rel="noopener noreferrer">https://www.ibm.com/history/ctr-and-ibm</a>
+      <p><strong>来源类别：</strong>企业官方历史资料。</p>
+      <p><strong>支持范围：</strong>C-T-R 于 1911 年成立，1924 年更名 IBM，具体日期见纠错表。</p>
+      <p><strong>限制：</strong>局部公司史事实不直接支持今天的竞争预测。</p>
+    </li>
+    <li class="source" id="src-S12">
+<h3>S12｜Netflix：文化说明</h3>
+<a class="url" href="https://jobs.netflix.com/culture" target="_blank" rel="noopener noreferrer">https://jobs.netflix.com/culture</a>
+<p><strong>来源类别：</strong>企业官方文化自述，相关正文已打开核验。</p>
+<p><strong>支持范围：</strong>提供背景、明确重要决定的责任人、征求异议与事后复盘；管理者仍可在危机、伦理风险或背景不足时介入。</p>
+<p><strong>限制：</strong>描述组织主张，不能单独证明它的因果效果、普遍适用性或 AI 原生组织已经成熟。</p>
+</li>
+<li class="source" id="src-U1">
+      <h3>U1｜YouTube：仅作为未打开线索登记</h3>
+      <a class="url" href="https://www.youtube.com/watch?v=69iJSe2n3ls" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=69iJSe2n3ls</a>
+      <p><strong>来源类别：</strong>第二检索路线发现的公开视频线索。</p>
+      <p><strong>支持范围：</strong>只说明有这一定位线索，不承担本报告的实质论证。</p>
+      <p><strong>限制：</strong>未作为已打开或已验证来源引用；未核验内容、音频和日期。</p>
+    </li>
+  </ol>
+
+  <div class="note">
+    <h3>未能纳入的材料</h3>
+    
+    <p>本地补充检索没有取得可用的相关原件，本报告未使用私有来源。未打开的视频线索、未读到正文的论文以及未经确认的企业传闻，都没有被悄悄补入“已验证事实”。需要进一步研究的不是笼统的“更多资料”，而是各条判断所依赖、目前仍缺失的具体证据。</p>
+  </div>
+
+  <details class="review" open>
+    <summary>展开／收起：验证、复核与交接记录</summary>
+    
+    
+    <dl>
+      <dt>390px／1440px 布局验收</dt>
+      <dt>键盘与辅助技术验收</dt>
+      <dt>无脚本／打印验收</dt>
+      <dt>事实与归因复核</dt><dd>24 张论点卡保留时间范围，分别标明受访者判断、分析解释、反证与建议。纠错表标清智能总结、文稿与分析防误读的来源。自动文稿未逐句回听；预测仍为预测。</dd>
+      
+    </dl>
+  </details>
+</section>
+</main>
+
+<footer class="wrap">
+  <p><strong>报告结论：</strong>产业史观的用途，是为未知世界提供一张可修订的地图。把基础设施、任务、反馈、能力、信任和组织逐环拆开，才知道下一笔资源应押在哪个可验证条件上。访谈中的雄心可以保留；它的时间表、竞争名单和社会愿望，则必须分别接受事实、反证与价值讨论。</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  const cards = Array.from(document.querySelectorAll(".thesis"));
+  const search = document.getElementById("card-search");
+  const categoryButtons = Array.from(document.querySelectorAll("[data-category]"));
+  const cardStatus = document.getElementById("card-status");
+  const noResults = document.getElementById("no-results");
+  const stageButtons = Array.from(document.querySelectorAll("[data-stage]"));
+  const stages = Array.from(document.querySelectorAll(".stage-panel"));
+  const stageStatus = document.getElementById("stage-status");
+  let activeCategory = "全部";
+
+  const searchable = new Map(cards.map(function(card){
+    return [card, card.textContent.replace(/\s+/g," ").toLocaleLowerCase("zh-CN")];
+  }));
+
+  function applyFilters(){
+    const term = search.value.trim().toLocaleLowerCase("zh-CN");
+    let shown = 0;
+    cards.forEach(function(card){
+      const categories = card.dataset.categories.split(" ");
+      const matchCategory = activeCategory === "全部" || categories.includes(activeCategory);
+      const matchText = !term || searchable.get(card).includes(term);
+      card.hidden = !(matchCategory && matchText);
+      if(!card.hidden) shown += 1;
+    });
+    categoryButtons.forEach(function(button){
+      button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
+    });
+    noResults.hidden = shown !== 0;
+    cardStatus.textContent = "显示 " + shown + " / " + cards.length + " 张卡片；主题：" +
+      activeCategory + (term ? "；搜索词：" + search.value.trim() : "；未设置搜索词") + "。";
+  }
+
+  categoryButtons.forEach(function(button){
+    button.addEventListener("click",function(){
+      activeCategory = button.dataset.category;
+      applyFilters();
+    });
+  });
+  search.addEventListener("input",applyFilters);
+  document.getElementById("reset-filters").addEventListener("click",function(){
+    activeCategory = "全部";
+    search.value = "";
+    applyFilters();
+  });
+  document.getElementById("expand-cards").addEventListener("click",function(){
+    cards.forEach(function(card){card.querySelector("details").open = true;});
+    cardStatus.textContent = "所有论点卡已展开；当前搜索与主题筛选保持不变。";
+  });
+  document.getElementById("collapse-cards").addEventListener("click",function(){
+    cards.forEach(function(card){card.querySelector("details").open = false;});
+    cardStatus.textContent = "所有论点卡的深读内容已收起；标题、时间戳与原文观点仍可阅读。";
+  });
+
+  function selectStage(id){
+    stages[0].parentElement.classList.toggle("single-stage",id!=="all");
+    stages.forEach(function(stage){stage.hidden = id !== "all" && stage.id !== id;});
+    stageButtons.forEach(function(button){
+      button.setAttribute("aria-pressed",String(button.dataset.stage === id));
+    });
+    const selected = stages.find(function(stage){return stage.id === id;});
+    stageStatus.textContent = selected
+      ? "当前显示：" + selected.querySelector("h3").textContent + "。可选择并读三阶段恢复全部。"
+      : "当前并列显示三个阶段。";
+  }
+  stageButtons.forEach(function(button){
+    button.addEventListener("click",function(){selectStage(button.dataset.stage);});
+  });
+
+  const form = document.getElementById("flywheel-form");
+  const diagnosticResult = document.getElementById("diagnostic-result");
+  const names = {
+    real:"真实需求与任务",rights:"数据与工具权限",result:"可观察的结果",
+    labels:"可信标签",replay:"回放与保留评测",transfer:"相邻任务迁移",
+    economics:"完整经济性",owner:"责任与恢复"
+  };
+  function updateDiagnostic(){
+    const checked = {};
+    Object.keys(names).forEach(function(key){
+      checked[key] = form.querySelector('[name="'+key+'"]').checked;
+    });
+    const missingCore = ["real","rights","result","owner"].filter(function(key){return !checked[key];});
+    const missingLearning = ["labels","replay"].filter(function(key){return !checked[key];});
+    const missingExpansion = ["transfer","economics"].filter(function(key){return !checked[key];});
+    let text;
+    if(missingCore.length){
+      text = "先补基础条件：" + missingCore.map(function(key){return names[key];}).join("、") +
+        "。这些证据不足时，不宜扩大真实执行；可先做需求研究、授权梳理或脱敏回放。勾选不是安全或商业保证。";
+    }else if(missingLearning.length){
+      text = "你已声明具备任务试验的基础条件，但学习回路仍缺：" +
+        missingLearning.map(function(key){return names[key];}).join("、") +
+        "。先验证标签与未见样本改善，暂不能据此宣称形成智能复利。";
+    }else if(missingExpansion.length){
+      text = "你已声明具备闭环评测的条件；扩展前还需补：" +
+        missingExpansion.map(function(key){return names[key];}).join("、") +
+        "。保持任务边界，检查迁移与全成本，不能把局部改善直接推成护城河。";
+    }else{
+      text = "每个检查项均已勾选。下一步是审阅证据质量、反证和版本记录，并由负责人决定继续、缩小或停止。全部勾选不构成市场验证，不证明必然复利或竞争优势。";
+    }
+    diagnosticResult.textContent = text;
+  }
+  form.addEventListener("change",updateDiagnostic);
+  document.getElementById("diagnostic-reset").addEventListener("click",function(){form.querySelectorAll("input[type=checkbox]").forEach(function(e){e.checked=false;});updateDiagnostic();});
+
+  const pInput = document.getElementById("step-p");
+  const nInput = document.getElementById("step-n");
+  const pOutput = document.getElementById("p-output");
+  const nOutput = document.getElementById("n-output");
+  const reliabilityOutput = document.getElementById("reliability-output");
+  function updateReliability(){
+    const percent = Number(pInput.value);
+    const n = Number(nInput.value);
+    if(!Number.isFinite(percent) || !Number.isFinite(n)) return;
+    const p = percent / 100;
+    const result = Math.pow(p,n) * 100;
+    pOutput.textContent = percent + "%";
+    nOutput.textContent = String(n);
+    reliabilityOutput.textContent = "独立、同成功率且无恢复的假设下：p = " + percent +
+      "%，n = " + n + "；整链成功概率 = " + p.toFixed(2) + "^" + n +
+      " ≈ " + result.toFixed(1) + "%。";
+  }
+  pInput.addEventListener("input",updateReliability);
+  nInput.addEventListener("input",updateReliability);
+
+  function revealHashTarget(){
+    if(!location.hash) return;
+    let id;
+    try{id = decodeURIComponent(location.hash.slice(1));}catch(error){return;}
+    const target = document.getElementById(id);
+    if(!target) return;
+    const card = target.closest(".thesis");
+    if(card){
+      if(card.hidden){
+        activeCategory = "全部";
+        search.value = "";
+        applyFilters();
+      }
+      const detail = card.querySelector("details");
+      if(detail) detail.open = true;
+    }
+    const stage = target.closest(".stage-panel");
+    if(stage && stage.hidden) selectStage("all");
+    let parent = target.parentElement;
+    while(parent){
+      if(parent.tagName === "DETAILS") parent.open = true;
+      parent = parent.parentElement;
+    }
+    if(card || stage) target.scrollIntoView({block:"start"});
+  }
+  window.addEventListener("hashchange",revealHashTarget);
+  document.addEventListener("click",function(event){const link=event.target.closest("a[href^=\"#\"]");if(link&&link.hash===location.hash){window.setTimeout(revealHashTarget,0);}});
+
+  let printState = null;
+  function preparePrint(){
+    if(printState) return;
+    printState = {
+      details:Array.from(document.querySelectorAll("details")).map(function(el){
+        return {el:el,open:el.open};
+      }),
+      visibility:cards.concat(stages).map(function(el){
+        return {el:el,hidden:el.hidden};
+      })
+    };
+    printState.details.forEach(function(item){item.el.open = true;});
+    printState.visibility.forEach(function(item){item.el.hidden = false;});
+  }
+  function restoreAfterPrint(){
+    if(!printState) return;
+    printState.details.forEach(function(item){item.el.open = item.open;});
+    printState.visibility.forEach(function(item){item.el.hidden = item.hidden;});
+    printState = null;
+  }
+  window.addEventListener("beforeprint",preparePrint);
+  window.addEventListener("afterprint",restoreAfterPrint);
+
+  document.documentElement.classList.add("js");
+  revealHashTarget();
+})();
+</script>
+</body>
+</html>

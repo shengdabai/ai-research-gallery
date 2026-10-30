@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="description" content="基于卡兹克文章的证据研究：AI创作、动机与意义感，含原文拆解、研究边界、历史核查与可交互的使用情景。">
+<title>当创造变容易之后｜AI、成长感与意义的证据研究</title>
+<style>
+/* TOKEN SOURCE · Single-file research edition. Primitive values live here;
+   components consume semantic roles. No external font, asset, library or request.
+   Breakpoint tokens (CSS variables cannot be media thresholds): compact=760px,
+   narrow=440px. Query literals below are their sole implementation. */
+:root{
+ --paper:#f5f1e7;--surface:#fcfaf4;--ink:#243b32;--muted:#52685d;--line:#c5cebf;
+ --forest:#254b3c;--on-forest:#faf8ef;--leaf:#e4ecdf;--rust:#954420;--rust-soft:#f5e8da;
+ --blue:#355a74;--blue-soft:#e7edf1;--gold:#a2702c;--gold-soft:#f0e6cd;--focus:#865021;
+ --space-1:.35rem;--space-2:.65rem;--space-3:1rem;--space-4:1.4rem;--space-5:2rem;--space-6:3rem;--space-7:4.8rem;
+ --type-xs:.78rem;--type-sm:.9rem;--type-base:1rem;--type-md:1.15rem;--type-lg:1.5rem;--type-xl:2rem;
+ --type-title:clamp(2.8rem,6.3vw,5.7rem);--type-section:clamp(1.7rem,3vw,2.55rem);
+ --font-body:"PingFang SC","Microsoft YaHei",sans-serif;--font-display:"Songti SC","Noto Serif CJK SC","STSong",serif;
+ --weight-normal:400;--weight-medium:600;--weight-bold:700;--leading:1.85;--leading-title:1.17;--leading-tight:1.4;
+ --tracking-label:.12em;--tracking-title:-.035em;--rule:1px;--rule-emphasis:2px;--radius:.3rem;
+ --page:1180px;--reading:760px;--side:210px;--touch:44px;--nav-height:64px;--scroll-offset:92px;
+ --grid-two:1.3fr 1fr;--hero-grid:1.65fr 1fr;--quote-size:1.55rem;--z-nav:20;--focus-width:3px;--focus-offset:3px;
+ --motion:160ms;--ease:cubic-bezier(.22,.61,.36,1);--disabled-opacity:.65;--skip-hidden:translateY(-200%);
+}
+/* BASE */
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:var(--type-base);line-height:var(--leading)}
+a{color:var(--forest);text-decoration-thickness:var(--rule);text-underline-offset:var(--space-1);overflow-wrap:anywhere}a:hover{color:var(--rust)}
+button,select{font:inherit}button{cursor:pointer}button,select{min-height:var(--touch)}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:var(--focus-width) solid var(--focus);outline-offset:var(--focus-offset)}
+h1,h2,h3,h4,p,ul,ol,blockquote,figure,dl{margin:0}p+p{margin-top:var(--space-3)}h1,h2{font-family:var(--font-display);font-weight:var(--weight-bold);line-height:var(--leading-title)}h3{font-size:var(--type-md);line-height:var(--leading-tight)}h4{font-size:var(--type-base)}
+ul,ol{padding-left:var(--space-4)}li+li{margin-top:var(--space-2)}strong{font-weight:var(--weight-bold)}section{scroll-margin-top:var(--scroll-offset)}[hidden]{display:none!important}
+.wrap{width:min(var(--page),calc(100% - var(--space-6)));margin-inline:auto}.reading{max-width:var(--reading)}.small{font-size:var(--type-sm);color:var(--muted)}.micro{font-size:var(--type-xs);color:var(--muted)}.kicker{font-size:var(--type-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-label);text-transform:uppercase}.serif{font-family:var(--font-display)}
+.skip{position:absolute;transform:var(--skip-hidden);padding:var(--space-3);background:var(--surface);z-index:var(--z-nav)}.skip:focus{transform:none}
+/* NAVIGATION */
+.mast{border-bottom:var(--rule) solid var(--line);padding-block:var(--space-3);display:flex;justify-content:space-between;gap:var(--space-3);align-items:center}.mast .edition{font-size:var(--type-xs);color:var(--muted);text-align:right}
+.nav{position:sticky;top:0;z-index:var(--z-nav);background:var(--paper);border-block:var(--rule) solid var(--line)}.nav-inner{display:flex;gap:var(--space-5);overflow-x:auto;min-height:var(--nav-height);align-items:center}.nav a{font-size:var(--type-sm);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;min-height:var(--touch)}
+/* HERO */
+.hero{padding-block:var(--space-7)}.hero-grid{display:grid;grid-template-columns:var(--hero-grid);gap:var(--space-6);align-items:end}.hero h1{font-size:var(--type-title);letter-spacing:var(--tracking-title);margin-block:var(--space-4) var(--space-5)}.hero h1 em{font-style:normal;color:var(--rust)}.lead{font-size:var(--type-md);max-width:var(--reading)}
+.hero-aside{border-top:var(--rule-emphasis) solid var(--forest);padding-top:var(--space-4)}.hero-aside h2{font-size:var(--quote-size);line-height:var(--leading-tight);margin-bottom:var(--space-3)}.source-line{margin-top:var(--space-5);font-size:var(--type-sm);color:var(--muted)}
+.verdict{display:grid;grid-template-columns:var(--grid-two);gap:var(--space-5);padding:var(--space-5);background:var(--forest);color:var(--on-forest);margin-top:var(--space-6)}.verdict h2{font-size:var(--type-lg);line-height:var(--leading-tight)}.verdict p{font-size:var(--type-sm)}.verdict strong{color:var(--on-forest)}
+/* EDITORIAL SECTIONS */
+.chapter{padding-block:var(--space-6) var(--space-7);border-top:var(--rule) solid var(--line)}.chapter-head{display:grid;grid-template-columns:var(--side) 1fr;gap:var(--space-5);margin-bottom:var(--space-5)}.chapter-head .index{color:var(--rust);font-size:var(--type-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-label);padding-top:var(--space-2)}.chapter-head h2{font-size:var(--type-section);margin-bottom:var(--space-3)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.row{border-top:var(--rule) solid var(--line);padding-block:var(--space-4)}.row h3{margin-bottom:var(--space-2)}.note{padding:var(--space-4) var(--space-5);background:var(--leaf);margin-block:var(--space-4)}.note.warm{background:var(--rust-soft)}.note h3{margin-bottom:var(--space-2)}
+.tag{display:inline-block;font-size:var(--type-xs);line-height:var(--leading-tight);padding:var(--space-1) var(--space-2);border:var(--rule) solid var(--line);background:var(--surface);color:var(--muted);border-radius:var(--radius);font-weight:var(--weight-medium)}.tag.fact{background:var(--leaf);color:var(--forest);border-color:var(--forest)}.tag.self{background:var(--blue-soft);color:var(--blue);border-color:var(--blue)}.tag.hyp{background:var(--gold-soft);color:var(--ink);border-color:var(--gold)}.tag.action{background:var(--rust-soft);color:var(--rust);border-color:var(--rust)}.legend{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-block:var(--space-4)}
+.journey{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4);counter-reset:step}.journey article{border-top:var(--rule-emphasis) solid var(--forest);padding-top:var(--space-3)}.journey article:before{counter-increment:step;content:"0" counter(step);display:block;font-family:var(--font-display);font-size:var(--type-xl);color:var(--rust);margin-bottom:var(--space-2)}.journey h3{margin-bottom:var(--space-2)}.journey p{font-size:var(--type-sm)}
+.concept{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-4);margin-top:var(--space-5)}.concept div{padding-top:var(--space-3);border-top:var(--rule) solid var(--forest)}.concept dt{font-weight:var(--weight-bold);margin-bottom:var(--space-2)}.concept dd{margin:0;font-size:var(--type-sm);color:var(--muted)}
+/* CLAIM LEDGER */
+.controls{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-block:var(--space-4)}.controls button{border:var(--rule) solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--radius);padding:var(--space-2) var(--space-3);transition:background var(--motion) var(--ease)}.controls button[aria-pressed="true"]{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}.count{font-size:var(--type-sm);color:var(--muted);margin-bottom:var(--space-3)}
+.claim{display:grid;grid-template-columns:1fr 1.5fr;gap:var(--space-5);padding-block:var(--space-4);border-top:var(--rule) solid var(--line)}.claim h3{margin-top:var(--space-2)}.claim p{font-size:var(--type-sm)}.claim .decision{font-weight:var(--weight-medium)}
+/* MECHANISM, diagram explicitly hypothetical; no quantitative encoding. */
+.diagram{border:var(--rule) solid var(--line);padding:var(--space-5);background:var(--surface)}.diagram figcaption{font-size:var(--type-sm);color:var(--muted);margin-bottom:var(--space-4)}.origin{padding:var(--space-4);background:var(--forest);color:var(--on-forest);text-align:center;font-weight:var(--weight-bold)}.branch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4);padding-block:var(--space-4)}.branch article{border-top:var(--rule-emphasis) dashed var(--gold);padding-top:var(--space-3)}.branch .arrow{color:var(--rust);font-size:var(--type-lg)}.branch p{font-size:var(--type-sm)}.outcomes{border-top:var(--rule) dashed var(--line);padding-top:var(--space-4)}.outcomes p{font-weight:var(--weight-medium)}
+/* RESEARCH */
+.study{display:grid;grid-template-columns:var(--side) 1fr;gap:var(--space-5);border-top:var(--rule) solid var(--line);padding-block:var(--space-5)}.study .label{font-family:var(--font-display);font-size:var(--type-lg);line-height:var(--leading-tight)}.study h3{margin-bottom:var(--space-3)}.study .limits{color:var(--muted);font-size:var(--type-sm);margin-top:var(--space-3)}.study .link{display:inline-block;margin-top:var(--space-3);font-size:var(--type-sm)}.study .method{display:inline-block;margin-top:var(--space-2);font-size:var(--type-xs);color:var(--muted)}
+.sequence{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center;margin-block:var(--space-3);font-size:var(--type-sm)}.sequence span{padding:var(--space-2) var(--space-3);background:var(--leaf)}.sequence b{font-weight:var(--weight-normal);color:var(--rust)}
+/* HISTORY */
+.timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4);margin-block:var(--space-5)}.timeline article{border-top:var(--rule-emphasis) solid var(--forest);padding-top:var(--space-3)}.timeline strong{font-family:var(--font-display);font-size:var(--type-xl);display:block}.timeline p{font-size:var(--type-sm)}
+/* SCENARIO LAB */
+.lab{border:var(--rule) solid var(--forest);padding:var(--space-5);background:var(--surface)}.goal{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap}.goal label{font-weight:var(--weight-bold)}select{max-width:100%;background:var(--paper);color:var(--ink);border:var(--rule) solid var(--line);border-radius:var(--radius);padding:var(--space-2) var(--space-3)}.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);margin-block:var(--space-4)}.mode{border-top:var(--rule-emphasis) solid var(--line);padding-top:var(--space-3)}.mode.active{border-color:var(--rust)}.mode h3{margin-bottom:var(--space-3)}.mode p{font-size:var(--type-sm)}.mode .cost{color:var(--muted)}.recommendation{border-top:var(--rule) solid var(--line);padding-top:var(--space-4)}.recommendation h3{margin-bottom:var(--space-2)}
+/* PRACTICE & SOURCES */
+.phase{display:grid;grid-template-columns:var(--side) 1fr;gap:var(--space-5);padding-block:var(--space-4);border-top:var(--rule) solid var(--line)}.phase strong{font-family:var(--font-display);font-size:var(--type-lg)}.phase h3{margin-bottom:var(--space-2)}.phase p{font-size:var(--type-sm)}
+details{border-top:var(--rule) solid var(--line);padding-block:var(--space-4)}summary{cursor:pointer;font-weight:var(--weight-bold);min-height:var(--touch)}details .inside{padding-top:var(--space-3)}.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3);margin-top:var(--space-3)}.record div{background:var(--surface);padding:var(--space-3)}.record strong{display:block;font-size:var(--type-sm)}.record p{font-size:var(--type-sm);color:var(--muted)}
+.sources{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4) var(--space-5);counter-reset:source}.sources li{margin:0;border-top:var(--rule) solid var(--line);padding-top:var(--space-3);font-size:var(--type-sm)}.sources li:before{counter-increment:source;content:"S" counter(source);display:block;color:var(--rust);font-size:var(--type-xs);font-weight:var(--weight-bold);margin-bottom:var(--space-1)}.sources .scope{display:block;font-size:var(--type-xs);color:var(--muted);margin-top:var(--space-2)}
+.closing{padding-block:var(--space-6);border-block:var(--rule-emphasis) solid var(--forest);margin-bottom:var(--space-6)}.closing h2{font-size:var(--type-section);margin-bottom:var(--space-4)}footer{padding-bottom:var(--space-6)}
+/* RESPONSIVE TOKEN: compact=760px */
+@media(max-width:760px){.wrap{width:calc(100% - var(--space-5))}.hero{padding-block:var(--space-6)}.hero-grid,.verdict,.two,.chapter-head,.study,.phase,.claim{grid-template-columns:1fr}.hero-aside{margin-top:var(--space-4)}.chapter-head,.study,.phase{gap:var(--space-3)}.journey,.concept,.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}.three,.branch,.modes,.sources{grid-template-columns:1fr}.nav-inner{gap:var(--space-4)}.chapter{padding-block:var(--space-5) var(--space-6)}.diagram,.lab{padding:var(--space-4)}.verdict{padding:var(--space-4)}.mast{align-items:start}.hero h1{font-size:var(--type-title)}.study .label{font-size:var(--type-md)}.concept{gap:var(--space-3)}}
+/* RESPONSIVE TOKEN: narrow=440px */
+@media(max-width:440px){.journey,.record{grid-template-columns:1fr}.mast .edition{max-width:var(--side)}.timeline{gap:var(--space-3)}.timeline strong{font-size:var(--type-lg)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header class="mast wrap"><span class="kicker">FIELD NOTES / 人与技术</span><span class="edition">研究日期 2026.10.23<br>原文阅读 · 文献核查 · 情景探索</span></header>
+<div class="hero wrap">
+ <div class="hero-grid">
+  <div><p class="kicker">基于数字生命卡兹克的公开文章</p><h1>当创造<br>变容易<em>之后</em></h1><p class="lead">作品更容易完成了，人为什么不一定更快乐？从一篇个人叙事出发，区分效率、成长感、创作参与和生活意义。</p></div>
+  <aside class="hero-aside"><p class="kicker">阅读判断</p><h2>这篇文章提出了一个值得研究的问题，尚未证明一种普遍规律。</h2><p class="small">它把“能做什么”的技术进步，转向了“为什么还想做”的个人体验。最重要的保留，是作者承认自己还没有完整答案。</p></aside>
+ </div>
+ <p class="source-line">原文：<a href="https://mp.weixin.qq.com/s/uxpJ1_6WTwaIPJzqPuitCA" target="_blank" rel="noopener noreferrer">《我好像陷入了某种，AI时代的虚无主义。》</a> · 数字生命卡兹克 · 2026 年 10 月 23 日 08:28<br>本次已完整提取文字正文；两张配图是游戏画面与书封引用，未做图像核查，未据图增添事实。</p>
+ <div class="verdict"><h2>可以保留作者的问题，<br>同时收紧因果结论。</h2><p>相关实验既发现过短时动机成本，也发现过更高的任务乐趣。较稳妥的研究方向是：<strong>AI 在什么任务里，改变了谁的哪些体验？</strong>长期创作身份和生活意义是否因此改变，仍需直接证据。</p></div>
+</div>
+<nav class="nav" aria-label="章节导航"><div class="nav-inner wrap"><a href="#reading">原文拆解</a><a href="#claims">论点核查</a><a href="#mechanisms">机制图</a><a href="#research">研究证据</a><a href="#history">历史与数学核查</a><a href="#lab">用法比较</a><a href="#practice">个人观察</a><a href="#sources">来源与验收</a></div></nav>
+<main id="main" class="wrap">
+<section id="reading" class="chapter">
+ <header class="chapter-head"><p class="index">01 / 读准原文</p><div><h2>作者写的是一段体验变化</h2><p class="small">以下是对文章的结构化转述。它描述作者怎样理解自己，不代表这些解释已经获得独立验证。</p></div></header>
+ <div class="journey">
+  <article><h3>能力提升，快乐减少</h3><p>作者自述：更容易做产品、追踪突破，却不再像过去那样兴奋；朋友间的交流让他感觉这种体验并不孤立。</p></article>
+  <article><h3>用游戏说明过程价值</h3><p>从修改游戏参数后的失趣，转到对《塞尔达》探索过程的怀念。叙事把价值从胜利移向参与和成长。</p></article>
+  <article><h3>技能与身份发生脱节</h3><p>文章担忧：过去通过长期学习获得的能力，如果不再稀缺，原有的努力理由和自我评价可能动摇。</p></article>
+  <article><h3>历史安慰，开放结尾</h3><p>刘大鹏日记成为另一种价值的例子。作者最终保留对生活与好奇心的重视，没有给出确定解法。</p></article>
+ </div>
+ <div class="note"><h3>全文的思想转折</h3><p>作者仍然喜欢 AI，也珍惜它扩展创作能力的自由。文章的矛盾发生在“能力变强”与“主观满足”之间；将它理解成反 AI 宣言，会遗漏这个转折。<a href="#s1">[S1]</a></p></div>
+ <div class="two"><div class="row"><h3>叙事为什么有感染力</h3><p>它先用具体经历建立共鸣，再借游戏与历史扩大问题，最后把注意力放回日常体验。这种写法让抽象问题容易进入，也容易让读者把类比误读成因果证明。</p><p class="small">本页分析：情绪的可信度与解释的准确度，需要分开判断。体验可以被认真对待，原因仍可继续讨论。</p></div><div class="row"><h3>标题里的“虚无主义”是什么</h3><p>在本文中，它主要是作者给失落、空、缺少兴奋感所起的名称。作者没有提供统一定义或心理量表。</p><p class="small">本页不据此判定作者的哲学立场或心理健康状况，也不把文章当成群体患病率、幸福感或职业替代率调查。</p></div></div>
+ <h3 class="row">先拆开五个不同问题</h3>
+ <dl class="concept"><div><dt>任务乐趣</dt><dd>做这件事时，我是否享受过程？</dd></div><div><dt>成长感</dt><dd>我能否看见自己学会了什么？</dd></div><div><dt>创作参与</dt><dd>我是否做了关键选择，并认同结果？</dd></div><div><dt>生活意义</dt><dd>生活是否说得通、有方向、值得过？</dd></div><div><dt>职业价值</dt><dd>他人是否需要、采用或付费购买结果？</dd></div></dl>
+ <p class="small row">这些变量可能相关，却不能互相替代。某次作品不令人兴奋，不等于生活没有价值；作品产量提高，也不能证明能力成长或收入增加。生活意义的三维区分参考 Martela 与 Steger；其余为本页用于分析的工作性区分。<a href="#s8">[S8]</a></p>
+</section>
+<section id="claims" class="chapter">
+ <header class="chapter-head"><p class="index">02 / 证据边界</p><div><h2>哪些内容可以成立，哪些需要收紧</h2><p class="small">标记表示信息类别，不是把主观体验排在事实之下。外部事实仍须看具体来源；机制假说仍须看具体检验。</p></div></header>
+ <div class="legend"><span class="tag fact">事实与来源</span><span class="tag self">作者体验</span><span class="tag hyp">机制假说</span><span class="tag action">行动建议</span></div>
+ <p class="reading">本页面不把个人叙述视为普遍规律，也不把理论上的可能性视为已经证实的因果关系。每项结论的可信范围，取决于其原始来源、研究设计与适用情境。</p>
+ <div class="controls" role="group" aria-label="筛选论点"><button type="button" data-filter="all" aria-pressed="true">全部论点</button><button type="button" data-filter="self" aria-pressed="false">作者体验</button><button type="button" data-filter="fact" aria-pressed="false">事实与来源</button><button type="button" data-filter="hyp" aria-pressed="false">机制假说</button><button type="button" data-filter="action" aria-pressed="false">行动建议</button></div>
+ <p id="claim-count" class="count" role="status" aria-live="polite">显示全部 9 条论点</p>
+ <div id="claim-list">
+ <article class="claim" data-kind="self"><div><span class="tag self">作者体验</span><h3>创作能力增强，快乐却减少</h3></div><p><span class="decision">保留为自述。</span>原文能证明作者报告过这种体验。朋友饭桌交流没有抽样设计、人数或对照，不能证明它有多普遍。<a href="#s1">[S1]</a></p></article>
+ <article class="claim" data-kind="hyp"><div><span class="tag hyp">机制假说</span><h3>跳过过程，可能损失成长反馈</h3></div><p><span class="decision">有相关依据，个案原因未定。</span>答案式帮助可能减少练习；提示式帮助也可能保留学习。练习表现、无辅助能力和主观成长感，要分别观察。<a href="#s6">[S6]</a></p></article>
+ <article class="claim" data-kind="hyp"><div><span class="tag hyp">机制假说</span><h3>习惯技术突破，惊喜会变少</h3></div><p><span class="decision">可讨论适应与参照变化。</span>经典幸福研究并未研究 AI；它不能证明技术新鲜感一定消退，更不能解释作者所有感受。<a href="#s4">[S4]</a></p></article>
+ <article class="claim" data-kind="hyp"><div><span class="tag hyp">机制假说</span><h3>AI 会让所有创作者失去意义</h3></div><p><span class="decision">不成立的外推。</span>本文和相关短任务实验都不足以支持。另有实验发现 AI 提升了当下写作乐趣；“长期生活意义”仍是不同结果变量。<a href="#s5">[S5]</a> <a href="#s7">[S7]</a></p></article>
+ <article class="claim" data-kind="fact"><div><span class="tag fact">事实与来源</span><h3>游戏修改等同于 AI 协作</h3></div><p><span class="decision">只保留类比。</span>作者报告修改负重后失去兴趣；“无限负重”本身并不等于取消所有战斗挑战。AI 也可能提供新能力、辅助体验或练习反馈，两个场景不能直接等同。<a href="#s1">[S1]</a></p></article>
+ <article class="claim" data-kind="fact"><div><span class="tag fact">事实与来源</span><h3>刘大鹏故事能证明当代 AI 心理</h3></div><p><span class="decision">历史材料与当代因果分开。</span>生平和日记可由学术材料核查；类比可以提出身份变化问题，却不能证明两时代具有相同机制。<a href="#history">见逐项核查</a></p></article>
+ <article class="claim" data-kind="fact"><div><span class="tag fact">事实与来源</span><h3>“七百多份数学手稿”代表创造力被替代</h3></div><p><span class="decision">数量可核实，能力外推未成立。</span>首发为 722 份手稿，后撤回 3 份；必须分开手稿、题目、有效解答和经核验的新发现。本页不拿该数字证明人类已无题可做。<a href="#math-check">见数学核查</a></p></article>
+ <article class="claim" data-kind="action"><div><span class="tag action">行动建议</span><h3>保留好奇心与日常体验</h3></div><p><span class="decision">作为价值选择保留。</span>这是文章的生活态度，不是验证过的通用疗法。不需要让每次散步、阅读或游戏都产生作品、收入或成长指标。<a href="#s1">[S1]</a></p></article>
+ <article class="claim" data-kind="action"><div><span class="tag action">行动建议</span><h3>比较自己在不同用法下的体验</h3></div><p><span class="decision">本页新增，随时可退出。</span>使用情景和 14 天记录均为观察工具，没有经过效果验证；不能据此诊断个人或确定 AI 的因果作用。<a href="#practice">查看方法与限制</a></p></article>
+ </div>
+</section>
+<section id="mechanisms" class="chapter">
+ <header class="chapter-head"><p class="index">03 / 解释模型</p><div><h2>同样省力，可能通向不同体验</h2><p class="small">下面是机制假说图。虚线表示待检验的关系，不是测量出的因果路径；分支位置、长度和数量没有统计含义。</p></div></header>
+ <figure class="diagram"><figcaption>起点有任务实验支持；下方对长期体验的迁移仍属假说。请按箭头文字阅读条件。</figcaption><div class="origin">AI 降低某些任务的执行负担<br><span class="kicker">只适用于具体任务与工具，非全部能力</span></div>
+  <div class="branch"><article><span class="arrow" aria-hidden="true">↘</span><h3>如果它替我拿走关键判断</h3><p>直接参与和练习机会可能减少。</p><p><span class="tag hyp">待检验</span> 我是否更难说明自己的选择？无 AI 时能否完成同类任务？</p></article><article><span class="arrow" aria-hidden="true">↓</span><h3>如果它为我提供反馈与选择</h3><p>理解、尝试与表达的机会可能增加。</p><p><span class="tag hyp">待检验</span> 我是否学会新方法？能否指出我主动改变了什么？</p></article><article><span class="arrow" aria-hidden="true">↙</span><h3>如果它去掉我不在意的负担</h3><p>时间和精力可能转向其他活动。</p><p><span class="tag hyp">待检验</span> 省下的时间是否去了我愿意去的地方？也可以只是休息。</p></article></div>
+  <div class="outcomes"><p>可能结果：更愿意继续 ／ 体验没有明显变化 ／ 参与减少或感到乏味</p><p class="small">方向取决于目标、任务、技能、使用方式、反馈和生活环境。没有证据要求每条路径最终都指向意义下降。<a href="#s2">[S2]</a> <a href="#s5">[S5]</a> <a href="#s6">[S6]</a> <a href="#s7">[S7]</a></p></div>
+ </figure>
+ <div class="three"><div class="row"><h3>自主：我是否愿意这样做</h3><p>自主指行动与自己认同的目标一致。选择让 AI 做重复工作，也可能体现自主；自主不等于所有步骤必须亲手做。</p></div><div class="row"><h3>胜任：我能否有效行动</h3><p>借助工具完成任务，与自己形成可迁移技能，是两个问题。两者都可能有价值；需要按目标分别验收。</p></div><div class="row"><h3>联结：我与谁有关</h3><p>创作的意义也可能来自共同活动、被理解和对他人的关心。它不必依赖比别人稀缺的技能或作品。</p></div></div>
+ <p class="small row">三项需要来自自我决定理论。将它们用于 AI 创作，是本页的分析框架；本页没有测量作者的需要是否受损。<a href="#s2">[S2]</a></p>
+ <div class="note warm"><h3>仍需保留的替代解释</h3><p>疲劳、任务重复、资讯刺激、工作压力、社交比较、目标改变，都可能与体验有关。原文提及长时间研究写稿，这只说明值得询问精力与工作安排，不能据此断定病因。本次未取得这些变量的系统记录。</p></div>
+</section>
+<section id="research" class="chapter">
+ <header class="chapter-head"><p class="index">04 / 文献对读</p><div><h2>研究支持局部机制，<br>也给出反向证据</h2><p class="small">本页按研究实际测量的结果阅读。不同研究没有共同的“虚无感”指标，不能将它们的数字合并为趋势图。</p></div></header>
+ <article class="study"><div><p class="label">即时表现<br>与后续动机</p><span class="method">Wu 等 · 2025 · 在线实验</span></div><div><h3>任务切换后的体验，不能直接外推到长期人生</h3><p>四项在线实验共 3,562 人，研究文本生成等短任务。AI 协作改善当下表现；从协作转为独立任务后，自报内在动机下降、无聊增加，同时控制感有所恢复。</p><div class="sequence" aria-label="实验任务序列"><span>任务一：AI 协作</span><b>→</b><span>任务二：独立完成</span><b>对照</b><span>独立 → 独立</span></div><p class="limits">测到：短任务表现与自报体验。未证明：长期创作者的意义感下降。任务顺序、在线样本和部分无聊量表可靠性限制解释，控制感与动机也并非同步变化。</p><a class="link" href="https://www.nature.com/articles/s41598-025-98385-2" target="_blank" rel="noopener noreferrer">阅读原始论文 [S5] ↗</a></div></article>
+ <article class="study"><div><p class="label">反向证据：<br>乐趣可以提高</p><span class="method">Noy &amp; Zhang · 2023 · 随机实验</span></div><div><h3>降低执行负担，也可能让当前任务更愉快</h3><p>453 名受过大学教育的专业人士完成职业写作任务。获得 ChatGPT 的参与者更快完成任务、质量更高，也报告更高的当下任务乐趣。</p><p class="limits">测到：指定写作任务中的短时体验。不能证明：长期幸福或意义提升。作者稿指出，一些主观反应在后续调查中消退；研究使用 2023 年 GPT-3.5，不能当成所有工具的现时效果。</p><a class="link" href="https://shakkednoy.com/Noy%20Zhang%20NBER%20SI.pdf" target="_blank" rel="noopener noreferrer">阅读作者公开稿，主观结果见第 5–6 页 [S7] ↗</a></div></article>
+ <article class="study"><div><p class="label">表现提升<br>不等于学会</p><span class="method">Bastani 等 · 2025 · 课堂试验</span></div><div><h3>直接答案与教学提示，可能有不同后果</h3><p>土耳其一所高中近千名学生参与数学课堂随机试验。直接使用 GPT 的组在辅助练习中表现更好，撤去工具后的考试却低于对照；采用教师设计提示的 Tutor 组，未显示同样的无辅助成绩损失。</p><p class="limits">测到：特定学校、数学单元和测试中的学习效果。没有测量：人生意义或长期创作动机。它提示我们检查帮助方式，不支持“使用 AI 都会退化”。</p><a class="link" href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener noreferrer">阅读原始论文 [S6] ↗</a></div></article>
+ <div class="two"><article class="row"><h3>努力悖论：努力既有成本，也可能有价值</h3><p>Inzlicht 等 2018 年的综述整理了一个张力：人会避免费力的任务，也会珍视投入努力后的结果，或主动选择努力。这里没有“越难越好”的定律。</p><p class="small">迁移问题：这一步努力是否支持我想要的学习或体验？如果只是重复负担，减少它也可能有价值。综述没有直接验证 AI 虚无感。<a href="#s3">[S3]</a></p></article><article class="row"><h3>享乐适应：可作为问题，不能用作结案</h3><p>Brickman 等 1978 年的早期研究比较了 22 位中奖者、22 位对照与 29 位事故受害者；中奖者未比对照更快乐，对日常小事的享受较低。</p><p class="small">这是小样本、非随机比较，不能证明每个人都回到固定幸福水平。对 AI 的新鲜感、惊奇和长期意义，仍需各自测量。<a href="#s4">[S4]</a></p></article></div>
+ <div class="note"><h3>两项 AI 动机研究为何不必互相否定</h3><p>一项关注获得工具后当前任务的体验，另一项关注协作结束后回到独立任务的体验。任务、顺序、量表和样本均不同。较好的问题是“何时发生哪种变化”，不能选择其中一项来宣布 AI 必然让人快乐或不快乐。</p></div>
+ <details><summary>什么样的新证据，会改变本页判断？</summary><div class="inside"><p>若长期研究在任务、基线能力和反馈条件相近时，持续观察到 AI 使用带来意义感下降，并排除主要替代解释，才更接近群体因果结论。若负面变化只出现在答案式代做，保留选择和练习的设计没有同样变化，就应收紧为具体使用方式或交互设计问题。</p><p class="small">仍缺：长期创作者样本、中文使用情境、不同用法的持续比较，以及职业收入、身份与生活意义的分开测量。</p></div></details>
+</section>
+<section id="history" class="chapter">
+ <header class="chapter-head"><p class="index">05 / 类比与事实核查</p><div><h2>废科举与 AI，<br>相似处需要限定</h2><p class="small">可比较之处是既有努力与价值体系的改变。制度关闭、市场技能变化和工具辅助，仍是不同事件。</p></div></header>
+ <div class="timeline"><article><strong>1857</strong><p>刘大鹏出生。其生平是沈艾娣后来研究的对象。</p></article><article><strong>1894</strong><p>中举。后曾三次参加会试未中，长期投身读书与教书。</p></article><article><strong>1905</strong><p>9 月 2 日上谕，规定从 1906 年起停止乡试、会试及各省岁科考试。</p></article><article><strong>1942</strong><p>刘大鹏去世。日记起于 1891 年，跨约 51 年；不代表现存逐日无缺。</p></article></div>
+ <div class="two"><div class="row"><span class="tag fact">历史核查</span><h3>事件、人物与出版需分别确认</h3><p>清廷上谕及学术材料支持废科举日期和核心生平。按出生年份推算，1905 年刘大鹏约 48 岁；本页不据年份差独立核定周岁。1990 年出版的《退想斋日记》是节选整理本，不能写成全部稿本已完整出版。</p><p class="small">沈艾娣（Henrietta Harrison）的英文专著由 Stanford University Press 于 2005 年出版，题为 <i>The Man Awakened from Dreams</i>。本页未通读该书。<a href="#s9">[S9]</a></p></div><div class="row"><span class="tag fact">学术转引可追溯</span><h3>失落的日记文字有转引出处</h3><p>关晓红关于废科举后士绅心态的论文引述了原文所用的日记文字，注释指向《退想斋日记》1905 年 10 月 15、17 日条及第 146 页。</p><p class="small">本次依据学术转引，未直接查看原版第 146 页或日记稿本，故不声称已完成原页核验。不能用这一段失落记录概括刘大鹏余生的全部体验。<a href="#s9">[S9]</a></p></div></div>
+ <div class="note warm"><h3>日记后来有史料价值，不等于写日记治好了作者</h3><p>后人如何使用一份记录，与当事人写作时是否获得安慰，是不同事实。也不能要求今天的日常记录必须将来被出版、被研究，才算有价值。“失败者”是原文的评价，不能当作历史研究已作出的统一判断。</p></div>
+ <div id="math-check" class="row"><h3>“OpenAI 七百多份数学手稿”核查</h3><p><span class="tag fact">核心数量有官方来源</span> OpenAI 于 2026 年 10 月 6 日集中公开数学成果。初始仓库列出 <strong>722 份手稿、372 个相关成果族</strong>；10 月 7 日记录撤回 3 份，本次访问时目录为 <strong>719 份</strong>。撤回说明涉及符号错误与依赖论证失效。<a href="#s10">[S10]</a></p>
+ <div class="sequence" aria-label="数学手稿数量变化"><span>10 月 6 日：722 份手稿</span><b>→ 撤回 3 份 →</b><span>本次快照：719 份手稿</span></div>
+ <p>所以，“七百多份”基本准确。距文章发布为 17 天，“两周前”是约数；“一夜发布”不能理解成全部研究在一夜完成。</p><p class="small">官方同时说明验证阶段不一，并非全部有 Lean 形式化证明。Lean 是可让计算机检查形式证明的语言；形式化也不等于全部手稿已完成独立同行评审。同一成果族可含主结果、配套论证或替代证明，因此手稿数、独立问题数与经验证的新发现数不能互换。本页未逐篇进行数学审查，也不由此推出“题目已经被解完”。</p></div>
+ <div class="two"><div class="row"><h3>类比能帮助提出的问题</h3><p>一个人的长期投入，如果主要依附于单一评价体系，当它改变时，原有目标是否更容易受冲击？哪些已有经验能转移到新的实践里？这些是可继续研究的问题。</p></div><div class="row"><h3>类比没有证明的结论</h3><p>科举是制度化晋升渠道的停止；AI 是影响多类任务的技术变化，不是所有职业与目标被同一天取消。日记留存还存在选择偏差，不能据一位人物推断所有人的适应过程。</p></div></div>
+</section>
+<section id="lab" class="chapter">
+ <header class="chapter-head"><p class="index">06 / 可交互情景</p><div><h2>先选目标，再选 AI 的参与方式</h2><p class="small">这是任务安排比较，不是人格测验。交互没有预测模型、幸福分数或效率百分比。</p></div></header>
+ <div class="lab"><div class="goal"><label for="goal">这次我最在意：</label><select id="goal"><option value="deliver">完成一项现实任务</option><option value="learn">形成能独立使用的技能</option><option value="explore">享受探索、表达或休息</option></select></div>
+ <div class="controls" role="group" aria-label="比较 AI 使用方式"><button type="button" data-mode="delegate" aria-pressed="false">委派</button><button type="button" data-mode="collaborate" aria-pressed="true">协作</button><button type="button" data-mode="practice" aria-pressed="false">练习</button></div>
+ <div class="modes"><article class="mode" data-mode-card="delegate"><h3>委派</h3><p>AI 执行主要步骤，你确定要求并检查结果。</p><p>可能获得：减少执行负担，跨过技能门槛。</p><p class="cost">需要观察：是否失去想保留的练习？是否有足够能力识别错误？</p></article><article class="mode active" data-mode-card="collaborate"><h3>协作</h3><p>AI 给备选与反馈，你保留关键判断和修改。</p><p>可能获得：扩展思路，保留主动选择。</p><p class="cost">需要观察：审核与协调是否耗费过多精力？选择是否只是表面动作？</p></article><article class="mode" data-mode-card="practice"><h3>练习</h3><p>你先尝试，AI 在卡点提示，最后独立复做。</p><p>可能获得：更多主动尝试与反馈机会。</p><p class="cost">需要观察：投入是否符合当前目标？难度是否已经阻碍继续？</p></article></div>
+ <div class="recommendation" role="status" aria-live="polite" aria-atomic="true"><h3 id="rec-title">完成现实任务 × 协作</h3><p id="rec-body">先写清结果给谁使用、达到什么要求。让 AI 给出方案，你选择并解释取舍，再按实际要求检查结果。</p></div>
+ <p class="small row">这些情景展示的是可能存在的取舍，不是实验结果，也不存在适用于所有人的最优模式。同一种用法在不同任务和个人目标下，可能产生不同体验。</p>
+ <div class="controls"><button id="reset" type="button">恢复默认比较</button></div>
+ </div>
+ <noscript><p class="note">当前浏览器未启用 JavaScript。全部论点、三种用法和默认观察建议仍可阅读；筛选与情景切换不可用。</p></noscript>
+</section>
+<section id="practice" class="chapter">
+ <header class="chapter-head"><p class="index">07 / 可选的个人观察</p><div><h2>用 14 天看清体验，<br>也可以随时停止</h2><p class="small">本页新增建议。14 天只是便于安排的时段，不是经过验证的改善周期；不需要完成全部步骤。</p></div></header>
+ <p class="reading">选一件你原本就愿意做的小事。可以写一段文字、学习一个概念、做一个小工具，也可以读书或玩游戏。先说明自己在意的是完成、学习还是体验。不要把每件事都转成效率或商业目标。</p>
+ <div class="phase"><strong>第 1–3 天</strong><div><h3>观察原有用法</h3></div></div>
+ <div class="phase"><strong>第 4–7 天</strong><div><h3>选一次你愿意保留的参与</h3><p>在适合的任务里，自己先提出判断或尝试，再让 AI 给反馈。若目标是交付且时间紧，选择充分委派也合理。</p></div></div>
+ <div class="phase"><strong>第 8–11 天</strong><div><h3>比较一个相近任务</h3><p>尝试不同的参与方式；如果想学习，就做一次无 AI 的相近题或任务。如果只想休息，就记录是否愿意继续，不额外增加练习义务。</p></div></div>
+ <div class="phase"><strong>第 12–14 天</strong><div><h3>保留一个有帮助的安排</h3><p>回看哪些方式符合自己的目标。可以保留一个步骤、减少记录，或完全停止。没有观察到变化，也是有效记录。</p></div></div>
+ <details open><summary>每次只需回答这些问题</summary><div class="inside"><div class="record"><div><strong>任务与目标</strong><p>我在做什么？这次想完成、学会还是体验什么？</p></div><div><strong>参与分工</strong><p>AI 做了什么？我做了哪些选择、尝试或检查？</p></div><div><strong>过程与结果感受</strong><p>我是否愿意继续？有无掌控、成长、满足或疲惫？用自己的词记录。</p></div><div><strong>其他条件</strong><p>当天精力、难度、时间压力、资讯接触和他人反馈，有什么不同？</p></div></div><p class="small">可以记在你已有的纸本或笔记工具中。本页不收集记录，也不在浏览器中保存个人输入。</p></div></details>
+ <div class="note"><p>这是一项帮助你观察个人体验的练习，不是临床评估或因果实验。记录不需要得出好坏排名，也不需要转化为效率目标。如果某种观察方式让你感到负担，可以随时停止。</p></div>
+ <div class="two"><div class="row"><h3>如果是作品目标，保留现实反馈</h3><p>完成一个工具，不等于别人会使用；被使用，不等于愿意付费；付费，也不等于持续使用或利润。只有你本来就在做商业验证时，才分别检查这些结果。</p></div><div class="row"><h3>如果是体验目标，允许没有产物</h3><p>散步、聊天、阅读或游戏可以以活动本身为目的。保留亲身体验，不需要先证明它能改善职业竞争力，也不需要让好奇心变成新的任务。</p></div></div>
+</section>
+<section id="local" class="chapter">
+ <header class="chapter-head"><p class="index">08 / 本地资料对照</p><div><h2>已有资料能扩展问题，<br>也要防止机械套用</h2></div></header>
+ <div class="two"><div class="row"><h3>本地存稿：外部奖励与内在兴趣</h3><p>2023 年存稿《父母随便给孩子奖励，是一种廉价而未经思考的善意》讨论了努力、反馈和内驱力。这能提醒本页继续问“体验怎样被改变”。</p><p class="small">迁移限制：儿童奖励研究与成人 AI 创作不同；AI 不是外部奖赏。该存稿没有被用来证明 AI 削弱动机，其关于所有奖励的概括也未直接采纳。<a href="#s11">[S11]</a></p></div><div class="row"><h3>本地书籍：《活出生命的意义》</h3><p>已读自序及关于创作、体验与态度的相关段落。它为“人生价值不只来自成就”提供一种作者思想视角。</p><p class="small">迁移限制：极端历史处境与现代工具使用不能等同。作品中的价值主张不等于针对 AI 使用者的随机实验，也不构成治疗效果证明。<a href="#s12">[S12]</a></p></div></div>
+ 
+</section>
+<section id="sources" class="chapter">
+ <header class="chapter-head"><p class="index">09 / 来源与可复核范围</p><div><h2>每一种材料，<br>只承担它能支持的结论</h2><p class="small">公开来源核查日期：2026 年 10 月 23 日。链接点击后才访问外网；页面自身可离线阅读，不加载外部字体、图片、脚本或统计服务。</p></div></header>
+ <ol class="sources">
+ <li id="s1"><a href="https://mp.weixin.qq.com/s/uxpJ1_6WTwaIPJzqPuitCA" target="_blank" rel="noopener noreferrer">数字生命卡兹克：《我好像陷入了某种，AI时代的虚无主义。》</a><span class="scope">2026-10-23 08:28。wechat-reader 完整提取 4,576 字符正文，非缓存、未截断。支持作者自述与文章结构；不是群体或因果研究。</span></li>
+ <li id="s2"><a href="https://www.selfdeterminationtheory.org/SDT/documents/2000_RyanDeci_SDT.pdf" target="_blank" rel="noopener noreferrer">Ryan &amp; Deci（2000）：Self-Determination Theory and the Facilitation of Intrinsic Motivation, Social Development, and Well-Being</a><span class="scope">American Psychologist 55(1), 68–78。理论综述；用于自主、胜任、联结框架，未直接研究 AI。</span></li>
+ <li id="s3"><a href="https://doi.org/10.1016/j.tics.2018.01.007" target="_blank" rel="noopener noreferrer">Inzlicht, Shenhav &amp; Olivola（2018）：The Effort Paradox: Effort Is Both Costly and Valued</a><span class="scope">Trends in Cognitive Sciences。综述，不含本次新实验；努力的成本与价值可并存，不支持困难越多越好。</span></li>
+ <li id="s4"><a href="https://doi.org/10.1037/0022-3514.36.8.917" target="_blank" rel="noopener noreferrer">Brickman, Coates &amp; Janoff-Bulman（1978）：Lottery Winners and Accident Victims: Is Happiness Relative?</a><span class="scope">Journal of Personality and Social Psychology。小样本、非随机比较；只能提供适应与对比的早期相关证据。</span></li>
+ <li id="s5"><a href="https://www.nature.com/articles/s41598-025-98385-2" target="_blank" rel="noopener noreferrer">Wu 等（2025）：Human-generative AI collaboration enhances task performance but undermines human’s intrinsic motivation</a><span class="scope">Scientific Reports 15, 15105。四项实验，总 N=3,562；短时动机、控制感和无聊，未测长期人生意义。</span></li>
+ <li id="s6"><a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener noreferrer">Bastani 等（2025）：Generative AI without guardrails can harm learning</a><span class="scope">PNAS。单所土耳其高中数学课堂试验；比较普通 GPT 与教学提示设计，学习成绩不等同生活意义。</span></li>
+ <li id="s7"><a href="https://doi.org/10.1126/science.adh2586" target="_blank" rel="noopener noreferrer">Noy &amp; Zhang（2023）：Experimental evidence on the productivity effects of generative artificial intelligence</a><span class="scope">Science，正式发表样本 N=453。另读<a href="https://shakkednoy.com/Noy%20Zhang%20NBER%20SI.pdf" target="_blank" rel="noopener noreferrer">作者公开稿</a>主观结果段落；早期 N=444 工作论文未混入正式样本。</span></li>
+ <li id="s8"><a href="https://doi.org/10.1080/17439760.2015.1137623" target="_blank" rel="noopener noreferrer">Martela &amp; Steger（2016）：The three meanings of meaning in life: Distinguishing coherence, purpose, and significance</a><span class="scope">The Journal of Positive Psychology 11(5), 531–545。已读<a href="https://www.its.caltech.edu/~squartz/Martela-Steger-JOPP.pdf" target="_blank" rel="noopener noreferrer">大学公开全文</a>定义段落；理论区分，不是 AI 实验。</span></li>
+ <li id="s9">历史核查材料组<span class="scope"><a href="https://www.edu.cn/importantnews_1659/20060323/t20060323_144915.shtml" target="_blank" rel="noopener noreferrer">中国教育和科研计算机网所录废科举上谕</a>；<a href="https://modernchina.org/article/5100.html" target="_blank" rel="noopener noreferrer">关晓红学术论文及日记注释</a>；<a href="https://academic.oup.com/ahr/article-abstract/110/5/1499/76430" target="_blank" rel="noopener noreferrer">American Historical Review 学术书评</a>；<a href="https://scholar.harvard.edu/files/harrison/files/harrison-cv.pdf" target="_blank" rel="noopener noreferrer">沈艾娣学术履历与书目</a>。论文/书评属于学术转引，未核日记原页；上谕引文见转录文章，非本次直接查看档案原件。</span></li>
+ <li id="s10">OpenAI 数学公告与版本记录<span class="scope"><a href="https://openai.com/index/sharing-ai-progress-in-mathematics/" target="_blank" rel="noopener noreferrer">2026-10-06 官方公告</a>；<a href="https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/README.md" target="_blank" rel="noopener noreferrer">首发固定版本 README</a>；<a href="https://github.com/openai/math/blob/main/README.md" target="_blank" rel="noopener noreferrer">本次当前 README</a>；<a href="https://github.com/openai/math/blob/main/history.md" target="_blank" rel="noopener noreferrer">撤回与修订记录</a>。来源可确认公司公开了什么；不替代独立数学审查。当前版本数字可能继续变化。</span></li>
+ 
+ <li id="s12">本地书籍：《活出生命的意义》中文标准化文本<span class="scope">检索并读取自序、相关创作与体验段落，未通读全书、未核验译本页码。只作作者思想背景，不作 AI 或临床实证。</span></li>
+ </ol>
+ 
+ 
+</section>
+<div class="closing"><p class="kicker">保留一个开放的问题</p><h2>当完成方式改变，<br>我还愿意参与什么？</h2><p class="reading">这篇文章值得留下的是对体验的认真追问。研究能帮助分清变量与证据，不能替一个人规定生活的价值。你可以保留好奇心、关系和日常活动，也可以暂时不为这种变化寻找一个完整解释。</p></div>
+</main>
+<footer class="wrap"><p class="small">独立研究整理 · 2026 年 10 月 23 日 · 基于指定文章与相关原始资料<br>事实、作者体验、机制假说与行动建议分别标记。离线单文件，手机与桌面自适应。</p><p class="small"><a href="#main">返回正文起点 ↑</a></p></footer>
+<script>
+// Interaction is deterministic editorial guidance, not a psychological model.
+(()=>{'use strict';
+ const claims=[...document.querySelectorAll('.claim')], filters=[...document.querySelectorAll('[data-filter]')];
+ const count=document.getElementById('claim-count');
+ filters.forEach(btn=>btn.addEventListener('click',()=>{const type=btn.dataset.filter;filters.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));let n=0;claims.forEach(c=>{const show=type==='all'||c.dataset.kind===type;c.hidden=!show;if(show)n++});count.textContent=type==='all'?`显示全部 ${n} 条论点`:`显示「${btn.textContent}」${n} 条论点`;}));
+ const goal=document.getElementById('goal'),buttons=[...document.querySelectorAll('[data-mode]')],cards=[...document.querySelectorAll('[data-mode-card]')];let mode='collaborate';
+ const modes={delegate:'委派',collaborate:'协作',practice:'练习'},goals={deliver:'完成现实任务',learn:'形成独立技能',explore:'享受探索与体验'};
+ const content={
+ deliver:{delegate:['写清验收要求，再让 AI 执行主要步骤。保留一次结果检查；必要时请有相应能力的人验证。','观察：结果能否实际使用？省力是否伴随更多返工？不凭完成速度推断质量。'],collaborate:['先写清结果给谁使用、达到什么要求。让 AI 给出方案，你选择并解释取舍，再按实际要求检查结果。','观察：你的判断是否改变了结果？实际使用者是否认为它有用？被使用不自动等于付费或持续采用。'],practice:['选择一个你确实想学会的环节亲自完成，其余可交给 AI。先确认练习投入不会妨碍这次任务的基本要求。','观察：亲手做的部分是否支持当前目标？如果只是增加负担，可以调整分工。']},
+ learn:{delegate:['直接答案可作示例，但先说明自己能理解到哪一步。看完后关掉答案，做一道相近题或复做一个环节。','观察：没有 AI 时能否解释并完成？看懂与能独立做，要分别记录。'],collaborate:['先写出自己的判断，请 AI 指出漏洞、给出反例或比较方法，再用自己的话说明修改理由。','观察：能否把所学迁移到相近任务？AI 的流畅解释本身不是掌握证据。'],practice:['先独立尝试，卡住时只请求一条提示。完成后用相近任务检查，而不只重复同一个答案。','观察：提示是否让你继续思考？若难度过高，可缩小任务或请求更明确的支持。']},
+ explore:{delegate:['让 AI 处理你不在意的负担，把省下的时间留给真正想做的活动，也可以休息。','观察：活动是否仍保留你喜欢的体验？无需为了省力而减少乐趣，也无需强迫自己保留麻烦。'],collaborate:['把 AI 当作提供备选的工具。保留你喜欢的选择、改写、探索或交流，不以作品数量评价这次活动。','观察：你是否愿意继续？如果协调和判断令人疲惫，可以减少工具参与。'],practice:['选一个你愿意亲自探索的小挑战，不要求有产物或被他人认可。觉得不合适时可以换活动。','观察：挑战是否符合当下精力？没有进步或不想继续，都不代表你做错了。']}
+ };
+ function render(){buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));cards.forEach(c=>c.classList.toggle('active',c.dataset.modeCard===mode));document.getElementById('rec-title').textContent=`${goals[goal.value]} × ${modes[mode]}`;const p=content[goal.value][mode];document.getElementById('rec-body').textContent=p[0];document.getElementById('rec-check').textContent=p[1];}
+ buttons.forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;render()}));goal.addEventListener('change',render);document.getElementById('reset').addEventListener('click',()=>{goal.value='deliver';mode='collaborate';render()});
+})();
+</script>
+</body>
+</html>

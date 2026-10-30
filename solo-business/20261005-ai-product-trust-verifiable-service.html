@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>AI时代的产品信任：从真诚到可验证的服务</title>
+<style>
+:root{
+--bg:#f6f3e9;--w:#fffdf6;--ink:#203b30;--g:#173e30;--pale:#e6eee3;--mut:#526255;--ln:#c4cdbd;--a:#a15c12;--ap:#f5e6c5;--al:#ffd28a;--fc:#925000;
+--sans:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;--serif:ui-serif,"Songti SC",STSong,serif;
+--t:16px;--sm:13px;--h1:clamp(30px,4.8vw,60px);--h2:clamp(24px,3vw,36px);--h3:20px;--num:36px;--b:700;--lh:1.75;--lhh:1.25;--ls:.08em;
+--s0:0;--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s7:32px;--s8:40px;--pad:clamp(18px,4vw,48px);--sect:clamp(32px,5vw,56px);
+--page:1160px;--all:100%;--hit:44px;--r:12px;--round:999px;--fw:3px;--fo:3px;--tw:640px;--bh:18px;--rule:1px solid var(--ln);--accent:4px solid var(--a);--dash:1px dashed var(--a);
+--two:repeat(2,minmax(0,1fr));--three:repeat(3,minmax(0,1fr));--four:repeat(4,minmax(0,1fr));--five:repeat(5,minmax(0,1fr));--six:repeat(6,minmax(0,1fr));--one:minmax(0,1fr);--hero:minmax(0,1.6fr) minmax(0,1fr);--matrix:60px repeat(2,minmax(0,1fr));
+--bar1:10%;--bar2:100%;--bar3:20%;--grow:1;--z:10;--off:translateY(-200%);--on:translateY(0);
+}
+*{box-sizing:border-box;min-width:var(--s0)}
+html{background:var(--bg);color:var(--ink);font:var(--t)/var(--lh) var(--sans)}
+body,h1,h2,h3,p,figure,dl,dd{margin:var(--s0)}
+h1,h2{font-family:var(--serif);line-height:var(--lhh);text-wrap:balance}h1{font-size:var(--h1)}h2{font-size:var(--h2)}h3{font-size:var(--h3);line-height:var(--lhh)}p+p{margin-top:var(--s3)}
+a,button,select,[tabindex="0"]{min-height:var(--hit)}
+a{display:inline-flex;align-items:center;justify-content:center;min-width:var(--hit);color:var(--g);text-underline-offset:var(--s1)}
+button,select{font:inherit;color:var(--ink);border:var(--rule);border-radius:var(--s2);background:var(--w);padding:var(--s2) var(--s3)}
+button{cursor:pointer}button:disabled,select:disabled{cursor:not-allowed;color:var(--mut);background:var(--bg)}
+:focus-visible{outline:var(--fw) solid var(--fc);outline-offset:var(--fo)}section{scroll-margin-top:var(--s6)}
+.wrap{width:var(--all);max-width:var(--page);margin-inline:auto;padding-inline:var(--pad)}
+.skip{position:absolute;left:var(--s4);top:var(--s4);z-index:var(--z);padding-inline:var(--s4);background:var(--w);transform:var(--off)}.skip:focus{transform:var(--on)}
+.hero,.end,.good,.flow li,thead th,.board-end button{background:var(--g);color:var(--bg)}
+.hero,.end{padding-block:var(--s8)}.hero a,.end a{color:var(--bg)}.hero :focus-visible,.end :focus-visible{outline-color:var(--al)}
+.mast,.case-top,.bar-key{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s4)}
+.mast,.hero .eyebrow,.end .eyebrow,.flow b{color:var(--al)}
+.hero-grid{display:grid;grid-template-columns:var(--hero);gap:var(--s8);align-items:end}
+.sub,.diagram{margin-top:var(--s6)}.thesis{border-left:var(--rule);padding-left:var(--s6)}.thesis p,.end p{font-size:var(--h3)}
+nav{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);margin-top:var(--s7);padding-top:var(--s4);border-top:var(--rule)}
+main>section{padding-block:var(--sect);border-bottom:var(--rule)}.head{margin-bottom:var(--s6)}
+.eyebrow{font-weight:var(--b);letter-spacing:var(--ls);color:var(--a);margin-bottom:var(--s2)}
+.lead{margin-top:var(--s4)}.note,.limit,.url{color:var(--mut)}
+.note,.mast,.hero a,.cite,.tag,.axis,.flow small,.flow b,figcaption,caption,.card dt,.scale,.counts p,.item p,.sources p,.url,.hero .eyebrow,.end .eyebrow,.eyebrow{font-size:var(--sm)}
+.cite{font-weight:var(--b);vertical-align:middle}.tag{padding:var(--s1) var(--s2);background:var(--pale)}
+.cards,.check-grid,.proofs,.journey,.templates,.plan,.metrics{display:grid;gap:var(--s4)}
+.cards,.check-grid,.metrics{grid-template-columns:var(--two)}.journey,.templates{grid-template-columns:var(--three)}.plan{grid-template-columns:var(--four)}.proofs{grid-template-columns:var(--five)}
+.card,.quad,.template,.capacity,.item,.metrics>div{background:var(--w);border:var(--rule)}
+.card,.capacity,.board,.story{padding:var(--s6);border-radius:var(--r)}
+.quad,.template,.journey article{padding:var(--s5)}.item,.metrics>div{padding:var(--s4)}
+.callout{padding:var(--s5) var(--s6);background:var(--ap);border-left:var(--accent);margin-top:var(--s5)}
+figcaption{font-weight:var(--b);margin-bottom:var(--s3)}.matrix{display:grid;grid-template-columns:var(--matrix);gap:var(--s2)}
+.axis{display:flex;align-items:center;justify-content:center;text-align:center;padding:var(--s2)}
+.quad h3,.proofs dd,.metrics dd{margin-bottom:var(--s2)}.quad.good{background:var(--g)}.quad.warn{background:var(--ap)}
+.story{background:var(--pale);margin-bottom:var(--s5)}
+.checks,.flow,.sources{list-style:none;padding:var(--s0);margin:var(--s0);display:grid}
+.checks,.sources{grid-template-columns:var(--two);gap:var(--s5)}
+.checks li{display:flex;gap:var(--s3);border-top:var(--rule);padding-top:var(--s4)}
+.num{font-size:var(--sm);color:var(--a)}.checks strong,.flow strong,.flow b,.item label{display:block}
+.flow{grid-template-columns:var(--six);gap:var(--s2);margin-bottom:var(--s5)}.flow li{padding:var(--s4);border-radius:var(--s2)}
+.proofs>div{border-top:var(--rule);padding-top:var(--s3)}dt,.item label{font-weight:var(--b)}
+.scroll{max-width:var(--all);overflow-x:auto;overscroll-behavior-inline:contain;border:var(--rule)}
+table{border-collapse:collapse;width:var(--all);min-width:var(--tw);background:var(--w)}
+caption,th,td{padding:var(--s4);text-align:start}th,td{vertical-align:top;border-top:var(--rule)}tbody th{background:var(--pale)}
+.card dl>div+div{margin-top:var(--s3)}.card dt{color:var(--a)}.limit{border-top:var(--rule);padding-top:var(--s3)}
+.journey,.plan{margin-bottom:var(--s6)}.journey article{background:var(--pale);border-top:var(--rule)}
+.journey h3,.template h3,.plan h3,.verify h3{margin-bottom:var(--s3)}.templates{margin-top:var(--s4)}
+.equation{padding:var(--s4);background:var(--pale);font-weight:var(--b);margin-block:var(--s4);overflow-wrap:anywhere}
+.bar+.bar{margin-top:var(--s5)}.bar-key{margin-bottom:var(--s2)}
+.track{height:var(--bh);background:var(--pale);border-radius:var(--round);overflow:hidden}.fill{display:block;height:var(--all);background:var(--g)}
+.b1{width:var(--bar1)}.b2{width:var(--bar2)}.b3{width:var(--bar3);background:var(--a)}
+.scale{display:flex;justify-content:space-between;margin-top:var(--s3)}
+.board{border:var(--rule);background:var(--pale)}.counts{display:grid;grid-template-columns:var(--four);gap:var(--s3);margin-block:var(--s5)}
+.counts p{margin:var(--s0);padding:var(--s3);background:var(--w)}.counts strong{display:block;font-size:var(--num);line-height:var(--lhh);font-variant-numeric:tabular-nums}
+.item p{margin-block:var(--s2) var(--s3)}select{width:var(--all)}
+.board-end{display:flex;gap:var(--s4);margin-top:var(--s5)}.board-end p{flex-grow:var(--grow)}.board-end button{flex-shrink:var(--s0)}.board-end button:disabled{background:var(--bg);color:var(--mut)}
+.plan article{border-top:var(--accent);padding-top:var(--s4)}
+.sources{margin-block:var(--s5)}.sources li{padding-top:var(--s4);border-top:var(--rule);scroll-margin-top:var(--s4)}.sources h3{font-size:var(--t);margin-bottom:var(--s2)}
+.url{display:block;overflow-wrap:anywhere;margin-top:var(--s2);user-select:all}
+.verify{padding:var(--s5);border:var(--dash);background:var(--ap)}.end a{margin-top:var(--s4)}
+/* 断点例外：媒体查询条件不能使用 CSS 自定义属性，此处直接写 780px；其余设计值集中于 :root。 */
+@media(max-width:780px){
+.hero-grid,.cards,.check-grid,.templates,.metrics,.sources,.checks{grid-template-columns:var(--one)}
+.hero-grid{gap:var(--s6)}.flow,.proofs,.journey,.plan,.counts{grid-template-columns:var(--two)}
+.card,.board,.capacity,.story,.journey article{padding:var(--s4)}.quad{padding:var(--s3)}.quad h3{font-size:var(--t)}
+.board-end{flex-direction:column}.board-end button{width:var(--all)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="hero" id="top">
+<div class="wrap">
+<div class="mast"><span>产品研究札记 · 独立 AI 开发者与创作者</span><time datetime="2026-10-05">整理日期：2026-10-05</time></div>
+<div class="hero-grid">
+<div><h1>AI时代的产品信任：<br>从真诚到可验证的服务</h1><p class="sub">别只让用户感到被重视：让承诺可查、结果可核、离开可选。</p></div>
+<aside class="thesis" aria-label="核心判断"><p class="eyebrow">真诚是起点，不是验收结果</p><p>可验证的能力、利益边界、用户选择与履约，才让产品信任有据可查。</p></aside>
+</div>
+<nav aria-label="篇内导航"><a href="#thesis">论点与边界</a><a href="#cases">案例证据</a><a href="#journey">服务旅程</a><a href="#board-section">证据检查</a><a href="#sources">来源与核验</a></nav>
+</div>
+</header>
+<main class="wrap" id="main" tabindex="-1">
+<section id="thesis" aria-labelledby="h-thesis">
+<div class="head"><p class="eyebrow">01 / 判断框架</p><h2 id="h-thesis">“对我好”，还要“把事做好”</h2><p class="lead">把温暖的感受与可靠的服务分开检查。下图是本文自拟的分析框架，不是经验证的公式、测量数据或评分。</p></div>
+<figure class="diagram"><figcaption id="matrix-title">概念矩阵｜横轴：履约能力由低到高 →；纵轴：尊重用户选择由低到高 ↑</figcaption>
+<div class="matrix" role="group" aria-labelledby="matrix-title">
+<div class="axis">尊重 ↑<br>能力 →</div><div class="axis">能力不足</div><div class="axis">能力可靠</div>
+<div class="axis">尊重<br>选择</div><article class="quad"><h3>有心，仍可能失约</h3><p>热情不能补回未完成的任务。</p></article><article class="quad good"><h3>值得继续验证</h3><p>交付结果，也让用户知情、纠正与退出。</p></article>
+<div class="axis">忽视<br>选择</div><article class="quad"><h3>先止损，再修复</h3><p>能力与规则都需要改进。</p></article><article class="quad warn"><h3>能用，关系仍脆弱</h3><p>效率不能抵消忽视用户选择。</p></article>
+</div>
+</figure>
+</section>
+<section id="story" aria-labelledby="h-story">
+<div class="head"><p class="eyebrow">02 / 从故事到边界</p><h2 id="h-story">保留启发，不把体感升级为定律</h2></div>
+<div class="story"><p><strong>叙事摘要：</strong>一位顾客感到连锁店 M 较程式化，个体店 S 更真诚：S 记得顾客、劝其不做无必要的充值，并提到假期停业可能影响服务。作者由此联想到小产品与 AI。<a class="cite" href="#s0">来源 S0</a></p></div>
+<ol class="checks">
+<li><span class="num">01</span><div><strong>主观体验，不是动机证据</strong><p>这是单人记述，门店未独立核验；不能由服务表现推定员工内心。</p></div></li>
+<li><span class="num">02</span><div><strong>小团队，不自带道德优势</strong><p>接近负责人不等于利益一致。原文对较大团队（50 人以上）与小团队（不足 10 人）的经验判断，不是群体研究。<a class="cite" href="#s0">来源 S0</a></p></div></li>
+<li><span class="num">03</span><div><strong>亲自回复，不等于全天待命</strong><p>创始人出面不自动形成 24/7 承诺。休息不是失信；提前公告、改约与备援才是服务设计。</p></div></li>
+<li><span class="num">04</span><div><strong>“AI 没温度”，结论过满</strong><p>文字可被感受为体贴，不等于模型有内在情感，更不应冒充真人。<a class="cite" href="#s5">来源 S5</a></p></div></li>
+<li><span class="num">05</span><div><strong>缺失图像，不补画趋势</strong><p>核验文本未含所引图片，不能补出“开发者增、付费用户减”的图或数据。<a class="cite" href="#s0">来源 S0</a></p></div></li>
+</ol>
+</section>
+<section id="cycle" aria-labelledby="h-cycle">
+<div class="head"><p class="eyebrow">03 / 信任如何接受检查</p><h2 id="h-cycle">让每次承诺都有回路</h2><p class="lead">这是待检验的服务假设，不是留存保证。用户可以继续关系，也可以在任何一环重新选择。</p></div>
+<ol class="flow" aria-label="可验证服务的六步循环">
+<li><b>01 →</b><strong>承诺</strong><small>说清能力与边界</small></li><li><b>02 →</b><strong>交付</strong><small>完成具体任务</small></li><li><b>03 →</b><strong>核验</strong><small>对照结果与记录</small></li><li><b>04 →</b><strong>选择</strong><small>可改、可拒、可退</small></li><li><b>05 →</b><strong>失误担责</strong><small>说明并实施补救</small></li><li><b>06 ↺</b><strong>重复关系</strong><small>重订承诺或离开</small></li>
+</ol>
+<dl class="proofs"><div><dt>能力</dt><dd>任务结果、失败条件、纠错记录。</dd></div><div><dt>诚实</dt><dd>限制、未知与实际交付是否一致。</dd></div><div><dt>利益边界</dt><dd>收入来源、推荐理由与数据用途。</dd></div><div><dt>用户控制</dt><dd>同意、撤回、导出与退出路径。</dd></div><div><dt>责任</dt><dd>负责人、响应时窗与补救进度。</dd></div></dl>
+<p class="callout">对反馈机制，也应检查实际处理效果：NPS 与问卷本身不足以判断服务诚意。更值得追问的是：反馈有没有负责人，问题有没有后续，用户能否确认已解决。</p>
+</section>
+<section id="division" aria-labelledby="h-division">
+<div class="head"><p class="eyebrow">04 / AI 与人的分工</p><h2 id="h-division">把体贴交给表达，把责任落实到人</h2><p class="lead">以下是建议分工。人和 AI 都会出错；人工复核也不是零失误保证。不得未经授权做敏感画像。</p></div>
+<div class="scroll" role="region" aria-label="AI 与人的服务分工表，可聚焦后横向滚动" tabindex="0">
+<table><caption>窄屏可在此表内部横向滚动，正文不需横向移动。</caption><thead><tr><th scope="col">环节</th><th scope="col">AI 可辅助</th><th scope="col">人应承担</th></tr></thead><tbody>
+<tr><th scope="row">记忆与理解</th><td>用户选择开启后的记忆、摘要。</td><td>确定采集边界，允许查看、纠正与关闭。</td></tr>
+<tr><th scope="row">回复与分流</th><td>检索、分类、起草体贴文字。</td><td>核对业务事实与承诺，标明 AI 参与。</td></tr>
+
+<tr><th scope="row">投诉与故障</th><td>汇总记录、辅助排查与交接。</td><td>负责申诉、补救、人工接手及对外说明。</td></tr>
+</tbody></table>
+</div>
+</section>
+<section id="cases" aria-labelledby="h-cases">
+<div class="head"><p class="eyebrow">05 / 证据与应用</p><h2 id="h-cases">学可检查的做法，不替品牌背书</h2><p class="lead">下面区分事实、应用启发与证据局限。已公布的政策，不等于实际体验、独立审计或已证明的客户成效。</p></div>
+<div class="cards">
+<article class="card"><div class="case-top"><h3>flomo：拆开收入与数据边界</h3><span class="tag">官方声明／政策</span></div><dl>
+<div><dt>事实</dt><dd>FAQ 声明以会员收入为生、不以笔记做广告、不出售隐私；获授权的搜索、关联笔记、Agent 等自动处理及必要的客服、排障、法律人工访问仍可能发生。<a class="cite" href="#s1">来源 S1</a> 隐私政策列明 Agent 处理消息、笔记与记忆，使用必要的 AI、语音、搜索、消息服务商；可停用 Agent、解绑微信及联系提出数据请求，也允许自家产品营销。<a class="cite" href="#s2">来源 S2</a></dd></div>
+<div><dt>启发</dt><dd>分别写清谁付钱、数据做什么、哪些提供方参与。</dd></div><div class="limit"><dt>局限</dt><dd>声明不是审计。“笔记不用于广告”不等于无自动处理、无外部提供方或无自营营销。</dd></div>
+</dl></article>
+<article class="card"><div class="case-top"><h3>沉浸式翻译：说明取消后果</h3><span class="tag">已公布条款</span></div><dl>
+<div><dt>事实</dt><dd>会员条款公布：设置 → 会员中心 → 取消订阅；取消后已付费周期继续。<a class="cite" href="#s3">来源 S3</a></dd></div>
+<div><dt>启发</dt><dd>续费取消、退款、导出和删号，分别说明入口与后果。</dd></div><div class="limit"><dt>局限</dt></div>
+</dl></article>
+<article class="card"><div class="case-top"><h3>37signals：别省略访问差异</h3><span class="tag">官方取消政策</span></div><dl>
+<div><dt>事实</dt><dd>政策提供自助取消：付费 HEY 可用至已付周期结束，其他账户类型可能取消即失去访问，应先导出。<a class="cite" href="#s4">来源 S4</a></dd></div>
+<div><dt>启发</dt><dd>在退出入口旁写明访问变化与导出次序。</dd></div><div class="limit"><dt>局限</dt><dd>不能概括为所有产品都保留访问；政策不证明操作效果或营收影响。</dd></div>
+</dl></article>
+<article class="card"><div class="case-top"><h3>PNAS：被倾听的感受有条件</h3><span class="tag">实验论文摘要</span></div><dl>
+<div><dt>事实</dt><dd>2024 年实验及后续研究区分消息实际来源与被认为的来源：AI 文字可能比人类文字更让人感到被倾听，但 AI 标签会减弱这种感受。<a class="cite" href="#s5">来源 S5</a></dd></div>
+<div><dt>启发</dt><dd>评价回复是否准确、有帮助，同时披露 AI 参与。</dd></div><div class="limit"><dt>局限</dt><dd>所据仅摘要，不能外推内在情感、长期信任、留存或治疗效果，更不是隐瞒 AI 身份的许可。</dd></div>
+</dl></article>
+<article class="card"><div class="case-top"><h3>Cloudflare：责任可以公开复盘</h3><span class="tag">企业事故自述</span></div><dl>
+<div><dt>事实</dt><dd>复盘称，2019-07-02 的 WAF 正则回溯耗尽 CPU，造成 27 分钟故障，并公布时间线、系统原因与整改。<a class="cite" href="#s7">来源 S7</a></dd></div>
+<div><dt>启发</dt><dd>大公司也能公开承担责任；小团队可学习通报与记录。</dd></div><div class="limit"><dt>局限</dt><dd>企业自述不保证永不故障，也不证明披露导致信任增长。</dd></div>
+</dl></article>
+<article class="card"><div class="case-top"><h3>FTC：反向检查操控性设计</h3><span class="tag">监管报告说明</span></div><dl>
+<div><dt>事实</dt><dd>2022 年报告讨论隐藏费用与条款、难取消、误导性广告及诱导数据同意等暗黑模式。<a class="cite" href="#s6">来源 S6</a></dd></div>
+<div><dt>启发</dt><dd>问界面是否妨碍用户知情、拒绝或离开。</dd></div><div class="limit"><dt>局限</dt><dd>案例含指控，并非一概经法院认定；这是设计反例，不是现行法律意见，也不指控故事中的门店。</dd></div>
+</dl></article>
+</div>
+</section>
+<section id="journey" aria-labelledby="h-journey">
+<div class="head"><p class="eyebrow">06 / 全旅程的服务证据</p><h2 id="h-journey">在最容易失约的地方写清规则</h2></div>
+<div class="journey">
+<article><h3>01 · 购买前</h3><p>明示总价、收费周期、续费与取消条件，不把限制藏在承诺后面。</p></article>
+<article><h3>02 · 开始使用</h3><p>仅收必要数据；可选记忆等功能由用户主动开启，说明撤回方式。</p></article>
+<article><h3>03 · 日常使用</h3><p>标明 AI 角色、已知限制与不确定性，提供纠正和人工接手入口。</p></article>
+<article><h3>04 · 求助</h3><p>给出响应时窗、工单负责人和交接规则，别把即时聊天当全天保证。</p></article>
+<article><h3>05 · 离开</h3><p>分开解释续费取消、退款、导出、删号及访问后果，不让用户猜。</p></article>
+<article><h3>06 · 故障</h3><p>说明已知影响与负责人，给下一次更新时间；未知恢复时间就明确说未知。</p></article>
+</div>
+<h3>三段假设话术：先有能力兑现，再使用</h3><p class="note">不是实际发送的消息。方括号须填真实信息，不得虚构备援、响应能力或完成时间。</p>
+<div class="templates">
+<article class="template"><h3>不适合的付费需求</h3><p>“当前版本不支持你需要的［关键能力］，暂不建议付费。可先试［替代路径］，能力变化后再评估。”</p></article>
+<article class="template"><h3>计划休息／维护</h3><p>“［起止时间与时区］暂停［服务范围］，你可提前改约。紧急问题由［备援渠道］接手；下一次状态更新在［时间］。”</p></article>
+<article class="template"><h3>AI 回答尚不确定</h3><p>“此答复由 AI 协助生成，对［问题］证据不足。请勿据此作重要决定；负责人［角色］将通过［人工渠道］在［响应时窗］内核对。”</p></article>
+</div>
+</section>
+<section id="capacity" aria-labelledby="h-capacity">
+<div class="head"><p class="eyebrow">07 / 可持续的服务容量</p><h2 id="h-capacity">先算工单，再许诺陪伴</h2><p class="lead">假设：每月 20% 的活跃用户联系，每位联系者产生 1 张工单，每张处理 15 分钟。以下全部是演算，不是任何公司的数据。</p></div>
+<p class="equation">100 × 20% × 1 = 20 张工单；20 × 15 分钟 = 5 小时<br>1,000 × 20% × 1 = 200 张工单；200 × 15 分钟 = 50 小时</p>
+<figure class="capacity"><figcaption>假设容量条形图｜所有条形统一使用 0–50 小时刻度</figcaption>
+<div class="bar"><div class="bar-key"><span>100 位活跃用户</span><strong>20 张工单 · 5 小时</strong></div><div class="track" aria-hidden="true"><span class="fill b1"></span></div></div>
+<div class="bar"><div class="bar-key"><span>1,000 位活跃用户</span><strong>200 张工单 · 50 小时</strong></div><div class="track" aria-hidden="true"><span class="fill b2"></span></div></div>
+<div class="bar"><div class="bar-key"><span>假设每月服务预算</span><strong>10 小时 · 最多 40 张工单</strong></div><div class="track" aria-hidden="true"><span class="fill b3"></span></div></div>
+<div class="scale" aria-hidden="true"><span>0 小时</span><span>25 小时</span><span>50 小时</span></div>
+</figure>
+<p class="callout">600 分钟 ÷ 15 分钟 = 40 张，只是上述假设下的理论容量。未计准备、行政、升级处理与重复联系，也未假定自动化率。另记工单到达量、积压与慢单尾部解决时长；用服务时窗和备援取代无限陪聊。</p>
+</section>
+<section id="board-section" aria-labelledby="h-board">
+<div class="head"><p class="eyebrow">08 / 互动证据板</p><h2 id="h-board">检查覆盖，不是信任分数</h2><p class="lead">“已有证据”只表示你找到了可核对的页面或记录，本页不验真、不认证、不分级。不输入私人数据，不使用浏览器存储，也不发送数据。</p></div>
+<div class="board" id="evidence-board" role="group" aria-labelledby="h-board">
+<p class="note" id="board-help">控件需 JavaScript 启用；未启用时，可直接按下面八项手工检查。</p>
+<div class="counts"><p>已检查（共 8 项）<strong id="count-checked">0</strong></p><p>未检查<strong id="count-unknown">8</strong></p><p>已有证据<strong id="count-evidence">0</strong></p><p>需要修改<strong id="count-change">0</strong></p></div>
+<div class="check-grid">
+<div class="item"><label for="c-price">价格与续费</label><p id="d-price">总价、收费周期、自动续费与取消条件。</p><select id="c-price" data-check aria-describedby="d-price" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-limits">诚实的能力边界</label><p id="d-limits">适用任务、不支持项与已知失败情形。</p><select id="c-limits" data-check aria-describedby="d-limits" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-ai">AI 的角色</label><p id="d-ai">何处由 AI 处理，何时转交真人。</p><select id="c-ai" data-check aria-describedby="d-ai" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-data">数据用途</label><p id="d-data">数据、目的、提供方与保存／删除规则。</p><select id="c-data" data-check aria-describedby="d-data" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-consent">用户同意</label><p id="d-consent">区分必要处理与可选功能，允许撤回选择。</p><select id="c-consent" data-check aria-describedby="d-consent" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-owner">响应责任与时窗</label><p id="d-owner">负责人、人工渠道与可兑现的响应范围。</p><select id="c-owner" data-check aria-describedby="d-owner" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-exit">退出、导出与后果</label><p id="d-exit">分别说明续费取消、退款、导出与删号。</p><select id="c-exit" data-check aria-describedby="d-exit" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+<div class="item"><label for="c-repair">故障与补救</label><p id="d-repair">状态、责任人、下次更新与修复记录。</p><select id="c-repair" data-check aria-describedby="d-repair" disabled><option value="u">未检查</option><option value="e">已有证据</option><option value="m">需要修改</option></select></div>
+</div>
+<div class="board-end"><p id="board-status" role="status" aria-live="polite" aria-atomic="true">已检查 0 项，未检查 8 项。下一步：检查“价格与续费”。</p><button id="board-reset" type="button" disabled>手动重置</button></div>
+<p class="note">已检查 = 已有证据 + 需要修改；优先处理第一项“需要修改”，否则检查第一项未知。八项都有记录，仍不保证信任。</p>
+</div>
+</section>
+<section id="plan" aria-labelledby="h-plan">
+<div class="head"><p class="eyebrow">09 / 14 天行动建议</p><h2 id="h-plan">先修一条失约，不先做人设</h2></div>
+<div class="plan">
+<article><p class="eyebrow">第 1–3 天</p><h3>听未完成的任务</h3><p>建议访谈 5 位现有用户、2 位离开者。人数是起步目标，不是代表性样本；参与应自愿。</p></article>
+<article><p class="eyebrow">第 4–6 天</p><h3>走一遍真实旅程</h3><p>从购买、使用、求助走到退出，记录承诺与实际之间的差距。</p></article>
+<article><p class="eyebrow">第 7–10 天</p><h3>只改一个断点</h3><p>选一条失约，先改功能或服务规则，再让文案如实反映能力。</p></article>
+<article><p class="eyebrow">第 11–14 天</p><h3>回访并观察</h3><p>请相关用户核验结果，记录仍未解决之处；不把礼貌回应当完成。</p></article>
+</div>
+<dl class="metrics"><div><dt>任务完成</dt><dd>完成任务数／尝试任务数；写明任务、观察期与排除项。</dd></div><div><dt>问题解决</dt></div><div><dt>续费（另查自主性）</dt><dd>续费账户数／本期到期账户数；另查是否知情、可自由取消，不把受阻当自愿。</dd></div><div><dt>退出完成</dt><dd>完成退出数／发起退出数；待处理与结果未知另列。</dd></div></dl>
+<p class="callout">用户构成、季节与功能更新都可能影响前后变化。小规模观察可提示问题，不能单凭“改版后变好”证明因果。</p>
+</section>
+<section id="sources" aria-labelledby="h-sources">
+<div class="head"><p class="eyebrow">10 / 来源索引与核验边界</p><h2 id="h-sources">能追溯，也能说清尚未知道什么</h2><p class="lead">本次已读：S0 的智能总结与全文文稿，加 S1–S7 七个补充页面，共八项主来源。所链微信原文未能直读，不算额外核验的完整原作。整理日期不是原文发布日期，也不是实验实施日期。</p><p class="note">正文标记可跳到对应来源。网址可点击或复制；页面无自动网络请求，主动点击外链才访问对应网站。</p></div>
+<ol class="sources">
+
+<li id="s1"><h3>S1 · flomo 官方 FAQ／官方自述</h3><p>未标日期；访问：2026-10-05。收入与隐私声明，不是独立审计。</p><a class="url" href="https://help.flomoapp.com/faq.html">https://help.flomoapp.com/faq.html</a></li>
+<li id="s2"><h3>S2 · flomo 隐私政策／处理规则</h3><p>更新：2026-07-29。政策披露不等于独立合规核验。</p><a class="url" href="https://help.flomoapp.com/privacy.html">https://help.flomoapp.com/privacy.html</a></li>
+<li id="s3"><h3>S3 · 沉浸式翻译会员条款／公布规则</h3><p>未标日期；访问：2026-10-05。仅核对条款，未做实际操作体验。</p><a class="url" href="https://immersivetranslate.com/docs/MEMBERSHIP-TERMS/">https://immersivetranslate.com/docs/MEMBERSHIP-TERMS/</a></li>
+<li id="s4"><h3>S4 · 37signals 取消政策／官方政策</h3><p>更新：2022-07-18。产品与账户类型的访问后果须分别看待。</p><a class="url" href="https://37signals.com/policies/cancellation/">https://37signals.com/policies/cancellation/</a></li>
+<li id="s5"><h3>S5 · Yin、Jia、Wakslak／PNAS 2024</h3><p>在线发表：2024-03-29；期刊日期：2024-04-02。DOI：10.1073/pnas.2319112121。本次采用原研究摘要，PMC 全文访问受限；不引样本量或效应数字。</p><a class="url" href="https://pubmed.ncbi.nlm.nih.gov/38551835/">https://pubmed.ncbi.nlm.nih.gov/38551835/</a></li>
+<li id="s6"><h3>S6 · FTC 暗黑模式报告新闻稿／监管材料</h3><p>发布：2022 年 9 月。本次读到完整新闻稿正文；案例指控须与司法认定区分。</p><a class="url" href="https://www.ftc.gov/news-events/news/press-releases/2022/09/ftc-report-shows-rise-sophisticated-dark-patterns-designed-trick-trap-consumers">https://www.ftc.gov/news-events/news/press-releases/2022/09/ftc-report-shows-rise-sophisticated-dark-patterns-designed-trick-trap-consumers</a></li>
+<li id="s7"><h3>S7 · Cloudflare 事故复盘／企业自述</h3><p>发布：2019-07-12；事件：2019-07-02。事故说明不是可靠性或客户成效的独立评估。</p><a class="url" href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/</a></li>
+</ol>
+
+<aside class="verify" aria-labelledby="h-verify"></aside>
+</section>
+</main>
+<footer class="end"><div class="wrap"><p class="eyebrow">下一步，只做一件具体的事</p><p>问一位用户最近哪个任务没完成；澄清或修复那条承诺，再请对方核验实际结果。</p><a href="#top">回到页首 ↑</a></div></footer>
+<script>
+(() => {
+'use strict';
+const byId = id => document.getElementById(id);
+const items = [...document.querySelectorAll('select[data-check]')];
+const reset = byId('board-reset'), status = byId('board-status'), help = byId('board-help');
+const counts = ['checked','unknown','evidence','change'].map(k => byId('count-' + k));
+if (items.length !== 8 || !reset || !status || !help || counts.some(n => !n)) return;
+// 仅作当前页面内计算。
+function render(cleared = false) {
+const e = items.filter(n => n.value === 'e').length;
+const m = items.filter(n => n.value === 'm').length;
+const checked = e + m, unknown = 8 - checked;
+[checked, unknown, e, m].forEach((n, i) => { counts[i].textContent = n; });
+const next = items.find(n => n.value === 'm') || items.find(n => n.value === 'u');
+const task = next ? '下一步：' + (next.value === 'm' ? '修改' : '检查') + '“' + next.labels[0].textContent + '”。' : '八项均标为已有证据；请让用户验证实际结果，这仍不保证信任。';
+status.textContent = (cleared ? '已重置。' : '') + '已检查 ' + checked + ' 项，未检查 ' + unknown + ' 项。' + task;
+}
+items.forEach(n => n.addEventListener('change', () => render()));
+reset.addEventListener('click', () => { items.forEach(n => { n.value = 'u'; }); render(true); });
+render();
+help.textContent = '交互已就绪：仅在本页计算检查覆盖与下一项任务。';
+items.forEach(n => { n.disabled = false; });
+reset.disabled = false;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>商业是最大的慈善吗？用「谁出钱、谁负责」拆解包子铺论断</title>
+<style>
+/* ===== 设计 token：第一层 primitive（原始值），第二层 semantic（用途）。组件只用 semantic token。 ===== */
+:root {
+  /* primitive：颜色 */
+  --c-ink-950: #0f172a;
+  --c-ink-800: #1e293b;
+  --c-ink-600: #475569;
+  --c-ink-400: #94a3b8;
+  --c-ink-200: #e2e8f0;
+  --c-ink-100: #eef2f7;
+  --c-white: #ffffff;
+  --c-blue-700: #2a5f9e;
+  --c-blue-100: #e3edf8;
+  --c-teal-700: #0f766e;
+  --c-teal-100: #d9f2ee;
+  --c-amber-700: #a35a00;
+  --c-amber-100: #fbeed5;
+  --c-rose-700: #b4233f;
+  --c-rose-100: #fbe3e8;
+  --c-violet-700: #5b3fb3;
+  --c-violet-100: #ebe6fa;
+  /* primitive：间距、字号、圆角、线宽、阴影 */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --fs-xs: 13px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 19px;
+  --fs-xl: 24px;
+  --fs-2xl: 32px;
+  --lh-tight: 1.3;
+  --lh-body: 1.75;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --bw-thin: 1px;
+  --bw-thick: 3px;
+  --sh-1: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --w-page: 980px;
+  --w-table-min: 760px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --fw-normal: 400;
+  --fw-bold: 650;
+  /* primitive：图表 viewBox 用户单位尺寸（宽屏与窄屏两套） */
+  --chart-fs-lg-wide: 13px;
+  --chart-fs-sm-wide: 11px;
+  --chart-fs-lg-narrow: 26px;
+  --chart-fs-sm-narrow: 23px;
+  --chart-lw-wide: 3px;
+  --chart-lw-narrow: 4px;
+  --chart-r-wide: 5px;
+  --chart-r-narrow: 7px;
+  --dash-6-5: 6 5;
+
+  /* semantic */
+  --bg-page: var(--c-ink-100);
+  --bg-surface: var(--c-white);
+  --bg-muted: var(--c-ink-100);
+  --text-strong: var(--c-ink-950);
+  --text-body: var(--c-ink-800);
+  --text-muted: var(--c-ink-600);
+  --border: var(--c-ink-200);
+  --border-strong: var(--c-ink-400);
+  --accent: var(--c-blue-700);
+  --accent-soft: var(--c-blue-100);
+  --v-cond: var(--c-teal-700);
+  --v-cond-bg: var(--c-teal-100);
+  --v-theory: var(--c-violet-700);
+  --v-theory-bg: var(--c-violet-100);
+  --v-over: var(--c-amber-700);
+  --v-over-bg: var(--c-amber-100);
+  --v-wrong: var(--c-rose-700);
+  --v-wrong-bg: var(--c-rose-100);
+  --weak: var(--c-rose-700);
+  --weak-bg: var(--c-rose-100);
+  --mid: var(--c-amber-700);
+  --mid-bg: var(--c-amber-100);
+  --ok: var(--c-teal-700);
+  --ok-bg: var(--c-teal-100);
+  --gap-section: var(--s-7);
+  --pad-card: var(--s-5);
+  --radius-card: var(--r-md);
+  --radius-control: var(--r-sm);
+  --grid-cols-3: repeat(3, minmax(0, 1fr));
+  --grid-cols-2: repeat(2, minmax(0, 1fr));
+  --h1-size: var(--fs-2xl);
+  /* semantic：排版、间距、线条、阴影 */
+  --font-body: var(--font-sans);
+  --size-caption: var(--fs-xs);
+  --size-small: var(--fs-sm);
+  --size-body: var(--fs-md);
+  --size-subhead: var(--fs-lg);
+  --size-title: var(--fs-xl);
+  --weight-regular: var(--fw-normal);
+  --weight-strong: var(--fw-bold);
+  --leading-tight: var(--lh-tight);
+  --leading-body: var(--lh-body);
+  --space-xs: var(--s-1);
+  --space-sm: var(--s-2);
+  --space-md: var(--s-3);
+  --space-lg: var(--s-4);
+  --space-xl: var(--s-5);
+  --space-2xl: var(--s-6);
+  --space-3xl: var(--s-7);
+  --line-hairline: var(--bw-thin);
+  --line-accent: var(--bw-thick);
+  --shadow-card: var(--sh-1);
+  --page-max: var(--w-page);
+  --table-min: var(--w-table-min);
+  /* semantic：图表 */
+  --chart-text-lg: var(--chart-fs-lg-wide);
+  --chart-text-sm: var(--chart-fs-sm-wide);
+  --chart-line: var(--chart-lw-wide);
+  --chart-dot: var(--chart-r-wide);
+  --chart-dash-estimate: var(--dash-6-5);
+}
+/* 唯一断点：720px（CSS 变量不能用在 media 条件里，所以字面值只在这里出现一次）。窄屏只改 semantic token，其中图表 token 改指向窄屏那套图表 primitive。 */
+@media (max-width: 720px) {
+  :root {
+    --gap-section: var(--s-6);
+    --pad-card: var(--s-4);
+    --grid-cols-3: minmax(0, 1fr);
+    --grid-cols-2: minmax(0, 1fr);
+    --h1-size: var(--fs-xl);
+    --chart-text-lg: var(--chart-fs-lg-narrow);
+    --chart-text-sm: var(--chart-fs-sm-narrow);
+    --chart-line: var(--chart-lw-narrow);
+    --chart-dot: var(--chart-r-narrow);
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+}
+.page { max-width: var(--page-max); margin: 0 auto; padding: var(--space-xl) var(--space-lg) var(--space-3xl); }
+h1, h2, h3 { color: var(--text-strong); line-height: var(--leading-tight); font-style: normal; }
+h1 { font-size: var(--h1-size); margin: 0 0 var(--space-lg); }
+h2 { font-size: var(--size-title); margin: 0 0 var(--space-lg); padding-bottom: var(--space-sm); border-bottom: var(--line-accent) solid var(--accent); }
+h3 { font-size: var(--size-subhead); margin: 0 0 var(--space-sm); }
+p { margin: 0 0 var(--space-md); }
+a { color: var(--accent); word-break: break-word; }
+section { margin-top: var(--gap-section); scroll-margin-top: var(--space-lg); }
+.muted { color: var(--text-muted); font-size: var(--size-small); }
+.card {
+  background: var(--bg-surface);
+  border: var(--line-hairline) solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--pad-card);
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
+.grid3 { display: grid; grid-template-columns: var(--grid-cols-3); gap: var(--space-lg); }
+.grid2 { display: grid; grid-template-columns: var(--grid-cols-2); gap: var(--space-lg); }
+
+/* hero */
+.hero { background: var(--bg-surface); border-left: var(--line-accent) solid var(--accent); border-radius: var(--radius-card); padding: var(--pad-card); box-shadow: var(--shadow-card); }
+.hero .kicker { color: var(--accent); font-weight: var(--weight-strong); font-size: var(--size-small); margin-bottom: var(--space-sm); }
+.hero .conclusion { font-size: var(--size-subhead); color: var(--text-strong); }
+.stats { display: grid; grid-template-columns: var(--grid-cols-3); gap: var(--space-md); margin-top: var(--space-lg); }
+.stat { background: var(--bg-muted); border-radius: var(--radius-control); padding: var(--space-md); }
+.stat b { display: block; font-size: var(--size-title); color: var(--text-strong); }
+.stat span { font-size: var(--size-small); color: var(--text-muted); }
+nav.toc { margin-top: var(--space-lg); display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+nav.toc a { font-size: var(--size-small); text-decoration: none; border: var(--line-hairline) solid var(--border-strong); border-radius: var(--radius-control); padding: var(--space-xs) var(--space-md); background: var(--bg-surface); }
+
+/* 原话三句 */
+.quote { border-left: var(--line-accent) solid var(--border-strong); padding-left: var(--space-md); color: var(--text-strong); font-weight: var(--weight-strong); margin-bottom: var(--space-sm); }
+.tag { display: inline-block; font-size: var(--size-caption); font-weight: var(--weight-strong); border-radius: var(--radius-control); padding: 0 var(--space-sm); margin-bottom: var(--space-sm); }
+.tag.cond { color: var(--v-cond); background: var(--v-cond-bg); }
+.tag.theory { color: var(--v-theory); background: var(--v-theory-bg); }
+.tag.over { color: var(--v-over); background: var(--v-over-bg); }
+.tag.wrong { color: var(--v-wrong); background: var(--v-wrong-bg); }
+.tag.info { color: var(--accent); background: var(--accent-soft); }
+
+/* 问责链 */
+.flow { display: flex; flex-direction: column; gap: var(--space-sm); }
+.node { border: var(--line-hairline) solid var(--border-strong); border-radius: var(--radius-control); padding: var(--space-sm) var(--space-md); background: var(--bg-muted); }
+.node.money { border-color: var(--accent); background: var(--accent-soft); }
+.node.good { border-color: var(--ok); background: var(--ok-bg); }
+.node.bad { border-color: var(--weak); background: var(--weak-bg); }
+.arrow { text-align: center; color: var(--text-muted); font-size: var(--size-small); }
+
+/* 表格 */
+.table-scroll { overflow-x: auto; min-width: 0; border: var(--line-hairline) solid var(--border); border-radius: var(--radius-card); background: var(--bg-surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--size-small); }
+.table-scroll table { min-width: var(--table-min); }
+th, td { text-align: left; vertical-align: top; padding: var(--space-sm) var(--space-md); border-bottom: var(--line-hairline) solid var(--border); }
+th { background: var(--bg-muted); color: var(--text-strong); }
+tbody th { font-weight: var(--weight-strong); }
+
+/* 2x2 矩阵 */
+.matrix { display: grid; grid-template-columns: var(--grid-cols-2); gap: var(--space-md); }
+.cell { border-radius: var(--radius-card); padding: var(--pad-card); border: var(--line-hairline) solid var(--border); background: var(--bg-surface); min-width: 0; }
+.cell .axis { font-size: var(--size-caption); color: var(--text-muted); font-weight: var(--weight-strong); }
+.cell.strong { border-color: var(--ok); }
+.cell.weak { border-color: var(--weak); }
+.cell.mark { box-shadow: inset 0 0 0 var(--line-accent) var(--accent); }
+
+/* 判定卡 */
+.verdict { border-top: var(--line-accent) solid var(--border-strong); }
+.verdict.cond { border-top-color: var(--v-cond); }
+.verdict.theory { border-top-color: var(--v-theory); }
+.verdict.over { border-top-color: var(--v-over); }
+.verdict.wrong { border-top-color: var(--v-wrong); }
+.verdict ul { margin: 0; padding-left: var(--space-xl); }
+.verdict li { margin-bottom: var(--space-xs); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+
+/* 图表 */
+figure { margin: 0; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: var(--size-small); color: var(--text-muted); margin-top: var(--space-sm); }
+.ch-grid { stroke: var(--border); stroke-width: var(--line-hairline); }
+.ch-axis { stroke: var(--border-strong); stroke-width: var(--line-hairline); }
+.ch-line { fill: none; stroke: var(--accent); stroke-width: var(--chart-line); }
+.ch-line.est { stroke-dasharray: var(--chart-dash-estimate); }
+.ch-dot { fill: var(--accent); r: var(--chart-dot); }
+.ch-dot.est { fill: var(--bg-surface); stroke: var(--accent); stroke-width: var(--line-accent); }
+.ch-label { fill: var(--text-muted); font-size: var(--chart-text-sm); font-family: var(--font-body); }
+.ch-value { fill: var(--text-strong); font-size: var(--chart-text-lg); font-weight: var(--weight-strong); font-family: var(--font-body); }
+
+/* 理论工具 */
+.tool dl { margin: 0; }
+.tool dt { font-weight: var(--weight-strong); color: var(--text-strong); font-size: var(--size-small); margin-top: var(--space-sm); }
+.tool dd { margin: 0; }
+
+/* 诊断器 */
+.presets { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+button {
+  font: inherit; font-size: var(--size-small); cursor: pointer;
+  border: var(--line-hairline) solid var(--accent); color: var(--accent); background: var(--bg-surface);
+  border-radius: var(--radius-control); padding: var(--space-xs) var(--space-md);
+}
+button[aria-pressed="true"] { background: var(--accent); color: var(--bg-surface); }
+fieldset { border: var(--line-hairline) solid var(--border); border-radius: var(--radius-card); margin: 0 0 var(--space-md); padding: var(--space-md) var(--space-lg); min-width: 0; background: var(--bg-surface); }
+legend { font-weight: var(--weight-strong); color: var(--text-strong); padding: 0 var(--space-xs); }
+label { display: block; padding: var(--space-xs) 0; cursor: pointer; }
+input[type="radio"] { margin-right: var(--space-sm); accent-color: var(--accent); }
+.result { margin-top: var(--space-lg); }
+.finding { border-left: var(--line-accent) solid var(--border-strong); padding: var(--space-sm) var(--space-md); margin-bottom: var(--space-sm); border-radius: var(--radius-control); }
+.finding.weak { border-left-color: var(--weak); background: var(--weak-bg); }
+.finding.mid { border-left-color: var(--mid); background: var(--mid-bg); }
+.finding.ok { border-left-color: var(--ok); background: var(--ok-bg); }
+.finding.unk { border-left-color: var(--border-strong); background: var(--bg-muted); }
+
+ol.sources { padding-left: var(--space-xl); font-size: var(--size-small); }
+ol.sources li { margin-bottom: var(--space-sm); }
+.note { background: var(--bg-muted); border-radius: var(--radius-card); padding: var(--pad-card); }
+footer { margin-top: var(--gap-section); font-size: var(--size-caption); color: var(--text-muted); }
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="hero" id="top">
+  <div class="kicker">视频观点拆解 · 包子铺例子</div>
+  <h1>商业是最大的慈善吗？用「谁出钱、谁负责」拆解包子铺论断</h1>
+  <p class="conclusion">结论：资金来源会影响组织激励，但组织表现取决于激励、信息、竞争、治理和问责机制的共同作用。商业不天然等于慈善，慈善也不注定腐败；真正值得比较的是谁受益、谁负责，以及失职能否被发现和纠正。</p>
+  
+  <div class="stats">
+    <div class="stat"><b>6 条</b><span>分论断：2 条有条件成立，1 条只有理论解释，1 条方向有据但说得太满，2 条说过头</span></div>
+    <div class="stat"><b>7 个</b><span>对照案例：商业失灵、慈善失灵、慈善成效和跨所有权比较</span></div>
+    <div class="stat"><b>5 个问题</b><span>可用来检查任何机构的问责薄弱环节（见诊断器）</span></div>
+  </div>
+  <nav class="toc" aria-label="目录">
+    <a href="#claim">原话拆三句</a>
+    <a href="#chain">问责链</a>
+    <a href="#matrix">四格矩阵</a>
+    <a href="#verdicts">逐条判定</a>
+    <a href="#poverty">贫困数据</a>
+    <a href="#cases">对照案例</a>
+    <a href="#tools">理论工具</a>
+    <a href="#diagnose">诊断器</a>
+    <a href="#use">怎么用</a>
+    <a href="#context">利益说明</a>
+    <a href="#sources">来源与核实</a>
+  </nav>
+</header>
+
+<section id="claim">
+  <h2>原话拆成三句</h2>
+  
+  <div class="grid3">
+    <div class="card">
+      <p class="quote">「商业才是最大的慈善」</p>
+      <p>这句把商业的社会贡献（就业、便宜商品、新技术）叫作慈善，并说它「最大」。</p>
+      <span class="tag wrong">说过头</span>
+    </div>
+    <div class="card">
+      <p class="quote">「慈善最后几乎都会变质」</p>
+      <p>这句判断整个慈善领域。包子铺是假设出来的例子，不是调查数据。</p>
+      <span class="tag wrong">说过头</span>
+    </div>
+    <div class="card">
+      
+      <p>这句讲激励机制，是全段的论证核心，也是最有价值的一句。</p>
+      <span class="tag over">方向有据，说得太满</span>
+    </div>
+  </div>
+  <div class="grid3" style="margin-top: var(--space-lg);">
+    <div class="card">
+      <h3>视频主张</h3>
+      <p>资金来源决定组织为谁服务。顾客付钱的店对顾客负责；拨款养活的机构对拨款方负责，所以会走向形式主义、任人唯亲和虚报成本。</p>
+    </div>
+    <div class="card">
+      <h3>成立条件</h3>
+      <p>付钱的人就是吃包子的人；包子好不好吃一尝就知道；附近有别家可换；开新店不难。这四个条件同时满足时，这条机制的解释力最强。</p>
+    </div>
+    <div class="card">
+      <h3>证据不足之处</h3>
+      <p>在养老、医疗、教育、奶粉等行业，付钱的人和使用的人常常不是同一批人，质量也难看出来。在这些行业里，商业机构同样会出问题。视频没有给出慈善「几乎都会变质」的数据。</p>
+    </div>
+  </div>
+</section>
+
+<section id="chain">
+  <h2>问责链：钱从哪来，反馈回到谁</h2>
+  <p>先把核心问题换一个问法：谁能约束服务提供者？提供者的利益和受益者的利益是否一致？两者冲突时，谁能发现并纠正？</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>商业包子铺（视频设定）</h3>
+      <div class="flow">
+        <div class="node money">顾客付钱</div>
+        <div class="arrow">↓</div>
+        <div class="node">包子铺做包子</div>
+        <div class="arrow">↓</div>
+        <div class="node">同一个顾客吃包子，一尝就知道好坏</div>
+        <div class="arrow">↓</div>
+        <div class="node good">不好吃就换店 → 包子铺收入马上下降</div>
+      </div>
+      <p class="muted" style="margin-top: var(--space-md);">反馈直接回到提供者。付钱、使用、评价质量、惩罚失职的是同一批人。</p>
+    </div>
+    <div class="card">
+      <h3>慈善包子铺（视频设定）</h3>
+      <div class="flow">
+        <div class="node money">基金或拨款方付钱</div>
+        <div class="arrow">↓</div>
+        <div class="node">包子铺做包子</div>
+        <div class="arrow">↓</div>
+        <div class="node">受助者吃包子，但不付钱</div>
+        <div class="arrow">↓</div>
+        <div class="node bad">拨款方只看表格和留痕 → 下一年继续拨款</div>
+      </div>
+      <p class="muted" style="margin-top: var(--space-md);">反馈绕道。吃包子的人知道好坏，但视频没有说他们能否换店或投诉。补充假设：如果受助者不能更换提供者，反馈也影响不了拨款，问责就可能减弱。</p>
+    </div>
+  </div>
+  <p style="margin-top: var(--space-lg);">视频抓到了一个真实机制，但它把这个机制和「商业 / 慈善」两个标签绑在了一起。实际上，同一类机构可以有不同的链条。下表用四种权力比较四个对象：谁选择服务、谁观察质量、谁承担失败成本、谁有权纠正提供者。</p>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="四种权力对比表，可横向滑动">
+    <table>
+      <thead>
+        <tr><th scope="col">权力</th><th scope="col">街边包子铺</th><th scope="col">视频里的慈善包子铺</th><th scope="col">私募基金收购的美国养老院</th><th scope="col">直接给现金的援助项目</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">谁选择服务</th><td>顾客</td><td>拨款方</td><td>患者或家属</td><td>受助者自己决定钱花在哪</td></tr>
+        <tr><th scope="row">谁观察质量</th><td>顾客，一尝就知道</td><td>受助者知道好坏；能约束包子铺的拨款方主要看表格</td><td>患者难判断；监管机构做检查</td><td>研究团队用随机试验测量（一名合著者与执行机构有已披露关系）</td></tr>
+        <tr><th scope="row">谁承担失败成本</th><td>店主：没人买就关门</td><td>受助者吃差包子；拨款方继续兜底</td><td>患者承担健康后果（见 S8 的死亡率结果）；付费方是公共医保</td><td>本页来源没有涉及</td></tr>
+        <tr><th scope="row">谁有权纠正</th><td>顾客换店；食品监管</td><td>视频只讲了拨款方；受助者能否换店或投诉，视频没有说明</td><td>监管机构</td><td>捐赠方可以改捐；受助者能否更换援助机构，本页来源没有涉及</td></tr>
+        <tr><th scope="row">按标签归类</th><td>商业</td><td>慈善</td><td>商业</td><td>慈善</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="margin-top: var(--space-sm);">表中两家包子铺是视频的假设；养老院与现金项目只填写了下文来源能支持的部分。看链条比看标签更能预测问题出在哪里。</p>
+</section>
+
+<section id="matrix">
+  <h2>四格矩阵：付钱的人是不是使用者 × 付钱的一方能不能看出质量</h2>
+  <p>两个维度的定义：「付钱的人是使用者」指付款人和享受服务的人是同一个人或同一个家庭。「付钱的一方能看出质量」指付款方能用较低成本判断服务好坏，可以靠自己判断，也可以靠公开的测量或评估结果。</p>
+  <div class="matrix">
+    <div class="cell strong mark">
+      <div class="axis">付钱的人是使用者 · 付钱的一方能看出质量</div>
+      <h3>市场纪律最强</h3>
+      <p>例：街边包子铺、餐馆。视频里的商业包子铺在这一格。</p>
+    </div>
+    <div class="cell">
+      <div class="axis">付钱的人是使用者 · 付钱的一方看不出质量</div>
+      <h3>质量难观察时，顾客付款不能保证质量</h3>
+      <p>例：婴儿奶粉。父母付钱，但无法检测成分；2008 年三聚氰胺事件（涉及三鹿等企业）里，奶源在收奶环节被兑水并加入三聚氰胺。又如营利性职业证书项目：学生用联邦助学资金付学费，入学前很难判断就业回报。</p>
+    </div>
+    <div class="cell">
+      <div class="axis">别人付钱 · 付钱的一方能看出质量</div>
+      <h3>可以有效，前提是有人认真测量</h3>
+      <p>例：直接给现金的援助项目、蚊帐分发。捐赠方付钱，并能看到随机试验或评估机构公开的测量结果。</p>
+    </div>
+    <div class="cell weak mark">
+      <div class="axis">别人付钱 · 付钱的一方看不出质量</div>
+      <h3>付款与使用分离、质量难观察：需要额外的问责机制</h3>
+      <p>例：大额灾后重建捐款，捐款人看不到钱用在哪里；私募持有的养老院，付费方主要靠检查和评级，难以看到日常护理质量。视频里的慈善包子铺也在这一格：受助者知道包子好不好吃，但他们不付钱；付钱的拨款方只看表格。如果受助者也无法换店或投诉，问责就可能减弱，但视频没有说明这一点。</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top: var(--space-lg);">
+    <p><b>关键观察：</b>视频比较的是两种情境：左上格是付款与使用一致、质量容易看出的商业情境；右下格是付款与使用分离、付款方难以看出质量的慈善情境。两者的差别主要来自「谁付钱」和「付钱的一方能不能看出质量」，不是来自「商业」或「慈善」这个标签。</p>
+    <p style="margin-bottom: 0;"><b>边界说明：</b>即使在左上格，如果市场竞争不足（附近只有一家店）、使用者没有退出权，或者开新店的门槛很高，市场纪律也会失效。</p>
+  </div>
+</section>
+
+<section id="verdicts">
+  <h2>逐条判定</h2>
+  <div class="legend">
+    <span class="tag cond">有条件成立</span>
+    <span class="tag theory">有理论解释，普遍性未证明</span>
+    <span class="tag over">方向有据，说得太满</span>
+    <span class="tag wrong">说过头</span>
+  </div>
+  <div class="grid2">
+    <article class="card verdict cond">
+      <span class="tag cond">有条件成立</span>
+      <h3>C1 竞争迫使包子铺提质降价</h3>
+      <ul>
+        <li>斯密写过：我们有晚饭吃，不是出于屠夫、酿酒师、面包师的仁慈，而是出于他们对自身利益的关心 [S1]。这支持「出于自利的交换也能满足顾客」，但这句话本身没有讲竞争。</li>
+        <li>竞争能否进一步推动提质降价，还要看条件：市场不过度集中、进入门槛不高、质量能被看出来、换店成本低、没有大的外部性。</li>
+        <li>质量失灵案例：2008 年三聚氰胺污染奶粉事件（涉及三鹿等企业）全国报告约 29.4 万例、6 例死亡 [S10]。它说明顾客付款并不保证产品安全；但这个案例本身不能证明质量下降是由竞争造成的。</li>
+      </ul>
+    </article>
+    <article class="card verdict cond">
+      <span class="tag cond">有条件成立</span>
+      <h3>C2 拿拨款的机构重表格、轻质量</h3>
+      <ul>
+        <li>古德哈特定律提醒：一个指标被强力用于管理时，人们可能针对指标优化，而不是改善真正关心的结果 [S6]。登记、留痕可能变成这种指标。</li>
+        <li>但表格不等于官僚主义。表格也可能是防止侵占、保证公平、方便审计追责的必要成本。</li>
+        <li>成立的条件：拨款方主要按表格和程序指标考核，又看不到真实结果。这时机构容易优化表格，而不是优化服务。</li>
+        <li>要分三层看：程序是否合规、量化绩效是否达标、真实社会结果是否改善。如果只考核前两层、不追踪第三层，就可能出现视频说的问题；但结果不好也可能有其他原因。</li>
+      </ul>
+    </article>
+    <article class="card verdict theory">
+      <span class="tag theory">有理论解释，普遍性未证明</span>
+      <h3>C3 做大成本来争取拨款、任人唯亲</h3>
+      <ul>
+        <li>尼斯卡宁 1971 年的预算最大化模型假设官僚追求总预算最大，这能解释「做大成本」的动机；后来的实证研究结论不一 [S3]。</li>
+        <li>软预算约束理论说：机构预期超支后会被救助时，成本纪律会变弱 [S4]。这一理论最早研究的是社会主义经济中的企业，不是慈善机构。</li>
+        <li>理论能解释动机，但不能证明某家机构寻租，更不能证明这种情况普遍发生。</li>
+        <li>任人唯亲和出国考察：上面两个理论都不解释这一点，视频和本页也都没有可以说明其普遍程度的数据。</li>
+      </ul>
+    </article>
+    <article class="card verdict over">
+      <span class="tag over">方向有据，说得太满</span>
+      <h3>C4 钱来自谁，就对谁负责</h3>
+      <ul>
+        <li>弗里德曼把花钱分成四种：花自己的钱给自己、花自己的钱给别人、花别人的钱给自己、花别人的钱给别人；最后一种既不在乎成本，也不在乎质量 [S2]。这和视频的思路一致。</li>
+        <li>但「钱来自顾客」不等于「顾客能约束提供者」。医疗、养老、教育常由他人付钱，顾客也可能缺乏专业知识，或没有别家可选。</li>
+        <li>法律义务、治理结构、声誉、职业伦理、监管和受助者的发声能力，都会改变机构行为。资金来源是重要因素，不是唯一因素。</li>
+      </ul>
+    </article>
+    <article class="card verdict wrong">
+      <span class="tag wrong">说过头</span>
+      <h3>C5 商业是最大的慈善</h3>
+      <ul>
+        <li>商业确实能创造就业、提高生产率、让商品更便宜。世界银行把 1990 年以来超过 10 亿人脱离极端贫困主要归功于快速经济增长，尤其是中国和印度 [S17]。</li>
+        <li>但这些贡献不自动等于慈善。慈善的含义是不求回报地帮助别人；商业的好处是交易的副产品。</li>
+        <li>「最大」需要把两者放在同一把尺子上比较，视频没有做这种比较，本页也没有找到可以直接比较的数据。</li>
+      </ul>
+    </article>
+    <article class="card verdict wrong">
+      <span class="tag wrong">说过头</span>
+      <h3>C6 慈善最后几乎都会变质</h3>
+      <ul>
+        <li>相关成效证据：一项汇总 82 项研究的荟萃分析发现，非营利养老院平均人员配置更高、压疮更少 [S7]；肯尼亚现金转移大规模试验发现明显正向溢出 [S13]。注意：非营利养老院不等于慈善捐助项目；某一阶段有效，也不证明长期不会变质。</li>
+        <li>慈善失败也真实存在：美国红十字会为海地筹集近 5 亿美元，调查报道称只建了 6 套永久住房，红十字会对报道提出异议 [S11][S12]。</li>
+        <li>几个成功案例不能证明慈善领域总体有效。要判断「几乎都会变质」，需要比较失败率、成本、受益者福利和长期效果。视频和本页都没有这种全领域数据，所以只能说这句话没有证据支持。</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section id="poverty">
+  <h2>全球极端贫困长期变化</h2>
+  <p>按世界银行口径，全球极端贫困人口占比从 1990 年的 37.9% 降到 2019 年的 8.8%。2020 年因疫情回升到 9.7%，之后缓慢下降。2013 年以后下降速度明显放慢 [S17]。</p>
+  <div class="card">
+    <figure>
+      <svg viewBox="0 0 640 330" role="img" aria-labelledby="pov-title pov-desc">
+        <title id="pov-title">全球极端贫困率 1990–2024</title>
+        <desc id="pov-desc">折线从 1990 年 37.9% 下降到 2019 年 8.8%，2020 年回升至 9.7%，2024 年预测为 8.5%。</desc>
+        <line class="ch-grid" x1="56" y1="284" x2="624" y2="284"/>
+        <line class="ch-grid" x1="56" y1="217" x2="624" y2="217"/>
+        <line class="ch-grid" x1="56" y1="150" x2="624" y2="150"/>
+        <line class="ch-grid" x1="56" y1="83" x2="624" y2="83"/>
+        <line class="ch-grid" x1="56" y1="16" x2="624" y2="16"/>
+        <text class="ch-label" x="48" y="289" text-anchor="end">0%</text>
+        <text class="ch-label" x="48" y="155" text-anchor="end">20%</text>
+        <text class="ch-label" x="48" y="21" text-anchor="end">40%</text>
+        <line class="ch-axis" x1="56" y1="284" x2="624" y2="284"/>
+        <polyline class="ch-line" points="56,30.1 139.5,66.3 223.1,87.7 306.6,140 390.1,178.8 473.6,213.7 540.4,225 557.1,219 573.8,220.4 590.5,223.7 607.3,225"/>
+        <polyline class="ch-line est" points="607.3,225 624,227.1"/>
+        <circle class="ch-dot" cx="56" cy="30.1"/>
+        <circle class="ch-dot" cx="139.5" cy="66.3"/>
+        <circle class="ch-dot" cx="223.1" cy="87.7"/>
+        <circle class="ch-dot" cx="306.6" cy="140"/>
+        <circle class="ch-dot" cx="390.1" cy="178.8"/>
+        <circle class="ch-dot" cx="473.6" cy="213.7"/>
+        <circle class="ch-dot" cx="540.4" cy="225"/>
+        <circle class="ch-dot" cx="557.1" cy="219"/>
+        <circle class="ch-dot" cx="573.8" cy="220.4"/>
+        <circle class="ch-dot" cx="590.5" cy="223.7"/>
+        <circle class="ch-dot" cx="607.3" cy="225"/>
+        <circle class="ch-dot est" cx="624" cy="227.1"/>
+        <text class="ch-value" x="70" y="34">37.9%</text>
+        <text class="ch-value" x="306.6" y="124" text-anchor="middle">21.5%</text>
+        <text class="ch-value" x="540.4" y="200" text-anchor="middle">8.8%</text>
+        <text class="ch-label" x="56" y="314" text-anchor="start">1990</text>
+        <text class="ch-label" x="223.1" y="314" text-anchor="middle">2000</text>
+        <text class="ch-label" x="390.1" y="314" text-anchor="middle">2010</text>
+        <text class="ch-label" x="557.1" y="314" text-anchor="middle">2020</text>
+      </svg>
+      
+    </figure>
+  </div>
+  <p style="margin-top: var(--space-md);"><b>这张图能说明什么：</b>经济增长和市场活动与大规模减贫同时发生，世界银行也把增长列为主要原因。<b>不能说明什么：</b>同一时期还有公共卫生、教育、基础设施和政策的作用，所以这张图不能单独证明「市场消灭了贫困」，更不能比较商业与慈善谁的贡献更大。</p>
+</section>
+
+<section id="cases">
+  <h2>对照案例：用同一组维度看商业与慈善</h2>
+  <p>每个案例都用同样的五个维度：谁付钱、谁观察质量、问题由谁发现、结果如何、证据强度。案例包含商业失灵、慈善失灵、慈善成效和一项跨所有权比较。本页没有单独纳入商业成功案例，因为视频的商业包子铺已经代表了这一面；读者应注意这一不对称。</p>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="对照案例表，可横向滑动">
+    <table>
+      <thead>
+        <tr><th scope="col">案例</th><th scope="col">谁付钱</th><th scope="col">谁观察质量</th><th scope="col">问题由谁发现</th><th scope="col">结果</th><th scope="col">证据强度</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">私募基金收购的美国养老院（商业）[S8][S9]</th>
+          <td>研究样本是 Medicare 短住患者，费用由公共医保支付</td>
+          <td>患者难判断；靠监管检查</td>
+          <td>研究者用 2005–2017 年数据分析</td>
+          <td>论文用工具变量估计局部平均处理效应：收购使患者死亡率相对上升约 11%（不是 11 个百分点）；NBER 摘要把它表述为短住患者 90 天死亡率约高 10%。同时，收购后患者构成转向低风险人群，护理人员和护理标准合规下降</td>
+          <td>高：超过 700 万患者，因果识别设计；只针对私募收购这一种所有权变化，不能推到所有营利养老院</td>
+        </tr>
+        <tr>
+          <th scope="row">2008 年三聚氰胺污染奶粉事件，涉及三鹿等企业（商业）[S10]</th>
+          <td>父母</td>
+          <td>父母无法检测成分</td>
+          <td>患儿出现肾结石后，卫生部门统计</td>
+          <td>中国卫生部统计全国约 29.4 万例，6 例死亡（多家企业产品合计，不是单一品牌）</td>
+          <td>高：世卫组织人员的论文，汇总官方数据</td>
+        </tr>
+        <tr>
+          <th scope="row">美国营利性职业证书项目（商业）[S16]</th>
+          <td>学生，主要依靠联邦助学资金</td>
+          <td>入学前很难判断就业回报</td>
+          <td>研究者用行政数据对比公立项目</td>
+          <td>就业率低 1.5 个百分点，收入低约 11%；学生债务超过收入增量</td>
+          <td>高：大样本行政数据；对比对象是公立证书项目</td>
+        </tr>
+        <tr>
+          <th scope="row">非营利与营利养老院比较（两者对比）[S7]</th>
+          <td>多种付费方式</td>
+          <td>研究者测量人员配置和压疮等指标</td>
+          <td>82 项研究的荟萃分析</td>
+          <td>非营利养老院平均人员配置更高（效应比 1.11），压疮更少（比值比 0.91）；作者提醒单个机构受很多因素影响</td>
+          <td>中高：观察性研究汇总，1965–2003 年</td>
+        </tr>
+        <tr>
+          <th scope="row">美国红十字会海地重建（慈善）[S11][S12]</th>
+          <td>捐款人</td>
+          <td>捐款人难以看到钱用在哪里，主要靠机构自报</td>
+          <td>新闻调查（ProPublica 与 NPR，2015）</td>
+          <td>筹集近 5 亿美元；红十字会称帮助超过 13 万人获得住所，报道称只建了 6 套永久住房。红十字会提出异议，称做了租房补贴和房屋修缮</td>
+          <td>中：新闻调查，双方说法有争议；本页不把它写成贪污，只写管理与成效宣称存疑</td>
+        </tr>
+        <tr>
+          <th scope="row">肯尼亚直接现金转移（慈善）[S13]</th>
+          <td>捐赠方</td>
+          <td>研究团队（一名合著者与执行机构有已披露关系）</td>
+          <td>大规模随机试验</td>
+          <td>超过 1.05 万户、653 个村，每户约 1000 美元；对周边经济有明显正向溢出，通胀很小，本地乘数约 2.5</td>
+          <td>高：随机试验；合著者之一是执行机构联合创始人（论文已披露）</td>
+        </tr>
+        <tr>
+          <th scope="row">防疟蚊帐分发（慈善）[S14][S15]</th>
+          <td>捐赠方</td>
+          <td>评估机构 GiveWell</td>
+          <td>评估机构建模估算</td>
+          <td>每顶蚊帐约 6 美元；GiveWell 估算 2022–2024 年平均约 5500 美元挽救一条生命；截至 2023 年 12 月，不同资助地点的估算约为 3000–8000 美元</td>
+          <td>中高：评估机构的模型估算，本身有不确定性，成本因地点而异</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="margin-top: var(--space-sm);">读法：这些案例提示，判断一个机构时应检查质量信息能否传到付钱的一方，以及失职能否被纠正。它们是挑选出来的案例，不能据此估计商业或慈善的总体表现，也不能证明成败由测量机制造成。</p>
+</section>
+
+<section id="tools">
+  <h2>理论工具：能解释什么，不能证明什么</h2>
+  <p>视频里的「看不见的手」是一个理论主张，需要检验，不是已经证明的结论。下面是五个理论工具和一个解释性比喻，都能帮助思考，但都有边界。</p>
+  <div class="grid2">
+    <div class="card tool">
+      <h3>斯密：自利与分工 [S1]</h3>
+      <dl><dt>说了什么</dt><dd>交换双方出于自利也能互相满足需求。</dd>
+      <dt>不能证明什么</dt><dd>不能证明所有商业行为都改善社会福利；垄断、信息不对称和外部性要另外分析。</dd></dl>
+    </div>
+    <div class="card tool">
+      <h3>弗里德曼：花钱的四种方式 [S2]</h3>
+      <dl><dt>说了什么</dt><dd>花别人的钱给别人办事，最不在乎成本和质量。</dd>
+      <dt>不能证明什么</dt><dd>不能证明慈善一定低效；独立测量和公开数据可以补上缺失的约束。</dd></dl>
+    </div>
+    <div class="card tool">
+      <h3>汉斯曼：合同失灵与非分配约束 [S5]</h3>
+      <dl><dt>说了什么</dt><dd>消费者难以判断质量时，「不得把利润分给私人」的规定可以成为一种信任保障，这解释了为什么某些行业需要非营利组织。</dd>
+      <dt>不能证明什么</dt><dd>不能证明非营利组织一定更可信。</dd></dl>
+    </div>
+    <div class="card tool">
+      <h3>尼斯卡宁与软预算约束 [S3][S4]</h3>
+      <dl><dt>说了什么</dt><dd>机构可能追求更大预算；预期会被救助时，成本纪律变弱。</dd>
+      <dt>不能证明什么</dt><dd>是理论模型，不是「机构一定会扩大预算」的经验定律；实证结论不一。</dd></dl>
+    </div>
+    <div class="card tool">
+      <h3>古德哈特定律 [S6]</h3>
+      <dl><dt>说了什么</dt><dd>指标一旦成为管理目标，就可能不再反映真实情况。</dd>
+      <dt>不能证明什么</dt><dd>不是「有考核就会造假」。是否偏移取决于指标设计、监督方式和激励。</dd></dl>
+    </div>
+    <div class="card tool">
+      <h3>「直接给现金 = 把受助者变回顾客」</h3>
+      <dl><dt>说了什么</dt><dd>这是一个好用的比喻：受助者拿到了选择权。</dd>
+      <dt>不能证明什么</dt><dd>不是严格的等价关系。受助者未必有竞争性的市场、充分的信息或退出服务的能力。</dd></dl>
+    </div>
+  </div>
+</section>
+
+<section id="diagnose">
+  <h2>诊断器：这个机构的问责薄弱环节在哪</h2>
+  <p>回答五个问题，诊断器列出哪些环节较弱。它不给机构打总分，因为好坏取决于哪个环节出问题。可以先点一个预设例子，再自己改选项。</p>
+  <div class="presets" role="group" aria-label="预设例子">
+    <button type="button" data-preset="shop" aria-pressed="false">街边包子铺</button>
+    <button type="button" data-preset="charityShop" aria-pressed="false">视频里的慈善包子铺</button>
+    <button type="button" data-preset="nursing" aria-pressed="false">私募收购的养老院</button>
+    <button type="button" data-preset="cash" aria-pressed="false">直接现金转移</button>
+    <button type="button" data-preset="clear" aria-pressed="false">清空</button>
+  </div>
+  <form id="diag"></form>
+  <div class="result" id="result" aria-live="polite"></div>
+</section>
+
+<section id="use">
+  <h2>读完以后怎么用</h2>
+  <div class="grid2">
+    <div class="card"><h3>听到「某类机构都会变质」时</h3><p>把它换成四个问题：谁选择服务、谁看得到质量、谁承担失败、谁有权纠正。答案比标签更能预测问题。</p></div>
+    <div class="card"><h3>捐款之前</h3><p>看项目有没有独立测量的结果和公开的成本数据。故事和表格数量不能代替结果。</p></div>
+    <div class="card"><h3>购买质量难看出的服务时</h3><p>奶粉、养老、职业培训这类服务，不能只靠「有竞争就会好」。要看第三方检测、监管记录和退出条款。</p></div>
+    <div class="card"><h3>自己做生意或项目时</h3><p>尽量让付钱的人、使用的人和评价质量的人是同一批人。如果做不到，至少给使用者投诉和更换的权利。</p></div>
+  </div>
+</section>
+
+<section id="context">
+  <h2>利益与语境说明</h2>
+  <div class="note">
+    <p>视频结尾，作者推荐了自己的第二本书。这说明这段话也有推广目的。但推广动机本身不能证明观点错，也不能证明观点对；本页只评估论据。</p>
+    <p style="margin-bottom: 0;">肯尼亚现金转移研究的合著者之一，是执行该项目的机构 GiveDirectly 的联合创始人兼董事长，论文已披露这层关系。研究结果来自大规模随机试验，但读者应知道这层关系。</p>
+  </div>
+</section>
+
+<section id="sources">
+  <h2>来源</h2>
+  <ol class="sources">
+    <li id="S1">[S1] Adam Smith, <i>The Wealth of Nations</i>, Book I, Chapter II（Econlib 在线版）. <a href="https://www.econlib.org/library/Smith/smWN.html">https://www.econlib.org/library/Smith/smWN.html</a></li>
+    <li id="S2">[S2] Milton Friedman, 2004 年接受 Fox News 采访时的「花钱的四种方式」，转引自 The American Spectator, 2011-10-05；同一思路见《自由选择》(1980) 第 4 章. <a href="https://spectator.org/friedmans-four-ways/">https://spectator.org/friedmans-four-ways/</a></li>
+    <li id="S3">[S3] Budget-maximizing model（Niskanen 1971，含后续实证争议），Wikipedia 条目，二手来源. <a href="https://en.wikipedia.org/wiki/Budget-maximizing_model">https://en.wikipedia.org/wiki/Budget-maximizing_model</a></li>
+    <li id="S4">[S4] Kornai, Maskin &amp; Roland (2003), Understanding the Soft Budget Constraint, <i>Journal of Economic Literature</i> 41(4): 1095–1136. <a href="https://www.aeaweb.org/articles?id=10.1257%2F002205103771799999">https://www.aeaweb.org/articles?id=10.1257%2F002205103771799999</a></li>
+    <li id="S5">[S5] Henry Hansmann (1980), The Role of Nonprofit Enterprise, <i>Yale Law Journal</i> 89: 835. <a href="https://yalelawjournal.org/article/the-role-of-nonprofit-enterprise">https://yalelawjournal.org/article/the-role-of-nonprofit-enterprise</a></li>
+    <li id="S6">[S6] Goodhart's law，Wikipedia 条目，二手来源. <a href="https://en.wikipedia.org/wiki/Goodhart%27s_law">https://en.wikipedia.org/wiki/Goodhart%27s_law</a></li>
+    <li id="S7">[S7] Comondore et al. (2009), Quality of care in for-profit and not-for-profit nursing homes: systematic review and meta-analysis, <i>BMJ</i> 339: b2732. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2721035/">https://pmc.ncbi.nlm.nih.gov/articles/PMC2721035/</a></li>
+    <li id="S8">[S8] Gupta, Howell, Yannelis &amp; Gupta (2021), Does Private Equity Investment in Healthcare Benefit Patients? Evidence from Nursing Homes, NBER Working Paper 28474. <a href="https://www.nber.org/papers/w28474">https://www.nber.org/papers/w28474</a></li>
+    <li id="S9">[S9] NBER Digest (2021-04), How Patients Fare When Private Equity Funds Acquire Nursing Homes. <a href="https://www.nber.org/digest/202104/how-patients-fare-when-private-equity-funds-acquire-nursing-homes">https://www.nber.org/digest/202104/how-patients-fare-when-private-equity-funds-acquire-nursing-homes</a></li>
+    <li id="S10">[S10] Gossner et al. (2009), The Melamine Incident: Implications for International Food and Feed Safety, <i>Environmental Health Perspectives</i>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2799451/">https://pmc.ncbi.nlm.nih.gov/articles/PMC2799451/</a></li>
+    <li id="S11">[S11] ProPublica (2015-06-03), How the Red Cross Raised Half a Billion Dollars for Haiti and Built Six Homes. <a href="https://www.propublica.org/article/how-the-red-cross-raised-half-a-billion-dollars-for-haiti-and-built-6-homes">https://www.propublica.org/article/how-the-red-cross-raised-half-a-billion-dollars-for-haiti-and-built-6-homes</a></li>
+    <li id="S12">[S12] NPR (2015-06-03), In Search Of The Red Cross' $500 Million In Haiti Relief. <a href="https://www.npr.org/2015/06/03/411524156/in-search-of-the-red-cross-500-million-in-haiti-relief">https://www.npr.org/2015/06/03/411524156/in-search-of-the-red-cross-500-million-in-haiti-relief</a></li>
+    <li id="S13">[S13] Egger, Haushofer, Miguel, Niehaus &amp; Walker (2022), General Equilibrium Effects of Cash Transfers: Experimental Evidence from Kenya, <i>Econometrica</i> 90(6): 2603–2643（作者接受稿）. <a href="https://par.nsf.gov/servlets/purl/10445626">https://par.nsf.gov/servlets/purl/10445626</a></li>
+    <li id="S14">[S14] GiveWell, Top Charities. <a href="https://www.givewell.org/charities/top-charities">https://www.givewell.org/charities/top-charities</a></li>
+    <li id="S15">[S15] GiveWell, Against Malaria Foundation. <a href="https://www.givewell.org/charities/amf">https://www.givewell.org/charities/amf</a></li>
+    <li id="S16">[S16] Cellini &amp; Turner (2019), Gainfully Employed? Assessing the Employment and Earnings of For-Profit College Students Using Administrative Data, <i>Journal of Human Resources</i> 54(2)（NBER WP 22287）. <a href="https://www.nber.org/papers/w22287">https://www.nber.org/papers/w22287</a></li>
+    <li id="S17">[S17] World Bank (2024), Poverty, Prosperity, and Planet Report 2024, Table 1D.1 与前言（联合国人权高专办网站托管的副本）. <a href="https://www.ohchr.org/sites/default/files/documents/issues/poverty/cfis/roadmap/subm-roadmap-eradicating-poverty-igo-94-world-bank.pdf">https://www.ohchr.org/sites/default/files/documents/issues/poverty/cfis/roadmap/subm-roadmap-eradicating-poverty-igo-94-world-bank.pdf</a></li>
+  </ol>
+
+  <h3 style="margin-top: var(--space-xl);">核实说明</h3>
+  <div class="note">
+    <p><b>已打开并核对内容：</b>S1–S17 都在 2026-10-20 打开过，并核对了本页引用的数字和原话。S3、S6 是 Wikipedia 条目，只用于说明理论内容，不用于证明事实。</p>
+    
+    <p><b>本页没有做到的：</b>没有找到商业机构和慈善机构总体失败率的全领域数据，所以本页不对「谁更容易变质」下总体结论。</p>
+    
+  </div>
+</section>
+
+<footer>
+  <p>制作日期：2026-10-20。本页是对公开视频观点的分析，不针对任何具体机构作指控；案例中的结论以所引来源为准。<a href="#top">回到顶部</a></p>
+</footer>
+
+</main>
+<script>
+(function () {
+  var QUESTIONS = [
+    { id: "q1", title: "谁决定服务内容？", options: [
+      { v: "user", t: "使用者自己选", level: "ok", msg: "服务内容由使用者决定，需求偏离的风险较低；仍要看使用者是否有足够信息做选择。" },
+      { v: "payer", t: "付钱的一方或拨款方决定", level: "mid", msg: "服务内容由付费方决定，可能偏离使用者的真实需求。要看付费方是否认真听取使用者意见。" },
+      { v: "provider", t: "提供者自己决定", level: "weak", msg: "服务内容由提供者自己决定。如果也没有其他外部约束，需求偏离的风险较高。" },
+      { v: "unknown", t: "不清楚 / 需要核实", level: "unk", msg: "这一项信息不足，需要先核实，再判断这个环节强弱。" } ] },
+    { id: "q2", title: "能约束提供者的一方，怎样获得质量信息？", options: [
+      { v: "user", t: "约束方就是使用者，自己就能判断", level: "ok", msg: "能约束提供者的就是使用者本人，并且能直接判断质量，坏质量较容易被察觉；前提是使用者的判断能产生后果。" },
+      { v: "third", t: "有第三方测量并公开结果", level: "mid", msg: "有第三方测量并公开结果，使用者看不出的问题有机会被发现。只有测量独立、覆盖关键结果、并能推动纠正时，这个环节才算较强；这三点需要分别核实。" },
+      { v: "self", t: "约束方主要靠提供者自报或填表", level: "weak", msg: "能约束提供者的一方主要靠自报和表格了解质量，有可能出现「指标好看、结果没变」的情况（古德哈特定律）。" },
+      { v: "unknown", t: "不清楚 / 需要核实", level: "unk", msg: "这一项信息不足，需要先核实，再判断这个环节强弱。" } ] },
+    { id: "q3", title: "谁能投诉？", options: [
+      { v: "effective", t: "使用者能投诉，而且有人处理、有后果", level: "ok", msg: "投诉渠道有效时，失职更可能付出代价。" },
+      { v: "via", t: "只能通过付费方转达", level: "mid", msg: "投诉要绕道付费方，反馈可能变慢，效果取决于付费方是否在乎。" },
+      { v: "none", t: "没有有效渠道", level: "weak", msg: "没有有效投诉渠道时，使用者知道问题也难以让提供者负责。" },
+      { v: "unknown", t: "不清楚 / 需要核实", level: "unk", msg: "这一项信息不足，需要先核实，再判断这个环节强弱。" } ] },
+    { id: "q4", title: "谁能更换提供者？", options: [
+      { v: "user", t: "使用者能随时换", level: "ok", msg: "使用者能换提供者时，提供者通常有持续改进的压力。" },
+      { v: "payer", t: "只有付费方能换", level: "mid", msg: "只有付费方能换提供者，压力强弱取决于付费方的监督力度。" },
+      { v: "nobody", t: "实际上没人能换（独家或换的成本很高）", level: "weak", msg: "没人能换提供者时，竞争带来的约束会明显减弱；商业机构和慈善机构都可能处在这种状态。" },
+      { v: "unknown", t: "不清楚 / 需要核实", level: "unk", msg: "这一项信息不足，需要先核实，再判断这个环节强弱。" } ] },
+    { id: "q5", title: "失败的成本由谁承担？", options: [
+      { v: "provider", t: "提供者（亏损、退出、被追责）", level: "ok", msg: "失败成本落在提供者身上时，提供者更有动力避免失败。" },
+      { v: "payer", t: "付费方继续拨款兜底", level: "weak", msg: "失败后由付费方兜底，成本纪律可能变弱（软预算约束）。" },
+      { v: "user", t: "使用者自己承受后果", level: "weak", msg: "失败成本主要落在使用者身上。如果做决定的人不承担后果，风险较高。" },
+      { v: "unknown", t: "不清楚 / 需要核实", level: "unk", msg: "这一项信息不足，需要先核实，再判断这个环节强弱。" } ] }
+  ];
+  // 包子铺两项是视频的假设；养老院与现金转移只填来源能支持的答案，其余设为「需要核实」。
+  var PRESETS = {
+    shop: { q1: "user", q2: "user", q3: "unknown", q4: "user", q5: "provider" },
+    charityShop: { q1: "payer", q2: "self", q3: "unknown", q4: "unknown", q5: "payer" },
+    nursing: { q1: "unknown", q2: "third", q3: "unknown", q4: "unknown", q5: "user" },
+    cash: { q1: "user", q2: "third", q3: "unknown", q4: "unknown", q5: "unknown" }
+  };
+  var PRESET_NOTE = {
+    shop: "预设说明：按视频的假设填写。视频没有讲投诉渠道，所以这一项设为需要核实。",
+    charityShop: "预设说明：按视频的假设填写。视频没有讲投诉渠道和谁能更换提供者，这两项设为需要核实。",
+    nursing: "预设说明：质量信息指监管机构的检查和评级；失败成本指 S8 的死亡率结果。患者或家属能选择养老院，不等于能决定护理内容，所以第一项设为需要核实。",
+    cash: "预设说明：受助者自己决定钱怎么花；结果由随机试验测量，一名合著者与执行机构有已披露关系。其余三项本页来源没有涉及。"
+  };
+  var currentPreset = "";
+  var LABEL = { ok: "较强", mid: "一般", weak: "较弱", unk: "需要核实" };
+  var form = document.getElementById("diag");
+  var result = document.getElementById("result");
+
+  QUESTIONS.forEach(function (q) {
+    var fs = document.createElement("fieldset");
+    var lg = document.createElement("legend");
+    lg.textContent = q.title;
+    fs.appendChild(lg);
+    q.options.forEach(function (o) {
+      var lb = document.createElement("label");
+      var input = document.createElement("input");
+      input.type = "radio";
+      input.name = q.id;
+      input.value = o.v;
+      lb.appendChild(input);
+      lb.appendChild(document.createTextNode(o.t));
+      fs.appendChild(lb);
+    });
+    form.appendChild(fs);
+  });
+
+  function render() {
+    var weak = [], mid = [], ok = [], unk = [], missing = 0;
+    QUESTIONS.forEach(function (q) {
+      var checked = form.querySelector('input[name="' + q.id + '"]:checked');
+      if (!checked) { missing++; return; }
+      var opt = q.options.filter(function (o) { return o.v === checked.value; })[0];
+      var item = { q: q.title, opt: opt };
+      if (opt.level === "weak") weak.push(item); else if (opt.level === "mid") mid.push(item); else if (opt.level === "unk") unk.push(item); else ok.push(item);
+    });
+    result.textContent = "";
+    var head = document.createElement("h3");
+    if (missing === QUESTIONS.length) {
+      head.textContent = "还没有选择。点一个预设例子，或逐题选择。";
+      result.appendChild(head);
+      return;
+    }
+    head.textContent = "较弱环节 " + weak.length + " 个，一般环节 " + mid.length + " 个，需要核实 " + unk.length + " 个" + (missing ? "（还有 " + missing + " 题未答）" : "");
+    result.appendChild(head);
+    weak.concat(mid, unk, ok).forEach(function (it) {
+      var d = document.createElement("div");
+      d.className = "finding " + it.opt.level;
+      var b = document.createElement("b");
+      b.textContent = LABEL[it.opt.level] + " · " + it.q + " ";
+      d.appendChild(b);
+      d.appendChild(document.createTextNode(it.opt.msg));
+      result.appendChild(d);
+    });
+    if (PRESET_NOTE[currentPreset]) {
+      var pn = document.createElement("p");
+      pn.className = "muted";
+      pn.textContent = PRESET_NOTE[currentPreset];
+      result.appendChild(pn);
+    }
+    if (weak.length === 0 && unk.length === 0 && missing === 0) {
+      var p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "按你的回答，这五个问题里没有发现较弱环节。这只是风险提示，不代表机构一定好；答案本身也可能需要核实。";
+      result.appendChild(p);
+    }
+  }
+
+  function setPressed(name) {
+    document.querySelectorAll("[data-preset]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-preset") === name && name !== "clear" ? "true" : "false");
+    });
+  }
+
+  document.querySelectorAll("[data-preset]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.getAttribute("data-preset");
+      form.querySelectorAll("input").forEach(function (i) { i.checked = false; });
+      var p = PRESETS[name];
+      if (p) {
+        Object.keys(p).forEach(function (k) {
+          var el = form.querySelector('input[name="' + k + '"][value="' + p[k] + '"]');
+          if (el) el.checked = true;
+        });
+      }
+      currentPreset = name;
+      setPressed(name);
+      render();
+    });
+  });
+  form.addEventListener("change", function () { currentPreset = ""; setPressed(""); render(); });
+  render();
+})();
+</script>
+</body>
+</html>

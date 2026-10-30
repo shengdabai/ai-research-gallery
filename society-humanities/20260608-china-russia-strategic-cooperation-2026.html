@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="description" content="中俄全面战略协作进展报告 · 2026 普京访华专题">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20260608-1616-中俄全面战略协作进展报告 · 2026 普京访华专题</title>
+<style>
+  :root{
+    --red:#b21e2b; --red-d:#7a1119; --gold:#c8a04a; --gold-l:#e3c987;
+    --ink:#1a1a1f; --ink2:#3a3a44; --slate:#5a6472; --line:#e6e2da;
+    --paper:#faf8f3; --card:#ffffff; --blue:#1d3557; --jade:#2f6e4f;
+    --warn:#9a6a00; --warn-bg:#fdf6e3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.85;font-size:16px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ===== Cover ===== */
+  .cover{background:linear-gradient(135deg,var(--red-d),var(--red) 55%,#8e1620);
+    color:#fff;padding:80px 0 64px;position:relative;overflow:hidden}
+  .cover::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 85% 15%,rgba(200,160,74,.25),transparent 45%),
+    radial-gradient(circle at 10% 90%,rgba(255,255,255,.08),transparent 40%)}
+  .cover .wrap{position:relative;z-index:2}
+  .badge{display:inline-block;border:1px solid rgba(255,255,255,.45);color:var(--gold-l);
+    padding:5px 16px;border-radius:30px;font-size:.8rem;letter-spacing:.2em;margin-bottom:22px}
+  .cover h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;line-height:1.2;letter-spacing:.02em}
+  .cover h1 em{font-style:normal;color:var(--gold-l)}
+  .cover .lede{font-size:1.1rem;color:rgba(255,255,255,.9);max-width:720px;margin:20px 0 30px}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:24px;font-size:.9rem;color:rgba(255,255,255,.8);
+    border-top:1px solid rgba(255,255,255,.2);padding-top:20px}
+  .cover .meta b{color:var(--gold-l);font-weight:700}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:34px;
+    background:rgba(0,0,0,.18);border-radius:14px;overflow:hidden}
+  .kpis .kpi{padding:18px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
+  .kpis .kpi:last-child{border:0}
+  .kpis .num{font-size:1.7rem;font-weight:800;color:var(--gold-l);line-height:1.1}
+  .kpis .lbl{font-size:.78rem;color:rgba(255,255,255,.78);margin-top:6px}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.kpis .kpi:nth-child(2){border:0}}
+
+  /* ===== Nav ===== */
+  .navbar{position:sticky;top:0;z-index:100;background:rgba(250,248,243,.92);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .navbar .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 28px}
+  .navbar a{white-space:nowrap;font-size:.86rem;color:var(--slate);padding:6px 12px;
+    border-radius:8px;text-decoration:none;transition:.2s}
+  .navbar a:hover,.navbar a.active{background:var(--red);color:#fff}
+
+  /* ===== Sections ===== */
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .sec-head .no{font-size:1rem;font-weight:800;color:var(--gold);
+    border:2px solid var(--gold);border-radius:8px;padding:2px 10px;flex-shrink:0}
+  h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:800;color:var(--ink)}
+  .sec-sub{color:var(--slate);font-size:.95rem;margin-bottom:26px}
+  h3{font-size:1.2rem;color:var(--red-d);margin:26px 0 12px;font-weight:700;
+    padding-left:12px;border-left:4px solid var(--gold)}
+  p{margin-bottom:14px;color:var(--ink2)}
+  strong{color:var(--ink)}
+
+  .card{background:var(--card);border-radius:14px;padding:24px 26px;margin:16px 0;
+    box-shadow:0 4px 18px rgba(26,26,31,.06);border:1px solid var(--line)}
+
+  /* timeline */
+  .tl{position:relative;margin:20px 0 6px;padding-left:30px}
+  .tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--red),var(--gold))}
+  .tl .ev{position:relative;margin-bottom:18px}
+  .tl .ev::before{content:"";position:absolute;left:-29px;top:6px;width:12px;height:12px;
+    border-radius:50%;background:var(--red);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--red)}
+  .tl .t{font-weight:800;color:var(--red);font-size:.92rem}
+  .tl .d{color:var(--ink2);font-size:.94rem}
+
+  /* doc grid */
+  .docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+  .doc{background:linear-gradient(135deg,#fff,#fbf7ee);border:1px solid var(--line);
+    border-radius:12px;padding:18px;border-top:4px solid var(--red)}
+  .doc h4{font-size:1rem;color:var(--red-d);margin-bottom:6px}
+  .doc p{font-size:.86rem;color:var(--slate);margin:0}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;
+    background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(26,26,31,.05)}
+  th{background:var(--blue);color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+  td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink2)}
+  tr:last-child td{border-bottom:0}
+  tr:nth-child(even) td{background:#fbfaf7}
+  .up{color:var(--jade);font-weight:700} .flat{color:var(--warn);font-weight:700}
+
+  .domain{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:18px 0}
+  .dcard{background:#fff;border-radius:14px;padding:22px;border:1px solid var(--line);
+    box-shadow:0 4px 18px rgba(26,26,31,.05);position:relative;overflow:hidden}
+  .dcard::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--red)}
+  .dcard .icon{font-size:1.6rem;margin-bottom:8px}
+  .dcard h4{font-size:1.1rem;color:var(--ink);margin-bottom:6px}
+  .dcard .tag{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:20px;
+    font-weight:700;margin-bottom:10px}
+  .tag.hot{background:#fdeaea;color:var(--red)}
+  .tag.steady{background:#e8f3ec;color:var(--jade)}
+  .tag.neg{background:var(--warn-bg);color:var(--warn)}
+  .dcard ul{list-style:none;font-size:.9rem}
+  .dcard li{padding:5px 0 5px 18px;position:relative;color:var(--ink2)}
+  .dcard li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
+
+  .callout{background:var(--warn-bg);border:1px solid #ecdcae;border-left:5px solid var(--warn);
+    border-radius:0 12px 12px 0;padding:18px 22px;margin:18px 0}
+  .callout .h{font-weight:800;color:var(--warn);margin-bottom:6px;font-size:.95rem}
+  .callout p{font-size:.9rem;color:#6b4e10;margin:0}
+
+  .quote{background:linear-gradient(135deg,var(--blue),#16263f);color:#fff;border-radius:14px;
+    padding:28px 30px;margin:20px 0;font-size:1.1rem;line-height:1.7}
+  .quote .src{display:block;font-size:.82rem;color:var(--gold-l);margin-top:12px;font-style:normal}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.twocol{grid-template-columns:1fr}}
+  .pill{display:inline-block;background:#f1ede3;color:var(--ink2);border:1px solid var(--line);
+    padding:4px 12px;border-radius:20px;font-size:.82rem;margin:0 6px 6px 0}
+
+  .outlook{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+  .ob{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+  .ob .y{font-weight:800;color:var(--red);font-size:1.1rem}
+  .ob .e{font-size:.84rem;color:var(--slate);margin-top:6px}
+
+  footer{background:var(--ink);color:#b8b8c0;padding:40px 0;font-size:.85rem}
+  footer .wrap{display:grid;gap:14px}
+  footer a{color:var(--gold-l);text-decoration:none}
+  .disc{font-size:.8rem;color:#8a8a92;line-height:1.7;border-top:1px solid #333;padding-top:18px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+
+<header class="cover">
+  <div class="wrap">
+    <span class="badge">专 题 研 究 报 告 · CONFIDENTIAL BRIEF</span>
+    <h1>中俄全面战略协作<br><em>进展与成果全景报告</em></h1>
+    <p class="lede">以 2026 年 5 月 19–20 日普京总统国事访华为切入点，系统梳理本次访问的核心成果，并全面评估能源、经贸、金融、军事、科技、人文、北极与多边治理八大领域的合作现状、突破与待解难题。</p>
+    <div class="meta">
+      <span>📅 数据截至 <b>2026-05-20</b></span>
+      <span>🤝 中俄战略协作伙伴关系 <b>30 周年</b></span>
+      <span>📜 《睦邻友好合作条约》 <b>25 周年</b></span>
+      <span>🎓 <b>中俄教育年</b> 启动</span>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="num">第 25 次</div><div class="lbl">普京访华次数</div></div>
+      <div class="kpi"><div class="num">40+ 项</div><div class="lbl">本次签署合作文件</div></div>
+      <div class="kpi"><div class="num">$852亿</div><div class="lbl">2026 年 1–4 月双边贸易额</div></div>
+      <div class="kpi"><div class="num">16 年</div><div class="lbl">中国连续居俄第一大贸易伙伴</div></div>
+    </div>
+  </div>
+</header>
+
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="#summit" class="active">访问综述</a>
+    <a href="#docs">签署文件</a>
+    <a href="#energy">能源</a>
+    <a href="#trade">经贸</a>
+    <a href="#finance">金融结算</a>
+    <a href="#military">军事安全</a>
+    <a href="#tech">科技</a>
+    <a href="#people">人文</a>
+    <a href="#arctic">北极航道</a>
+    <a href="#multi">多边治理</a>
+    <a href="#challenge">风险与展望</a>
+  </div>
+</nav>
+
+
+<section id="summit">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">01</span><h2>访问综述：一次"承前启后"的国事访问</h2></div>
+    <p class="sec-sub">应国家主席习近平邀请，俄罗斯总统普京于 2026 年 5 月 19–20 日对中国进行国事访问——这是普京第 25 次到访中国。</p>
+
+    <div class="card">
+      <h3>关键日程（克里姆林宫披露）</h3>
+      <div class="tl">
+        <div class="ev"><div class="t">5 月 19 日 晚</div><div class="d">普京抵达北京；习近平举行欢迎晚宴；两国元首进行非正式"茶叙"——克宫称这是此访的重要环节之一。</div></div>
+        <div class="ev"><div class="t">5 月 20 日 上午</div><div class="d">天安门广场盛大欢迎仪式：军乐团奏两国国歌，鸣放礼炮 21 响，普京检阅解放军仪仗队并观看分列式。</div></div>
+        <div class="ev"><div class="t">5 月 20 日</div><div class="d">人民大会堂举行小范围 + 大范围会谈 → 签署联合文件 → 共同会见记者发表声明 → 出席"中俄教育年"开幕式。</div></div>
+        <div class="ev"><div class="t">5 月 20 日</div><div class="d">普京与国务院总理李强会谈；并会见中国工程师彭湃（2000 年普京首次访华时曾与其合影，时年尚是孩童）。</div></div>
+      </div>
+    </div>
+
+    <div class="quote">
+      "在双方共同努力下，俄中关系达到空前的高水平，高层交往密切，政治互信牢固，双边贸易稳步增长，能源供需实现互利互惠。"
+      <span class="src">—— 普京总统会谈表态（据新华网、中国外交部通稿）</span>
+    </div>
+
+    <h3>本次访问的三大象征意义</h3>
+    <div class="twocol">
+      <div class="card" style="margin:0">
+        <p>📌 <strong>时间节点叠加</strong>：恰逢中俄战略协作伙伴关系建立 30 周年、《中俄睦邻友好合作条约》签署 25 周年、"中俄教育年"启动之年，"具有继往开来的重要意义"。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <p>📌 <strong>条约延期为核心成果</strong>：两国元首一致同意《中俄睦邻友好合作条约》<strong>继续延期</strong>，为下一阶段合作提供法律与政治框架。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="docs">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">02</span><h2>签署成果：两份联合声明 + 40 余项合作文件</h2></div>
+    <p class="sec-sub">访华前克里姆林宫预告将签署"近 40 项双边合作文件"，涵盖工业、交通、核能等领域；正式成果以两份联合声明为政治统领。</p>
+
+    <h3>两份纲领性联合声明</h3>
+    <div class="docs">
+      <div class="doc">
+        <h4>① 全面战略协作联合声明</h4>
+        <p>《关于进一步加强全面战略协作、深化睦邻友好合作的联合声明》——双边关系总纲。</p>
+      </div>
+      <div class="doc">
+        <h4>② 多极化国际关系声明</h4>
+        <p>《关于倡导世界多极化和新型国际关系的联合声明》——俄方称为"基础性文件"，全文约 47 页，系统定义双边关系发展路径与全球事务互动形式。</p>
+      </div>
+    </div>
+
+    <h3>领域合作文件（见证签署）</h3>
+    <p>两份声明之外，双方在以下领域达成约 40 项合作文件，覆盖：</p>
+    <div>
+      <span class="pill">经贸投资</span><span class="pill">教育</span><span class="pill">科技</span>
+      <span class="pill">能源资源</span><span class="pill">核能</span><span class="pill">工业</span>
+      <span class="pill">交通运输</span><span class="pill">农业</span><span class="pill">文化电影旅游体育</span>
+    </div>
+    <div class="callout">
+      <div class="h">⚠ 口径说明</div>
+      <p>不同渠道对"签署文件数量"表述略有差异（官方通稿强调"20 项 + 联合声明"、克宫预告"近 40 项"）。本报告采用"40 余项"为上限口径，具体以两国官方正式发布的清单为准。</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="energy">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">03</span><h2>能源合作：压舱石，但"力量 2 号"仍在博弈</h2></div>
+    <p class="sec-sub">能源是中俄合作的核心支柱。普京称两国"能源供需实现互利互惠"。但旗舰管道项目的商业合同尚未最终落定。</p>
+
+    <div class="domain">
+      <div class="dcard">
+        <div class="icon">⛽</div>
+        <span class="tag steady">运行中 · 稳步扩容</span>
+        <h4>西伯利亚力量 1 号</h4>
+        <ul>
+          <li>已投产主力管道</li>
+          <li>计划扩容至 <strong>440 亿 m³/年</strong></li>
+          <li>定价锚定亚洲油价模式</li>
+        </ul>
+      </div>
+      <div class="dcard">
+        <div class="icon">🌏</div>
+        <span class="tag steady">运行中</span>
+        <h4>远东管线</h4>
+        <ul>
+          <li>计划扩容至 <strong>120 亿 m³/年</strong></li>
+          <li>"十五五"规划点名推进</li>
+        </ul>
+      </div>
+      <div class="dcard">
+        <div class="icon">🚧</div>
+        <span class="tag neg">仅备忘录 · 价格未定</span>
+        <h4>西伯利亚力量 2 号</h4>
+        <ul>
+          <li>2025-09 签<strong>有法律约束力备忘录</strong></li>
+          <li>经蒙古"联盟东方"过境，<strong>500 亿 m³/年</strong></li>
+          <li>规划 2030 年投产</li>
+          <li>采购合同<strong>尚未签署</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="h">⚠ 待解核心难题：价格 + 投资分摊</div>
+      <p><strong>价格分歧</strong>：俄方希望沿用力量 1 号、锚定亚洲油价（约 265–285 美元/千 m³），中方倾向接近国内水平（约 120–130 美元）。<strong>投资与工期</strong>：总造价估 136 亿–340 亿美元，资金分摊仍在拉锯，中方境内段尚无明确计划。三方（含蒙古过境）的最终采购合同何时签署仍存不确定性。</p>
+    </div>
+    <p>若三条管线全部到位，俄对华供气总量可达 <strong>约 1060 亿 m³/年</strong>，占中国天然气总消费近 20%。相较新建管道，<strong>扩容既有两条管线</strong>被业内视为更现实的近期路径。核能方面，本次访问也将核能列入合作文件清单，延续田湾、徐大堡核电项目的协作脉络。</p>
+  </div>
+</section>
+
+
+<section id="trade">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">04</span><h2>经贸：连续三年破 2000 亿，从规模扩张转向质量升级</h2></div>
+    <p class="sec-sub">中国已连续 16 年保持俄第一大贸易伙伴地位。双边贸易额连续三年突破 2000 亿美元大关。</p>
+
+    <table>
+      <thead><tr><th>时段</th><th>双边贸易额</th><th>同比 / 备注</th></tr></thead>
+      <tbody>
+        <tr><td>2024 全年</td><td>约 2448 亿美元</td><td class="up">历史新高</td></tr>
+        <tr><td>2025 全年</td><td>约 2279 亿美元</td><td class="flat">高位趋稳</td></tr>
+        <tr><td>2026 Q1</td><td>约 612 亿美元</td><td class="up">+14.7%（对俄出口 +22%）</td></tr>
+        <tr><td>2026 年 1–4 月</td><td>约 852.41 亿美元</td><td class="up">+19.7%</td></tr>
+      </tbody>
+    </table>
+
+    <h3>结构升级的三个方向</h3>
+    <div class="twocol">
+      <div class="card" style="margin:0">
+        <p>🌾 <strong>农产品成新增长极</strong>：俄已是中国第三大农产品进口来源国，大豆、牛肉等年均增速超 20%。2025 年 12 月俄对华农产品出口单月首破 10 亿美元。</p>
+      </div>
+      <div class="card" style="margin:0">
+        <p>🐟 <strong>水产品异军突起</strong>：2025 年中国首超欧盟成为俄水产品最大单一市场，冷冻鱼跃居俄对华农产品第一大类，对华冷冻鱼出口 13 亿美元、同比近 +50%。</p>
+      </div>
+    </div>
+    <p style="margin-top:14px">新阶段重点已从"规模扩张"转向"巩固成果 + 创新扩容"：稳定商品贸易与产业链合作，扩大电商、服务贸易、本币结算，探索投资、科技与北极航道等新领域。习近平在会谈中明确提出推动"经贸投资、能源资源、交通运输、科技创新"务实合作提质升级，以<strong>新质生产力</strong>打造增长新引擎。</p>
+  </div>
+</section>
+
+
+<section id="finance">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">05</span><h2>金融与结算：本币占比超 90%，支付基建加速搭建</h2></div>
+    <p class="sec-sub">在西方制裁背景下，去美元化的本币结算已成为中俄贸易的主导方式，并正从"记账式变通"走向制度化基建。</p>
+
+    <div class="outlook">
+      <div class="ob"><div class="y">90%+</div><div class="e">本币结算占比（人民币为主）</div></div>
+      <div class="ob"><div class="y">→ 80%</div><div class="e">人民币—卢布直接兑换目标比例</div></div>
+      <div class="ob"><div class="y">2026 Q2</div><div class="e">BRICS PAY 预计上线（中俄 12 家大行参与）</div></div>
+      <div class="ob"><div class="y">2026</div><div class="e">俄银行卡纳入中国二维码支付，逐步覆盖涉俄贸易城市</div></div>
+    </div>
+
+    <div class="callout">
+      <div class="h">⚠ 结构性挑战</div>
+      <p>许多中小贸易仍采用"货物跨境、资金不跨境"的记账式 / 名义账户结算，易受跨境资金流动不畅制约，出现阶段性人民币短缺与结算滞后。新支付系统（BRICS PAY、二维码互通）上线后，因制裁导致的涉俄跨境支付难题有望明显缓解。</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="military">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">06</span><h2>军事与战略安全：协作定位上升至"全球稳定因素"</h2></div>
+    <p class="sec-sub">普京行前称俄中协作是"维护国际关系稳定的最重要因素"，并特别点出其在防核扩散领域的作用。</p>
+    <div class="card">
+      <p>普京强调：当裁军和防止核扩散领域的国际条约"几乎已荡然无存"时，<strong>俄中协作成为防止核扩散和维持稳定的重要因素</strong>。这一表态把中俄军事与战略协调的定位，从双边层面提升到全球安全治理层面。</p>
+      <p>两份联合声明（尤其 47 页的多极化文件）系统阐述了双方在全球安全、战略稳定与国际事务中的互动形式。常态化的高层军事交往、联合演训与战略磋商机制，构成两国"政治互信牢固"的安全底座。</p>
+    </div>
+    <div class="callout">
+      <div class="h">⚠ 信息边界提示</div>
+      <p>本次访问公开通稿聚焦经贸、能源、人文与多边治理，<strong>未披露具体军售或装备协议清单</strong>。涉及军贸的具体内容通常不在国事访问公开成果中体现，本节仅基于公开战略表态，不作未经证实的延伸。</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="tech">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">07</span><h2>科技创新：从"补短板"到"布前沿"</h2></div>
+    <p class="sec-sub">科技是本次签署文件明确覆盖的领域之一，也是习近平所提"以新质生产力打造增长新引擎"的核心承载。</p>
+    <div class="domain">
+      <div class="dcard"><div class="icon">🛰️</div><span class="tag steady">深化中</span><h4>航天与核能</h4><ul><li>核能合作列入文件清单</li><li>延续既有民用核电与航天协作脉络</li></ul></div>
+      <div class="dcard"><div class="icon">🤖</div><span class="tag hot">前沿布局</span><h4>前沿领域</h4><ul><li>习近平提"积极布局前沿领域合作"</li><li>新质生产力为关键词</li></ul></div>
+      <div class="dcard"><div class="icon">🎓</div><span class="tag steady">机制化</span><h4>科教联动</h4><ul><li>"中俄教育年"为科技人才交流提供制度通道</li></ul></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="people">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">08</span><h2>人文交流：从"文化年"到"教育年"</h2></div>
+    <p class="sec-sub">在成功举办"俄中文化年"后，两国元首在本次访问中共同启动"中俄教育年"，人文交流迈上新台阶。</p>
+    <div class="twocol">
+      <div class="card" style="margin:0"><p>🎬 习近平提出加强 <strong>教育、文化、电影、旅游、体育</strong> 等人文交流合作，相关领域均在本次签署文件覆盖范围内。</p></div>
+      <div class="card" style="margin:0"><p>✈️ 双边人员往来更加密切，互免签证 / 便利化措施持续推进，旅游与人文交流成为巩固民意基础的重要抓手。</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="arctic">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">09</span><h2>北极航道：从季节性试航走向全年常态化通航</h2></div>
+    <p class="sec-sub">北方海航道（NSR）正成为中俄物流合作的战略新前沿，与农产品、粮食走廊形成协同效应。</p>
+    <table>
+      <thead><tr><th>维度</th><th>关键进展</th></tr></thead>
+      <tbody>
+        <tr><td>航线优势</td><td>巴伦支海至白令海峡全长约 5600 km，较苏伊士传统航线缩短欧亚航行时间 <span class="up">35–40%</span></td></tr>
+        <tr><td>"北极快线 1 号"</td><td>已开航运营，全程约 1.32 万 km、20–25 天，较苏伊士航线缩短 5000–8000 km、省 20 天以上</td></tr>
+        <tr><td>货运量</td><td>俄方预计 2025 年北方航道货运量超 <strong>4000 万吨</strong></td></tr>
+        <tr><td>全年通航</td><td>中国新新航运与俄国家原子能签约，建首批 5 艘 ARC7 级极地集装箱船，<strong>首艘 2027 年投运</strong>，迈向四季常态化</td></tr>
+      </tbody>
+    </table>
+    <p>北极航道与"新陆路粮食走廊"共同为农产品（尤其水产品、油料、小麦）贸易提供低成本运输保障，是非能源贸易的重要支撑性基础设施。</p>
+  </div>
+</section>
+
+
+<section id="multi">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">10</span><h2>多边治理：合力推动"世界多极化"</h2></div>
+    <p class="sec-sub">47 页的《多极化与新型国际关系联合声明》是本次访问在全球治理层面最具分量的成果。</p>
+    <div class="card">
+      <p>习近平强调，双方要深化在 <strong>联合国、上海合作组织、金砖国家、亚太经合组织</strong> 等多边平台的协调与配合。两国把"倡导世界多极化、推动新型国际关系"作为共同的全球战略叙事，并以此份基础性文件加以制度化表述。</p>
+      <p>有专家评价，大国领导人密集访华，有望在全球治理新规范的制定上发挥作用——中俄正试图在裁军、防扩散、支付体系（BRICS PAY）、能源与粮食安全等多个维度，提供"非西方主导"的替代性公共产品。</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="challenge">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">11</span><h2>风险研判与前景展望</h2></div>
+    <p class="sec-sub">合作高歌猛进的同时，仍存在若干结构性张力，需客观评估。</p>
+
+    <h3>四大待解张力</h3>
+    <div class="domain">
+      <div class="dcard"><div class="icon">⛽</div><span class="tag neg">价格</span><h4>力量 2 号定价僵局</h4><ul><li>俄油价锚定 vs 中国内价</li><li>采购合同迟迟未签</li></ul></div>
+      <div class="dcard"><div class="icon">💱</div><span class="tag neg">金融</span><h4>跨境支付不畅</h4><ul><li>记账式结算的脆弱性</li><li>阶段性人民币短缺</li></ul></div>
+      <div class="dcard"><div class="icon">⚖️</div><span class="tag neg">外部</span><h4>二级制裁压力</h4><ul><li>涉俄交易的合规风险</li><li>金融机构审慎态度</li></ul></div>
+      <div class="dcard"><div class="icon">📉</div><span class="tag neg">结构</span><h4>贸易增速回落</h4><ul><li>2025 总额较 2024 回落</li><li>从规模转向质量的阵痛</li></ul></div>
+    </div>
+
+    <h3>未来 1–3 年关键观察节点</h3>
+    <div class="outlook">
+      <div class="ob"><div class="y">2026 Q2</div><div class="e">BRICS PAY 上线，支付基建落地验证</div></div>
+      <div class="ob"><div class="y">2026 内</div><div class="e">俄银行卡接入中国二维码支付推广</div></div>
+      <div class="ob"><div class="y">2027</div><div class="e">首艘 ARC7 极地船投运，北极全年通航起步</div></div>
+      <div class="ob"><div class="y">2030</div><div class="e">西伯利亚力量 2 号规划投产（取决于合同落定）</div></div>
+    </div>
+
+    <div class="quote" style="background:linear-gradient(135deg,var(--red-d),var(--red))">
+      综合判断：本次访问以《睦邻友好合作条约》延期与两份联合声明为政治压舱石，<strong>巩固了"高水平、机制化"的全面战略协作底盘</strong>；能源、北极、金融三条线索是未来增量的主战场，但"力量 2 号采购合同"与"跨境支付制度化"是决定合作能否再上台阶的两个关键变量。
+      <span class="src">—— 本报告综合研判</span>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <div><strong style="color:#fff">中俄全面战略协作进展报告</strong> · 2026 普京访华专题 · 数据截至 2026-05-20</div>
+    <div style="font-size:.85rem">主要信息来源：中华人民共和国外交部、新华网、俄罗斯卫星通讯社、观察者网、中国石油新闻中心、商务部《对俄投资合作国别指南(2025)》、人民网等公开报道。</div>
+    <div class="disc">
+      <strong style="color:#b8b8c0">免责与口径说明：</strong>本报告为基于公开新闻报道的综合整理与研判，非官方文件。部分 2026 年最新数据（如季度贸易额、个别项目进度）来自媒体与社交平台来源，可信度不一，<strong>具体数字与协议清单请以两国官方海关统计及正式发布为准</strong>。涉及军事装备、未公开协议等内容，本报告恪守"无证不录"原则，仅基于已公开的战略表态陈述，不作未经证实的推测。报告中"约""估""预计"等限定词均为对来源不确定性的如实标注。
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  // nav active
+  const links=[...document.querySelectorAll('.navbar a')];
+  const map=links.map(a=>({a,s:document.querySelector(a.getAttribute('href'))})).filter(x=>x.s);
+  const io2=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));
+      const m=map.find(x=>x.s===e.target);if(m)m.a.classList.add('active');}
+  }),{rootMargin:"-20% 0px -70% 0px"});
+  map.forEach(x=>io2.observe(x.s));
+</script>
+</body>
+</html>

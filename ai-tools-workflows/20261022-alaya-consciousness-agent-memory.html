@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阿赖耶识是 AI Agent 的记忆架构图吗？口播原文核对与类比拆解</title>
+<meta name="description" content="逐条核对一段把唯识八识类比为 AI Agent 记忆架构的口播：哪些成立、哪些说过头、哪些引文出处不准，并给出可交互的类比边界与设计清单。">
+<style>
+:root{
+  /* ===== 颜色：底色与文字 ===== */
+  --c-bg:#0f1420;
+  --c-bg-top:#141b2c;
+  --c-surface:#171d2b;
+  --c-surface-2:#1e2638;
+  --c-surface-3:#252f45;
+  --c-line:#2e3852;
+  --c-line-strong:#3f4b69;
+  --c-text:#e6e9f0;
+  --c-text-2:#b8bfce;
+  --c-text-3:#98a1b6;
+  --c-none:transparent;
+  --c-shadow:rgba(0,0,0,.35);
+  --c-grid:rgba(230,233,240,.09);
+  --c-focus:#ffd479;
+  --c-on-accent:#0f1420;
+  /* ===== 颜色：两套体系 ===== */
+  --c-yoga:#e8b75c;
+  --c-yoga-soft:rgba(232,183,92,.13);
+  --c-yoga-line:rgba(232,183,92,.5);
+  --c-agent:#4fcab6;
+  --c-agent-soft:rgba(79,202,182,.12);
+  --c-agent-line:rgba(79,202,182,.5);
+  /* ===== 颜色：判定 ===== */
+  --c-v-ok:#62cf8f;
+  --c-v-part:#74afef;
+  --c-v-over:#f28a62;
+  --c-v-src:#bb95f2;
+  --c-v-alt:#aab2c4;
+  --c-v-over-soft:rgba(242,138,98,.12);
+  --c-v-part-soft:rgba(116,175,239,.12);
+  /* ===== 渐变 ===== */
+  --grad-hero:linear-gradient(180deg,var(--c-bg-top),var(--c-bg));
+  /* ===== 字体 ===== */
+  --f-sans:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --f-serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --fs-xs:.8125rem;
+  --fs-sm:.875rem;
+  --fs-base:1rem;
+  --fs-md:1.0625rem;
+  --fs-lg:1.1875rem;
+  --fs-xl:1.375rem;
+  --fs-2xl:clamp(1.375rem,1.1rem + 1.2vw,1.875rem);
+  --fs-hero:clamp(1.75rem,1.15rem + 2.7vw,2.875rem);
+  --fs-svg:12px;
+  --fs-svg-lg:16px;
+  --fw-regular:400;
+  --fw-medium:500;
+  --fw-bold:700;
+  --lh-tight:1.3;
+  --lh-snug:1.5;
+  --lh-base:1.75;
+  --ls-wide:.06em;
+  /* ===== 间距 ===== */
+  --sp-0:0;
+  --sp-1:.25rem;
+  --sp-2:.5rem;
+  --sp-3:.75rem;
+  --sp-4:1rem;
+  --sp-5:1.5rem;
+  --sp-6:2rem;
+  --sp-7:3rem;
+  --sp-8:4.5rem;
+  /* ===== 圆角 / 描边 / 阴影 ===== */
+  --r-sm:4px;
+  --r-md:8px;
+  --r-lg:12px;
+  --bw-1:1px;
+  --bw-2:2px;
+  --bw-accent:4px;
+  --sh-card:0 10px 30px var(--c-shadow);
+  /* ===== 透明度 / 层级 ===== */
+  --op-muted:.72;
+  --op-full:1;
+  --z-base:1;
+  /* ===== 动效 ===== */
+  --t-none:.01ms;
+  --t-fast:150ms;
+  --t-med:320ms;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --js-autoplay-ms:1800;
+  /* ===== 布局尺寸 ===== */
+  --w-full:100%;
+  --w-page:72rem;
+  --w-prose:46rem;
+  --w-loop-svg:26rem;
+  --w-num-col:3.25rem;
+  --w-badge-col:6.5rem;
+  --h-vbar:12px;
+  --h-chart:300px;
+  --h-chart-sm:240px;
+  --sz-dot:10px;
+  --sz-touch:44px;
+  --col-1:minmax(0,1fr);
+  --col-2:repeat(2,minmax(0,1fr));
+  --col-3:repeat(3,minmax(0,1fr));
+  --col-layer:minmax(0,5fr) minmax(0,7fr);
+  --col-loop:minmax(0,1fr) minmax(0,1fr);
+  --col-matrix:var(--w-num-col) minmax(0,1fr) minmax(0,1fr);
+  --col-ctrl:minmax(0,1fr) auto;
+  --grow-seg:1;
+  --scale-check:1.6;
+  --ul-offset:.2em;
+  /* ===== SVG 与图表 ===== */
+  --svg-stroke:2;
+  --svg-stroke-thick:3;
+  --svg-hair:1;
+  --svg-dash:4 4;
+  --chart-pad-t:14;
+  --chart-pad-r:14;
+  --chart-pad-b:34;
+  --chart-pad-l:44;
+  --chart-tick-gap:8;
+  --chart-txt-dy:4;
+  --chart-label-dy:22;
+  --bp-md-js:820;
+}
+/* 断点（媒体查询不能用 var()，阈值集中写在这里）
+   BP-md = 820px：两栏改单栏，主张表改卡片
+   BP-sm = 520px：三栏改单栏，表格改卡片，图表变矮 */
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{color-scheme:dark;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:var(--sp-0);background:var(--c-bg);color:var(--c-text);font-family:var(--f-sans);font-size:var(--fs-base);line-height:var(--lh-base)}
+a{color:var(--c-agent);text-underline-offset:var(--ul-offset)}
+a:hover{color:var(--c-text)}
+:focus-visible{outline:var(--bw-2) solid var(--c-focus);outline-offset:var(--bw-2)}
+p{margin:var(--sp-0) var(--sp-0) var(--sp-3)}
+ul{margin:var(--sp-0);padding-left:var(--sp-5)}
+li{margin-bottom:var(--sp-2)}
+h1,h2,h3{line-height:var(--lh-tight);font-weight:var(--fw-bold)}
+h2{font-size:var(--fs-2xl);margin:var(--sp-0) var(--sp-0) var(--sp-3)}
+h3{font-size:var(--fs-lg);margin:var(--sp-0) var(--sp-0) var(--sp-3)}
+.wrap{max-width:var(--w-page);margin-inline:auto;padding-inline:var(--sp-5)}
+.prose{max-width:var(--w-prose)}
+.muted{color:var(--c-text-2)}
+.small{font-size:var(--fs-sm)}
+.xs{font-size:var(--fs-xs);color:var(--c-text-3)}
+.zh-old{font-family:var(--f-serif)}
+.y{color:var(--c-yoga)}
+.g{color:var(--c-agent)}
+.mt-3{margin-top:var(--sp-3)}
+.mt-5{margin-top:var(--sp-5)}
+
+/* ---------- 头部 ---------- */
+.hero{background:var(--grad-hero);border-bottom:var(--bw-1) solid var(--c-line);padding-block:var(--sp-8) var(--sp-7)}
+.kicker{color:var(--c-yoga);font-size:var(--fs-sm);font-weight:var(--fw-medium);letter-spacing:var(--ls-wide);margin:var(--sp-0)}
+.hero h1{font-size:var(--fs-hero);margin:var(--sp-3) var(--sp-0) var(--sp-4)}
+.lede{font-size:var(--fs-md);color:var(--c-text-2)}
+.meta{font-size:var(--fs-sm);color:var(--c-text-3);margin-top:var(--sp-3)}
+.verdict-box{margin-top:var(--sp-6);background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-left:var(--bw-accent) solid var(--c-yoga);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--sh-card)}
+.verdict-box .one{font-size:var(--fs-lg);font-weight:var(--fw-bold);margin-bottom:var(--sp-4)}
+.verdict-box ul{color:var(--c-text-2)}
+.verdict-box li strong{color:var(--c-text)}
+.tally{margin-top:var(--sp-5);border-top:var(--bw-1) solid var(--c-line);padding-top:var(--sp-4)}
+.tally-head{font-size:var(--fs-sm);color:var(--c-text-2);margin-bottom:var(--sp-2)}
+.vbar{display:flex;gap:var(--bw-2);height:var(--h-vbar);border-radius:var(--r-sm);overflow:hidden;margin-bottom:var(--sp-3)}
+.vbar span{flex-grow:var(--grow-seg);flex-basis:var(--sp-0)}
+.vlegend{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--c-text-2)}
+.vdot{display:inline-block;width:var(--sz-dot);height:var(--sz-dot);border-radius:var(--r-sm);margin-right:var(--sp-1);vertical-align:baseline}
+[data-v="ok"]{--vc:var(--c-v-ok)}
+[data-v="part"]{--vc:var(--c-v-part)}
+[data-v="over"]{--vc:var(--c-v-over)}
+[data-v="src"]{--vc:var(--c-v-src)}
+[data-v="alt"]{--vc:var(--c-v-alt)}
+.vbar span,.vdot{background:var(--vc)}
+.badge{display:inline-block;padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);background:var(--vc);color:var(--c-on-accent);font-size:var(--fs-xs);font-weight:var(--fw-bold);line-height:var(--lh-snug);white-space:nowrap}
+
+/* ---------- 目录 ---------- */
+.toc{border-bottom:var(--bw-1) solid var(--c-line);padding-block:var(--sp-4)}
+.toc ul{list-style:none;padding:var(--sp-0);display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm)}
+.toc li{margin:var(--sp-0)}
+.toc a{color:var(--c-text-2);text-decoration:none;border-bottom:var(--bw-1) solid var(--c-line-strong)}
+.toc a:hover{color:var(--c-text);border-color:var(--c-agent)}
+
+/* ---------- 小节 ---------- */
+section{padding-block:var(--sp-7);border-bottom:var(--bw-1) solid var(--c-line)}
+.intro{color:var(--c-text-2);max-width:var(--w-prose);margin-bottom:var(--sp-5)}
+.card{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-5)}
+.note{background:var(--c-surface-2);border-left:var(--bw-accent) solid var(--c-line-strong);border-radius:var(--r-sm);padding:var(--sp-3) var(--sp-4);color:var(--c-text-2);font-size:var(--fs-sm);margin-top:var(--sp-4)}
+.note strong{color:var(--c-text)}
+.note.warn{border-left-color:var(--c-v-over);background:var(--c-v-over-soft)}
+.note.key{border-left-color:var(--c-yoga);background:var(--c-yoga-soft)}
+blockquote.q{margin:var(--sp-3) var(--sp-0);padding:var(--sp-3) var(--sp-4);background:var(--c-yoga-soft);border-left:var(--bw-accent) solid var(--c-yoga-line);border-radius:var(--r-sm);font-family:var(--f-serif);color:var(--c-text);line-height:var(--lh-base)}
+blockquote.q cite{display:block;margin-top:var(--sp-1);font-family:var(--f-sans);font-style:normal;font-size:var(--fs-xs);color:var(--c-text-3)}
+.grid-2{display:grid;grid-template-columns:var(--col-2);gap:var(--sp-4)}
+.grid-3{display:grid;grid-template-columns:var(--col-3);gap:var(--sp-4)}
+
+/* ---------- 表格 ---------- */
+.tbl{width:var(--w-full);border-collapse:collapse;font-size:var(--fs-sm)}
+.tbl th,.tbl td{padding:var(--sp-3);border-bottom:var(--bw-1) solid var(--c-line);text-align:left;vertical-align:top}
+.tbl th{color:var(--c-text-3);font-weight:var(--fw-medium);background:var(--c-surface-2)}
+.tbl td.n{color:var(--c-text-3);width:var(--w-num-col);white-space:nowrap}
+.tbl td.b{width:var(--w-badge-col)}
+.tbl .say{color:var(--c-text)}
+.tbl .src{color:var(--c-text-3);font-size:var(--fs-xs);margin-top:var(--sp-1)}
+.tbl-wrap{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);overflow:hidden}
+
+/* ---------- 三种“像” ---------- */
+.scale{display:grid;grid-template-columns:var(--col-3);gap:var(--sp-4)}
+.scale .lv{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-4)}
+.scale .lv h3{font-size:var(--fs-md);margin-bottom:var(--sp-2)}
+.scale .tag{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-bold);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);margin-bottom:var(--sp-2)}
+.scale .lv.yes{border-color:var(--c-agent-line)}
+.scale .lv.yes .tag{background:var(--c-agent);color:var(--c-on-accent)}
+.scale .lv.some{border-style:dashed;border-color:var(--c-agent-line)}
+.scale .lv.some .tag{background:var(--c-agent-soft);color:var(--c-agent);border:var(--bw-1) solid var(--c-agent-line)}
+.scale .lv.no .tag{background:var(--c-v-over-soft);color:var(--c-v-over);border:var(--bw-1) solid var(--c-v-over)}
+
+/* ---------- 八识分层 ---------- */
+.layers{display:grid;grid-template-columns:var(--col-layer);gap:var(--sp-5);align-items:start}
+.layer-list{display:flex;flex-direction:column;gap:var(--sp-2)}
+.layer-btn{display:grid;grid-template-columns:var(--col-2);gap:var(--sp-3);align-items:center;width:var(--w-full);min-height:var(--sz-touch);text-align:left;padding:var(--sp-3) var(--sp-4);background:var(--c-surface);color:var(--c-text);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);font:inherit;cursor:pointer;transition:border-color var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease)}
+.layer-btn:hover{border-color:var(--c-line-strong)}
+.layer-btn[aria-pressed="true"]{border-color:var(--c-yoga);background:var(--c-yoga-soft)}
+.layer-btn .ly{color:var(--c-yoga);font-weight:var(--fw-bold)}
+.layer-btn .lg{color:var(--c-agent);font-size:var(--fs-sm)}
+.layer-btn .lsub{display:block;font-size:var(--fs-xs);color:var(--c-text-3);font-weight:var(--fw-regular)}
+.layer-panel h3{color:var(--c-yoga)}
+.layer-panel dl{margin:var(--sp-0)}
+.layer-panel dt{font-size:var(--fs-xs);color:var(--c-text-3);margin-top:var(--sp-4);letter-spacing:var(--ls-wide)}
+.layer-panel dd{margin:var(--sp-1) var(--sp-0) var(--sp-0)}
+
+/* ---------- 恒审矩阵 ---------- */
+.matrix{display:grid;grid-template-columns:var(--col-matrix);gap:var(--sp-2)}
+.mx-h{display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);color:var(--c-text-2);font-size:var(--fs-sm);padding:var(--sp-2)}
+.mx-cell{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4)}
+.mx-cell .four{font-family:var(--f-serif);color:var(--c-yoga);font-size:var(--fs-lg);font-weight:var(--fw-bold)}
+.mx-cell .who{font-weight:var(--fw-bold);margin-bottom:var(--sp-2)}
+.mx-cell .axis{display:none;font-size:var(--fs-xs);color:var(--c-text-3)}
+.mx-cell.key{border:var(--bw-2) solid var(--c-yoga);background:var(--c-yoga-soft)}
+.mx-cell .ag{font-size:var(--fs-sm);color:var(--c-text-2)}
+.mx-cell .ag b{color:var(--c-agent);font-weight:var(--fw-medium)}
+
+/* ---------- 种现熏习闭环 ---------- */
+.loop{display:grid;grid-template-columns:var(--col-loop);gap:var(--sp-5);align-items:center}
+.loop-fig{max-width:var(--w-loop-svg);width:var(--w-full);margin-inline:auto}
+.loop-fig svg{display:block;width:var(--w-full);height:auto}
+.ln-node{fill:var(--c-surface-2);stroke:var(--c-line-strong);stroke-width:var(--svg-stroke);transition:fill var(--t-med) var(--ease),stroke var(--t-med) var(--ease)}
+.ln-node.is-on{fill:var(--c-yoga-soft);stroke:var(--c-yoga)}
+.ln-arrow{fill:none;stroke:var(--c-text-3);stroke-width:var(--svg-stroke);transition:stroke var(--t-med) var(--ease)}
+.ln-arrow.is-on{stroke:var(--c-yoga);stroke-width:var(--svg-stroke-thick)}
+.ln-head{fill:var(--c-text-3)}
+.ln-t{fill:var(--c-text);font-size:var(--fs-svg-lg);font-weight:var(--fw-bold);font-family:var(--f-serif)}
+.ln-s{fill:var(--c-text-2);font-size:var(--fs-svg)}
+.ln-c{fill:var(--c-text-3);font-size:var(--fs-svg)}
+.ln-verb{fill:var(--c-yoga);font-size:var(--fs-svg)}
+.steps{list-style:none;padding:var(--sp-0);margin:var(--sp-0) var(--sp-0) var(--sp-4)}
+.steps li{border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-2);background:var(--c-surface);transition:border-color var(--t-med) var(--ease),background-color var(--t-med) var(--ease)}
+.steps li.is-on{border-color:var(--c-yoga);background:var(--c-yoga-soft)}
+.steps .st-y{font-family:var(--f-serif);color:var(--c-yoga);font-weight:var(--fw-bold)}
+.steps .st-g{display:block;font-size:var(--fs-sm);color:var(--c-text-2)}
+.btn-row{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.btn{min-height:var(--sz-touch);padding:var(--sp-2) var(--sp-4);border-radius:var(--r-sm);border:var(--bw-1) solid var(--c-agent-line);background:var(--c-agent-soft);color:var(--c-text);font:inherit;font-size:var(--fs-sm);cursor:pointer;transition:background-color var(--t-fast) var(--ease)}
+.btn:hover{background:var(--c-surface-3)}
+.btn.primary{background:var(--c-agent);border-color:var(--c-agent);color:var(--c-on-accent);font-weight:var(--fw-bold)}
+.btn.primary:hover{background:var(--c-text)}
+.btn[aria-pressed="true"]{border-color:var(--c-yoga);background:var(--c-yoga-soft)}
+.cap{min-height:var(--sz-touch);font-size:var(--fs-sm);color:var(--c-text)}
+
+/* ---------- 四条持久化路径 ---------- */
+.toggles{display:flex;flex-wrap:wrap;gap:var(--sp-3) var(--sp-5);margin-bottom:var(--sp-4)}
+.toggles label{display:flex;align-items:center;gap:var(--sp-2);min-height:var(--sz-touch);cursor:pointer;font-size:var(--fs-sm)}
+.toggles input,.ctrl input[type="range"]{accent-color:var(--c-agent)}
+.toggles input{width:var(--sz-dot);height:var(--sz-dot);transform:scale(var(--scale-check));margin:var(--sp-0) var(--sp-2)}
+.path{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4);transition:border-color var(--t-med) var(--ease)}
+.path h3{font-size:var(--fs-md);margin-bottom:var(--sp-2)}
+.path p{font-size:var(--fs-sm);color:var(--c-text-2)}
+.path .st{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-text-3);margin:var(--sp-0)}
+.path.carry{border-color:var(--c-v-over);background:var(--c-v-over-soft)}
+.path.carry .st{color:var(--c-v-over)}
+.path.keep{border-color:var(--c-v-part)}
+.path.keep .st{color:var(--c-v-part)}
+.result{margin-top:var(--sp-4);font-weight:var(--fw-bold)}
+
+/* ---------- 错误雪球 ---------- */
+.sim{display:grid;grid-template-columns:var(--col-layer);gap:var(--sp-5);align-items:start}
+.ctrl{margin-bottom:var(--sp-4)}
+.ctrl .row{display:grid;grid-template-columns:var(--col-ctrl);gap:var(--sp-2);font-size:var(--fs-sm)}
+.ctrl output{color:var(--c-agent);font-weight:var(--fw-bold)}
+.ctrl input[type="range"]{width:var(--w-full);min-height:var(--sz-touch)}
+.ctrl .hint{font-size:var(--fs-xs);color:var(--c-text-3)}
+.stats{display:grid;grid-template-columns:var(--col-3);gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.stat{background:var(--c-surface-2);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3)}
+.stat .k{font-size:var(--fs-xs);color:var(--c-text-3);line-height:var(--lh-snug)}
+.stat .v{font-size:var(--fs-xl);font-weight:var(--fw-bold)}
+.stat.a .v{color:var(--c-v-part)}
+.stat.b .v{color:var(--c-v-over)}
+.chart{height:var(--h-chart);width:var(--w-full);background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md)}
+.chart svg{display:block}
+.ch-grid{stroke:var(--c-grid);stroke-width:var(--svg-hair)}
+.ch-div{stroke:var(--c-line-strong);stroke-width:var(--svg-hair);stroke-dasharray:var(--svg-dash)}
+.ch-txt{fill:var(--c-text-3);font-size:var(--fs-svg);font-family:var(--f-sans)}
+.ch-a{fill:none;stroke:var(--c-v-part);stroke-width:var(--svg-stroke-thick);stroke-linejoin:round}
+.ch-b{fill:none;stroke:var(--c-v-over);stroke-width:var(--svg-stroke-thick);stroke-linejoin:round}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-sm);color:var(--c-text-2);margin-top:var(--sp-2)}
+.legend .sw{display:inline-block;width:var(--sp-5);height:var(--bw-accent);border-radius:var(--r-sm);vertical-align:middle;margin-right:var(--sp-1)}
+.sw.a{background:var(--c-v-part)}
+.sw.b{background:var(--c-v-over)}
+.formula{background:var(--c-surface-2);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-size:var(--fs-sm);color:var(--c-text-2);margin-top:var(--sp-4)}
+.formula .eq{color:var(--c-text);font-weight:var(--fw-medium)}
+
+/* ---------- 种子六义 ---------- */
+.seed{background:var(--c-surface);border:var(--bw-1) solid var(--c-line);border-radius:var(--r-md);padding:var(--sp-4)}
+.seed h3{font-family:var(--f-serif);color:var(--c-yoga);font-size:var(--fs-lg);margin-bottom:var(--sp-1)}
+.seed .orig{font-family:var(--f-serif);font-size:var(--fs-sm);color:var(--c-text-2);margin-bottom:var(--sp-3)}
+.seed .use{font-size:var(--fs-sm)}
+.seed .mark{display:inline-block;font-size:var(--fs-xs);font-weight:var(--fw-bold);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);border:var(--bw-1) solid var(--c-line-strong);color:var(--c-text-2);margin-bottom:var(--sp-2)}
+.seed.drop{border-style:dashed;opacity:var(--op-muted)}
+.seed .eng{font-size:var(--fs-xs);color:var(--c-yoga);margin-top:var(--sp-3);margin-bottom:var(--sp-0)}
+.label-eng{display:inline-block;font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-yoga);border:var(--bw-1) solid var(--c-yoga-line);border-radius:var(--r-sm);padding:var(--sp-1) var(--sp-3);margin-bottom:var(--sp-4)}
+
+/* ---------- 主张表筛选 ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+.filters .btn{background:var(--c-surface);border-color:var(--c-line-strong)}
+.filters .btn[aria-pressed="true"]{background:var(--c-surface-3);border-color:var(--c-text-2)}
+.filters .vdot{margin-right:var(--sp-2)}
+.fstatus{font-size:var(--fs-sm);color:var(--c-text-3);margin-bottom:var(--sp-3)}
+
+/* ---------- 设计清单 ---------- */
+.dgroup h3{display:flex;align-items:center;gap:var(--sp-2)}
+.dgroup .gtag{width:var(--sz-dot);height:var(--sz-dot);border-radius:var(--r-sm);display:inline-block}
+.dgroup.res .gtag{background:var(--c-v-ok)}
+.dgroup.eng .gtag{background:var(--c-v-part)}
+.dgroup.hyp .gtag{background:var(--c-yoga)}
+.dgroup li{font-size:var(--fs-sm);color:var(--c-text-2)}
+.dgroup li strong{color:var(--c-text)}
+
+/* ---------- 来源 ---------- */
+.sources{font-size:var(--fs-sm);color:var(--c-text-2)}
+.sources li{overflow-wrap:anywhere}
+.sources b{color:var(--c-text)}
+footer{padding-block:var(--sp-6);color:var(--c-text-3);font-size:var(--fs-xs)}
+
+@media (max-width:820px){ /* BP-md */
+  .layers,.loop,.sim{grid-template-columns:var(--col-1)}
+  .tbl.stack-md thead{display:none}
+  .tbl.stack-md tr{display:block;padding:var(--sp-3) var(--sp-4);border-bottom:var(--bw-1) solid var(--c-line)}
+  .tbl.stack-md td{display:block;border:none;padding:var(--sp-1) var(--sp-0);width:var(--w-full)}
+  .tbl.stack-md td.n{display:inline-block;width:auto;margin-right:var(--sp-2)}
+  .tbl.stack-md td.b{display:inline-block;width:auto}
+}
+@media (max-width:520px){ /* BP-sm */
+  .wrap{padding-inline:var(--sp-4)}
+  .hero{padding-block:var(--sp-7) var(--sp-6)}
+  section{padding-block:var(--sp-6)}
+  .grid-2,.grid-3,.scale,.stats{grid-template-columns:var(--col-1)}
+  .matrix{grid-template-columns:var(--col-1)}
+  .mx-h{display:none}
+  .mx-cell .axis{display:block}
+  .layer-btn{grid-template-columns:var(--col-1);gap:var(--sp-1)}
+  .tbl.stack thead{display:none}
+  .tbl.stack tr{display:block;padding:var(--sp-3) var(--sp-4);border-bottom:var(--bw-1) solid var(--c-line)}
+  .tbl.stack td{display:block;border:none;padding:var(--sp-1) var(--sp-0)}
+  .tbl.stack td::before{content:attr(data-label);display:block;font-size:var(--fs-xs);color:var(--c-text-3)}
+  .chart{height:var(--h-chart-sm)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:var(--t-none) !important;animation-duration:var(--t-none) !important;scroll-behavior:auto !important}
+}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">口播拆解 · 原文核对 · 类比边界</p>
+    <h1>阿赖耶识是 AI Agent 的记忆架构图吗？</h1>
+    <p class="lede prose">一位 AI Agent 架构师在口播里说：一千五百年前，无著、世亲就画出了 AI Agent 的记忆架构图。读到“种子生现行、现行熏种子”时，他说：“这不是像，这就是我画了一年的 memory pipeline 闭环。”本页对照 CBETA 收录的原典和 Agent 记忆研究，逐条判断哪些说法成立、哪些说过头、哪些引文出处不准。</p>
+    <p class="meta">核对日期 2026-10-22 · 依据：用户提供的口播转写稿、《成唯识论》等原典、9 篇 Agent 记忆与模型训练论文</p>
+
+    <div class="verdict-box">
+      <p class="one">一句话结论：唯识可以当作设计 Agent 记忆的一面镜子，但它不是现成的架构图。</p>
+      <ul>
+        <li><strong>可以借鉴三点。</strong>“种子生现行、现行熏种子”的循环、身份层、错误自我强化，这三点在 Agent 研究里都有呼应。</li>
+        <li><strong>不能直接照搬。</strong>口播在模型权重的倾向和外部记忆写回之间来回切换，都归到“阿赖耶识”，没有交代两者的差别。唯识也没有存储格式、索引、淘汰和权限的设计。</li>
+        <li><strong>三处引文要更正或标明。</strong>《大宝积经》原文是“假使经百劫”，不是“百千劫”；“万法唯识”是后世概括语，本次核对未在《成唯识论》《唯识三十论颂》中找到这一原句；“恒审思量、执以为我”是卷四和卷一两处的综合。</li>
+      </ul>
+      <div class="tally">
+        <p class="tally-head">14 条主张的判定分布（由下方判定表计算）</p>
+        <div class="vbar" aria-hidden="true">
+          <span data-v="ok" data-seg="ok"></span><span data-v="part" data-seg="part"></span><span data-v="over" data-seg="over"></span><span data-v="src" data-seg="src"></span><span data-v="alt" data-seg="alt"></span>
+        </div>
+        <div class="vlegend">
+          <span><i class="vdot" data-v="ok"></i>成立 <b data-count="ok">2</b></span>
+          <span><i class="vdot" data-v="part"></i>部分成立 <b data-count="part">8</b></span>
+          <span><i class="vdot" data-v="over"></i>说过头 <b data-count="over">2</b></span>
+          <span><i class="vdot" data-v="src"></i>出处不准 <b data-count="src">1</b></span>
+          <span><i class="vdot" data-v="alt"></i>另有解释 <b data-count="alt">1</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="页面目录">
+  <div class="wrap">
+    <ul>
+      <li><a href="#fix">转写纠错</a></li>
+      <li><a href="#scale">三种“像”</a></li>
+      <li><a href="#layers">八识对照</a></li>
+      <li><a href="#mech">更新机制</a></li>
+      <li><a href="#matrix">恒与审</a></li>
+      <li><a href="#loop">种现熏习</a></li>
+      <li><a href="#persist">会话清空后</a></li>
+      <li><a href="#snowball">错误雪球</a></li>
+      <li><a href="#seeds">种子六义</a></li>
+      <li><a href="#claims">主张判定</a></li>
+      <li><a href="#design">设计清单</a></li>
+      <li><a href="#sources">来源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<section id="fix">
+  <div class="wrap">
+    <h2>先纠正转写错字</h2>
+    <p class="intro">转写稿有几处同音错字。下表按上下文还原；最后一列说明依据。“排期话术”无法从文字确认，只是推测。</p>
+    <div class="tbl-wrap">
+      <table class="tbl stack">
+        <thead><tr><th>转写稿</th><th>应为</th><th>依据</th></tr></thead>
+        <tbody>
+          <tr><td data-label="转写稿">绘画结束 / 新绘画</td><td data-label="应为">会话结束 / 新会话</td><td data-label="依据">上下文在讲“上下文清空”</td></tr>
+          <tr><td data-label="转写稿">意义藏识</td><td data-label="应为">意译藏识</td><td data-label="依据">“阿赖耶”是音译，意译为“藏识”</td></tr>
+          <tr><td data-label="转写稿">锁知障</td><td data-label="应为">所知障</td><td data-label="依据">唯识的二障：烦恼障、所知障</td></tr>
+          <tr><td data-label="转写稿">排气话术</td><td data-label="应为">排期话术（推测）</td><td data-label="依据">语境是“项目翻车”之后的心理反应</td></tr>
+          <tr><td data-label="转写稿">连夜存在哪</td><td data-label="应为">连业存在哪</td><td data-label="依据">后半句是“怎么流转的数据库设计都给出来了”</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="scale">
+  <div class="wrap">
+    <h2>先定尺度：说“像”有三种强度</h2>
+    <p class="intro">口播说“这不是像，这就是”。要判断这句话，先分清三种强度的“像”。强度越高，需要的证据越多。</p>
+    <div class="scale">
+      <div class="lv yes">
+        <span class="tag">口播能支持</span>
+        <h3>功能相似</h3>
+        <p class="small muted">两个系统要解决的问题有相似之处。例如：都要解释“过去的经验怎样影响现在的反应”。</p>
+      </div>
+      <div class="lv some">
+        <span class="tag">局部可以讨论</span>
+        <h3>结构对应</h3>
+        <p class="small muted">两个系统的组成部分之间有相对稳定的映射。例如：前五识与输入通道。这一层只在个别环节成立。</p>
+      </div>
+      <div class="lv no">
+        <span class="tag">推不出</span>
+        <h3>理论同构</h3>
+        <p class="small muted">基本概念、因果关系和运行规则能系统地一一对应。口播说“这不是像，这就是”，需要的正是这一层，但口播没有给出证据。</p>
+      </div>
+    </div>
+    <p class="note key"><strong>阅读提示：</strong>八识与 Agent 模块的对照，是现代工程视角下的启发式类比，不是唯识学对计算机架构的预言，也不意味着两个系统在本体或因果机制上相同。</p>
+  </div>
+</section>
+
+<section id="layers">
+  <div class="wrap">
+    <h2>八识与 Agent 模块：逐层点开看</h2>
+    <p class="intro">左边是口播的对应关系。点一层，右边显示唯识原义、口播说法、判定和更准确的说法。原文引自 CBETA 收录的玄奘译《成唯识论》和明代普泰《八识规矩补注》。</p>
+    <div class="layers">
+      <div class="layer-list" role="group" aria-label="选择一层">
+        <button type="button" class="layer-btn" data-layer="l5" aria-pressed="false" aria-controls="panel-l5"><span class="ly">前五识<span class="lsub">眼、耳、鼻、舌、身识</span></span><span class="lg">口播：多模态输入</span></button>
+        <button type="button" class="layer-btn" data-layer="l6" aria-pressed="false" aria-controls="panel-l6"><span class="ly">第六意识<span class="lsub">了别一切法</span></span><span class="lg">口播：工作记忆、会话窗口</span></button>
+        <button type="button" class="layer-btn" data-layer="l7" aria-pressed="true" aria-controls="panel-l7"><span class="ly">第七末那识<span class="lsub">恒审思量</span></span><span class="lg">口播：专家人设、持久身份</span></button>
+        <button type="button" class="layer-btn" data-layer="l8" aria-pressed="false" aria-controls="panel-l8"><span class="ly">第八阿赖耶识<span class="lsub">意译“藏识”，含藏种子</span></span><span class="lg">口播：记忆库</span></button>
+      </div>
+
+      <div>
+        <article class="card layer-panel" id="panel-l5" hidden>
+          <h3>前五识 ↔ 多模态输入</h3>
+          <dl>
+            <dt>唯识原义</dt>
+            <dd>依眼、耳等五根，分别认识色、声、香、味、触五境。《八识规矩补注》把它归为“非恒非审”：有间断，也不做审察思量。</dd>
+            <dd><blockquote class="q">四、非恒非審，謂前五識<cite>《八识规矩补注》卷二（T1865）</cite></blockquote></dd>
+            <dt>口播说法</dt>
+            <dd>前五识加第六识，大致类似模型的多模态输入加上当下的工作记忆。</dd>
+            <dt>判定</dt>
+            <dd><span class="badge" data-v="part">部分成立</span></dd>
+            <dt>更准确的说法</dt>
+            <dd>只到“功能相似”。前五识在唯识里不是单纯的数据接口，而是有特定所缘、所依和生起条件的认识活动。多模态编码器只在“分别接收不同感官通道”这一点上相似。</dd>
+          </dl>
+        </article>
+
+        <article class="card layer-panel" id="panel-l6" hidden>
+          <h3>第六意识 ↔ 上下文推理</h3>
+          <dl>
+            <dt>唯识原义</dt>
+            <dd>第六意识的活动不限于当前感官输入，也包括记忆、概念、分别和推理。《八识规矩补注》把它归为“审而非恒”：会审察思量，但有间断。</dd>
+            <dd><blockquote class="q">二、審而非恒，謂第六識<cite>《八识规矩补注》卷二（T1865）</cite></blockquote></dd>
+            <dt>口播说法</dt>
+            <dd>前五识加第六识，大致类似多模态输入加上当下的工作记忆。口播后文又说，会话结束时上下文清空。</dd>
+            <dt>判定</dt>
+            <dd><span class="badge" data-v="part">部分成立</span></dd>
+            <dt>更准确的说法</dt>
+            <dd>“有间断”与会话清空确实贴合。但上下文只是影响模型推理的条件之一，不能把第六意识等同于上下文。另外，卷一说“分别我执”要靠外来说法和后天分别才生起，而且只在第六意识中有：</dd>
+            <dd><blockquote class="q">分別我執亦由現在外緣力故，非與身俱，要待邪教及邪分別然後方起，故名分別，唯在第六意識中有。<cite>《成唯识论》卷一（T1585）</cite></blockquote></dd>
+            <dd>外加的人设 prompt 也是外部给定、可以替换的，所以本页认为它更像这一类，而不是末那识。这是本页的类比，不是论典原话。</dd>
+          </dl>
+        </article>
+
+        <article class="card layer-panel" id="panel-l7">
+          <h3>第七末那识 ↔ 身份维持</h3>
+          <dl>
+            <dt>唯识原义</dt>
+            <dd>这里说的是有染污的末那识；卷五说阿罗汉等位没有染污末那。它“恒、审思量”，缘第八识，执为实我，与我痴、我见、我慢、我爱四种烦恼恒常相应。《八识规矩补注》把它归为唯一“亦恒亦审”的识。</dd>
+            <dd><blockquote class="q">是識聖教別名末那，恒、審思量勝餘識故。<cite>《成唯识论》卷四（T1585）</cite></blockquote></dd>
+            <dd><blockquote class="q">一、常相續，在第七識，緣第八識，起自心相，執為實我<cite>《成唯识论》卷一（T1585），讲“俱生我执”的第一种</cite></blockquote></dd>
+            <dt>口播说法</dt>
+            <dd>“恒审思量、执以为我”，就是给 Agent 挂的专家人设和长期目标：手工实现一层持久身份。</dd>
+            <dt>判定</dt>
+            <dd><span class="badge" data-v="part">部分成立</span></dd>
+            <dt>更准确的说法</dt>
+            <dd>更准确的说法是“身份维持与自我归属功能的类比”。口播的八个字是综合说法：“恒审思量”见卷四，“执为实我”见卷一，不是一段连续原文。</dd>
+            <dd>末那的我执是“俱生”的，不靠外来教导，任运而起；prompt 人设可以随时替换，不满足“恒”。训练进权重的性格（Anthropic 2024 年起做的 character training）更接近“俱生”，但它不“审”。所以系统提示词里的角色设定，不能判定为末那识。</dd>
+          </dl>
+        </article>
+
+        <article class="card layer-panel" id="panel-l8" hidden>
+          <h3>第八阿赖耶识 ↔ 记忆库</h3>
+          <dl>
+            <dt>唯识原义</dt>
+            <dd>阿赖耶识含藏种子，是前七识生起的来源。种子不是一条条记录，而是“本识中功能差别”，即产生后续活动的潜在能力。</dd>
+            <dd><blockquote class="q">唯本識中功能差別具斯六義，成種非餘<cite>《成唯识论》卷二（T1585）</cite></blockquote></dd>
+            <dt>口播说法</dt>
+            <dd>仓库里存着无始以来的种子，就是记忆库。</dd>
+            <dt>判定</dt>
+            <dd><span class="badge" data-v="part">部分成立</span></dd>
+            <dt>更准确的说法</dt>
+            <dd>口播在两种机制之间来回切换，都归到“阿赖耶识”：训练形成的权重倾向（“权重的倾向一条都没走”）和外部记忆写回（“决策结果写回记忆库”）。两者的更新方式不同，见下一节的对照表。无论权重还是外部记忆，都不能仅凭“可更新”就等同于唯识的所熏机制。</dd>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mech">
+  <div class="wrap">
+    <h2>“阿赖耶识”在 Agent 里被拆成了几块</h2>
+    <p class="intro">口播把“记忆库”“权重里的倾向”都叫阿赖耶识。下表按实际的更新方式拆开，并标出每一项不应直接等同的唯识概念。</p>
+    <div class="tbl-wrap">
+      <table class="tbl stack">
+        <thead><tr><th>Agent 机制</th><th>实际更新方式</th><th>可以比较的功能</th><th>不应直接等同的概念</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Agent 机制"><b>预训练／微调权重</b></td><td data-label="实际更新方式">训练过程更新参数；推理时不变</td><td data-label="可以比较的功能">长期形成的行为倾向</td><td data-label="不应直接等同的概念">阿赖耶识、种子</td></tr>
+          <tr><td data-label="Agent 机制"><b>当前上下文</b></td><td data-label="实际更新方式">随会话输入与上下文管理改变</td><td data-label="可以比较的功能">当前信息对输出的影响</td><td data-label="不应直接等同的概念">第六意识本身</td></tr>
+          <tr><td data-label="Agent 机制"><b>外部记忆库</b></td><td data-label="实际更新方式">写入、检索、修订、删除</td><td data-label="可以比较的功能">经验信息的保留与再利用</td><td data-label="不应直接等同的概念">阿赖耶识、种子</td></tr>
+          <tr><td data-label="Agent 机制"><b>系统提示词／身份契约</b></td><td data-label="实际更新方式">按配置替换或修订</td><td data-label="可以比较的功能">约束输出风格与角色</td><td data-label="不应直接等同的概念">末那识</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <p><strong>为什么不用“可熏性”给 Agent 部件打分。</strong>《成唯识论》卷二列出所熏四义：坚住性、无记性、可熏性、与能熏共和合性，并说“唯異熟識具此四義”。这是唯识关于熏习和因果连续性的理论条件，不是工程上“能不能写入”的定义。</p>
+      <p>一个常见推论是“推理时权重冻结，所以权重不满足可熏性”。这个推论不充分：权重在训练和微调时会更新；而外部记忆虽然能写入，也不因此满足全部所熏四义。所以权重与外部记忆都不能仅凭“可更新”就等同于唯识的所熏机制。</p>
+    </div>
+  </div>
+</section>
+
+<section id="matrix">
+  <div class="wrap">
+    <h2>“恒”与“审”：哪一格在 Agent 里是空的</h2>
+    <p class="intro">《八识规矩补注》用“恒”（持续不断）和“审”（审察思量）两个标准，把八识分成四类。把 Agent 部件放进同一张表，会发现末那识那一格没有天然对应。</p>
+    <div class="matrix">
+      <div class="mx-h" aria-hidden="true"></div>
+      <div class="mx-h" aria-hidden="true">审</div>
+      <div class="mx-h" aria-hidden="true">非审</div>
+
+      <div class="mx-h" aria-hidden="true">恒</div>
+      <div class="mx-cell key">
+        <p class="axis">恒：是 · 审：是</p>
+        <p class="four">亦恒亦审</p>
+        <p class="who">第七末那识</p>
+        <p class="ag"><b>Agent：没有天然部件。</b>所谓“持久身份”，是把一直保留的权重倾向、每次重新注入的人设提示词和当次推理拼在一起。前两者不自行审察，后者不持续。</p>
+      </div>
+      <div class="mx-cell">
+        <p class="axis">恒：是 · 审：否</p>
+        <p class="four">恒而非审</p>
+        <p class="who">第八阿赖耶识</p>
+        <p class="ag"><b>Agent：权重里的倾向、外部记忆库、系统提示词。</b>它们是可持续保留的条件，自己不审察；是否生效取决于调用和检索。</p>
+      </div>
+
+      <div class="mx-h" aria-hidden="true">非恒</div>
+      <div class="mx-cell">
+        <p class="axis">恒：否 · 审：是</p>
+        <p class="four">审而非恒</p>
+        <p class="who">第六意识</p>
+        <p class="ag"><b>Agent：当前上下文里的推理过程。</b>会做判断，但会话一清空就中断。</p>
+      </div>
+      <div class="mx-cell">
+        <p class="axis">恒：否 · 审：否</p>
+        <p class="four">非恒非审</p>
+        <p class="who">前五识</p>
+        <p class="ag"><b>Agent：各模态的输入编码。</b>只在有输入时工作，不做审察。</p>
+      </div>
+    </div>
+    <p class="note">原文：“一、恒而非審，謂第八識……二、審而非恒，謂第六識……三、亦恒亦審，謂第七識……四、非恒非審，謂前五識”（《八识规矩补注》卷二）。这张表是明代注释书的概括；Agent 一列是本页的类比。</p>
+  </div>
+</section>
+
+<section id="loop">
+  <div class="wrap">
+    <h2>种子生现行、现行熏种子：能对应到什么程度</h2>
+    <p class="intro">这是口播最核心的类比：检索、决策、写回的记忆闭环。下面的图可以逐步查看三个环节。</p>
+    <div class="loop">
+      <figure class="loop-fig" aria-label="种子、现行、新种子三者循环示意图">
+        <svg viewBox="0 0 360 320" role="img" aria-labelledby="loop-title">
+          <title id="loop-title">种子生起现行，现行熏成新种子，三者循环</title>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ln-head" d="M0,0 L10,5 L0,10 z"/></marker>
+          </defs>
+          <line class="ln-arrow" data-la="0" x1="213" y1="118" x2="264" y2="189" marker-end="url(#ah)"/>
+          <line class="ln-arrow" data-la="1" x1="242" y1="244" x2="122" y2="244" marker-end="url(#ah)"/>
+          <line class="ln-arrow" data-la="2" x1="93" y1="192" x2="144" y2="121" marker-end="url(#ah)"/>
+          <text class="ln-verb" x="256" y="146" text-anchor="start">生起</text>
+          <text class="ln-verb" x="182" y="266" text-anchor="middle">熏习</text>
+          <text class="ln-verb" x="104" y="146" text-anchor="end">相续</text>
+          <g data-ln="0"><circle class="ln-node" data-ln="0" cx="180" cy="70" r="52"/><text class="ln-t" x="180" y="68" text-anchor="middle">种子</text><text class="ln-s" x="180" y="88" text-anchor="middle">潜在条件</text></g>
+          <g data-ln="1"><circle class="ln-node" data-ln="1" cx="300" cy="244" r="52"/><text class="ln-t" x="300" y="242" text-anchor="middle">现行</text><text class="ln-s" x="300" y="262" text-anchor="middle">当下活动</text></g>
+          <g data-ln="2"><circle class="ln-node" data-ln="2" cx="60" cy="244" r="52"/><text class="ln-t" x="60" y="242" text-anchor="middle">新种子</text><text class="ln-s" x="60" y="262" text-anchor="middle">所熏成种</text></g>
+          <text class="ln-c" x="180" y="178" text-anchor="middle">唯识：三法因果同时</text>
+          <text class="ln-c" x="180" y="198" text-anchor="middle">Agent：按步骤先后执行</text>
+        </svg>
+      </figure>
+      <div>
+        <ul class="steps">
+          <li data-ls="0" data-cap="种子：潜在条件，生起现行。Agent 类比：外部记忆被检索并进入上下文。"><span class="st-y">种子 → 生起现行</span><span class="st-g">Agent 类比：外部记忆被检索并进入上下文</span></li>
+          <li data-ls="1" data-cap="现行：当下的活动，同时熏成新种子。Agent 类比：模型输出及其引发的行为。"><span class="st-y">现行 → 熏习</span><span class="st-g">Agent 类比：模型输出及其引发的行为</span></li>
+          <li data-ls="2" data-cap="新种子：现行熏成的种子，与旧种子前后相续。Agent 类比：输出被筛选、记录并写回记忆库。"><span class="st-y">新种子 → 相续，再生起</span><span class="st-g">Agent 类比：输出被筛选、记录并写回记忆库</span></li>
+        </ul>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="loop-next">下一步</button>
+          <button type="button" class="btn" id="loop-play" aria-pressed="false">自动播放</button>
+        </div>
+        <p class="cap" id="loop-cap" aria-live="polite">点“下一步”逐个查看三个环节。</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="note"><strong>可以这样对应：</strong>外部记忆被检索并进入上下文，可作为“潜在条件影响当前活动”的类比；模型输出及其引发的行为，可作为“现行”的类比；输出被筛选、记录并写回记忆库，可作为“现行熏成新种子”的类比。三者不是严格的一一对应。</div>
+      <div class="note warn"><strong>两处差别：</strong>第一，卷二说“三法展轉因果同時，如炷生焰、焰生焦炷”，这里的“三法”指能生的种子、生起的现行、新熏成的种子，是一种因果关系模型；新种子与旧种子之间是前后相续。Agent 是有先后顺序的程序步骤。差别在因果模型与程序执行模型，不只是快慢。第二，种子是“功能差别”，即潜在能力；外部记忆里存的是可读的文本记录。</div>
+    </div>
+  </div>
+</section>
+
+<section id="persist">
+  <div class="wrap">
+    <h2>会话清空后，什么会留下来？</h2>
+    <p class="intro">口播引用“假使百千劫，所作业不亡”，说上下文清空看似归零，但模型权重的倾向一条都没走。这句话容易让人读出两个命题：第一，权重里既有的倾向还在；第二，那千百次会话里造下的“业”也留在了权重里。前者通常成立，后者在没有参数更新的普通推理过程中通常不成立。口播没有明说第二个命题，但“所作业不亡”的比喻容易让人这样理解。</p>
+    <div class="toggles">
+      <label><input type="checkbox" id="in-writeback">假设本次错误已写入外部记忆</label>
+      <label><input type="checkbox" id="in-train">假设这批对话进入后续训练</label>
+    </div>
+    <div class="grid-2">
+      <div class="path" data-path="ctx"><h3>会话上下文</h3><p>当前对话窗口里的内容。新会话是否保留，取决于上下文管理；这不等于参数被更新。</p><p class="st">本次错误：新会话里不保留</p></div>
+      <div class="path" data-path="mem"><h3>外部记忆</h3><p>系统实际执行写入、保存，并在后续检索时取回，内容才会跨会话影响行为。</p><p class="st" data-st="mem">本次错误：没有写入，不会留下</p></div>
+      <div class="path keep" data-path="param"><h3>模型参数</h3><p>训练形成的既有倾向会持续影响输出。新会话中的内容不会自动进入权重。</p><p class="st">既有倾向：仍在 · 本次错误：不会自动写入</p></div>
+      <div class="path" data-path="train"><h3>后续训练</h3><p>对话被收集进训练或微调数据后，才可能改变下一版模型的参数。</p><p class="st" data-st="train">本次错误：没有进入训练，不影响下一版模型</p></div>
+    </div>
+    <p class="result" id="persist-result" aria-live="polite">本次会话的错误不会自动留到下一次会话；留下的是训练时已形成的既有倾向。</p>
+    <p class="note"><strong>A7 判定：部分成立。</strong>成立的部分：清空会话上下文通常不会清除模型既有参数，所以预训练或微调形成的行为倾向仍可能影响后续输出。对不上的部分：“所作业不亡”说的是造下的业不消失，而权重里的倾向来自训练，不是那千百次会话造下的；本次会话的新信息和错误不会因为被模型生成就自动写入权重。只有存进外部记忆，或进入后续训练、微调，才可能跨会话影响。另外，《大宝积经》卷五十七的原文是“假使經百劫”。</p>
+  </div>
+</section>
+
+<section id="snowball">
+  <div class="wrap">
+    <h2>“业力加速器”：错误怎样滚成雪球</h2>
+    <p class="intro">口播说：向量库毫秒级检索，一个错误几小时就能在记忆库里滚成雪球。研究支持“错误会自我强化”这个方向；“几小时”是作者的个人经历，“几万倍”没有测量。下面的模型把两条反馈路径分开，看哪些条件会让雪球变大。</p>
+    
+    <div class="grid-2">
+      <div class="note"><strong>路径一：上下文内自我条件化。</strong>前面产生的错误进入后续上下文，影响下一步输出。Sinha 等（2025）观察到：上下文里含有模型自己先前的错误时，后续更容易出错；放大模型规模不能消除，thinking 可以缓解。会话一清空，这条路径就中断。</div>
+      <div class="note"><strong>路径二：跨轮次持久化。</strong>错误被写入外部记忆，之后又被检索并用于新的判断。这才是“写回—再检索”构成的闭环。AgentPoison（2024）显示，投毒率低于 0.1% 时，平均攻击成功率高于 80%。</div>
+    </div>
+    <div class="sim mt-5">
+      <div>
+        <div class="ctrl">
+          <div class="row"><label for="in-p">单步基础错误率 p</label><output id="out-p" for="in-p">5%</output></div>
+          <input type="range" id="in-p" min="1" max="20" step="1" value="5">
+        </div>
+        <div class="ctrl">
+          <div class="row"><label for="in-k">自我条件化强度 k</label><output id="out-k" for="in-k">0.60</output></div>
+          <input type="range" id="in-k" min="0" max="1" step="0.05" value="0.6">
+          <p class="hint">已有错误把下一步错误率推高多少。0 表示不受影响。</p>
+        </div>
+        <div class="ctrl">
+          <div class="row"><label for="in-g">写入校验拦截率 g</label><output id="out-g" for="in-g">30%</output></div>
+          <input type="range" id="in-g" min="0" max="100" step="5" value="30">
+          <p class="hint">错误记录在写回前被拦下的比例。只影响“加记忆写回”这条线。</p>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" data-preset="5,1,0">无校验、强自我条件化</button>
+          <button type="button" class="btn" data-preset="5,1,90">同上，加严格写入校验</button>
+          <button type="button" class="btn" data-preset="5,0.6,30">恢复默认</button>
+        </div>
+      </div>
+      <div>
+        <div class="stats">
+          <div class="stat a"><div class="k">第 5 个会话末步错误率 · 仅上下文</div><div class="v" id="out-a">—</div></div>
+          <div class="stat b"><div class="k">第 5 个会话末步错误率 · 加记忆写回</div><div class="v" id="out-b">—</div></div>
+          <div class="stat"><div class="k">记忆池里的错误占比</div><div class="v" id="out-m">—</div></div>
+        </div>
+        <div class="chart" id="chart"></div>
+        <div class="legend"><span><i class="sw a"></i>仅上下文（每个会话清空）</span><span><i class="sw b"></i>加记忆写回（跨会话累积）</span></div>
+        <p class="small mt-3" id="sim-read" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="formula">
+      <p class="eq">每一步的错误率 pₜ = min(0.95, p + k × 0.5 × e会话 + k × 0.5 × m)</p>
+      <p>e会话：本会话已走步骤的平均错误率，新会话从 0 开始。m：记忆池里的错误占比，只在“加记忆写回”线里起作用。假设每一步写回一条记录；正确记录全部写入，错误记录以 1 − g 的比例通过校验。所以 m = Σpₜ(1 − g) ÷ Σ[(1 − pₜ) + pₜ(1 − g)]。共 5 个会话，每个会话 20 步。</p>
+    </div>
+    <p class="note"><strong>A11 判定：部分成立。</strong>方向有支撑；“几万倍”没有测量，“几小时”是作者的个人经历，没有给出可复核的记录。拿人的触发间隔（几年）和检索延迟（毫秒）相比，比较的是两个不同过程，不能据此算出加速倍数。在模型里，真正决定雪球大小的是写回—再检索的循环和写入校验，不是检索速度。</p>
+  </div>
+</section>
+
+<section id="seeds">
+  <div class="wrap">
+    <h2>种子六义：借名字给记忆设计找灵感</h2>
+    <p class="intro">《成唯识论》卷二说，种子要具备六个条件。下面每张卡先给原文，再给一条工程上的启发。</p>
+    <p class="label-eng">每张卡都标“工程启发，不是教义释义”：借的是概念的名字，不是原义。</p>
+    <div class="grid-3">
+      <div class="seed"><span class="mark">修改后借用</span><h3>刹那灭</h3><p class="orig">謂體纔生無間必滅，有勝功力，方成種子</p><p class="use">启发：系统状态随时间变化，记忆不是写一次就永远有效。这不等于“检索时重写”，也不落实为某个具体写入操作。</p><p class="eng">工程启发，不是教义释义</p></div>
+      <div class="seed drop"><span class="mark">不借用</span><h3>果俱有</h3><p class="orig">謂與所生現行果法俱現和合，方成種子</p><p class="use">原义讲种子与它所生的果同时存在。把它理解成“记忆和输出同在一个上下文”，会误解“俱有”，所以本页不借用。</p><p class="eng">工程启发，不是教义释义</p></div>
+      <div class="seed"><span class="mark">修改后借用</span><h3>恒随转</h3><p class="orig">謂要長時一類相續，至究竟位，方成種子</p><p class="use">启发：持久性与过期机制的设计问题——一条记忆该保留多久、什么时候失效。TTL 不是它的直译。</p><p class="eng">工程启发，不是教义释义</p></div>
+      <div class="seed"><span class="mark">有限借用</span><h3>性决定</h3><p class="orig">謂隨因力生善、惡等，功能決定，方成種子</p><p class="use">启发：写入时记录来源和可信度，让后面使用的人知道这条记忆的性质。工程元数据与种子性质不是一回事。</p><p class="eng">工程启发，不是教义释义</p></div>
+      <div class="seed"><span class="mark">有限借用</span><h3>待众缘</h3><p class="orig">謂此要待自眾緣合，功能殊勝，方成種子</p><p class="use">启发：多条件触发检索。Generative Agents 结合相关性、近因、重要性三项打分。相关性分数不等于“众缘”。</p><p class="eng">工程启发，不是教义释义</p></div>
+      <div class="seed"><span class="mark">改名借用</span><h3>引自果 → 分区存放</h3><p class="orig">謂於別別色、心等果，各各引生方成種子</p><p class="use">启发：按任务类型分区存放，避免一类任务的经验污染另一类。命名空间隔离不是“引自果”的原义，所以改名。</p><p class="eng">工程启发，不是教义释义</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="claims">
+  <div class="wrap">
+    <h2>14 条主张逐条判定</h2>
+    <p class="intro">按判定类别筛选。来源列的简称对应页尾“来源”。</p>
+    <div class="filters" role="group" aria-label="按判定筛选">
+      <button type="button" class="btn" data-filter="all" aria-pressed="true">全部</button>
+      <button type="button" class="btn" data-filter="ok" aria-pressed="false"><i class="vdot" data-v="ok"></i>成立</button>
+      <button type="button" class="btn" data-filter="part" aria-pressed="false"><i class="vdot" data-v="part"></i>部分成立</button>
+      <button type="button" class="btn" data-filter="over" aria-pressed="false"><i class="vdot" data-v="over"></i>说过头</button>
+      <button type="button" class="btn" data-filter="src" aria-pressed="false"><i class="vdot" data-v="src"></i>出处不准</button>
+      <button type="button" class="btn" data-filter="alt" aria-pressed="false"><i class="vdot" data-v="alt"></i>另有解释</button>
+    </div>
+    <p class="fstatus" id="filter-status" aria-live="polite">显示 14 条，共 14 条</p>
+    <div class="tbl-wrap">
+      <table class="tbl stack-md" id="claims-table">
+        <thead><tr><th>编号</th><th>口播说法</th><th>判定</th><th>核对结果</th></tr></thead>
+        <tbody>
+          <tr data-v="ok"><td class="n">A1</td><td><span class="say">“一千五百年前”，印度兄弟无著、世亲在公元四五世纪创立唯识</span></td><td class="b"><span class="badge" data-v="ok">成立</span></td><td>斯坦福哲学百科定世亲为 4–5 世纪，无著是他的兄长。“一千五百年前”是约数：世亲约 1600 年前；口播引用的论句出自玄奘 659 年糅译的《成唯识论》，约 1370 年前。<div class="src">来源：SEP《Vasubandhu》</div></td></tr>
+          <tr data-v="part"><td class="n">A2</td><td><span class="say">前五识加第六识 ≈ 多模态输入加工作记忆</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>功能相似。前五识对应感官通道；第六意识“审而非恒”（不是持续不断）与会话清空贴合。但第六意识也包括记忆、概念和推理，不只是一个窗口。<div class="src">来源：《八识规矩补注》卷二；《成唯识论》卷一</div></td></tr>
+          <tr data-v="part"><td class="n">A3</td><td><span class="say">末那识“恒审思量、执以为我” ≈ 专家人设、持久身份</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>“恒审思量”见卷四，“执为实我”见卷一，口播是两处综合。末那的我执是俱生、任运的；prompt 人设是外加、可替换的，更像卷一说的“分别我执”。<div class="src">来源：《成唯识论》卷一、卷四</div></td></tr>
+          <tr data-v="part"><td class="n">A4</td><td><span class="say">阿赖耶识 ≈ 记忆库</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>口播在训练形成的权重倾向和外部记忆写回之间来回切换，都归到阿赖耶识，没有交代两者的差别。种子是“功能差别”，不是一条条记录。<div class="src">来源：《成唯识论》卷二</div></td></tr>
+          <tr data-v="part"><td class="n">A5</td><td><span class="say">种子生现行、现行熏种子 ≈ 检索、决策、写回的闭环；“这不是像，这就是”</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>可以作流程示意，但不是一一对应。唯识讲“因果同时”，Agent 是串行步骤；检索本身也不一定是“种子生现行”。<div class="src">来源：《成唯识论》卷二</div></td></tr>
+          <tr data-v="src"><td class="n">A6</td><td><span class="say">《大宝积经》：“假使百千劫，所作业不亡，因缘会遇时，果报还自受”</span></td><td class="b"><span class="badge" data-v="src">出处不准</span></td><td>《大宝积经》卷五十七（义净译）原文是“假使經百劫，所作業不亡，因緣會遇時，果報還自受”。“百千劫”的写法在 CBETA 有 86 处，多见于后世语录、注疏和日诵集。<div class="src">来源：《大宝积经》卷五十七；CBETA 全文检索</div></td></tr>
+          <tr data-v="part"><td class="n">A7</td><td><span class="say">引“所作业不亡”：百千劫“是千百次的会话结束，上下文清空看起来一切归零，但模型权重的倾向一条都没走”</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>成立的部分：权重里既有的倾向还在。对不上的部分：本页认为，“所作业不亡”的类比在经验写入机制上对不上。经文说的是造下的业不消失，而权重里的倾向来自训练，不是那千百次会话造下的；本次会话的错误不会自动写入权重。口播没有明确说会话错误会写入权重。只有存进外部记忆，或进入后续训练、微调，才可能跨会话影响。见“会话清空后”一节。<div class="src">来源：本页分析</div></td></tr>
+          <tr data-v="part"><td class="n">A8</td><td><span class="say">用 AI 生成的数据训练会越来越差，必须用干净的原始数据</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>Shumailov 等（Nature 2024）：不加区分地用模型生成内容训练，会造成不可逆缺陷，原分布的尾部消失。Gerstgrasser 等（2024）：用合成数据替换真实数据会坍缩；把合成数据和原始真实数据累积在一起可以避免。所以重点是“保留真实数据”，不是“只能用原始数据”。<div class="src">来源：Shumailov 2024；Gerstgrasser 2024</div></td></tr>
+          <tr data-v="ok"><td class="n">A9</td><td><span class="say">“我们花了几年造出来的 AI 机制，人却是出厂自带的”</span></td><td class="b"><span class="badge" data-v="ok">成立</span></td><td>原话说的是机制：人不用配置记忆库，经历就会留下持久影响。这与唯识相符：卷二说种子除“本有”外，还有“始起”一类，由现行反复熏习而成，名为“习所成种”，而且“無始來”就是这样。口播举的项目翻车例子正属于这一类。这句话说的是机制自带，不是说种子本身都是天生的。<div class="src">来源：《成唯识论》卷二</div></td></tr>
+          <tr data-v="over"><td class="n">A10</td><td><span class="say">第七识被定义为根本无明；修行人看破它、转化它，穷尽一生想拆掉它</span></td><td class="b"><span class="badge" data-v="over">说过头</span></td><td>末那与我痴、我见、我慢、我爱四烦恼恒相应，卷五引经说“不共无明”。但识本身不等于无明：卷五说阿罗汉位断灭的是“染意種及現行”，“言彼無者，依染意說”；末那有三种，第三种与“平等性智”相应。口播说“看破它、转化它”，这一点与论典一致；“拆掉”可理解为修辞。需要纠正的是把第七识本身说成“被定义为根本无明”。<div class="src">来源：《成唯识论》卷四、卷五、卷十</div></td></tr>
+          <tr data-v="part"><td class="n">A11</td><td><span class="say">向量库毫秒级检索，是“业力加速器”；一个错误几小时就在记忆库里滚成雪球</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>方向有支撑：自我条件化（Sinha 2025）、记忆投毒（AgentPoison、MINJA）。但“几万倍”没有测量；“几小时”是作者的个人经历，没有给出可复核的记录。拿触发间隔和检索延迟相比，比较的是两个不同过程，不能据此算出加速倍数。<div class="src">来源：Sinha 2025；AgentPoison 2024；MINJA 2025</div></td></tr>
+          <tr data-v="over"><td class="n">A12</td><td><span class="say">“唯识宗连业存在哪、怎么流转的数据库设计都给出来了”</span></td><td class="b"><span class="badge" data-v="over">说过头</span></td><td>唯识没有存储格式、索引、淘汰、权限的设计；种子是“功能差别”，不是可读的记录。现有 Agent 记忆设计来自操作系统分层内存（MemGPT）、认知科学（CoALA）等工程脉络。<div class="src">来源：《成唯识论》卷二；MemGPT；CoALA</div></td></tr>
+          <tr data-v="part"><td class="n">A13</td><td><span class="say">唯识宗有句总纲：“万法唯识”</span></td><td class="b"><span class="badge" data-v="part">部分成立</span></td><td>口播说它是“总纲”，没有说它出自哪部论典。作为后世概括语可以用，但不应当作早期唯识论典的原句。CBETA 检索“萬法唯識”共 408 条，本次核对未在《成唯识论》《唯识三十论颂》中找到，多见于《宗镜录》和后世禅宗语录。<div class="src">来源：CBETA 全文检索</div></td></tr>
+          <tr data-v="alt"><td class="n">A14</td><td><span class="say">“原来我们从来不是在造机器，我们是在临摹自己的心”</span></td><td class="b"><span class="badge" data-v="alt">另有解释</span></td><td>CoALA 明确说借鉴认知科学和符号 AI 的历史来设计 Agent 记忆模块；MemGPT 借鉴操作系统的分层内存。相似的一部分来自工程师有意参照人类认知模型，这不能证明心与 Agent 同构。<div class="src">来源：CoALA；MemGPT</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="design">
+  <div class="wrap">
+    <h2>给 Agent 构建者的设计清单</h2>
+    <p class="intro">口播最有用的部分，是作者自己说的“要设计反思机制，要防记忆污染，要判断什么值得存”。下面按证据强弱分三类。</p>
+    <div class="grid-3">
+      <div class="card dgroup res">
+        <h3><i class="gtag"></i>有研究依据</h3>
+        <ul>
+          <li><strong>保留可追溯的真实数据来源，并评估真实与合成数据的比例、质量和用途。</strong>依据 Shumailov 2024、Gerstgrasser 2024。</li>
+          <li><strong>把记忆写入当作攻击面。</strong>少量投毒记录（AgentPoison）、普通查询（MINJA）都可能污染记忆库。写入权限和投毒检测是风险缓解措施，不是绝对防护，效果要自己测。</li>
+        </ul>
+      </div>
+      <div class="card dgroup eng">
+        <h3><i class="gtag"></i>合理工程措施</h3>
+        <ul>
+          <li><strong>写入门控与新上下文复核。</strong>写回前，用不含原错误的新上下文复核关键结论。Sinha 2025 支持“错误会自我条件化”这个问题本身，但不能假定复核一定能发现错误。</li>
+          <li><strong>记忆溯源。</strong>记录来源、时间、置信度。置信度字段不等于事实为真。</li>
+          <li><strong>衰减与重要性加权。</strong>Generative Agents 结合相关性、近因（指数衰减）和重要性来检索。TTL、时间衰减和重要性加权各有取舍，不是所有任务都适用。</li>
+        </ul>
+      </div>
+      <div class="card dgroup hyp">
+        <h3><i class="gtag"></i>本页设计假设</h3>
+        <ul>
+          <li><strong>身份分层。</strong>训练得到的行为倾向，与运行时可修订、有版本的身份契约，分开管理。</li>
+          <li><strong>周期性评估与反馈环审计。</strong>定期抽查写回的记忆是否在放大错误。不按固定时间机械地清空全部记忆。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <h2>来源</h2>
+    <div class="grid-2 sources">
+      <ul>
+        <li><b>《成唯识论》</b>（T1585，玄奘译，659 年）：<a href="https://cbetaonline.dila.edu.tw/zh/T1585_001">卷一</a>（两种我执）、<a href="https://cbetaonline.dila.edu.tw/zh/T1585_002">卷二</a>（种子六义、所熏四义、种现熏生、种子二类）、<a href="https://cbetaonline.dila.edu.tw/zh/T1585_004">卷四</a>（末那恒审思量）、<a href="https://cbetaonline.dila.edu.tw/zh/T1585_005">卷五</a>（不共无明、何位永断、三种末那）、<a href="https://cbetaonline.dila.edu.tw/zh/T1585_010">卷十</a>（平等性智）</li>
+        <li><b>《八识规矩补注》卷二</b>（T1865，明·普泰）：<a href="https://cbetaonline.dila.edu.tw/zh/T1865_002">恒审四句</a></li>
+        <li><b>《大宝积经》卷五十七</b>（T0310，唐·义净译）：<a href="https://cbetaonline.dila.edu.tw/zh/T0310_057">“假使經百劫”</a></li>
+        <li><b>CBETA 全文检索</b>（2026-10-22）：“假使百千劫”86 处；“萬法唯識”408 条。<a href="https://cbetaonline.dila.edu.tw/zh/">CBETA Online</a></li>
+        <li><b>SEP《Vasubandhu》</b>（2021 年修订版）：<a href="https://plato.stanford.edu/entries/vasubandhu/">plato.stanford.edu/entries/vasubandhu</a></li>
+        <li><b>SEP《Yogācāra》</b>：<a href="https://plato.stanford.edu/entries/yogacara/">plato.stanford.edu/entries/yogacara</a></li>
+      </ul>
+      <ul>
+        <li><b>Shumailov 等 2024</b>，AI models collapse when trained on recursively generated data，Nature 631：<a href="https://www.nature.com/articles/s41586-024-07566-y">nature.com</a></li>
+        <li><b>Gerstgrasser 等 2024</b>，Is Model Collapse Inevitable?：<a href="https://arxiv.org/abs/2404.01413">arXiv 2404.01413</a></li>
+        <li><b>Park 等 2023</b>，Generative Agents：<a href="https://arxiv.org/abs/2304.03442">arXiv 2304.03442</a></li>
+        <li><b>Shinn 等 2023</b>，Reflexion：<a href="https://arxiv.org/abs/2303.11366">arXiv 2303.11366</a></li>
+        <li><b>Packer 等 2023</b>，MemGPT：<a href="https://arxiv.org/abs/2310.08560">arXiv 2310.08560</a></li>
+        <li><b>Sumers 等 2023</b>，CoALA：<a href="https://arxiv.org/abs/2309.02427">arXiv 2309.02427</a></li>
+        <li><b>Sinha 等 2025</b>，The Illusion of Diminishing Returns：<a href="https://arxiv.org/abs/2509.09677">arXiv 2509.09677</a></li>
+        <li><b>Chen 等 2024</b>，AgentPoison：<a href="https://arxiv.org/abs/2407.12784">arXiv 2407.12784</a></li>
+        <li><b>Dong 等 2025</b>，MINJA：<a href="https://arxiv.org/abs/2503.03704">arXiv 2503.03704</a></li>
+        <li><b>Anthropic 2024</b>，Claude's character：<a href="https://www.anthropic.com/research/claude-character">anthropic.com</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <h2>方法与局限</h2>
+    <ul class="small muted prose">
+      <li>依据用户提供的口播转写稿，没有看原视频。转写错字按上下文推断。</li>
+      <li>唯识原文以 CBETA 收录的玄奘译《成唯识论》为准。这个译本糅合了护法等十家注释，不代表无著、世亲原著的全部立场。</li>
+      
+      
+      
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">本页为单文件 HTML，不依赖外部资源。判定基于 2026-10-22 可访问的原文。</div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+  const css = getComputedStyle(document.documentElement);
+  const tnum = n => parseFloat(css.getPropertyValue(n));
+  const say = (el, t) => { if (el && el.textContent !== t) el.textContent = t; };
+  const pct = x => (x * 100).toFixed(1) + '%';
+
+  /* 判定计数：从表格行计算 */
+  const rows = Array.from(document.querySelectorAll('#claims-table tbody tr'));
+  const counts = {};
+  rows.forEach(r => { counts[r.dataset.v] = (counts[r.dataset.v] || 0) + 1; });
+  document.querySelectorAll('[data-count]').forEach(el => say(el, String(counts[el.dataset.count] || 0)));
+  document.querySelectorAll('.vbar [data-seg]').forEach(seg => { seg.style.flexGrow = String(counts[seg.dataset.seg] || 0); });
+
+  /* 判定筛选 */
+  const fbtns = Array.from(document.querySelectorAll('[data-filter]'));
+  const fstatus = document.getElementById('filter-status');
+  fbtns.forEach(b => b.addEventListener('click', () => {
+    const f = b.dataset.filter;
+    fbtns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    let n = 0;
+    rows.forEach(r => { const show = f === 'all' || r.dataset.v === f; r.hidden = !show; if (show) n++; });
+    say(fstatus, '显示 ' + n + ' 条，共 ' + rows.length + ' 条');
+  }));
+
+  /* 八识分层 */
+  const lbtns = Array.from(document.querySelectorAll('[data-layer]'));
+  lbtns.forEach(b => b.addEventListener('click', () => {
+    lbtns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    let shown = null;
+    document.querySelectorAll('.layer-panel').forEach(p => { p.hidden = p.id !== 'panel-' + b.dataset.layer; if (!p.hidden) shown = p; });
+    if (shown && window.innerWidth <= tnum('--bp-md-js')) {
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      shown.scrollIntoView({ block: 'nearest', behavior: smooth ? 'smooth' : 'auto' });
+    }
+  }));
+
+  /* 种现熏习闭环 */
+  const lnodes = Array.from(document.querySelectorAll('circle[data-ln]'));
+  const larrows = Array.from(document.querySelectorAll('[data-la]'));
+  const lsteps = Array.from(document.querySelectorAll('[data-ls]'));
+  const lcap = document.getElementById('loop-cap');
+  const play = document.getElementById('loop-play');
+  let li = -1, timer = null;
+  const showStep = i => {
+    li = i;
+    lnodes.forEach(n => n.classList.toggle('is-on', Number(n.dataset.ln) === i));
+    larrows.forEach(a => a.classList.toggle('is-on', Number(a.dataset.la) === i));
+    lsteps.forEach(s => {
+      const on = Number(s.dataset.ls) === i;
+      s.classList.toggle('is-on', on);
+      if (on) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current');
+    });
+    say(lcap, lsteps[i].dataset.cap);
+  };
+  const nextStep = () => showStep((li + 1) % lsteps.length);
+  const stopPlay = () => { clearInterval(timer); timer = null; play.setAttribute('aria-pressed', 'false'); say(play, '自动播放'); };
+  document.getElementById('loop-next').addEventListener('click', () => { if (timer) stopPlay(); nextStep(); });
+  play.addEventListener('click', () => {
+    if (timer) { stopPlay(); return; }
+    nextStep();
+    timer = setInterval(nextStep, tnum('--js-autoplay-ms'));
+    play.setAttribute('aria-pressed', 'true');
+    say(play, '暂停');
+  });
+
+  /* 会话清空后的四条路径 */
+  const wb = document.getElementById('in-writeback');
+  const tr = document.getElementById('in-train');
+  const pres = document.getElementById('persist-result');
+  const setPath = (key, on, text) => {
+    document.querySelector('[data-path="' + key + '"]').classList.toggle('carry', on);
+    say(document.querySelector('[data-st="' + key + '"]'), text);
+  };
+  const updPersist = () => {
+    setPath('mem', wb.checked, wb.checked ? '假设已写入：下次检索时可能被取回' : '本次错误：没有写入，不会留下');
+    setPath('train', tr.checked, tr.checked ? '本次错误：可能改变下一版模型的倾向' : '本次错误：没有进入训练，不影响下一版模型');
+    const via = [wb.checked ? '外部记忆' : '', tr.checked ? '后续训练' : ''].filter(Boolean);
+    say(pres, via.length
+      ? '本次会话的错误可能经' + via.join('和') + '影响以后的输出；训练时已形成的既有倾向也仍在。'
+      : '本次会话的错误不会自动留到下一次会话；留下的是训练时已形成的既有倾向。');
+  };
+  wb.addEventListener('change', updPersist);
+  tr.addEventListener('change', updPersist);
+  updPersist();
+
+  /* 错误雪球示意模型（模型参数是数据，不是设计值） */
+  const MODEL = { sessions: 5, steps: 20, cap: 0.95, weight: 0.5, yTicks: [0.1, 0.2, 0.4, 0.6, 0.8, 1] };
+  const inP = document.getElementById('in-p'), inK = document.getElementById('in-k'), inG = document.getElementById('in-g');
+  const chart = document.getElementById('chart');
+  const simRead = document.getElementById('sim-read');
+  const run = (p, k, g, writeback) => {
+    const out = [];
+    let E = 0, C = 0;
+    for (let s = 0; s < MODEL.sessions; s++) {
+      let sum = 0;
+      for (let t = 0; t < MODEL.steps; t++) {
+        const eS = t ? sum / t : 0;
+        const m = writeback && E + C > 0 ? E / (E + C) : 0;
+        const pt = Math.min(MODEL.cap, p + k * MODEL.weight * eS + k * MODEL.weight * m);
+        sum += pt;
+        out.push(pt);
+        if (writeback) { E += pt * (1 - g); C += 1 - pt; }
+      }
+    }
+    return { series: out, m: writeback && E + C > 0 ? E / (E + C) : 0 };
+  };
+  const draw = () => {
+    const p = Number(inP.value) / 100, k = Number(inK.value), g = Number(inG.value) / 100;
+    say(document.getElementById('out-p'), inP.value + '%');
+    say(document.getElementById('out-k'), k.toFixed(2));
+    say(document.getElementById('out-g'), inG.value + '%');
+    const a = run(p, k, g, false), b = run(p, k, g, true);
+    const aLast = a.series[a.series.length - 1], bLast = b.series[b.series.length - 1];
+    say(document.getElementById('out-a'), pct(aLast));
+    say(document.getElementById('out-b'), pct(bLast));
+    say(document.getElementById('out-m'), pct(b.m));
+    say(simRead, bLast - aLast > 0.05
+      ? '在这组参数下，写回—再检索的循环让错误逐会话抬升：这就是“跨轮次持久化”路径。'
+      : '在这组参数下，写入校验或较弱的自我条件化压住了跨会话累积，两条线差距不大。');
+
+    const W = chart.clientWidth, H = chart.clientHeight;
+    if (!W || !H) return;
+    const pl = tnum('--chart-pad-l'), pr = tnum('--chart-pad-r'), ptop = tnum('--chart-pad-t'), pb = tnum('--chart-pad-b');
+    const gap = tnum('--chart-tick-gap'), dy = tnum('--chart-txt-dy'), ldy = tnum('--chart-label-dy');
+    const mx = Math.max.apply(null, a.series.concat(b.series));
+    const ymax = MODEL.yTicks.find(v => v >= mx * 1.1) || 1;
+    const n = a.series.length;
+    const x = i => pl + (W - pl - pr) * i / (n - 1);
+    const y = v => ptop + (H - ptop - pb) * (1 - v / ymax);
+    let s = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="示意模型：第 5 个会话末步错误率，仅上下文 ' + pct(aLast) + '，加记忆写回 ' + pct(bLast) + '">';
+    [0, ymax / 2, ymax].forEach(v => {
+      s += '<line class="ch-grid" x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(v) + '" y2="' + y(v) + '"/>';
+      s += '<text class="ch-txt" x="' + (pl - gap) + '" y="' + (y(v) + dy) + '" text-anchor="end">' + Math.round(v * 100) + '%</text>';
+    });
+    for (let si = 0; si < MODEL.sessions; si++) {
+      const x0 = si === 0 ? x(0) : (x(si * MODEL.steps - 1) + x(si * MODEL.steps)) / 2;
+      if (si > 0) s += '<line class="ch-div" x1="' + x0 + '" x2="' + x0 + '" y1="' + ptop + '" y2="' + (H - pb) + '"/>';
+      const xc = x(si * MODEL.steps + (MODEL.steps - 1) / 2);
+      s += '<text class="ch-txt" x="' + xc + '" y="' + (H - pb + ldy) + '" text-anchor="middle">会话' + (si + 1) + '</text>';
+    }
+    const pts = arr => arr.map((v, i) => x(i).toFixed(1) + ',' + y(v).toFixed(1)).join(' ');
+    s += '<polyline class="ch-a" points="' + pts(a.series) + '"/>';
+    s += '<polyline class="ch-b" points="' + pts(b.series) + '"/>';
+    s += '</svg>';
+    chart.innerHTML = s;
+  };
+  [inP, inK, inG].forEach(el => el.addEventListener('input', draw));
+  document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
+    const v = b.dataset.preset.split(',');
+    inP.value = v[0]; inK.value = v[1]; inG.value = v[2];
+    draw();
+  }));
+  let raf = 0;
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }).observe(chart);
+  } else {
+    window.addEventListener('resize', draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
