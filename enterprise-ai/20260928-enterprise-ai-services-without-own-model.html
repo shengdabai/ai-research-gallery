@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从一家AI API聚合公司的面试笔记出发，分析企业AI服务的商业模式、十类生意形态、十三个真实案例、合规风险，以及AI自媒体求职者的90天行动路径。">
+    <title>不造大模型，如何做成企业AI生意｜产业分析与职业行动报告</title>
+  <style>
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+
+      /* Layering */
+      --layer-raised: 10;
+      --layer-top: 20;
+
+      --color-page: #f2f6fa;
+      --color-white: #ffffff;
+      --color-ink: #142d42;
+      --color-navy: #0c2438;
+      --color-navy-soft: #163d50;
+      --color-teal: #087d78;
+      --color-teal-dark: #08645f;
+      --color-mint: #a8ead8;
+      --color-muted: #526879;
+      --color-light-text: #c8dbe5;
+      --color-line: #d9e4eb;
+      --color-dark-line: #365565;
+      --color-soft: #edf8f5;
+      --color-blue-soft: #edf3f8;
+      --color-zebra: #f8fbfd;
+      --color-critical: #a6404a;
+      --color-critical-bg: #fcf0f2;
+      --color-transparent: transparent;
+
+      --space-0: 0;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-14: 56px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-negative-pixel: -1px;
+
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-table: 14px;
+      --text-base: 16px;
+      --text-lead: 18px;
+      --text-card: 21px;
+      --text-section: 32px;
+      --text-display: 52px;
+      --text-display-mobile: 36px;
+      --text-metric: 34px;
+      --text-svg-title: 21px;
+      --text-svg-body: 16px;
+      --text-svg-note: 14px;
+
+      --weight-normal: 400;
+      --weight-medium: 500;
+      --weight-semibold: 600;
+      --weight-bold: 700;
+      --weight-heavy: 800;
+      --line-body: 1.85;
+      --line-compact: 1.65;
+      --line-heading: 1.35;
+      --line-display: 1.22;
+      --tracking-eyebrow: 0.08em;
+      --tracking-title: -0.025em;
+
+      --radius-none: 0;
+      --radius-small: 6px;
+      --radius-card: 12px;
+      --radius-large: 20px;
+      --border-thin: 1px;
+      --border-thick: 2px;
+      --border-accent: 4px;
+
+      --shadow-card: 0 8px 26px rgba(12, 36, 56, 0.045);
+      --shadow-hero: 0 18px 46px rgba(12, 36, 56, 0.13);
+      --shadow-none: none;
+
+      --page-width: 1280px;
+      --page-gutter: 32px;
+      --hero-measure: 18ch;
+      --body-measure: 76ch;
+      --nav-height: 58px;
+      --anchor-offset: 84px;
+      --diagram-width: 960px;
+      --mobile-label-width: 78px;
+      --check-size: 18px;
+      --progress-height: 8px;
+      --control-height: 42px;
+      --screen-reader-size: 1px;
+      --focus-offset: 4px;
+
+      --business-col-name: 14%;
+      --business-col-value: 20%;
+      --business-col-client: 14%;
+      --business-col-price: 16%;
+      --business-col-barrier: 18%;
+      --business-col-risk: 18%;
+
+      --risk-col-name: 18%;
+      --risk-col-trigger: 25%;
+      --risk-col-action: 43%;
+      --risk-col-owner: 14%;
+
+      --hero-background: linear-gradient(115deg, var(--color-navy), var(--color-navy-soft));
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      color-scheme: light;
+      scroll-padding-top: var(--anchor-offset);
+    }
+
+    body {
+      margin: var(--space-0);
+      background: var(--color-page);
+      color: var(--color-ink);
+      font-family: var(--font-family);
+      font-size: var(--text-base);
+      font-weight: var(--weight-normal);
+      line-height: var(--line-body);
+      overflow-wrap: anywhere;
+    }
+
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+      margin: var(--space-0);
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--color-ink);
+      font-weight: var(--weight-bold);
+      line-height: var(--line-heading);
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: var(--hero-measure);
+      font-size: var(--text-display);
+      line-height: var(--line-display);
+      letter-spacing: var(--tracking-title);
+    }
+
+    h2 {
+      font-size: var(--text-section);
+      letter-spacing: var(--tracking-title);
+    }
+
+    h3 { font-size: var(--text-card); }
+    h4 { font-size: var(--text-base); }
+
+    strong { font-weight: var(--weight-bold); }
+
+    a {
+      color: var(--color-teal-dark);
+      text-decoration-thickness: var(--border-thin);
+      text-underline-offset: var(--space-1);
+    }
+
+    a:hover { color: var(--color-ink); }
+
+    button, input, progress {
+      font: inherit;
+    }
+
+    button, input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: var(--border-thick) solid var(--color-teal);
+      outline-offset: var(--focus-offset);
+    }
+
+    [hidden] { display: none !important; }
+
+    .shell {
+      width: 100%;
+      max-width: var(--page-width);
+      margin-inline: auto;
+      padding-inline: var(--page-gutter);
+    }
+
+    .skip-link {
+      position: absolute;
+      inset-inline-start: var(--space-4);
+      inset-block-start: var(--space-4);
+      z-index: var(--layer-top);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-white);
+      border: var(--border-thick) solid var(--color-teal);
+      transform: translateY(-200%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .hero-wrap {
+      padding-block: var(--space-8) var(--space-0);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+      gap: var(--space-12);
+      padding: var(--space-14);
+      background: var(--hero-background);
+      color: var(--color-white);
+      border-radius: var(--radius-large);
+      box-shadow: var(--shadow-hero);
+    }
+
+    .hero h1, .hero h2, .hero h3 {
+      color: var(--color-white);
+    }
+
+    .eyebrow {
+      margin-block-end: var(--space-5);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      letter-spacing: var(--tracking-eyebrow);
+    }
+
+    .hero .eyebrow { color: var(--color-mint); }
+
+    .hero-lead {
+      margin-block-start: var(--space-6);
+      color: var(--color-light-text);
+      font-size: var(--text-lead);
+      line-height: var(--line-body);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-6);
+      margin-block-start: var(--space-8);
+      color: var(--color-light-text);
+      font-size: var(--text-sm);
+    }
+
+    .hero-aside {
+      align-self: center;
+      padding-inline-start: var(--space-8);
+      border-inline-start: var(--border-thin) solid var(--color-dark-line);
+    }
+
+    .hero-aside-title {
+      color: var(--color-mint);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    .hero-thesis {
+      margin-block: var(--space-3) var(--space-6);
+      font-size: var(--text-card);
+      line-height: var(--line-compact);
+    }
+
+    .hero-aside p:last-child {
+      color: var(--color-light-text);
+      font-size: var(--text-sm);
+    }
+
+    .scope-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-block-start: var(--space-8);
+      padding-block-start: var(--space-6);
+      border-block-start: var(--border-thin) solid var(--color-dark-line);
+    }
+
+    .scope-stats strong {
+      display: block;
+      color: var(--color-mint);
+      font-size: var(--text-metric);
+      line-height: var(--line-heading);
+    }
+
+    .scope-stats span {
+      color: var(--color-light-text);
+      font-size: var(--text-xs);
+    }
+
+    .nav-wrap {
+      position: sticky;
+      inset-block-start: var(--space-0);
+      z-index: var(--layer-raised);
+      margin-block-start: var(--space-6);
+      background: var(--color-page);
+      border-block-end: var(--border-thin) solid var(--color-line);
+    }
+
+    .section-nav {
+      display: flex;
+      gap: var(--space-7);
+      min-height: var(--nav-height);
+      align-items: center;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+
+    .section-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--nav-height);
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      text-decoration: none;
+      border-block-end: var(--border-thick) solid var(--color-transparent);
+    }
+
+    .section-nav a:hover,
+    .section-nav a:focus-visible {
+      color: var(--color-teal-dark);
+      border-block-end-color: var(--color-teal);
+    }
+
+    main { padding-block-end: var(--space-16); }
+
+    .report-section {
+      margin-block-start: var(--space-16);
+      scroll-margin-top: var(--anchor-offset);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-8);
+      margin-block-end: var(--space-6);
+    }
+
+    .section-heading p {
+      max-width: var(--body-measure);
+      margin-block-start: var(--space-3);
+      color: var(--color-muted);
+    }
+
+    .section-kicker {
+      display: block;
+      margin-block-end: var(--space-2);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      letter-spacing: var(--tracking-eyebrow);
+    }
+
+    .card {
+      padding: var(--space-7);
+      background: var(--color-white);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      min-width: var(--space-0);
+    }
+
+    .card > p + p,
+    .prose > p + p {
+      margin-block-start: var(--space-4);
+    }
+
+    .card > h3 + p,
+    .card > h4 + p {
+      margin-block-start: var(--space-3);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+
+    .stack {
+      display: grid;
+      gap: var(--space-6);
+    }
+
+    .space-top { margin-block-start: var(--space-6); }
+    .space-top-large { margin-block-start: var(--space-10); }
+
+    .muted { color: var(--color-muted); }
+    .small { font-size: var(--text-sm); }
+    .teal { color: var(--color-teal-dark); }
+
+    .summary-card {
+      border-block-start: var(--border-accent) solid var(--color-teal);
+    }
+
+    .summary-card .summary-label {
+      margin-block-end: var(--space-3);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    .summary-card h3 { margin-block-end: var(--space-4); }
+
+    .evidence {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+      padding: var(--space-6);
+      background: var(--color-blue-soft);
+      border-radius: var(--radius-card);
+      font-size: var(--text-sm);
+    }
+
+    .evidence strong {
+      display: block;
+      margin-block-end: var(--space-2);
+    }
+
+    .note {
+      padding: var(--space-5) var(--space-6);
+      background: var(--color-soft);
+      border-inline-start: var(--border-accent) solid var(--color-teal);
+      border-radius: var(--radius-small);
+      color: var(--color-ink);
+    }
+
+    .note p + p { margin-block-start: var(--space-3); }
+
+    .note-critical {
+      background: var(--color-critical-bg);
+      border-inline-start-color: var(--color-critical);
+    }
+
+    .ref {
+      margin-inline-start: var(--space-1);
+      color: var(--color-teal-dark);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      white-space: nowrap;
+      text-decoration: none;
+      vertical-align: super;
+    }
+
+    .ref:hover { text-decoration: underline; }
+
+    .fact-row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.8fr);
+      gap: var(--space-6);
+      padding-block: var(--space-5);
+      border-block-end: var(--border-thin) solid var(--color-line);
+    }
+
+    .fact-row:first-child { padding-block-start: var(--space-0); }
+    .fact-row:last-child {
+      padding-block-end: var(--space-0);
+      border-block-end: none;
+    }
+
+    .fact-row dt { font-weight: var(--weight-semibold); }
+    .fact-row dd { color: var(--color-muted); }
+
+    .diagram-card { padding: var(--space-6); }
+
+    .diagram-scroll {
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .chain-diagram {
+      display: block;
+      width: 100%;
+      min-width: var(--diagram-width);
+      height: auto;
+      font-family: var(--font-family);
+    }
+
+    .svg-node {
+      fill: var(--color-blue-soft);
+      stroke: var(--color-line);
+      stroke-width: var(--border-thin);
+      rx: var(--radius-card);
+    }
+
+    .svg-node-middle {
+      fill: var(--color-navy);
+      stroke: var(--color-navy);
+    }
+
+    .svg-title {
+      fill: var(--color-ink);
+      font-size: var(--text-svg-title);
+      font-weight: var(--weight-bold);
+    }
+
+    .svg-body {
+      fill: var(--color-muted);
+      font-size: var(--text-svg-body);
+    }
+
+    .svg-white { fill: var(--color-white); }
+    .svg-mint { fill: var(--color-mint); }
+
+    .svg-note {
+      fill: var(--color-muted);
+      font-size: var(--text-svg-note);
+    }
+
+    .svg-arrow {
+      fill: none;
+      stroke: var(--color-teal);
+      stroke-width: var(--border-thick);
+    }
+
+    .svg-arrow-muted {
+      fill: none;
+      stroke: var(--color-muted);
+      stroke-width: var(--border-thin);
+    }
+
+    .svg-arrow-head { fill: var(--color-teal); }
+    .svg-arrow-head-muted { fill: var(--color-muted); }
+
+    .svg-band {
+      fill: var(--color-soft);
+      rx: var(--radius-small);
+    }
+
+    figcaption {
+      margin-block-start: var(--space-3);
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+      line-height: var(--line-compact);
+    }
+
+    .mechanism {
+      padding-block-start: var(--space-6);
+      border-block-start: var(--border-thick) solid var(--color-teal);
+    }
+
+    .mechanism h3 { margin-block-end: var(--space-3); }
+
+    .mechanism p + p { margin-block-start: var(--space-3); }
+
+    .formula {
+      padding: var(--space-7);
+      background: var(--color-navy);
+      color: var(--color-white);
+      border-radius: var(--radius-card);
+    }
+
+    .formula .eyebrow {
+      margin-block-end: var(--space-3);
+      color: var(--color-mint);
+    }
+
+    .formula-main {
+      font-size: var(--text-card);
+      font-weight: var(--weight-semibold);
+      line-height: var(--line-body);
+    }
+
+    .formula-note {
+      margin-block-start: var(--space-4);
+      color: var(--color-light-text);
+      font-size: var(--text-sm);
+    }
+
+    .moat-step {
+      padding: var(--space-5);
+      background: var(--color-white);
+      border: var(--border-thin) solid var(--color-line);
+      border-inline-start: var(--border-accent) solid var(--color-line);
+      border-radius: var(--radius-small);
+    }
+
+    .moat-step:nth-child(2) { border-inline-start-color: var(--color-muted); }
+    .moat-step:nth-child(3) { border-inline-start-color: var(--color-teal); }
+    .moat-step:nth-child(4) { border-inline-start-color: var(--color-navy); }
+
+    .moat-step strong {
+      display: block;
+      margin-block-end: var(--space-2);
+    }
+
+    .moat-step p {
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+    }
+
+    .table-card {
+      overflow: hidden;
+      padding: var(--space-0);
+      background: var(--color-white);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: var(--text-table);
+      line-height: var(--line-compact);
+    }
+
+    .matrix caption {
+      padding: var(--space-5) var(--space-6);
+      background: var(--color-white);
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+      text-align: left;
+      border-block-end: var(--border-thin) solid var(--color-line);
+    }
+
+    .matrix thead {
+      color: var(--color-white);
+      background: var(--color-navy);
+    }
+
+    .matrix thead th {
+      padding: var(--space-4);
+      color: var(--color-white);
+      font-weight: var(--weight-semibold);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .matrix tbody th,
+    .matrix td {
+      padding: var(--space-5) var(--space-4);
+      border-block-end: var(--border-thin) solid var(--color-line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .matrix tbody th {
+      font-weight: var(--weight-bold);
+      color: var(--color-ink);
+    }
+
+    .matrix tbody tr:nth-child(even) {
+      background: var(--color-zebra);
+    }
+
+    .matrix tbody tr:last-child th,
+    .matrix tbody tr:last-child td {
+      border-block-end: none;
+    }
+
+    .matrix .cell-sub {
+      display: block;
+      margin-block-start: var(--space-2);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-normal);
+    }
+
+    .business-name { width: var(--business-col-name); }
+    .business-value { width: var(--business-col-value); }
+    .business-client { width: var(--business-col-client); }
+    .business-price { width: var(--business-col-price); }
+    .business-barrier { width: var(--business-col-barrier); }
+    .business-risk { width: var(--business-col-risk); }
+
+    .risk-name { width: var(--risk-col-name); }
+    .risk-trigger { width: var(--risk-col-trigger); }
+    .risk-action { width: var(--risk-col-action); }
+    .risk-owner { width: var(--risk-col-owner); }
+
+    .comparison-title {
+      margin-block-end: var(--space-5);
+    }
+
+    .case-tools {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      margin-block-end: var(--space-6);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .filter-button {
+      min-height: var(--control-height);
+      padding: var(--space-2) var(--space-5);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-small);
+      background: var(--color-white);
+      color: var(--color-ink);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      box-shadow: var(--shadow-none);
+    }
+
+    .filter-button[aria-pressed="true"] {
+      background: var(--color-navy);
+      color: var(--color-white);
+      border-color: var(--color-navy);
+    }
+
+    .filter-button:hover {
+      border-color: var(--color-teal);
+    }
+
+    .case-count {
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+
+    .case-card {
+      display: flex;
+      flex-direction: column;
+      scroll-margin-top: var(--anchor-offset);
+    }
+
+    .case-category {
+      margin-block-end: var(--space-2);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    .case-card h3 { margin-block-end: var(--space-5); }
+
+    .case-details {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: var(--space-3) var(--space-4);
+      font-size: var(--text-sm);
+      line-height: var(--line-body);
+    }
+
+    .case-details dt {
+      color: var(--color-muted);
+      font-weight: var(--weight-semibold);
+    }
+
+    .case-details dd { min-width: var(--space-0); }
+
+    .case-lesson {
+      margin-block-start: var(--space-5);
+      padding-block-start: var(--space-4);
+      border-block-start: var(--border-thin) solid var(--color-line);
+      font-size: var(--text-sm);
+    }
+
+    .case-lesson strong { color: var(--color-teal-dark); }
+
+    .case-source {
+      margin-block-start: auto;
+      padding-block-start: var(--space-4);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+    }
+
+    .priority {
+      display: block;
+      margin-block-start: var(--space-2);
+      color: var(--color-critical);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+    }
+
+    .priority-operating { color: var(--color-teal-dark); }
+
+    .legal-card h3 {
+      margin-block-end: var(--space-4);
+    }
+
+    .legal-card p + p { margin-block-start: var(--space-4); }
+
+    .career-lane {
+      border-block-start: var(--border-accent) solid var(--color-navy);
+    }
+
+    .career-lane .lane-fit {
+      margin-block: var(--space-3) var(--space-4);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    .career-lane p + p { margin-block-start: var(--space-3); }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-5);
+    }
+
+    .skill-card {
+      padding: var(--space-5);
+      background: var(--color-blue-soft);
+      border-radius: var(--radius-small);
+    }
+
+    .skill-card h4 { margin-block-end: var(--space-3); }
+    .skill-card p { font-size: var(--text-sm); }
+
+    .plan-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: var(--space-8);
+      align-items: center;
+      margin-block-end: var(--space-6);
+    }
+
+    .plan-status {
+      padding: var(--space-5);
+      background: var(--color-blue-soft);
+      border-radius: var(--radius-small);
+    }
+
+    .plan-status label {
+      display: block;
+      margin-block-end: var(--space-3);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    progress {
+      display: block;
+      width: 100%;
+      height: var(--progress-height);
+      border: none;
+      border-radius: var(--radius-none);
+      background: var(--color-line);
+      color: var(--color-teal);
+      accent-color: var(--color-teal);
+      appearance: none;
+    }
+
+    progress::-webkit-progress-bar {
+      background: var(--color-line);
+      border-radius: var(--radius-none);
+    }
+
+    progress::-webkit-progress-value {
+      background: var(--color-teal);
+      border-radius: var(--radius-none);
+    }
+
+    progress::-moz-progress-bar {
+      background: var(--color-teal);
+      border-radius: var(--radius-none);
+    }
+
+    .plan-status p {
+      margin-block-start: var(--space-3);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+      line-height: var(--line-compact);
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+
+    .phase {
+      border-block-start: var(--border-accent) solid var(--color-teal);
+    }
+
+    .phase-time {
+      display: block;
+      margin-block-end: var(--space-2);
+      color: var(--color-teal-dark);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+    }
+
+    .phase h3 { margin-block-end: var(--space-4); }
+
+    .task {
+      display: grid;
+      grid-template-columns: var(--check-size) minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: start;
+      margin-block: var(--space-4);
+      font-size: var(--text-sm);
+    }
+
+    .task input {
+      width: var(--check-size);
+      height: var(--check-size);
+      margin: var(--space-1) var(--space-0) var(--space-0);
+      accent-color: var(--color-teal);
+    }
+
+    .task input:checked + span {
+      color: var(--color-teal-dark);
+    }
+
+    .phase-output {
+      margin-block-start: var(--space-5);
+      padding-block-start: var(--space-4);
+      border-block-start: var(--border-thin) solid var(--color-line);
+      font-size: var(--text-sm);
+    }
+
+    .phase-gate {
+      margin-block-start: var(--space-3);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+    }
+
+    .content-chain {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-5);
+      margin-block: var(--space-5);
+    }
+
+    .content-step {
+      padding-inline-start: var(--space-4);
+      border-inline-start: var(--border-thick) solid var(--color-teal);
+    }
+
+    .content-step strong {
+      display: block;
+      margin-block-end: var(--space-2);
+    }
+
+    .content-step p {
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+    }
+
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-0) var(--space-8);
+    }
+
+    .source-item {
+      padding-block: var(--space-4);
+      border-block-end: var(--border-thin) solid var(--color-line);
+      font-size: var(--text-sm);
+      line-height: var(--line-compact);
+      scroll-margin-top: var(--anchor-offset);
+    }
+
+    .source-item strong {
+      display: block;
+      margin-block-end: var(--space-2);
+    }
+
+    .source-item p + p { margin-block-start: var(--space-2); }
+
+    .source-item:target {
+      background: var(--color-soft);
+      outline: var(--border-thick) solid var(--color-teal);
+      outline-offset: var(--space-2);
+    }
+
+    .conclusion {
+      padding: var(--space-12);
+      background: var(--hero-background);
+      color: var(--color-white);
+      border-radius: var(--radius-large);
+      box-shadow: var(--shadow-hero);
+    }
+
+    .conclusion h2,
+    .conclusion h3 {
+      color: var(--color-white);
+    }
+
+    .conclusion .section-kicker { color: var(--color-mint); }
+
+    .conclusion-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7) var(--space-10);
+      margin-block-start: var(--space-8);
+    }
+
+    .conclusion-grid h3 {
+      margin-block-end: var(--space-3);
+      font-size: var(--text-lead);
+    }
+
+    .conclusion-grid p {
+      color: var(--color-light-text);
+      font-size: var(--text-sm);
+    }
+
+    .closing-statement {
+      margin-block-start: var(--space-10);
+      padding-block-start: var(--space-7);
+      border-block-start: var(--border-thin) solid var(--color-dark-line);
+      color: var(--color-mint);
+      font-size: var(--text-card);
+      font-weight: var(--weight-semibold);
+    }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      padding-block: var(--space-6) var(--space-0);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+    }
+
+    .js-only { display: none; }
+    .js .js-only { display: flex; }
+    .js .plan-status.js-only { display: block; }
+
+    @media (max-width: 1080px) {
+      .hero {
+        gap: var(--space-8);
+        padding: var(--space-10);
+      }
+
+      .grid-three,
+      .phase-grid {
+        gap: var(--space-4);
+      }
+
+      .skill-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-aside {
+        padding-inline-start: var(--space-0);
+        padding-block-start: var(--space-6);
+        border-inline-start: none;
+        border-block-start: var(--border-thin) solid var(--color-dark-line);
+      }
+
+      .hero-thesis {
+        margin-block-end: var(--space-3);
+      }
+
+      .scope-stats { margin-block-start: var(--space-6); }
+
+      .grid-three,
+      .phase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .evidence,
+      .content-chain {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .plan-header {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-5);
+      }
+
+      .matrix,
+      .matrix tbody,
+      .matrix tr,
+      .matrix tbody th,
+      .matrix td {
+        display: block;
+        width: 100%;
+      }
+
+      .matrix colgroup { display: none; }
+
+      .matrix caption {
+        display: block;
+        width: 100%;
+      }
+
+      .matrix thead {
+        position: absolute;
+        width: var(--screen-reader-size);
+        height: var(--screen-reader-size);
+        padding: var(--space-0);
+        margin: var(--space-negative-pixel);
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: none;
+      }
+
+      .matrix tbody tr {
+        padding: var(--space-6);
+        border-block-end: var(--border-thin) solid var(--color-line);
+      }
+
+      .matrix tbody tr:last-child { border-block-end: none; }
+
+      .matrix tbody th {
+        padding: var(--space-0) var(--space-0) var(--space-4);
+        border: none;
+        font-size: var(--text-lead);
+      }
+
+      .matrix td {
+        display: grid;
+        grid-template-columns: var(--mobile-label-width) minmax(0, 1fr);
+        gap: var(--space-3);
+        padding: var(--space-3) var(--space-0);
+        border: none;
+        font-size: var(--text-sm);
+      }
+
+      .matrix td::before {
+        content: attr(data-label);
+        color: var(--color-muted);
+        font-size: var(--text-sm);
+        font-weight: var(--weight-semibold);
+      }
+
+      .matrix td > div { min-width: var(--space-0); }
+
+      .matrix .cell-sub {
+        font-size: var(--text-sm);
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --page-gutter: 16px;
+        --text-section: 27px;
+        --text-card: 20px;
+        --anchor-offset: 78px;
+      }
+
+      .hero-wrap { padding-block-start: var(--space-4); }
+
+      .hero {
+        padding: var(--space-7);
+        border-radius: var(--radius-card);
+      }
+
+      h1 { font-size: var(--text-display-mobile); }
+
+      .hero-lead { font-size: var(--text-base); }
+
+      .hero-meta {
+        gap: var(--space-2) var(--space-4);
+        margin-block-start: var(--space-6);
+      }
+
+      .section-nav { gap: var(--space-5); }
+
+      .report-section { margin-block-start: var(--space-12); }
+
+      .section-heading { display: block; }
+
+      .grid-two,
+      .grid-three,
+      .case-grid,
+      .phase-grid,
+      .evidence,
+      .sources-grid,
+      .conclusion-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .card { padding: var(--space-6); }
+
+      .fact-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-2);
+      }
+
+      .skill-grid,
+      .content-chain {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .case-details {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-1);
+      }
+
+      .case-details dd + dt { margin-block-start: var(--space-3); }
+
+      .case-tools {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .filter-button { padding-inline: var(--space-4); }
+
+      .diagram-card { padding: var(--space-4); }
+
+      .note { padding: var(--space-5); }
+
+      .conclusion { padding: var(--space-7); }
+
+      .conclusion-grid { gap: var(--space-6); }
+
+      .sources-grid { gap: var(--space-0); }
+    }
+
+    @media print {
+      body { background: var(--color-white); }
+
+      .shell {
+        max-width: none;
+        padding-inline: var(--space-0);
+      }
+
+      .nav-wrap,
+      .case-tools,
+      .plan-status,
+      .skip-link {
+        display: none !important;
+      }
+
+      .hero,
+      .card,
+      .table-card,
+      .conclusion {
+        box-shadow: var(--shadow-none);
+      }
+
+      .case-card[hidden] { display: flex !important; }
+
+      .report-section { margin-block-start: var(--space-10); }
+
+      .card,
+      .phase,
+      .source-item {
+        break-inside: avoid;
+      }
+
+      .diagram-scroll { overflow: visible; }
+      .chain-diagram { min-width: var(--space-0); }
+
+      a { color: var(--color-ink); }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳转到报告正文</a>
+
+  <header class="hero-wrap shell">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">中国AI产业 · 企业服务 · 职业行动</p>
+        <h1>不造大模型，<br>如何做成企业AI生意</h1>
+        <p class="hero-lead">
+          从一家API聚合公司的面试笔记出发，拆解“卖铲子”的收入、壁垒与风险，进一步回答：企业究竟为什么付费，服务商靠什么持续赚钱，求职者如何真正入场。
+        </p>
+        <div class="hero-meta">
+          <span>研究基准日：2026年9月28日</span>
+          <span>公开资料核对 · 访谈观点辨析</span>
+        </div>
+      </div>
+      <aside class="hero-aside" aria-label="报告核心判断">
+        <p class="hero-aside-title">核心判断</p>
+        <p class="hero-thesis">API可以是入口，<br>可验收的企业价值才是生意。</p>
+        <p>
+          不把“能接通模型”误当作长期壁垒，也不把“签了B端合同”误当作合规结论。本报告将访谈陈述、公开事实与分析建议分开呈现。
+        </p>
+        <div class="scope-stats" aria-label="报告内容范围">
+          <div><strong>10</strong><span>种生意形态</span></div>
+          <div><strong>13</strong><span>个真实案例</span></div>
+          <div><strong>90</strong><span>天行动路径</span></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="nav-wrap">
+    <nav class="section-nav shell" aria-label="报告目录">
+      <a href="#summary">核心摘要</a>
+      <a href="#business">商业模式</a>
+      <a href="#business-map">生意地图</a>
+      <a href="#cases">真实案例</a>
+      <a href="#risk">风险与合规</a>
+      <a href="#career">求职行动</a>
+      <a href="#sources">公开来源</a>
+      <a href="#conclusion">关键结论</a>
+    </nav>
+  </div>
+
+  <main id="main" class="shell">
+    <section id="summary" class="report-section" aria-labelledby="summary-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">先看判断，再看证据</span>
+          <h2 id="summary-title">这份面试笔记，揭示了什么？</h2>
+          <p>
+            它提供了一个有价值的观察窗口：不参与基础模型训练，也可以围绕模型的采购、接入、治理和业务落地收费。但一家公司的销售话术，不能直接外推成整个行业的规律。
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-three">
+        <article class="card summary-card">
+          <p class="summary-label">商业判断</p>
+          <h3>“卖铲子”成立，<br>“倒接口就躺赚”不成立</h3>
+          <p>
+            聚合、推理优化、企业搜索、开发工具和实施服务都有真实产品与收费机制。但这些公司的收入来源不完全相同，不能统称为赚模型差价。
+            <a class="ref" href="#s1">[1]</a><a class="ref" href="#s2">[2]</a><a class="ref" href="#s5">[5]</a><a class="ref" href="#s8">[8]</a>
+          </p>
+        </article>
+
+        <article class="card summary-card">
+          <p class="summary-label">经营判断</p>
+          <h3>B端是客户选择，<br>不是利润保证</h3>
+          <p>
+            更大的调用量只有在单位贡献为正、交付可控、款项可回收时才有价值。应验证每个客户的收入、直接成本与续约，而不是只看调用流水。
+          </p>
+        </article>
+
+        <article class="card summary-card">
+          <p class="summary-label">合规判断</p>
+          <h3>客户可追溯，<br>不等于全链条合法</h3>
+          <p>
+            上游许可、支持地区、数据处理和境内服务责任需要分别判断。
+            B端合同与海外主体都不能自动覆盖这些问题。
+            <a class="ref" href="#s15">[15]</a><a class="ref" href="#s16">[16]</a><a class="ref" href="#s17">[17]</a><a class="ref" href="#s18">[18]</a>
+          </p>
+        </article>
+      </div>
+
+      <div class="evidence space-top" aria-label="证据边界">
+        <div>
+          <strong>访谈信息</strong>
+          公司业务、客户用量、蒸馏用途及海外主体计划，均来自用户提供的笔记；未取得公司合同、客户清单和经营报表。
+        </div>
+        <div>
+          <strong>公开事实</strong>
+          案例功能、收费机制及法规条款，以文末官方产品页、协议、监管文件和公司披露为依据；不推算未公开营收、毛利或客户数量。
+        </div>
+        <div>
+          <strong>分析建议</strong>
+          生意矩阵、风险优先级与90天路径是决策框架，不是市场统计。官网报价与条款可能更新，具体采购仍需核对地区、版本及合同。
+        </div>
+      </div>
+    </section>
+
+    <section id="business" class="report-section" aria-labelledby="business-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">从“转卖API”拆到现金流</span>
+          <h2 id="business-title">这家公司实际站在产业链的哪一层？</h2>
+          <p>
+            按笔记描述，它不是基础模型研发商，而是处于模型供应商与企业应用之间的接入和商业服务层。下面列出的治理、运维与交付能力，是这一层可以提供的价值，不代表访谈公司已经具备。
+          </p>
+        </div>
+      </div>
+
+      <figure class="card diagram-card">
+        <div class="diagram-scroll" tabindex="0" aria-label="产业链示意图，窄屏可横向滚动">
+          <svg class="chain-diagram" viewBox="0 0 1120 400" role="img" aria-labelledby="chain-title chain-desc">
+            <title id="chain-title">企业AI服务产业链：上游模型、中游服务、下游业务</title>
+            <desc id="chain-desc">
+              上游提供模型、算力和推理服务，中游提供授权接入、网关治理与实施运维，下游企业将能力嵌入业务。服务向下游交付，资金按合同流向中游与上游，数据、权利和责任贯穿全链条。
+            </desc>
+            <defs>
+              <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path class="svg-arrow-head" d="M0 0 L10 5 L0 10 Z"></path>
+              </marker>
+              <marker id="arrow-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path class="svg-arrow-head-muted" d="M0 0 L10 5 L0 10 Z"></path>
+              </marker>
+            </defs>
+
+            <text x="20" y="30" class="svg-note">能力与服务向下游交付；资金按合同反向结算</text>
+
+            <rect x="20" y="60" width="300" height="190" class="svg-node"></rect>
+            <text x="44" y="98" class="svg-title">上游 · 供给层</text>
+            <text x="44" y="134" class="svg-body">模型厂商与推理云</text>
+            <text x="44" y="165" class="svg-body">闭源API / 开放权重模型</text>
+            <text x="44" y="196" class="svg-body">算力、模型能力、服务条款</text>
+            <text x="44" y="227" class="svg-note">决定授权边界与基础成本</text>
+
+            <path d="M334 155 H394" class="svg-arrow" marker-end="url(#arrow-teal)"></path>
+
+            <rect x="410" y="60" width="300" height="190" class="svg-node svg-node-middle"></rect>
+            <text x="434" y="98" class="svg-title svg-white">中游 · 企业服务层</text>
+            <text x="434" y="134" class="svg-body svg-mint">合法接入 / 统一网关 / 结算</text>
+            <text x="434" y="165" class="svg-body svg-white">权限、评测、监控与成本治理</text>
+            <text x="434" y="196" class="svg-body svg-white">连接业务系统、交付与运维</text>
+            <text x="434" y="227" class="svg-note svg-mint">访谈公司的主要位置</text>
+
+            <path d="M724 155 H784" class="svg-arrow" marker-end="url(#arrow-teal)"></path>
+
+            <rect x="800" y="60" width="300" height="190" class="svg-node"></rect>
+            <text x="824" y="98" class="svg-title">下游 · 需求层</text>
+            <text x="824" y="134" class="svg-body">有研发能力的企业与软件商</text>
+            <text x="824" y="165" class="svg-body">客服、研发、知识与行业流程</text>
+            <text x="824" y="196" class="svg-body">内部使用 / 面向客户的产品</text>
+            <text x="824" y="227" class="svg-note">为可验收的业务价值付费</text>
+
+            <path d="M1100 281 H20" class="svg-arrow-muted" marker-end="url(#arrow-muted)"></path>
+            <text x="560" y="307" text-anchor="middle" class="svg-note">企业付款 → 服务商收入与履约成本 → 上游采购支出，不等于全部变成利润</text>
+
+            <rect x="20" y="329" width="1080" height="59" class="svg-band"></rect>
+            <text x="560" y="354" text-anchor="middle" class="svg-body">数据、使用权与责任贯穿全链条</text>
+            <text x="560" y="377" text-anchor="middle" class="svg-note">需要识别实际接收方、处理地点、最终用户、用途、留存与合同权限</text>
+          </svg>
+        </div>
+        <figcaption>
+          分析示意，不表示市场份额或收入规模。中游可能自建推理，也可能调用上游API；二者的成本结构、授权关系和技术门槛并不相同。窄屏可横向查看完整图。
+        </figcaption>
+      </figure>
+
+      <div class="card space-top">
+        <h3 class="comparison-title">把笔记中的五个判断，改写为可验证的问题</h3>
+        <dl>
+          <div class="fact-row">
+            <dt>“企业一天调用量，抵个人一年”</dt>
+            <dd>
+              这是未核实的访谈陈述，不是行业比例。应查看单客户实际消耗、峰谷差、折扣、支持工时和回款。调用次数也不等于Token消耗：输入长度、输出长度和重试都会改变账单。
+            </dd>
+          </div>
+          <div class="fact-row">
+            <dt>“个人没有利润，企业才有钱”</dt>
+            <dd>
+              更准确的说法是：这家公司可能更适合B端获客与交付。
+              Cursor同时提供个人付费和团队、企业方案，说明个人付费产品确实存在；但公开价格本身也不能证明任何一个业务已经盈利。
+              <a class="ref" href="#s8">[8]</a>
+            </dd>
+          </div>
+          <div class="fact-row">
+            <dt>“接入之后很难换”</dt>
+            <dd>
+              要区分更换网关和更换模型。若仍使用同一模型、同类接口，替换中间商可能相对容易；若换了模型、工具调用行为和业务流程，则需要重新评测、适配与验收。不能把两种成本混在一起。
+            </dd>
+          </div>
+          <div class="fact-row">
+            <dt>“大厂也用海外模型蒸馏”</dt>
+            <dd>
+              笔记没有提供可核查对象，不能据此给具体公司贴标签。内部提效、生成测试数据、训练自用模型、训练竞争模型是不同用途，是否允许需要逐项核对上游条款与数据权利。
+              <a class="ref" href="#s14">[14]</a><a class="ref" href="#s15">[15]</a>
+            </dd>
+          </div>
+          <div class="fact-row">
+            <dt>“卖给B端、签合同就可控”</dt>
+            <dd>
+              客户识别和用途约束可以提高可追溯性，但不能替代上游授权、数据处理合法性或境内服务义务。本报告既不认定访谈公司违法，也不接受其话术作为合规证明。
+              <a class="ref" href="#s15">[15]</a><a class="ref" href="#s17">[17]</a><a class="ref" href="#s18">[18]</a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="space-top-large">
+        <h3 class="comparison-title">中间层可以卖三种东西，不能只剩一种“差价”</h3>
+        <div class="grid-three">
+          <article class="mechanism">
+            <h3>授权供给与用量服务</h3>
+            <p>
+              在上游允许的商业模式、地区与用途内，提供模型能力和统一结算。收入可以来自用量服务费、经授权的转售安排或容量服务。
+            </p>
+            <p class="small muted">
+              必须算清基础采购、支付、汇率、失败请求和客户支持成本。“拥有账号”不等于“拥有转售权”。<a class="ref" href="#s15">[15]</a>
+            </p>
+          </article>
+
+          <article class="mechanism">
+            <h3>客户自带密钥的治理网关</h3>
+            <p>
+              客户与上游建立合法关系，服务商提供路由、预算、权限和观测能力，收软件或管理服务费。
+              BYOK即客户自带密钥。
+            </p>
+            <p class="small muted">
+              OpenRouter公开提供BYOK机制，但BYOK并不豁免地区限制与数据责任。
+              <a class="ref" href="#s1">[1]</a><a class="ref" href="#s16">[16]</a>
+            </p>
+          </article>
+
+          <article class="mechanism">
+            <h3>业务集成与持续运营</h3>
+            <p>
+              把模型接入知识库、客户关系系统或研发流程，用实施费覆盖初始工作，再通过软件、运维和持续优化收费。
+            </p>
+            <p class="small muted">
+              应把模型消耗、实施范围与后续服务分别列明，避免用一次性项目费承担无限期支持。
+              Glean、Palantir的公开资料体现了软件与服务并行的收费结构。
+              <a class="ref" href="#s4">[4]</a><a class="ref" href="#s5">[5]</a>
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid-two space-top-large">
+        <div class="stack">
+          <div class="formula">
+            <p class="eyebrow">管理分析口径 · 不是会计准则替代品</p>
+            <p class="formula-main">
+              当期经营贡献<br>
+              ＝ 不含税已履约收入<br>
+              − 上游推理与算力成本<br>
+              − 运行、支付与交付支持成本<br>
+              − 退款补偿及坏账损失
+            </p>
+            <p class="formula-note">
+              再扣除固定销售、研发和管理支出，才能进一步讨论盈利。预充值形成的现金、平台流水、营业收入和利润不是同一个概念。收入采用总额还是净额确认，应依据实际合同与会计判断。
+            </p>
+          </div>
+          <article class="card">
+            <h3>最值得盯的单位：一次合格任务</h3>
+            <p>
+              不只看“每百万Token多少钱”，还应看完成一次被业务方接受的任务，总共用了多少模型调用、检索、工具执行、人工复核和重试。
+            </p>
+            <p>
+              建议同时追踪客户贡献、续约情况、故障补偿、应收账款和收入集中度。上游降价可能带来更多用量，也可能让客户更快要求降价，结果要靠账单验证。
+            </p>
+          </article>
+        </div>
+
+        <div>
+          <h3 class="comparison-title">切换成本：哪些薄，哪些更扎实？</h3>
+          <div class="stack">
+            <div class="moat-step">
+              <strong>较薄：统一地址、接口包装、付款便利</strong>
+              <p>若缺少其他价值，同一模型的兼容接口容易被替代。接入摩擦可以带来首单，不一定带来长期留存。</p>
+            </div>
+            <div class="moat-step">
+              <strong>中等：模型适配与稳定性工程</strong>
+              <p>提示词、结构化输出、工具调用、容错和版本回归确实需要工程投入，但很多能力也可迁移或标准化。</p>
+            </div>
+            <div class="moat-step">
+              <strong>更强：企业治理与评测资产</strong>
+              <p>权限、审计、连接器、专用评测集、成本分摊与历史故障经验，能够形成可复用的服务能力。</p>
+            </div>
+            <div class="moat-step">
+              <strong>最值得积累：业务流程与交付信任</strong>
+              <p>理解客户例外情形、持续达成验收、关键时刻能响应，比单纯阻止客户迁移更有价值。应支持数据导出与退出安排。</p>
+            </div>
+          </div>
+          <p class="small muted space-top">
+            以上是定性分析，不是对某家公司护城河的量化评分。Glean的连接器与权限体系、
+            Palantir的业务对象与治理能力，提供了比“转发接口”更深一层的对照。
+            <a class="ref" href="#s4">[4]</a><a class="ref" href="#s5">[5]</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-two space-top-large">
+        <article class="card">
+          <h3>最匹配的客户画像</h3>
+          <p>
+            有研发团队、有持续API需求、有明确预算负责人，并且模型使用地区、数据和用途均可合法落地。其痛点不是“不会聊天”，而是不愿反复处理供应商对接、结算、稳定性与内部治理。
+          </p>
+          <p>
+            优先访谈三类角色：将AI嵌入产品的软件商、统一管理内部模型使用的平台团队、有明确工作流的业务与研发团队。问清谁使用、谁推动、谁付钱，以及谁有安全或法务否决权。
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>不应硬卖裸API的客户</h3>
+          <p>
+            没有研发能力的客户，更可能需要成品应用或实施服务；没有重复需求、预算和验收标准的客户，不应被“AI焦虑”催成大项目。
+          </p>
+          <p>
+            对数据处理边界要求严格的客户，应先评估境内合适的云服务或本地部署，而不是默认海外模型最优。对蒸馏或训练需求，应先审查许可和数据来源，再谈模型效果。
+            <a class="ref" href="#s14">[14]</a><a class="ref" href="#s15">[15]</a><a class="ref" href="#s19">[19]</a>
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="business-map" class="report-section" aria-labelledby="map-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">重点地图 · 企业究竟为什么付费</span>
+          <h2 id="map-title">用AI服务企业的十种生意形态</h2>
+          <p>
+            分类按照主要交付物，而非按厂商划分。同一家公司可以横跨多行。收费栏是可采用的商业设计，不表示每家案例公司都提供这些收费选项，更不是市场统一报价。
+          </p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>阅读关键：</strong>
+          API是程序调用接口；RAG是先检索相关资料、再辅助模型作答的方法；
+          Agent是能调用工具并执行流程的智能体；LLMOps是大模型应用的评测、发布、监控与运营体系。技术名称不是验收标准，业务结果才是。
+        </p>
+      </div>
+
+      <div class="table-card space-top">
+        <table class="matrix">
+          <caption>生意矩阵：价值、客户、收费、门槛与风险。产品依据见各行引用，验收与经营建议为分析判断。</caption>
+          <colgroup>
+            <col class="business-name">
+            <col class="business-value">
+            <col class="business-client">
+            <col class="business-price">
+            <col class="business-barrier">
+            <col class="business-risk">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">生意形态</th>
+              <th scope="col">价值与验收</th>
+              <th scope="col">客户与付费方</th>
+              <th scope="col">收费设计</th>
+              <th scope="col">交付门槛</th>
+              <th scope="col">主要风险</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                API聚合与网关
+                <span class="cell-sub">OpenRouter、硅基流动、Bedrock</span>
+                <a class="ref" href="#s1">[1]</a><a class="ref" href="#s2">[2]</a><a class="ref" href="#s3">[3]</a>
+              </th>
+              <td data-label="价值验收"><div>统一接入、路由、预算与结算。验收可用性、延迟、账单准确性和切换行为，而非模型数量。</div></td>
+              <td data-label="客户付费"><div>软件商、企业研发和AI平台团队；技术预算负责人或采购付款。</div></td>
+              <td data-label="收费设计"><div>经授权的用量服务费、软件订阅、BYOK管理费、容量或服务保障费用。</div></td>
+              <td data-label="交付门槛"><div>供给许可、接口适配、租户隔离、限流容错、账务与运维响应。</div></td>
+              <td data-label="主要风险"><div>断供封号、纯转发可替代、模型降价压缩差价；不能把地区限制包装成技术问题。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                私有化部署与一体机
+                <span class="cell-sub">H3C灵犀Cube、企业推理部署</span>
+                <a class="ref" href="#s2">[2]</a><a class="ref" href="#s11">[11]</a>
+              </th>
+              <td data-label="价值验收"><div>让模型在可控环境运行。验收指定模型版本、精度、上下文、并发、时延和业务准确性。</div></td>
+              <td data-label="客户付费"><div>有本地化需求、持续负载与运维条件的企业；信息技术部门或项目预算付款。</div></td>
+              <td data-label="收费设计"><div>硬件、软件及集成交付，后续维护与调优按合同收费；不默认开放权重模型本身需要付许可费。</div></td>
+              <td data-label="交付门槛"><div>算力容量规划、推理优化、驱动兼容、权限与升级回滚，模型许可证核查。</div></td>
+              <td data-label="主要风险"><div>设备闲置、更新快、总成本高；“本地部署”仍可能有遥测或外部调用，不能只听宣传。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                行业Agent
+                <span class="cell-sub">Harvey、Palantir AIP</span>
+                <a class="ref" href="#s4">[4]</a><a class="ref" href="#s6">[6]</a>
+              </th>
+              <td data-label="价值验收"><div>完成受约束的专业工作流，如资料核查、合同分析、采购协同。验收正确性、审查成本与可追溯性。</div></td>
+              <td data-label="客户付费"><div>律所、法务、供应链和专业服务团队；业务负责人联合技术、安全部门决策。</div></td>
+              <td data-label="收费设计"><div>席位、工作流、任务用量或企业合同；成果计费须明确责任、归因与验收规则。</div></td>
+              <td data-label="交付门槛"><div>行业知识、专业评测、业务系统权限、工具执行控制与人工复核。</div></td>
+              <td data-label="主要风险"><div>幻觉、越权执行、责任难分；看似完整的演示，可能遗漏大量真实例外。</div></td>
+            </tr>
+
+            
+
+            <tr>
+              <th scope="row">
+                客服与服务Agent
+                <span class="cell-sub">Sierra</span>
+                <a class="ref" href="#s7">[7]</a>
+              </th>
+              <td data-label="价值验收"><div>回答问题并完成受控的订单、账户或服务动作。验收有效解决率、重复联系、升级人工和服务质量。</div></td>
+              <td data-label="客户付费"><div>有较多重复服务请求的品牌与服务企业；客服或客户体验部门付款。</div></td>
+              <td data-label="收费设计"><div>基础服务费叠加用量，或按约定的有效解决结果收费。</div></td>
+              <td data-label="交付门槛"><div>知识政策、客户系统连接、动作权限、人工接管与失败恢复。</div></td>
+              <td data-label="主要风险"><div>错误承诺、误操作、把用户离开误算解决；成果计费须约定重开和重复联系口径。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                营销与销售提效
+                <span class="cell-sub">Glean相关场景、咨询实施服务</span>
+                <a class="ref" href="#s5">[5]</a><a class="ref" href="#s13">[13]</a>
+              </th>
+              <td data-label="价值验收"><div>生成经过审批的内容、整理销售知识、辅助客户跟进。验收采用率、内容质量与可归因效果。</div></td>
+              <td data-label="客户付费"><div>品牌营销、企业销售、渠道团队；营销或销售运营预算付款。</div></td>
+              <td data-label="收费设计"><div>席位、内容用量、实施项目；效果分成只适合可核验归因的场景。</div></td>
+              <td data-label="交付门槛"><div>品牌规范、内容审核、客户关系系统集成、实验设计与数据授权。</div></td>
+              <td data-label="主要风险"><div>批量骚扰、虚假宣传、版权争议、客户信息滥用；生成更多内容不等于更多有效收入。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                研发提效
+                <span class="cell-sub">Cursor</span>
+                <a class="ref" href="#s8">[8]</a>
+              </th>
+              <td data-label="价值验收"><div>辅助理解代码、修改、测试与审查。验收交付周期、缺陷和复核负担，不以新增代码行数论成效。</div></td>
+              <td data-label="客户付费"><div>开发者、软件研发团队；个人、工程负责人或企业技术预算付款。</div></td>
+              <td data-label="收费设计"><div>个人或团队订阅、模型用量、企业治理方案；落地辅导可作为独立服务。</div></td>
+              <td data-label="交付门槛"><div>代码库上下文、测试体系、开发环境集成、凭据保护与组织权限。</div></td>
+              <td data-label="主要风险"><div>源代码泄露、错误修改、依赖与版权问题；工具采购后低采用率，也会吞掉价值。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                数据标注与评测
+                <span class="cell-sub">Scale AI</span>
+                <a class="ref" href="#s9">[9]</a>
+              </th>
+              <td data-label="价值验收"><div>提供训练、偏好与验证数据，识别模型失效边界。验收标注一致性、专家质量和评测可重复性。</div></td>
+              <td data-label="客户付费"><div>模型研发机构、企业AI团队及专业场景建设方；研发或数据预算付款。</div></td>
+              <td data-label="收费设计"><div>按验收样本、专家工时、项目或平台服务计费；具体形式取决于合同。</div></td>
+              <td data-label="交付门槛"><div>任务定义、领域专家、抽检仲裁、数据权利、标注人员与质量运营。</div></td>
+              <td data-label="主要风险"><div>数据来源不清、测试集污染、主观评分漂移、敏感信息泄露与不当劳动安排。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                LLMOps与AI治理
+                <span class="cell-sub">LangSmith、企业AI平台</span>
+                <a class="ref" href="#s12">[12]</a>
+              </th>
+              <td data-label="价值验收"><div>追踪调用链、评测版本、监控成本并控制发布。验收故障定位、回归检测与治理覆盖。</div></td>
+              <td data-label="客户付费"><div>已有多个AI应用的研发和平台团队；工程基础设施预算付款。</div></td>
+              <td data-label="收费设计"><div>席位、追踪记录、存储保留、部署资源及企业合同。</div></td>
+              <td data-label="交付门槛"><div>观测接入、租户隔离、数据脱敏、评测设计、版本与回滚集成。</div></td>
+              <td data-label="主要风险"><div>日志反而成为敏感数据副本；功能被云平台或开源替代，成本随追踪量膨胀。</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">
+                咨询、培训与实施
+                <span class="cell-sub">Accenture、企业实施生态</span>
+                <a class="ref" href="#s13">[13]</a>
+              </th>
+              <td data-label="价值验收"><div>从需求诊断推进到试点、系统接入与员工采用。验收可交付成果，而不是培训场次或方案页数。</div></td>
+              <td data-label="客户付费"><div>缺少方案和交付能力的企业；业务、信息技术或人才发展预算付款。</div></td>
+              <td data-label="收费设计"><div>有边界的工作坊、项目里程碑、实施和持续运营；培训可以独立销售或嵌入交付。</div></td>
+              <td data-label="交付门槛"><div>需求访谈、方案工程、范围管理、组织协同、业务验收与知识转移。</div></td>
+              <td data-label="主要风险"><div>只卖概念、无边界定制、无限修改、无法交接；人力收入不能自动转化为软件式利润。</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-three space-top">
+        <article class="card">
+          <h3>看能力，不追热词</h3>
+          <p>
+            有稳定性工程和合法供给，才考虑网关；有数据连接能力，才考虑知识系统；有行业理解与流程资源，才考虑行业Agent。选题热度不能替代交付条件。
+          </p>
+        </article>
+        <article class="card">
+          <h3>软件化程度要单独检查</h3>
+          <p>
+            每多一个客户，是否都要重新开发？同类连接器、评测、权限模块能否复用？复用率决定你在经营产品，还是经营披着产品外衣的定制项目。
+          </p>
+        </article>
+        
+      </div>
+    </section>
+
+    <section id="cases" class="report-section" aria-labelledby="cases-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">公开事实对照 · 国内外兼有</span>
+          <h2 id="cases-title">十三个真实案例：钱收在哪一层？</h2>
+          <p>
+            以下案例用于比较企业服务机制，不代表它们都“不做模型”，也不代表其产品均可直接面向中国大陆提供。“启示”是本报告分析；官网未公开的价格与合同细节，不作猜测。
+          </p>
+        </div>
+      </div>
+
+      <div class="case-tools js-only">
+        <div class="filter-group" role="group" aria-label="按业务层筛选案例">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true" aria-controls="case-grid">全部案例</button>
+          <button class="filter-button" type="button" data-filter="foundation" aria-pressed="false" aria-controls="case-grid">供给与基础设施</button>
+          <button class="filter-button" type="button" data-filter="application" aria-pressed="false" aria-controls="case-grid">业务应用</button>
+          <button class="filter-button" type="button" data-filter="service" aria-pressed="false" aria-controls="case-grid">工具与交付</button>
+        </div>
+        <output id="case-count" class="case-count" aria-live="polite">显示13个案例</output>
+      </div>
+
+      <div id="case-grid" class="case-grid">
+        <article id="case-openrouter" class="card case-card" data-category="foundation">
+          <p class="case-category">海外 · API聚合与路由</p>
+          <h3>OpenRouter</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>通过统一接口连接多种模型和供应商，并支持客户自带密钥。</dd>
+            <dt>服务谁</dt><dd>需要调用多个模型、管理提供商与账单的开发者和团队。</dd>
+            <dt>怎么赚钱</dt><dd>官方FAQ说明，其推理价格按提供商价格传递，不在该价格上加价；在购买额度时收取费用，BYOK另有适用的收费安排。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>聚合平台不必只靠隐蔽的Token差价；透明结算和服务费也可以构成商业模式。</p>
+          <p class="case-source">依据：官方FAQ；具体费率和适用规则以页面及合同为准。<a class="ref" href="#s1">[1]</a></p>
+        </article>
+
+        <article id="case-siliconflow" class="card case-card" data-category="foundation">
+          <p class="case-category">国内 · 模型推理基础设施</p>
+          <h3>硅基流动 SiliconFlow</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>提供多模态模型API、推理引擎、预留实例及企业私有化部署服务。</dd>
+            <dt>服务谁</dt><dd>需要模型推理能力的开发者、应用团队，以及有专用资源或私有化需求的企业。</dd>
+            <dt>怎么赚钱</dt><dd>官网公开按量计费的API服务，并提供预留实例和企业部署等商业服务入口；企业项目具体报价需洽谈。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>有自研推理引擎与部署优化的基础设施公司，不等同于简单转发海外闭源API的中间商。</p>
+          <p class="case-source">依据：官方产品与服务介绍。<a class="ref" href="#s2">[2]</a></p>
+        </article>
+
+        <article id="case-bedrock" class="card case-card" data-category="foundation">
+          <p class="case-category">海外 · 云上托管模型平台</p>
+          <h3>Amazon Bedrock</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>在AWS环境中提供基础模型访问及构建生成式AI应用所需的平台能力。</dd>
+            <dt>服务谁</dt><dd>希望结合云基础设施开发和部署AI应用的企业及开发团队。</dd>
+            <dt>怎么赚钱</dt><dd>模型推理按对应模型和模态计费，提供按需及适用的预置吞吐量等模式；其他平台能力有各自计费项。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>企业采购的不只是模型列表，还可能是既有云环境中的权限、运维与采购整合。</p>
+          <p class="case-source">依据：官方产品页与价格页；模型、功能、地区可用性并不相同。<a class="ref" href="#s3">[3]</a></p>
+        </article>
+
+        <article id="case-zhipu" class="card case-card" data-category="foundation">
+          <p class="case-category">国内 · 自研模型与模型服务</p>
+          <h3>智谱 / Z.ai</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>研发GLM模型体系，并提供模型API、模型服务平台和相关应用能力。</dd>
+            <dt>服务谁</dt><dd>通过模型服务建设应用的开发者和企业团队。</dd>
+            <dt>怎么赚钱</dt><dd>Z.ai公开价格页按模型列出文本输入、缓存输入、输出等计费项，其他模态有相应规则。国内具体产品与合同应另行核对。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>模型厂商可以直接进入企业服务层。中间商必须回答：客户为什么不直接采购上游？</p>
+          <p class="case-source">依据：智谱官网与Z.ai价格文档；不将国际站报价等同于国内合同价。<a class="ref" href="#s10">[10]</a></p>
+        </article>
+
+        <article id="case-h3c" class="card case-card" data-category="foundation">
+          <p class="case-category">国内 · DeepSeek模型一体机</p>
+          <h3>新华三 H3C 灵犀Cube</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>提供预装DeepSeek模型的一体机及相关平台能力，支持API、知识库、流程编排和行业应用建设。</dd>
+            <dt>服务谁</dt><dd>希望本地部署模型，并获得软硬件一体化交付与支持的组织。</dd>
+            <dt>怎么赚钱</dt><dd>通过一体机产品和相关企业交付服务形成商业收入；官网列出咨询、部署、运维、调优等服务，具体价格与合同拆分未公开。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>开放权重模型可以带动算力、软件和实施生意。这是第三方基于DeepSeek构建的产品，不等于DeepSeek直接销售硬件。</p>
+          <p class="case-source">依据：官方产品页及2025年2月20日发布材料。<a class="ref" href="#s11">[11]</a></p>
+        </article>
+
+        <article id="case-palantir" class="card case-card" data-category="application">
+          <p class="case-category">海外 · 企业业务系统与AI平台</p>
+          <h3>Palantir AIP</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>将模型能力与企业数据、业务对象、权限和操作流程结合，支持构建受治理的AI应用。</dd>
+            <dt>服务谁</dt><dd>需要在复杂业务和数据环境中使用AI的商业组织及政府机构。</dd>
+            <dt>怎么赚钱</dt><dd>Palantir的2024年报披露公司收入包含托管订阅、客户环境中的软件订阅及相关运维、专业服务。该口径不是AIP单一产品报价。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>价值可以来自“让AI理解并操作真实业务”，而非只提供一个回答问题的界面。</p>
+          <p class="case-source">依据：AIP官方文档与2024年报。<a class="ref" href="#s4">[4]</a></p>
+        </article>
+
+        <article id="case-glean" class="card case-card" data-category="application">
+          <p class="case-category">海外 · 企业搜索与知识工作平台</p>
+          <h3>Glean</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>连接企业应用与知识，提供企业搜索、助手和Agent，并将企业上下文、权限与治理纳入平台。</dd>
+            <dt>服务谁</dt><dd>信息散落在多个系统中的企业员工，以及管理这些系统的技术团队。</dd>
+            <dt>怎么赚钱</dt><dd>企业软件服务按订单与合同提供；公开服务协议还列有高级支持和定制连接器专业服务。统一公开单价未在所引页面披露。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>知识库的深度价值不只是检索算法，而是连接器、权限同步、可靠上下文和持续运营。</p>
+          <p class="case-source">依据：官方平台介绍与公开服务协议；单独谈判的合同可能不同。<a class="ref" href="#s5">[5]</a></p>
+        </article>
+
+        <article id="case-harvey" class="card case-card" data-category="application">
+          <p class="case-category">海外 · 法律专业AI</p>
+          <h3>Harvey</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>提供法律研究、文档分析及相关专业工作流工具。</dd>
+            <dt>服务谁</dt><dd>律所、企业法务和其他法律专业团队。</dd>
+            <dt>怎么赚钱</dt><dd>平台协议约定客户按照订单支付费用，公开页面未给出适用于所有客户的统一价格。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>垂直产品可以把通用能力变成专业工作流，但专业用户复核仍是关键。Harvey协议也明确输出可能有误，不能直接替代专业判断。</p>
+          <p class="case-source">依据：官网及2026年1月9日更新的平台协议。<a class="ref" href="#s6">[6]</a></p>
+        </article>
+
+        <article id="case-sierra" class="card case-card" data-category="application">
+          <p class="case-category">海外 · 企业客户服务Agent</p>
+          <h3>Sierra</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>为企业构建客户对话Agent，支持跨渠道服务及与业务流程相关的操作。</dd>
+            <dt>服务谁</dt><dd>希望用AI处理客户服务与体验流程的企业。</dd>
+            <dt>怎么赚钱</dt><dd>官网明确提出按结果计价的商业模式，而非仅以座席或生成文本量定义价值。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>“完成了什么”可以成为收费对象；采购时仍须写清有效结果、错误处理和复核机制，不能把官网理念等同于某份合同细则。</p>
+          <p class="case-source">依据：官方产品与定价理念介绍。<a class="ref" href="#s7">[7]</a></p>
+        </article>
+
+        <article id="case-cursor" class="card case-card" data-category="application">
+          <p class="case-category">海外 · AI编程工具</p>
+          <h3>Cursor</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>将AI能力嵌入代码编辑、理解与开发工作流，并提供团队和企业管理能力。</dd>
+            <dt>服务谁</dt><dd>个人开发者、研发团队及需要统一治理的企业。</dd>
+            <dt>怎么赚钱</dt><dd>提供个人订阅、按用户计费的团队方案及定制企业方案；包含用量和额外模型使用有对应规则。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>“进入高频工作流”比“提供更多模型”更接近用户价值；个人与企业可以采用不同获客和收费方式，而不是二选一。</p>
+          <p class="case-source">依据：官方价格页；不以订阅价格推断公司盈利。<a class="ref" href="#s8">[8]</a></p>
+        </article>
+
+        <article id="case-scale" class="card case-card" data-category="service">
+          <p class="case-category">海外 · 数据与模型评测服务</p>
+          <h3>Scale AI</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>提供数据整理、标注、人类反馈数据以及模型评测等能力。</dd>
+            <dt>服务谁</dt><dd>模型研发机构、机器学习团队，以及建设企业AI能力的组织。</dd>
+            <dt>怎么赚钱</dt><dd>销售企业数据与评测相关服务，通过企业销售入口洽谈项目；所引页面未披露统一价目和全部结算颗粒度。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>模型越进入专业场景，越需要可靠的数据和验证。这里的门槛是质量体系与领域判断，不只是组织人手标注。</p>
+          <p class="case-source">依据：官方Data Engine与企业销售页面。<a class="ref" href="#s9">[9]</a></p>
+        </article>
+
+        <article id="case-langsmith" class="card case-card" data-category="service">
+          <p class="case-category">海外 · LLMOps工具</p>
+          <h3>LangSmith</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>提供AI应用追踪、评测和部署相关工具，帮助团队观察和改进应用行为。</dd>
+            <dt>服务谁</dt><dd>开发、测试和运营AI应用的工程与平台团队。</dd>
+            <dt>怎么赚钱</dt><dd>公开方案结合席位、追踪用量和部署资源等计费，企业方案通过合同提供。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>当演示走向生产，排错、评测和成本控制本身就成为产品。工具价值应体现在更快发现问题和更安全发布，而非更多日志。</p>
+          <p class="case-source">依据：LangChain官方价格页。<a class="ref" href="#s12">[12]</a></p>
+        </article>
+
+        <article id="case-accenture" class="card case-card" data-category="service">
+          <p class="case-category">国际 · 咨询与技术实施</p>
+          <h3>Accenture 埃森哲</h3>
+          <dl class="case-details">
+            <dt>做什么</dt><dd>围绕生成式AI提供战略、技术基础、业务流程、责任治理与人才组织等服务。</dd>
+            <dt>服务谁</dt><dd>希望将AI纳入业务与组织转型的企业。</dd>
+            <dt>怎么赚钱</dt><dd>通过咨询、技术实施等专业服务承接企业项目；具体生成式AI项目报价并非公开统一价。</dd>
+          </dl>
+          <p class="case-lesson"><strong>启示：</strong>企业难题并不止于选模型，还包括流程、系统和人的变化。小团队可以做窄场景实施，但不能照搬大型转型项目的承诺。</p>
+          <p class="case-source">依据：官方生成式AI服务介绍。<a class="ref" href="#s13">[13]</a></p>
+        </article>
+      </div>
+
+      <div class="note space-top">
+        <p>
+          <strong>横向结论：</strong>
+          这些案例显示了四种不同收费对象：供给与消耗、软件使用权、数据与工程服务、约定的业务结果。对小团队而言，关键不是复制某家公司全部功能，而是选定一个能获客、能交付、能复用且合法的收费单元。
+        </p>
+      </div>
+    </section>
+
+    <section id="risk" class="report-section" aria-labelledby="risk-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">把风险前移到签约与架构阶段</span>
+          <h2 id="risk-title">合规不是“卖给谁”这一道题</h2>
+          <p>
+            应把客户身份、上游授权、实际数据流、服务对象和输出用途放在一起审查。以下是风险识别框架，不替代针对具体经营模式的法律、安全和行业专项意见。
+          </p>
+        </div>
+      </div>
+
+      <div class="note note-critical">
+        <p>
+          <strong>“设海外主体切割”不能自动消除境内责任。</strong>
+          不同主体可以有各自合同和职责，但适用责任取决于实际经营、服务对象与数据处理行为，不能仅凭注册地推导“境内没有责任”。《个人信息保护法》对符合条件的境外处理活动具有适用规则；生成式AI相关规定也关注面向境内公众提供服务的情形。
+          <a class="ref" href="#s17">[17]</a><a class="ref" href="#s18">[18]</a>
+        </p>
+        <p>
+          “国内AI不能完全封闭”是宏观观点，不是法律豁免；“企业签了合同”能提高可追溯性，但不会自动补齐上游授权、数据出境或下游用途的缺口。
+        </p>
+      </div>
+
+      <div class="grid-two space-top">
+        <article class="card legal-card">
+          <h3>先区分内部应用与面向公众的服务</h3>
+          <p>
+            《生成式人工智能服务管理暂行办法》主要适用于向境内公众提供相关服务。企业内部研发、应用而不向境内公众提供服务的情形，不适用该办法所规定的这一适用范围；但个人信息、数据安全、商业秘密等义务并不会因此消失。
+            <a class="ref" href="#s17">[17]</a><a class="ref" href="#s18">[18]</a>
+          </p>
+          <p>
+            <strong>B端不是当然豁免：</strong>
+            上游卖给企业，企业再向公众提供应用，需要按全链条实际角色分析；该办法对“提供者”的定义也包含通过可编程接口提供服务的情形。
+            <a class="ref" href="#s17">[17]</a>
+          </p>
+        </article>
+
+        <article class="card legal-card">
+          <h3>“AI备案”不是一个万能手续</h3>
+          <p>
+            应区分生成式AI服务备案、调用已备案模型的应用或功能登记、适用的算法备案与安全评估，以及其他网站或业务手续。完成其中一项，不代表所有义务已经满足。
+            <a class="ref" href="#s17">[17]</a><a class="ref" href="#s20">[20]</a>
+          </p>
+          <p>
+            国家网信办2026年1月至2月备案信息公告（湖南省政府网站转载）写明：直接调用已备案模型能力的应用或功能由地方网信办开展登记，并说明相关公示要求。具体应走哪条程序，要结合是否具有舆论属性或社会动员能力等条件，与属地核对。
+            <a class="ref" href="#s20">[20]</a>
+          </p>
+        </article>
+
+        <article class="card legal-card">
+          <h3>看真实数据路径，不只看服务器名称</h3>
+          <p>
+            应画出提示词、上传文档、检索片段、输出、日志和人工支持访问的完整路径。调用境外服务可能涉及数据出境，是否需要履行相应程序，要结合数据类别、处理主体、规模及适用豁免判断；不能笼统说“所有海外调用都必须安全评估”，也不能说“脱敏一下就一定没事”。
+            <a class="ref" href="#s18">[18]</a><a class="ref" href="#s19">[19]</a>
+          </p>
+          <p>
+            对适用情形，还需处理告知、合法性基础、单独同意、个人信息保护影响评估等要求。豁免某些出境程序，不等于豁免数据保护义务。
+            <strong>不用于训练、不留存、不出境，是三个不同承诺。</strong>
+            <a class="ref" href="#s18">[18]</a><a class="ref" href="#s19">[19]</a>
+          </p>
+        </article>
+
+        <article class="card legal-card">
+          <h3>上游条款与蒸馏许可必须逐项核对</h3>
+          <p>
+            以OpenAI公开协议为例，允许通过API建设客户应用，并不等于允许出售账号或转移、买卖API密钥；协议也限制规避服务约束及将输出用于开发竞争模型，并列有特定例外。中国大陆未列入其当前API支持地区，官方提示在未支持地区访问或提供访问可能导致封禁。
+            <a class="ref" href="#s15">[15]</a><a class="ref" href="#s16">[16]</a>
+          </p>
+          <p>
+            蒸馏不是一个可以一概判定的行为：DeepSeek-R1官方仓库对其代码与模型权重给出明确许可，并说明商业使用与蒸馏等条件；部分派生模型还涉及各自基础模型许可。这不能外推为任意海外闭源API都允许同类用途。
+            <a class="ref" href="#s14">[14]</a>
+          </p>
+        </article>
+      </div>
+
+      <div class="table-card space-top-large">
+        <table class="matrix">
+          <caption>
+            风险矩阵：优先级表示管理顺序，不表示发生概率。所有缓释措施以合法经营为前提，不包含规避封禁、地区限制或监管的做法。
+          </caption>
+          <colgroup>
+            <col class="risk-name">
+            <col class="risk-trigger">
+            <col class="risk-action">
+            <col class="risk-owner">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">风险与优先级</th>
+              <th scope="col">触发情形与后果</th>
+              <th scope="col">上线前检查与缓释</th>
+              <th scope="col">主要负责人</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">上游断供与封号<span class="priority">上线前置</span></th>
+              <td data-label="触发后果"><div>供应商条款、地区或商业权限不匹配；也可能出现限流、模型退役或服务中断，导致下游无法履约。</div></td>
+              <td data-label="检查缓释"><div>核查商业模式与地区资格，保留适用授权和合同；准备合法可用的替代模型并提前测试，设置限流、降级和客户通知流程。备用账号不等于合法容灾。<a class="ref" href="#s15">[15]</a><a class="ref" href="#s16">[16]</a></div></td>
+              <td data-label="负责人"><div>经营负责人、采购、法务、技术运维</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">毛利压缩与国产模型价格战<span class="priority priority-operating">经营重点</span></th>
+              <td data-label="触发后果"><div>模型降价、免费额度或低价供给扩大时，客户比价和压价；用量增长不一定抵消单位贡献下降。</div></td>
+              <td data-label="检查缓释"><div>把此项作为价格竞争情景持续测算，而非预设行业毛利率。区分模型成本和服务价值，约定调价机制；减少不可逆额度囤积，考察单位合格任务成本与客户直接采购的替代成本。</div></td>
+              <td data-label="负责人"><div>产品、财务、销售</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">大客户依赖与现金流<span class="priority priority-operating">经营重点</span></th>
+              <td data-label="触发后果"><div>少数客户占据主要收入，客户拖欠或要求长账期，而上游需要及时付款；持续流水反而形成垫资压力。</div></td>
+              <td data-label="检查缓释"><div>建立信用额度、对账、分阶段验收和应收跟踪；按客户核算支持与履约成本。不能把全部预收现金当成可自由支配利润。</div></td>
+              <td data-label="负责人"><div>财务、销售、客户成功</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">数据出境与信息泄露<span class="priority">上线前置</span></th>
+              <td data-label="触发后果"><div>客户文档、个人信息或日志进入未审查的境外链路；第三方支持、追踪平台和备份形成额外副本。</div></td>
+              <td data-label="检查缓释"><div>先分类分级与最小化，再审查真实处理方、留存、再委托与出境路径；依法确定所需评估和程序。脱敏后仍可识别的个人信息不能简单当匿名数据。<a class="ref" href="#s18">[18]</a><a class="ref" href="#s19">[19]</a></div></td>
+              <td data-label="负责人"><div>数据保护、安全、法务、架构</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">备案、登记与内容标识<span class="priority">上线前置</span></th>
+              <td data-label="触发后果"><div>面向境内公众的产品没有正确判断适用程序；把上游已备案误当自身全部义务完成。</div></td>
+              <td data-label="检查缓释"><div>按服务与应用角色核对备案、登记、公示和其他要求；适用的生成合成内容服务还需评估显式、隐式标识等义务。标识办法自2025年9月1日起施行，并非所有纯内部输出都可不加区分地套用同一结论。<a class="ref" href="#s17">[17]</a><a class="ref" href="#s20">[20]</a><a class="ref" href="#s21">[21]</a></div></td>
+              <td data-label="负责人"><div>法务、产品、内容安全</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">ToS、蒸馏与知识产权<span class="priority">上线前置</span></th>
+              <td data-label="触发后果"><div>未经许可转售账号或密钥、超出地区和用途范围；用受限制输出训练模型，或使用无权处理的数据。</div></td>
+              <td data-label="检查缓释"><div>保存条款版本和具体授权，区分客户应用、纯能力转售与训练用途；对模型、基础模型、数据和第三方内容分别建立许可清单。合同写“客户自负责任”不能当然免除服务商自身义务。<a class="ref" href="#s14">[14]</a><a class="ref" href="#s15">[15]</a></div></td>
+              <td data-label="负责人"><div>法务、模型团队、采购</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">幻觉、提示注入与越权<span class="priority">交付前置</span></th>
+              <td data-label="触发后果"><div>模型引用错误、被不可信内容影响，或以过大权限执行客户系统操作，造成错误决策与损失。</div></td>
+              <td data-label="检查缓释"><div>将检索到的内容视作数据而非指令；按任务授予最小权限，高影响动作人工确认；建立拒答、回滚、回归测试与可追溯记录。不能用模型自报“已完成”代替业务核验。</div></td>
+              <td data-label="负责人"><div>工程、安全、业务验收人</div></td>
+            </tr>
+
+            <tr>
+              <th scope="row">一体机与私有化总成本<span class="priority priority-operating">采购重点</span></th>
+              <td data-label="触发后果"><div>采购只比较模型参数和硬件规格，未考虑低利用率、扩容、维护、模型更新与业务质量差异。</div></td>
+              <td data-label="检查缓释"><div>用真实负载测试，写明模型版本、精度、上下文和并发组合；盘点外联、遥测、升级、许可证与售后边界。比较包含运维和更新的总成本，而不是把“模型权重可获得”当成“运行免费”。<a class="ref" href="#s11">[11]</a><a class="ref" href="#s14">[14]</a></div></td>
+              <td data-label="负责人"><div>采购、架构、运维、业务部门</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card space-top">
+        <h3>签约前，至少应能拿出这套“证据包”</h3>
+        <p>
+          上游商业与地区权限说明、真实数据流图、客户与用途识别记录、数据处理和再委托条款、适用备案或登记材料、模型与数据许可清单，以及故障、删除、退出和迁移方案。具体材料随业务而异，重点是每个承诺有对应的合同、配置或测试记录。
+        </p>
+        <p class="small muted">
+          判断标准不是“有没有写合规两个字”，而是销售承诺、技术实现、合同责任和实际运营是否一致。
+        </p>
+      </div>
+    </section>
+
+    <section id="career" class="report-section" aria-labelledby="career-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">给AI自媒体求职者的现实路径</span>
+          <h2 id="career-title">从“讲AI的人”，变成能推动企业采用AI的人</h2>
+          <p>
+            自媒体经历的可迁移优势，是研究、表达、用户反馈和分发。下一步不必从训练模型开始，也不应从灰色API转售开始；更有说服力的定位是：把复杂技术变成可解释、可演示、可验收的企业方案。
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-three">
+        <article class="card career-lane">
+          <h3>技术内容与产品市场</h3>
+          <p class="lane-fit">适合：研究与表达较强</p>
+          <p>目标方向：技术内容、产品市场、客户教育、开发者关系支持等岗位。</p>
+          <p>需要补齐：亲手做出可复现演示，能解释适用边界、竞品差异和企业采购逻辑。</p>
+          
+        </article>
+
+        <article class="card career-lane">
+          <h3>售前、方案与实施</h3>
+          <p class="lane-fit">适合：愿意沟通，也愿意动手</p>
+          <p>目标方向：初级解决方案、售前支持、实施顾问、技术型客户成功。</p>
+          <p>需要补齐：需求访谈、接口接入、评测、数据权限、工作范围和验收设计。</p>
+          <p class="small muted">作品证据：能把模糊需求拆成有预算、有负责人、有边界的试点方案。</p>
+        </article>
+
+        <article class="card career-lane">
+          <h3>AI应用与平台工程</h3>
+          <p class="lane-fit">适合：已有编程基础并持续积累</p>
+          <p>目标方向：AI应用开发、网关与工具集成、评测平台或LLMOps相关岗位。</p>
+          <p>需要补齐：工程测试、鉴权、数据库、异步任务、可观测性与可靠性。</p>
+          <p class="small muted">作品证据：代码、测试、故障分析和部署说明，而不是仅有一个聊天界面。</p>
+        </article>
+      </div>
+
+      <div class="space-top-large">
+        <h3 class="comparison-title">四组必须补齐的能力</h3>
+        <div class="skill-grid">
+          <article class="skill-card">
+            <h4>技术基本功</h4>
+            <p>理解HTTP、JSON、API、Git和基本脚本；会保护密钥、处理报错、记录用量，不把敏感信息写进公开代码。</p>
+          </article>
+          <article class="skill-card">
+            <h4>应用与评测</h4>
+            <p>能解释RAG、工具调用与模型局限；会建立评测集、比较基线、记录失败和核算完成任务的成本。</p>
+          </article>
+          
+          <article class="skill-card">
+            <h4>证据型表达</h4>
+            <p>分清功能演示、受控实验和生产结果；保留来源、版本与条件，公开失败边界，不编造客户或效率数字。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="card space-top-large">
+        <div class="plan-header">
+          
+          <div class="plan-status js-only">
+            <label for="plan-progress">完成进度：<span id="plan-status-text" aria-live="polite">0 / 12项</span></label>
+            <progress id="plan-progress" max="12" value="0">0 / 12</progress>
+            <p>勾选状态仅尝试保存在当前浏览器；浏览器限制本地存储时，仅保留本页状态。不会上传任何勾选信息。</p>
+          </div>
+        </div>
+
+        <div class="phase-grid">
+          <article class="card phase">
+            <span class="phase-time">第1—15天</span>
+            <h3>选场景，找真实问题</h3>
+            <label class="task">
+              <input type="checkbox" data-task="interviews">
+              <span>完成6—8次自愿参与的需求访谈，记录重复任务、现有流程、出错代价和预算归属。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="scope">
+              <span>只选一个低风险任务，写明不做什么，以及哪些数据不能进入演示。</span>
+            </label>
+            <p class="phase-output"><strong>交付物：</strong>一页需求说明、客户角色图、原流程基线。</p>
+            <p class="phase-gate">关口：说得清“谁因为什么问题需要它”，而不是只说“AI很有前景”。</p>
+          </article>
+
+          <article class="card phase">
+            <span class="phase-time">第16—30天</span>
+            <h3>做出有边界的演示</h3>
+            <label class="task">
+              <input type="checkbox" data-task="demo">
+              <span>使用合法可用的模型与公开、自有或合成资料，做出带来源、拒答和基本权限区分的演示。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="evalset">
+              <span>建立30—50道评测题，覆盖可回答、资料缺失、过期信息与越权问题，保留独立测试题。</span>
+            </label>
+            <p class="phase-output"><strong>交付物：</strong>可复现演示、数据清单、初版评测表。</p>
+            <p class="phase-gate">关口：答案可以回到依据；没有依据时能停止，而不是强行编答案。</p>
+          </article>
+
+          <article class="card phase">
+            <span class="phase-time">第31—45天</span>
+            <h3>比较效果，也比较成本</h3>
+            <label class="task">
+              <input type="checkbox" data-task="baseline">
+              <span>比较人工或普通搜索基线，以及两种获准使用的模型或方案；固定任务、样本与评分口径。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="cost">
+              <span>记录质量、延迟、重试、人工复核与任务成本，设置预算上限和失败处理。</span>
+            </label>
+            <p class="phase-output"><strong>交付物：</strong>评测报告、成本表、失败案例集。</p>
+            <p class="phase-gate">关口：能解释为什么某方案更合适，而不是展示一次最佳回答。</p>
+          </article>
+
+          <article class="card phase">
+            <span class="phase-time">第46—60天</span>
+            <h3>做受控试点</h3>
+            <label class="task">
+              <input type="checkbox" data-task="pilot">
+              <span>获得组织与数据负责人明确许可后，在沙盒开展小范围试点；没有真实组织时，诚实标注模拟项目。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="acceptance">
+              <span>约定验收、人工接管、回滚与数据删除；不直接接管生产权限，不上传企业秘密。</span>
+            </label>
+            
+            <p class="phase-gate">关口：用户愿意复用，且失败与风险被记录，而不是只完成展示。</p>
+          </article>
+
+          <article class="card phase">
+            <span class="phase-time">第61—75天</span>
+            <h3>沉淀内容与作品集</h3>
+            <label class="task">
+              <input type="checkbox" data-task="content">
+              <span>形成三篇内容：生意如何成立、一次失败如何定位、方案如何评测；公开内容只使用有权披露的材料。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="portfolio">
+              <span>整理演示说明、测试、成本口径、来源、版本和工作范围模板，明确个人承担的工作。</span>
+            </label>
+            <p class="phase-output"><strong>交付物：</strong>一套案例作品集，而非互不关联的热点文章。</p>
+            
+          </article>
+
+          <article class="card phase">
+            <span class="phase-time">第76—90天</span>
+            <h3>把作品对接到岗位</h3>
+            <label class="task">
+              <input type="checkbox" data-task="applications">
+              <span>选择10—15个与能力匹配的岗位或团队，按真实产品和客户场景写定向方案，而不是群发同一简历。</span>
+            </label>
+            <label class="task">
+              <input type="checkbox" data-task="review">
+              <span>每周复盘面试与读者反馈，补最常被追问的短板；不把浏览量、试用量和客户收入混写。</span>
+            </label>
+            <p class="phase-output"><strong>交付物：</strong>定向简历、案例讲述、方案备忘录和改进记录。</p>
+            <p class="phase-gate">关口：能够回答“入职后，你能负责哪一段交付”。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid-two space-top-large">
+        <article class="card">
+          <h3>让内容成为能力证据，而不只是曝光</h3>
+          <div class="content-chain">
+            <div class="content-step">
+              <strong>问题研究</strong>
+              <p>访谈具体角色，说明现有流程为何卡住。</p>
+            </div>
+            <div class="content-step">
+              <strong>动手验证</strong>
+              <p>演示、数据、基线和失败记录互相对应。</p>
+            </div>
+            <div class="content-step">
+              <strong>公开表达</strong>
+              <p>写清版本、授权、条件和未解决问题。</p>
+            </div>
+            <div class="content-step">
+              <strong>职业连接</strong>
+              <p>将作品映射到岗位职责与团队真实问题。</p>
+            </div>
+          </div>
+          <p>
+            好选题不是“某模型又碾压了谁”，而是“为什么这个知识助手有引用仍然答错”“一家企业该买API还是本地部署”“按解决问题收费，验收应怎样定义”。把评论区的真实问题带回下一轮研究，而不是把所有内容都变成获客承诺。
+          </p>
+          <p class="small muted">
+            时间节约也不自动等于财务收益。报告效果时，应扣除复核与返工，区分受控测试、用户反馈和真实生产结果。
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>下一次面试，应反向核查什么？</h3>
+          <dl>
+            <div class="fact-row">
+              <dt>供给是否稳定合法</dt>
+              <dd>谁提供模型？当前商业模式与地区是否获准？出现断供如何履约？不要接受“我们有办法”作为证明。</dd>
+            </div>
+            <div class="fact-row">
+              <dt>业务是否真的赚钱</dt>
+              <dd>在允许披露的范围内，询问客户续约、直接成本、回款与支持负担，区分用量增长和利润增长。</dd>
+            </div>
+            <div class="fact-row">
+              <dt>岗位能否形成积累</dt>
+              <dd>能否接触需求、评测和交付？是否有人带教、代码或方案复盘？还是仅要求高频产出宣传内容？</dd>
+            </div>
+            <div class="fact-row">
+              <dt>承诺与责任是否一致</dt>
+              <dd>销售是否夸大模型能力和合规性？是否要求虚构客户案例？是否允许员工如实呈现失败与边界？</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+
+      <div class="note space-top">
+        <p>
+          <strong>“先入场，边做边学”的更稳妥版本：</strong>
+          用有预算上限、数据授权清楚、失败可回退的小项目学习。不必以辞职、借钱囤额度或承诺自己无法交付的企业项目作为入场证明。职业信用应积累在真实能力上，而不是积累在无法核验的“资源”上。
+        </p>
+      </div>
+    </section>
+
+    <section id="sources" class="report-section" aria-labelledby="sources-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">可追溯资料</span>
+          <h2 id="sources-title">公开来源与阅读口径</h2>
+          <p>
+            资料以官方产品、协议、监管文件和公司披露为主。企业产品页用于确认“提供什么”，不能单独证明实际客户收益；价格页用于确认收费机制，不能推算毛利。以下为人工点击访问的出处链接，页面本身不加载任何外部资源。
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sources-grid">
+          <article id="s1" class="source-item">
+            <strong>[1] OpenRouter：聚合、额度费用与BYOK</strong>
+            <p><a href="https://openrouter.ai/docs/faq" target="_blank" rel="noopener noreferrer">官方FAQ</a>。核对统一访问、提供商价格传递、额度购买费用及BYOK规则。</p>
+          </article>
+
+          <article id="s2" class="source-item">
+            <strong>[2] 硅基流动：API、推理引擎与企业服务</strong>
+            <p><a href="https://www.siliconflow.cn/" target="_blank" rel="noopener noreferrer">硅基流动官网</a>。核对按量API、预留实例、推理引擎和私有化服务。</p>
+          </article>
+
+          <article id="s3" class="source-item">
+            <strong>[3] AWS：Amazon Bedrock</strong>
+            <p><a href="https://aws.amazon.com/bedrock/" target="_blank" rel="noopener noreferrer">产品介绍</a>；
+              <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener noreferrer">官方价格页</a>。功能和价格应按具体模型、模式与地区核对。</p>
+          </article>
+
+          <article id="s4" class="source-item">
+            <strong>[4] Palantir：AIP能力与公司收入结构</strong>
+            <p><a href="https://www.palantir.com/docs/foundry/aip/overview" target="_blank" rel="noopener noreferrer">AIP官方文档</a>；
+              <a href="https://www.sec.gov/Archives/edgar/data/1321655/000132165525000022/pltr-20241231.htm" target="_blank" rel="noopener noreferrer">2024年Form 10-K</a>。年报收入分类是公司口径，并非AIP独立报价。</p>
+          </article>
+
+          <article id="s5" class="source-item">
+            <strong>[5] Glean：企业上下文、搜索与服务协议</strong>
+            <p><a href="https://www.glean.com/platform" target="_blank" rel="noopener noreferrer">平台介绍</a>；
+              <a href="https://www.glean.com/website-terms" target="_blank" rel="noopener noreferrer">公开条款页面及其中的服务协议</a>。服务协议部分标注2024年5月17日更新，单独合同可能优先适用。</p>
+          </article>
+
+          <article id="s6" class="source-item">
+            <strong>[6] Harvey：法律AI与订单收费</strong>
+            <p><a href="https://www.harvey.ai/" target="_blank" rel="noopener noreferrer">官方产品介绍</a>；
+              <a href="https://www.harvey.ai/legal/platform-agreement" target="_blank" rel="noopener noreferrer">平台协议</a>。核对订单费用与输出使用边界；协议标注2026年1月9日更新。</p>
+          </article>
+
+          <article id="s7" class="source-item">
+            <strong>[7] Sierra：客户Agent与结果计价</strong>
+            <p><a href="https://sierra.ai/" target="_blank" rel="noopener noreferrer">Sierra官网</a>。官网说明产品方向与按结果定价理念，未据此推定具体客户合同中的结果口径。</p>
+          </article>
+
+          <article id="s8" class="source-item">
+            <strong>[8] Cursor：个人、团队与企业方案</strong>
+            <p><a href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer">官方价格页</a>。核对订阅、团队按用户计费、用量及企业管理功能。</p>
+          </article>
+
+          <article id="s9" class="source-item">
+            <strong>[9] Scale AI：数据与评测服务</strong>
+            <p><a href="https://scale.com/data-engine" target="_blank" rel="noopener noreferrer">Data Engine</a>；
+              <a href="https://scale.com/demo" target="_blank" rel="noopener noreferrer">企业销售入口</a>。所引页面未公开全部服务单价与结算方式。</p>
+          </article>
+
+          <article id="s10" class="source-item">
+            <strong>[10] 智谱 / Z.ai：模型服务及计费</strong>
+            <p><a href="https://www.zhipuai.cn/en" target="_blank" rel="noopener noreferrer">智谱官方介绍</a>；
+              <a href="https://docs.z.ai/guides/overview/pricing" target="_blank" rel="noopener noreferrer">Z.ai价格文档</a>。国际站规则不直接替代国内产品合同。</p>
+          </article>
+
+          <article id="s11" class="source-item">
+            <strong>[11] H3C：灵犀Cube与DeepSeek部署</strong>
+            <p><a href="https://www.h3c.com/cn/Products_And_Solution/LinSeer/Linseercube/" target="_blank" rel="noopener noreferrer">灵犀Cube产品页</a>；
+              <a href="https://www.h3c.com/cn/d_202502/2356580_30008_0.htm" target="_blank" rel="noopener noreferrer">2025年2月20日官方发布材料</a>。未使用宣传性性能表述推算真实项目效果。</p>
+          </article>
+
+          <article id="s12" class="source-item">
+            <strong>[12] LangSmith：工具平台计费</strong>
+            <p><a href="https://www.langchain.com/pricing" target="_blank" rel="noopener noreferrer">LangChain官方价格页</a>。核对席位、追踪、部署与企业方案等计费项。</p>
+          </article>
+
+          <article id="s13" class="source-item">
+            <strong>[13] Accenture：生成式AI专业服务</strong>
+            <p><a href="https://www.accenture.com/en/services/ai-data/generative-ai?country=US" target="_blank" rel="noopener noreferrer">官方生成式AI服务介绍</a>。用于确认服务范围，不据此虚构项目价格或客户回报。</p>
+          </article>
+
+          <article id="s14" class="source-item">
+            <strong>[14] DeepSeek-R1：模型与派生许可</strong>
+            <p><a href="https://github.com/deepseek-ai/DeepSeek-R1" target="_blank" rel="noopener noreferrer">官方代码仓库及License说明</a>。适用具体仓库、模型与基础模型许可，不可外推至所有模型或闭源API。</p>
+          </article>
+
+          <article id="s15" class="source-item">
+            <strong>[15] OpenAI：商业服务协议</strong>
+            <p><a href="https://openai.com/policies/services-agreement/" target="_blank" rel="noopener noreferrer">Services Agreement</a>。核对API客户应用、账号与密钥、使用限制及竞争模型相关条款；所引版本自2026年1月1日起生效。</p>
+          </article>
+
+          <article id="s16" class="source-item">
+            <strong>[16] OpenAI：API支持国家和地区</strong>
+            <p><a href="https://help.openai.com/en/articles/5347006-openai-api-supported-countries-and-territories" target="_blank" rel="noopener noreferrer">官方支持地区清单</a>。清单及对未支持地区提供访问的提示属于动态规则，应在采购与使用前重新核查。</p>
+          </article>
+
+          <article id="s17" class="source-item">
+            <strong>[17] 生成式人工智能服务管理暂行办法</strong>
+            <p><a href="https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm" target="_blank" rel="noopener noreferrer">国家网信办正式文件</a>。重点参照第2、9、17、20、22条；自2023年8月15日起施行。</p>
+          </article>
+
+          <article id="s18" class="source-item">
+            <strong>[18] 中华人民共和国个人信息保护法</strong>
+            <p><a href="https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm" target="_blank" rel="noopener noreferrer">正式法律文本</a>。重点参照适用范围、跨境提供与个人信息保护影响评估等规定。</p>
+          </article>
+
+          <article id="s19" class="source-item">
+            <strong>[19] 促进和规范数据跨境流动规定</strong>
+            <p><a href="https://www.cac.gov.cn/2024-03/22/c_1712776611775634.htm" target="_blank" rel="noopener noreferrer">国家网信办2024年3月22日文件</a>。用于区分出境程序、适用条件、豁免与持续保护义务。</p>
+          </article>
+
+          <article id="s20" class="source-item">
+            <strong>[20] 2026年1月至2月生成式AI备案信息公告</strong>
+            <p><a href="https://www.hunan.gov.cn/zqt/zcsd/202603/t20260318_33936465.html" target="_blank" rel="noopener noreferrer">湖南省政府网站转载国家网信办公告</a>。公告发文日期为2026年3月17日，转载日期为3月18日；说明直接调用已备案模型的登记及公示要求。</p>
+          </article>
+
+          <article id="s21" class="source-item">
+            <strong>[21] 人工智能生成合成内容标识办法</strong>
+            <p><a href="https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm" target="_blank" rel="noopener noreferrer">国家网信办等部门正式文件</a>。自2025年9月1日起施行；实际义务应结合服务、传播和使用角色判断。</p>
+          </article>
+        </div>
+
+        <p class="small muted space-top">
+          研究限制：未核实访谈公司的主体、上游合同、实际数据链路与财务情况；未开展企业客户访谈或付费产品的全面生产测试。法律部分聚焦本题相关的中国规则与所举供应商条款，不构成对所有行业、境外法域和后续更新的穷尽清单。链接核验（2026年9月28日）：16个链接可直接打开；SEC与OpenAI页面限制程序访问，政府网站在编制环境中无法访问，其中[20]已于同日通过湖南省政府网站转载页核对原文（国家网信办网站本身未能直接访问）。
+        </p>
+      </div>
+    </section>
+
+    
+
+    <footer class="page-footer">
+      <span>企业AI服务研究报告 · 2026年9月28日</span>
+      <span>访谈陈述不等于公开事实；产品演示不等于生产收益。</span>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      document.documentElement.classList.add("js");
+
+      var filterButtons = Array.prototype.slice.call(
+        document.querySelectorAll("[data-filter]")
+      );
+      var caseCards = Array.prototype.slice.call(
+        document.querySelectorAll(".case-card[data-category]")
+      );
+      var caseCount = document.getElementById("case-count");
+
+      filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var selected = button.getAttribute("data-filter");
+          var visibleCount = 0;
+
+          filterButtons.forEach(function (item) {
+            item.setAttribute("aria-pressed", item === button ? "true" : "false");
+          });
+
+          caseCards.forEach(function (card) {
+            var visible =
+              selected === "all" ||
+              card.getAttribute("data-category") === selected;
+            card.hidden = !visible;
+            if (visible) visibleCount += 1;
+          });
+
+          if (caseCount) {
+            caseCount.textContent = "显示" + visibleCount + "个案例";
+          }
+        });
+      });
+
+      var tasks = Array.prototype.slice.call(
+        document.querySelectorAll('input[type="checkbox"][data-task]')
+      );
+      var progress = document.getElementById("plan-progress");
+      var progressText = document.getElementById("plan-status-text");
+      var storageKey =
+        "enterprise-ai-plan-v1";
+      var savedState = {};
+
+      try {
+        var rawState = window.localStorage.getItem(storageKey);
+        var parsedState = rawState ? JSON.parse(rawState) : {};
+        if (
+          parsedState &&
+          typeof parsedState === "object" &&
+          !Array.isArray(parsedState)
+        ) {
+          savedState = parsedState;
+        }
+      } catch (error) {
+        savedState = {};
+      }
+
+      tasks.forEach(function (task) {
+        var taskId = task.getAttribute("data-task");
+        task.checked = savedState[taskId] === true;
+      });
+
+      function updateProgress(persist) {
+        var completed = 0;
+        var currentState = {};
+
+        tasks.forEach(function (task) {
+          var taskId = task.getAttribute("data-task");
+          currentState[taskId] = task.checked;
+          if (task.checked) completed += 1;
+        });
+
+        if (progress) {
+          progress.max = tasks.length;
+          progress.value = completed;
+          progress.textContent = completed + " / " + tasks.length;
+        }
+
+        if (progressText) {
+          progressText.textContent =
+            completed + " / " + tasks.length + "项";
+        }
+
+        if (persist) {
+          try {
+            window.localStorage.setItem(
+              storageKey,
+              JSON.stringify(currentState)
+            );
+          } catch (error) {
+            /* 本地存储不可用时，勾选与进度仍在当前页面正常工作。 */
+          }
+        }
+      }
+
+      tasks.forEach(function (task) {
+        task.addEventListener("change", function () {
+          updateProgress(true);
+        });
+      });
+
+      updateProgress(false);
+    }());
+  </script>
+</body>
+</html>
