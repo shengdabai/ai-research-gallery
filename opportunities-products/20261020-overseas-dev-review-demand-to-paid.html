@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="从浩承yang出海复盘出发，核查小流量工具站的需求、付费、SEO与收入口径，补充Buffer、Tally和Plausible历史案例。">
+<title>从小流量到付费：浩承yang出海复盘研究</title>
+<style>
+/* TOKEN SOURCE. Primitive scales -> semantic roles -> components.
+   All authored design values live here. Breakpoints: compact=720px, medium=1000px.
+   Runtime bar widths encode supplied data and are not design constants.
+   Local fonts avoid external resources; no claims of whole-platform token coverage. */
+:root{
+ --paper:#f4f0e7;--surface:#fbf9f3;--ink:#242c28;--muted:#536057;--rule:#c5c9bc;
+ --green:#284d3c;--green-soft:#e2eadf;--rust:#a44325;--rust-soft:#f4e1d4;
+ --gold:#87621f;--chart-old:#707b65;--focus:#933a1f;--transparent:transparent;
+ --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.5rem;--space-6:2rem;--space-7:3rem;--space-8:4.5rem;--space-9:6rem;
+ --text-xs:.77rem;--text-sm:.88rem;--text-base:1rem;--text-lg:1.18rem;--text-xl:1.5rem;--text-2xl:2rem;
+ --hero-size:clamp(2.5rem,5vw,4.8rem);--heading-size:clamp(1.65rem,3vw,2.5rem);
+ --font-body:"PingFang SC","Microsoft YaHei",sans-serif;--font-display:"Songti SC","Noto Serif CJK SC",serif;
+ --weight-normal:400;--weight-mid:600;--weight-bold:700;--line-body:1.85;--line-tight:1.18;--letter-label:.12em;--letter-display:-.035em;
+ --border:1px;--border-heavy:2px;--radius:.2rem;--outline:3px;--outline-offset:3px;
+ --max-width:1180px;--aside-width:16rem;--nav-width:13rem;--field-width:8rem;--case-index:4rem;
+ --bar-height:2.8rem;--mini-height:.6rem;--target-size:2.75rem;--table-min:43rem;
+ --sticky-top:1.5rem;--layer-nav:10;--underline-offset:.2em;--empty-min:1%;
+ --desktop-columns:1.55fr 1fr;--case-columns:.8fr 1.2fr;
+}
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:var(--paper);color:var(--ink);font:var(--weight-normal) var(--text-base)/var(--line-body) var(--font-body)}
+a{color:var(--green);text-underline-offset:var(--underline-offset);overflow-wrap:anywhere}a:hover{color:var(--rust)}
+button,input,select{font:inherit}button,a,input,select,summary{outline-color:var(--focus)}:focus-visible{outline:var(--outline) solid var(--focus);outline-offset:var(--outline-offset)}
+button{min-height:var(--target-size);cursor:pointer;background:var(--surface);border:var(--border) solid var(--rule);border-radius:var(--radius);padding:var(--space-2) var(--space-4);color:var(--ink)}
+button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--surface)}
+h1,h2,h3,p,ol,ul,figure{margin:0}h1,h2{font-family:var(--font-display);font-weight:var(--weight-bold);line-height:var(--line-tight)}h1{font-size:var(--hero-size);letter-spacing:var(--letter-display)}h2{font-size:var(--heading-size);margin-bottom:var(--space-5)}h3{font-size:var(--text-lg);line-height:var(--line-tight);margin-bottom:var(--space-3)}p+p{margin-top:var(--space-3)}
+small,.small{font-size:var(--text-sm)}.muted{color:var(--muted)}.kicker{font-size:var(--text-xs);letter-spacing:var(--letter-label);text-transform:uppercase;font-weight:var(--weight-bold);color:var(--rust);margin-bottom:var(--space-4)}
+.wrap{max-width:var(--max-width);margin:auto;padding:var(--space-6)}.masthead{display:flex;justify-content:space-between;gap:var(--space-4);border-bottom:var(--border-heavy) solid var(--ink);padding-block:var(--space-4);font-size:var(--text-sm)}
+.hero{padding-block:var(--space-8);display:grid;grid-template-columns:var(--desktop-columns);gap:var(--space-7);align-items:end}
+.hero h1 span{color:var(--rust)}.deck{font-size:var(--text-lg);margin-top:var(--space-5);max-width:var(--max-width)}.hero-aside{border-top:var(--border-heavy) solid var(--green);padding-top:var(--space-4)}.hero-aside strong{font-size:var(--text-xl);display:block;margin-bottom:var(--space-3)}
+.badge{display:inline-block;font-size:var(--text-xs);font-weight:var(--weight-mid);padding:var(--space-1) var(--space-2);background:var(--green-soft);color:var(--green);border-radius:var(--radius)}.badge.warn{color:var(--rust);background:var(--rust-soft)}
+.layout{display:grid;grid-template-columns:var(--nav-width) minmax(0,1fr);gap:var(--space-7)}nav{align-self:start;position:sticky;top:var(--sticky-top);font-size:var(--text-sm);border-top:var(--border) solid var(--ink);padding-top:var(--space-4)}
+nav a{display:block;text-decoration:none;padding-block:var(--space-2);min-height:var(--target-size);color:var(--muted)}nav strong{display:block;margin-bottom:var(--space-3)}
+main{min-width:0}section{padding-block:var(--space-7);border-top:var(--border) solid var(--rule);scroll-margin-top:var(--space-5)}.section-no{font-size:var(--text-xs);font-weight:var(--weight-bold);color:var(--rust);display:block;margin-bottom:var(--space-3);letter-spacing:var(--letter-label)}
+.note{padding:var(--space-5);background:var(--green-soft);margin-block:var(--space-5)}.note.warn{background:var(--rust-soft)}.note strong{display:block;margin-bottom:var(--space-2)}.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}.two>div{min-width:0}
+.lead{font-size:var(--text-lg);font-weight:var(--weight-mid)}.points{padding-left:var(--space-5)}.points li{padding-left:var(--space-1);margin-block:var(--space-2)}
+.timeline{list-style:none;padding:0}.timeline li{display:grid;grid-template-columns:var(--field-width) minmax(0,1fr);gap:var(--space-5);border-top:var(--border) solid var(--rule);padding-block:var(--space-5)}.timeline time{font-weight:var(--weight-bold);color:var(--green);font-size:var(--text-sm)}.timeline li:last-child{border-bottom:var(--border) solid var(--rule)}
+.chart{padding-block:var(--space-5)}.bar-row{display:grid;grid-template-columns:var(--case-index) minmax(0,1fr) var(--field-width);gap:var(--space-3);align-items:center;margin-block:var(--space-4)}.bar-track{display:flex;width:100%;background:var(--green-soft);height:var(--bar-height);align-items:stretch}.bar{background:var(--green);width:var(--data-width,0);min-width:0}.bar.old{background:var(--chart-old)}.bar-row strong{text-align:right;font-size:var(--text-sm);font-variant-numeric:tabular-nums}.legend{display:flex;flex-wrap:wrap;gap:var(--space-5);font-size:var(--text-sm)}.legend span:before{content:"";display:inline-block;width:var(--text-sm);height:var(--text-sm);background:var(--green);margin-right:var(--space-2)}.legend span.old:before{background:var(--chart-old)}
+figure figcaption{font-size:var(--text-sm);color:var(--muted);margin-top:var(--space-4)}
+.filters{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-block:var(--space-5)}.claim{padding-block:var(--space-5);border-top:var(--border) solid var(--rule)}.claim .badge{margin-bottom:var(--space-3)}.claim p{margin-top:var(--space-3)}[hidden]{display:none!important}
+.flow{list-style:none;padding:0;counter-reset:steps;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);margin-block:var(--space-5)}.flow li{counter-increment:steps;border-top:var(--border-heavy) solid var(--green);padding-top:var(--space-4)}.flow li:before{content:counter(steps,decimal-leading-zero);display:block;color:var(--rust);font-size:var(--text-sm);margin-bottom:var(--space-2);font-weight:var(--weight-bold)}
+.case{display:grid;grid-template-columns:var(--case-columns);gap:var(--space-5);border-top:var(--border) solid var(--rule);padding-block:var(--space-6)}.case-title{font-size:var(--text-2xl);font-family:var(--font-display);line-height:var(--line-tight);margin-bottom:var(--space-3)}.case p{font-size:var(--text-sm)}.case .transfer{margin-top:var(--space-3);color:var(--green);font-weight:var(--weight-mid)}
+.calc{background:var(--surface);border:var(--border) solid var(--rule);padding:var(--space-5);margin-top:var(--space-5)}.inputs{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-block:var(--space-5)}label{display:block;font-size:var(--text-sm)}label span{display:block;font-size:var(--text-xs);color:var(--muted)}input[type=number],select{width:100%;min-height:var(--target-size);border:var(--border) solid var(--rule);border-radius:var(--radius);background:var(--paper);color:var(--ink);padding:var(--space-2) var(--space-3);margin-top:var(--space-1)}.results{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);border-top:var(--border-heavy) solid var(--ink);padding-block:var(--space-5)}.result span{font-size:var(--text-sm);display:block;color:var(--muted)}.result output{font-size:var(--text-xl);font-weight:var(--weight-bold);font-variant-numeric:tabular-nums}.formula{font-size:var(--text-sm);color:var(--muted)}.error{color:var(--rust);font-weight:var(--weight-mid)}
+.retention-rows{margin-block:var(--space-5)}.retention-row{display:grid;grid-template-columns:var(--case-index) 1fr var(--field-width);align-items:center;gap:var(--space-3);margin-block:var(--space-3);font-size:var(--text-sm)}.retention-row .meter{height:var(--mini-height);background:var(--green-soft)}.retention-row i{display:block;height:100%;background:var(--green);width:var(--data-width)}.retention-row strong{text-align:right;font-variant-numeric:tabular-nums}
+.table-scroll{overflow-x:auto;margin-block:var(--space-5)}table{width:100%;border-collapse:collapse;font-size:var(--text-sm)}th,td{text-align:left;vertical-align:top;padding:var(--space-3);border-bottom:var(--border) solid var(--rule)}th{font-weight:var(--weight-bold);color:var(--green)}details{border-top:var(--border) solid var(--rule);padding-block:var(--space-4)}summary{cursor:pointer;min-height:var(--target-size);font-weight:var(--weight-mid)}details p{font-size:var(--text-sm)}
+.sources{padding-left:var(--space-5);font-size:var(--text-sm)}.sources li{margin-bottom:var(--space-4)}footer{border-top:var(--border-heavy) solid var(--ink);padding-block:var(--space-6);font-size:var(--text-sm);color:var(--muted);margin-top:var(--space-7)}
+/* Named media tokens: medium=1000px; compact=720px. CSS custom properties cannot define media-query thresholds. */
+@media(max-width:1000px){.layout{grid-template-columns:minmax(0,1fr)}nav{position:static;display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4);padding-bottom:var(--space-4)}nav strong{width:100%;margin:0}nav a{padding-block:var(--space-1)}.hero{gap:var(--space-5)}}
+@media(max-width:720px){.wrap{padding:var(--space-4)}.masthead{flex-direction:column;gap:var(--space-1)}.hero{grid-template-columns:minmax(0,1fr);padding-block:var(--space-7)}.two,.flow,.case{grid-template-columns:minmax(0,1fr)}.timeline li{grid-template-columns:minmax(0,1fr);gap:var(--space-2)}.bar-row{grid-template-columns:var(--case-index) minmax(0,1fr)}.bar-row strong{grid-column:2;text-align:left}.inputs{grid-template-columns:minmax(0,1fr)}.results{gap:var(--space-4)}.result output{font-size:var(--text-lg)}section{padding-block:var(--space-6)}.table-scroll table{min-width:var(--table-min)}.case{gap:var(--space-4)}.calc{padding:var(--space-4)}.retention-row{grid-template-columns:var(--case-index) 1fr var(--field-width)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="masthead"><strong>独立开发研究札记 / 01</strong><span>研究日期 2026.10.20 · 原文分析 × 对照案例 × 情景计算</span></header>
+<div class="hero">
+<div><p class="kicker">Small traffic / paid demand</p><h1>从小流量到付费，<br><span>中间还缺什么证据？</span></h1><p class="deck">以浩承yang的出海复盘为起点，拆开需求发现、付费验证和持续经营，判断哪些做法值得试，哪些结论还需要验证。</p></div>
+<aside class="hero-aside"><span class="badge warn">标题成绩为原文自述</span><strong>先用一个内页验证，再决定是否独立建站。</strong><p class="small">这是本案例最值得检验的做法。产品域名、支付明细和续费数据未披露，因此无法独立确认“月入万刀”的收入口径。</p></aside>
+</div>
+<div class="layout">
+<nav aria-label="章节导航"><strong>阅读路线</strong><a href="#verdict">01 先看结论</a><a href="#journey">02 时间与收入</a><a href="#claims">03 核查原文主张</a><a href="#evidence">04 验证需要什么</a><a href="#cases">05 三个对照案例</a><a href="#calculator">06 自己算一遍</a><a href="#action">07 14天验证计划</a><a href="#sources">08 来源与范围</a></nav>
+<main>
+<section id="verdict"><span class="section-no">01 / RESEARCH VERDICT</span><h2>有价值的经验，需要带着条件使用</h2><p class="lead">本研究的建议：把“先发现一个具体任务，拿到真实付款，再小步增加投入”作为可测试方法；收入规模与长期存续另行核验。</p>
+<div class="two"><div class="note"><strong>可以借鉴</strong><p>从用户索要工具的场景找线索；用已有网站的一个内页降低试验成本；观察订单后再单独建站；把搜索数据与业务数据一起看。</p></div><div class="note warn"><strong>尚不能证明</strong><p>一个首单能扩大为250位持续付费用户；外链是收入增长的唯一原因；群成员约10%的自述比例是可复制成功率；坚持时间决定结果。</p></div></div>
+<p class="small muted">证据层次：原文与图片证明“文中如何描述”；公司博客证明“团队当时如何披露”；平台文档证明“指标与规则如何定义”。这些材料均不替代支付审计或因果实验。</p>
+<p class="small">材料：<a href="#s1">得到笔记与微信原文 [1]</a>。原文作者为浩承yang，由哥飞转发并补充评论。</p>
+</section>
+
+<section id="journey"><span class="section-no">02 / A NONLINEAR JOURNEY</span><h2>不是一路增长，而是多次改方向</h2>
+<ol class="timeline">
+<li><time>2024.12—2025.05</time><div><h3>上线后还需要验证需求</h3><p>热点倒计时站收到第一美元；之后多个自选工具站无流量。作者停止继续做PDF转换，开始重新确定收益目标。</p></div></li>
+<li><time>2025.06—08</time><div><h3>先看到搜索点击，再遇到热点</h3><p>学习SEO后为旧站获取外链，随后做wplace相关站并获得流量。这里有相关变化，但不能从回顾中单独识别外链效果。</p></div></li>
+<li><time>2025.09—2026.03</time></li>
+<li><time>2026.03—06</time><div><h3>重新观察搜索数据，尝试小需求</h3><p>作者重读教程、重新找词；一个测试类站自述当月收入800多美元。新机会来自X评论区索要一个视频效果工具。</p></div></li>
+<li><time>2026.06—07</time><div><h3>先做旧站内页，订单出现后才拆站</h3><p>先测试一个页面，7月持续收到订单，随后决定做独立站。作者还提到直接访问和ChatGPT流量，但未逐单披露归因，因此需要分别记录获客来源与订单。</p></div></li>
+<li><time>2026.08—10</time><div><h3>独立站增长，收入口径仍需补证</h3><p>作者同时做外链、内容、视频和广告试验，9月自述收入提高。标题与结尾称达到月入万刀；截至研究日尚未取得完整10月账期及订阅明细。</p></div></li>
+</ol>
+<figure class="chart" aria-label="作者自述收入数据：7月600美元，8月两站合计2000美元，9月两站合计6000美元。8月新站约500美元，9月约4500美元。">
+<h3>公开到具体月份的数据，到9月为止</h3>
+<div class="legend"><span>新站估算部分</span><span class="old">其他部分／未拆分</span></div>
+<div class="bar-row"><span>7月</span><div class="bar-track"><div class="bar old" style="--data-width:10%"></div></div><strong>$600</strong></div>
+<div class="bar-row"><span>8月</span><div class="bar-track"><div class="bar" style="--data-width:8.3333%"></div><div class="bar old" style="--data-width:25%"></div></div><strong>$2,000</strong></div>
+<div class="bar-row"><span>9月</span><div class="bar-track"><div class="bar" style="--data-width:75%"></div><div class="bar old" style="--data-width:25%"></div></div><strong>$6,000</strong></div>
+<figcaption>数值均来自作者自述，未审计。8月新站约占1/4、9月约占3/4，对应约$500与$4,500，属于按比例计算；7月不拆分。月份、站点范围和账期可能不同，因此图表不把10月“万刀”接成已核实数据点。<a href="#s1">[1]</a></figcaption>
+</figure>
+<details><summary>原文GSC截图能证明多少？</summary><p>已查看正文中的搜索数据图与建站建议聊天图。搜索图可读到总点击3,218、曝光约2.94万、点击率11%、平均排名7.1；横轴显示2026年7月底至10月的一段时间。完整筛选、域名与后台原始导出不可见，无法独立认证。聊天图表达“能出单后加大投入”的建议，不构成收入证据。这里不展示截图中的人物信息。</p></details>
+</section>
+
+<section id="claims"><span class="section-no">03 / CLAIM CHECK</span><h2>原文哪些话需要改写？</h2><p>点击分类查看。保留表示保留做法，不表示效果已被独立验证。</p>
+<div class="filters" role="group" aria-label="主张分类"><button type="button" data-filter="all" aria-pressed="true">全部 · 6</button><button type="button" data-filter="keep" aria-pressed="false">保留 · 2</button><button type="button" data-filter="qualify" aria-pressed="false">加条件 · 2</button><button type="button" data-filter="revise" aria-pressed="false">修正 · 2</button></div>
+<p id="filter-count" class="small muted" role="status">显示全部6项主张</p>
+<article class="claim" data-claim="keep"><span class="badge">保留做法</span><h3>先用一个内页测试</h3><p class="small muted">原文描述先上内页，再考虑单独建站。<a href="#s1">[1]</a></p><p>已有网站、可承接该任务、能清楚报价时，可以先验证一个入口。需要记录访问、尝试、付款和交付结果。旧站与新站的流量不能混算。</p></article>
+<article class="claim" data-claim="keep"><span class="badge">保留做法</span><h3>看收录、搜索词和排名</h3><p class="small muted">原文复盘提出要观察收录、词库和排名。<a href="#s1">[1]</a></p><p>GSC（Google Search Console，谷歌搜索控制台）帮助发现搜索表现变化；同时记录总访客、付款和退款。搜索点击与站内访客是不同指标。<a href="#s5">[5]</a></p></article>
+<article class="claim" data-claim="qualify"><span class="badge warn">加条件</span><h3>小搜索量，也可能有商业价值</h3><p class="small muted">原文写工具查询量“才3k”，具体查询范围未披露。<a href="#s1">[1]</a></p></article>
+<article class="claim" data-claim="qualify"><span class="badge warn">加条件</span><h3>缩短上线时间</h3><p class="small muted">原文事后反思提出“三天内上线”。<a href="#s1">[1]</a></p><p>“三天上线”是作者事后提出的做法，不是已验证的普适工期。可以减少功能，但承诺的核心结果、价格、退款说明和交付能力必须真实。展示他人样例时需要使用授权并注明来源。</p></article>
+<article class="claim" data-claim="revise"><span class="badge warn">修正推断</span><h3>一个人付费，不能保证找到250人</h3><p class="small muted">原文从一位付费用户外推到25位、250位。<a href="#s1">[1]</a></p><p>首单只说明这位客户在当时愿意付钱。扩大投入前，应检查客户是否来自可重复渠道、交付能否重复、获客成本与退款是否可承受，以及后续是否继续使用。</p></article>
+<article class="claim" data-claim="revise"><span class="badge warn">修正做法</span><h3>外链数量与DR都不能保证排名</h3><p class="small muted">本研究针对原文外链、DR与收入的并列描述作出限定，并非引用作者的单一归因结论。<a href="#s1">[1]</a></p><p>DR是第三方工具的域名评分，不是Google官方排名分。原文同时使用多个渠道，不能把增长全部归因于外链。Google将为操纵排名买卖链接、低质目录与带优化链接的论坛评论列为链接垃圾；广告与赞助链接应正确标注。<a href="#s6">[6]</a> <a href="#s7">[7]</a></p></article>
+<div class="note warn"><strong>“约10%做到月入万刀”是未核实的社群说法</strong><p>未给出成员分母、入群时长、收入定义、退出者和样本核验方法。本研究不把它作为成功概率，也不把持续投入写成成功保证。<a href="#s1">[1]</a></p></div>
+</section>
+
+<section id="evidence"><span class="section-no">04 / EVIDENCE BEFORE SCALE</span><h2>从一个评论，到一项可持续业务</h2><p>以下是本研究提出的验证顺序。每一步回答不同问题，前一步通过后，后一步仍可能失败。</p>
+<ol class="flow">
+<li><h3>有人提出任务</h3><p>保存具体场景、原话和现有做法。索要链接属于兴趣信号，还不是付款意愿。</p></li>
+<li><h3>目标用户愿意试</h3><p>让对方用自己的输入完成任务。记录是否完成、结果是否可用，区分点赞与实际使用。</p></li>
+<li><h3>有人接受价格并付款</h3><p>记录真实付款人数、成交价格与来源。点击价格页、口头答应、支付成功分别记数。</p></li>
+<li><h3>结果通过客户验收</h3><p>客户能用结果完成什么？记录失败、退款、人工返工与每单成本，不能只看支付截图。</p></li>
+<li><h3>能再次获得同类客户</h3><p>同一渠道能否带来新的独立客户？排除朋友支持、一次热点和无法持续的低价流量。</p></li>
+<li><h3>客户继续使用，经营可承受</h3><p>到了实际使用或续费周期后再观察。核算流失、退款、获客、API、客服和维护成本。</p></li>
+</ol>
+<h3>替代解释：收入上升，究竟来自哪里？</h3>
+<p>收入增长与需求在线化、独立建站或SEO之间的因果关系尚未得到独立验证。搜索增长、社交视频引流、一次大单和短期热点都可能解释部分变化。可按周记录落地页、来源、付款客户数、订单金额与退款，再比较渠道和客户批次；直接访问的归因仍可能缺失。</p>
+<details><summary>两个失败方向：先补证，再谈反事实</summary><p>涂色页站：原文披露开发约一个月、每月两三单；作者认为需求调研、外链与数据观察存在问题。确切访问数、报价、付款失败和留存未给出。应先区分需求不足、分发不足、定价不当和交付成本过高，再决定只改变哪个变量。</p><p>广告视频站：开发两个多月，上线后很少继续投入；作者描述开发负担与维护意愿下降。付费人数、交付成本及稳定性缺失。把试验缩到单个任务也许能更早发现问题，但不能倒推出“三天上线就会成功”。</p></details>
+<div class="note"><strong>什么时候值得独立建站？</strong><p>当一个任务有重复付款、交付可稳定完成、独立站能改善定位或体验，而且新增开发与获客成本可承受时，再评估拆站。无需把“已经有订单”直接改写成“应该全力投入”。</p></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="SEO与业务诊断表，可横向滚动">
+<table><thead><tr><th>观察到什么</th><th>先查什么</th><th>不要直接做什么</th></tr></thead><tbody>
+<tr><td>搜索无曝光</td><td>页面能否索引、需求是否存在、查询是否相关</td><td>立刻批量买链接</td></tr>
+<tr><td>有曝光、少点击</td><td>查询意图、排名、标题与结果呈现</td><td>只加关键词密度</td></tr>
+<tr><td>有人访问、少尝试</td><td>来源匹配、首屏说明、使用门槛</td><td>把注册数称作需求验证</td></tr>
+<tr><td>有人试用、少付款</td><td>结果价值、报价、免费替代与支付故障</td><td>直接认定只是流量少</td></tr>
+<tr><td>有付款、少复用</td><td>一次性任务、质量问题、频次与退款</td><td>强行转月付订阅</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="cases"><span class="section-no">05 / COMPARATIVE CASES</span><h2>三个案例，分别检验三个环节</h2><p class="muted">以下都是有官方复盘的历史案例，不是当前收入快照，也不是财务审计。它们提供不同路径，不能合并为共同成功公式。</p>
+<article class="case"><div><p class="kicker">Demand → Payment</p><h3 class="case-title">Buffer</h3><span class="badge">创始人复盘 · 2011.02.16</span></div><div><p>创始人先用两页网页收集兴趣反馈，再加入价格页观察用户选择；产品上线四天后获得首位付费客户。官方记录说明这些事件依次发生。<a href="#s2">[2]</a></p><p class="transfer">可借鉴：把兴趣测试、价格测试和付款分开记录。</p><p>价格页点击还不是付款；当时的社交平台、创始人触达能力与今天不同。案例不能证明先做两页就能成交。</p></div></article>
+<article class="case"><div><p class="kicker">Free use → Paid use</p><h3 class="case-title">Tally</h3><span class="badge">团队复盘 · 2024.03.01</span></div><div><p>团队披露2024年2月达到10万美元MRR（月度经常性收入），并将免费产品、早期用户反馈与产品体验列为增长因素；同时描述客服负担和团队调整。<a href="#s3">[3]</a></p><p class="transfer">可借鉴：决定免费范围时，同步设计支持边界。</p><p>免费本身没有被证明是收入增长的唯一原因。低边际成本的表单产品，与按次支付模型费用的AI工具不可直接套用。</p></div></article>
+<article class="case"><div><p class="kicker">Positioning → Acquisition</p><h3 class="case-title">Plausible</h3><span class="badge">团队复盘 · 2022.06.22</span></div><div><p>团队披露达到100万美元ARR（年度经常性收入），回顾隐私定位、开源和内容获客；从推出付费服务到首400美元MRR花了324天。<a href="#s4">[4]</a></p><p class="transfer">可借鉴：围绕目标客户的问题做定位和内容。</p><p>早期进展慢可以继续诊断，但不足以支持无限期投入。开源不自动带来付款；ARR也不能当成年内实际收款。</p></div></article>
+<div class="note"><strong>合起来看，能提出什么建议？</strong><p>先选一个具体客户任务，再分别验证价格、交付、获客和继续使用。免费、订阅、内容SEO都只是可选手段，适用性取决于任务频次、成本与客户行为。</p></div>
+</section>
+
+<section id="calculator"><span class="section-no">06 / TWO DIFFERENT CALCULATIONS</span><h2>40美元 × 250人，先说明收的是什么钱</h2><p>一次购买、年付套餐和每月订阅，代表不同收入。原文未披露套餐结构，因此这里只做明确假设下的情景计算。<a href="#s1">[1]</a></p>
+<div class="note"><strong>先保留原文的三个数字，再核对口径</strong><p>作者自述日访问200—400、平均付费率2%—4%、客单价约$40。这里的访问去重、转化分母、观察区间与套餐周期均未披露。若仅假设同一30天内日访问300、首购率3%、每位首购支付$40，则计算300 × 30 × 3% × $40 = $10,800新客首购毛收入；这个演示不等于原文实际收入，更不等于MRR。</p><p>GSC图片跨越多个月份，日访问可能描述近期状态；缺少同期全站访问与逐单来源，不能用两者直接反推搜索占比，也不能把新站收入除以客单价当作实际订单数。</p></div>
+<noscript><div class="note warn">当前浏览器未启用JavaScript。筛选和计算不可用，但全文、公式和示例仍可阅读：9,000次月访问 × 1%首购率 × $40 = $3,600新客首购毛收入；250个有效月付订阅 × $40/月 = $10,000 MRR。</div></noscript>
+<div class="calc"><h3>A · 新客户首购收入</h3><p class="small muted">默认月访问9,000和首次付款$40只作演示；首购率特意取1%来测试较低转化情景，不采用作者未核实口径的2%—4%。这些默认值不是后台还原，也不是收入预测。首购率分母为月访问量，跨设备或重复访问会改变解释。</p>
+
+<p id="acq-error" class="error" role="status" hidden>请在标示范围内输入有效数字；全部字段均需填写。</p>
+<div id="acq-results" class="results">
+<div class="result"><span>预计首次付款人数</span><output id="buyers">90人</output></div>
+<div class="result"><span>新客首购毛收入</span><output id="gross">$3,600</output></div>
+<div class="result"><span>扣退款后的首购收入</span><output id="net">$3,420</output></div>
+<div class="result"><span>简化贡献余额</span><output id="balance">$2,392</output></div>
+</div>
+
+<p class="small muted">人数是期望值，允许小数；这不是成交预测。未填入的人工、税费、长期研发与其他支出均未计入，因此“贡献余额”不叫净利润。</p>
+</div>
+<div class="calc"><h3>B · 全部按月订阅时，存量会怎样变化？</h3><p class="small muted">仅适用于统一月价、无折扣、无退款、无年付或按次购买的假设；新订阅在每月末加入，流失只作用于该月月初存量。这里的MRR是月末存量折算额，不是当月实际收款。</p>
+<div class="inputs">
+<label for="active">起始有效月付订阅数<input id="active" type="number" min="0" max="1000000" step="1" value="250"></label>
+<label for="monthly-price">统一月价（美元）<input id="monthly-price" type="number" min="0" max="100000" step="1" value="40"></label>
+<label for="new-subs">每月新增有效订阅数<input id="new-subs" type="number" min="0" max="1000000" step="1" value="10"></label>
+<label for="churn">月度订阅数流失率（%）<input id="churn" type="number" min="0" max="100" step=".1" value="5"></label>
+</div>
+<div class="filters" role="group" aria-label="订阅情景"><button type="button" data-preset="base">演示：每月新增10，流失5%</button><button type="button" data-preset="stress">压力：无新增，流失10%</button><button type="button" data-preset="steady">保持：每月新增25，流失10%</button></div>
+<p id="sub-error" class="error" role="status" hidden>请在标示范围内输入有效数字；全部字段均需填写。</p>
+<div id="sub-results"><div class="results"><div class="result"><span>起始MRR</span><output id="initial-mrr">$10,000</output></div><div class="result"><span>6个月后MRR</span><output id="final-mrr">$9,470</output></div></div><p class="small muted">条形长度表示有效订阅数，右侧显示对应MRR。订阅数采用期望值，可能出现小数。</p><div class="retention-rows" id="retention-bars"></div><p id="final-subs" class="small"></p><p id="replacement" class="small"></p></div>
+<p class="formula">下月有效订阅数 = 本月有效订阅数 ×（1 − 流失率）+ 每月新增有效订阅数。MRR = 月末有效订阅数 × 统一月价。</p>
+<p class="small muted">若250个订阅都付$40/月，起始MRR才是$10,000；若它们都是$40/年，月度折算约为$833；若只买一次，就是该批客户合计$10,000收款，不能自动延续到下个月。</p>
+</div>
+</section>
+
+<section id="action"><span class="section-no">07 / A BOUNDED EXPERIMENT</span><h2>先做一次14天试验，再决定下一步</h2><p>这是建议方案，没有替你执行获客、收费或发布。只测试一个任务与一种报价。开始前自己填写可承受的时间与现金上限，并写下停止日期。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="14天试验计划，可横向滚动"><table><thead><tr><th>时间</th><th>行动</th><th>留下的证据</th><th>停止或调整条件</th></tr></thead><tbody>
+
+
+<tr><td>第6—10天</td><td>在一个合适渠道向目标用户展示报价</td><td>有效触达、试用、付款、来源分开计数</td><td>无人接触到报价时，不能判定没有需求；记录样本不足</td></tr>
+
+</tbody></table></div>
+<div class="note"><strong>如何解释试验结果？</strong><p>例如，可事先把“3位互不关联的目标客户付费，且交付可用”定为继续做小规模试验的门槛。这是管理预算的约定，不是统计证明，也不等于产品已经成立。实际续费必须等到真实账期后观察，14天不能验完月付或年付留存。</p></div>
+<p>如果用户只偶尔用一次，先测试按次或按结果收费；如果用户有持续任务，再测试订阅。若广告收入更合适，需要另算有效流量与广告收益，不沿用付费率计算器。</p>
+</section>
+
+<section id="sources"><span class="section-no">08 / SOURCES & LIMITS</span><h2>来源、覆盖与未取得的材料</h2>
+<ol class="sources">
+
+<li id="s2"><strong>Buffer · 创始人历史复盘。</strong><a href="https://buffer.com/resources/idea-to-paying-customers-in-7-weeks-how-we-did-it/">Idea to Paying Customers in 7 Weeks: How We Did It</a>，2011-02-16。用于区分兴趣、价格选择与真实付款。</li>
+<li id="s3"><strong>Tally · 团队历史复盘。</strong><a href="https://blog.tally.so/our-bootstrapped-journey-towards-100k-mrr/">Our bootstrapped journey towards $100K MRR</a>，2024-03-01。用于比较免费产品、反馈与支持成本。</li>
+<li id="s4"><strong>Plausible · 团队历史复盘。</strong><a href="https://plausible.io/blog/open-source-saas">How we built a $1M ARR open source SaaS</a>，2022-06-22。用于比较定位、内容和早期增长周期。</li>
+<li id="s5"><strong>Google官方指标定义。</strong><a href="https://support.google.com/webmasters/answer/7042828?hl=en">What are impressions, position, and clicks?</a> 2026-10-20核查。搜索指标与业务指标应分别统计。</li>
+<li id="s6"><strong>Google官方规则。</strong><a href="https://developers.google.com/search/docs/essentials/spam-policies#link-spam">Spam policies — Link spam</a>，2026-10-20核查。广告与赞助应标注nofollow或sponsored；不以操纵排名为目的批量建立低质链接。</li>
+<li id="s7"><strong>第三方指标原始定义。</strong><a href="https://ahrefs.com/seo/glossary/domain-rating">Ahrefs — Domain Rating</a>，2026-10-20核查。DR用于描述其工具测量的外链强度，不代表Google官方评分。</li>
+</ol>
+
+<details><summary>仍缺哪些关键数据？</summary><p>产品名称与域名、支付平台导出、套餐与月/年付构成、订单去重、完整账期、活跃付费订阅、退款拒付、获客渠道及支出、API与人工成本、分批留存。缺少这些，不能确认实际MRR、净利润、投资回报或任何单一渠道的因果贡献。</p></details>
+
+</section>
+</main></div>
+<footer>研究边界：分析一次公开复盘，补充历史案例，提出可检验建议。案例中的收入、经验与本页的演示参数各自保留原有证据范围。</footer>
+</div>
+<script>
+'use strict';
+const byId=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+const number=n=>new Intl.NumberFormat('zh-CN',{maximumFractionDigits:1}).format(n);
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{
+ const filter=b.dataset.filter;
+ document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ let shown=0;document.querySelectorAll('[data-claim]').forEach(x=>{const visible=filter==='all'||x.dataset.claim===filter;x.hidden=!visible;if(visible)shown++});
+ byId('filter-count').textContent=filter==='all'?'显示全部6项主张':'显示'+shown+'项主张';
+}));
+function values(ids){
+ let valid=true;
+ const result=ids.map(id=>{const el=byId(id);const n=el.valueAsNumber;const okay=el.value.trim()!==''&&Number.isFinite(n)&&n>=Number(el.min)&&n<=Number(el.max);el.setAttribute('aria-invalid',String(!okay));if(!okay)valid=false;return n});
+ return valid?result:null;
+}
+const acqIds=['visits','conversion','price','refund','cost','fee','fixed'];
+function acquisition(){
+ const v=values(acqIds);byId('acq-error').hidden=!!v;byId('acq-results').hidden=!v;if(!v)return;
+ const [visits,rate,price,refund,cost,fee,fixed]=v;const buyers=visits*rate/100,gross=buyers*price,net=gross*(1-refund/100),balance=net-gross*fee/100-buyers*cost-fixed;
+ byId('buyers').textContent=number(buyers)+'人';byId('gross').textContent=money(gross);byId('net').textContent=money(net);byId('balance').textContent=money(balance);
+}
+const subIds=['active','monthly-price','new-subs','churn'];
+function subscription(){
+ const v=values(subIds);byId('sub-error').hidden=!!v;byId('sub-results').hidden=!v;if(!v)return;
+ const [active,price,add,churn]=v;let n=active;const all=[n];
+ for(let i=1;i<=6;i++){n=n*(1-churn/100)+add;all.push(n)}
+ byId('initial-mrr').textContent=money(active*price);byId('final-mrr').textContent=money(n*price);
+ const denom=Math.max(...all,1);byId('retention-bars').replaceChildren();
+ all.forEach((val,i)=>{const row=document.createElement('div');row.className='retention-row';
+ const label=document.createElement('span');label.textContent=i===0?'现在':'第'+i+'月';
+ const meter=document.createElement('div');meter.className='meter';meter.setAttribute('aria-hidden','true');
+ const fill=document.createElement('i');fill.style.setProperty('--data-width',(val/denom*100)+'%');meter.append(fill);
+ const text=document.createElement('strong');text.textContent=money(val*price)+' / '+number(val)+'个订阅';row.append(label,meter,text);byId('retention-bars').append(row)});
+ byId('final-subs').textContent='6个月后预计有效订阅数：'+number(n)+'个。';
+ byId('replacement').textContent='按起始存量计算，首月需要新增约'+number(active*churn/100)+'个有效订阅才能抵消流失；实际值随存量变化。';
+}
+acqIds.forEach(id=>byId(id).addEventListener('input',acquisition));subIds.forEach(id=>byId(id).addEventListener('input',subscription));
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+ const preset=b.dataset.preset;byId('active').value=250;byId('monthly-price').value=40;byId('new-subs').value=preset==='base'?10:preset==='steady'?25:0;byId('churn').value=preset==='base'?5:10;subscription();
+}));
+acquisition();subscription();
+</script>
+</body></html>

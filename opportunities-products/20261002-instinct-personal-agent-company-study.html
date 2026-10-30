@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light" name="color-scheme"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<meta content="面向独立开发者的 Instinct 中文研究草稿：证据分级、产品原则、信任边界、商业模型与十四天受控试点。证据快照：2026年10月2日。" name="description"/>
+<title>Instinct｜少一个界面，多一层责任 · 独立开发者研究</title>
+<style>
+    /*
+      所有视觉常量集中于此；0、1、auto、网格列数等结构值除外。
+
+      断点只能使用字面量，不能在媒体查询条件中使用 CSS 自定义属性：
+      68rem（默认字号下约1088px）：侧栏转为页内目录，封面改单列。
+      42rem（约672px）：目录两列，卡片与计算器单列，适配390px。
+      22rem（约352px）：缩小边距及标题，适配320px。
+      rem 随用户默认字号变化；1440px 使用宽屏布局。
+    */
+    :root {
+      --paper: #f5f1e8;
+      --surface: #fbf8f1;
+      --ink: #242d28;
+      --muted: #5b645a;
+      --forest: #224d3d;
+      --forest-deep: #183c30;
+      --sage: #e5ebe0;
+      --line: #d6d8ca;
+      --amber: #71512b;
+      --amber-soft: #efe5d4;
+      --negative: #8a3e32;
+      --on-dark: #f6f2e8;
+      --on-dark-muted: #cdd7c9;
+      --focus: #98510e;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      --font-serif: "Iowan Old Style", "Palatino Linotype", "Songti SC", "STSong", "Noto Serif CJK SC", SimSun, serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+      --text-xs: .75rem;
+      --text-sm: .875rem;
+      --text-base: 1rem;
+      --text-body: 1.0625rem;
+      --text-lead: clamp(1.125rem, 1.7vw, 1.375rem);
+      --text-h3: 1.1875rem;
+      --text-h2: clamp(1.5rem, 2.6vw, 2rem);
+      --text-hero: clamp(4rem, 9vw, 8rem);
+      --text-cover: clamp(1.875rem, 4vw, 3.25rem);
+      --text-stat: clamp(1.75rem, 3vw, 2.5rem);
+      --text-quote: clamp(1.3rem, 2.2vw, 1.8rem);
+
+      --leading-body: 1.95;
+      --leading-tight: 1.22;
+      --leading-ui: 1.55;
+      --leading-title: 1.3;
+      --tracking-wide: .16em;
+      --tracking-heading: -.02em;
+      --weight-normal: 400;
+      --weight-medium: 600;
+      --weight-bold: 700;
+
+      --s1: .25rem;
+      --s2: .5rem;
+      --s3: .75rem;
+      --s4: 1rem;
+      --s5: 1.25rem;
+      --s6: 1.5rem;
+      --s8: 2rem;
+      --s10: 2.5rem;
+      --s12: 3rem;
+      --s16: 4rem;
+      --s20: 5rem;
+
+      --page-max: 80rem;
+      --measure: 48rem;
+      --rail: 12rem;
+      --gutter: var(--s12);
+      --layout-gap: var(--s16);
+      --section-space: var(--s16);
+      --hero-ratio: 1.65fr;
+      --table-min: 40rem;
+      --table-small-min: 31rem;
+
+      --border: 1px;
+      --border-strong: 2px;
+      --radius: .375rem;
+      --touch: 2.75rem;
+      --anchor-offset: var(--s8);
+      --focus-width: 3px;
+      --focus-offset: 4px;
+      --underline-offset: .2em;
+      --underline-width: .07em;
+      --duration: 160ms;
+      --ease: ease;
+      --a11y-pixel: 1px;
+      --clip-half: 50%;
+      --z-skip: 10;
+      --hero-small: 3.625rem;
+      --cover-small: 1.75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      overflow-wrap: break-word;
+    }
+    a {
+      color: var(--forest);
+      text-decoration-thickness: var(--underline-width);
+      text-underline-offset: var(--underline-offset);
+    }
+    a:hover { text-decoration-thickness: var(--border-strong); }
+    :focus-visible {
+      outline: var(--focus-width) solid var(--focus);
+      outline-offset: var(--focus-offset);
+    }
+    :target { scroll-margin-block-start: var(--anchor-offset); }
+    ::selection { background: var(--forest); color: var(--on-dark); }
+
+    h1, h2, h3, p, dl, dd, figure { margin: 0; }
+    h1, h2 {
+      font-family: var(--font-serif);
+      font-weight: var(--weight-medium);
+    }
+    h2 {
+      font-size: var(--text-h2);
+      line-height: var(--leading-title);
+      letter-spacing: var(--tracking-heading);
+      text-wrap: balance;
+    }
+    h3 {
+      margin-block: var(--s6) var(--s2);
+      font-size: var(--text-h3);
+      line-height: var(--leading-ui);
+    }
+    p + p { margin-block-start: var(--s4); }
+    strong { font-weight: var(--weight-bold); }
+    button, input { font: inherit; }
+    button {
+      min-block-size: var(--touch);
+      padding: var(--s2) var(--s5);
+      border: var(--border) solid var(--forest);
+      border-radius: var(--radius);
+      background: var(--forest);
+      color: var(--on-dark);
+      cursor: pointer;
+      transition: background var(--duration) var(--ease);
+    }
+    button:hover { background: var(--forest-deep); }
+    button:disabled {
+      background: var(--line);
+      border-color: var(--line);
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .wrap {
+      inline-size: min(calc(100% - var(--gutter) * 2), var(--page-max));
+      margin-inline: auto;
+    }
+    .sr-only {
+      position: absolute;
+      inline-size: var(--a11y-pixel);
+      block-size: var(--a11y-pixel);
+      padding: 0;
+      margin: calc(-1 * var(--a11y-pixel));
+      overflow: hidden;
+      clip-path: inset(var(--clip-half));
+      white-space: nowrap;
+      border: 0;
+    }
+    .skip-link {
+      position: absolute;
+      inset-block-start: var(--s3);
+      inset-inline-start: var(--s3);
+      z-index: var(--z-skip);
+      padding: var(--s3) var(--s5);
+      background: var(--ink);
+      color: var(--on-dark);
+      transform: translateY(calc(-100% - var(--s8)));
+    }
+    .skip-link:focus { transform: none; }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--s4);
+      flex-wrap: wrap;
+      padding-block: var(--s6);
+      border-block-end: var(--border) solid var(--ink);
+    }
+    .eyebrow {
+      color: var(--forest);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wide);
+      line-height: var(--leading-ui);
+    }
+    .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+    .small {
+      font-size: var(--text-sm);
+      line-height: var(--leading-ui);
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, var(--hero-ratio)) minmax(0, 1fr);
+      gap: var(--layout-gap);
+      padding-block: var(--s20) var(--s16);
+      align-items: end;
+    }
+    .hero-name {
+      display: block;
+      color: var(--forest);
+      font-size: var(--text-hero);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-heading);
+    }
+    .hero-title {
+      display: block;
+      margin-block-start: var(--s6);
+      font-size: var(--text-cover);
+      line-height: var(--leading-title);
+    }
+    .hero-deck {
+      max-inline-size: var(--measure);
+      margin-block-start: var(--s6);
+      font-size: var(--text-lead);
+      color: var(--muted);
+    }
+    .cover-note {
+      padding: var(--s8);
+      border-block-start: var(--border-strong) solid var(--forest);
+      background: var(--sage);
+    }
+    .cover-note h2 {
+      margin-block: var(--s4);
+      font-size: var(--text-quote);
+    }
+    .cover-note p { font-size: var(--text-base); }
+    .status-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2) var(--s4);
+      margin-block-start: var(--s6);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--s1) var(--s2);
+      border: var(--border) solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: var(--text-xs);
+      line-height: var(--leading-ui);
+      vertical-align: middle;
+    }
+    .badge.primary {
+      border-color: var(--forest);
+      color: var(--forest);
+      background: var(--sage);
+    }
+    .badge.claim {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+    .badge.analysis { color: var(--forest); }
+    .status-band {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3) var(--s6);
+      padding-block: var(--s4);
+      border-block: var(--border) solid var(--line);
+      margin-block-end: var(--s12);
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+
+    .reading-layout {
+      display: grid;
+      grid-template-columns: var(--rail) minmax(0, 1fr);
+      gap: var(--layout-gap);
+      align-items: start;
+    }
+    .rail {
+      position: sticky;
+      inset-block-start: var(--s8);
+      padding-block-end: var(--s8);
+    }
+    .rail h2 {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+      margin-block-end: var(--s3);
+    }
+    .toc { list-style: none; margin: 0; padding: 0; }
+    .toc a {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      min-block-size: var(--touch);
+      padding: var(--s1) 0;
+      font-size: var(--text-sm);
+      color: var(--muted);
+      text-decoration: none;
+      line-height: var(--leading-ui);
+    }
+    .toc a:hover, .toc a:focus-visible {
+      color: var(--forest);
+      text-decoration: underline;
+    }
+    .toc .num {
+      font-family: var(--font-mono);
+      color: var(--forest);
+      font-size: var(--text-xs);
+    }
+    .rail-note {
+      border-block-start: var(--border) solid var(--line);
+      margin-block-start: var(--s5);
+      padding-block-start: var(--s4);
+    }
+
+    main, article { min-inline-size: 0; }
+    article > section {
+      padding-block: 0 var(--section-space);
+      margin-block-end: var(--section-space);
+      border-block-end: var(--border) solid var(--line);
+    }
+    article > section:last-child { margin-block-end: 0; }
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s4);
+      margin-block-end: var(--s6);
+    }
+    .section-number {
+      color: var(--forest);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      flex-shrink: 0;
+    }
+    .section-tag { margin-block-end: var(--s4); }
+    .prose { max-inline-size: var(--measure); }
+    .lead {
+      font-size: var(--text-lead);
+      line-height: var(--leading-body);
+    }
+    .cite {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      white-space: nowrap;
+    }
+    .pullquote {
+      max-inline-size: var(--measure);
+      margin-block: var(--s8);
+      padding-inline-start: var(--s6);
+      border-inline-start: var(--border-strong) solid var(--forest);
+      font-family: var(--font-serif);
+      font-size: var(--text-quote);
+      line-height: var(--leading-ui);
+      color: var(--forest);
+    }
+    .note {
+      margin-block: var(--s6);
+      padding: var(--s5) var(--s6);
+      background: var(--sage);
+      border-inline-start: var(--border-strong) solid var(--forest);
+    }
+    .note.warning {
+      background: var(--amber-soft);
+      border-color: var(--amber);
+    }
+    .note p + p { margin-block-start: var(--s3); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s6);
+      padding: var(--s6);
+      background: var(--forest);
+      color: var(--on-dark);
+      margin-block: var(--s6);
+    }
+    .stats dt {
+      font-size: var(--text-sm);
+      color: var(--on-dark-muted);
+    }
+    .stats dd {
+      font-family: var(--font-serif);
+      font-size: var(--text-stat);
+      line-height: var(--leading-ui);
+    }
+    .stats a { color: var(--on-dark); }
+    .evidence-key {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s4) var(--s6);
+      margin-block: var(--s6);
+    }
+    .evidence-key dt { margin-block-end: var(--s1); }
+    .evidence-key dd {
+      color: var(--muted);
+      font-size: var(--text-sm);
+      line-height: var(--leading-ui);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-block: var(--s6);
+      border-block: var(--border) solid var(--line);
+      overscroll-behavior-inline: contain;
+    }
+    table {
+      inline-size: 100%;
+      min-inline-size: var(--table-min);
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+      line-height: var(--leading-ui);
+      text-align: start;
+    }
+    .compact-table { min-inline-size: var(--table-small-min); }
+    caption {
+      padding: var(--s4) 0;
+      text-align: start;
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    th, td {
+      padding: var(--s4) var(--s3);
+      border-block-end: var(--border) solid var(--line);
+      vertical-align: top;
+    }
+    th { font-weight: var(--weight-medium); }
+    thead { background: var(--sage); }
+    tbody th { color: var(--forest); }
+    tbody tr:last-child > * { border-block-end: 0; }
+    .table-help {
+      color: var(--muted);
+      font-size: var(--text-xs);
+    }
+
+    .journey {
+      margin-block: var(--s6);
+      padding: var(--s6);
+      background: var(--surface);
+      border: var(--border) solid var(--line);
+    }
+    .journey h3 { margin-block-start: 0; }
+    .journey ol {
+      padding-inline-start: var(--s6);
+      margin-block: var(--s4) 0;
+    }
+    .journey li {
+      padding-inline-start: var(--s2);
+      margin-block: var(--s3);
+    }
+    .principle {
+      padding-block: var(--s5);
+      border-block-start: var(--border) solid var(--line);
+    }
+    .principle h3 { margin-block: 0 var(--s3); }
+    .principle p { max-inline-size: var(--measure); }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s5);
+      margin-block: var(--s6);
+    }
+    .architecture > div {
+      border-block-start: var(--border-strong) solid var(--forest);
+      padding-block-start: var(--s3);
+    }
+    .architecture dt {
+      font-weight: var(--weight-medium);
+      color: var(--forest);
+    }
+    .architecture dd {
+      margin-block-start: var(--s2);
+      font-size: var(--text-sm);
+      line-height: var(--leading-body);
+    }
+    .math-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s4);
+      margin-block: var(--s6);
+      padding-block: var(--s5);
+      border-block: var(--border) solid var(--line);
+    }
+    .math-strip strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: var(--text-stat);
+      font-weight: var(--weight-normal);
+      color: var(--forest);
+      line-height: var(--leading-ui);
+    }
+    .math-strip span {
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+    .flow {
+      margin-block: var(--s6);
+      padding: var(--s5) var(--s6);
+      border: var(--border) solid var(--forest);
+      color: var(--forest);
+      line-height: var(--leading-body);
+    }
+
+    .calculator {
+      border: var(--border) solid var(--line);
+      background: var(--surface);
+      padding: var(--s8);
+      margin-block: var(--s6);
+    }
+    .calculator fieldset {
+      min-inline-size: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .calculator legend {
+      padding: 0;
+      margin-block-end: var(--s5);
+      font-weight: var(--weight-medium);
+    }
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s6) var(--s8);
+    }
+    .control { min-inline-size: 0; }
+    .control label {
+      display: block;
+      font-size: var(--text-base);
+      font-weight: var(--weight-medium);
+    }
+    .control-value {
+      display: block;
+      color: var(--forest);
+      font-size: var(--text-h3);
+      font-variant-numeric: tabular-nums;
+    }
+    input[type="range"] {
+      display: block;
+      inline-size: 100%;
+      min-inline-size: 0;
+      block-size: var(--touch);
+      margin: var(--s1) 0;
+      accent-color: var(--forest);
+      cursor: pointer;
+    }
+    input[type="range"]:disabled { cursor: default; }
+    .control p {
+      font-size: var(--text-sm);
+      color: var(--muted);
+      line-height: var(--leading-ui);
+    }
+    .calc-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s4);
+      margin-block: var(--s6);
+    }
+    .formula {
+      padding-block: var(--s4);
+      border-block: var(--border) solid var(--line);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+    }
+    .calc-results {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s6);
+      margin-block: var(--s6);
+    }
+    .calc-results dt {
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+    .calc-results dd {
+      color: var(--forest);
+      font-family: var(--font-serif);
+      font-size: var(--text-stat);
+      font-variant-numeric: tabular-nums;
+      line-height: var(--leading-ui);
+    }
+    .calc-results dd.negative { color: var(--negative); }
+    .break-even {
+      color: var(--forest);
+      font-size: var(--text-sm);
+    }
+
+    .sources {
+      list-style: none;
+      padding: 0;
+      margin: var(--s6) 0;
+    }
+    .sources li {
+      padding-block: var(--s4);
+      border-block-start: var(--border) solid var(--line);
+      font-size: var(--text-base);
+    }
+    .source-title {
+      font-weight: var(--weight-medium);
+      overflow-wrap: anywhere;
+    }
+    .source-detail {
+      margin-block-start: var(--s2);
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+    .timestamp-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2) var(--s4);
+      margin-block-start: var(--s3);
+    }
+    .timestamp-links a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--touch);
+      font-size: var(--text-sm);
+    }
+    .workflow {
+      border: var(--border-strong) solid var(--forest);
+      padding: var(--s6);
+      margin-block-start: var(--s8);
+    }
+    .workflow h3 { margin-block-start: 0; }
+    .handoff {
+      overflow-wrap: anywhere;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--muted);
+      margin-block-start: var(--s5);
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--s4);
+      padding-block: var(--s8) var(--s12);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+    footer a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--touch);
+    }
+
+    @media (max-width: 68rem) {
+      :root {
+        --gutter: var(--s8);
+        --layout-gap: var(--s10);
+      }
+      .hero, .reading-layout { grid-template-columns: minmax(0, 1fr); }
+      .hero { padding-block-start: var(--s12); }
+      .cover-note { max-inline-size: var(--measure); }
+      .rail {
+        position: static;
+        padding-block-end: var(--s6);
+        border-block-end: var(--border) solid var(--line);
+      }
+      .toc {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0 var(--s4);
+      }
+      .rail-note { max-inline-size: var(--measure); }
+    }
+
+    @media (max-width: 42rem) {
+      :root {
+        --gutter: var(--s5);
+        --section-space: var(--s10);
+        --layout-gap: var(--s8);
+      }
+      .hero {
+        gap: var(--s8);
+        padding-block: var(--s10);
+      }
+      .hero-title { margin-block-start: var(--s4); }
+      .cover-note, .calculator { padding: var(--s5); }
+      .toc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .evidence-key, .architecture, .control-grid, .calc-results, .stats {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .stats { gap: var(--s4); }
+      .math-strip {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--s3);
+      }
+      .math-strip > div {
+        display: flex;
+        align-items: baseline;
+        gap: var(--s4);
+        flex-wrap: wrap;
+      }
+      .section-heading { gap: var(--s3); }
+      .note, .journey, .flow { padding: var(--s4); }
+      .pullquote { padding-inline-start: var(--s4); }
+    }
+
+    @media (max-width: 22rem) {
+      :root {
+        --gutter: var(--s4);
+        --text-hero: var(--hero-small);
+        --text-cover: var(--cover-small);
+      }
+      .toc { column-gap: var(--s2); }
+      .toc a { gap: var(--s2); }
+      .calculator, .cover-note, .workflow { padding: var(--s4); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    @media print {
+      :root {
+        --gutter: var(--s4);
+        --section-space: var(--s8);
+      }
+      html { scroll-behavior: auto; }
+      .reading-layout, .hero { display: block; }
+      .rail { position: static; }
+      .toc {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .cover-note { margin-block-start: var(--s6); }
+      .table-wrap { overflow: visible; }
+      table, .compact-table { min-inline-size: 0; }
+      tr, .note, .workflow { break-inside: avoid; }
+      h2, h3 { break-after: avoid; }
+      .skip-link, .calc-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳至研究正文</a>
+<header class="wrap" id="top">
+<div class="masthead">
+<p class="eyebrow">FIELD NOTES / 独立开发者研究</p>
+<p class="small mono">NO. 01 · EVIDENCE / 2026-10-02</p>
+</div>
+<div class="hero">
+<div>
+<p class="eyebrow">PERSONAL AGENTS / 从对话到托付</p>
+<h1>
+<span class="hero-name" lang="en">Instinct.</span>
+<span class="hero-title">少一个界面，<br/>多一层责任。</span>
+</h1>
+<p class="hero-deck">当软件替人办事，真正的产品不只是答案，而是可理解的决定、可核对的结果，以及随时收回的授权。</p>
+</div>
+
+</div>
+
+</header>
+<div class="wrap reading-layout">
+<nav aria-labelledby="toc-title" class="rail">
+<h2 id="toc-title">阅读路线</h2>
+<ol class="toc">
+<li><a href="#thesis"><span class="num">01</span>核心判断</a></li>
+<li><a href="#identity"><span class="num">02</span>公司与融资</a></li>
+<li><a href="#ledger"><span class="num">03</span>证据账本</a></li>
+<li><a href="#journey"><span class="num">04</span>使用旅程</a></li>
+<li><a href="#principles"><span class="num">05</span>四个反直觉</a></li>
+<li><a href="#trust"><span class="num">06</span>信任与偏差</a></li>
+<li><a href="#architecture"><span class="num">07</span>技术分层</a></li>
+<li><a href="#privacy"><span class="num">08</span>隐私的边界</a></li>
+<li><a href="#growth"><span class="num">09</span>增长与算力</a></li>
+<li><a href="#commerce"><span class="num">10</span>交易与激励</a></li>
+<li><a href="#economics"><span class="num">11</span>经济模型</a></li>
+<li><a href="#markets"><span class="num">12</span>市场影响</a></li>
+<li><a href="#moat"><span class="num">13</span>壁垒与弱点</a></li>
+<li><a href="#pilot"><span class="num">14</span>十四天试点</a></li>
+<li><a href="#unknowns"><span class="num">15</span>待回答问题</a></li>
+<li><a href="#sources"><span class="num">16</span>来源与交接</a></li>
+</ol>
+<p class="small rail-note">先读证据，再读推演。所有假设数字均与公司实际经营数据区分；表格可在窄屏内横向滚动。</p>
+</nav>
+<main id="main" tabindex="-1">
+<article aria-label="Instinct 中文研究正文">
+<section aria-labelledby="thesis">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">01</span>
+<h2 id="thesis">值得研究的，是责任如何被重新分配</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">分析推演</span></p>
+<div class="prose">
+<p class="lead">Instinct 的核心命题可以拆成三步：用户表达意图，助手协调行动，外部服务交付结果。界面越简单，后台需要承担的判断、确认与纠错责任反而越多。</p>
+<p>这不是“聊天替代所有软件”的必然预言。真正值得验证的是：在某类重复任务中，一次委托能否比用户自己操作更省心，同时不削弱知情、选择与撤回的能力。减少点击只是手段；把出错后的协调工作重新交还用户，不能算自动化成功。</p>
+<p>对独立开发者，最有价值的切口不是搭建另一位全能助手，而是找出一个边界明确、结果可检查、失败可恢复的小任务。先证明一个人愿意反复交付同一类工作，再考虑更多渠道、更多权限和更广的商业网络。</p>
+</div>
+<p class="pullquote">成功不是用户交出了多少权限，<br/>而是用户少承担了多少不必要的工作。</p>
+<p class="prose">本稿用三道检验约束乐观叙事：用户是否知道下一步会发生什么；任务失败时能否恢复到安全状态；每次成功服务能否支撑它消耗的资源。任何一道不成立，都足以让“看起来聪明”与“值得托付”分离。</p>
+</section>
+<section aria-labelledby="identity">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">02</span>
+<h2 id="identity">公司身份与融资：先确认名词，再解释规模</h2>
+</div>
+<div class="prose">
+<p>隐私政策列明法律主体为 <span lang="en">Spear Street Technology, Inc. d/b/a Instinct</span>；Colossus 节目介绍确认 Noah Shinn 为创始人。法律实体、产品品牌与个人经历应分别核对。<a class="cite" href="#src-2">[2]</a> <a class="cite" href="#src-3">[3]</a></p>
+</div>
+<dl class="stats">
+<div>
+<dt>2026-09-28 公司公告 · Series C</dt>
+<dd>10 亿美元 <a class="cite" href="#src-4">[4]</a></dd>
+</div>
+<div>
+<dt>同一公告标题中的估值</dt>
+<dd>100 亿美元 <a class="cite" href="#src-4">[4]</a></dd>
+</div>
+</dl>
+<div class="prose">
+<p>公告列出的投资方为 Sequoia Capital、Benchmark Capital 和 Coatue。这是公司经 Business Wire 发布的融资消息，不是经审计财务报表；本文不自行补充投前或投后口径、历轮累计融资与其他交易条款。<a class="cite" href="#src-4">[4]</a> 媒体亦报道同次融资。<a class="cite" href="#src-10">[10]</a></p>
+<p>Shinn 的个人网站更新于 2025 年 8 月，列有 Sierra 早期研究工作、东北大学的类型预测与代码生成研究，以及第一作者论文 Reflexion（NeurIPS 2023）、共同作者论文 τ-bench（ICLR 2025）。这些材料说明研究背景，不证明 Instinct 使用同一方法。<a class="cite" href="#src-5">[5]</a></p>
+<p>分析上，资本可以购买算力承诺、容错空间与开发时间，却不能代替留存质量和可持续收入。反过来，“小团队”也不等于低成本：外包、供应商和基础设施可能承接大量工作。不能拿未核实的人数直接计算惊人的人均收入。</p>
+</div>
+</section>
+<section aria-labelledby="ledger">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">03</span>
+<h2 id="ledger">逐项证据账本：数字必须带着口径出现</h2>
+</div>
+<p class="prose">“有公开出处”与“已经独立证实”不是同一件事。下表的 U 指用户提供的中文评论要点；访谈时间仅定位公开章节，不能冒充逐句听核。AI 整理字幕与同场访谈也不能算两份独立证据。</p>
+<dl class="evidence-key">
+<div>
+<dt><span class="badge primary">原始资料</span></dt>
+<dd>确认页面、条款或公告写了什么；不代表审计背书。</dd>
+</div>
+<div>
+<dt><span class="badge claim">自述／转述</span></dt>
+<dd>创始人或评论中的陈述，仍需样本、周期与定义。</dd>
+</div>
+<div>
+<dt><span class="badge analysis">分析推演</span></dt>
+<dd>本文提出的解释、模型与可证伪假设。</dd>
+</div>
+<div>
+<dt><span class="badge">未知／待核</span></dt>
+<dd>证据不足，暂不填补，不把缺失改写成否定。</dd>
+</div>
+</dl>
+<p class="table-help" id="ledger-help">窄屏可横向滚动；键盘用户可聚焦表格区域后使用方向键。</p>
+<div aria-describedby="ledger-help" aria-labelledby="ledger-caption" class="table-wrap" role="region" tabindex="0">
+<table>
+<caption id="ledger-caption">核心主张、证据归属与禁止跨越的推论</caption>
+<thead>
+<tr>
+<th scope="col">评论中的主张</th>
+<th scope="col">证据与定位</th>
+<th scope="col">本稿采用的边界</th>
+<th scope="col">下一步需要什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">团队只有 14 人</th>
+<td><span class="badge claim">评论待核</span> <a href="#src-u">[U]</a></td>
+<td>不是已核实的员工总数，不代表全部生产投入。</td>
+<td>统计日期、雇员／承包商口径。</td>
+</tr>
+<tr>
+<th scope="row">营销支出为零</th>
+<td><span class="badge claim">自述转述</span> <a href="#src-u">[U]</a> · <a href="#time-5003">50:03</a></td>
+<td>不等于获客成本为零。</td>
+<td>邀请、媒体、人员时间与补贴的成本归属。</td>
+</tr>
+<tr>
+<th scope="row">每天增长 10%</th>
+<td><span class="badge claim">阶段性自述</span> <a href="#src-u">[U]</a> · <a href="#time-5003">50:03</a></td>
+<td>基数、样本、指标与持续窗口未知；不得永久外推。</td>
+<td>逐日序列、分母及新增／活跃定义。</td>
+</tr>
+<tr>
+<th scope="row">接近 10 亿美元／年交易流量</th>
+<td><span class="badge claim">字幕转述</span> <a href="#src-6">[6]</a> · <a href="#time-1723">17:23</a></td>
+<td>不是历史已入账收入；年化与过去十二个月口径未确认。旅行约占一半亦为自述。 <a class="cite" href="#src-u">[U]</a></td>
+<td>统计周期、成交确认、取消与退款处理。</td>
+</tr>
+<tr>
+<th scope="row">融资 10 亿、估值 100 亿美元</th>
+<td><span class="badge primary">公司公告</span> <a href="#src-4">[4]</a></td>
+<td>支持公告口径，不补写投后估值或已审计经营表现。</td>
+<td>交易条款与正式披露。</td>
+</tr>
+<tr>
+<th scope="row">不需要一个新 App</th>
+<td><span class="badge primary">定位需限定</span> <a href="#src-1">[1]</a> <a href="#src-2">[2]</a></td>
+<td>低学习成本的交互定位；不能写成绝对没有应用或网站。</td>
+<td>各入口、系统与权限的实际可用性。</td>
+</tr>
+<tr>
+<th scope="row">三周内 40% 提供信用卡</th>
+<td><span class="badge claim">自述转述</span> <a href="#src-u">[U]</a> <a href="#src-6">[6]</a> · <a href="#time-2100">21:00</a></td>
+<td>不是安全认证，也不是推荐追逐的权限转化指标。</td>
+<td>进入队列条件、分母与观察起点。</td>
+</tr>
+<tr>
+<th scope="row">敏感信息连接者约 80% 留存</th>
+<td><span class="badge claim">自述转述</span> <a href="#src-u">[U]</a> <a href="#src-6">[6]</a></td>
+<td>观察窗口和队列不明，且存在选择偏差；不能证明授权导致留存。</td>
+<td>全体新用户的同期留存曲线。</td>
+</tr>
+<tr>
+<th scope="row">数月里只主动来电三次</th>
+<td><span class="badge claim">个人轶事</span> <a href="#src-u">[U]</a></td>
+<td>不能推导所有用户的平均打扰频率。</td>
+<td>来电触发、有效提醒与遗漏率。</td>
+</tr>
+<tr>
+<th scope="row">可理解性优先，重点放消息前面</th>
+<td><span class="badge claim">设计主张</span> <a href="#src-u">[U]</a> · <a href="#time-4443">44:43</a></td>
+<td>不是已经证明的增长因果关系。</td>
+<td>理解正确率、误批准率与完成时间。</td>
+</tr>
+<tr>
+<th scope="row">向商家收佣而非卖广告</th>
+<td><span class="badge claim">商业设想</span> <a href="#src-u">[U]</a> · <a href="#time-3107">31:07</a></td>
+<td>当前完整收费表、有效抽成和单位贡献未知。</td>
+<td>合同覆盖、返佣、退款与服务成本。</td>
+</tr>
+<tr>
+<th scope="row">注意力平台受损，服务商受益</th>
+<td><span class="badge analysis">条件性假说</span> <a href="#src-u">[U]</a></td>
+<td>不能忽略平台政策、履约能力、价格竞争与需求弹性。</td>
+<td>净新增需求及各方贡献的对照实验。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="prose">最重要的修正是分开三个量：<strong>交易额不等于收入，收入不等于利润。</strong>“接近每年某个规模”可能是在描述当下速度的年化推算，但计算方法未披露，不能直接写成过去一年已完成的业绩。</p>
+<div class="note"><p>中文评论说“突破 10 亿美元”，第三方字幕表述为“接近”；这里保留更谨慎的近似规模及自述归属，不把二者的差异抹平。全套原始统计没有取得。融资公告与媒体转载支持同一发布事件，也不构成两次独立财务审计。 <a class="cite" href="#src-u">[U]</a> <a class="cite" href="#src-6">[6]</a></p></div></section>
+<section aria-labelledby="journey">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">04</span>
+<h2 id="journey">使用旅程：从一句话，到一份可核对的回执</h2>
+</div>
+<div class="prose">
+<p>官网将 Instinct 描述为连接邮件、消息、屏幕、音频和位置的个人助手：用户通过文字或电话沟通，助手用自己的手机与电脑执行任务；核心模型面向生活语境，可主动提醒并安排服务。这是产品自述，而非本稿验收结论。<a class="cite" href="#src-1">[1]</a></p>
+<p>公告还列出 Concierge 电话与高接触预订服务、Trusted Person Network 的计划及文件协同，以及 iMessage 位置共享；产品仍处于早期访问阶段。功能发布并不自动证明所有账户、地区和任务都能使用。<a class="cite" href="#src-4">[4]</a></p>
+</div>
+<div class="journey">
+<h3>示意任务：整理一次外地会议行程</h3>
+<p class="small">分析者构造的旅程；非真实订单、非产品测试，亦非功能承诺。</p>
+<ol>
+<li><strong>表达目标：</strong>“周四上午要到会场，请整理往返方案，先不要预订。”只提供本次会议需要的信息。</li>
+<li><strong>展示计划：</strong>先写推荐方案、到达限制和待确认事项，再给备选；明确“尚未下单”，缺失信息不靠猜测补齐。</li>
+<li><strong>明确批准：</strong>任何实际预订都另行确认对象、时间、费用与取消条件；只有供应商回执可支持“已完成”，超时则报告未决状态。</li>
+</ol>
+</div>
+<p class="prose">这个旅程的难点不是生成行程，而是处理变更：会议时间改了、回复晚到了、供应商没有接受请求，都可能让先前计划失效。运营应记录“成功且可核对的任务比例”、人工接管次数及端到端耗时。如果用户核查助手的时间超过自己办理，界面再流畅也没有证明价值。</p>
+</section>
+<section aria-labelledby="principles">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">05</span>
+<h2 id="principles">四个反直觉原则，都需要反证条件</h2>
+</div>
+<p class="prose">以下把评论中的设计方向改写成可测试的产品原则，而不是把创始人的偏好包装成普遍规律。对应访谈章节为“可理解性”讨论。<a class="cite" href="#src-u">[U]</a> <a class="cite" href="#time-4443">[44:43]</a></p>
+<div class="principles">
+<div class="principle">
+<h3>一｜先让人知道会发生什么，再展示能做多少</h3>
+<p>好处是降低委托前的解释成本；反面是过度简化可能遮住风险。消息先给结论与状态，再给行动请求，最后补理由。“尚未预订，需要确认日期”比长篇铺垫更可操作，但费用、对象和不可逆后果不能藏到末尾。测试应看用户能否准确复述下一步；若短消息提高了误批准率，简短就不是成功。</p>
+</div>
+<div class="principle">
+<h3>二｜借用已有渠道，不把“去 App”当信仰</h3>
+<p>熟悉的消息入口可能减少学习阻力，却不天然适合复杂权限、历史回溯和并行任务。合理方案是让对话负责发起与确认，让清晰的记录页负责检查。比较时应看中断后能否找回任务、渠道切换是否丢失状态。若追问轮数与误认任务增加，减少界面可能只是把复杂性塞进聊天记录。</p>
+</div>
+<div class="principle">
+<h3>三｜允许授权慢慢发生，不追逐权限转化</h3>
+<p>渐进授权把选择权留给用户，也可能限制初期自动化能力。产品应先用最少信息完成一件小事，遇到真实需求才解释额外权限。考察只读模式的完成率与拒绝授权后的可用性。若只有交出大量敏感信息才看见一点价值，所谓信任阶梯可能只是被拉长的强制开通流程。</p>
+</div>
+<div class="principle">
+<h3>四｜主动但克制，不把打扰当作活跃</h3>
+<p>主动提醒的价值在于避免遗漏，而不是制造打开次数。前述来电轶事只提供设计灵感，不提供通用频率标准。应让用户设定重要性与安静时段，同时记录有效提醒和错过关键事件的比例。如果少打电话却漏掉真正需要处理的事情，克制就退化成了失职；反之，频繁“贴心”也可能只是噪声。</p>
+</div>
+</div>
+<div class="note"><p>评论中的“第一行读 80%、第二行读 50%”和“重点放前 30%”，在本次资料里没有相应实验依据，应视为设计启发，不能当作通用心理学定律。可用用户复述、扫读理解和误批准率检验消息布局。所谓 feel good 也要拆成少返工、少打扰、可预期，而不只是访谈中的审美评价。<a class="cite" href="#src-u">[U]</a></p></div></section>
+<section aria-labelledby="trust">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">06</span>
+<h2 id="trust">信任是结果，不能用敏感信息替代测量</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">分析推演 · 因果关系未建立</span></p>
+<div class="prose">
+<p>上表两项“信任数字”来自自述及转述，不能据此推荐索取信用卡，更不能将敏感连接者的留存推广到全部用户。把连接行为当成信任的代理指标，还会漏掉那些满意却始终不愿交出敏感数据的人。<a class="cite" href="#src-u">[U]</a> <a class="cite" href="#src-6">[6]</a></p>
+<p>至少存在两条替代解释：需求本来更强的人，更容易同时留下来并授予权限；也可能是先获得了数周良好体验，才决定连接资料。此时授权是结果的一部分，而非留存的原因。只研究已经走到高权限阶段的人，还会遗漏早期退出者。</p>
+<p>更健康的信任阶梯应是：看懂计划、复核草稿、批准一次动作、按边界重复授权、随时收回。这是本文建议的设计顺序，不是对 Instinct 内部流程的描述。每一步都应可以停住，而不是默认自动升级。</p>
+<p>测量上，应按首次使用周建立全体新用户队列，定义第七、第三十和第六十天的重复任务完成率，并只比较观察期已足够长的队列。敏感连接只能作为描述性分组，还要控制任务种类、使用强度与加入渠道。可以测试不同解释方式，但不应以诱导更多授权为实验目标。</p>
+</div>
+<p class="note"><strong>反证：</strong>当两组完成的是同类任务，低权限路径提供同样价值且留存相当，“收集更多信息才能建立信任”的解释就应被削弱。</p>
+</section>
+<section aria-labelledby="architecture">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">07</span>
+<h2 id="architecture">一个可讨论的技术分层，而非专有蓝图</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">分析者架构模型 · 非 Instinct 实现披露</span></p>
+<p class="prose">从产品要求倒推，可以把系统拆成六层。这样做的目的不是猜测公司用了哪些模型，而是让独立开发者知道：哪些责任不应该交给同一次语言模型生成。</p>
+<dl class="architecture">
+<div>
+<dt>01 / 入口与身份</dt>
+<dd>把消息归到正确用户和任务；收到消息不等于取得执行授权。</dd>
+</div>
+<div>
+<dt>02 / 目标与状态</dt>
+<dd>记录期限、限制、待确认项及取消状态，避免依靠聊天记忆维持流程。</dd>
+</div>
+<div>
+<dt>03 / 有来源的上下文</dt>
+<dd>偏好注明来源、有效期和可用范围；过期信息先复核，不悄悄当成事实。</dd>
+</div>
+<div>
+<dt>04 / 计划与工具选择</dt>
+<dd>把复杂目标拆成可检查动作；不确定时退回澄清，不无限循环尝试。</dd>
+</div>
+<div>
+<dt>05 / 独立许可检查</dt>
+<dd>在执行前核对权限、对象与额度边界；外部网页的文字不能替用户批准。</dd>
+</div>
+<div>
+<dt>06 / 回执与恢复</dt>
+<dd>保存任务标识和外部回执，防止重试造成重复操作，并提供停止与接管路径。</dd>
+</div>
+</dl>
+<div class="prose">
+<p>公司公告声称采用隔离沙箱、短时凭证、签名工具执行和 “<span lang="en">active detective</span>” 检错机制。这里记录的是发布方的安全主张，不是独立安全验证；公开材料未给本稿提供可复现的覆盖率。<a class="cite" href="#src-4">[4]</a></p>
+<p>工程验收不应只统计“工具调用成功”。应逐层记录误授权、重复执行、超时恢复与人工接管，并把最终回执纳入成功条件。模拟测试要覆盖含糊日期、过期授权、供应商未回复等情况；一旦越权，先暂停流程，而不是依赖更长的提示词补救。接入方式也不应绕过服务方限制。</p>
+</div>
+<div class="prose"><h3>论文背景：可靠行动比一次漂亮回答更难</h3><p>Reflexion 研究用语言反馈和情节记忆改善后续尝试，核心方法无需更新模型权重；τ-bench 把用户对话、工具和领域规则放进同一环境，检验最终状态及多次运行的一致性。两篇原始论文帮助理解 Shinn 的研究脉络，但不能证明 Instinct 的私有技术栈采用了这些方法，早期基准得分也不等于今天产品能力。<a class="cite" href="#src-8">[8]</a> <a class="cite" href="#src-9">[9]</a></p></div></section>
+<section aria-labelledby="privacy">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">08</span>
+<h2 id="privacy">产品越像“无界面”，数据边界越要可见</h2>
+</div>
+<div class="note warning">
+<p><strong>条款快照，不是安全认证。</strong>2026 年 8 月 26 日修订的政策覆盖网站及相关 Mac OS、移动应用。非 Workspace 的共享内容可能用于模型评估、微调与训练；网页列出退出训练设置，但只对今后适用，存在安全审查例外，先前训练的模型仍可使用。直接来自 Google Workspace 的数据被明确排除于模型训练等用途；断开集成不会自动删除已索引数据。<a class="cite" href="#src-2">[2]</a></p>
+</div>
+<div class="prose">
+
+<p>对开发者，更实用的启示是把控制放到任务旁边：本次用了什么资料、为何需要、授权何时失效、撤销之后还剩什么。不要用一句“你始终掌控数据”代替这些可检查的状态。手动转发的内容是否保留原来源限制，仍需要单独确认。</p>
+<p>消费者的便利与雇主、客户的资料治理也要分开。个人愿意分享，不等于适合把工作材料交给第三方处理。受控试点应先用合成资料与获准字段；真实工作流再核对组织准入、保留要求和退出流程。以上是产品审查问题，不是对条款作扩张性法律解释。</p>
+</div>
+<div class="prose"><h3>愿景与现行合同，需要分开阅读</h3><p>2026-08-26 修订的服务条款保留部分功能收费、调整价格的可能。因此，采访中的“用户免费”不是永久免费的保证。条款还提示动作可能出错或无法撤销，保障措施不能保证阻止全部错误；用户需确保连接服务上的操作得到许可。<a class="cite" href="#src-7">[7]</a></p><p>条款第 6 节列有个人使用许可，前言也涉及代表公司或实体接受条款的情形。团队采购应核对适用范围与书面约定，不能由协作演示推出企业准入已经满足，也不能仅据一条许可直接判定企业使用违法。这里只说明原文边界，不作合同效力判断。<a class="cite" href="#src-7">[7]</a></p></div></section>
+<section aria-labelledby="growth">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">09</span>
+<h2 id="growth">增长的另一面，是服务供给能否跟上</h2>
+</div>
+<p class="prose">评论中的日增速需要先保留为阶段性自述。其基数、样本、增长对象和持续窗口尚不明确；下面只是将“每天增加 10%”代入复利公式，不是公司预测。<a class="cite" href="#src-u">[U]</a> <a class="cite" href="#time-5003">[50:03]</a></p>
+<div aria-label="百分之十日增长的纯数学结果" class="math-strip" role="group">
+<div><strong>1.95×</strong><span>七天后：1.1 的七次方</span></div>
+<div><strong>7.27 天</strong><span>翻倍：ln(2) ÷ ln(1.1)</span></div>
+<div><strong>17.45×</strong><span>三十天后：1.1 的三十次方</span></div>
+</div>
+<div class="prose">
+<p>“零营销支出”同样不能推出零获客成本。邀请管理、创始人的媒体曝光与时间、推荐激励、免费服务的算力补贴，都可能进入完整获客成本。应比较每个来源带来的持续任务量，而不是只看新增账户；邀请稀缺本身也可能影响早期样本。</p>
+<p>第三方字幕整理还转述：算力需提前数月安排，相关问题占据创始人约四成注意力。它说明一个值得检验的容量压力方向，并非本稿掌握了采购合同或真实成本曲线。<a class="cite" href="#src-6">[6]</a> <a class="cite" href="#time-5446">[54:46]</a></p>
+<p>建议用“活跃人数 × 每人任务数 × 每任务调用及重试量，加后台负载”建立容量模型，而不是让注册增速机械等于算力增速。紧急请求与可延迟任务可分队列处理；缓存、批处理及模型分级都要在质量不退化的条件下评价。</p>
+<p>关键指标是排队积压、第九十五百分位延迟、每次成功任务成本与人工接管率。若开放邀请后复用下降，而单位成功成本持续上升，增长就可能是在放大补贴与履约负担，而不是证明可扩张性。</p>
+</div>
+</section>
+<section aria-labelledby="commerce">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">10</span>
+<h2 id="commerce">不卖广告，不代表没有利益冲突</h2>
+</div>
+<p class="prose">“用户免费、商家支付佣金”应被理解为评论中的商业设想，而非已核实的现行完整价目表。Apple Pay 的类比描述的是入口与分发逻辑，不能推导相同的费率、清算结构或责任分配。<a class="cite" href="#src-u">[U]</a> <a class="cite" href="#time-3107">[31:07]</a></p>
+<p class="flow">
+<strong>意图</strong> → 助手比较与协调 → 服务商履约 → 符合合同的交易产生佣金<br/>
+<span class="small">并非所有经过助手的交易都可计佣；任务成功也不一定产生交易。</span>
+</p>
+<div class="prose">
+<p>商业模型必须分开交易流、收入流与融资现金。下节只将可计佣交易额乘假设佣金率定义为模拟收入，不替公司判断实际收入确认方式。退款、归因争议、未签约商家和不涉及购买的日历任务，都可能影响变现覆盖。</p>
+<p>若助手因成交获利，它可能偏向更高佣金的供应商，或者更频繁建议购买；这与“最符合用户利益”并不必然一致。真正的对齐需要允许推荐不购买，展示不付佣金的可行选项，并把商业关系与推荐理由分开说明。</p>
+<p>运营应检查佣金差异是否改变排序、退款后收入是否冲回，以及用户最终付出的价格和时间。反证也很直接：当更便宜、更合适的未签约选项被系统性排除，“无广告所以中立”的推论就不能成立。对窄场景开发者，透明的订阅或按次收费也值得比较，不必先假设能够获得商家分发费。</p>
+</div>
+<div class="note"><p>合同中的交易角色也与 Apple Pay 类比不同：服务条款第 3 节将相关购买描述为用户与外部服务商之间的交易，声明 Instinct 不处理该次购买的支付、不是买卖双方或交易当事方；条款也涉及代用户订立承诺的授权。它提供的是交易协助，并非承诺替用户承担全部履约责任。<a class="cite" href="#src-7">[7]</a></p></div></section>
+<section aria-labelledby="economics">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">11</span>
+<h2 id="economics">单位经济：先让覆盖率进入公式</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">纯假设计算器 · 非公司财务数据</span></p>
+<p class="prose">下列默认值仅供演示。即使交易额与某项自述规模相似，也不表示 Instinct 实现了这些收入、成本或费率。金额统一为<strong>百万美元／年</strong>；贡献不是净利润，亦不用于推算估值倍数。</p>
+<div aria-label="交易佣金与年度贡献情景计算器" class="calculator" role="region">
+<fieldset disabled="" id="calc-controls">
+<legend>四个可调整假设</legend>
+<div class="control-grid">
+<div class="control">
+<label for="gmv">年度交易额 GMV</label>
+<span class="control-value"><output aria-live="off" for="gmv" id="gmv-value">1,000</output> 百万美元</span>
+<input aria-describedby="gmv-help" aria-valuetext="1,000 百万美元" id="gmv" max="5000" min="0" step="10" type="range" value="1000"/>
+<p id="gmv-help">范围 0—5,000；步长 10。表示交易流量，不是助手收入。</p>
+</div>
+<div class="control">
+<label for="coverage">可计佣交易覆盖率</label>
+<span class="control-value"><output aria-live="off" for="coverage" id="coverage-value">50</output>%</span>
+<input aria-describedby="coverage-help" aria-valuetext="50%" id="coverage" max="100" min="0" step="1" type="range" value="50"/>
+<p id="coverage-help">范围 0—100%；步长 1。符合假设计佣条件的交易比例，不是旅行占比。</p>
+</div>
+<div class="control">
+<label for="take">可计佣部分的佣金率</label>
+<span class="control-value"><output aria-live="off" for="take" id="take-value">3.0</output>%</span>
+<input aria-describedby="take-help" aria-valuetext="3.0%" id="take" max="20" min="0" step="0.1" type="range" value="3"/>
+<p id="take-help">范围 0—20%；步长 0.1。仅作用于可计佣交易额，不是实际报价。</p>
+</div>
+<div class="control">
+<label for="cost">年度可变成本</label>
+<span class="control-value"><output aria-live="off" for="cost" id="cost-value">20</output> 百万美元</span>
+<input aria-describedby="cost-help" aria-valuetext="20 百万美元" id="cost" max="200" min="0" step="1" type="range" value="20"/>
+<p id="cost-help">范围 0—200；步长 1。自行假设的服务成本总额，不是已知支出。</p>
+</div>
+</div>
+<div class="calc-actions">
+<button id="calc-reset" type="button">恢复演示默认值</button>
+<span class="small">方向键微调；Home / End 到达边界。</span>
+</div>
+</fieldset>
+<p class="small" id="calc-mode">当前为静态基准；启用 JavaScript 后可调整。输入不上传、不保存，刷新后不保证保留。</p>
+<noscript>
+<p class="note">JavaScript 未启用。控件保持禁用；默认结果、公式与下方敏感性表仍可直接阅读。</p>
+</noscript>
+<div class="formula">
+<p>模拟收入 = GMV × 覆盖率 × 佣金率<br/>模拟贡献 = 模拟收入 − 年度可变成本</p>
+<p class="small">金额显示保留两位小数；极小值可能显示为零，盈亏判断使用未舍入值。</p>
+</div>
+<dl class="calc-results">
+<div>
+<dt>模拟年度佣金收入 · 百万美元</dt>
+<dd id="calc-revenue">15.00</dd>
+</div>
+<div>
+<dt>模拟年度贡献 · 百万美元</dt>
+<dd class="negative" id="calc-contribution">−5.00</dd>
+</div>
+</dl>
+<p class="small" id="calc-equation">1,000 × 50% × 3.0% = 15.00；15.00 − 20 = −5.00（百万美元）。</p>
+<p id="calc-outcome"><strong>尚未覆盖假设可变成本。</strong>固定费用等项目仍未计入。</p>
+<p class="break-even" id="calc-break-even">保持其他参数不变，收支相抵需要佣金率 4.00%，或可计佣覆盖率 66.67%。两者是分别改变一个变量的条件。</p>
+<p aria-atomic="true" aria-live="polite" class="sr-only" id="calc-announcement" role="status"></p>
+</div>
+<p class="prose">模型未计固定团队与研发、资本投入、融资费用、税费以及额外退款拒付和赔付。人工履约、支付处理等费用只有被放入可变成本假设时才算覆盖，不能默认全部已包含。覆盖率与佣金率还可能互相牵制：更高收费可能降低商家参与度。这仍是年度汇总；真正的单位经济还需按成功任务数及任务类型拆分。</p>
+<div aria-labelledby="sensitivity-caption" class="table-wrap" role="region" tabindex="0">
+<table class="compact-table">
+<caption id="sensitivity-caption">静态敏感性：GMV 1,000、佣金率 3%、可变成本 20；金额为百万美元／年，不随控件改变</caption>
+<thead>
+<tr>
+<th scope="col">假设覆盖率</th>
+<th scope="col">模拟收入</th>
+<th scope="col">模拟贡献</th>
+<th scope="col">读法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">30%</th>
+<td>9</td>
+<td>−11</td>
+<td>交易规模不能弥补覆盖不足。</td>
+</tr>
+<tr>
+<th scope="row">50% · 默认</th>
+<td>15</td>
+<td>−5</td>
+<td>尚未覆盖可变成本。</td>
+</tr>
+<tr>
+<th scope="row">80%</th>
+<td>24</td>
+<td>+4</td>
+<td>贡献转正，仍不等于净盈利。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section aria-labelledby="markets">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">12</span>
+<h2 id="markets">注意力与服务市场：不是简单的输赢分组</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">条件性市场推演</span></p>
+<div class="prose">
+<p>评论提出，助手可能压缩依赖用户浏览的注意力生意，并帮助实际提供服务的商家。合理的机制是减少比较与协调摩擦，但结果取决于新需求是否真的出现，而非原有交易仅换了一个入口。<a class="cite" href="#src-u">[U]</a></p>
+<p>注意力平台可能损失展示机会，也可能保留发现、品牌与接入控制；服务商可能获得订单，却要承担佣金、履约压力和更透明的价格竞争。库存有限、需求缺乏弹性或平台限制接入时，成交便利并不保证商家利润增加。</p>
+<p>消费者应比较省下的时间、最终价格与自主选择；商家应看扣除佣金及退款后的净增量贡献；平台应分开流量损失与新的服务收入。雇主和客户工作流则要另看责任可追溯、数据权限与业务连续性，不能用消费场景的方便替代企业验收。</p>
+<p>比较产品时，优先比较下列原型。评论中的 Grok Bot、Muse、Pi Agent，以及“Amazon 封锁 Meta Muse”的说法，其身份、版本或事件均未在本次证据集中独立确认，不纳入事实性竞品排名。<a class="cite" href="#src-u">[U]</a></p>
+</div>
+<div aria-labelledby="archetype-caption" class="table-wrap" role="region" tabindex="0">
+<table>
+
+<thead>
+<tr>
+<th scope="col">原型</th>
+<th scope="col">优先优化什么</th>
+<th scope="col">主要代价</th>
+<th scope="col">应比较的结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">对话建议助手</th>
+<td>解释与方案生成。</td>
+<td>用户仍承担实际执行。</td>
+<td>决策质量与后续人工时间。</td>
+</tr>
+<tr>
+<th scope="row">垂直任务助手</th>
+<td>一个边界明确的闭环。</td>
+<td>任务范围有限。</td>
+<td>同类任务完成率、恢复成本。</td>
+</tr>
+<tr>
+<th scope="row">系统级助手</th>
+<td>设备入口与系统上下文。</td>
+<td>生态边界及权限约束。</td>
+<td>跨设备连续性、授权可见性。</td>
+</tr>
+<tr>
+<th scope="row">跨服务个人代理</th>
+<td>跨供应商协调。</td>
+<td>异常状态与利益冲突增多。</td>
+<td>端到端回执、净节时、真实总成本。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="prose">检验市场影响时，应设置可比用户组，追踪总交易变化、取消率和商家总贡献，并剔除从原渠道迁移的订单。把“经代理归因”直接当作“代理创造”，会高估分发价值。</p>
+</section>
+<section aria-labelledby="moat">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">13</span>
+<h2 id="moat">壁垒可能来自复用，弱点也来自依赖</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">待验证的竞争优势</span></p>
+<div class="prose">
+<p>个人代理的壁垒不宜被概括为“知道用户越多越强”。更有价值的资产可能是：在获得授权的范围内减少重复确认，知道常见任务如何失败，并能稳定恢复。它积累的是可靠服务经验，而不仅是数据体积。</p>
+<p>多方协调也只有在参与者真能减少往返沟通时，才可能形成网络价值。连接数量并不能直接证明网络效应；共享边界模糊、跨组织协作受阻或参与者可轻易使用多个助手，都可能限制这种优势。</p>
+</div>
+<div aria-labelledby="moat-caption" class="table-wrap" role="region" tabindex="0">
+<table>
+<caption id="moat-caption">资产、脆弱点与诊断方法</caption>
+<thead>
+<tr>
+<th scope="col">潜在资产</th>
+<th scope="col">积累机制</th>
+<th scope="col">脆弱点</th>
+<th scope="col">诊断指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">长期任务记忆</th>
+<td>减少重复解释。</td>
+<td>偏好过期；记忆可迁移。</td>
+<td>纠错率与实际减少的追问。</td>
+</tr>
+<tr>
+<th scope="row">可靠执行经验</th>
+<td>覆盖异常与恢复路径。</td>
+<td>接口变化；底层模型进步。</td>
+<td>相同权限下的完成率、恢复成本。</td>
+</tr>
+<tr>
+<th scope="row">服务商关系</th>
+<td>改善覆盖与履约。</td>
+<td>平台限制；佣金挤压。</td>
+<td>非独家条件下的净增量价值。</td>
+</tr>
+<tr>
+<th scope="row">用户托付习惯</th>
+<td>连续可靠结果降低顾虑。</td>
+<td>一次越权；系统入口竞争。</td>
+<td>可自由退出时的持续复用。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="prose">反证门槛应公平：给通用替代方案同样的任务、权限和人工支持，再比较成本与完成率。差距消失时，所谓壁垒可能只是早期高密度服务。允许导出与退出并不削弱真正的价值；用户能够离开仍选择回来，才比数据被锁住更有说服力。</p>
+</section>
+<section aria-labelledby="pilot">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">14</span>
+<h2 id="pilot">独立开发者的十四天：只验证一个小闭环</h2>
+</div>
+<p class="section-tag"><span class="badge analysis">建议试点 · 所有门槛均为事先假设</span></p>
+<div class="prose">
+<p>一个合适的起点是<strong>只读日历／预约协调助手</strong>：输入脱敏空闲时段和会议限制，产出候选时间及邀请草稿。首轮不接管账号，不索取密码或银行卡，不处理支付；用户明确批准内容后自行发送。未来增加写入，也必须逐次确认对象、日期、时区和具体动作。</p>
+<p>把试点限制在五名知情同意的测试者、最多二十个低风险预约任务。先用合成日历验证冲突与时区，再允许使用获准的最少字段。每个任务最多两次自动重试；总调用预算在开跑前锁定。不要让验证一个小需求演变成持续监控用户生活。</p>
+</div>
+<div aria-labelledby="pilot-caption" class="table-wrap" role="region" tabindex="0">
+<table>
+<caption id="pilot-caption">十四天受控试点计划；不是已发生的测试结果</caption>
+<thead>
+<tr>
+<th scope="col">阶段</th>
+<th scope="col">交付物</th>
+<th scope="col">权限边界</th>
+<th scope="col">退出检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">第 1—3 天</th>
+<td>人工基线、任务定义、异常样例。</td>
+<td>仅合成资料。</td>
+<td>能明确判断成功、失败与未决。</td>
+</tr>
+<tr>
+<th scope="row">第 4—6 天</th>
+<td>候选时段、草稿、解释和撤销入口。</td>
+<td>只读；不发送、不写入。</td>
+<td>过期资料与含糊时区触发复核。</td>
+</tr>
+<tr>
+<th scope="row">第 7—10 天</th>
+<td>受控使用及人工确认日志。</td>
+<td>逐项批准后，由用户手动发出。</td>
+<td>每项任务都有最终状态与来源。</td>
+</tr>
+<tr>
+<th scope="row">第 11—14 天</th>
+<td>与人工基线比较、删除样本、复盘。</td>
+<td>停止读取，检查撤销效果。</td>
+<td>是否继续由完成结果决定，而非授权率。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="prose">
+<p>成功应定义为预约被双方确认，而不是生成了一段文字或拿到了权限。记录用户与助手加总的处理时间，防止把模型节省的时间转化为用户的检查负担。失败案例必须区分信息不足、模型判断错误、外部未回复与用户主动取消。</p>
+<p>可以预设门槛：至少八成任务在约定期限内完成，返工比例不超过一成，总处理时长中位数比人工基线减少三成，且没有越权行为。这些是试点目标，不是公司指标；二十个任务也不足以证明普遍安全或统计显著性。</p>
+<p>出现未经批准的发送、跨用户资料混淆或撤销失效，应立即暂停并检查授权与数据边界。若节时没有超过确认负担，就缩小场景或停止，而不是先增加权限。商业验证也应问用户愿为何种完成结果付费，不把商家佣金当作免费服务必然成立的前提。</p>
+</div>
+</section>
+<section aria-labelledby="unknowns">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">15</span>
+<h2 id="unknowns">需要继续追问的，不止是一个用户数</h2>
+</div>
+<div class="prose">
+<h3>经济口径：交易流里，究竟哪部分能留下收入？</h3>
+<p>需要明确交易量的年化与历史口径、退款后的有效成交、佣金合同覆盖及人工服务成本。当前资料不足以填写实际收入、净利润、完整收费表或单位贡献，也不能据此判断估值是否合理。</p>
+<h3>产品与安全：演示以外，异常由谁承担？</h3>
+
+<h3>增长与组织：样本是谁，成本由谁承担？</h3>
+<p>需要队列留存、来源结构、容量限制变化和人员统计口径。本文不补造成立日期、创始人年龄、联合创始人、团队名单、总用户数或私有指标；不清楚的部分保持空白。</p>
+<p>最能改变结论的新证据，是可比队列的持续任务完成率、可核对的净收入与成本定义，以及覆盖真实失败路径的验证。更多同源访谈剪辑不会自动增加独立支持；没有证据，也不等于断言相关能力不存在。</p>
+</div>
+</section>
+<section aria-labelledby="sources">
+<div class="section-heading">
+<span aria-hidden="true" class="section-number">16</span>
+<h2 id="sources">来源覆盖、验证边界与交接状态</h2>
+</div>
+<p class="prose">以下链接只在主动点击时离开本页；本页不加载远程资源。资料访问快照统一为 2026 年 10 月 2 日。公司网页用于定位主张，条款用于定位承诺，访谈用于定位观点，分析模型不冒充任何一方披露。</p>
+<ol class="sources">
+<li id="src-1">
+<a class="source-title" href="https://instinct.com/" rel="noreferrer noopener">[1] Instinct 官网</a>
+<p class="source-detail">原始产品自述。覆盖定位与交互方向；不支持实际完成率或所有渠道的可用性。</p>
+</li>
+<li id="src-2">
+<a class="source-title" href="https://instinct.com/privacy-policy" rel="noreferrer noopener">[2] Instinct · Privacy Policy</a>
+
+</li>
+<li id="src-3">
+<a class="source-title" href="https://colossus.com/episode/instinct-the-personal-agent/" rel="noreferrer noopener">[3] Colossus · Instinct: The Personal Agent · 第 493 期</a>
+<p class="source-detail">2026-09-28，主持人 Patrick O’Shaughnessy。已核对公开说明及章节；完整逐字稿需登录，本稿未完整收听音频。下面链接定位节目说明中的时间文字，不保证播放器跳转，也不代表逐句核验。</p>
+<nav aria-label="原节目章节定位" class="timestamp-links">
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A17%3A23" id="time-1723" rel="noreferrer noopener">17:23 · 旅行与交易量</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A21%3A00" id="time-2100" rel="noreferrer noopener">21:00 · 信任</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A23%3A25" id="time-2325" rel="noreferrer noopener">23:25 · 安全</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A31%3A07" id="time-3107" rel="noreferrer noopener">31:07 · 抽成</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A44%3A43" id="time-4443" rel="noreferrer noopener">44:43 · 可理解性</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A50%3A03" id="time-5003" rel="noreferrer noopener">50:03 · 增长</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=00%3A54%3A46" id="time-5446" rel="noreferrer noopener">54:46 · 算力</a>
+<a href="https://colossus.com/episode/instinct-the-personal-agent/#:~:text=01%3A18%3A43" id="time-7843" rel="noreferrer noopener">78:43 · 融资</a>
+</nav>
+</li>
+<li id="src-4">
+<a class="source-title" href="https://markets.financialcontent.com/newsok/article/bizwire-2026-9-28-instinct-raises-1-billion-in-series-c-funding-from-sequoia-benchmark-and-coatue-at-10-billion-valuation" rel="noreferrer noopener">[4] Instinct 融资与产品公告 · Business Wire / FinancialContent</a>
+<p class="source-detail">发布于 2026-09-28。公司通告的转载版本；投资方名称以此为据，不以自动字幕推断。转载不增加独立验证。</p>
+</li>
+<li id="src-5">
+<a class="source-title" href="https://noahshinn.com/" rel="noreferrer noopener">[5] Noah Shinn 个人网站</a>
+<p class="source-detail">页面标注最后更新于 2025 年 8 月。用于研究经历与论文署名脉络，不用于推断当前内部架构。</p>
+</li>
+<li id="src-6">
+<a class="source-title" href="https://www.bidclub.ai/e/noah-shinn-building-instinct-personal-agent" rel="noreferrer noopener">[6] BidClub · 访谈字幕整理</a>
+<p class="source-detail">第三方 AI 清理字幕，非独立报道。仅补充自述的数值语境；不能替代原音频、审计记录或准确专名来源。</p>
+</li>
+<li id="src-7"><a class="source-title" href="https://instinct.com/terms" rel="noreferrer noopener">[7] Instinct · Terms of Service</a><p class="source-detail">修订日期：2026-08-26。核对收费、执行风险、第三方许可及个人使用范围；不是法律意见。</p></li><li id="src-8"><a class="source-title" href="https://arxiv.org/abs/2303.11366" rel="noreferrer noopener">[8] Reflexion · 原始论文</a><p class="source-detail">2023 年论文。语言反馈与记忆的研究方法；不证明 Instinct 当前实现。</p></li><li id="src-9"><a class="source-title" href="https://arxiv.org/abs/2406.12045" rel="noreferrer noopener">[9] τ-bench · 原始论文</a><p class="source-detail">2024 年论文预印本，后发表于 ICLR 2025。工具、规则和最终状态可靠性评估。</p></li><li id="src-10"><a class="source-title" href="https://siliconangle.com/2026/09/28/everyday-personal-ai-assistant-startup-instinct-raises-1b-at-10b-valuation/" rel="noreferrer noopener">[10] SiliconANGLE · 融资报道</a><p class="source-detail">2026-09-28，记者 Kyt Dotson。媒体亦报道这次融资；未取得股权表与独立经营审计。</p></li><li id="src-u">
+<span class="source-title">[U] 用户提供的中文评论要点</span>
+<p class="source-detail">本稿的议题线索，不是独立核验。评论中的数字与判断保留“评论／转述”标签，不改写成已核实的逐字引述。</p>
+</li>
+</ol>
+
+</section>
+</article>
+</main>
+</div>
+<footer class="wrap">
+<p>研究止于证据，产品始于一次可验证的完成。</p>
+<a href="#top">返回页首 ↑</a>
+</footer>
+<script>
+    (() => {
+      'use strict';
+
+      // 仅在内存中计算：无网络请求、存储、表单提交或跟踪。
+      const ids = ['gmv', 'coverage', 'take', 'cost'];
+      const controls = document.getElementById('calc-controls');
+      const reset = document.getElementById('calc-reset');
+      const mode = document.getElementById('calc-mode');
+      const revenueNode = document.getElementById('calc-revenue');
+      const contributionNode = document.getElementById('calc-contribution');
+      const equationNode = document.getElementById('calc-equation');
+      const outcomeNode = document.getElementById('calc-outcome');
+      const breakEvenNode = document.getElementById('calc-break-even');
+      const announcement = document.getElementById('calc-announcement');
+      const inputs = ids.map(id => document.getElementById(id));
+      const values = ids.map(id => document.getElementById(`${id}-value`));
+
+      const required = [
+        controls, reset, mode, revenueNode, contributionNode,
+        equationNode, outcomeNode, breakEvenNode, announcement,
+        ...inputs, ...values
+      ];
+
+      if (
+        required.some(node => !node) ||
+        inputs.some(node => !(node instanceof HTMLInputElement))
+      ) return;
+
+      const fmt = (number, decimals = 0) => new Intl.NumberFormat('zh-CN', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      }).format(number);
+
+      const signed = number =>
+        `${number < 0 ? '−' : number > 0 ? '+' : ''}${fmt(Math.abs(number), 2)}`;
+
+      function readClamped(input) {
+        const rawMin = Number(input.min);
+        const rawMax = Number(input.max);
+        const min = Number.isFinite(rawMin) ? rawMin : 0;
+        const max = Number.isFinite(rawMax) && rawMax >= min ? rawMax : min;
+
+        const rawDefault = Number(input.defaultValue);
+        const fallback = Number.isFinite(rawDefault) ? rawDefault : min;
+        const rawValue = input.value.trim() === '' ? NaN : Number(input.value);
+        const finiteValue = Number.isFinite(rawValue) ? rawValue : fallback;
+        const clamped = Math.min(max, Math.max(min, finiteValue));
+
+        const step = Number(input.step);
+        const snapped = Number.isFinite(step) && step > 0
+          ? min + Math.round((clamped - min) / step) * step
+          : clamped;
+
+        const safeValue = Math.min(
+          max,
+          Math.max(min, Number(snapped.toFixed(8)))
+        );
+
+        input.value = String(safeValue);
+        return safeValue;
+      }
+
+      function update(announce = false) {
+        const [gmv, coverage, take, cost] = inputs.map(readClamped);
+        const revenue = gmv * (coverage / 100) * (take / 100);
+        const contribution = revenue - cost;
+
+        // 有限值检查先于任何数值渲染；失败时保留既有读数。
+        if (![gmv, coverage, take, cost, revenue, contribution].every(Number.isFinite)) {
+          mode.textContent = '输入无法计算，已保留上次结果；请恢复演示默认值。';
+          return;
+        }
+
+        const current = [gmv, coverage, take, cost];
+        current.forEach((number, index) => {
+          const decimals = index === 2 ? 1 : 0;
+          values[index].textContent = fmt(number, decimals);
+          const unit = index === 0 || index === 3 ? ' 百万美元' : '%';
+          inputs[index].setAttribute(
+            'aria-valuetext',
+            fmt(number, decimals) + unit
+          );
+        });
+
+        revenueNode.textContent = fmt(revenue, 2);
+        contributionNode.textContent = signed(contribution);
+        contributionNode.classList.toggle('negative', contribution < 0);
+
+        equationNode.textContent =
+          `${fmt(gmv)} × ${fmt(coverage)}% × ${fmt(take, 1)}% = ${fmt(revenue, 2)}；` +
+          `${fmt(revenue, 2)} − ${fmt(cost)} = ${signed(contribution)}（百万美元）。`;
+
+        const outcome = contribution < 0
+          ? '尚未覆盖假设可变成本。'
+          : contribution > 0
+            ? '已覆盖假设可变成本，但不代表净盈利。'
+            : '模拟收入与假设可变成本恰好相抵，但不代表净盈利。';
+
+        outcomeNode.textContent = outcome + '固定费用等项目仍未计入。';
+
+        // 分别求佣金率与覆盖率的盈亏平衡值；零分母不渲染 Infinity。
+        let breakEvenText;
+
+        if (cost === 0) {
+          breakEvenText =
+            '假设可变成本为零，零佣金收入也达到零贡献；仍未覆盖模型之外的费用。';
+        } else if (gmv === 0) {
+          breakEvenText =
+            'GMV 为零，调整覆盖率或佣金率都不能覆盖正的可变成本。';
+        } else {
+          const eligible = gmv * (coverage / 100);
+          const rateBase = gmv * (take / 100);
+          const requiredTake = eligible > 0 ? (cost / eligible) * 100 : null;
+          const requiredCoverage = rateBase > 0 ? (cost / rateBase) * 100 : null;
+          const takeMax = Number(inputs[2].max);
+
+          let takeText = requiredTake === null
+            ? '当前覆盖率为零，仅提高佣金率无法收支相抵'
+            : `所需佣金率为 ${fmt(requiredTake, 2)}%`;
+
+          if (requiredTake !== null && requiredTake > 100) {
+            takeText += '，超过 100%，本假设不具可行性';
+          } else if (requiredTake !== null && requiredTake > takeMax) {
+            takeText += `，超过控件的 ${fmt(takeMax)}% 上限`;
+          }
+
+          let coverageText = requiredCoverage === null
+            ? '当前佣金率为零，仅提高覆盖率无法收支相抵'
+            : `所需可计佣覆盖率为 ${fmt(requiredCoverage, 2)}%`;
+
+          if (requiredCoverage !== null && requiredCoverage > 100) {
+            coverageText += '，超过 100%，仅调整覆盖率不可行';
+          }
+
+          breakEvenText =
+            `保持其他参数不变：${takeText}；${coverageText}。两者分别只改变一个变量。`;
+        }
+
+        breakEvenNode.textContent = breakEvenText;
+        mode.textContent =
+          '交互已启用。金额单位为百万美元／年；所有输入仅在本页计算，不上传、不保存。';
+
+        if (announce) {
+          announcement.textContent =
+            `模拟收入 ${fmt(revenue, 2)} 百万美元，` +
+            `模拟贡献 ${signed(contribution)} 百万美元。${outcome} ${breakEvenText}`;
+        }
+      }
+
+      inputs.forEach(input => {
+        input.addEventListener('input', () => update(false));
+        // 完成一次调整后再播报整体结果，避免拖动时重复朗读。
+        input.addEventListener('change', () => update(true));
+      });
+
+      reset.addEventListener('click', () => {
+        inputs.forEach(input => {
+          input.value = input.defaultValue;
+        });
+        update(true);
+      });
+
+      update(false);
+      controls.disabled = false;
+    })();
+  </script>
+</body>
+</html>
