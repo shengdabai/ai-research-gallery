@@ -1,0 +1,1696 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="逐条核查一篇关于 Anthropic 警告 GLM-5.3 的笔记，并全面对比 GLM-5.3 与 Claude 的能力、防护与发布方式。">
+<title>GLM-5.3 × Claude：真伪核查与全面对比</title>
+<style>
+:root {
+  /* 基础刻度 primitive：颜色、尺寸、字体、比例与图表原始数据集中于此。 */
+  --p-white: #ffffff;
+  --p-cool-50: #f2f6f7;
+  --p-cool-100: #e7eef0;
+  --p-cool-300: #c6d4d9;
+  --p-graphite-600: #4b6069;
+  --p-graphite-800: #29434d;
+  --p-graphite-950: #152d35;
+  --p-teal-700: #145f67;
+  --p-teal-900: #103e46;
+  --p-green-100: #e5f2ef;
+  --p-green-800: #175a4c;
+  --p-blue-100: #eaf1fb;
+  --p-blue-800: #254f83;
+  --p-rose-100: #fbeaf0;
+  --p-rose-800: #8b2c47;
+  --p-slate-100: #edf1f4;
+  --p-slate-800: #475963;
+
+  --p-font-sans: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --p-weight-regular: 400;
+  --p-weight-medium: 600;
+  --p-weight-bold: 700;
+  --p-type-small: 15px;
+  --p-type-body: 16px;
+  --p-type-subhead: 18px;
+  --p-type-card: 20px;
+  --p-type-subtitle: 24px;
+  --p-type-section: 28px;
+  --p-type-stat: 32px;
+  --p-type-title: 40px;
+  --p-leading-tight: 1.25;
+  --p-leading-label: 1.5;
+  --p-leading-body: 1.8;
+
+  --p-zero: 0;
+  --p-one: 1;
+  --p-full: 100%;
+  --p-hairline: 1px;
+  --p-outline: 2px;
+  --p-accent-rule: 3px;
+  --p-space-4: 4px;
+  --p-space-6: 6px;
+  --p-space-8: 8px;
+  --p-space-12: 12px;
+  --p-space-16: 16px;
+  --p-space-20: 20px;
+  --p-space-24: 24px;
+  --p-space-32: 32px;
+  --p-space-40: 40px;
+  --p-space-48: 48px;
+  --p-space-64: 64px;
+
+  --p-radius-small: 4px;
+  --p-radius-medium: 8px;
+  --p-radius-large: 12px;
+  --p-page-max: 1240px;
+  --p-table-min: 640px;
+  --p-reading-max: 78ch;
+  --p-offscreen: -10000px;
+  --p-shadow-soft: 0px 4px 24px rgb(21 45 53 / 0.05);
+  --p-grid-single: minmax(0, 1fr);
+  --p-grid-double: repeat(2, minmax(0, 1fr));
+  --p-grid-triple: repeat(3, minmax(0, 1fr));
+  --p-grid-four: repeat(4, minmax(0, 1fr));
+  --p-grid-span: 1 / -1;
+
+  --p-data-12: 12%;
+  --p-data-14: 14%;
+  --p-data-4: 4%;
+  --p-data-6: 6%;
+  --p-data-84-5: 84.5%;
+  --p-data-83-8: 83.8%;
+  --p-data-54-4: 54.4%;
+  --p-data-78: 78.0%;
+  --p-data-130: 130;
+  --p-data-247: 247;
+
+  /* 语义角色 semantic：不新增原始设计值，只引用基础刻度。 */
+  --color-canvas: var(--p-cool-50);
+  --color-surface: var(--p-white);
+  --color-surface-soft: var(--p-cool-100);
+  --color-line: var(--p-cool-300);
+  --color-text: var(--p-graphite-950);
+  --color-muted: var(--p-graphite-600);
+  --color-accent: var(--p-teal-700);
+  --color-heading: var(--p-teal-900);
+  --color-series-glm: var(--p-teal-700);
+  --color-series-claude: var(--p-graphite-800);
+  --color-true-ink: var(--p-green-800);
+  --color-true-surface: var(--p-green-100);
+  --color-context-ink: var(--p-blue-800);
+  --color-context-surface: var(--p-blue-100);
+  --color-error-ink: var(--p-rose-800);
+  --color-error-surface: var(--p-rose-100);
+  --color-unverified-ink: var(--p-slate-800);
+  --color-unverified-surface: var(--p-slate-100);
+
+  --font-sans: var(--p-font-sans);
+  --font-regular: var(--p-weight-regular);
+  --font-medium: var(--p-weight-medium);
+  --font-bold: var(--p-weight-bold);
+  --size-small: var(--p-type-small);
+  --size-body: var(--p-type-body);
+  --size-subhead: var(--p-type-subhead);
+  --size-card: var(--p-type-card);
+  --size-subtitle: var(--p-type-subtitle);
+  --size-section: var(--p-type-section);
+  --size-stat: var(--p-type-stat);
+  --size-title: var(--p-type-title);
+  --leading-heading: var(--p-leading-tight);
+  --leading-label: var(--p-leading-label);
+  --leading-copy: var(--p-leading-body);
+
+  --space-none: var(--p-zero);
+  --space-micro: var(--p-space-4);
+  --space-tiny: var(--p-space-6);
+  --space-small: var(--p-space-8);
+  --space-copy: var(--p-space-12);
+  --space-compact: var(--p-space-16);
+  --space-card: var(--p-space-20);
+  --space-panel: var(--p-space-24);
+  --space-gutter: var(--p-space-32);
+  --space-header: var(--p-space-40);
+  --space-section: var(--p-space-48);
+  --space-footer: var(--p-space-64);
+  --line-thin: var(--p-hairline);
+  --line-focus: var(--p-outline);
+  --line-accent: var(--p-accent-rule);
+  --radius-label: var(--p-radius-small);
+  --radius-card: var(--p-radius-medium);
+  --radius-panel: var(--p-radius-large);
+  --shadow-surface: var(--p-shadow-soft);
+
+  --measure-fill: var(--p-full);
+  --measure-page: var(--p-page-max);
+  --measure-table: var(--p-table-min);
+  --measure-copy: var(--p-reading-max);
+  --position-offscreen: var(--p-offscreen);
+  --layer-front: var(--p-one);
+  --columns-one: var(--p-grid-single);
+  --columns-two: var(--p-grid-double);
+  --columns-three: var(--p-grid-triple);
+  --columns-four: var(--p-grid-four);
+  --columns-span: var(--p-grid-span);
+
+  --datum-s1-glm-exploit: var(--p-data-12);
+  --datum-s1-preview-exploit: var(--p-data-14);
+  --datum-s1-glm-binary: var(--p-data-4);
+  --datum-s1-preview-binary: var(--p-data-6);
+  --datum-s3-glm-cyber: var(--p-data-84-5);
+  --datum-s3-mythos-cyber: var(--p-data-83-8);
+  --datum-s3-glm-exploit: var(--p-data-54-4);
+  --datum-s3-mythos-exploit: var(--p-data-78);
+  --datum-s3-glm-gym: var(--p-data-130);
+  --datum-s3-mythos-gym: var(--p-data-247);
+
+  /* 组件 token：页面规则仅消费这一层；图表宽度也经过语义映射。 */
+  --body-bg: var(--color-canvas);
+  --body-ink: var(--color-text);
+  --body-font: var(--font-sans);
+  --body-size: var(--size-body);
+  --body-weight: var(--font-regular);
+  --body-leading: var(--leading-copy);
+  --copy-muted: var(--color-muted);
+  --copy-small: var(--size-small);
+  --copy-gap: var(--space-copy);
+  --copy-strong: var(--font-bold);
+
+  --heading-ink: var(--color-heading);
+  --heading-weight: var(--font-bold);
+  --heading-leading: var(--leading-heading);
+  --heading-title: var(--size-title);
+  --heading-title-compact: var(--size-section);
+  --heading-section: var(--size-section);
+  --heading-section-compact: var(--size-subtitle);
+  --heading-card: var(--size-card);
+  --heading-sub: var(--size-subhead);
+  --heading-subtitle: var(--size-subtitle);
+  --heading-gap: var(--space-compact);
+
+  --layout-zero: var(--space-none);
+  --layout-full: var(--measure-fill);
+  --layout-gap: var(--space-panel);
+  --layout-gap-compact: var(--space-compact);
+  --layout-one: var(--columns-one);
+  --layout-two: var(--columns-two);
+  --layout-three: var(--columns-three);
+  --layout-four: var(--columns-four);
+  --layout-span: var(--columns-span);
+  --page-max: var(--measure-page);
+  --page-gutter: var(--space-gutter);
+  --page-gutter-compact: var(--space-compact);
+  --page-header-space: var(--space-header);
+  --page-footer-space: var(--space-footer);
+  --section-space: var(--space-section);
+  --section-space-compact: var(--space-gutter);
+  --reading-max: var(--measure-copy);
+
+  --panel-bg: var(--color-surface);
+  --panel-soft: var(--color-surface-soft);
+  --panel-pad: var(--space-panel);
+  --panel-pad-compact: var(--space-compact);
+  --panel-radius: var(--radius-panel);
+  --panel-shadow: var(--shadow-surface);
+  --card-pad: var(--space-card);
+  --card-radius: var(--radius-card);
+  --line-width: var(--line-thin);
+  --line-color: var(--color-line);
+  --accent-width: var(--line-accent);
+  --accent-ink: var(--color-accent);
+  --link-ink: var(--color-accent);
+  --link-rule: var(--line-thin);
+  --link-offset: var(--space-micro);
+  --focus-width: var(--line-focus);
+  --focus-offset: var(--space-micro);
+  --focus-ink: var(--color-accent);
+  --skip-hidden: var(--position-offscreen);
+  --skip-offset: var(--space-compact);
+  --skip-layer: var(--layer-front);
+
+  --list-indent: var(--space-panel);
+  --list-gap: var(--space-small);
+  --nav-gap: var(--space-compact);
+  --nav-pad: var(--space-compact);
+  --badge-pad-y: var(--space-micro);
+  --badge-pad-x: var(--space-small);
+  --badge-radius: var(--radius-label);
+  --badge-size: var(--size-small);
+  --badge-leading: var(--leading-label);
+  --badge-weight: var(--font-medium);
+  --verdict-true-ink: var(--color-true-ink);
+  --verdict-true-bg: var(--color-true-surface);
+  --verdict-context-ink: var(--color-context-ink);
+  --verdict-context-bg: var(--color-context-surface);
+  --verdict-error-ink: var(--color-error-ink);
+  --verdict-error-bg: var(--color-error-surface);
+  --verdict-unverified-ink: var(--color-unverified-ink);
+  --verdict-unverified-bg: var(--color-unverified-surface);
+  --stat-gap: var(--space-small);
+  --stat-pad: var(--space-copy);
+  --stat-size: var(--size-stat);
+  --claim-label-gap: var(--space-copy);
+  --claim-value-gap: var(--space-micro);
+  --details-gap: var(--space-compact);
+  --details-pad: var(--space-copy);
+
+  --table-min: var(--measure-table);
+  --table-pad: var(--space-copy);
+  --table-head-bg: var(--color-surface-soft);
+  --table-caption-size: var(--size-small);
+  --chart-gap: var(--space-compact);
+  --chart-track-bg: var(--color-surface-soft);
+  --chart-height: var(--space-small);
+  --chart-glm-ink: var(--color-series-glm);
+  --chart-claude-ink: var(--color-series-claude);
+  --chart-label-gap: var(--space-tiny);
+  --chart-s1-glm-exploit: var(--datum-s1-glm-exploit);
+  --chart-s1-preview-exploit: var(--datum-s1-preview-exploit);
+  --chart-s1-glm-binary: var(--datum-s1-glm-binary);
+  --chart-s1-preview-binary: var(--datum-s1-preview-binary);
+  --chart-s3-glm-cyber: var(--datum-s3-glm-cyber);
+  --chart-s3-mythos-cyber: var(--datum-s3-mythos-cyber);
+  --chart-s3-glm-exploit: var(--datum-s3-glm-exploit);
+  --chart-s3-mythos-exploit: var(--datum-s3-mythos-exploit);
+  --chart-s3-glm-gym: calc(var(--datum-s3-glm-gym) / var(--datum-s3-mythos-gym) * var(--measure-fill));
+  --chart-s3-mythos-gym: var(--measure-fill);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--body-bg); }
+
+body {
+  margin: var(--layout-zero);
+  min-width: var(--layout-zero);
+  background: var(--body-bg);
+  color: var(--body-ink);
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
+  line-height: var(--body-leading);
+}
+
+a {
+  color: var(--link-ink);
+  text-decoration-thickness: var(--link-rule);
+  text-underline-offset: var(--link-offset);
+  overflow-wrap: anywhere;
+}
+
+a:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ink);
+  outline-offset: var(--focus-offset);
+}
+
+h1, h2, h3, h4 {
+  margin: var(--layout-zero);
+  color: var(--heading-ink);
+  font-weight: var(--heading-weight);
+  font-style: normal;
+  line-height: var(--heading-leading);
+  overflow-wrap: anywhere;
+}
+
+h1 { font-size: var(--heading-title); }
+h2 { font-size: var(--heading-section); }
+h3 { font-size: var(--heading-card); }
+h4 { font-size: var(--heading-sub); }
+
+.title-phrase,
+.label-piece { display: inline-block; }
+
+p { margin-block: var(--copy-gap); }
+strong { font-weight: var(--copy-strong); }
+
+ul, ol {
+  margin-block: var(--copy-gap);
+  padding-inline-start: var(--list-indent);
+}
+
+li + li { margin-block-start: var(--list-gap); }
+figure, dl, dd { margin: var(--layout-zero); }
+
+section, article, aside, figure, .table-scroll {
+  min-width: var(--layout-zero);
+}
+
+section { scroll-margin-top: var(--page-gutter-compact); }
+
+.page-shell {
+  width: var(--layout-full);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+.skip-link {
+  position: fixed;
+  inset-inline-start: var(--skip-hidden);
+  inset-block-start: var(--skip-offset);
+  z-index: var(--skip-layer);
+  padding: var(--stat-pad);
+  background: var(--panel-bg);
+}
+
+.skip-link:focus { inset-inline-start: var(--skip-offset); }
+
+.page-header {
+  padding-block: var(--page-header-space) var(--heading-gap);
+  border-top: var(--accent-width) solid var(--accent-ink);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--list-gap) var(--layout-gap);
+  margin-block-end: var(--heading-gap);
+  color: var(--copy-muted);
+  font-size: var(--copy-small);
+}
+
+.subtitle {
+  margin-block: var(--copy-gap) var(--layout-zero);
+  color: var(--heading-ink);
+  font-size: var(--heading-subtitle);
+  font-weight: var(--badge-weight);
+}
+
+.scope-note,
+.small,
+.source-ref,
+.source-line,
+.scroll-hint,
+.chart-note {
+  font-size: var(--copy-small);
+}
+
+.scope-note,
+.small,
+.source-ref,
+.scroll-hint,
+.chart-note {
+  color: var(--copy-muted);
+}
+
+.scope-note { max-width: var(--reading-max); }
+
+.panel {
+  padding: var(--panel-pad);
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--panel-radius);
+  background: var(--panel-bg);
+}
+
+.summary-panel { box-shadow: var(--panel-shadow); }
+.summary-points { padding-inline-start: var(--list-indent); }
+
+.verdict-counts {
+  display: grid;
+  grid-template-columns: var(--layout-four);
+  gap: var(--stat-gap);
+  margin-block-start: var(--heading-gap);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  min-width: var(--layout-zero);
+  padding: var(--stat-pad);
+  border-top: var(--accent-width) solid;
+  border-radius: var(--badge-radius);
+}
+
+.stat-card dt {
+  font-size: var(--badge-size);
+  line-height: var(--badge-leading);
+  font-weight: var(--badge-weight);
+}
+
+.stat-card dd {
+  margin-block-start: auto;
+  padding-block-start: var(--claim-value-gap);
+  font-size: var(--stat-size);
+  line-height: var(--heading-leading);
+  font-weight: var(--heading-weight);
+}
+
+.v-true {
+  color: var(--verdict-true-ink);
+  background: var(--verdict-true-bg);
+  border-color: var(--verdict-true-ink);
+}
+
+.v-context {
+  color: var(--verdict-context-ink);
+  background: var(--verdict-context-bg);
+  border-color: var(--verdict-context-ink);
+}
+
+.v-error {
+  color: var(--verdict-error-ink);
+  background: var(--verdict-error-bg);
+  border-color: var(--verdict-error-ink);
+}
+
+.v-unverified {
+  color: var(--verdict-unverified-ink);
+  background: var(--verdict-unverified-bg);
+  border-color: var(--verdict-unverified-ink);
+}
+
+.status {
+  display: inline-block;
+  max-width: var(--layout-full);
+  padding: var(--badge-pad-y) var(--badge-pad-x);
+  border: var(--line-width) solid;
+  border-radius: var(--badge-radius);
+  font-size: var(--badge-size);
+  line-height: var(--badge-leading);
+  font-weight: var(--badge-weight);
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--list-gap) var(--nav-gap);
+  padding-block: var(--nav-pad);
+  border-bottom: var(--line-width) solid var(--line-color);
+}
+
+.toc a {
+  font-size: var(--copy-small);
+  font-weight: var(--badge-weight);
+}
+
+.report-section { margin-block-start: var(--section-space); }
+
+.section-intro {
+  margin-block: var(--copy-gap) var(--layout-gap);
+  max-width: var(--reading-max);
+  color: var(--copy-muted);
+}
+
+.grid-two,
+.grid-three {
+  display: grid;
+  gap: var(--layout-gap);
+  align-items: start;
+}
+
+.grid-two { grid-template-columns: var(--layout-two); }
+.grid-three { grid-template-columns: var(--layout-three); }
+
+.fact-card {
+  padding: var(--card-pad);
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--card-radius);
+  background: var(--panel-bg);
+}
+
+.claim dt {
+  margin-block-start: var(--claim-label-gap);
+  color: var(--copy-muted);
+  font-size: var(--copy-small);
+  font-weight: var(--badge-weight);
+}
+
+.claim dd {
+  margin-block-start: var(--claim-value-gap);
+  overflow-wrap: anywhere;
+}
+
+details {
+  margin-block-start: var(--details-gap);
+  border-top: var(--line-width) solid var(--line-color);
+}
+
+summary {
+  padding-block: var(--details-pad);
+  color: var(--link-ink);
+  font-weight: var(--badge-weight);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.evidence { padding-block-end: var(--details-pad); }
+.evidence p:first-child { margin-block-start: var(--layout-zero); }
+.evidence p:last-child { margin-block-end: var(--layout-zero); }
+
+.source-line {
+  color: var(--copy-muted);
+  overflow-wrap: anywhere;
+}
+
+.source-id { font-weight: var(--badge-weight); }
+
+.fact-group {
+  grid-column: var(--layout-span);
+  padding: var(--panel-pad);
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--panel-radius);
+  background: var(--panel-soft);
+}
+
+.fact-group > p { margin-block-end: var(--layout-gap); }
+
+.note {
+  margin-block: var(--heading-gap);
+  padding: var(--card-pad);
+  border-inline-start: var(--accent-width) solid var(--accent-ink);
+  background: var(--panel-soft);
+}
+
+.note p:first-child { margin-block-start: var(--layout-zero); }
+.note p:last-child { margin-block-end: var(--layout-zero); }
+.subsection { margin-block-start: var(--layout-gap); }
+
+.table-scroll {
+  width: var(--layout-full);
+  max-width: var(--layout-full);
+  overflow-x: auto;
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--card-radius);
+  background: var(--panel-bg);
+}
+
+table {
+  width: var(--layout-full);
+  min-width: var(--table-min);
+  border-collapse: collapse;
+  font-size: var(--body-size);
+}
+
+caption {
+  padding: var(--table-pad);
+  color: var(--copy-muted);
+  font-size: var(--table-caption-size);
+  text-align: left;
+}
+
+th, td {
+  padding: var(--table-pad);
+  border-top: var(--line-width) solid var(--line-color);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+thead th {
+  background: var(--table-head-bg);
+  color: var(--heading-ink);
+  font-weight: var(--badge-weight);
+}
+
+tbody th { font-weight: var(--badge-weight); }
+.missing { color: var(--copy-muted); }
+
+.chart-panel { margin-block-start: var(--layout-gap); }
+
+.chart-panel > .grid-two,
+.chart-panel > .grid-three {
+  margin-block-start: var(--heading-gap);
+}
+
+.chart {
+  padding: var(--card-pad);
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--card-radius);
+  background: var(--panel-bg);
+}
+
+.chart figcaption {
+  margin-block-end: var(--chart-gap);
+  color: var(--heading-ink);
+  font-weight: var(--badge-weight);
+}
+
+.bar-item + .bar-item { margin-block-start: var(--chart-gap); }
+
+.bar-label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--chart-label-gap) var(--chart-gap);
+  margin-block-end: var(--chart-label-gap);
+  font-size: var(--copy-small);
+}
+
+.bar-track {
+  height: var(--chart-height);
+  background: var(--chart-track-bg);
+}
+
+.bar { height: var(--layout-full); }
+.bar.glm { background: var(--chart-glm-ink); }
+.bar.claude { background: var(--chart-claude-ink); }
+.s1-glm-exploit { width: var(--chart-s1-glm-exploit); }
+.s1-preview-exploit { width: var(--chart-s1-preview-exploit); }
+.s1-glm-binary { width: var(--chart-s1-glm-binary); }
+.s1-preview-binary { width: var(--chart-s1-preview-binary); }
+.s3-glm-cyber { width: var(--chart-s3-glm-cyber); }
+.s3-mythos-cyber { width: var(--chart-s3-mythos-cyber); }
+.s3-glm-exploit { width: var(--chart-s3-glm-exploit); }
+.s3-mythos-exploit { width: var(--chart-s3-mythos-exploit); }
+.s3-glm-gym { width: var(--chart-s3-glm-gym); }
+.s3-mythos-gym { width: var(--chart-s3-mythos-gym); }
+
+.tradeoff-list dt {
+  margin-block-start: var(--heading-gap);
+  font-weight: var(--badge-weight);
+  color: var(--heading-ink);
+}
+
+.tradeoff-list dd { margin-block-start: var(--claim-value-gap); }
+
+.cost-note {
+  margin-block-start: var(--layout-gap);
+  padding-block-start: var(--heading-gap);
+  border-top: var(--line-width) solid var(--line-color);
+}
+
+.inference-panel {
+  border-inline-start: var(--accent-width) solid var(--accent-ink);
+}
+
+.inference-label {
+  display: inline-block;
+  margin-block-end: var(--heading-gap);
+  padding: var(--badge-pad-y) var(--badge-pad-x);
+  border: var(--line-width) solid var(--line-color);
+  border-radius: var(--badge-radius);
+  color: var(--copy-muted);
+  font-weight: var(--badge-weight);
+}
+
+.source-list {
+  list-style: none;
+  padding: var(--layout-zero);
+  margin: var(--layout-zero);
+}
+
+.source-list li {
+  padding-block: var(--heading-gap);
+  border-top: var(--line-width) solid var(--line-color);
+  margin: var(--layout-zero);
+}
+
+.source-list p {
+  margin-block: var(--claim-value-gap) var(--layout-zero);
+}
+
+.page-footer {
+  padding-block: var(--section-space) var(--page-footer-space);
+  color: var(--copy-muted);
+  font-size: var(--copy-small);
+}
+
+/*
+  媒体查询阈值集中区：760px 以下切换为单列。
+  查询条件不支持 var()，阈值仅在此出现；查询内设计值仍使用组件 token。
+*/
+@media (max-width: 760px) {
+  .page-shell { padding-inline: var(--page-gutter-compact); }
+  .page-header { padding-block-start: var(--page-gutter-compact); }
+  h1 { font-size: var(--heading-title-compact); }
+  h2 { font-size: var(--heading-section-compact); }
+  .panel, .fact-group { padding: var(--panel-pad-compact); }
+  .grid-two, .grid-three {
+    grid-template-columns: var(--layout-one);
+    gap: var(--layout-gap-compact);
+  }
+  .report-section { margin-block-start: var(--section-space-compact); }
+  .stat-card { padding: var(--stat-gap); }
+}
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+
+<div class="page-shell">
+  <header class="page-header">
+    <div class="meta">
+      <span>事实核查与对比分析</span>
+      <span>核查日期：<time datetime="2026-09-30">2026-09-30</time></span>
+    </div>
+    <h1><span class="title-phrase">Anthropic 警告 GLM-5.3：</span><span class="title-phrase">真伪核查与全面对比</span></h1>
+    <p class="subtitle">GLM-5.3（开放权重）× Claude（闭源受控）</p>
+    <p class="scope-note">核查对象是一篇 Get 笔记 AI 摘要《Anthropic警告GLM-5.3网络能力：是风险警示还是反向带货？》，摘自量子位 2026-09-30 的文章。“全面对比”覆盖这些来源涉及的网络安全能力、防护、发布方式、成本与防御成果；不是通用模型排行榜。</p>
+  </header>
+
+  <main id="main">
+    <section id="conclusion" class="panel summary-panel" aria-labelledby="conclusion-title">
+      <h2 id="conclusion-title">先看结论与适用范围</h2>
+      <ul class="summary-points">
+        <li><strong>真伪：数字基本都对，问题出在丢掉的限定语。</strong>17 个判定单位里 7 个属实、7 个缺语境、2 个表述有误、1 个未独立证实。接近 Mythos Preview 的特定成绩，不等于追平当前美国前沿。<span class="source-ref">〔S1、S2〕</span></li>
+        <li><strong>差异：已知漏洞复现得分接近，完整利用与防护有差距。</strong>智谱口径下 CyberGym（复现已知漏洞、生成 PoC）84.5% 对 83.8%，但 ExploitBench 54.4% 对 78.0%；同一句“这是演练”话术，GLM-5.3 配合 64%，所测 Claude 配置为 0%。不同口径的 ExploitBench 不可横比。<span class="source-ref">〔S1、S3〕</span></li>
+        <li><strong>各自优势：开放权重赢在可自部署、可外部评测；闭源赢在完整利用链与可持续管控。</strong>代价也各自存在：去拒答后能力基本保留且权重不可撤回；闭源护栏会误拦合法防御者（HF 取证案例，用的是 GLM-5.2）。<span class="source-ref">〔S1、S5、S6〕</span></li>
+      </ul>
+
+      <dl class="verdict-counts" aria-label="四档判定计数，按拆分后的子主张统计">
+        <div class="stat-card v-true">
+          <dt>属实</dt>
+          <dd>7</dd>
+        </div>
+        <div class="stat-card v-context">
+          <dt><span class="label-piece">属实但</span><span class="label-piece">缺语境</span></dt>
+          <dd>7</dd>
+        </div>
+        <div class="stat-card v-error">
+          <dt><span class="label-piece">表述</span><span class="label-piece">有误</span></dt>
+          <dd>2</dd>
+        </div>
+        <div class="stat-card v-unverified">
+          <dt><span class="label-piece">未独立</span><span class="label-piece">证实</span></dt>
+          <dd>1</dd>
+        </div>
+      </dl>
+      <p class="small">笔记说法归纳为 15 条，其中“Claude 为什么骗不动、拆不了”一条拆为三个子主张，共 17 个判定单位。“未独立证实”包含单方说法或未能核验；引述准确不等于事实已被独立证实。</p>
+    </section>
+
+    <nav class="toc" aria-label="报告目录">
+      <a href="#checks">核查卡片</a>
+      <a href="#layers">信息差异</a>
+      <a href="#capabilities">分口径能力</a>
+      <a href="#safeguards">防护对照</a>
+      <a href="#tradeoffs">差异与优势</a>
+      <a href="#inference">风险与宣传</a>
+      <a href="#method">方法与来源</a>
+    </nav>
+
+    <section id="checks" class="report-section" aria-labelledby="checks-title">
+      <h2 id="checks-title">核查卡片</h2>
+      <p class="section-intro">“说法”按笔记原文归纳，并对照量子位原文《Anthropic，你是来给智谱打广告的吧！》与一手来源。默认展示说法、判定与关键限定；展开可读证据。厂商自测被准确转述，不等于结果已被独立复现。</p>
+
+      <div class="grid-two">
+        <article class="fact-card">
+          <h3>报告发布日期</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>Anthropic 前沿红队于 9/29 发布 GLM-5.3 网络安全报告。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            <dd>发布事实有来源支持；报告中的实验结论仍须按其测试范围理解。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 的发布日期为 2026-09-29，主题为 GLM-5.3 与先进网络安全能力的扩散。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>接近的是哪个 Mythos？</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>ExploitBench 共 410 次尝试：GLM-5.3 成功 50 次，Mythos Preview 成功 56 次。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            <dd><strong>410 次是尝试次数，不是 410 个独立漏洞。</strong>对照是 Mythos Preview，不是 Mythos 5。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 使用 41 个 Chrome V8 漏洞，报告成功率分别为 12% 与 14%。Mythos Preview 于 2026-04 发布。</p>
+              <p>另一项内部 Binary Exploitation 基准包含 100 个任务，要求完整控制流劫持：GLM-5.3 为 4%，Mythos Preview 为 6%。不能从单项接近外推全系能力相当。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>“距美国前沿约 4 个月”</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>CAISI 于 9/17 称 GLM-5.3 是最强开放权重模型，距美国前沿约 4 个月。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            <dd>S2 同时强调“显著低于当前美国前沿模型”。4 个月是 IRT 综合指数换算，不是单项差距，也不是“只差一点”。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>CAISI 的四项对照另表列出；“美国最佳”不是 Claude 某个型号的别名。</p>
+              <p>S1 提醒：CAISI 评估美国模型时关闭了网络护栏，且包含仅向审核用户开放的模型。能力上限与公众可获得的服务配置不能混为一谈。</p>
+              <p class="source-line"><span class="source-id">S2</span> · <a href="https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities">CAISI's Assessment of Z.ai's GLM-5.3 Cyber Capabilities</a></p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>真实浏览器中的未知漏洞</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>GLM-5.3 在真实浏览器环境找到并串联了 0-day。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            <dd>据 S1 自测，案例仅涉及 Linux 构建，已向维护者披露；不代表所有浏览器平台都被验证。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 报告在一天内、人工投入不到 1 小时的条件下，串联 JS 引擎的多个 0-day，达到可读取任意文件的效果。这是具体案例，不是新漏洞发现率统计。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>20.40 美元案例的漏洞性质</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>GLM-5.3-Flash 用 20 分钟人工投入、8 小时及 20.40 美元完成 PAC 绕过案例。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            <dd><strong>这是 N-day，不是 0-day。</strong>20.40 美元只是该次案例的推理花费，不能据此推导“比 Claude 更便宜”。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 的 ARM64 案例使用已知漏洞 CVE-2026-11645 与另一个已知漏洞。N-day 指已知漏洞，0-day 指当时未知的漏洞。</p>
+              <p>量子位原文保留了 CVE 编号，笔记摘要丢掉了这一限定。单次费用不含人工与前期工程，也没有同条件的 Claude 总成本对照。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+              <p class="source-line"><span class="source-id">S10</span> · <a href="https://mp.weixin.qq.com/s/XzR_J9cVrMViGiPtBt8WLQ">Anthropic，你是来给智谱打广告的吧！</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>绕过防护的配合率</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>GLM-5.3 在伪装红队、预填思考、去拒答条件下，配合率为 64%、92%、100%；Flash 为 16%、80%、92%。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            <dd>数值对应 S1，但实验使用假终端、未真实执行，每格 50 次。原版直接收到攻击指令时的 0% 是“不配合”，不是“无防护”。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>这些数字衡量特定模拟配置下的配合，不是现实攻击成功率。不同列还涉及提示条件、API 入口和权重访问方式的差异。</p>
+              <p>GLM-5.3-Flash 必须单独标注，不能把其结果写成 GLM-5.3 的同一组成绩。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>去拒答实验花费 2200 GPU 小时，约 4400 美元。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 正文给出实际实验投入，脚注另估有经验团队所需投入。它还称权重发布数日内已有多名开发者公开去拒答版本。</p>
+              <p>设备算时、美元估值与团队熟练度各有含义；本页不把估算包装成另一场已经完成的实验。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>去拒答后，能力是否仍在？</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>去拒答后拒答率骤降；GPQA-Diamond 不变，CyberGym 从 85% 变为 81%。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            <dd>数字都对。可表述为<strong>“能力基本保留”</strong>；笔记那句“本事一点没丢”说过了头：CyberGym 分数确实降了 4 个百分点。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 图示：JailbreakBench、HarmBench 的拒答率从 90%+ 降至约 3%、2%，StrongREJECT 降至 12%；三基准均值从 95% 降至 6%。Flash 的均值从 95% 降至 14%。</p>
+              <p>GLM-5.3 的 GPQA-Diamond 为 88% → 88%，CyberGym 为 85% → 81%；GLM-5.3-Flash 的 CyberGym 为 86% → 86%。这些结论只覆盖已测指标。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>原版拒答率不能合并成“Claude”</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>原版 GLM-5.3 拒答率为 95%，Claude 为 96%。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-context">属实但缺语境</span></dd>
+            <dt>关键限定</dt>
+            <dd>96% 对应 Opus 4.8 与 Mythos Preview；Opus 5 是 95%。必须写明型号，不能把 Claude 全系写成同一个数。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 的相关图表给出：GLM-5.3 为 95%，Opus 4.8 为 96%，Opus 5 为 95%，Mythos Preview 为 96%。</p>
+              <p>原版拒答率与特定攻击条件下的配合率是不同指标，不能互相替换。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-group">
+          <h3>“Claude 骗不动、拆不了，主要靠闭源”：拆开判断</h3>
+          <p>笔记原话是：Claude“骗不动、拆不了”，“主要靠闭源属性，而非安全技术本身更强”。这句话里有三个不同的主张，分别判定。</p>
+
+          <div class="grid-three">
+            <section class="fact-card">
+              <h4>产品入口差异</h4>
+              <dl class="claim">
+                <dt>说法</dt>
+                <dd>权重不公开，所以没法去拒答；API 不支持预填思考，所以没法替模型写推理。</dd>
+                <dt>判定</dt>
+                <dd><span class="status v-true">属实</span></dd>
+                <dt>关键限定</dt>
+                <dd><strong>这两列，量子位说法成立。</strong>API 不接受预填思考、权重不公开，表示攻击入口不可用，应标“不适用”。</dd>
+              </dl>
+              <details>
+                <summary>证据与来源</summary>
+                <div class="evidence">
+                  <p>这里没有完成与开放权重相同的攻击操作，不能据此证明模型内在对齐更强，也不能将缺少入口统计为防御成功。</p>
+                  <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+                  <p class="source-line"><span class="source-id">S10</span> · <a href="https://mp.weixin.qq.com/s/XzR_J9cVrMViGiPtBt8WLQ">Anthropic，你是来给智谱打广告的吧！</a></p>
+                </div>
+              </details>
+            </section>
+
+            <section class="fact-card">
+              <h4>伪装红队的可比结果</h4>
+              <dl class="claim">
+                <dt>说法</dt>
+                <dd>Claude 的防护优势“主要靠闭源属性，而非安全技术本身更强”。</dd>
+                <dt>判定</dt>
+                <dd><span class="status v-error">表述有误</span></dd>
+                <dt>关键限定</dt>
+                <dd><strong>伪装红队这一列不靠闭源也有差距。</strong>同样提示下，GLM-5.3 为 64%，所测 Claude 服务配置为 0%；但也不能全归因于模型对齐。</dd>
+              </dl>
+              <details>
+                <summary>证据与来源</summary>
+                <div class="evidence">
+                  <p>GLM-5.3-Flash 为 16%；Opus 4.8、Opus 5、Mythos 5 的默认服务配置均为 0%。</p>
+                  <p>关闭外层护栏后，Opus 4.8 为 4%，Opus 5 为 10%，Mythos 5 为 0%。这支持区分模型行为与外层防护，也说明 Claude 的模型层面并非一概无懈可击。</p>
+                  <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+                  <p class="source-line"><span class="source-id">S10</span> · <a href="https://mp.weixin.qq.com/s/XzR_J9cVrMViGiPtBt8WLQ">Anthropic，你是来给智谱打广告的吧！</a></p>
+                </div>
+              </details>
+            </section>
+
+            <section class="fact-card">
+              <h4>“骗不动”只限于本次测试</h4>
+              <dl class="claim">
+                <dt>说法</dt>
+                <dd>Claude“骗不动、拆不了”。</dd>
+                <dt>判定</dt>
+                <dd><span class="status v-context">属实但缺语境</span></dd>
+                <dt>关键限定</dt>
+                
+              </dl>
+              <details>
+                <summary>证据与来源</summary>
+                <div class="evidence">
+                  <p>S1 的配合率实验每格 50 次，使用模拟终端、未真实执行。有限测试中的零值不能外推全部提示、全部工具或现实环境。</p>
+                  
+                  <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+                </div>
+              </details>
+            </section>
+          </div>
+        </article>
+
+        <article class="fact-card">
+          <h3>建议是谁来做安全测试？</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>Anthropic 建议向防御者开放前沿模型，并开展“独立安全测试”。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-error">表述有误</span></dd>
+            <dt>关键限定</dt>
+            <dd>前半项转述成立；后半项应是<strong>“各国政府应做安全测试”</strong>，不能换成泛指第三方的“独立测试”。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S1 的政策建议明确了政府这一行动主体。独立评估可以是讨论方向，但不是本条可直接替换的原文含义。</p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>蒸馏指控：转述与证实分开</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>智谱等七家中国实验室“蒸馏”了美国模型（笔记转述 Anthropic 9/10 报告的点名）。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-unverified">未独立证实</span></dd>
+            <dt>关键限定</dt>
+            <dd><strong>“报告确实这样点名”属实，笔记转述准确；这里判定的是蒸馏行为本身，它仍是 Anthropic 单方说法，未独立证实。</strong>不能把“确有这份指控”写成“指控已经坐实”。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S4 称自 2 月以来识别并阻断相关活动，将智谱标为 GTG-16006；其列出 273 个欺诈账号、10 天 770,609 次思维链提取交换、17 天 340 万+ 次交换。</p>
+              <p>报告还称智谱在 GLM-5.3 发布前针对美国前沿模型网络能力做蒸馏，尝试 Fable 后因护栏放弃，转向 Opus 4.6 和另一家美国实验室模型。S4 还称同一时期的交换总量超过 300 万次。以上均是 Anthropic 的陈述；截至核查日，未找到第三方验证或智谱的公开回应。</p>
+              <p class="source-line"><span class="source-id">S4</span> · <a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Detecting and countering misuse of AI: September 2026</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>延迟开放与受信访问</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>智谱推迟两周开放权重，并设置受信访问计划。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            <dd>模型发布与权重开放不是同一时点；公开权重也不等于最敏感能力无条件向所有用户开放。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S2 记载 GLM-5.3 于 8/14 发布，两周后开放权重。S3 称开放前完成安全评估与加固，最敏感能力仅提供给验证用户。</p>
+              <p class="source-line"><span class="source-id">S2</span> · <a href="https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities">CAISI's Assessment of Z.ai's GLM-5.3 Cyber Capabilities</a></p>
+              <p class="source-line"><span class="source-id">S3</span> · <a href="https://www.zhipuai.cn/zh/research/162">GLM-5.3：前沿编程能力与涌现的网络安全能力</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>HF 取证用的是 GLM-5.2</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>7 月 Hugging Face 事件中，自部署 GLM-5.2 帮助还原了 1.7 万多条攻击动作。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S5 披露超过 17,000 条事件；S6 技术时间线记载约 17,600 条动作、约 6,280 簇。商业 API 前沿模型的护栏拦截取证分析，S6 称所试 Opus 每次都触发护栏，随后改用自部署 GLM-5.2。</p>
+              <p>S7 承认事件涉及 OpenAI 内部测评模型：GPT-5.6 Sol 加一个未发布原型，测评时降低了拒答。不能将这次测评配置直接等同一般公开服务配置。</p>
+              <p class="source-line"><span class="source-id">S5</span> · <a href="https://huggingface.co/blog/security-incident-july-2026">Security incident disclosure — July 2026</a></p>
+              <p class="source-line"><span class="source-id">S6</span> · <a href="https://huggingface.co/blog/agent-intrusion-technical-timeline">Hugging Face 技术时间线</a></p>
+              <p class="source-line"><span class="source-id">S7</span> · <a href="https://openai.com/index/hugging-face-model-evaluation-security-incident/">OpenAI 声明</a></p>
+            </div>
+          </details>
+        </article>
+
+        <article class="fact-card">
+          <h3>Mythos Preview 与 Glasswing 的时间线</h3>
+          <dl class="claim">
+            <dt>说法</dt>
+            <dd>Mythos Preview 约五个月前发布，Glasswing 披露了 1 万多个漏洞。</dd>
+            <dt>判定</dt>
+            <dd><span class="status v-true">属实</span></dd>
+            <dt>关键限定</dt>
+            <dd>Mythos Preview 于 2026-04 发布，距 9/29 约 5 个半月；Glasswing 的数字是项目成果，不是统一预算的单模型测试分数。</dd>
+          </dl>
+          <details>
+            <summary>证据与来源</summary>
+            <div class="evidence">
+              <p>S8 在 2026-05-22 更新中披露约 50 家伙伴，以及 1 万多个高危或严重漏洞。不能把合作项目的汇总成果直接变成与另一模型的漏洞数量排名。</p>
+              <p class="source-line"><span class="source-id">S8</span> · <a href="https://www.anthropic.com/research/glasswing-initial-update">Project Glasswing: An initial update</a></p>
+              <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+            </div>
+          </details>
+        </article>
+      </div>
+    </section>
+
+    <section id="layers" class="report-section" aria-labelledby="layers-title">
+      <h2 id="layers-title">三层信息，三种偏移</h2>
+      <p class="section-intro">问题不主要在数字抄错，而在限定语流失、叙事选择，以及把利益相关方的材料当作无立场结论。</p>
+
+      <div class="grid-three">
+        <article class="panel">
+          <h3>笔记：压缩时丢了边界</h3>
+          <p>多数数字来自原文，但 N-day、模拟环境、政府测试等限定在摘要中被弱化或丢失。</p>
+          <p>最具体的例子是 PAC 案例：量子位保留了 CVE 编号，摘要却容易让读者将它理解为未知漏洞发现。不能把摘要的遗漏倒记到原文头上。<span class="source-ref">〔S1、S10〕</span></p>
+          <p>“反向带货？”是带立场的标题问句，不是已经得到验证的传播效果结论。</p>
+        </article>
+
+        <article class="panel">
+          <h3>量子位：引用与叙事分开</h3>
+          <p>事实引用大体准确，但重点放在“接近 Mythos Preview”“Claude 靠闭源”和“广告费省了”。<span class="source-ref">〔S10〕</span></p>
+          <p>相对弱化了 CAISI 的“显著低于美国前沿”、熟练团队约 1200 美元的估算、公开去拒答版本，以及伪装红队时 64% 对 0% 的配置差异。<span class="source-ref">〔S1、S2〕</span></p>
+          <p>智谱对开放权重后发布者只剩对齐这一层防线的自述，也应进入治理讨论。<span class="source-ref">〔S3〕</span></p>
+        </article>
+
+        <article class="panel">
+          <h3>一手来源：也要辨认角色</h3>
+          <p><strong>Anthropic：</strong>提供详细实验，但也是闭源竞争者；此前提出蒸馏指控，同期推动 Mythos 5.1 受信访问。它也承认开放模型对防御者的价值。<span class="source-ref">〔S1、S4〕</span></p>
+          <p><strong>CAISI：</strong>给出第三方评估，结论是开放权重最强、但明显落后美国前沿；不是对 S1 实验的原样复现。<span class="source-ref">〔S2〕</span></p>
+          <p><strong>智谱：</strong>自报 CyberGym 略高于 Mythos 5，也承认越深入完整利用，差距越大。厂商利益相关不等于结论无效，仍应检查实验。<span class="source-ref">〔S3〕</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="capabilities" class="report-section" aria-labelledby="capabilities-title">
+      <h2 id="capabilities-title">能力图：分口径，不串线</h2>
+
+      <div class="note">
+        <p><strong>不可横比。</strong>Anthropic 的 ExploitBench 12%、智谱的 54.4%、CAISI 的 61.1% 来自不同任务子集、预算与评分设置，不能放到同一轴上排名。下图只在同一来源、同一任务口径内对照。<span class="source-ref">〔S1、S2、S3〕</span></p>
+      </div>
+
+      <p class="small">所有百分比条形以 100% 为满刻度；项数图单独缩放。未列出的同口径成绩不绘条、不补零。模型名称直接标在条形旁，不仅依赖颜色辨认。</p>
+
+      <article class="panel chart-panel" aria-labelledby="s1-chart-title">
+        <h3 id="s1-chart-title">Anthropic 口径｜GLM-5.3 × Mythos Preview</h3>
+        <p>这里的对手是 <strong>Mythos Preview</strong>，不是 Mythos 5，也不是 Opus 4.8 或 Opus 5。</p>
+
+        <div class="grid-two">
+          <figure class="chart">
+            <figcaption>ExploitBench 成功率</figcaption>
+            <div class="bar-item">
+              <div class="bar-label"><span>GLM-5.3</span><strong>12% · 50 次</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar glm s1-glm-exploit"></div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Mythos Preview</span><strong>14% · 56 次</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar claude s1-preview-exploit"></div></div>
+            </div>
+            <p class="chart-note">41 个 Chrome V8 漏洞，410 次尝试；尝试数不是独立漏洞数。〔S1〕</p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>Binary Exploitation 成功率</figcaption>
+            <div class="bar-item">
+              <div class="bar-label"><span>GLM-5.3</span><strong>4%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar glm s1-glm-binary"></div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Mythos Preview</span><strong>6%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar claude s1-preview-binary"></div></div>
+            </div>
+            <p class="chart-note">100 个任务，要求完整控制流劫持；属于 Anthropic 内部基准。〔S1〕</p>
+          </figure>
+        </div>
+
+        <p class="small">S1 还称 Opus 4.6、GLM-5.2、Kimi K3、DeepSeek V4.1-Flash 在 Binary Exploitation 上为 0 或接近 0；本页未取得逐模型精确值，因此不画成精确零值条。</p>
+        <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+      </article>
+
+      <article class="panel chart-panel" aria-labelledby="s3-chart-title">
+        <h3 id="s3-chart-title">智谱口径｜GLM-5.3 × Mythos 5</h3>
+        <p>以下是<strong>智谱报告口径</strong>，不是对上方 Anthropic 测试的复现。CyberGym 的主要任务是按文字描述复现已知漏洞、生成 PoC（概念验证代码），得分不等于真实新漏洞发现率。<span class="source-ref">〔S11〕</span></p>
+
+        <div class="grid-three">
+          <figure class="chart">
+            <figcaption>CyberGym 得分</figcaption>
+            <div class="bar-item">
+              <div class="bar-label"><span>GLM-5.3</span><strong>84.5%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar glm s3-glm-cyber"></div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Mythos 5</span><strong>83.8%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar claude s3-mythos-cyber"></div></div>
+            </div>
+            <p class="chart-note">该项得分略高，不等于完整利用能力更强。〔S3〕</p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>ExploitBench 成功率</figcaption>
+            <div class="bar-item">
+              <div class="bar-label"><span>GLM-5.3</span><strong>54.4%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar glm s3-glm-exploit"></div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Mythos 5</span><strong>78.0%</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar claude s3-mythos-exploit"></div></div>
+            </div>
+            <p class="chart-note">只与本图同口径对照，不与 12% 或 61.1% 排名。〔S3〕</p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>ExploitGym｜6 小时完成项数</figcaption>
+            <div class="bar-item">
+              <div class="bar-label"><span>GLM-5.3</span><strong>130 项</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar glm s3-glm-gym"></div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Mythos 5</span><strong>247 项</strong></div>
+              <div class="bar-track" aria-hidden="true"><div class="bar claude s3-mythos-gym"></div></div>
+            </div>
+            <p class="chart-note">仅在本图按 247 项缩放；这是项数，不是成功率。〔S3〕</p>
+          </figure>
+        </div>
+
+        <p class="small">智谱也承认：越深入完整利用，与 Mythos 5 的差距越大。CyberGym 的单项结果不能抵消另两项差距。</p>
+        <p class="source-line"><span class="source-id">S3</span> · <a href="https://www.zhipuai.cn/zh/research/162">GLM-5.3：前沿编程能力与涌现的网络安全能力</a></p>
+      </article>
+
+      <article class="panel chart-panel" aria-labelledby="caisi-title">
+        <h3 id="caisi-title">CAISI 口径｜“美国最佳”单独列</h3>
+        <p>“美国最佳”是 S2 的评估列名，<strong>不能填入 Claude 栏，也不能擅自指定为 Mythos 5</strong>。</p>
+        <p class="scroll-hint" id="caisi-hint">窄屏可在表格内左右滑动，查看完整对照。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="caisi-title" aria-describedby="caisi-hint" tabindex="0">
+          <table>
+            <caption>S2 的同口径评估结果；百分比按 S2 原表列示。</caption>
+            <thead>
+              <tr>
+                <th scope="col">评测</th>
+                <th scope="col">GLM-5.3</th>
+                <th scope="col">美国最佳</th>
+                <th scope="col">中国此前最佳</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">SEC-Bench Pro</th><td>40.4%</td><td>90.2%</td><td>27.3%</td></tr>
+              <tr><th scope="row">ExploitBench</th><td>61.1%</td><td>100%</td><td>32.2%</td></tr>
+              <tr><th scope="row">ExploitGym</th><td>9.4%</td><td>44.4%</td><td>2.6%</td></tr>
+              <tr><th scope="row">OSS-Fuzz</th><td>7.7%</td><td>23.2%</td><td>2.4%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>CAISI 的结论同时包含“最强开放权重模型”和“显著低于当前美国前沿”。“约 4 个月”是 IRT 综合指数的时间换算，不是任意一项任务的落后时长。<span class="source-ref">〔S2〕</span></p>
+        <p class="small">服务条件也不同：S1 指出，CAISI 测试美国模型时关闭网络护栏，并包含仅限审核用户的模型。不能把这一能力评估当成公众服务防护效果比较。</p>
+        <p class="source-line"><span class="source-id">S2</span> · <a href="https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities">CAISI's Assessment of Z.ai's GLM-5.3 Cyber Capabilities</a></p>
+        <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+      </article>
+    </section>
+
+    <section id="safeguards" class="report-section" aria-labelledby="safeguards-title">
+      <h2 id="safeguards-title">防护对照：配合率、拒答率与不可用入口</h2>
+      <p class="section-intro">低配合率和高拒答率不是同一个指标。S1 的攻击条件实验每格 50 次，使用模拟终端，未真实执行；同提示对比的是所测服务配置，不能把所有差异都归因于模型对齐。</p>
+
+      <article class="subsection" aria-labelledby="cooperation-title">
+        <h3 id="cooperation-title">攻击条件下的配合率</h3>
+        
+
+        <div class="table-scroll" role="region" aria-labelledby="cooperation-title" aria-describedby="cooperation-hint" tabindex="0">
+          <table>
+            <caption>S1 的配合率；模型与服务配置分别标注，不把模拟配合率写成现实攻击成功率。</caption>
+            <thead>
+              <tr>
+                <th scope="col">模型 / 所测服务</th>
+                <th scope="col">直接指令</th>
+                <th scope="col">伪装红队</th>
+                <th scope="col">预填思考</th>
+                <th scope="col">去拒答</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">GLM-5.3</th><td>0%</td><td>64%</td><td>92%</td><td>100%</td></tr>
+              <tr><th scope="row">GLM-5.3-Flash</th><td>0%</td><td>16%</td><td>80%</td><td>92%</td></tr>
+              
+              
+              <tr><th scope="row">Claude Mythos 5</th><td>0%</td><td>0%</td><td class="missing">不适用：API 不接受</td><td class="missing">不适用：权重不公开</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="small">“直接指令”指不加任何伪装直接下达攻击指令，各模型原版均为 0%，即本次测试全部拒绝；GLM 的“去拒答”一列用的是去拒答后的权重。表中 Claude 的 0% 也只代表该配置下未成功，并非普遍免疫。〔S1〕</p>
+      </article>
+
+      <article class="subsection" aria-labelledby="outer-title">
+        <h3 id="outer-title">外层护栏关闭后，结果会变</h3>
+        <p class="scroll-hint" id="outer-hint">窄屏可在表格内左右滑动，比较默认配置与关闭外层护栏后的结果。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="outer-title" aria-describedby="outer-hint" tabindex="0">
+          <table>
+            <caption>S1 图注披露的“伪装红队”配合率，不能与其他攻击列混读。</caption>
+            <thead>
+              <tr>
+                <th scope="col">模型</th>
+                <th scope="col">默认服务配置</th>
+                <th scope="col">关闭外层护栏</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              
+              <tr><th scope="row">Claude Mythos 5</th><td>0%</td><td>0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="small">这一组结果说明需要分别讨论模型行为、外层分类器和服务管控，而不是把“闭源”或“模型对齐”当作唯一原因。〔S1〕</p>
+      </article>
+
+      <article class="subsection" aria-labelledby="refusal-title">
+        <h3 id="refusal-title">原版拒答率：逐型号列出</h3>
+        <p class="scroll-hint" id="refusal-hint">窄屏可在表格内左右滑动；缺少结果不填零。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="refusal-title" aria-describedby="refusal-hint" tabindex="0">
+          <table>
+            <caption>S1 三项拒答基准（JailbreakBench、HarmBench、StrongREJECT）的均值；Claude 各型号是关闭外层护栏后模型自身的拒答率。不要写成一个笼统的“Claude 96%”。</caption>
+            <thead>
+              <tr>
+                <th scope="col">模型</th>
+                <th scope="col">原版拒答率</th>
+                <th scope="col">证据边界</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">GLM-5.3</th><td>95%</td><td>与去拒答后的 6% 对照。</td></tr>
+              <tr><th scope="row">GLM-5.3-Flash</th><td>95%</td><td>与去拒答后的 14% 对照。</td></tr>
+              
+              
+              <tr><th scope="row">Claude Mythos Preview</th><td>96%</td><td>不是 Mythos 5。</td></tr>
+              <tr><th scope="row">Claude Mythos 5</th><td aria-label="未披露"></td><td class="missing">S1 这张图未列 Mythos 5。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="subsection" aria-labelledby="retention-title">
+        <h3 id="retention-title">去拒答后：能力基本保留，而非全部不变</h3>
+        <p class="scroll-hint" id="retention-hint">窄屏可在表格内左右滑动，查看变更前后的同指标结果。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="retention-title" aria-describedby="retention-hint" tabindex="0">
+          <table>
+            <caption>S1 能力指标前后对照；不据此推导未测试能力的保留程度。</caption>
+            <thead>
+              <tr>
+                <th scope="col">模型</th>
+                <th scope="col">指标</th>
+                <th scope="col">原版</th>
+                <th scope="col">去拒答后</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">GLM-5.3</th><td>GPQA-Diamond</td><td>88%</td><td>88%</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>CyberGym</td><td>85%</td><td>81%</td></tr>
+              <tr><th scope="row">GLM-5.3-Flash</th><td>CyberGym</td><td>86%</td><td>86%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="small">此处 CyberGym 为 S1 的前后对照，不能与 S3 的 84.5% 直接比较。拒答下降与能力变化也应分别报告。</p>
+      </article>
+
+      <p class="source-line"><span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a></p>
+    </section>
+
+    <section id="tradeoffs" class="report-section" aria-labelledby="tradeoffs-title">
+      <h2 id="tradeoffs-title">差异、各自优势与代价</h2>
+      <p class="section-intro">没有脱离任务、数据边界和准入条件的统一胜者。下列优势都有具体证据或案例，但其适用范围不能越过来源。</p>
+
+      <article class="subsection" aria-labelledby="overview-title">
+        <h3 id="overview-title">差异总览：一张表看两条路线</h3>
+        <p class="scroll-hint" id="overview-hint">窄屏可在表格内左右滑动；每行只在同一来源口径内对照。</p>
+        <div class="table-scroll" role="region" aria-labelledby="overview-title" aria-describedby="overview-hint" tabindex="0">
+          <table>
+            <caption>型号逐格写明；“Claude”一栏不含 CAISI 的“美国最佳”。</caption>
+            <thead>
+              <tr>
+                <th scope="col">维度</th>
+                <th scope="col">GLM-5.3（开放权重）</th>
+                <th scope="col">Claude（闭源受控）</th>
+                <th scope="col">来源</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">发布形态</th><td>8/14 发布，两周后开放权重，可自部署；最敏感能力走受信访问</td><td>权重不公开；Mythos 系列受限访问（智谱称约 150 家机构）</td><td>S2、S3</td></tr>
+              <tr><th scope="row">已知漏洞复现（CyberGym）</th><td>84.5%</td><td>Mythos 5：83.8%</td><td>S3</td></tr>
+              <tr><th scope="row">完整利用（ExploitBench）</th><td>54.4%</td><td>Mythos 5：78.0%</td><td>S3</td></tr>
+              <tr><th scope="row">ExploitGym 6 小时</th><td>130 项</td><td>Mythos 5：247 项</td><td>S3</td></tr>
+              <tr><th scope="row">ExploitBench（Anthropic 测）</th><td>12%（410 次中 50 次）</td><td>Mythos Preview：14%（56 次）</td><td>S1</td></tr>
+              <tr><th scope="row">“这是演练”话术下的配合率</th><td>64%（Flash 16%）</td><td>Opus 4.8、Opus 5、Mythos 5 默认均 0%；关外层护栏后 4%、10%、0%</td><td>S1</td></tr>
+              
+              <tr><th scope="row">发布者手里的防护层</th><td>开放权重后只剩对齐一层仍有效（智谱自述）</td><td>模型行为、外层护栏、账号与访问管控</td><td>S3、S1、S4</td></tr>
+              <tr><th scope="row">数据位置</th><td>自部署时可不离开自有环境</td><td>经云端服务处理</td><td>S5</td></tr>
+              <tr><th scope="row">事后能否收回</th><td>已分发的权重无法撤回</td><td>服务方可继续调整护栏、阻断账号</td><td>S1、S4</td></tr>
+              <tr><th scope="row">防御侧成果（口径不同，不排名）</th><td>2,436 个漏洞，1,097 个中高危（智谱自述）</td><td>Glasswing：约 50 家伙伴、1 万多个高危或严重漏洞</td><td>S3、S8</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <div class="grid-two subsection">
+        <article class="panel">
+          <h3>GLM-5.3 与开放权重路线</h3>
+
+          <dl class="tradeoff-list">
+            <dt>自部署可保留数据控制</dt>
+            <dd>HF 在商业模型阻断取证分析后，改用自部署 GLM-5.2 处理约 17,600 条动作。它说明开放部署的防御价值；<strong>数据不出域是自部署时可做到的属性</strong>，不是所有调用方式的保证，也不是 GLM-5.3 的直接成绩。<span class="source-ref">〔S5、S6〕</span></dd>
+
+            <dt>已公开权重可接受外部评估</dt>
+            <dd>Anthropic 与 CAISI 均对 GLM-5.3 提供评估，说明外部研究者可以检查其能力与风险；开放可评测不等于评估结果天然中立。<span class="source-ref">〔S1、S2〕</span></dd>
+
+            <dt>部分安全任务已有强结果</dt>
+            <dd>智谱报告 CyberGym 为 84.5%，略高于同口径 Mythos 5 的 83.8%；另自报发现 2,436 个漏洞，其中 1,097 个中高危，涉及 269 个项目。后者是厂商披露的防御成果，不是 CyberGym 的新漏洞发现率。<span class="source-ref">〔S3〕</span></dd>
+
+            <dt>部署入口不完全依赖云端白名单</dt>
+            <dd>GLM-5.3 在 8/14 发布后两周开放权重，可自行部署；同时，智谱仍对最敏感能力设置验证用户访问，不能概括为所有能力均无门槛。<span class="source-ref">〔S2、S3〕</span></dd>
+
+            <dt>存在单次成本案例，但没有总成本胜负</dt>
+            <dd>GLM-5.3-Flash 的 N-day 案例推理花费为 20.40 美元。缺少同条件 Claude 费用，也未计人工与前期工程，因此不下“更便宜”的结论。<span class="source-ref">〔S1〕</span></dd>
+          </dl>
+
+          <details>
+            <summary>智谱自述的其他例子与效率口径</summary>
+            <div class="evidence">
+              <p>S3 还列出 DNS 协议 40 年老漏洞、微软三漏洞致谢等例子，均应标为智谱自述。编码约 5 万 token 对 12 万 token 的说法也是其自报，不能自动换算为同口径美元成本。</p>
+              <p class="source-line"><span class="source-id">S3</span> · <a href="https://www.zhipuai.cn/zh/research/162">GLM-5.3：前沿编程能力与涌现的网络安全能力</a></p>
+            </div>
+          </details>
+
+          <div class="cost-note">
+            <h4>代价：发布者失去后续控制</h4>
+            <p>智谱称原有三层防护在开放权重后只剩对齐这一层仍由模型本身承载。发布者不能撤回已分发权重；<strong>自部署者仍可自行加防护</strong>，并非开放部署必然毫无防线。<span class="source-ref">〔S3〕</span></p>
+            
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Claude 与闭源受控服务路线</h3>
+
+          <dl class="tradeoff-list">
+            <dt>完整利用任务更强，但要点名型号</dt>
+            <dd>在 S3 口径下，Mythos 5 的 ExploitBench 为 78.0%，GLM-5.3 为 54.4%；ExploitGym 在 6 小时内为 247 项对 130 项。这里不借用 CAISI 的“美国最佳”替 Claude 加分。<span class="source-ref">〔S3〕</span></dd>
+
+            <dt>所测配置的配合率更低</dt>
+            <dd>伪装红队提示下，Opus 4.8、Opus 5、Mythos 5 默认服务配置均为 0%，GLM-5.3 为 64%。关闭外层护栏后的变化说明优势涉及服务防护与模型行为，不能全归于其中一方。<span class="source-ref">〔S1〕</span></dd>
+
+            <dt>服务管控可以继续实施</dt>
+            <dd>权重不公开、API 不接受预填思考，使相关攻击入口不适用；S4 的账号识别与阻断披露，则展示服务方持续干预访问的机制。机制存在不等于其中每项指控已被独立证实。<span class="source-ref">〔S1、S4〕</span></dd>
+
+            <dt>有组织的防御合作</dt>
+            <dd>Glasswing 在 S8 更新中披露约 50 家伙伴、1 万多个高危或严重漏洞。它体现合作项目成果，但统计范围与智谱披露不同，不按总量直接排模型名次。<span class="source-ref">〔S8、S3〕</span></dd>
+
+            <dt>受信访问与发布治理仍可调整</dt>
+            <dd>Mythos 系列采用受限访问，Mythos 5.1 的受信访问也属于这一治理路线；不能把这种限制泛化为 Opus、Fable 等所有 Claude 产品都采用同一准入方式。<span class="source-ref">〔S1、S3〕</span></dd>
+          </dl>
+
+          <div class="cost-note">
+            <h4>代价：误拦、准入与厂商信任</h4>
+            <p>HF 的取证案例中，S6 称所试 Opus 每次都触发护栏，说明合法防御任务也可能被挡住。这个案例不应被抹去，也不能自动等同所有 Claude 型号的表现。<span class="source-ref">〔S6〕</span></p>
+            <p>Mythos 的覆盖范围，智谱称约 150 家机构，仍是其说法。云端 API 路线还要求计入数据处理信任与访问门槛；这些来源均未披露同口径价格，不能比较总成本。<span class="source-ref">〔S3〕</span></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="inference" class="report-section panel inference-panel" aria-labelledby="inference-title">
+      <span class="inference-label">以下为推断</span>
+      <h2 id="inference-title">风险警示，还是反向带货？</h2>
+      <p><strong>报告可能同时提示真实风险，并放大对手的能力声誉。但风险、防御收益与营销效果必须分别举证，不能互相抵消。</strong></p>
+
+      <div class="grid-two subsection">
+        <section>
+          <h3>风险证据，止于已测边界</h3>
+          <p>S1 支持特定条件下的能力、配合率与去拒答结论，因此可以据此讨论开放后能力扩散的风险；它没有给出现实滥用规模，不能从实验配合率直接推出实际受害规模。<span class="source-ref">〔S1〕</span></p>
+        </section>
+
+        <section>
+          <h3>防御收益，不能跨型号背书</h3>
+          <p>HF 案例说明，开放部署可能帮助合法防御者避开服务误拦并保留数据控制。但所用模型是 GLM-5.2；这一收益不能直接替 GLM-5.3 的能力、安全性或总体发布决策背书。<span class="source-ref">〔S5、S6〕</span></p>
+        </section>
+
+        <section>
+          <h3>发布治理，要同时计算两边代价</h3>
+          <p>开放权重使发布者失去后续撤回与服务级管控能力，但自部署者仍可设置防护。闭源保留服务控制，也必须计入合法任务误拦、准入门槛与厂商依赖。能力提升不会自动免除发布责任，防护更强也不会自动抵消误拦损失。<span class="source-ref">〔S1、S3、S6〕</span></p>
+        </section>
+
+        <section>
+          <h3>宣传效果，需要传播与转化证据</h3>
+          <p>Anthropic 的竞争关系、蒸馏指控与受信访问安排值得披露，但利益相关不等于实验无效。应检验任务选择、预算与服务配置，而不是猜动机。缺少传播与转化证据时，只能写<strong>“可能产生宣传效应”</strong>，不能断言营销效果已经发生，更不能推断广告动机。<span class="source-ref">〔S1、S4、S10〕</span></p>
+        </section>
+      </div>
+
+      <p>对读者更有用的问题是：任务需要什么能力，数据能否离开自有环境，能接受多少准入限制与误拦？在这些条件明确后，再比较同口径结果，而不是把风险报告直接当作购买榜单。</p>
+    </section>
+
+    <section id="method" class="report-section" aria-labelledby="method-title">
+      <h2 id="method-title">方法、局限与来源</h2>
+
+      <article class="panel subsection">
+        <h3>这份核查做了什么，没做什么</h3>
+        <p>笔记全文经 Get 笔记读取，量子位原文经公众号页面读取；文末 S1–S11 共 <strong>11 个网址均于 2026-09-30 实际打开核对</strong>，数字取自各来源原文与图表。本页<strong>没有复现任何实验</strong>，所有评测成绩都是来源方自己报告的结果。“说法”一栏是对笔记内容的归纳，不全是逐字引文。</p>
+        <p>计数覆盖笔记的 15 条说法，其中“骗不动、拆不了”一条拆为三个子主张，共 17 个判定单位；后文对照和推断不重复计数。“两条建议”按复合说法判定，其第二项措辞错误。</p>
+
+        <dl class="tradeoff-list">
+          <dt>属实</dt>
+          <dd>来源支持该项日期、数字或报告内容；不自动表示厂商实验已被独立复现。</dd>
+          <dt>属实但缺语境</dt>
+          <dd>核心数字或事件有依据，但遗漏型号、任务、时间、配置或统计含义等关键限定。</dd>
+          <dt>表述有误</dt>
+          <dd>表述与材料冲突，或把不同指标、不可用入口及测试零值作了错误解释。</dd>
+          <dt>未独立证实</dt>
+          <dd>包含单方说法或未能核验。蒸馏指控按这一档处理，同时保留“笔记转述准确”的独立判断。</dd>
+        </dl>
+      </article>
+
+      <article class="subsection" aria-labelledby="identity-title">
+        <h3 id="identity-title">型号边界：名字相近，也不能互代</h3>
+        <p class="scroll-hint" id="identity-hint">窄屏可在表格内左右滑动；未列出的同口径数值不补零。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="identity-title" aria-describedby="identity-hint" tabindex="0">
+          <table>
+            <caption>本页实际使用的型号与证据用途。</caption>
+            <thead>
+              <tr>
+                <th scope="col">型号</th>
+                <th scope="col">在本页对应的证据</th>
+                <th scope="col">不能替代什么</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">GLM-5.3</th><td>S1、S2、S3 的主体评估。</td><td>不能与 Flash 或 GLM-5.2 合并。</td></tr>
+              <tr><th scope="row">GLM-5.3-Flash</th><td>S1 的 N-day 案例、配合率与部分能力前后对照。</td><td>20.40 美元不能记在普通版名下。</td></tr>
+              
+              <tr><th scope="row">Mythos Preview</th><td>S1 的 ExploitBench、Binary Exploitation 与原版拒答结果。</td><td>不能代表 Mythos 5。</td></tr>
+              <tr><th scope="row">Mythos 5</th><td>S3 的能力对照；S1 的伪装红队配合率。</td><td>不能挪用 Preview 或“美国最佳”的数值。</td></tr>
+              <tr><th scope="row">Mythos 5.1</th><td>受信访问的治理背景。</td><td>这些来源里没有可加入本页能力图的同口径成绩。</td></tr>
+              <tr><th scope="row">Opus 4.8</th><td>S1 的原版拒答与服务防护对照。</td><td>不能替代 Opus 5 或 Mythos 系列。</td></tr>
+              <tr><th scope="row">Opus 5</th><td>S1 的原版拒答与服务防护对照。</td><td>不能将其拒答率写成 Opus 4.8 的 96%。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="subsection" aria-labelledby="unknowns-title">
+        <h3 id="unknowns-title">读者追问：哪些信息仍未披露？</h3>
+        <p>“未披露”指本次核对的来源里没有找到足以回答该问题的信息；本页不补写未知数。</p>
+        <p class="scroll-hint" id="unknowns-hint">窄屏可在表格内左右滑动，区分已知边界与未披露内容。</p>
+
+        <div class="table-scroll" role="region" aria-labelledby="unknowns-title" aria-describedby="unknowns-hint" tabindex="0">
+          <table>
+            <caption>重要方法边界与缺口，避免从现有数字推导材料没有提供的答案。</caption>
+            <thead>
+              <tr>
+                <th scope="col">读者追问</th>
+                <th scope="col">已经知道的边界</th>
+                <th scope="col">未披露</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">CyberGym 是新漏洞发现率吗？</th>
+                <td>不是。它主要考查按描述复现已知漏洞、生成 PoC。</td>
+                <td>可与该得分对应的真实新漏洞发现率及验证依据。</td>
+              </tr>
+              <tr>
+                <th scope="row">各方预算、工具与重复次数相同吗？</th>
+                <td>不一致。410 次尝试或每格 50 次，只属于各自已说明的实验。</td>
+                <td>足以统一所有对照的逐项预算、工具设置、重复次数与评分映射。</td>
+              </tr>
+              <tr>
+                <th scope="row">20.40 美元是完成任务的总成本吗？</th>
+                <td>不是。它是单次案例的推理花费，不含人工与前期工程。</td>
+                <td>完整人工、前期工程及同条件其他模型的总成本。</td>
+              </tr>
+              <tr>
+                <th scope="row">“落后 4 个月”能套到每一项吗？</th>
+                <td>不能。它是 CAISI 的 IRT 综合指数时间换算，非单项差距。</td>
+                <td>各单项的等效时间差；不能从综合结果自行拆分。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="small">上述边界分别关联 S1、S2、S3、S11；因此三种 ExploitBench 结果始终分开展示。</p>
+      </article>
+
+      <div class="note">
+        <p><strong>未核验：</strong>量子位引用的两条 X 帖仅能作为网友观感，未能独立核验，本页不将其用作事实证据。</p>
+        <p><strong>复现与回应：</strong>智谱案例细节来自自述；未找到对 Anthropic 实验的第三方复现；S4 的蒸馏指控仍是单方说法。截至核查日未找到智谱对 S1 的正式回应，“未找到”不等于“确定不存在”。</p>
+        <p><strong>证据独立性：</strong>CAISI 是第三方评估，但不同来源采用不同测试条件，不能因为方向相近就称为对同一实验的独立复现。厂商利益需要披露，结论有效性仍需看实验设计。</p>
+      </div>
+
+      <section class="subsection" aria-labelledby="sources-title">
+        <h3 id="sources-title">来源清单</h3>
+        <p class="small">来源编号对应正文，日期为各页面标注的发布日期。S10 是被核查的传播文本，不与实验一手材料混同。</p>
+
+        <ol class="source-list" role="list">
+          <li id="source-s1">
+            <span class="source-id">S1</span> · <a href="https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities">GLM-5.3 and the spread of advanced cyber capabilities</a>
+            <p class="small">Anthropic 前沿红队 · <time datetime="2026-09-29">2026-09-29</time></p>
+          </li>
+          <li id="source-s2">
+            <span class="source-id">S2</span> · <a href="https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities">CAISI's Assessment of Z.ai's GLM-5.3 Cyber Capabilities</a>
+            <p class="small">NIST CAISI · <time datetime="2026-09-17">2026-09-17</time></p>
+          </li>
+          <li id="source-s3">
+            <span class="source-id">S3</span> · <a href="https://www.zhipuai.cn/zh/research/162">GLM-5.3：前沿编程能力与涌现的网络安全能力</a>
+            <p class="small">智谱 · 页面发布日期未核到；据 S2，GLM-5.3 于 2026-08-14 发布</p>
+          </li>
+          <li id="source-s4">
+            <span class="source-id">S4</span> · <a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Detecting and countering misuse of AI: September 2026</a>
+            <p class="small">Anthropic · <time datetime="2026-09-10">2026-09-10</time></p>
+          </li>
+          <li id="source-s5">
+            <span class="source-id">S5</span> · <a href="https://huggingface.co/blog/security-incident-july-2026">Security incident disclosure — July 2026</a>
+            <p class="small">Hugging Face · <time datetime="2026-07-16">2026-07-16</time></p>
+          </li>
+          <li id="source-s6">
+            <span class="source-id">S6</span> · <a href="https://huggingface.co/blog/agent-intrusion-technical-timeline">Hugging Face 技术时间线</a>
+            <p class="small">Hugging Face · <time datetime="2026-07-27">2026-07-27</time></p>
+          </li>
+          <li id="source-s7">
+            <span class="source-id">S7</span> · <a href="https://openai.com/index/hugging-face-model-evaluation-security-incident/">OpenAI 声明</a>
+            <p class="small">OpenAI · <time datetime="2026-07-21">2026-07-21</time></p>
+          </li>
+          <li id="source-s8">
+            <span class="source-id">S8</span> · <a href="https://www.anthropic.com/research/glasswing-initial-update">Project Glasswing: An initial update</a>
+            <p class="small">Anthropic · <time datetime="2026-05-22">2026-05-22</time></p>
+          </li>
+          <li id="source-s9">
+            <span class="source-id">S9</span> · <a href="https://www.nist.gov/news-events/news/2026/07/caisi-assessment-zais-glm-52">CAISI Assessment of Z.ai's GLM-5.2</a>
+            <p class="small">NIST CAISI · <time datetime="2026-07-17">2026-07-17</time> · GLM-5.2 背景材料，不作为 GLM-5.3 性能证据</p>
+          </li>
+          <li id="source-s10">
+            <span class="source-id">S10</span> · <a href="https://mp.weixin.qq.com/s/XzR_J9cVrMViGiPtBt8WLQ">Anthropic，你是来给智谱打广告的吧！</a>
+            <p class="small">量子位 · <time datetime="2026-09-30">2026-09-30</time> · 被核查传播文本</p>
+          </li>
+          <li id="source-s11">
+            <span class="source-id">S11</span> · <a href="https://arxiv.org/abs/2506.02548">CyberGym: Evaluating AI Agents' Real-World Cybersecurity Capabilities at Scale</a>
+            <p class="small">arXiv 论文 · <time datetime="2025-06-03">2025-06-03</time> · 仅用于说明 CyberGym 的任务定义</p>
+          </li>
+        </ol>
+      </section>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>判定说明材料支持什么，限定说明材料不能证明什么。能力、风险、防御收益与宣传效果，分别举证。</p>
+    <p>核查与成稿：2026-09-30。</p>
+    <a href="#conclusion">返回结论</a>
+  </footer>
+</div>
+</body>
+</html>

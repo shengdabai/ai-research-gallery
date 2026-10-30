@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light" name="color-scheme"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="面向创作者与独立开发者的硅谷AI行业上半部分析：三阶段框架、Google深读、九项观点审计、八家公司地图与可离线使用的月度单位经济示例。" name="description"/>
+<meta content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<title>硅谷AI行业现状分析｜上半部分 · 2026-10-06</title>
+<style>/* Token source: :root. Original Pro geometry is mapped to shared type, spacing, layout, stroke and color scales. Breakpoints are centrally registered in :root and mirrored as media literals because custom properties cannot be media thresholds. Chart --value percentages are data. */
+
+    :root{
+      --paper: #f4f0e6;
+      --surface: #fffdf7;
+      --ink: #192f2d;
+      --muted: #53635e;
+      --teal: #10665d;
+      --teal-soft: #e2eee6;
+      --line: #c6cec2;
+      --sand: #eae3d5;
+      --amber: #765123;
+      --amber-soft: #f4e8d2;
+      --negative: #963f2c;
+      --focus: #b44b22;
+      --radius: 0.8rem;
+      --space-1: 0.4rem;
+      --space-2: 0.75rem;
+      --space-3: 1rem;
+      --space-4: 1.5rem;
+      --space-5: 2rem;
+      --space-6: 3.5rem;
+      --max: 1220px;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      --serif: "Songti SC", "Noto Serif CJK SC", "SimSun", serif;
+      --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+    --space-scale-01:1.25rem;--type-scale-01:1rem;--type-scale-02:1.85;--stroke-scale-01:1px;--space-scale-02:0.22em;--stroke-scale-02:2px;--stroke-scale-03:3px;--space-scale-03:4px;--radius-scale-01:3px;--space-scale-04:1.5rem;--leading-01:1.4;--type-scale-03:700;--type-scale-04:2.5rem;--type-scale-05:5.3vw;--type-scale-06:4.5rem;--type-scale-07:1.18;--tracking-01:-0.035em;--space-scale-05:1.35rem;--type-scale-08:1.65rem;--type-scale-09:3vw;--type-scale-10:2.2rem;--type-scale-11:1.35;--type-scale-12:1.16rem;--space-scale-06:0.5rem;--weight-01:750;--type-scale-13:0.85rem;--layout-scale-01:46px;--radius-scale-02:0.4rem;--space-scale-07:0.55rem;--space-scale-08:1rem;--weight-02:650;--space-scale-09:0.65rem;--opacity-scale-01:0.8;--type-scale-14:0.9rem;--type-scale-15:0.85em;--layout-scale-02:0.6rem;--layout-scale-03:1rem;--layer-01:10;--space-scale-10:0.75rem;--layout-scale-04:-180%;--type-scale-16:0.82rem;--weight-03:800;--tracking-02:0.1em;--space-scale-11:2.5rem;--type-scale-17:0.76rem;--tracking-03:0.14em;--layout-scale-05:1.75fr;--layout-scale-06:250px;--space-scale-12:3rem;--type-scale-18:600;--type-scale-19:0.4em;--type-scale-20:1.6;--tracking-04:0.03em;--type-scale-21:1.18rem;--layout-scale-07:40em;--type-scale-22:0.87rem;--space-scale-13:1.6rem;--stroke-scale-04:5px;--type-scale-23:650;--type-scale-24:1.15rem;--type-scale-25:1.5;--type-scale-26:0.93rem;--color-01:#b9dcc9;--space-scale-14:0.6rem;--color-02:#61766e;--type-scale-27:1.7rem;--type-scale-28:1.4;--type-scale-29:0.75rem;--space-scale-15:1.3rem;--stroke-scale-05:4px;--type-scale-30:750;--type-scale-31:1.03rem;--space-scale-16:0.16rem;--radius-scale-03:0.3rem;--type-scale-32:0.74rem;--type-scale-33:1.65;--layout-scale-08:190px;--space-scale-17:2.6rem;--layout-scale-09:44px;--type-scale-34:0.83rem;--space-scale-18:1.2rem;--type-scale-35:0.77rem;--space-scale-19:2.8rem;--tracking-05:0.08em;--type-scale-36:1.07rem;--space-scale-20:0.04rem;--space-scale-21:0.24rem;--type-scale-37:0.78rem;--leading-02:1.75;--space-scale-22:0.8rem;--space-scale-23:1.15rem;--type-scale-38:2rem;--type-scale-39:1.3;--type-scale-40:1.05rem;--type-scale-41:0.89rem;--radius-scale-04:0.55rem;--weight-04:700;--space-scale-24:0.9rem;--space-scale-25:1.1rem;--type-scale-42:0.98rem;--layout-scale-10:0.85fr;--layout-scale-11:1.5fr;--type-scale-43:0.91rem;--space-scale-26:1.4rem;--layout-scale-12:1.4fr;--type-scale-44:1.4rem;--type-scale-45:0.92rem;--space-scale-27:2.4rem;--type-scale-46:0.84rem;--space-scale-28:0.4rem;--space-scale-29:0.7rem;--space-scale-30:0.25rem;--space-scale-31:0.3rem;--layout-scale-13:0.7rem;--radius-scale-05:0.15rem;--type-scale-47:0.73rem;--type-scale-48:1.8;--leading-03:1.6;--weight-05:400;--space-scale-32:0.35rem;--space-scale-33:0.85rem;--type-scale-49:1.9vw;--type-scale-50:1.35rem;--type-scale-51:1.7;--type-scale-52:1.9;--layout-scale-14:1.05rem;--type-scale-53:1.2rem;--type-scale-54:0.94rem;--space-scale-34:0.45rem;--space-scale-35:5px;--type-scale-55:0.79rem;--layout-scale-15:1px;--space-scale-36:-1px;--layout-scale-16:160px;--layout-scale-17:2.8rem;--space-scale-37:1;--space-scale-38:3;--space-scale-39:2;--space-scale-40:-1;--space-scale-41:2.2rem;--space-scale-42:2rem;--type-scale-56:1.25rem;--space-scale-43:0.2rem;--type-scale-57:2.55rem;--type-scale-58:1.08rem;--type-scale-59:1.5rem;--color-03:white;--type-scale-60:10.5pt;--color-04:black;--layout-break-wide:1000px;--layout-break-medium:760px;--layout-break-phone:430px;}
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--space-scale-01);
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: var(--type-scale-01)/var(--type-scale-02) var(--sans);
+    }
+
+    [hidden] { display: none !important; }
+
+    a {
+      color: var(--teal);
+      text-decoration-thickness: var(--stroke-scale-01);
+      text-underline-offset: var(--space-scale-02);
+    }
+
+    a:hover { text-decoration-thickness: var(--stroke-scale-02); }
+
+    :focus-visible {
+      outline: var(--stroke-scale-03) solid var(--focus);
+      outline-offset: var(--space-scale-03);
+      border-radius: var(--radius-scale-01);
+    }
+
+    :target { scroll-margin-top: var(--space-scale-04); }
+
+    h1, h2, h3, h4, p, figure, dl { margin-top: 0; }
+
+    h1, h2, h3, h4 {
+      line-height: var(--leading-01);
+      text-wrap: balance;
+    }
+
+    h1 {
+      font: var(--type-scale-03) clamp(var(--type-scale-04), var(--type-scale-05), var(--type-scale-06))/var(--type-scale-07) var(--serif);
+      letter-spacing: var(--tracking-01);
+      margin-bottom: var(--space-scale-05);
+    }
+
+    h2 {
+      font: var(--type-scale-03) clamp(var(--type-scale-08), var(--type-scale-09), var(--type-scale-10))/var(--type-scale-11) var(--serif);
+      margin-bottom: var(--space-3);
+    }
+
+    h3 {
+      font-size: var(--type-scale-12);
+      margin-bottom: var(--space-2);
+    }
+
+    h4 {
+      font-size: var(--type-scale-01);
+      margin-bottom: var(--space-scale-06);
+    }
+
+    p { margin-bottom: var(--space-3); }
+    p:last-child { margin-bottom: 0; }
+    strong { font-weight: var(--weight-01); }
+    small, .small { font-size: var(--type-scale-13); }
+
+    button, input, select { font: inherit; }
+
+    button, select, input {
+      min-height: var(--layout-scale-01);
+      border: var(--stroke-scale-01) solid var(--muted);
+      border-radius: var(--radius-scale-02);
+    }
+
+    button {
+      padding: var(--space-scale-07) var(--space-scale-08);
+      background: var(--teal);
+      border-color: var(--teal);
+      color: var(--surface);
+      cursor: pointer;
+      font-weight: var(--weight-02);
+    }
+
+    button:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    button.secondary:hover { background: var(--sand); }
+
+    input, select {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      background: var(--surface);
+      color: var(--ink);
+      padding: var(--space-scale-07) var(--space-scale-09);
+    }
+
+    input::placeholder {
+      color: var(--muted);
+      opacity: 1;
+    }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    fieldset:disabled input,
+    fieldset:disabled button {
+      opacity: var(--opacity-scale-01);
+      cursor: default;
+    }
+
+    legend {
+      font-weight: var(--weight-01);
+      margin-bottom: var(--space-3);
+    }
+
+    label {
+      display: block;
+      font-size: var(--type-scale-14);
+      font-weight: var(--weight-02);
+    }
+
+    label > span {
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: var(--type-scale-15);
+      overflow-wrap: anywhere;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+    }
+
+    .skip {
+      position: fixed;
+      top: var(--layout-scale-02);
+      left: var(--layout-scale-03);
+      z-index: var(--layer-01);
+      padding: var(--space-scale-10) var(--space-scale-08);
+      background: var(--ink);
+      color: var(--surface);
+      transform: translateY(var(--layout-scale-04));
+    }
+
+    .skip:focus { transform: translateY(0); }
+
+    .masthead { border-bottom: var(--stroke-scale-01) solid var(--line); }
+
+    .masthead-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-3);
+      padding-block: var(--space-3);
+      font-size: var(--type-scale-16);
+    }
+
+    .brand {
+      font-weight: var(--weight-03);
+      letter-spacing: var(--tracking-02);
+    }
+
+    .masthead-meta {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero { padding-block: var(--space-6) var(--space-scale-11); }
+
+    .eyebrow {
+      display: block;
+      font-size: var(--type-scale-17);
+      font-weight: var(--weight-01);
+      letter-spacing: var(--tracking-03);
+      color: var(--teal);
+      margin-bottom: var(--space-3);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, var(--layout-scale-05)) minmax(var(--layout-scale-06), 1fr);
+      gap: var(--space-scale-12);
+      align-items: start;
+    }
+
+    .part {
+      display: block;
+      font: var(--type-scale-18) var(--type-scale-19)/var(--type-scale-20) var(--sans);
+      letter-spacing: var(--tracking-04);
+      margin-top: var(--space-3);
+      color: var(--teal);
+    }
+
+    .deck {
+      font-size: var(--type-scale-21);
+      max-width: var(--layout-scale-07);
+    }
+
+    .hero-note {
+      color: var(--muted);
+      font-size: var(--type-scale-22);
+    }
+
+    .editor-note {
+      background: var(--ink);
+      color: var(--paper);
+      padding: var(--space-scale-13);
+      border-radius: var(--radius);
+      border-top: var(--stroke-scale-04) solid var(--teal);
+    }
+
+    .editor-note h2 { font: var(--type-scale-23) var(--type-scale-24)/var(--type-scale-25) var(--sans); }
+    .editor-note p { font-size: var(--type-scale-26); }
+    .editor-note .eyebrow { color: var(--color-01); }
+
+    .edition-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-scale-14);
+      padding-top: var(--space-3);
+      border-top: var(--stroke-scale-01) solid var(--color-02);
+    }
+
+    .edition-stats strong {
+      display: block;
+      font: var(--type-scale-23) var(--type-scale-27)/var(--type-scale-28) var(--mono);
+    }
+
+    .edition-stats span {
+      display: block;
+      font-size: var(--type-scale-29);
+    }
+
+    .scope {
+      padding: var(--space-scale-15) var(--space-scale-04);
+      background: var(--surface);
+      border: var(--stroke-scale-01) solid var(--line);
+      border-left: var(--stroke-scale-05) solid var(--teal);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .scope h2 {
+      font: var(--type-scale-30) var(--type-scale-31)/var(--type-scale-25) var(--sans);
+      margin-bottom: var(--space-scale-14);
+    }
+
+    .scope p { font-size: var(--type-scale-14); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-06);
+      margin-top: var(--space-3);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: var(--space-scale-16) var(--space-scale-07);
+      border-radius: var(--radius-scale-03);
+      font: var(--type-scale-23) var(--type-scale-32)/var(--type-scale-33) var(--sans);
+      vertical-align: middle;
+      letter-spacing: 0;
+    }
+
+    .original {
+      background: var(--sand);
+      color: var(--ink);
+    }
+
+    .evidence {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .inference {
+      background: var(--surface);
+      color: var(--ink);
+      border: var(--stroke-scale-01) dashed var(--muted);
+    }
+
+    .caution {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--layout-scale-08) minmax(0, 1fr);
+      gap: var(--space-scale-17);
+      margin-top: var(--space-scale-11);
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: var(--layout-scale-03);
+    }
+
+    .toc {
+      border: 0;
+      background: transparent;
+    }
+
+    .toc summary {
+      padding: var(--space-scale-06) 0;
+      font-size: var(--type-scale-14);
+    }
+
+    .toc nav {
+      display: grid;
+      margin-top: var(--space-scale-06);
+    }
+
+    .toc a {
+      min-height: var(--layout-scale-09);
+      display: flex;
+      align-items: center;
+      gap: var(--space-scale-14);
+      padding: var(--space-scale-06) 0;
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+      color: var(--muted);
+      font-size: var(--type-scale-34);
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      color: var(--teal);
+      text-decoration: underline;
+    }
+
+    .toc a span {
+      font: var(--type-scale-29) var(--mono);
+      color: var(--teal);
+    }
+
+    .sidebar-note {
+      margin-top: var(--space-scale-18);
+      color: var(--muted);
+      font-size: var(--type-scale-35);
+    }
+
+    main { min-width: 0; }
+
+    .section {
+      padding-block: 0 var(--space-scale-19);
+      margin-bottom: var(--space-scale-19);
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-06) var(--space-scale-08);
+      align-items: center;
+      margin-bottom: var(--space-3);
+    }
+
+    .section-index {
+      font: var(--type-scale-18) var(--type-scale-35) var(--mono);
+      color: var(--teal);
+      letter-spacing: var(--tracking-05);
+    }
+
+    .section-lead { font-size: var(--type-scale-36); }
+    .muted { color: var(--muted); }
+
+    .ref {
+      display: inline-block;
+      padding: var(--space-scale-20) var(--space-scale-21);
+      font-size: var(--type-scale-37);
+      line-height: var(--leading-02);
+      font-weight: var(--weight-02);
+    }
+
+    .panel {
+      padding: var(--space-scale-15);
+      border: var(--stroke-scale-01) solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+    }
+
+    .callout {
+      padding: var(--space-scale-18) var(--space-scale-15);
+      border-left: var(--stroke-scale-03) solid var(--teal);
+      background: var(--teal-soft);
+      margin-block: var(--space-scale-15);
+    }
+
+    .warning {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-scale-22);
+      margin-block: var(--space-4);
+    }
+
+    .stage {
+      border-top: var(--stroke-scale-03) solid var(--teal);
+      padding: var(--space-scale-23);
+      background: var(--surface);
+    }
+
+    .stage-number {
+      display: block;
+      color: var(--teal);
+      font: var(--type-scale-18) var(--type-scale-38)/var(--type-scale-39) var(--mono);
+      margin-bottom: var(--space-scale-06);
+    }
+
+    .stage h3 { font-size: var(--type-scale-40); }
+    .stage p { font-size: var(--type-scale-41); }
+
+    .analogy-grid,
+    .two-col,
+    .company-grid,
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .analogy-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-block: var(--space-3);
+    }
+
+    .analogy-grid article {
+      padding-top: var(--space-3);
+      border-top: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .analogy-grid p { font-size: var(--type-scale-14); }
+
+    details {
+      border: var(--stroke-scale-01) solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius-scale-04);
+    }
+
+    summary {
+      min-height: var(--layout-scale-01);
+      cursor: pointer;
+      font-weight: var(--weight-04);
+      padding: var(--space-scale-24) var(--space-scale-08);
+    }
+
+    summary::marker { color: var(--teal); }
+
+    details[open] > summary {
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .details-body { padding: var(--space-scale-25) var(--space-scale-18); }
+    .audit { margin-block: var(--space-2); }
+    .audit summary { font-size: var(--type-scale-42); }
+
+    .audit-id {
+      font: var(--type-scale-23) var(--type-scale-34) var(--mono);
+      color: var(--teal);
+      margin-right: var(--space-1);
+    }
+
+    .audit-pair {
+      display: grid;
+      grid-template-columns: minmax(0, var(--layout-scale-10)) minmax(0, var(--layout-scale-11));
+      gap: var(--space-scale-25);
+      padding: var(--space-scale-25);
+    }
+
+    .audit-pair p {
+      font-size: var(--type-scale-43);
+      margin-top: var(--space-scale-06);
+    }
+
+    .audit-pair > div:first-child {
+      padding-right: var(--space-3);
+      border-right: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .google-evidence {
+      border-top: var(--stroke-scale-05) solid var(--teal);
+      margin-block: var(--space-scale-26);
+    }
+
+    .thesis {
+      margin-block: var(--space-4);
+      padding-bottom: var(--space-scale-15);
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .thesis:last-child { border-bottom: 0; }
+
+    .thesis h3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-14);
+      align-items: baseline;
+    }
+
+    .test {
+      color: var(--muted);
+      font-size: var(--type-scale-14);
+    }
+
+    .filters {
+      background: var(--sand);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      margin-block: var(--space-scale-04) var(--space-scale-22);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: var(--layout-scale-12) 1fr 1fr;
+      gap: var(--space-scale-22);
+    }
+
+    .filter-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-scale-22);
+    }
+
+    .filter-count {
+      margin: 0;
+      font-size: var(--type-scale-13);
+    }
+
+    .company {
+      padding: var(--space-scale-15);
+      border: var(--stroke-scale-01) solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      min-width: 0;
+    }
+
+    .company h3 {
+      font-size: var(--type-scale-44);
+      margin-bottom: var(--space-1);
+    }
+
+    .company .company-bet {
+      font-weight: var(--weight-01);
+      color: var(--teal);
+      margin-block: var(--space-scale-22);
+    }
+
+    .company p { font-size: var(--type-scale-45); }
+
+    .empty-state {
+      text-align: center;
+      padding: var(--space-scale-27) var(--space-scale-18);
+      border: var(--stroke-scale-02) dashed var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .cycle-chain {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-06);
+      margin: var(--space-scale-08) 0 var(--space-scale-04);
+      padding: 0;
+      list-style: none;
+    }
+
+    .cycle-chain li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-scale-06);
+      font-size: var(--type-scale-46);
+    }
+
+    .cycle-chain li:not(:last-child)::after {
+      content: "→";
+      color: var(--teal);
+    }
+
+    .cycle-chain span {
+      padding: var(--space-scale-28) var(--space-scale-29);
+      background: var(--teal-soft);
+      border-radius: var(--radius-scale-03);
+    }
+
+    .metric-chart { margin: var(--space-scale-04) 0; }
+
+    figcaption {
+      margin-bottom: var(--space-3);
+      font-weight: var(--weight-01);
+    }
+
+    .chart-row { margin-block: var(--space-scale-24); }
+
+    .chart-label {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-scale-30) var(--space-scale-10);
+      font-size: var(--type-scale-22);
+      margin-bottom: var(--space-scale-31);
+    }
+
+    .chart-label strong { font: var(--type-scale-23) var(--type-scale-22) var(--mono); }
+
+    .track {
+      height: var(--layout-scale-13);
+      background: var(--sand);
+      border-radius: var(--radius-scale-05);
+      overflow: hidden;
+    }
+
+    .fill {
+      display: block;
+      height: 100%;
+      width: var(--value, 0%);
+      background: var(--teal);
+    }
+
+    .fill.secondary-fill,
+    .fill.expense { background: var(--muted); }
+
+    .fill.balance { background: var(--teal); }
+    .fill.loss { background: var(--negative); }
+
+    .axis {
+      display: flex;
+      justify-content: space-between;
+      font: var(--type-scale-47)/var(--type-scale-48) var(--mono);
+      color: var(--muted);
+      margin-top: var(--space-scale-14);
+    }
+
+    .pricing-grid { margin-block: var(--space-4); }
+
+    .pricing-card {
+      border: var(--stroke-scale-01) solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: var(--space-scale-18);
+    }
+
+    .pricing-card h3 { color: var(--teal); }
+    .pricing-card p { font-size: var(--type-scale-45); }
+
+    .calc-shell {
+      padding: var(--space-4);
+      background: var(--surface);
+      border: var(--stroke-scale-01) solid var(--line);
+      border-top: var(--stroke-scale-05) solid var(--teal);
+      border-radius: var(--radius);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .input-grid label { line-height: var(--leading-03); }
+
+    .input-grid label small {
+      display: block;
+      font-weight: var(--weight-05);
+      color: var(--muted);
+      margin-top: var(--space-scale-32);
+      font-size: var(--type-scale-17);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-29);
+      margin-top: var(--space-3);
+    }
+
+    .calc-status {
+      color: var(--muted);
+      font-size: var(--type-scale-34);
+      margin-block: var(--space-scale-24);
+    }
+
+    .error {
+      color: var(--negative);
+      font-size: var(--type-scale-14);
+    }
+
+    .result-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-scale-29);
+      margin-block: var(--space-scale-15);
+    }
+
+    .result-item {
+      background: var(--teal-soft);
+      padding: var(--space-scale-33);
+      border-radius: var(--radius-scale-02);
+    }
+
+    .result-item span {
+      display: block;
+      font-size: var(--type-scale-35);
+    }
+
+    .result-item strong {
+      display: block;
+      font: var(--type-scale-03) clamp(var(--type-scale-01), var(--type-scale-49), var(--type-scale-50))/var(--type-scale-51) var(--mono);
+      overflow-wrap: anywhere;
+    }
+
+    .calc-formula {
+      display: block;
+      padding: var(--space-3);
+      background: var(--paper);
+      font: var(--type-scale-34)/var(--type-scale-52) var(--mono);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .practice-list {
+      padding: 0;
+      list-style: none;
+      counter-reset: practice;
+    }
+
+    .practice-list li {
+      counter-increment: practice;
+      position: relative;
+      padding: var(--space-scale-25) 0 var(--space-scale-25) var(--space-scale-12);
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .practice-list li::before {
+      content: counter(practice, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: var(--layout-scale-14);
+      color: var(--teal);
+      font: var(--type-scale-23) var(--type-scale-53)/var(--type-scale-20) var(--mono);
+    }
+
+    .practice-list h3 { margin-bottom: var(--space-scale-07); }
+    .practice-list p { font-size: var(--type-scale-54); }
+
+    .indicators { margin-block: var(--space-scale-18); }
+
+    .indicators > div {
+      padding: var(--space-scale-08) 0;
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .indicators dt { font-weight: var(--weight-01); }
+
+    .indicators dd {
+      margin: var(--space-scale-34) 0 0;
+      font-size: var(--type-scale-45);
+    }
+
+    .continuation {
+      border: var(--stroke-scale-02) dashed var(--muted);
+      padding: var(--space-5);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .continuation h2 { margin-bottom: var(--space-scale-22); }
+
+    .source-list {
+      padding: 0;
+      list-style: none;
+    }
+
+    .source-item {
+      padding: var(--space-scale-18) 0;
+      border-bottom: var(--stroke-scale-01) solid var(--line);
+    }
+
+    .source-item:target {
+      background: var(--teal-soft);
+      outline: var(--stroke-scale-03) solid var(--teal);
+      outline-offset: var(--space-scale-35);
+    }
+
+    .source-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-scale-06);
+      align-items: baseline;
+      margin-bottom: var(--space-1);
+    }
+
+    .source-id {
+      font: var(--type-scale-30) var(--type-scale-34) var(--mono);
+      color: var(--teal);
+    }
+
+    .source-top h3 {
+      font-size: var(--type-scale-01);
+      margin: 0;
+    }
+
+    .source-meta {
+      color: var(--muted);
+      font-size: var(--type-scale-55);
+      margin-bottom: var(--space-scale-34);
+    }
+
+    .source-item p {
+      font-size: var(--type-scale-22);
+      margin-bottom: var(--space-scale-06);
+    }
+
+    .source-url {
+      display: block;
+      font: var(--type-scale-29)/var(--type-scale-48) var(--mono);
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .method-card { margin-block: var(--space-scale-15); }
+
+    .version {
+      padding: var(--space-scale-18);
+      background: var(--sand);
+      border-radius: var(--radius);
+      margin-top: var(--space-scale-15);
+    }
+
+    .version h3 { margin-bottom: var(--space-scale-06); }
+    .version p { font-size: var(--type-scale-14); }
+
+    .footer { padding-block: var(--space-scale-08) var(--space-scale-19); }
+
+    .footer-row {
+      border-top: var(--stroke-scale-02) solid var(--ink);
+      padding-top: var(--space-scale-25);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      align-items: center;
+    }
+
+    .handoff {
+      display: block;
+      color: var(--muted);
+      font: var(--type-scale-47)/var(--type-scale-48) var(--mono);
+      overflow-wrap: anywhere;
+    }
+
+    .review-status {
+      overflow-wrap: anywhere;
+      margin-top: var(--space-3);
+      padding: var(--space-scale-22) var(--space-scale-08);
+      background: var(--amber-soft);
+      border: var(--stroke-scale-01) solid var(--amber);
+      border-radius: var(--radius-scale-02);
+      font-weight: var(--weight-01);
+      color: var(--amber);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: var(--layout-scale-15);
+      height: var(--layout-scale-15);
+      padding: 0;
+      margin: var(--space-scale-36);
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1000px) {
+      .layout {
+        grid-template-columns: var(--layout-scale-16) minmax(0, 1fr);
+        gap: var(--space-scale-04);
+      }
+
+      .stage-grid,
+      .analogy-grid { grid-template-columns: 1fr; }
+
+      .stage {
+        display: grid;
+        grid-template-columns: var(--layout-scale-17) 1fr;
+        gap: 0 var(--space-scale-29);
+      }
+
+      .stage-number { grid-row: var(--space-scale-37) / var(--space-scale-38); }
+      .stage p { grid-column: var(--space-scale-39); }
+
+      .filter-grid,
+      .input-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .filter-grid label:first-child { grid-column: var(--space-scale-37) / var(--space-scale-40); }
+    }
+
+    @media (max-width: 760px) {
+      .wrap { padding-inline: var(--space-scale-18); }
+      .hero { padding-top: var(--space-scale-41); }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-scale-04);
+      }
+
+      .editor-note { padding: var(--space-scale-15); }
+
+      .layout {
+        display: block;
+        margin-top: var(--space-scale-04);
+      }
+
+      .sidebar {
+        position: static;
+        margin-bottom: var(--space-scale-42);
+      }
+
+      .toc {
+        border: var(--stroke-scale-01) solid var(--line);
+        padding: var(--space-scale-32) var(--space-scale-22);
+      }
+
+      .toc nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 var(--space-scale-08);
+      }
+
+      .sidebar-note { display: none; }
+
+      .section {
+        padding-bottom: var(--space-scale-42);
+        margin-bottom: var(--space-scale-42);
+      }
+
+      .audit-pair {
+        grid-template-columns: 1fr;
+        gap: var(--space-scale-22);
+      }
+
+      .audit-pair > div:first-child {
+        padding-right: 0;
+        padding-bottom: var(--space-scale-22);
+        border-right: 0;
+        border-bottom: var(--stroke-scale-01) solid var(--line);
+      }
+
+      .company-grid,
+      .pricing-grid,
+      .two-col { grid-template-columns: 1fr; }
+
+      .calc-shell { padding: var(--space-scale-25); }
+      .result-strip { grid-template-columns: 1fr; }
+
+      .result-item {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-scale-28);
+      }
+
+      .result-item strong { font-size: var(--type-scale-56); }
+      .scope { padding: var(--space-scale-25); }
+      .continuation { padding: var(--space-scale-26); }
+    }
+
+    @media (max-width: 430px) {
+      .masthead-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-scale-43);
+      }
+
+      h1 { font-size: var(--type-scale-57); }
+      .deck { font-size: var(--type-scale-58); }
+      .input-grid { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
+      .filter-grid label:first-child { grid-column: auto; }
+      .button-row button { flex: 1 1 100%; }
+      .edition-stats strong { font-size: var(--type-scale-59); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @media (forced-colors: active) {
+      .fill { background: Highlight; }
+
+      .track,
+      .badge,
+      .editor-note,
+      .result-item { border: var(--stroke-scale-01) solid CanvasText; }
+
+      button { border: var(--stroke-scale-01) solid ButtonText; }
+    }
+
+    @media print {
+      body {
+        background: var(--color-03);
+        font-size: var(--type-scale-60);
+      }
+
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+
+      .layout { display: block; }
+
+      .sidebar,
+      .filters,
+      .skip,
+      .button-row,
+      .empty-state { display: none !important; }
+
+      .company[hidden] { display: block !important; }
+      .hero { padding-top: 0; }
+      .hero-grid { grid-template-columns: 1fr; }
+
+      .editor-note {
+        background: var(--color-03);
+        color: var(--color-04);
+        border: var(--stroke-scale-01) solid var(--color-04);
+      }
+
+      .editor-note .eyebrow { color: var(--color-04); }
+
+      .section {
+        margin-bottom: var(--space-scale-26);
+        padding-bottom: var(--space-scale-26);
+      }
+
+      .company,
+      .source-item,
+      .pricing-card,
+      .chart-row { break-inside: avoid; }
+
+      a { color: inherit; }
+    }
+  
+#verified-addendum h3{margin-top:var(--space-5)}#verified-addendum details{margin-block:var(--space-3)}</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="masthead" id="top">
+<div class="wrap masthead-inner">
+<span class="brand">技术 × 商业 / 研究札记</span>
+<span class="masthead-meta">
+<time datetime="2026-10-06">2026-10-06</time>
+        · v1 · 面向创作者与独立开发者
+      </span>
+</div>
+</header>
+<div class="wrap">
+<section aria-labelledby="page-title" class="hero">
+<span class="eyebrow">行业观察 · 先分清事实，再讨论机会</span>
+<div class="hero-grid">
+<div>
+<h1 id="page-title">
+            硅谷AI行业<br/>现状分析
+            <span class="part">｜上半部分</span>
+</h1>
+<p class="deck">算力、任务与入口：当智能成为可调用的能力，谁承担成本，谁交付结果，谁保留与用户的关系？</p>
+<p class="hero-note">本文把用户提供的上半部文稿转述、企业公开披露与编辑推论分开呈现。它是有边界的产业分析，不是完整演讲实录，也不提供任何证券买卖建议。</p>
+</div>
+<aside aria-label="本期阅读要点" class="editor-note">
+<span class="eyebrow">本期判断 · 编辑推论</span>
+<h2>不要把能力增长，直接写成利润归属。</h2>
+<p>对小团队，更有用的问题不是押中哪一家巨头，而是找到可验收的任务、算清每次交付的成本，并避免把获客与数据关系全部交给单一入口。</p>
+<div class="edition-stats">
+<div><strong>03</strong><span>分析阶段</span></div>
+<div><strong>08</strong><span>公司定位</span></div>
+<div><strong>19</strong><span>已核验公开来源</span></div>
+</div>
+</aside>
+</div>
+</section>
+<section aria-labelledby="scope-title" class="scope" id="origin">
+<h2 id="scope-title">材料边界：只有 Google 在所给上半部文稿中被展开</h2>
+<p><strong>P0 · 原始材料：</strong>用户提供了上半部分逐字稿，未提供原始音视频。讲话者身份、原始音视频及提到的曾鸣播客均不可得；不补造作者、节目名、期数、时间戳或直接引语。标为“原观点”的内容均为文稿层面的转述，不是逐字引用。</p>
+
+<div aria-label="全文标签说明" class="legend">
+<span class="badge original">原观点 · 文稿转述</span>
+<span class="badge evidence">公开证据 · 可追溯</span>
+<span class="badge inference">补充推论 · 待验证</span>
+<span class="badge caution">示例 / 计划 · 非既成事实</span>
+</div>
+</section>
+<div class="layout">
+<aside class="sidebar">
+<details class="toc" open="">
+<summary>本页阅读导航</summary>
+<nav aria-label="章节导航">
+<a href="#stages"><span>01</span>三阶段与类比边界</a>
+<a href="#audit"><span>02</span>九项观点审计</a>
+<a href="#google"><span>03</span>Google 深读</a>
+<a href="#companies"><span>04</span>八家公司地图</a>
+<a href="#cycle"><span>05</span>基础设施周期</a>
+<a href="#pricing"><span>06</span>定价模式比较</a>
+<a href="#economics"><span>07</span>月度经营试算</a>
+<a href="#actions"><span>08</span>创业观察与指标</a>
+<a href="#verified-addendum"><span>09</span>核验补充与案例</a>
+<a href="#continuation"><span>10</span>下半部待续区</a>
+<a href="#sources"><span>11</span>来源与证据限制</a></nav>
+</details>
+<p class="sidebar-note">正文与图表数字均可离线阅读。脚本只增强本地筛选和试算，不读取账户，不保存输入，也不发送请求。</p>
+</aside>
+<main id="main" tabindex="-1">
+<section aria-labelledby="stages-title" class="section" id="stages">
+<div class="section-head">
+<span class="section-index">01 / FRAMEWORK</span>
+<span class="badge original">原文稿转述 + 编辑边界说明</span>
+</div>
+<h2 id="stages-title">三阶段是价值链坐标，不是交棒时刻表</h2>
+<p class="section-lead">文稿将这一轮变化概括为“基础设施 → Agent 应用 → 能力分发 / 操作系统”。这里的箭头表示观察重心的移动，不表示前一阶段结束后，后一阶段才会出现。<a class="ref" href="#origin">[P0 · 文稿来源边界]</a></p>
+<div aria-label="三阶段分析框架，序号不是年份或市场份额" class="stage-grid">
+<article class="stage">
+<span class="stage-number">01</span>
+<h3>基础设施：把能力造出来</h3>
+<p>观察算力、模型、机房和交付容量。分析重点是前置投入多久才能转成被使用、被付费的服务，而非采购了多少设备。对独立开发者，真正接触到的往往是调用价格、可用性和延迟，不是整座数据中心的账面规模。</p>
+</article>
+<article class="stage">
+<span class="stage-number">02</span>
+<h3>Agent 应用：把任务做完</h3>
+<p>本文把 Agent 理解为能够组织多步工作、调用工具并处理状态的任务系统。一个演示能运行，不等于客户能放心交付；任务验收、失败恢复、权限边界和人工复核，决定它是在生成内容，还是在承担工作流程。</p>
+</article>
+<article class="stage">
+<span class="stage-number">03</span>
+<h3>能力分发：决定谁被调用</h3>
+<p>此处“操作系统”是功能类比：管理身份、上下文、工具发现、任务路由与结算。它不必是新的桌面系统，也可能依附搜索、设备或工作环境。掌握入口和拥有全部底层算力，是两个不同问题。</p>
+</article>
+</div>
+<p><span class="badge inference">补充推论</span> 三层可以同时竞争，也可以由同一家公司跨层经营。应用可能把模型替换成更便宜的供应商，入口可能调用外部云，基础设施商也可能直接提供开发工具。因此，“模型更强”与“应用没有价值”、“有设备入口”与“无需外购算力”，都不是逻辑等价式。Apple 的 PCC 扩展公告正好提供了后一种区分的实例。<a class="ref" href="#s04">[S04 · Apple · 2026-06-08]</a></p>
+<h3>历史类比可以提出问题，不能代替预测模型</h3>
+<p class="small muted">以下只保留原文稿中的 SGI、电信、铁路类比作为假设工具；没有在此重建这些行业的历史财务序列，也没有推出任何公司将重复其结局。<a class="ref" href="#origin">[P0]</a></p>
+<div class="analogy-grid">
+<article>
+<h4>SGI 类比：优势会不会迁移？</h4>
+<p>把它当作“专业计算平台的优势是否会被新的技术组织方式改写”的问题。需要检验的是替代方案的性能、迁移成本和开发者生态，而不是因为同样销售计算能力，就预设 NVIDIA 的命运。</p>
+</article>
+<article>
+<h4>电信类比：容量是否先于需求？</h4>
+<p>它提醒我们拆开建成容量与付费利用率。但不同地区、网络条件、芯片代际和工作负载未必能互相替代；一处闲置，不能证明全行业过剩，一处排队，也不能证明所有项目都值得继续扩张。</p>
+</article>
+<article>
+<h4>铁路类比：使用价值归谁？</h4>
+<p>它让人区分社会使用价值与建设者的经济回报。即使基础设施帮助大量下游业务，也不能跳过融资、定价和债务期限的分析。受益者与出资者可能不同，但这里不预测它们必然分离。</p>
+</article>
+</div>
+<details>
+<summary>为什么不能把三个类比拼成“泡沫必然破裂”？</summary>
+<div class="details-body">
+<p>类比只抽取了相似机制，没有提供相同的初始条件。有效的比较至少要说明资产寿命、需求弹性、竞争结构、融资成本和供给可迁移性；缺少这些变量，历史故事可以支持多种相反叙事。本文因此不设置周期拐点年份，也不推导某家公司必胜或必败。</p>
+<p>同样，基础设施存在盈利企业，并不意味着每个新增项目都具有相同回报。正确的分析单位应下沉到项目、客户与工作负载，而不是把整个行业压缩成一个情绪标签。</p>
+</div>
+</details>
+</section>
+<section aria-labelledby="audit-title" class="section" id="audit">
+<div class="section-head">
+<span class="section-index">02 / CLAIM AUDIT</span>
+<span class="badge evidence">九项核对 · 不替代原话校勘</span>
+</div>
+<h2 id="audit-title">先修正九个容易滑向结论的命题</h2>
+<p>下列“原观点 / 待核命题”根据所给文稿及勘误要求整理，<strong>不是对原话的逐字引用，亦未经原音频校勘</strong>。事实判断、概念纠正和证据不足分别处理；判为证据不足，不等于已经证明相反命题。<a class="ref" href="#origin">[P0]</a></p>
+<details class="audit" open="">
+<summary><span class="audit-id">01</span>时间线：1990年代的固定互联网，不是移动互联网</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>在历史阶段的讲述中，把1990 年代光纤铺设所服务的固定互联网称为移动互联网。</p>
+</div>
+<div>
+<span class="badge evidence">概念纠正</span>
+<p>本页统一改为“1990年代的固定互联网 / 早期 Web”。不能把固定接入、移动设备入口和今天的 AI 任务入口当成同一种分发条件；这里纠正术语，不额外宣称某个唯一的移动互联网起始年。校对依据为本次提供的时间线勘误要求。<a class="ref" href="#origin">[P0 · 勘误范围]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">02</span>历史类比：机制假设，不是公司命运预告</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 文稿转述</span>
+<p>借 SGI、电信建设和铁路投资理解 AI 基础设施与平台迁移。</p>
+</div>
+<div>
+<span class="badge inference">保留类比，撤去必然性</span>
+<p>需要证明的是需求兑现、供给替代、融资压力等机制是否相似，而不是先给出同样结局。本文把这些比喻保留为可检验问题，不把它们写成市场预测、投资回报预测或破产预告。<a class="ref" href="#stages">[本文 §01 · 类比边界]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">03</span>计量单位：token 不是跨模型统一的“智能吨位”</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>用 token 数量或每百万 token 单价，直接比较不同模型的产能、能力和经济价值。</p>
+</div>
+<div>
+<span class="badge evidence">计量纠正</span>
+<p>分词方式、语言、输入与输出类别都会影响计量；同一任务也可能产生不同长度的推理和结果。应固定任务、质量门槛与延迟要求，比较验收成功的总成本；不能把低 token 单价直接等同低交付成本。<a class="ref" href="#m01">[M01 · OpenAI 计量说明]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">04</span>成本：数字服务不等于边际成本为零</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>模型训练完以后，新增用户或新增回答不再产生成本。</p>
+</div>
+<div>
+<span class="badge evidence">否定绝对说法</span>
+<p>新增推理、工具调用、重试和服务支持都可能增加费用；容量扩张还可能带来阶梯式成本。微软对 AI 投入与云毛利的解释提供了成本压力的背景，但不能据此反推任何一条回答的成本。<a class="ref" href="#s02">[S02 · 2026-07-29]</a><a class="ref" href="#m01">[M01 · 调用计量]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">05</span>付费：消费者“永远不付钱”是错误命题</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>消费者产品只能免费，只有企业客户愿意付费。</p>
+</div>
+<div>
+<span class="badge evidence">存在反例，不泛化支付意愿</span>
+<p>微软披露的消费者订阅业务及订阅量增长，足以否定“消费者从不付费”。但这也不能证明任意 AI 工具都能收费。应按任务频率、可替代性、节省时间与个人预算区分需求，而不是用 C 端 / B 端标签代替用户研究。<a class="ref" href="#s02">[S02 · 消费者订阅披露]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">06</span>商业模式：广告出现，不等于订阅失败</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>广告与付费只能二选一；引入广告便说明用户不愿订阅，或者广告已经左右答案。</p>
+</div>
+<div>
+<span class="badge evidence">证据只支持广告业务存在</span>
+<p>OpenAI 的公告支持其广告平台与相关产品的存在，不能证明订阅模式失败，也不能证明广告影响独立回答。免费用户、付费高价值层与广告可以共存；实际答案独立性仍需独立验证，不能只凭厂商承诺判定。<a class="ref" href="#s07">[S07 · 2026-09-16]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">07</span>Google 动机：“故意稀释搜索”没有充分证据</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>搜索产品改变，就意味着 Google 有意降低搜索价值或主动牺牲现有业务。</p>
+</div>
+<div>
+<span class="badge caution">不支持动机归因</span>
+<p>产品发布能证明产品变化，不能单独证明内部战略意图。防守用户意图、改善体验、寻找新变现与降低流失，都是可能解释。miniapps 在所引公告中仍是未来计划，本页不把计划升级为已核实上线。<a class="ref" href="#s05">[S05 · 2026-05-19]</a></p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">08</span>财务口径：单季、年化与全年实际不能互换</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 待核命题</span>
+<p>Google 每年广告收入约4,000亿美元；单季收入乘四即为全年收入；不同公司的资本支出可以不校准周期就比较。</p>
+</div>
+<div>
+<span class="badge evidence">改用同期间、同定义的数据</span>
+<p>Google 2025 全年广告收入为 <strong>2946.91 亿美元</strong>；这是全年实际口径。2026 Q2 广告收入为 816.29 亿美元，季度乘四仍只是算术年化，不能充当全年实际。详见 <a href="#verified-addendum">年度财报核验补充</a>。广告合计与纯搜索收入、收入与利润应分别标注。</p>
+</div>
+</div>
+</details>
+<details class="audit" open="">
+<summary><span class="audit-id">09</span>巴菲特 / 喜诗类比：保留讲话归属，不制造引语</summary>
+<div class="audit-pair">
+<div>
+<span class="badge original">原观点 / 文稿转述</span>
+<p>原讲话借巴菲特与喜诗糖果（See’s）的故事讨论商业质量。</p>
+</div>
+<div>
+<span class="badge inference">解释有边界，出处仍待核</span>
+
+</div>
+</div>
+</details>
+</section>
+<section aria-labelledby="google-title" class="section" id="google">
+<div class="section-head">
+<span class="section-index">03 / GOOGLE</span>
+<span class="badge original">上半部唯一展开对象</span>
+</div>
+<h2 id="google-title">Google：争夺的可能是“任务从哪里开始”</h2>
+<p class="section-lead"><span class="badge original">原文稿转述</span> Google 的观察主线是“用户意图”。本页将它拆成入口防守、变现、推理成本与云业务四个问题；这些展开属于编辑分析，不冒充讲话逐字内容。<a class="ref" href="#origin">[P0]</a></p>
+<div class="panel google-evidence" id="google-evidence">
+<h3>先确定公开材料真正说了什么</h3>
+<p><span class="badge evidence">产品公告</span> Google 于2026年5月19日介绍 Search agents，并宣布 AI Mode 使用 Gemini 3.5 Flash；同文中的 miniapps 属于未来计划。本文没有用后续上线证据替换这一状态。<a class="ref" href="#s05">[S05 · 2026-05-19]</a></p>
+<p><span class="badge evidence">财务披露</span> S09 的 Google advertising 是广告合计，不能当作纯搜索广告收入。收入数字描述已经发生的经营结果，不说明管理层希望主动缩小哪一项业务。<a class="ref" href="#s09">[S09 · 2026-07-22]</a></p>
+</div>
+<article class="thesis">
+<h3><span class="badge inference">推论 A</span>防守意图：让用户先在自己的界面描述任务</h3>
+<p>当查询从几个关键词变成一段目标、约束和上下文，入口可能更早接触到用户的决策过程。由此可以推测，搜索代理有助于维持 Google 与任务发起者的关系；但同一产品变化也可能只是为了减少来回搜索的步骤，不能从结果倒推唯一动机。<a class="ref" href="#s05">[依据 S05；动机为本文推论]</a></p>
+<p class="test"><strong>如何检验：</strong>比较同类任务的完成率、再次使用率、外部访问与最终转化。即使查询次数增加，也需要判断新增的是有效需求、任务拆分，还是反复追问；一个总量指标无法回答入口价值是否提高。</p>
+</article>
+<article class="thesis">
+<h3><span class="badge inference">推论 B</span>重组变现：从页面曝光转向不同价值的任务</h3>
+<p>一种分析路径是把商业价值拆为任务量、商业意图占比、转化质量与单位变现。回答更完整，可能减少某些点击，也可能让部分商业需求表达得更清楚；净影响必须依靠分组数据验证。不能把所有查询视为同等价值，也不能把单季广告增长全部归因于 AI。<a class="ref" href="#s05">[S05]</a><a class="ref" href="#s09">[S09；因果未识别]</a></p>
+<p class="test"><strong>边界：</strong>这不是“Google 故意稀释搜索”的证据。为了改善体验接受某些旧指标下降，与有意破坏业务价值，是两个不同命题。需要观察的是用户价值和收入结构如何共同变化。</p>
+</article>
+<article class="thesis">
+<h3><span class="badge inference">推论 C</span>控制推理成本：更好的答案仍要经过账单检验</h3>
+<p>多轮推理、检索和工具执行可能改变一次任务的资源消耗。评价新入口，需要同时考虑成功交付数、平均成本和高成本尾部。路由、缓存与简化流程可以作为小团队的工程试验方向，但不能据此声称已经知道 Google 的单次 AI 搜索成本。<a class="ref" href="#m01">[M01 · 任务计量依据]</a></p>
+<p class="test"><strong>证据缺口：</strong>本页引用的 Google 材料没有提供可直接计算单次 AI 搜索利润的完整数据。微软关于云毛利压力与效率改善的披露只能作为跨公司背景，不能替 Google 填入成本参数。<a class="ref" href="#s02">[S02 · 背景而非代理测量]</a></p>
+</article>
+<article class="thesis">
+<h3><span class="badge inference">推论 D</span>云业务分散变现路径，但不会自动分散所有风险</h3>
+<p>Apple 宣布把 PCC 扩展至采用 NVIDIA 的 Google Cloud，为“入口在别处，计算服务仍可由云平台提供”给出了公开实例。由此可以推测，Google 不只可能从自身搜索入口获得商业机会，也可能服务别人的入口。<a class="ref" href="#s04">[S04 · 2026-06-08；后句为推论]</a></p>
+<p>这种多路径变现可能降低对单一产品形态的依赖，但客户集中、长期采购承诺和基础设施成本也可能产生新的相关风险。它不是已证实的内部战略意图，更不能证明云收入一定能抵消任何搜索业务变化。</p>
+</article>
+<div class="callout">
+<h3>对创作者：把“被看见”和“建立关系”分开计量</h3>
+<p>一个可执行的做法，是分别记录内容被引用、用户到站、订阅和成交，而不是把摘要中的一次提及等同一个客户。把重要事实写清、给出可追溯出处、明确内容授权与联系路径，是可控的编辑工作；这并不承诺获得任何平台的排序优待。对开发者，则应保存用户授权的任务记录、验收标准与可导出的项目状态，让产品价值不依赖某一模型名称。</p>
+</div>
+</section>
+<section aria-labelledby="companies-title" class="section" id="companies">
+<div class="section-head">
+<span class="section-index">04 / COMPANY MAP</span>
+<span class="badge inference">七家补充分析，不是缺失讲稿</span>
+</div>
+<h2 id="companies-title">八家公司，八种待验证的价值主张</h2>
+<p>公司下注方向取自用户提供的上半部文稿；只有 Google 的论述属于原文稿已展开部分。其余卡片里的解释全部是<strong>本页补充分析</strong>。这里的“下注”是理解竞争位置的框架，不是对公司完整战略的认定，也不是能力排名。<a class="ref" href="#origin">[P0]</a></p>
+<form aria-label="筛选公司地图" class="filters" hidden="" id="company-filter" role="search">
+<div class="filter-grid">
+<label for="company-query">
+<span>公司或主题关键词</span>
+<input aria-controls="company-grid" aria-describedby="filter-help" autocomplete="off" id="company-query" maxlength="80" placeholder="例如：谷歌、企业信任、算力" type="search"/>
+</label>
+<label for="company-layer">
+<span>价值链位置</span>
+<select aria-controls="company-grid" id="company-layer">
+<option value="all">全部位置</option>
+<option value="infra">基础设施</option>
+<option value="agent">Agent 应用</option>
+<option value="entry">能力分发 / 入口</option>
+<option value="enterprise">企业交付</option>
+</select>
+</label>
+<label for="company-scope">
+<span>文字归属</span>
+<select aria-controls="company-grid" id="company-scope">
+<option value="all">全部归属</option>
+<option value="original">上半部已展开</option>
+<option value="supplement">本页补充分析</option>
+</select>
+</label>
+</div>
+<div class="filter-bottom">
+<p aria-atomic="true" aria-live="polite" class="filter-count" id="filter-count" role="status">显示 8 / 8 家公司</p>
+<button class="secondary" id="filter-reset" type="button">重置筛选</button>
+</div>
+<p class="small muted" id="filter-help">多个词以空格分开时，需同时匹配。筛选只影响下方卡片，不隐藏正文或证据。</p>
+</form>
+<noscript>
+<p class="callout">脚本未启用：以下八家公司完整展示；筛选不影响正文阅读。</p>
+</noscript>
+<div class="company-grid" id="company-grid">
+<article class="company" data-layer="infra agent entry" data-scope="original" data-search="google alphabet 谷歌 意图 搜索 云 基础设施 agent 入口 分发">
+<h3>Google</h3>
+<span class="badge original">原文稿已展开 · 本页转述</span>
+<p class="company-bet">下注方向：用户意图</p>
+<p>关键问题不是搜索框长什么样，而是谁先接到用户的目标。本文以“防守入口，同时重组任务交付”解释这一方向；这不是已经核实的内部动机。产品与财务事实见 <a href="#google-evidence">Google 证据框</a>。<a class="ref" href="#s05">[S05]</a><a class="ref" href="#s09">[S09]</a></p>
+
+</article>
+<article class="company" data-layer="infra agent enterprise" data-scope="supplement" data-search="microsoft 微软 企业信任 权限 审计 工作流 云 基础设施 agent 企业交付">
+<h3>Microsoft</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：企业信任</p>
+<p>这里的信任应拆成权限、管理、可追溯性和交付责任，而不是把大公司名称当作可靠性的替代品。S02 提供供给投入与云业务的财务背景，并不直接测量“信任溢价”。<a class="ref" href="#s02">[S02 · 2026-07-29]</a></p>
+<p><strong>开发者检验点：</strong>采购者愿意为哪些管理功能支付额外费用？真正进入日常流程之后，谁承担错误与维护成本？</p>
+</article>
+<article class="company" data-layer="agent entry enterprise" data-scope="supplement" data-search="openai 开放人工智能 智能溢价 模型 广告 订阅 agent 入口 企业交付">
+<h3>OpenAI</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：智能溢价</p>
+<p>“更强能力可以收费”需要用任务结果证明，而不是由品牌名推出。广告平台公告说明变现可以有多条路径，但既不是订阅失败的证据，也不是模型能力优势的测量。<a class="ref" href="#s07">[S07 · 2026-09-16]</a></p>
+<p><strong>开发者检验点：</strong>在同样验收标准下，高能力模型减少的返工与人工复核，是否足以覆盖调用价差？</p>
+</article>
+<article class="company" data-layer="agent enterprise" data-scope="supplement" data-search="anthropic 安思 智能溢价 claude code cowork 企业工作流 agent 企业交付">
+<h3>Anthropic</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：智能溢价与工作交付</p>
+<p>与 OpenAI 分列，因为合作路径和产品落点需要分别验证。PwC 扩大 Claude / Code / Cowork 部署的公告提供企业采用线索，但厂商宣布合作并不等于独立测得投资回报。<a class="ref" href="#s06">[S06 · 2026-05-14]</a></p>
+<p><strong>开发者检验点：</strong>试点是否进入持续使用？比较上线前后的总交付时间时，是否计算了培训、复核与集成成本？</p>
+</article>
+<article class="company" data-layer="infra" data-scope="supplement" data-search="nvidia 英伟达 算力溢价 gpu 网络 软件 生态 基础设施">
+<h3>NVIDIA</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：算力与系统生态溢价</p>
+<p>分析对象应包括计算、网络和软件生态，不只是单颗 GPU。单季强劲财务表现说明当期经营结果，不能证明未来毛利会维持同一水平；核心数字见 S08。<a class="ref" href="#s08">[S08 · 2026-08-26]</a></p>
+<p><strong>开发者检验点：</strong>在性能接近时，工具链、迁移与运维成本是否仍影响选择？同时区分供应商利润与应用商的利润。</p>
+</article>
+<article class="company" data-layer="infra agent enterprise" data-scope="supplement" data-search="amazon 亚马逊 aws 内部需求 平台化 云 基础设施 agent 企业交付">
+<h3>Amazon</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：内部需求成为平台</p>
+<p>这是“内部场景试验，再向外部客户标准化”的解释框架，不是对 AWS 起源或所有新产品路径的完整历史认定。AWS 的季度经营结果证明已有平台规模，不保证每项内部 AI 工具都能复制。<a class="ref" href="#s03">[S03 · 2026-07-30]</a></p>
+<p><strong>开发者检验点：</strong>内部好用的工具，是否能在没有特殊数据、补贴与团队支持的条件下服务其他客户？</p>
+</article>
+<article class="company" data-layer="entry agent" data-scope="supplement" data-search="apple 苹果 设备入口 隐私 pcc 云 agent 入口 分发">
+<h3>Apple</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：设备入口</p>
+<p>设备与交互控制可以和外部算力采购同时存在。PCC 扩展公告反驳的是“掌握入口就必然自有全部计算”的推断，不是对所有隐私承诺已经完成独立验证的证明。<a class="ref" href="#s04">[S04 · 2026-06-08]</a></p>
+<p><strong>开发者检验点：</strong>哪些步骤必须发生在设备端，哪些可以交给云？用户是否能理解并撤回数据与任务授权？</p>
+</article>
+<article class="company" data-layer="entry agent" data-scope="supplement" data-search="meta 脸书 元 上下文 个人代理 社交 agent 入口 分发">
+<h3>Meta</h3>
+<span class="badge inference">补充分析 · 非下半部原文</span>
+<p class="company-bet">下注方向：上下文与个人代理</p>
+<p>“更了解用户情境就可能提供更贴近需求的代理”是待验证命题，还取决于授权、准确性和用户信任。财报能说明投入与经营状况，不能证明个人代理已经形成稳定收入。<a class="ref" href="#s01">[S01 · 2026-07-29]</a></p>
+<p><strong>开发者检验点：</strong>上下文是否真的改善任务结果？用户愿意提供的信息范围，是否小于产品设计默认需要的范围？</p>
+</article>
+</div>
+<div class="empty-state" hidden="" id="company-empty">
+<h3>没有匹配的公司</h3>
+<p>试试更短的关键词，或取消位置与归属条件。无匹配只表示本页八张卡片不满足条件，不代表行业中不存在相关业务。</p>
+<button id="empty-reset" type="button">清除全部筛选</button>
+</div>
+</section>
+<section aria-labelledby="cycle-title" class="section" id="cycle">
+<div class="section-head">
+<span class="section-index">05 / INFRASTRUCTURE</span>
+<span class="badge inference">本页独立补充分析</span>
+</div>
+<h2 id="cycle-title">基础设施周期：采购金额只是第一站</h2>
+<p class="section-lead">观察资本开支时，先把链条拉长：签约、交付、通电、部署、被使用，再到回款。任何一环延迟，都可能使资本投入和收入确认错位；这是一套项目分析框架，不是对全行业利用率的测量。</p>
+<ol aria-label="基础设施兑现链条" class="cycle-chain">
+<li><span>01 采购 / 融资</span></li>
+<li><span>02 交付 / 通电</span></li>
+<li><span>03 部署 / 使用</span></li>
+<li><span>04 计费 / 回款</span></li>
+</ol>
+<div class="two-col">
+<article class="panel">
+<h3>利用率与利息负担，要放在同一张工作表</h3>
+<p>利用率应区分设备在线、正在计算与有效付费工作负载。即便机房很忙，也可能存在低价试用、低效率任务或内部需求；因此不能只用“忙碌程度”推算现金回收。</p>
+<p>对有融资的项目，还应检查利率、到期日、最低采购承诺和还款节奏。折旧是成本分摊，利息是融资代价，资本支出是资产投入；三者不能混用。本文不假定任何一家公司的新增项目一定依赖高负债。</p>
+</article>
+<article class="panel">
+<h3>电力与网络约束，会造成局部供需错配</h3>
+<p>情景分析不能假设“买到芯片”就等于“立即可交付计算”。供电、冷却、网络互联和数据位置都可能改变部署时间。这里列的是应检查的约束，并非声称这些约束已经同时发生在每家公司。</p>
+<p>同样，训练与推理、不同芯片代际、不同延迟等级未必共享一张完全可替换的供给池。短缺与闲置可以在不同位置并存。要否定或支持“过度建设”，需要分地区、分代际、分负载的利用率和合同数据。</p>
+</article>
+</div>
+<figure aria-describedby="capex-note" aria-labelledby="capex-caption" class="panel metric-chart">
+<figcaption id="capex-caption">口径示范：微软同一个季度，两种支出指标</figcaption>
+<p class="small muted">FY26 Q4 · 单位：十亿美元（USD bn）· 共同刻度 0–50</p>
+<div class="chart-row">
+<div class="chart-label">
+<span>资本支出（含融资租赁）</span>
+<strong>41.0</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill" style="--value:82%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>现金购置不动产、厂房及设备</span>
+<strong>35.8</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill secondary-fill" style="--value:71.6%"></span>
+</div>
+</div>
+<div aria-hidden="true" class="axis">
+<span>0</span><span>25</span><span>50</span>
+</div>
+<p class="small" id="capex-note">两条柱不是可相加的组成项，差额也不是完整的租赁调节表。该季约三分之二资本支出投向以 CPU / GPU 为主的短寿命资产。<a class="ref" href="#s02">[S02 · 2026-07-29]</a></p>
+</figure>
+<p><span class="badge evidence">并列记录，不做横比</span> Meta 的2026全年资本支出指引为<strong>130–145十亿美元</strong>，第二季度资本支出为31.08十亿美元，这两个资本支出口径均包含融资租赁本金；该季营业利润率31%。微软上述数据是一个财季，不能用41与130–145直接比较投资力度。<a class="ref" href="#s01">[S01 · 2026-07-29]</a><a class="ref" href="#s02">[S02 · 同日发布]</a></p>
+<p><span class="badge evidence">利润率也要保留分母</span> 微软该季 Microsoft Cloud 毛利率为65%；公司解释 AI 投入等因素带来压力，效率改善部分抵消。NVIDIA 单季 GAAP 毛利率见 S08；它不是云服务商毛利率，更不是应用开发者能获得的利润率。<a class="ref" href="#s02">[S02]</a><a class="ref" href="#s08">[S08]</a></p>
+<div class="callout warning">
+<p><strong>分析结论的边界：</strong>本资料包没有足够的项目级利用率、能源接入成本、债务期限和回款数据，不能据此判定全行业一定过剩或一定短缺。对小团队更直接的动作，是控制固定承诺，记录真实服务成本，而不是将巨头资本支出变成自己的需求预测。</p>
+</div>
+</section>
+<section aria-labelledby="pricing-title" class="section" id="pricing">
+<div class="section-head">
+<span class="section-index">06 / PRICING</span>
+<span class="badge inference">本页独立补充分析</span>
+</div>
+<h2 id="pricing-title">订阅、广告、按量与混合，不是单选题</h2>
+<p>以下比较是定价设计框架，不引用任何厂商的实时套餐价格。应先问谁获得价值、谁承担账单、成本随什么增长，再决定收费方式；不能从某家公司新增一种收入来源，推导另一种模式已经失效。<a class="ref" href="#s07">[广告存在的实例：S07 · 2026-09-16]</a></p>
+<div class="pricing-grid">
+<article class="pricing-card">
+<h3>01 / 订阅</h3>
+<p><strong>适合检验：</strong>稳定、重复、价值可预期的任务。用户买的是可持续获得的服务，而不必理解底层每次调用。</p>
+<p><strong>主要张力：</strong>收入较固定，重度用户的服务成本可能快速增加。应清楚说明额度、速度或人工服务范围，避免用无法兑现的“无限”掩盖约束。</p>
+</article>
+<article class="pricing-card">
+<h3>02 / 广告</h3>
+<p><strong>适合检验：</strong>存在可识别商业需求，并且广告主愿意为可验证的触达或转化付费的场景。</p>
+<p><strong>主要张力：</strong>付款者与使用者不同。应清楚区分赞助内容和独立答案，并检验广告负担对体验的影响；不能默认任何免费流量都能覆盖服务成本。</p>
+</article>
+<article class="pricing-card">
+<h3>03 / 按量</h3>
+<p><strong>适合检验：</strong>任务量波动大，且用户能够理解和控制使用规模的服务。计费单位可以是调用、任务或约定成果。</p>
+<p><strong>主要张力：</strong>成本更易对应，但账单不确定性会增加使用顾虑。预算上限、失败计费规则和可解释的用量记录，比单纯展示 token 数更贴近用户决策。</p>
+</article>
+<article class="pricing-card">
+<h3>04 / 混合</h3>
+<p><strong>适合检验：</strong>免费入门、高价值付费层、基础订阅与超额按量的组合；在适当场景也可并存明确标识的广告。</p>
+<p><strong>主要张力：</strong>分层过多会使价值难以理解。免费层必须进入成本表，付费层必须说明增益，广告也不能被偷偷当作“零成本补贴”。</p>
+</article>
+</div>
+<p><span class="badge inference">编辑判断</span> 判断支付意愿，要回到具体任务。高频、可验证、能减少返工的功能可以设计付费实验；低频探索性功能也可能更适合免费试用或按次收费。无论采用哪种方式，都应以用户实际选择和留存检验，而不是把企业愿付费、消费者只要免费当作先验结论。</p>
+</section>
+<section aria-labelledby="economics-title" class="section" id="economics">
+<div class="section-head">
+<span class="section-index">07 / UNIT ECONOMICS</span>
+<span class="badge caution">假设示例 · 非市场数据或预测</span>
+</div>
+<h2 id="economics-title">把“很受欢迎”翻译成一张月度成本表</h2>
+<p>这是一个假设中的创作者工具：付费用户购买月度服务，免费任务也消耗 API。<strong>月份固定为2026年10月，货币全部为美元（USD）</strong>；输入不是任何公司的真实价格、用户数或经营数据，结果也不构成市场规模预测。</p>
+<div class="calc-shell">
+<form aria-describedby="calc-assumptions" id="economics-form" novalidate="">
+<fieldset disabled="" id="calc-fields">
+<legend>编辑假设后，按“重新计算”更新下方结果</legend>
+<div class="input-grid">
+<label for="paid-users">
+<span>付费用户（人 / 月）</span>
+<input id="paid-users" inputmode="numeric" max="100000" min="0" name="users" required="" step="1" type="number" value="100"/>
+</label>
+<label for="monthly-price">
+<span>每人月费（USD）</span>
+<input id="monthly-price" inputmode="decimal" max="10000" min="0" name="price" required="" step="0.01" type="number" value="20"/>
+</label>
+<label for="tasks-per-user">
+<span>每位付费用户任务（次 / 月）</span>
+<input id="tasks-per-user" inputmode="numeric" max="10000" min="0" name="tasks" required="" step="1" type="number" value="80"/>
+</label>
+<label for="free-tasks">
+<span>免费层任务总量（次 / 月）</span>
+<input id="free-tasks" inputmode="numeric" max="10000000" min="0" name="free" required="" step="1" type="number" value="2000"/>
+</label>
+<label for="api-cost">
+<span>首次执行 API 成本（USD / 任务）</span>
+<input id="api-cost" inputmode="decimal" max="100" min="0" name="api" required="" step="0.001" type="number" value="0.080"/>
+<small>可汇总一个任务中的多次调用，不按跨模型统一 token 计价。</small>
+</label>
+<label for="retry-ratio">
+<span>重试费用 / 基础 API 费用（%）</span>
+<input id="retry-ratio" inputmode="numeric" max="500" min="0" name="retry" required="" step="1" type="number" value="20"/>
+<small>这是额外费用比例，不是任务失败概率。</small>
+</label>
+<label for="hosting-cost">
+<span>托管费用（USD / 月）</span>
+<input id="hosting-cost" inputmode="decimal" max="10000000" min="0" name="hosting" required="" step="0.01" type="number" value="120"/>
+</label>
+<label for="support-cost">
+<span>支持服务费用（USD / 月）</span>
+<input id="support-cost" inputmode="decimal" max="10000000" min="0" name="support" required="" step="0.01" type="number" value="200"/>
+</label>
+<label for="acquisition-cost">
+<span>当月获客支出（USD / 月）</span>
+<input id="acquisition-cost" inputmode="decimal" max="10000000" min="0" name="acquisition" required="" step="0.01" type="number" value="300"/>
+<small>当月总支出，不是单客获客成本。</small>
+</label>
+</div>
+<div class="button-row">
+<button type="submit">重新计算</button>
+<button class="secondary" id="calc-reset" type="button">恢复示例假设</button>
+</div>
+</fieldset>
+<p aria-atomic="true" aria-live="polite" class="calc-status" id="calc-status" role="status">当前显示默认示例。禁用脚本时，输入不可编辑，完整公式与结果仍可阅读。</p>
+<p class="error" id="calc-error" role="alert"></p>
+</form>
+<div aria-labelledby="calc-results-title" id="calc-results">
+<h3 id="calc-results-title">2026年10月 · 简化月度试算</h3>
+<div class="result-strip">
+<div class="result-item">
+<span>月收入</span>
+<strong data-money="revenue">USD 2,000.00</strong>
+</div>
+<div class="result-item">
+<span>列示费用合计</span>
+<strong data-money="cost">USD 1,580.00</strong>
+</div>
+<div class="result-item">
+<span>简化月度余额</span>
+<strong data-money="balance">USD 420.00</strong>
+</div>
+</div>
+<p class="small">本月任务数：<strong id="task-output">10,000</strong> 次，包含免费层；不是验收成功任务数。余额 / 收入：<strong id="balance-ratio">21.0%</strong>，不是会计毛利率或净利率。</p>
+<figure aria-labelledby="monthly-chart-caption" class="metric-chart">
+<figcaption id="monthly-chart-caption">月度金额拆解 · USD</figcaption>
+<div class="chart-row">
+<div class="chart-label">
+<span>收入</span>
+<strong data-money="revenue">USD 2,000.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill" data-bar="revenue" style="--value:100%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>费用① 基础 API</span>
+<strong data-money="api">USD 800.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill expense" data-bar="api" style="--value:40%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>费用② 额外重试</span>
+<strong data-money="retry">USD 160.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill expense" data-bar="retry" style="--value:8%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>费用③ 托管</span>
+<strong data-money="hosting">USD 120.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill expense" data-bar="hosting" style="--value:6%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>费用④ 支持服务</span>
+<strong data-money="support">USD 200.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill expense" data-bar="support" style="--value:10%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>费用⑤ 当月获客</span>
+<strong data-money="acquisition">USD 300.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill expense" data-bar="acquisition" style="--value:15%"></span>
+</div>
+</div>
+<div class="chart-row">
+<div class="chart-label">
+<span>余额（负号表示亏缺）</span>
+<strong data-money="balance">USD 420.00</strong>
+</div>
+<div aria-hidden="true" class="track">
+<span class="fill balance" data-bar="balance" style="--value:21%"></span>
+</div>
+</div>
+<p class="small muted">所有条形共用零起点；长度表示金额绝对值，不表示时间变化。当前刻度上限：<span id="chart-max">USD 2,000.00</span>，取收入与费用合计中的较大值；负余额以数值负号标明。</p>
+</figure>
+</div>
+<details open="">
+<summary>公式、口径与默认示例的人工复核</summary>
+<div class="details-body">
+<code class="calc-formula">
+                  任务数 = 付费用户 × 每人任务数 + 免费任务数<br/>
+                  收入 = 付费用户 × 月费<br/>
+                  基础 API = 任务数 × 首次执行 API 成本<br/>
+                  额外重试 = 基础 API × 重试费用比例<br/>
+                  月度余额 = 收入 − 基础 API − 额外重试 − 托管 − 支持服务 − 当月获客
+                </code>
+<p class="small" id="calc-assumptions">按默认假设：100 × 80 + 2,000 = 10,000次任务；2,000 − 800 − 160 − 120 − 200 − 300 = <strong>420美元</strong>。各项金额按美分四舍五入后求和。该静态复核仅针对默认值，不随输入变化。</p>
+<p class="small">同一默认示例中，若首次执行 API 成本单独翻倍为0.16美元，重试费用比例仍为20%，其他输入不变，则月度余额为<strong>−540美元</strong>。这是数学敏感性分析，不预测任何 API 价格会上涨。</p>
+</div>
+</details>
+<p class="small muted" style="margin-top:var(--space-scale-08);">未计入未填写的创始人工时、研发、税费、支付手续费、退款、折旧、资本支出与融资成本，也未建模流失和跨月回收。真实经营应补齐这些项目；本余额不能被称为完整利润。没有广告收入假设，不代表广告模式不可行。</p>
+</div>
+</section>
+<section aria-labelledby="actions-title" class="section" id="actions">
+<div class="section-head">
+<span class="section-index">08 / FIELD NOTES</span>
+<span class="badge inference">编辑工作清单 · 非投资建议</span>
+</div>
+<h2 id="actions-title">给创业者的五个观察，给研究者的五个指标</h2>
+
+<h3>创业者：五个实际观察</h3>
+<ol class="practice-list">
+<li>
+<h4>从可验收的小任务开始，而不是从通用助手开始</h4>
+<p>先写清“完成”意味着什么。例如，创作者的资料核对工具可以要求每条关键事实有出处、日期与人工确认；开发工具可以要求修改通过测试并可回滚。把输入、交付物和失败条件写下来，才能判断模型变强是否真的改善产品。</p>
+</li>
+<li>
+<h4>比较成功交付成本，不比较抽象 token 单价</h4>
+<p>为同一批代表性任务记录首次执行、重试、人工复核与等待时间。保留失败样本，避免只比较最顺利的演示；低调用价格若伴随更多返工，未必更便宜。这个试验应控制任务质量，而不是只控制输出字数。<a class="ref" href="#m01">[M01 · 计量边界]</a></p>
+</li>
+<li>
+<h4>把用户关系与模型供应商分开设计</h4>
+<p>在适用授权下支持数据导出、任务记录迁移和模型替换。真正值得积累的是用户的工作流程、偏好确认与验收反馈，而不是锁死在一个接口上的提示词。替换也有测试成本，因此应记录切换代价，不必为了多模型而制造复杂系统。</p>
+</li>
+<li>
+<h4>免费层也进入成本表，付费层要有明确增益</h4>
+<p>免费体验可以用于降低尝试门槛，但应计算其服务与支持消耗。给付费层提供可解释的价值，例如更多可验收任务、更完整历史或明确的服务范围；避免把“无限使用”当作替代成本管理的营销口号。不同收费模式可以小范围检验，不必一次押注全部收入来源。</p>
+</li>
+<li>
+<h4>把可信交付做成流程，而不是一句承诺</h4>
+<p>让客户能查看来源、确认敏感操作、撤回权限，并在失败时恢复工作。企业合作公告可以帮助识别需求方向，但仍要验证实际使用与净收益；不要把采购、试点和持续使用混成一个“客户数”。<a class="ref" href="#s06">[S06 · 企业公告与回报的区别]</a></p>
+</li>
+</ol>
+<h3 style="margin-top:var(--space-scale-42);">行业研究：五个应持续跟踪的指标组</h3>
+<dl class="indicators">
+<div>
+<dt>01 / 供给兑现率：从交付到有效付费使用</dt>
+<dd>分别记录合同容量、已部署容量和有效付费容量，说明地区、芯片代际与工作负载；同时跟踪通电与网络交付的时间差。若定义不同，就不合并为一个行业利用率。本资料包未提供完整测量值。</dd>
+</div>
+<div>
+<dt>02 / 现金与期限：投入能否等到回款</dt>
+<dd>校准财季、自然年、现金购置设备与融资租赁口径，再观察现金回收、利息和承诺期限。微软与 Meta 的支出应按各自披露定义保存，而不是为了排行强行统一。<a class="ref" href="#s02">[S02]</a><a class="ref" href="#s01">[S01]</a></dd>
+</div>
+<div>
+<dt>03 / 任务经济性：质量约束下的全成本</dt>
+<dd>跟踪成功率、端到端延迟、重试、人工复核与每次验收成本的分布。既看中位数，也看最昂贵的一批任务；不要将本文假设计算器的余额率与上市公司披露的毛利率放在同一张比较表。</dd>
+</div>
+<div>
+<dt>04 / 采用质量：从签约到持续使用</dt>
+<dd>区分宣布合作、采购额度、激活用户、持续使用和续约。企业部署公告是起点，不是净投资回报的终点；不同收入期数不能混用，季度收入年化也不等于已实现全年收入。<a class="ref" href="#s06">[S06]</a><a class="ref" href="#s03">[S03]</a></dd>
+</div>
+<div>
+<dt>05 / 分发与信任：入口变化之后，关系留在哪里</dt>
+<dd>记录任务发起、完成、到站与付费之间的转化，同时观察引用可追溯性、广告标识和用户授权。Google 的产品变化与 OpenAI 的广告公告是观察线索，不是答案质量、独立性或所有创作者流量变化的直接测量。<a class="ref" href="#s05">[S05]</a><a class="ref" href="#s07">[S07]</a></dd>
+</div>
+</dl>
+</section>
+<section aria-labelledby="continuation-title" class="section" id="continuation">
+<div class="continuation">
+<span class="eyebrow">10 / CONTINUATION · 明确保留</span>
+<h2 id="continuation-title">下半部待续｜原始材料尚未提供</h2>
+<p><strong>此处不续写讲话，不模拟发言者口吻，不推测下半部结论。</strong>前文七家公司简报及各项工作清单，均属于本页独立补充分析，不是这个空缺的替代稿。</p>
+<p class="small muted">后续只有在取得新的原始材料后，才能另建“下半部原文转述”区，并标明材料来源、覆盖范围与新增日期。当前继续保留空缺。</p>
+</div>
+</section>
+<section aria-labelledby="sources-title" class="section" id="sources">
+<div class="section-head">
+<span class="section-index">11 / SOURCES &amp; METHOD</span>
+<span class="badge evidence">9 主证据 + 1 计量 + 9 补充核验 = 19</span>
+</div>
+<h2 id="sources-title">来源目录：每条证据都有适用范围</h2>
+<p>下列目录包括九项主证据、一项计量说明和九项补充核验，按原网址与发布日期或核对日期列示；摘要只保留本页使用的事实。各财季仍采用公司自己的命名。<strong>十亿美元（USD bn）= 10亿美元。</strong>企业披露、产品公告和独立效果评估不是同一证据等级。</p>
+<p class="small muted">正文的编号链接只跳转本页。下列完整网址由读者主动打开时才联网，并在新窗口显示；本 HTML 自身不加载外部资源、不发起接口请求。</p>
+<ol class="source-list">
+<li class="source-item" id="s01" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S01</span>
+<h3>Meta · 2026年第二季度业绩</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-07-29">2026-07-29</time> · 类型：公司财务披露与前瞻指引</p>
+<p>摘要：全年资本支出指引130–145十亿美元，第二季度资本支出31.08十亿美元，均含融资租赁本金；第二季度营业利润率31%。指引不是实际全年支出，也不能证明个人代理的回报。</p>
+<a class="source-url" href="https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Second-Quarter-2026-Results/" rel="noopener noreferrer" target="_blank">https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Second-Quarter-2026-Results/<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s02" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S02</span>
+<h3>Microsoft · FY26 Q4 业绩电话会</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-07-29">2026-07-29</time> · 类型：公司财务口径与管理层解释</p>
+<p>摘要：季度资本支出41十亿美元（含融资租赁，排除经营租赁；定位：CFO 资本开支及 FY27 资产寿命调整段落），现金购置设备等35.8十亿美元；约三分之二投向短寿命 CPU / GPU 等资产。Microsoft Cloud 毛利率65%，AI 等因素施压，效率部分抵消；另披露消费者订阅增长。不能用单季支出对比同业全年指引。</p>
+<a class="source-url" href="https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4" rel="noopener noreferrer" target="_blank">https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s03" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S03</span>
+<h3>Amazon · 2026年第二季度业绩</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-07-30">2026-07-30</time> · 类型：公司季度经营结果</p>
+<p>摘要：AWS 当季销售额42.2十亿美元，同比增长37%，营业利润16.6十亿美元。以季度水平推算的年化运行规模（run rate），不是实际已实现的全年收入，也不是下一年预测。</p>
+<a class="source-url" href="https://www.aboutamazon.com/news/company-news/amazon-earnings-q2-2026-report" rel="noopener noreferrer" target="_blank">https://www.aboutamazon.com/news/company-news/amazon-earnings-q2-2026-report<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s04" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S04</span>
+<h3>Apple · 扩展 Private Cloud Compute</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-06-08">2026-06-08</time> · 类型：技术与部署公告</p>
+<p>摘要：宣布与 Google、NVIDIA 合作，将 PCC 扩展到 Google Cloud。入口控制不要求所有计算都自有；公告不是全部部署与隐私效果均已完成独立验证的证明。</p>
+<a class="source-url" href="https://security.apple.com/blog/expanding-pcc/" rel="noopener noreferrer" target="_blank">https://security.apple.com/blog/expanding-pcc/<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s05" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S05</span>
+<h3>Google · Search 的 I/O 2026 更新</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-05-19">2026-05-19</time> · 类型：产品发布与未来计划</p>
+<p>摘要：介绍 Search agents 与以 Gemini 3.5 Flash 驱动的 AI Mode；miniapps 在该文中是未来计划。本页没有后续上线证明，也不能由此确认“故意稀释搜索”的动机。</p>
+<a class="source-url" href="https://blog.google/products-and-platforms/products/search/search-io-2026/" rel="noopener noreferrer" target="_blank">https://blog.google/products-and-platforms/products/search/search-io-2026/<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s06" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S06</span>
+<h3>Anthropic · 扩大与 PwC 的合作</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-05-14">2026-05-14</time> · 类型：厂商合作与部署公告</p>
+<p>摘要：宣布 PwC 扩大 Claude、Claude Code 与 Cowork 部署。可用来观察企业采用方向；公告及其客户案例不等于独立测量、具有对照组的净投资回报。</p>
+<a class="source-url" href="https://www.anthropic.com/news/pwc-expanded-partnership" rel="noopener noreferrer" target="_blank">https://www.anthropic.com/news/pwc-expanded-partnership<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s07" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S07</span>
+<h3>OpenAI · 以 AI 重新构想广告</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-09-16">2026-09-16</time> · 类型：广告产品与平台公告</p>
+<p>摘要：公布 AI 驱动的广告体验与平台工具；Sponsored Agents 为美国部分广告主的有限测试。证据支持广告业务存在，不能证明订阅失败；对答案是否受到广告影响，本页不把公告当作独立实证。</p>
+<a class="source-url" href="https://openai.com/index/reimagining-advertising-with-ai/" rel="noopener noreferrer" target="_blank">https://openai.com/index/reimagining-advertising-with-ai/<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s08" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S08</span>
+<h3>NVIDIA · FY27 Q2 财务结果</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-08-26">2026-08-26</time> · 类型：公司季度财务披露</p>
+<p>摘要：季度收入96.2十亿美元，其中数据中心89十亿美元，GAAP 毛利率75%。分析应包括计算、网络与软件生态；季度纪录不能证明毛利率持久不变，也不是2027自然年已经实现的全年结果。</p>
+<a class="source-url" href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027/" rel="noopener noreferrer" target="_blank">https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027/<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+<li class="source-item" id="s09" tabindex="-1">
+<div class="source-top">
+<span class="source-id">S09</span>
+<h3>Alphabet · 2026年第二季度业绩附件</h3>
+</div>
+<p class="source-meta">发布日期：<time datetime="2026-07-22">2026-07-22</time> · 类型：SEC 所载公司业绩附件，非 SEC 背书</p>
+<p>摘要：Google advertising 当季81.629十亿美元，属于广告合计而非只有搜索。季度乘四只是算术年化，不能充当实际全年收入；此数据不支持原文稿中的年度广告400十亿美元说法。</p>
+<a class="source-url" href="https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/googexhibit991q22026.htm" rel="noopener noreferrer" target="_blank">https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/googexhibit991q22026.htm<span class="sr-only">（外部原文，新窗口）</span></a>
+</li>
+</ol>
+<aside aria-labelledby="m01-title" class="panel method-card" id="m01" tabindex="-1">
+<h3 id="m01-title">M01 / 计量补充：OpenAI《Understanding and counting tokens》</h3>
+<p class="source-meta">不属于九项主证据包 · 动态帮助页，未采用相对更新时间推算发布日期 · 核对日期：<time datetime="2026-10-06">2026-10-06</time></p>
+<p class="small">摘要：同一文本的 token 数会随模型、编码和语言变化；输入、输出、缓存等计价类别需区分，任务总成本不能仅凭每百万 token 单价比较。这里不引用动态价格或具体套餐。</p>
+<a class="source-url" href="https://help.openai.com/en/articles/4936856-understanding-and-counting-tokens" rel="noopener noreferrer" target="_blank">https://help.openai.com/en/articles/4936856-understanding-and-counting-tokens<span class="sr-only">（外部原文，新窗口）</span></a>
+</aside>
+<h3>补充核验来源 S10–S18</h3><ol class="source-list" start="10">
+<li class="source-item" id="s10" tabindex="-1"><div class="source-top"><span class="source-id">S10</span><h3>Alphabet · 2025年 Form 10-K</h3></div><p class="source-meta">2025全年；核对日期 2026-10-06</p><p>广告收入2946.91亿美元、Search 2245.32亿美元、TAC与资本开支为不同口径。</p><a class="source-url" href="https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm" rel="noopener noreferrer" target="_blank">https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s11" tabindex="-1"><div class="source-top"><span class="source-id">S11</span><h3>OpenAI · ChatGPT Plus 说明</h3></div><p class="source-meta">动态帮助页；核对日期 2026-10-06</p><p>订阅产品存在；价格和权益不等于订阅利润、留存或收入规模证明。</p><a class="source-url" href="https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus" rel="noopener noreferrer" target="_blank">https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s12" tabindex="-1"><div class="source-top"><span class="source-id">S12</span><h3>Netflix · 2025年 Form 10-K</h3></div><p class="source-meta">2025全年；核对日期 2026-10-06</p><p>消费订阅可以形成规模的反例；不能由流媒体推断AI订阅的成本与需求。</p><a class="source-url" href="https://www.sec.gov/Archives/edgar/data/1065280/000106528026000034/nflx-20251231.htm" rel="noopener noreferrer" target="_blank">https://www.sec.gov/Archives/edgar/data/1065280/000106528026000034/nflx-20251231.htm<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s13" tabindex="-1"><div class="source-top"><span class="source-id">S13</span><h3>SGI · Chapter 11 与资产出售协议公告</h3></div><p class="source-meta">发布日期 2009-04-01；核对日期 2026-10-06</p><p>证实当时的破产申请与出售协议；初始报价不作为最终成交价。</p><a class="source-url" href="https://www.sec.gov/Archives/edgar/data/1316625/000119312509070097/dex991.htm" rel="noopener noreferrer" target="_blank">https://www.sec.gov/Archives/edgar/data/1316625/000119312509070097/dex991.htm<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s14" tabindex="-1"><div class="source-top"><span class="source-id">S14</span><h3>CERN · 万维网诞生史</h3></div><p class="source-meta">历史页面；核对日期 2026-10-06</p><p>1989提出Web、1990浏览器、1993公开许可；不直接证明今天AI处于同一阶段。</p><a class="source-url" href="https://home.cern/science/computing/the-birth-of-the-web/" rel="noopener noreferrer" target="_blank">https://home.cern/science/computing/the-birth-of-the-web/<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s15" tabindex="-1"><div class="source-top"><span class="source-id">S15</span><h3>Berkshire Hathaway · 2007年股东信</h3></div><p class="source-meta">2007年度股东信，第7–8印刷页；核对日期 2026-10-06</p><p>See’s低增量资本需求，不等于零边际成本；资本承载力类比不是Google动机证据。</p><a class="source-url" href="https://berkshirehathaway.com/letters/2007ltr.pdf" rel="noopener noreferrer" target="_blank">https://berkshirehathaway.com/letters/2007ltr.pdf<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s16" tabindex="-1"><div class="source-top"><span class="source-id">S16</span><h3>Meta · Muse Spark 从思考到行动</h3></div><p class="source-meta">发布日期 2026-07-24；核对日期 2026-10-06</p><p>厂商产品公告支持context到action的布局线索；不证明留存、利润或独立ROI。</p><a class="source-url" href="https://about.fb.com/news/2026/07/meta-ai-muse-spark-doesnt-just-think-it-acts/" rel="noopener noreferrer" target="_blank">https://about.fb.com/news/2026/07/meta-ai-muse-spark-doesnt-just-think-it-acts/<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s17" tabindex="-1"><div class="source-top"><span class="source-id">S17</span><h3>A2A · v1.0.0 协议规范</h3></div><p class="source-meta">版本 v1.0.0；核对日期 2026-10-06</p><p>Agent间互操作规范；协议不等于操作系统、完整分发或责任平台。</p><a class="source-url" href="https://a2a-protocol.org/v1.0.0/" rel="noopener noreferrer" target="_blank">https://a2a-protocol.org/v1.0.0/<span class="sr-only">（外部原文，新窗口）</span></a></li>
+<li class="source-item" id="s18" tabindex="-1"><div class="source-top"><span class="source-id">S18</span><h3>IEA · Energy and AI：能源供应</h3></div><p class="source-meta">2025年报告；核对日期 2026-10-06</p><p>基准情景预测为所有数据中心供电的发电量从2024年460 TWh到2030年超过1000 TWh；非纯AI实际耗电。</p><a class="source-url" href="https://www.iea.org/reports/energy-and-ai/energy-supply-for-ai" rel="noopener noreferrer" target="_blank">https://www.iea.org/reports/energy-and-ai/energy-supply-for-ai<span class="sr-only">（外部原文，新窗口）</span></a></li>
+</ol>
+<details id="limitations" open="">
+<summary>证据限制：哪些问题仍然没有答案？</summary>
+<div class="details-body">
+<p><strong>讲话归属未闭环。</strong>P0 是用户提供的上半部分逐字稿；听写准确性未由原音频核验。所有原观点转述都应在后续取得原始材料后逐条核对；巴菲特 / 喜诗类比与曾鸣播客不能在缺少材料时升级为已验证引用。</p>
+<p><strong>公告不等于效果。</strong>厂商是产品与合作公告的直接来源，但也是利益相关方；财务披露可支持相应口径的结果，不能自动支持因果解释。公司宣布采用、宣称安全与用户实际收益，应分别验证。</p>
+<p><strong>样本与期间有限。</strong>本页没有完整的市场份额、独立任务评测、推理成本、利用率和客户留存数据。财季与自然季度、毛利率与营业利润率、实际支出与指引均不混用。页面日期晚于某项发布计划，也不自动证明计划已经完成。</p>
+<p><strong>推论与算例不是事实增补。</strong>Google 的四条战略解释、其他公司的下注分析和创业工作清单，均是可被后续证据修订的分析。试算器只计算输入条件下的结果，不提供盈利保证或投资结论。</p>
+</div>
+</details>
+<details id="update-protocol" open="" style="margin-top:var(--space-scale-08);">
+<summary>更新协议：保留原讲话归属，明确新增文字范围</summary>
+<div class="details-body">
+<p><strong>先保留原材料，再作旁注。</strong>后续取得音视频或逐字稿时，记录确有依据的来源与定位信息，保留原句、现有转述和修改原因三者的对应关系；不凭猜测补全作者身份，不用后来事实悄悄改写当时立场。</p>
+<p><strong>事实更新与讲话续篇分开。</strong>新财报、新产品状态和更正进入“公开证据更新”版本，保留旧数值、旧日期与口径变化。新的下半部材料必须另标“新增原始材料转述”，不能并入七家公司补充分析并追认成原讲话内容。</p>
+<p><strong>让推论能被撤回。</strong>每次更新说明哪条证据支持、削弱或否定了原分析；只有获得确切上线材料，才能把计划改为已上线。每轮交付都保留人工复核责任与待办项，生成页面本身不构成内容获批。</p>
+</div>
+</details>
+<div aria-labelledby="version-title" class="version">
+<h3 id="version-title">版本日志 / v1 · <time datetime="2026-10-06">2026-10-06</time></h3>
+<p>本次首版：上半部分逐字稿整理与 Google 深读；九项命题审计、八家公司图谱；19 个公开来源覆盖财报、产品公告、历史案例、能源与协议。其他公司的展开明确标为本页补充分析，下半部分仍未收到。</p>
+<p><strong>交付边界：</strong>加入离线可读图表、本地公司筛选、带静态公式的月度试算；下半部继续留空。该日志只记录本次首版，不虚构此前发布历史。待办为原始讲话归属核对、独立效果证据补充与人工内容复核。</p>
+</div>
+</section>
+</main>
+</div>
+<footer class="footer">
+<div class="footer-row">
+<div>
+<strong>硅谷AI行业现状分析｜上半部分</strong>
+
+</div>
+<a href="#top">返回页首 ↑</a>
+</div>
+<p class="small muted" style="margin-top:var(--space-scale-08);">版本 v1 · 截点 2026-10-06 · 上半部文稿与公开资料补充 · 无下半部实录 · 无证券买卖建议</p>
+
+</footer>
+</div>
+<script>
+    (() => {
+      "use strict";
+
+      // 渐进增强：全部公司卡片和默认试算结果已经存在于静态 HTML。
+      const filterForm = document.getElementById("company-filter");
+      const queryInput = document.getElementById("company-query");
+      const layerSelect = document.getElementById("company-layer");
+      const scopeSelect = document.getElementById("company-scope");
+      const cards = Array.from(document.querySelectorAll(".company"));
+      const emptyState = document.getElementById("company-empty");
+      const filterCount = document.getElementById("filter-count");
+
+      const normalize = (text) =>
+        String(text).normalize("NFKC").toLowerCase().trim();
+
+      const companyIndex = cards.map((card) => ({
+        element: card,
+        text: normalize((card.dataset.search || "") + " " + card.textContent),
+        layers: (card.dataset.layer || "").split(" "),
+        scope: card.dataset.scope
+      }));
+
+      function filterCompanies() {
+        const terms = normalize(queryInput.value)
+          .split(/\s+/)
+          .filter(Boolean);
+
+        let visible = 0;
+
+        companyIndex.forEach((company) => {
+          const match =
+            terms.every((term) => company.text.includes(term)) &&
+            (layerSelect.value === "all" ||
+              company.layers.includes(layerSelect.value)) &&
+            (scopeSelect.value === "all" ||
+              company.scope === scopeSelect.value);
+
+          company.element.hidden = !match;
+          if (match) visible += 1;
+        });
+
+        emptyState.hidden = visible !== 0;
+        filterCount.textContent =
+          "显示 " + visible + " / " + cards.length + " 家公司";
+      }
+
+      function resetFilters() {
+        filterForm.reset();
+        filterCompanies();
+        queryInput.focus();
+      }
+
+      filterForm.addEventListener("submit", (event) => event.preventDefault());
+      queryInput.addEventListener("input", filterCompanies);
+      layerSelect.addEventListener("change", filterCompanies);
+      scopeSelect.addEventListener("change", filterCompanies);
+
+      document
+        .getElementById("filter-reset")
+        .addEventListener("click", resetFilters);
+
+      document
+        .getElementById("empty-reset")
+        .addEventListener("click", resetFilters);
+
+      filterForm.hidden = false;
+      filterCompanies();
+
+      // 金额以整数美分求和；不请求网络，不保存输入，不使用外部代码。
+      const calcForm = document.getElementById("economics-form");
+      const calcFields = document.getElementById("calc-fields");
+      const calcStatus = document.getElementById("calc-status");
+      const calcError = document.getElementById("calc-error");
+
+      const money = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "code",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      const integers = new Intl.NumberFormat("zh-CN", {
+        maximumFractionDigits: 0
+      });
+
+      const cents = (dollars) =>
+        Math.round((dollars + Number.EPSILON) * 100);
+
+      const formatMoney = (valueInCents) =>
+        money.format(valueInCents / 100);
+
+      const read = (name) =>
+        calcForm.elements.namedItem(name).valueAsNumber;
+
+      function calculate(announce) {
+        calcError.textContent = "";
+
+        if (!calcForm.checkValidity()) {
+          calcError.textContent =
+            "请填写范围内的非负数；人数和任务量须为整数。下方仍保留上次有效结果。";
+          calcForm.reportValidity();
+          return;
+        }
+
+        const values = {
+          users: read("users"),
+          price: read("price"),
+          tasks: read("tasks"),
+          free: read("free"),
+          api: read("api"),
+          retry: read("retry"),
+          hosting: read("hosting"),
+          support: read("support"),
+          acquisition: read("acquisition")
+        };
+
+        if (!Object.values(values).every(Number.isFinite)) {
+          calcError.textContent =
+            "输入中存在不可计算的数值；请修改后重新计算。";
+          return;
+        }
+
+        const taskCount =
+          values.users * values.tasks + values.free;
+
+        const result = {
+          revenue: cents(values.users * values.price),
+          api: cents(taskCount * values.api),
+          hosting: cents(values.hosting),
+          support: cents(values.support),
+          acquisition: cents(values.acquisition)
+        };
+
+        result.retry = Math.round(result.api * values.retry / 100);
+
+        result.cost =
+          result.api +
+          result.retry +
+          result.hosting +
+          result.support +
+          result.acquisition;
+
+        result.balance = result.revenue - result.cost;
+
+        if (!Object.values(result).every(Number.isSafeInteger)) {
+          calcError.textContent =
+            "金额超出安全计算范围；请减小输入。下方仍保留上次有效结果。";
+          return;
+        }
+
+        document.querySelectorAll("[data-money]").forEach((element) => {
+          element.textContent =
+            formatMoney(result[element.dataset.money]);
+        });
+
+        document.getElementById("task-output").textContent =
+          integers.format(taskCount);
+
+        const ratio = result.revenue > 0
+          ? (result.balance / result.revenue * 100).toFixed(1) + "%"
+          : "不适用（收入为零）";
+
+        document.getElementById("balance-ratio").textContent = ratio;
+
+        const maxAmount = Math.max(result.revenue, result.cost);
+
+        document.getElementById("chart-max").textContent =
+          formatMoney(maxAmount);
+
+        document.querySelectorAll("[data-bar]").forEach((bar) => {
+          const value = result[bar.dataset.bar];
+
+          const width = maxAmount > 0
+            ? Math.min(100, Math.abs(value) / maxAmount * 100)
+            : 0;
+
+          bar.style.setProperty("--value", width.toFixed(3) + "%");
+
+          bar.classList.toggle(
+            "loss",
+            bar.dataset.bar === "balance" && value < 0
+          );
+        });
+
+        calcStatus.textContent = announce
+          ? "已按当前假设重算：月收入 " +
+            formatMoney(result.revenue) +
+            "，列示费用 " +
+            formatMoney(result.cost) +
+            "，简化月度余额 " +
+            formatMoney(result.balance) +
+            "。"
+          : "当前显示默认示例。所有计算只在本页进行；输入不会发送或保存。";
+      }
+
+      calcFields.disabled = false;
+
+      calcForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        calculate(true);
+      });
+
+      calcForm.addEventListener("input", () => {
+        calcStatus.textContent =
+          "输入已修改；下方仍为上次有效计算。按“重新计算”更新结果。";
+        calcError.textContent = "";
+      });
+
+      document.getElementById("calc-reset").addEventListener("click", () => {
+        calcForm.reset();
+        calculate(false);
+      });
+
+      calculate(false);
+    })();
+  </script>
+</body>
+</html>

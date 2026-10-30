@@ -1,0 +1,2432 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="基于 a16z 对话中文整理大纲的二次分析：拆解个人 AI Agent 的主动性、信任边界、隐形体验与一人公司的切入机会。">
+  <meta name="handoff-id" content="a86fcc27-57ab-4bf4-93af-39f55fdf40c0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>a16z 对话深度拆解｜个人 AI Agent 的底层逻辑与未来图景</title>
+
+  <style>
+    /*
+      断点集中约定：
+      ≤390px：紧凑手机排版，收紧页面留白与数字字号。
+      ≥700px：辅助内容双栏，流程图横向排列。
+      ≥1024px：桌面封面双栏、数字四栏、目录与正文分栏。
+      媒体查询使用上述字面常量；JS 从 --breakpoint-desktop 读取桌面阈值。
+      print 为独立打印模式，不属于屏幕断点。
+      图表中的 --sample-count / --sample-total 是内容数据，不是设计 token。
+    */
+
+    :root {
+      /* Primitive：颜色 */
+      --p-white: #ffffff;
+      --p-canvas: #f2f5f8;
+      --p-surface-subtle: #f6f8fa;
+      --p-ink: #17283b;
+      --p-ink-secondary: #44576a;
+      --p-ink-muted: #5c6c7c;
+      --p-line: #dce3e9;
+      --p-teal: #176a58;
+      --p-teal-soft: #edf5f2;
+      --p-teal-bright: #9de0c7;
+      --p-navy: #102235;
+      --p-navy-panel: #1a3046;
+      --p-navy-line: #3c5267;
+      --p-inverse-text: #f5f8fb;
+      --p-inverse-muted: #c1ceda;
+      --p-rose: #974752;
+      --p-rose-soft: #f8eef0;
+      --p-rose-bright: #f0b7c0;
+      --p-blue-bar: #5b7692;
+      --p-gray-bar: #8494a4;
+      --p-transparent: transparent;
+
+      /* Primitive：间距、尺寸 */
+      --p-zero: 0;
+      --p-auto: auto;
+      --p-space-2: 2px;
+      --p-space-4: 4px;
+      --p-space-6: 6px;
+      --p-space-8: 8px;
+      --p-space-12: 12px;
+      --p-space-16: 16px;
+      --p-space-20: 20px;
+      --p-space-24: 24px;
+      --p-space-32: 32px;
+      --p-space-40: 40px;
+      --p-space-48: 48px;
+      --p-space-64: 64px;
+      --p-space-80: 80px;
+      --p-size-1: 1px;
+      --p-size-10: 10px;
+      --p-size-28: 28px;
+      --p-size-36: 36px;
+      --p-size-44: 44px;
+      --p-size-104: 104px;
+      --p-size-160: 160px;
+      --p-size-224: 224px;
+      --p-size-600: 600px;
+      --p-size-1280: 1280px;
+      --p-full: 100%;
+      --p-half: 50%;
+      --p-toc-height: calc(100dvh - 48px);
+      --p-print-margin: 16mm;
+      --p-breakpoint-compact: 390px;
+      --p-breakpoint-medium: 700px;
+      --p-breakpoint-desktop: 1024px;
+
+      /* Primitive：字体、行高、字重 */
+      --p-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --p-font-root: 16px;
+      --p-font-16: 1rem;
+      --p-font-17: 1.0625rem;
+      --p-font-18: 1.125rem;
+      --p-font-20: 1.25rem;
+      --p-font-24: 1.5rem;
+      --p-font-26: 1.625rem;
+      --p-font-30: 1.875rem;
+      --p-font-32: 2rem;
+      --p-font-36: 2.25rem;
+      --p-font-42: 2.625rem;
+      --p-font-52: 3.25rem;
+      --p-font-hero: clamp(2.125rem, 4.6vw, 3.5rem);
+      --p-leading-body: 1.7;
+      --p-leading-compact: 1.5;
+      --p-leading-heading: 1.3;
+      --p-leading-display: 1.18;
+      --p-leading-number: 1.08;
+      --p-weight-regular: 400;
+      --p-weight-medium: 500;
+      --p-weight-bold: 700;
+      --p-tracking-normal: normal;
+      --p-tracking-tight: -0.035em;
+      --p-tracking-label: 0.035em;
+
+      /* Primitive：边框、圆角、阴影、动效 */
+      --p-border-1: 1px;
+      --p-border-2: 2px;
+      --p-border-3: 3px;
+      --p-radius-4: 4px;
+      --p-radius-6: 6px;
+      --p-radius-12: 12px;
+      --p-shadow-card: 0 6px 24px #17283b08;
+      --p-shadow-none: none;
+      --p-duration-zero: 0ms;
+      --p-duration-fast: 160ms;
+      --p-duration-base: 240ms;
+      --p-ease-standard: ease-out;
+      --p-angle-check: 45deg;
+      --p-z-progress: 50;
+      --p-z-skip: 60;
+
+      /* Semantic：界面颜色 */
+      --color-page: var(--p-canvas);
+      --color-surface: var(--p-white);
+      --color-surface-subtle: var(--p-surface-subtle);
+      --color-text: var(--p-ink);
+      --color-text-secondary: var(--p-ink-secondary);
+      --color-text-muted: var(--p-ink-muted);
+      --color-line: var(--p-line);
+      --color-accent: var(--p-teal);
+      --color-accent-soft: var(--p-teal-soft);
+      --color-warning: var(--p-rose);
+      --color-warning-soft: var(--p-rose-soft);
+      --color-inverse-bg: var(--p-navy);
+      --color-inverse-panel: var(--p-navy-panel);
+      --color-inverse-line: var(--p-navy-line);
+      --color-inverse-text: var(--p-inverse-text);
+      --color-inverse-muted: var(--p-inverse-muted);
+      --color-inverse-accent: var(--p-teal-bright);
+      --color-inverse-warning: var(--p-rose-bright);
+      --color-chart-full: var(--p-teal);
+      --color-chart-freemium: var(--p-blue-bar);
+      --color-chart-free: var(--p-gray-bar);
+      --color-transparent: var(--p-transparent);
+      --color-action-bg: var(--p-white);
+      --color-action-text: var(--p-ink);
+
+      /* Semantic：空间与布局 */
+      --space-none: var(--p-zero);
+      --space-auto: var(--p-auto);
+      --space-hair: var(--p-space-2);
+      --space-3xs: var(--p-space-4);
+      --space-2xs: var(--p-space-8);
+      --space-xs: var(--p-space-12);
+      --space-sm: var(--p-space-16);
+      --space-md: var(--p-space-24);
+      --space-lg: var(--p-space-32);
+      --space-xl: var(--p-space-48);
+      --space-2xl: var(--p-space-64);
+      --space-3xl: var(--p-space-80);
+      --page-gutter: var(--p-space-24);
+      --hero-padding: var(--p-space-48);
+      --chapter-padding: var(--p-space-24);
+      --card-padding: var(--p-space-24);
+      --stat-padding: var(--p-space-20);
+      --action-padding: var(--p-space-24);
+      --layout-max: var(--p-size-1280);
+      --layout-sidebar: var(--p-size-224);
+      --layout-gap: var(--p-space-32);
+      --size-full: var(--p-full);
+      --size-half: var(--p-half);
+      --size-zero: var(--p-zero);
+      --icon-size: var(--p-size-28);
+      --marker-size: var(--p-space-6);
+      --control-height: var(--p-size-44);
+      --checkbox-size: var(--p-space-24);
+      --check-mark-width: var(--p-space-6);
+      --check-mark-height: var(--p-size-10);
+      --check-mark-left: var(--p-space-8);
+      --check-mark-top: var(--p-space-4);
+      --check-mark-angle: var(--p-angle-check);
+      --progress-height: var(--p-border-3);
+      --anchor-offset: var(--p-space-32);
+      --toc-offset: var(--p-space-24);
+      --toc-max-height: var(--p-toc-height);
+      --table-min-width: var(--p-size-600);
+      --table-label-width: var(--p-size-160);
+      --chart-label-width: var(--p-size-104);
+      --chart-number-width: var(--p-size-36);
+      --chart-track-height: var(--p-space-12);
+      --a11y-pixel: var(--p-size-1);
+      --print-margin: var(--p-print-margin);
+      --breakpoint-desktop: var(--p-breakpoint-desktop);
+
+      /* Semantic：排版 */
+      --font-family-body: var(--p-font-family);
+      --font-root: var(--p-font-root);
+      --font-body: var(--p-font-17);
+      --font-label: var(--p-font-16);
+      --font-lead: var(--p-font-18);
+      --font-card-title: var(--p-font-20);
+      --font-subheading: var(--p-font-24);
+      --font-section-title: var(--p-font-30);
+      --font-section-title-small: var(--p-font-26);
+      --font-hero: var(--p-font-hero);
+      --font-stat: var(--p-font-52);
+      --font-stat-compact: var(--p-font-36);
+      --font-price: var(--p-font-32);
+      --font-guide: var(--p-font-32);
+      --font-decision-title: var(--p-font-42);
+      --font-action-title: var(--p-font-32);
+      --font-print-title: var(--p-font-32);
+      --leading-body: var(--p-leading-body);
+      --leading-compact: var(--p-leading-compact);
+      --leading-heading: var(--p-leading-heading);
+      --leading-display: var(--p-leading-display);
+      --leading-number: var(--p-leading-number);
+      --weight-regular: var(--p-weight-regular);
+      --weight-medium: var(--p-weight-medium);
+      --weight-bold: var(--p-weight-bold);
+      --tracking-normal: var(--p-tracking-normal);
+      --tracking-tight: var(--p-tracking-tight);
+      --tracking-label: var(--p-tracking-label);
+
+      /* Semantic：组件表现 */
+      --border-thin: var(--p-border-1);
+      --border-strong: var(--p-border-2);
+      --border-accent: var(--p-border-3);
+      --border-none: var(--p-zero);
+      --radius-bar: var(--p-radius-4);
+      --radius-control: var(--p-radius-6);
+      --radius-card: var(--p-radius-12);
+      --shadow-card: var(--p-shadow-card);
+      --shadow-none: var(--p-shadow-none);
+      --duration-none: var(--p-duration-zero);
+      --duration-fast: var(--p-duration-fast);
+      --duration-base: var(--p-duration-base);
+      --ease-standard: var(--p-ease-standard);
+      --z-progress: var(--p-z-progress);
+      --z-skip: var(--p-z-skip);
+      --reading-fraction: var(--p-zero);
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      font-size: var(--font-root);
+      scroll-behavior: smooth;
+      color-scheme: light;
+    }
+    body {
+      margin: var(--space-none);
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: var(--font-family-body);
+      font-size: var(--font-body);
+      font-weight: var(--weight-regular);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-normal);
+    }
+    :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote) {
+      margin: var(--space-none);
+    }
+    :where(ul, ol) {
+      padding: var(--space-none);
+      list-style: none;
+    }
+    :where(main, section, article, aside, nav, header, footer, div, figure, details) {
+      min-inline-size: var(--size-zero);
+    }
+    :where(h1, h2, h3, h4, p, li, dt, dd, a, span) {
+      overflow-wrap: anywhere;
+    }
+    :where(h1, h2, h3, h4) {
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+      text-wrap: balance;
+    }
+    h2 { font-size: var(--font-section-title); }
+    h3 { font-size: var(--font-subheading); }
+    h4 { font-size: var(--font-card-title); }
+    p + p { margin-block-start: var(--space-sm); }
+    strong { font-weight: var(--weight-bold); }
+    a {
+      color: var(--color-accent);
+      text-decoration-thickness: var(--border-thin);
+      text-underline-offset: var(--space-3xs);
+    }
+    button, input, output { font: inherit; }
+    button { cursor: pointer; }
+    a, button, summary, .action-item {
+      -webkit-tap-highlight-color: var(--color-accent-soft);
+    }
+    :focus-visible {
+      outline: var(--border-strong) solid var(--color-accent);
+      outline-offset: var(--space-3xs);
+    }
+    ::selection {
+      background: var(--color-accent);
+      color: var(--color-surface);
+    }
+    [hidden] { display: none !important; }
+
+    .shell {
+      inline-size: calc(var(--size-full) - var(--page-gutter) * 2);
+      max-inline-size: var(--layout-max);
+      margin-inline: var(--space-auto);
+    }
+    .sr-only {
+      position: absolute;
+      inline-size: var(--a11y-pixel);
+      block-size: var(--a11y-pixel);
+      padding: var(--space-none);
+      border: var(--border-none);
+      overflow: hidden;
+      clip-path: inset(var(--size-half));
+      white-space: nowrap;
+    }
+    .skip-link {
+      position: fixed;
+      inset-block-start: var(--space-sm);
+      inset-inline-start: var(--space-sm);
+      z-index: var(--z-skip);
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--color-surface);
+      border: var(--border-strong) solid var(--color-accent);
+      border-radius: var(--radius-control);
+      clip-path: inset(var(--size-full));
+    }
+    .skip-link:focus { clip-path: none; }
+    .reading-progress {
+      position: fixed;
+      inset-block-start: var(--space-none);
+      inset-inline: var(--space-none);
+      z-index: var(--z-progress);
+      block-size: var(--progress-height);
+      background: var(--color-transparent);
+      pointer-events: none;
+    }
+    .reading-progress__fill {
+      inline-size: var(--size-full);
+      block-size: var(--size-full);
+      background: var(--color-accent);
+      transform: scaleX(var(--reading-fraction));
+      transform-origin: left;
+      transition: transform var(--duration-fast) linear;
+    }
+
+    .masthead {
+      padding-block: var(--space-sm);
+      background: var(--color-surface);
+      border-block-end: var(--border-thin) solid var(--color-line);
+    }
+    .masthead-inner, .brand, .top-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .masthead-inner {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .brand {
+      color: var(--color-text);
+      font-size: var(--font-label);
+      font-weight: var(--weight-bold);
+      text-decoration: none;
+    }
+    .brand-symbol {
+      flex: 0 0 var(--icon-size);
+      inline-size: var(--icon-size);
+      block-size: var(--icon-size);
+      fill: var(--color-transparent);
+      stroke: var(--color-accent);
+      stroke-width: var(--border-strong);
+    }
+    .top-actions { flex-wrap: wrap; gap: var(--space-2xs); }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-block-size: var(--control-height);
+      padding: var(--space-2xs) var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-control);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--font-label);
+      font-weight: var(--weight-medium);
+      line-height: var(--leading-compact);
+      text-decoration: none;
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+    }
+    .button:hover {
+      background: var(--color-accent-soft);
+      border-color: var(--color-accent);
+    }
+
+    .report-hero {
+      padding-block: var(--hero-padding);
+      background: var(--color-inverse-bg);
+      color: var(--color-inverse-text);
+    }
+    .hero-grid {
+      display: grid;
+      gap: var(--space-lg);
+      align-items: center;
+    }
+    .eyebrow {
+      font-size: var(--font-label);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-text-muted);
+    }
+    .report-hero .eyebrow { color: var(--color-inverse-muted); }
+    .hero-title {
+      margin-block-start: var(--space-md);
+      font-size: var(--font-hero);
+      line-height: var(--leading-display);
+      letter-spacing: var(--tracking-tight);
+    }
+    .hero-title-secondary { color: var(--color-inverse-accent); }
+    .no-split { display: inline-block; max-inline-size: var(--size-full); }
+    .hero-thesis {
+      margin-block-start: var(--space-lg);
+      font-size: var(--font-lead);
+      color: var(--color-inverse-muted);
+    }
+    .hero-thesis strong { color: var(--color-inverse-text); }
+    .hero-subtitle {
+      margin-block-start: var(--space-md);
+      font-size: var(--font-label);
+      color: var(--color-inverse-muted);
+    }
+    .hero-model {
+      padding: var(--card-padding);
+      border: var(--border-thin) solid var(--color-inverse-line);
+      border-radius: var(--radius-card);
+      background: var(--color-inverse-panel);
+    }
+    .hero-model-heading {
+      margin-block-end: var(--space-md);
+      color: var(--color-inverse-muted);
+      font-size: var(--font-label);
+      font-weight: var(--weight-medium);
+    }
+    .principle-row {
+      padding-block: var(--space-sm);
+      border-block-start: var(--border-thin) solid var(--color-inverse-line);
+    }
+    .principle-row h3 {
+      color: var(--color-inverse-accent);
+      font-size: var(--font-subheading);
+    }
+    .principle-row p {
+      margin-block-start: var(--space-2xs);
+      color: var(--color-inverse-muted);
+      font-size: var(--font-label);
+    }
+    .model-conclusion {
+      padding-block-start: var(--space-sm);
+      border-block-start: var(--border-thin) solid var(--color-inverse-line);
+      color: var(--color-inverse-text);
+      font-size: var(--font-label);
+    }
+    .hero-source {
+      margin-block-start: var(--space-lg);
+      padding-block-start: var(--space-md);
+      border-block-start: var(--border-thin) solid var(--color-inverse-line);
+      color: var(--color-inverse-muted);
+      font-size: var(--font-label);
+    }
+
+    .reading-guide {
+      display: grid;
+      gap: var(--space-md);
+      margin-block-start: var(--space-lg);
+      padding: var(--card-padding);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+    }
+    .guide-title {
+      grid-column: 1 / -1;
+      font-size: var(--font-lead);
+      color: var(--color-text-secondary);
+    }
+    .read-option {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: start;
+    }
+    .read-option + .read-option {
+      padding-block-start: var(--space-md);
+      border-block-start: var(--border-thin) solid var(--color-line);
+    }
+    .read-time {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-3xs);
+      color: var(--color-accent);
+    }
+    .read-time strong {
+      font-size: var(--font-guide);
+      line-height: var(--leading-number);
+      font-variant-numeric: tabular-nums;
+    }
+    .read-time span { font-size: var(--font-label); }
+    .read-option p { font-size: var(--font-label); }
+    .read-option .muted { margin-block-start: var(--space-3xs); }
+
+    .source-panel {
+      margin-block-start: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+    }
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-block-size: var(--control-height);
+      cursor: pointer;
+      list-style: none;
+      font-size: var(--font-label);
+      font-weight: var(--weight-bold);
+    }
+    summary::-webkit-details-marker { display: none; }
+    .source-panel > summary { padding: var(--space-sm) var(--card-padding); }
+    .details-marker {
+      flex: 0 0 var(--checkbox-size);
+      color: var(--color-accent);
+      text-align: center;
+      font-size: var(--font-card-title);
+    }
+    .details-marker::before { content: "+"; }
+    details[open] > summary .details-marker::before { content: "−"; }
+    .source-body {
+      padding: var(--space-none) var(--card-padding) var(--card-padding);
+      font-size: var(--font-label);
+    }
+    .source-grid { display: grid; gap: var(--space-md); }
+    .source-grid dt {
+      margin-block-end: var(--space-2xs);
+      font-weight: var(--weight-bold);
+      color: var(--color-accent);
+    }
+    .source-grid dd { color: var(--color-text-secondary); }
+    .source-boundary {
+      margin-block-start: var(--space-md);
+      padding-block-start: var(--space-sm);
+      border-block-start: var(--border-thin) solid var(--color-line);
+      color: var(--color-text-muted);
+    }
+    .material-note {
+      margin-block-start: var(--space-sm);
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+    }
+
+    .overview {
+      padding-block: var(--space-xl);
+      scroll-margin-block-start: var(--anchor-offset);
+    }
+    .section-intro {
+      margin-block-start: var(--space-xs);
+      color: var(--color-text-secondary);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .stat-card {
+      padding: var(--stat-padding);
+      border: var(--border-thin) solid var(--color-line);
+      border-block-start: var(--border-accent) solid var(--color-accent);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
+    }
+    .stat-label {
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+      font-weight: var(--weight-medium);
+    }
+    .stat-number {
+      display: block;
+      margin-block: var(--space-sm);
+      color: var(--color-text);
+      font-size: var(--font-stat);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-number);
+      letter-spacing: var(--tracking-tight);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-card p {
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+      line-height: var(--leading-compact);
+    }
+    .data-caption {
+      margin-block-start: var(--space-sm);
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+    }
+
+    .report-layout {
+      display: grid;
+      gap: var(--space-md);
+      align-items: start;
+    }
+    .toc { align-self: start; }
+    .toc-card {
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+    }
+    .toc-card summary { padding-inline: var(--space-2xs); }
+    .toc-card[open] summary { margin-block-end: var(--space-xs); }
+    .toc-list { display: grid; gap: var(--space-3xs); }
+    .toc-link {
+      display: flex;
+      align-items: center;
+      min-block-size: var(--control-height);
+      padding: var(--space-2xs) var(--space-xs);
+      border-inline-start: var(--border-strong) solid var(--color-transparent);
+      border-radius: var(--radius-control);
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+      line-height: var(--leading-compact);
+      text-decoration: none;
+      transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard);
+    }
+    .toc-link:hover { background: var(--color-surface-subtle); }
+    .toc-link[aria-current="location"] {
+      border-inline-start-color: var(--color-accent);
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+      font-weight: var(--weight-bold);
+    }
+    .toc-link--decision { font-weight: var(--weight-bold); color: var(--color-accent); }
+    .toc-legend {
+      display: grid;
+      gap: var(--space-2xs);
+      margin-block-start: var(--space-sm);
+      padding: var(--space-sm) var(--space-2xs) var(--space-none);
+      border-block-start: var(--border-thin) solid var(--color-line);
+      font-size: var(--font-label);
+      color: var(--color-text-muted);
+    }
+    .legend-line { display: flex; align-items: center; gap: var(--space-xs); }
+    .legend-mark {
+      inline-size: var(--marker-size);
+      block-size: var(--space-sm);
+      background: var(--color-text-muted);
+    }
+    .legend-mark--analysis { background: var(--color-accent); }
+    .chapters {
+      padding: var(--chapter-padding);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+    }
+    .chapter {
+      margin-block-end: var(--space-xl);
+      padding-block-end: var(--space-xl);
+      border-block-end: var(--border-thin) solid var(--color-line);
+      scroll-margin-block-start: var(--anchor-offset);
+    }
+    .chapters > .chapter:last-child {
+      margin-block-end: var(--space-none);
+      padding-block-end: var(--space-none);
+      border-block-end: var(--border-none);
+    }
+    .chapter-header .eyebrow { margin-block-end: var(--space-xs); }
+    .chapter-deck {
+      margin-block-start: var(--space-xs);
+      color: var(--color-text-secondary);
+    }
+    .source-block { margin-block-start: var(--space-md); }
+    .block-heading {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-block-end: var(--space-xs);
+      font-size: var(--font-label);
+      font-weight: var(--weight-bold);
+      color: var(--color-text-muted);
+    }
+    .source-block > .block-heading::before {
+      content: "";
+      flex: 0 0 var(--marker-size);
+      inline-size: var(--marker-size);
+      block-size: var(--marker-size);
+      background: var(--color-text-muted);
+    }
+    .analysis-block {
+      margin-block-start: var(--space-md);
+      padding: var(--card-padding);
+      border-inline-start: var(--border-accent) solid var(--color-accent);
+      background: var(--color-accent-soft);
+    }
+    .analysis-block > .block-heading { color: var(--color-accent); }
+    .muted { color: var(--color-text-muted); }
+    .rule-line {
+      margin-block-start: var(--space-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-accent);
+    }
+
+    .figure-block { margin-block-start: var(--space-md); }
+    figcaption {
+      margin-block-start: var(--space-xs);
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+      line-height: var(--leading-compact);
+    }
+    .three-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2xs);
+      align-items: stretch;
+    }
+    .flow-step {
+      padding: var(--space-sm);
+      border-block-start: var(--border-accent) solid var(--color-accent);
+      background: var(--color-surface-subtle);
+    }
+    .flow-step h4 { font-size: var(--font-card-title); }
+    .flow-step p {
+      margin-block-start: var(--space-2xs);
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+    }
+    .flow-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--color-accent);
+      font-size: var(--font-subheading);
+      line-height: var(--leading-number);
+    }
+    .flow-arrow::before { content: "↓"; }
+    .case-number {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-block-start: var(--space-md);
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      background: var(--color-surface-subtle);
+    }
+    .case-number strong {
+      color: var(--color-accent);
+      font-size: var(--font-stat-compact);
+      line-height: var(--leading-number);
+      font-variant-numeric: tabular-nums;
+    }
+    .case-number p {
+      flex: 1 1 auto;
+      font-size: var(--font-label);
+    }
+    .permission-map { margin-block-start: var(--space-md); }
+    .permission-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-sm);
+    }
+    .permission-card {
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-accent);
+      border-radius: var(--radius-control);
+      background: var(--color-surface);
+    }
+    .permission-card h4 { color: var(--color-accent); }
+    .permission-card--ask { border-color: var(--color-warning); }
+    .permission-card--ask h4 { color: var(--color-warning); }
+    .zone-rule {
+      margin-block-start: var(--space-2xs);
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+    }
+    .example-list { margin-block-start: var(--space-sm); }
+    .example-list li + li {
+      margin-block-start: var(--space-xs);
+      padding-block-start: var(--space-xs);
+      border-block-start: var(--border-thin) solid var(--color-line);
+    }
+    .example-list strong {
+      display: block;
+      font-size: var(--font-label);
+    }
+    .example-list span {
+      display: block;
+      margin-block-start: var(--space-3xs);
+      font-size: var(--font-label);
+      color: var(--color-text-muted);
+    }
+    .safety-note {
+      margin-block-start: var(--space-sm);
+      padding: var(--space-xs) var(--space-sm);
+      border-inline-start: var(--border-strong) solid var(--color-line);
+      background: var(--color-surface-subtle);
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+    }
+    .interface-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .interface-item {
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-control);
+    }
+    .interface-item strong { display: block; color: var(--color-text); }
+    .interface-item span {
+      display: block;
+      margin-block-start: var(--space-3xs);
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+    }
+
+    .economy-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block: var(--space-md);
+    }
+    .economy-card {
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-control);
+      background: var(--color-surface-subtle);
+    }
+    .economy-status {
+      color: var(--color-warning);
+      font-size: var(--font-label);
+      font-weight: var(--weight-bold);
+    }
+    .price-line {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-2xs);
+      margin-block: var(--space-xs);
+    }
+    .price-line strong {
+      font-size: var(--font-price);
+      line-height: var(--leading-number);
+      font-variant-numeric: tabular-nums;
+    }
+    .price-line span, .economy-card p { font-size: var(--font-label); }
+    .economy-card p { color: var(--color-text-secondary); }
+    .payment-figure { margin-block-start: var(--space-md); }
+    .payment-figure > figcaption { margin-block-start: var(--space-none); }
+    .payment-title {
+      display: block;
+      color: var(--color-text);
+      font-size: var(--font-lead);
+      font-weight: var(--weight-bold);
+    }
+    .payment-chart {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .pay-row {
+      display: grid;
+      grid-template-columns: var(--chart-label-width) minmax(0, 1fr) var(--chart-number-width);
+      gap: var(--space-xs);
+      align-items: center;
+      font-size: var(--font-label);
+    }
+    .pay-track {
+      block-size: var(--chart-track-height);
+      border-radius: var(--radius-bar);
+      background: var(--color-line);
+      overflow: hidden;
+    }
+    .pay-fill {
+      display: block;
+      inline-size: calc(var(--sample-count) * 100% / var(--sample-total));
+      block-size: var(--size-full);
+      border-radius: var(--radius-bar);
+    }
+    .pay-row--full .pay-fill { background: var(--color-chart-full); }
+    .pay-row--freemium .pay-fill { background: var(--color-chart-freemium); }
+    .pay-row--free .pay-fill { background: var(--color-chart-free); }
+    .pay-count { text-align: end; font-variant-numeric: tabular-nums; }
+    .data-note {
+      margin-block-start: var(--space-md);
+      padding: var(--space-sm);
+      border-inline-start: var(--border-strong) solid var(--color-line);
+      background: var(--color-surface-subtle);
+      font-size: var(--font-label);
+      color: var(--color-text-secondary);
+    }
+    .table-scroll {
+      max-inline-size: var(--size-full);
+      margin-block-start: var(--space-md);
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-control);
+    }
+    table {
+      inline-size: var(--size-full);
+      min-inline-size: var(--table-min-width);
+      border-collapse: collapse;
+      font-size: var(--font-label);
+      line-height: var(--leading-body);
+    }
+    caption {
+      padding: var(--space-sm);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--font-lead);
+      font-weight: var(--weight-bold);
+      text-align: start;
+    }
+    th, td {
+      padding: var(--space-sm);
+      border-block-end: var(--border-thin) solid var(--color-line);
+      text-align: start;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    thead th { background: var(--color-surface-subtle); }
+    tbody th { inline-size: var(--table-label-width); font-weight: var(--weight-medium); }
+    tbody tr:last-child > * { border-block-end: var(--border-none); }
+    .table-hint {
+      margin-block-start: var(--space-2xs);
+      font-size: var(--font-label);
+      color: var(--color-text-muted);
+    }
+    .closing-thought {
+      margin-block-start: var(--space-md);
+      color: var(--color-accent);
+      font-size: var(--font-subheading);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+    }
+
+    .decision-section {
+      margin-block-start: var(--space-xl);
+      margin-block-end: var(--space-none);
+      padding-block: var(--space-2xl);
+      border: var(--border-none);
+      background: var(--color-inverse-bg);
+      color: var(--color-inverse-text);
+    }
+    .decision-section .eyebrow { color: var(--color-inverse-accent); }
+    .decision-title {
+      margin-block-start: var(--space-sm);
+      font-size: var(--font-decision-title);
+      line-height: var(--leading-display);
+      letter-spacing: var(--tracking-tight);
+    }
+    .decision-title span { color: var(--color-inverse-accent); }
+    .decision-deck {
+      margin-block-start: var(--space-md);
+      color: var(--color-inverse-muted);
+      font-size: var(--font-lead);
+    }
+    .decision-source {
+      padding: var(--card-padding);
+      border: var(--border-thin) solid var(--color-inverse-line);
+      border-radius: var(--radius-control);
+      background: var(--color-inverse-panel);
+      color: var(--color-inverse-muted);
+    }
+    .decision-source > .block-heading { color: var(--color-inverse-text); }
+    .decision-source > .block-heading::before { background: var(--color-inverse-muted); }
+    .decision-analysis {
+      margin-block-start: var(--space-lg);
+      padding: var(--space-none);
+      border: var(--border-none);
+      background: var(--color-transparent);
+    }
+    .decision-analysis > .block-heading {
+      padding-inline-start: var(--space-sm);
+      border-inline-start: var(--border-accent) solid var(--color-inverse-accent);
+      color: var(--color-inverse-accent);
+    }
+    .decision-note {
+      color: var(--color-inverse-muted);
+      font-size: var(--font-label);
+    }
+    .signal-grid {
+      display: grid;
+      gap: var(--space-md);
+      margin-block-start: var(--space-md);
+    }
+    .signal-card {
+      padding: var(--card-padding);
+      border: var(--border-thin) solid var(--color-inverse-line);
+      border-block-start: var(--border-accent) solid var(--color-inverse-accent);
+      border-radius: var(--radius-control);
+      background: var(--color-inverse-panel);
+    }
+    .signal-card h4 {
+      color: var(--color-inverse-accent);
+      font-size: var(--font-subheading);
+    }
+    .signal-card--verify { border-block-start-color: var(--color-inverse-warning); }
+    .signal-card--verify h4 { color: var(--color-inverse-warning); }
+    .signal-list { margin-block-start: var(--space-md); }
+    .signal-list li + li {
+      margin-block-start: var(--space-sm);
+      padding-block-start: var(--space-sm);
+      border-block-start: var(--border-thin) solid var(--color-inverse-line);
+    }
+    .signal-list strong { color: var(--color-inverse-text); }
+    .signal-list p {
+      margin-block-start: var(--space-3xs);
+      color: var(--color-inverse-muted);
+      font-size: var(--font-label);
+    }
+    .decision-subsection { margin-block-start: var(--space-xl); }
+    .decision-subsection > h3 {
+      margin-block-end: var(--space-sm);
+      color: var(--color-inverse-text);
+      font-size: var(--font-subheading);
+    }
+    .tension-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .tension-card {
+      padding: var(--space-md);
+      border: var(--border-thin) solid var(--color-inverse-line);
+      border-radius: var(--radius-control);
+      background: var(--color-inverse-panel);
+    }
+    .tension-card h4 {
+      font-size: var(--font-lead);
+      color: var(--color-inverse-text);
+    }
+    .tension-card p {
+      margin-block-start: var(--space-xs);
+      font-size: var(--font-label);
+      color: var(--color-inverse-muted);
+    }
+    .mapping-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .mapping-item {
+      padding: var(--space-md);
+      border: var(--border-thin) solid var(--color-inverse-line);
+      border-radius: var(--radius-control);
+    }
+    .mapping-item dt {
+      font-size: var(--font-lead);
+      font-weight: var(--weight-bold);
+      color: var(--color-inverse-text);
+    }
+    .mapping-item dd {
+      margin-block-start: var(--space-2xs);
+      font-size: var(--font-label);
+      color: var(--color-inverse-muted);
+    }
+
+    .action-panel {
+      margin-block-start: var(--space-xl);
+      padding: var(--action-padding);
+      border-block-start: var(--border-accent) solid var(--color-inverse-accent);
+      border-radius: var(--radius-card);
+      background: var(--color-action-bg);
+      color: var(--color-action-text);
+    }
+    .action-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .action-header h3 {
+      color: var(--color-action-text);
+      font-size: var(--font-action-title);
+    }
+    .action-status { font-size: var(--font-label); color: var(--color-text-muted); }
+    .action-status output {
+      margin-inline-start: var(--space-2xs);
+      color: var(--color-accent);
+      font-weight: var(--weight-bold);
+      font-variant-numeric: tabular-nums;
+    }
+    .action-intro {
+      margin-block-start: var(--space-xs);
+      color: var(--color-text-secondary);
+    }
+    .action-grid {
+      display: grid;
+      gap: var(--space-sm);
+      margin-block-start: var(--space-md);
+    }
+    .action-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: var(--checkbox-size) minmax(0, 1fr);
+      gap: var(--space-xs);
+      align-items: start;
+      padding: var(--space-sm);
+      border: var(--border-thin) solid var(--color-line);
+      border-radius: var(--radius-control);
+      background: var(--color-surface-subtle);
+      cursor: pointer;
+      transition: border-color var(--duration-fast) var(--ease-standard);
+    }
+    .action-item:hover { border-color: var(--color-accent); }
+    .action-item:focus-within {
+      outline: var(--border-strong) solid var(--color-accent);
+      outline-offset: var(--space-3xs);
+    }
+    .check-ui {
+      position: relative;
+      inline-size: var(--checkbox-size);
+      block-size: var(--checkbox-size);
+      margin-block-start: var(--space-3xs);
+      border: var(--border-strong) solid var(--color-text-muted);
+      border-radius: var(--radius-bar);
+      background: var(--color-surface);
+    }
+    .check-ui::after {
+      content: "";
+      display: none;
+      position: absolute;
+      inset-inline-start: var(--check-mark-left);
+      inset-block-start: var(--check-mark-top);
+      inline-size: var(--check-mark-width);
+      block-size: var(--check-mark-height);
+      border-inline-end: var(--border-strong) solid var(--color-surface);
+      border-block-end: var(--border-strong) solid var(--color-surface);
+      transform: rotate(var(--check-mark-angle));
+    }
+    .action-input:checked + .check-ui {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+    }
+    .action-input:checked + .check-ui::after { display: block; }
+    .action-copy strong {
+      display: block;
+      font-size: var(--font-lead);
+      color: var(--color-action-text);
+    }
+    .action-copy > span {
+      display: block;
+      margin-block-start: var(--space-2xs);
+      color: var(--color-text-secondary);
+      font-size: var(--font-label);
+    }
+    .action-input:checked ~ .action-copy strong {
+      text-decoration: line-through;
+      text-decoration-thickness: var(--border-thin);
+    }
+    .action-footnote {
+      margin-block-start: var(--space-sm);
+      color: var(--color-text-muted);
+      font-size: var(--font-label);
+    }
+    .final-remark {
+      margin-block-start: var(--space-lg);
+      padding-block-start: var(--space-md);
+      border-block-start: var(--border-thin) solid var(--color-inverse-line);
+      color: var(--color-inverse-accent);
+      font-size: var(--font-subheading);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+    }
+
+    .page-footer { padding-block: var(--space-lg); }
+    .footer-grid { display: grid; gap: var(--space-md); align-items: start; }
+    .page-footer p { font-size: var(--font-label); color: var(--color-text-muted); }
+    .back-top { font-size: var(--font-label); }
+
+    @media (min-width: 700px) {
+      .reading-guide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .read-option + .read-option {
+        padding-block-start: var(--space-none);
+        padding-inline-start: var(--space-md);
+        border-block-start: var(--border-none);
+        border-inline-start: var(--border-thin) solid var(--color-line);
+      }
+      .source-grid, .interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .permission-grid, .economy-grid, .signal-grid, .mapping-grid, .action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .three-stage {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      }
+      .flow-arrow::before { content: "→"; }
+      .table-hint { display: none; }
+      .footer-grid { grid-template-columns: minmax(0, 1fr) auto; }
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --page-gutter: var(--p-space-32);
+        --hero-padding: var(--p-space-64);
+        --chapter-padding: var(--p-space-32);
+        --stat-padding: var(--p-space-24);
+        --action-padding: var(--p-space-32);
+      }
+      .hero-grid { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: var(--space-xl); }
+      .stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .report-layout {
+        grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+        gap: var(--layout-gap);
+      }
+      .toc {
+        position: sticky;
+        inset-block-start: var(--toc-offset);
+        max-block-size: var(--toc-max-height);
+        overflow-y: auto;
+        overscroll-behavior-block: contain;
+      }
+      .tension-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 390px) {
+      :root {
+        --page-gutter: var(--p-space-16);
+        --hero-padding: var(--p-space-40);
+        --chapter-padding: var(--p-space-20);
+        --card-padding: var(--p-space-16);
+        --stat-padding: var(--p-space-16);
+        --action-padding: var(--p-space-16);
+        --font-body: var(--p-font-16);
+        --font-stat: var(--p-font-36);
+        --font-section-title: var(--p-font-26);
+        --font-decision-title: var(--p-font-32);
+      }
+      .stat-grid { gap: var(--space-xs); }
+      .read-option { gap: var(--space-sm); }
+      .top-actions .button { padding-inline: var(--space-xs); }
+      .decision-section { padding-block: var(--space-xl); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --duration-fast: var(--p-duration-zero);
+        --duration-base: var(--p-duration-zero);
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    @page { size: A4; margin: var(--print-margin); }
+
+    @media print {
+      :root {
+        --color-page: var(--p-white);
+        --color-inverse-bg: var(--p-white);
+        --color-inverse-panel: var(--p-surface-subtle);
+        --color-inverse-line: var(--p-line);
+        --color-inverse-text: var(--p-ink);
+        --color-inverse-muted: var(--p-ink-secondary);
+        --color-inverse-accent: var(--p-teal);
+        --color-inverse-warning: var(--p-rose);
+        --font-body: var(--p-font-16);
+      }
+      html { scroll-behavior: auto; }
+      .masthead, .reading-progress, .skip-link, .toc, .back-top, .action-status { display: none !important; }
+      .shell { inline-size: var(--size-full); max-inline-size: none; }
+      .report-hero, .decision-section { padding-block: var(--space-md); }
+      .hero-grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: var(--space-md); }
+      .hero-title, .decision-title { font-size: var(--font-print-title); }
+      .hero-thesis { margin-block-start: var(--space-sm); }
+      .hero-source { margin-block-start: var(--space-sm); }
+      .report-layout { display: block; }
+      .chapters { padding: var(--space-none); border: var(--border-none); }
+      .chapter { margin-block-end: var(--space-md); padding-block-end: var(--space-md); }
+      .stat-grid, .signal-grid, .permission-grid, .mapping-grid, .action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .table-scroll { overflow: visible; }
+      table { min-inline-size: var(--size-zero); }
+      .table-hint { display: none; }
+      .stat-card, .flow-step, .permission-card, .signal-card, .tension-card, .mapping-item, .action-item {
+        break-inside: avoid;
+        box-shadow: var(--shadow-none);
+      }
+      h2, h3, h4, .block-heading { break-after: avoid; }
+      p { orphans: 3; widows: 3; }
+      .action-panel { padding: var(--space-md); border: var(--border-thin) solid var(--color-line); }
+      .decision-subsection { margin-block-start: var(--space-md); }
+      .page-footer { border-block-start: var(--border-thin) solid var(--color-line); }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#key-numbers">跳到关键数字</a>
+
+  <div
+    class="reading-progress"
+    id="reading-progress"
+    role="progressbar"
+    aria-label="页面阅读进度"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+    hidden
+  >
+    <div class="reading-progress__fill"></div>
+  </div>
+
+  <header class="masthead" id="top">
+    <div class="shell masthead-inner">
+      <a class="brand" href="#top" aria-label="深度拆解报告，回到顶部">
+        <svg class="brand-symbol" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M3 3h9v9H3zM16 3h9v9h-9zM3 16h9v9H3zM16 16h9v9h-9z"></path>
+          <path d="M12 7.5h4M7.5 12v4M20.5 12v4M12 20.5h4"></path>
+        </svg>
+        <span>深度拆解报告</span>
+      </a>
+      <div class="top-actions">
+        <a class="button" href="#signals-actions">看结论</a>
+        <button class="button" id="print-button" type="button" hidden>打印</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <header class="report-hero" aria-labelledby="report-title">
+      <div class="shell">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">a16z 对话 · 产品逻辑与商业判断</p>
+            <h1 class="hero-title" id="report-title">
+              个人 <span class="no-split">AI Agent</span><br>
+              <span class="hero-title-secondary"><span class="no-split">真正的门槛，</span><span class="no-split">是信任。</span></span>
+            </h1>
+            <p class="hero-thesis">
+              个人 Agent 的胜负手不在模型和功能，而在
+              <strong>「主动性 × 信任边界 × 隐形体验」</strong>
+              三者的产品化；成本会降，信任与习惯才是护城河。
+            </p>
+            <p class="hero-subtitle">
+              个人 AI Agent 的底层逻辑与未来图景<br>
+              写给关注 Agent 产品与一人公司机会的中文创业者、产品人。
+            </p>
+          </div>
+
+          <aside class="hero-model" aria-labelledby="hero-model-heading">
+            <h2 class="hero-model-heading" id="hero-model-heading">本页判断 · 产品化的三个变量</h2>
+            <div class="principle-row">
+              <h3>主动性</h3>
+              <p>不是等用户提问，而是发现值得做的事。</p>
+            </div>
+            <div class="principle-row">
+              <h3>信任边界</h3>
+              <p>不是尽可能多做，而是知道何时必须先问。</p>
+            </div>
+            <div class="principle-row">
+              <h3>隐形体验</h3>
+              <p>不是占据更多界面，而是后台完成、必要时出现。</p>
+            </div>
+            <p class="model-conclusion">三者是相互约束的乘法，不是功能清单的加法。</p>
+          </aside>
+        </div>
+
+        <p class="hero-source">
+          来源链路：a16z 播客（Anish Acharya × David Pawlan）
+          →「深思圈」公众号中文整理（<time datetime="2026-09-29">2026-09-29</time>）
+          → Get 笔记 AI 总结。以下依据所给大纲重构，为二次分析。
+        </p>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="reading-guide" aria-labelledby="guide-title">
+        <h2 class="guide-title" id="guide-title">阅读指引</h2>
+        <div class="read-option">
+          <div class="read-time"><strong>3</strong><span>分钟</span></div>
+          <div>
+            <p><a href="#key-numbers">关键数字</a> → <a href="#signals-actions">最后一节：信号与行动</a></p>
+            <p class="muted">跳读：先判断哪些值得做，哪些还不能当作前提。</p>
+          </div>
+        </div>
+        <div class="read-option">
+          <div class="read-time"><strong>15</strong><span>分钟</span></div>
+          <div>
+            <p><a href="#origins">从背景开始，顺序读完 12 章</a></p>
+            <p class="muted">全读：把用户需求、权限设计与商业模式连成一条线。</p>
+          </div>
+        </div>
+      </aside>
+
+      <details class="source-panel" id="source-notes">
+        <summary>
+          <span>来源链路与材料边界</span>
+          <span class="details-marker" aria-hidden="true"></span>
+        </summary>
+        <div class="source-body">
+          <dl class="source-grid">
+            <div>
+              <dt>原始对话</dt>
+              <dd>
+                a16z 播客。所给大纲标注的对谈双方为 General Partner Anish Acharya
+                与 Assistant Benchmark 创始人 David Pawlan。
+              </dd>
+            </div>
+            <div>
+              <dt>中文整理</dt>
+              <dd>
+                微信公众号「深思圈」，2026-09-29，
+                《a16z 最新深度对话｜这才是 personal agent 的正确打开方式》。
+                整理已包含作者的个人判断。
+              </dd>
+            </div>
+            <div>
+              <dt>中间摘要</dt>
+              <dd>
+                Get 笔记 AI 总结，以 10 个问题式小节与关键洞察压缩内容。
+                本页依照用户提供的大纲展开为 12 章。
+              </dd>
+            </div>
+          </dl>
+          <p class="source-boundary">
+            本页已对照「深思圈」原文核对数字与案例，但未对照播客音频或逐字稿，也未核验产品现状。
+            「原对话要点」均指依据大纲的转述，不是逐字引语；
+            「分析 / 判断」属于本页推论。第十二章为本页独有的决策层。
+          </p>
+        </div>
+      </details>
+
+      <p class="material-note">
+        阅读约定：灰色标记是材料转述，绿色左侧色条是本页分析。案例、预测与未说明口径的数字分别标注，不混作事实。
+      </p>
+
+      <section class="overview" id="key-numbers" aria-labelledby="numbers-title">
+        <p class="eyebrow">关键数字</p>
+        <h2 id="numbers-title">先看规模，不把热度当留存。</h2>
+        <p class="section-intro">
+          这些数字描述的是 David 的观察范围与内容传播热度，不是市场总量、收入规模或用户留存。
+        </p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">追踪产品</span>
+            <strong class="stat-number">122</strong>
+            <p>David 追踪的产品样本，不代表全市场规模。</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">实际测试</span>
+            <strong class="stat-number">26</strong>
+            
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">群聊人数</span>
+            <strong class="stat-number">1,200</strong>
+            <p>社群讨论热度，不等于付费人数或真实需求量。</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">报告访问 · 16 天</span>
+            <strong class="stat-number">10 万</strong>
+            <p>Assistant Bench 报告访问量，不等于独立用户数。</p>
+          </div>
+        </div>
+        <p class="data-caption">
+          数字均按大纲转述；除报告的 16 天窗口外，材料未完整提供统计时间、去重方式与抽样方法。
+        </p>
+      </section>
+
+      <div class="report-layout">
+        <aside class="toc" aria-label="报告导航">
+          <nav aria-label="章节目录">
+            <details class="toc-card" id="toc-details" open>
+              <summary>
+                <span>阅读导航 · 12 章</span>
+                <span class="details-marker" aria-hidden="true"></span>
+              </summary>
+              <ul class="toc-list">
+                <li><a class="toc-link" href="#origins">爆发从哪里来</a></li>
+                <li><a class="toc-link" href="#money-first">为什么先省钱</a></li>
+                <li><a class="toc-link" href="#permission-boundary">主动性的边界</a></li>
+                <li><a class="toc-link" href="#invisible-agent">让界面退后</a></li>
+                <li><a class="toc-link" href="#interface-choice">入口不等于终局</a></li>
+                <li><a class="toc-link" href="#silent-agent">社交中的沉默</a></li>
+                <li><a class="toc-link" href="#trust-delegation">从助手到委托</a></li>
+                <li><a class="toc-link" href="#agent-economics">付费与成本口径</a></li>
+                <li><a class="toc-link" href="#platform-shift">商业生态的分歧</a></li>
+                <li><a class="toc-link" href="#agent-to-agent">服务如何重组</a></li>
+                <li><a class="toc-link" href="#time-return">省下时间之后</a></li>
+                <li><a class="toc-link toc-link--decision" href="#signals-actions">信号、噪音与行动</a></li>
+              </ul>
+              <div class="toc-legend">
+                <div class="legend-line"><span class="legend-mark" aria-hidden="true"></span><span>材料转述</span></div>
+                <div class="legend-line"><span class="legend-mark legend-mark--analysis" aria-hidden="true"></span><span>本页分析</span></div>
+              </div>
+            </details>
+          </nav>
+        </aside>
+
+        <div class="chapters">
+          <section class="chapter" id="origins" aria-labelledby="origins-title">
+            <header class="chapter-header">
+              <p class="eyebrow">背景 · 需求起点</p>
+              <h2 id="origins-title">第三次「见到上帝」，这次是谁在推动？</h2>
+              <p class="chapter-deck">从惊叹模型能力，到愿意把生活里的具体任务交出去。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                对话把 ChatGPT、coding agent、personal agent 串成三次「见到上帝」的体验，
+                并将这轮个人 Agent 热潮描述为首次由普通消费者驱动：
+                HSA 报销、航班退差价等生活任务，成为理解价值的入口。
+                原文提到的产品脉络：David 是 Poke 的早期用户（其「和 agent 谈判你愿意付多少钱」的机制让他意识到不同），
+                之后是 OpenClaw、Instinct 在 Twitter 上传播，再到 Grockbot、Muse 相继出现。
+              </p>
+              
+              <figure class="figure-block" aria-labelledby="milestone-caption">
+                <div class="three-stage">
+                  <div class="flow-step">
+                    <h4>ChatGPT</h4>
+                    <p>看见模型能力，改变对 AI 的预期。</p>
+                  </div>
+                  <span class="flow-arrow" aria-hidden="true"></span>
+                  <div class="flow-step">
+                    <h4>Coding Agent</h4>
+                    <p>不止回答问题，开始在工作中执行。</p>
+                  </div>
+                  <span class="flow-arrow" aria-hidden="true"></span>
+                  <div class="flow-step">
+                    <h4>Personal Agent</h4>
+                    <p>把个人生活中的具体事务交给代理。</p>
+                  </div>
+                </div>
+                <figcaption id="milestone-caption">
+                  三次里程碑的概念时间线：按大纲中的体验顺序排列，不补充具体年份，也不表示增长曲线。
+                </figcaption>
+              </figure>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                真正值得研究的不是「第三次」的情绪强度，而是<strong>任务结构发生了什么变化</strong>：
+                用户不再只问“你能做什么”，而开始问“这件事能不能由你替我办完”。
+                产品研究应从可交付的生活结果出发，而不是从聊天功能出发。
+              </p>
+              <p>
+                传播数字说明大家愿意看，不说明大家已愿意交出账户访问权与行动权限。
+                从围观到委托，中间仍隔着一整套信任设计。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="money-first" aria-labelledby="money-title">
+            <header class="chapter-header">
+              <p class="eyebrow">切入点 · 价值表达</p>
+              <h2 id="money-title">省钱，比省时间更容易成为第一笔信任。</h2>
+              <p class="chapter-deck">先交付一个看得见的结果，再解释背后的智能。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                省时间的承诺抽象，省钱的结果具体。David 引用 Ben Thompson 的说法：多数消费者不是想省时间，而是想花时间；
+                所以切入点是「免费的钱」——批量提交 HSA 报销、航班降价自动退差价。对话提到，把 Grockbot 接上天气数据调洒水系统，水费下降 50%；
+                这类收益容易唤起「免费的钱」心理。理想的个人 Agent 不需要持续占据用户注意力，
+                而是后台做事、偶尔汇报。
+              </p>
+              <div class="case-number">
+                <strong>−50%</strong>
+                <p>
+                  洒水系统水费的单一案例<br>
+                  <span class="muted">材料未给出样本、周期与适用条件，不可外推为普遍节省率。</span>
+                </p>
+              </div>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                省钱不是唯一价值，但适合作为<strong>首个可核对的承诺</strong>。
+                用户可以检查收益是否发生，而不必先接受“效率大幅提升”的抽象说法。
+                应区分“发现了可能省的钱”与“已经兑现的节省”，避免把机会金额包装成实际收益。
+              </p>
+              <p>
+                对小团队而言，更好的起点不是全能生活管家，而是一个能明确回答
+                “替谁、在什么任务里、实际省下了什么”的窄产品。
+              </p>
+              <p class="rule-line">先证明结果值得付费，再让用户决定是否扩大授权。</p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="permission-boundary" aria-labelledby="permission-title">
+            <header class="chapter-header">
+              <p class="eyebrow">护城河 · Proactivity</p>
+              <h2 id="permission-title">主动性创造价值，边界决定它能否留下。</h2>
+              <p class="chapter-deck">Agent 应主动发现问题，但不能默认替用户承担人生后果。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                Proactivity 指主动发现、规避和完成，而不是等待每一道指令。
+                对话用“越界一次，当天卸载”强调信任的脆弱，也借“帮你分手”的玩笑指出：
+                能做，不等于有权替用户做。这是对容错边界的观点表达，不是卸载率统计。
+              </p>
+              <p>
+                材料给出两类权限：<strong>自主行动区</strong>，无后续动作、可逆；
+                <strong>必须询问区</strong>，不可逆，或需要用户承担后果，例如更换保险。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                权限不能只写成“是否开启自动模式”。它应是一套逐任务的规则：
+                已授权什么、会影响谁、是否产生新承诺、出了错能否完整回退。
+                <strong>可逆只是必要考虑，不等于自动获得行动许可；数据访问本身也需要授权。</strong>
+              </p>
+
+              <figure class="permission-map" aria-labelledby="permission-map-title">
+                <h4 id="permission-map-title">权限边界二分图</h4>
+                <div class="permission-grid">
+                  <section class="permission-card" aria-labelledby="autonomous-title">
+                    <h4 id="autonomous-title">自主行动区</h4>
+                    <p class="zone-rule">已明确授权；可逆；不产生新的对外承诺或后续义务。</p>
+                    <ul class="example-list">
+                      <li>
+                        <strong>汇总待报销材料</strong>
+                        <span>只生成缺项清单，不提交申请。</span>
+                      </li>
+                      <li>
+                        <strong>筛出可能退差价的航班</strong>
+                        <span>只形成提醒，不改签、不取消。</span>
+                      </li>
+                      <li>
+                        <strong>整理收件箱待办</strong>
+                        <span>保留原邮件，不删除、不代回复。</span>
+                      </li>
+                    </ul>
+                  </section>
+
+                  <section class="permission-card permission-card--ask" aria-labelledby="ask-title">
+                    <h4 id="ask-title">必须询问区</h4>
+                    <p class="zone-rule">不可逆，或涉及责任、敏感资料提交与他人权益。</p>
+                    <ul class="example-list">
+                      <li>
+                        <strong>更换保险方案</strong>
+                        <span>涉及保障变化与后续责任。</span>
+                      </li>
+                      <li>
+                        <strong>提交报销或退款申请</strong>
+                        <span>对外提交身份资料与正式声明。</span>
+                      </li>
+                      <li>
+                        <strong>代发承诺性消息</strong>
+                        <span>影响他人，无法确保完整撤回。</span>
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+                <figcaption>
+                  六例均为本页将框架落成产品规则的设计示例，不是新增的原对话案例；“更换保险”来自大纲中的边界提示。
+                </figcaption>
+              </figure>
+
+              <p class="rule-line">让“主动发现”的范围更宽，让“自动执行”的边界更明确。</p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="invisible-agent" aria-labelledby="invisible-title">
+            <header class="chapter-header">
+              <p class="eyebrow">产品形态 · Invisible Agent</p>
+              <h2 id="invisible-title">让界面退后，让结果走到前面。</h2>
+              <p class="chapter-deck">好的后台体验，是用户可以离开屏幕，却没有失去掌控。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                对话区分前台型与后台型 Agent：前者持续要求用户操作，后者在用户做其他事情时完成任务。
+                材料提到一个骑车时用 30 分钟语音处理邮件、达到 inbox zero 的例子，
+                并指出园艺、烹饪、驾车、运动等占手占眼场景，长期没有得到充分的界面设计关注。
+              </p>
+              <p class="safety-note">
+                骑行、驾驶的叙述仅用于理解交互需求，不是使用建议；处理会分散注意力的任务，应先停在安全地点。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                Invisible 不等于没有状态、没有记录，也不等于永远不出现。
+                <strong>任务可以在后台，结果、撤回入口和权限变化必须可见。</strong>
+                设计目标是减少不必要的操作，而不是减少用户的知情权。
+              </p>
+              <p>
+                “少打开一次 App”只是体验改善；“不用打开，也知道它不会乱来”，才接近委托关系成立。
+                因此，后台执行与清晰的结果回执应同时设计。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="interface-choice" aria-labelledby="interface-title">
+            <header class="chapter-header">
+              <p class="eyebrow">界面战争 · App / iMessage / 硬件</p>
+              <h2 id="interface-title">入口可以不同，关系不能每次重建。</h2>
+              <p class="chapter-deck">争夺入口的背后，是上下文、权限与信任能否跨界面连续。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                iMessage 被认为更像一种私人关系入口。David 将 Muse Charm（原文称为 Meta 新发布的配件）
+                解读为 24/7 采集数据、为世界模型提供输入，并自称这是 hot take；
+                Anish 则看好纯音频方向，并谈到 Ray-Ban。
+              </p>
+              
+              <div class="interface-grid" aria-label="对话涉及的三类入口">
+                <div class="interface-item">
+                  <strong>App</strong>
+                  <span>独立产品界面，是入口讨论的一端。</span>
+                </div>
+                <div class="interface-item">
+                  <strong>iMessage</strong>
+                  <span>更接近熟悉的私人沟通关系。</span>
+                </div>
+                <div class="interface-item">
+                  <strong>硬件 / 音频</strong>
+                  <span>讨论脱离持续看屏幕的交互可能。</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                跨界面一致，不应只理解为同步聊天记录，更应包括：
+                任务进度不丢失、权限边界不漂移、用户不必反复解释自己。
+                但对创业者来说，<strong>先跑通一个入口中的任务与信任闭环</strong>，
+                比同时铺开 App、消息和硬件更重要。
+              </p>
+              <p>
+                硬件动机的猜测可以生成研究问题，却不能直接作为商业判断的证据。
+                应把“使用体验如何”与“厂商真正想采集什么”分开讨论。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="silent-agent" aria-labelledby="silent-title">
+            <header class="chapter-header">
+              <p class="eyebrow">社交场景 · 沉默 Agent</p>
+              <h2 id="silent-title">不抢麦克风，才可能真正帮上忙。</h2>
+              <p class="chapter-deck">公共场合少打断，私人渠道做跟进。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                对话对“被 @、像一个参与者一样发言”的 agent 模式评价较低，
+                将其描述为基本失败：大家轮流占用麦克风，Agent 的参与反而打断原有交流。
+                Doc 的思路是只听不说，之后通过私信跟进。
+              </p>
+              <p>材料提炼出的原则是：在社交场景里，越没存在感，可能越有价值。</p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                群聊更适合作为经授权的上下文来源，而不是 Agent 展示能力的舞台。
+                产品可以在参与者同意记录与处理的前提下，整理相关待办，
+                只在需要确认、出现异常或任务完成时私信。
+              </p>
+              <p>
+                <strong>沉默是交互策略，不是隐蔽采集数据的许可。</strong>
+                “不打扰”与“知情同意”必须同时成立，否则隐形体验就会变成信任风险。
+              </p>
+              <p class="rule-line">优先设计“什么时候不说话”，再设计“说什么”。</p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="trust-delegation" aria-labelledby="trust-title">
+            <header class="chapter-header">
+              <p class="eyebrow">概念边界 · Assistant vs Agent</p>
+              <h2 id="trust-title">差别不只是更聪明，而是被允许采取行动。</h2>
+              <p class="chapter-deck">真正困难的升级，发生在用户心理里。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                Assistant 与 Agent 的差别，在这里被归结为 agency 与信任委托：
+                不只是提供帮助，而是在授权范围内围绕目标采取行动。
+                对话用企业中“实习生逐步晋升”的类比，说明行动权需要通过表现获得。
+              </p>
+              <p>
+                用户心理上交出控制权并不容易。信任需要经过一系列小测试，
+                再逐步扩大边界，而不是一次性授予全部权限。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                信任不是一个“同意全部”的弹窗，而是一段可被观察的过程。
+                产品应先证明能正确识别任务，再证明会在边界前停下，最后才争取更大的执行范围。
+              </p>
+              <p class="rule-line">
+                本页建议的委托顺序：只建议 → 确认后执行 → 已授权范围内自主行动。
+              </p>
+              <p>
+                每次扩权仍需用户明确同意，也应允许退回上一步。
+                比起累计拿到多少权限，更值得观察的是：
+                <strong>用户是否持续保留授权，以及什么时候主动收回授权。</strong>
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="agent-economics" aria-labelledby="economics-title">
+            <header class="chapter-header">
+              <p class="eyebrow">经济学 · 定价与成本</p>
+              <h2 id="economics-title">免费不是商业答案，高价也不是验证结果。</h2>
+              <p class="chapter-deck">先分清数字是什么，再讨论它意味着什么。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                Anish 估算「雄心勃勃」的个人 Agent 当前约需 $20 / 用户 / 天，并称一年下来对初创公司「可能是几亿美元的规模」（原文原话，未给出用户数前提）；原文也没有给出模型、用量或任务组合假设。
+                大纲把 Muse / Instinct 视为主导者，称其免费供给分别依靠 Meta / OpenAI 补贴；
+                Anish 则表示希望看到 $1,000 / 月的个人 Agent 产品。
+              </p>
+
+              <div class="economy-grid">
+                <div class="economy-card">
+                  <span class="economy-status">成本说法 · 口径待验证</span>
+                  <div class="price-line"><strong>$20</strong><span>/ 用户 / 天</span></div>
+                  <p>缺少模型、任务频率与用量假设，不能直接拿来推导月成本或毛利。</p>
+                </div>
+                <div class="economy-card">
+                  <span class="economy-status">产品愿景 · 不是成交价</span>
+                  <div class="price-line"><strong>$1,000</strong><span>/ 月</span></div>
+                  <p>Anish 希望看到的产品价格带，不代表已验证的付费意愿或成熟定价。</p>
+                </div>
+              </div>
+
+              <figure class="payment-figure" aria-labelledby="payment-title" aria-describedby="payment-note">
+                <figcaption id="payment-title">
+                  <span class="payment-title">122 个追踪产品：只展示已知三档</span>
+                  每条长度均以 122 为分母；这是独立数量条，不是完整市场份额图。
+                </figcaption>
+
+                <div class="payment-chart" style="--sample-total: 122;">
+                  <div class="pay-row pay-row--full">
+                    <span>全收费</span>
+                    <div class="pay-track" aria-hidden="true"><span class="pay-fill" style="--sample-count: 35;"></span></div>
+                    <strong class="pay-count">35</strong>
+                  </div>
+                  <div class="pay-row pay-row--freemium">
+                    <span>Freemium<br>免费＋付费</span>
+                    <div class="pay-track" aria-hidden="true"><span class="pay-fill" style="--sample-count: 30;"></span></div>
+                    <strong class="pay-count">30</strong>
+                  </div>
+                  <div class="pay-row pay-row--free">
+                    <span>免费</span>
+                    <div class="pay-track" aria-hidden="true"><span class="pay-fill" style="--sample-count: 13;"></span></div>
+                    <strong class="pay-count">13</strong>
+                  </div>
+                </div>
+
+                <div class="data-note" id="payment-note">
+                  <p>
+                    <strong>已知合计：35 + 30 + 13 = 78。</strong>
+                    其余 44 个由 122 − 78 得到，原文未说明归类；本图不把它们推定为任何商业模式。
+                  </p>
+                  <p>
+                    大纲转述的“65 付费”与“35 全收费、30 freemium”自洽：
+                    <strong>65 = 35 + 30</strong>。它表示包含付费模式的产品数，
+                    不是 65 个全收费产品，更不是付费用户人数。
+                  </p>
+                </div>
+              </figure>
+
+              <p>
+                对话把 browser use、token 与本地模型相关成本的下降视为大势，
+                认为信任和习惯才是长期护城河，但材料没有给出成本下降的时间表。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                免费产品验证的可能是使用兴趣，而不是无补贴条件下的商业模式；
+                高价愿景表达的可能是价值上限，而不是已经发生的交易。
+                两者都不能替代真实的交付成本与付费测试。
+              </p>
+              <p>
+                对小团队，应该把<strong>已兑现的用户收益、实际履约成本与失败补救成本</strong>放在一起看。
+                不要靠今天的高成本证明壁垒，也不要把成本会下降当作今天不必核算的理由。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="platform-shift" aria-labelledby="platform-title">
+            <header class="chapter-header">
+              <p class="eyebrow">商业生态 · 平台激励</p>
+              <h2 id="platform-title">Agent 没有眼球，谁还需要它看广告？</h2>
+              <p class="chapter-deck">开放与封锁，不只是技术路线差异，也是收入结构的分歧。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                大纲概括了 Shopify 开放、Amazon 封锁的分歧，并把 Amazon 的态度与广告收入依赖联系起来。
+                当任务由 Agent 执行，“吸引人来浏览”的注意力逻辑可能不再同样有效。
+              </p>
+
+              <div class="table-scroll" tabindex="0" role="region" aria-label="Shopify 与 Amazon 对比表，可横向滚动">
+                <table>
+                  <caption>Shopify vs Amazon：按材料梳理的平台分歧</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">比较维度</th>
+                      <th scope="col">Shopify</th>
+                      <th scope="col">Amazon</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">材料中的态度</th>
+                      <td><strong>开放</strong></td>
+                      <td><strong>封锁</strong></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">材料给出的解释</th>
+                      <td>赋能商家做更多生意：Agent 帮用户买得越多，Shopify 的生意越好（原文在 Muse 上线后的语境中给出）。</td>
+                      <td>广告收入依赖，使不需要“观看”的 Agent 与现有注意力变现逻辑产生冲突。</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">本表的适用范围</th>
+                      <td colspan="2">
+                        比较的是材料中的平台立场概括，不是当前接口能力、授权政策或可执行操作的核验清单。
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="table-hint">窄屏可左右滑动表格；键盘用户可聚焦表格区域后滚动。</p>
+
+              <p>
+                对话还以 Resy 订座为例，讨论自动化如何拉平抢订时的“紧张感”，让权力回到餐厅。
+                更底层的判断是：依赖信息不对称、反应速度不对称赚钱的模式，将受到消解。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                更值得问的不是“这个平台有没有流量”，而是
+                <strong>它的收入有多少来自完成交易，又有多少来自控制注意力与访问顺序</strong>。
+                这是解释开放意愿的一个分析角度，不是对所有平台的统一结论。
+              </p>
+              <p>
+                不对称利润被消解，是一个结构性方向，不等于所有广告与中介会立即消失。
+                对产品团队而言，必须分别确认平台授权、供给可达性和履约责任；
+                “开放”不意味着任意抓取或代操作都被允许。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="agent-to-agent" aria-labelledby="a2a-title">
+            <header class="chapter-header">
+              <p class="eyebrow">服务范式 · Agent to Agent</p>
+              <h2 id="a2a-title">下一步，不只是替人找服务。</h2>
+              <p class="chapter-deck">也可能把原本没有数字化能力的供给，接入可协商的服务网络。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                对话提出“人订人 → agent 订人 → agent 订 agent”的演进。
+                内布拉斯加老奶奶织袜子的设想，用来说明：
+                即使供给方没有复杂的软件系统，Agent 也可能通过邮箱和电话接洽，
+                将更多长尾供给接入，覆盖面可以比 Uber 更广。
+              </p>
+
+              <figure class="figure-block" aria-labelledby="service-caption">
+                <div class="three-stage">
+                  <div class="flow-step">
+                    <h4>人订人</h4>
+                    <p>人寻找供给、沟通条件、确认服务。</p>
+                  </div>
+                  <span class="flow-arrow" aria-hidden="true"></span>
+                  <div class="flow-step">
+                    <h4>Agent 订人</h4>
+                    <p>需求方由代理接洽，供给方仍由人响应。</p>
+                  </div>
+                  <span class="flow-arrow" aria-hidden="true"></span>
+                  <div class="flow-step">
+                    <h4>Agent 订 Agent</h4>
+                    <p>双方代理在各自的授权边界内协商。</p>
+                  </div>
+                </div>
+                <figcaption id="service-caption">
+                  服务范式的概念演进，不表示三个阶段已经依次全面落地；长尾供给与覆盖范围属于对话中的设想。
+                </figcaption>
+              </figure>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                机会未必是再造一个流量市场，而可能是把非标准供给转译成
+                <strong>可确认的价格、交付时间和服务条件</strong>。
+                邮箱与电话在这里的意义，是降低供给接入门槛，而不是要求每个小商家先学会一套新软件。
+              </p>
+              <p>
+                但 Agent to Agent 不能消除责任主体。
+                自动协商越顺畅，越需要保留“谁授权、谁确认、谁履约”的记录，
+                否则一次失败就会暴露整条链路的责任空白。
+              </p>
+            </aside>
+          </section>
+
+          <section class="chapter" id="time-return" aria-labelledby="time-title">
+            <header class="chapter-header">
+              <p class="eyebrow">作者反思 · 用户真正得到什么</p>
+              <h2 id="time-title">省下来的时间，最后还给了谁？</h2>
+              <p class="chapter-deck">效率之外，还有一个更根本的产品问题。</p>
+            </header>
+
+            <div class="source-block">
+              <h3 class="block-heading">原对话要点</h3>
+              <p>
+                中文整理作者把问题拉回“多出来的时间用来干嘛”。
+                David 则提到，孩子不理解为什么这一代人总是低头看手机。
+                这里既有嘉宾的观察，也有中文整理作者的反思，不能全部视为原始对话的统一结论。
+              </p>
+            </div>
+
+            <aside class="analysis-block">
+              <h3 class="block-heading">分析 / 判断</h3>
+              <p>
+                如果节省的时间只是被更多提醒、新任务和产品互动填满，
+                Agent 就只是更高效地占用了用户。
+                个人 Agent 的评价，不应只看用户多用了多久，
+                也应看它是否减少了无谓打断、恢复了用户自己安排时间的能力。
+              </p>
+              <p class="closing-thought">让用户离开屏幕，<br>不等于让用户失去掌控。</p>
+              <p>
+                这也是“隐形”的最终意义：不是把技术藏起来，
+                而是让本来需要人持续操心的事情，真正变得可以放心。
+              </p>
+            </aside>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <section class="decision-section chapter" id="signals-actions" aria-labelledby="decision-title">
+      <div class="shell">
+        <header>
+          <p class="eyebrow">本页独有 · 决策层</p>
+          <h2 class="decision-title" id="decision-title">
+            信号 vs 噪音<br>
+            <span>把判断，变成可执行的选择。</span>
+          </h2>
+          <p class="decision-deck">
+            不把热度当需求，不把愿景当定价，不把猜测当事实。
+            对一人公司最有用的，是找出一个值得被托付的小任务。
+          </p>
+        </header>
+
+        <div class="source-block decision-source">
+          <h3 class="block-heading">原对话要点 · 仅回顾判断素材</h3>
+          
+        </div>
+
+        <div class="analysis-block decision-analysis">
+          <h3 class="block-heading">分析 / 判断</h3>
+          <p class="decision-note">
+            “强信号”指更值得进入产品假设与验证的线索，不表示本页已独立核验所有相关事实。
+            材料中的已有案例、框架、平台立场，与预测和个人猜测应分开使用。
+          </p>
+
+          <div class="signal-grid" id="signals">
+            <section class="signal-card" aria-labelledby="strong-signal-title">
+              <h4 id="strong-signal-title">强信号 · 值得围绕它设计</h4>
+              <ul class="signal-list">
+                <li>
+                  <strong>省钱切入</strong>
+                  <p>回报可以展示与核对，适合做首个价值测试；个案收益不能变成普遍承诺。</p>
+                </li>
+                <li>
+                  <strong>权限边界框架</strong>
+                  <p>把可逆低后果任务与高后果行动分开，能够直接转化为产品规则。</p>
+                </li>
+                <li>
+                  <strong>沉默 Agent 设计</strong>
+                  <p>少在公共场合打断，必要时私信跟进，是明确的交互方向；前提仍是知情授权。</p>
+                </li>
+                <li>
+                  <strong>Shopify / Amazon 分歧</strong>
+                  <p>大纲视为已发生的平台态度差异，提示商业激励不同；它不是本页核验后的实时政策结论。</p>
+                </li>
+              </ul>
+            </section>
+
+            <section class="signal-card signal-card--verify" aria-labelledby="verify-title">
+              <h4 id="verify-title">待验证 · 不作为商业前提</h4>
+              <ul class="signal-list">
+                <li>
+                  <strong>$20 / 用户 / 天</strong>
+                  <p>缺少模型、任务组合和用量假设，不能直接代入单位经济模型。</p>
+                </li>
+                <li>
+                  <strong>122 个产品中“个位数存活”</strong>
+                  <p>这是关于未来淘汰率的预测，不是已经发生的产品存活统计。</p>
+                </li>
+                <li>
+                  <strong>Muse Charm 的采集动机</strong>
+                  <p>David 自称 hot take。采数据、喂世界模型的动机判断，不应被当成已证实事实。</p>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <section class="decision-subsection" aria-labelledby="tensions-title">
+            <h3 id="tensions-title">三组结构性张力，比站队更值得追踪。</h3>
+            <div class="tension-grid">
+              <article class="tension-card">
+                <h4>补贴免费 ↔ $1,000 / 月</h4>
+                <p>
+                  两端并存，不证明同一用户会从免费跃迁到高价。
+                  要验证的是脱离补贴后，产品能否交付足以支撑收费的净价值。
+                </p>
+              </article>
+              <article class="tension-card">
+                <h4>主动性更强 ↔ 越界一次全输</h4>
+                <p>
+                  多做可能创造更多价值，但执行权不能靠默认扩张。
+                  用更积极的发现能力配合更明确的询问规则，而不是二选一。
+                </p>
+              </article>
+              <article class="tension-card">
+                <h4>体验隐形 ↔ 品牌容易被遗忘</h4>
+                <p>
+                  不应靠高频打扰刷存在感。
+                  用清晰的结果回执、可追溯记录与可靠补救，让用户记住“谁值得托付”。
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section class="decision-subsection" aria-labelledby="china-title">
+            <h3 id="china-title">中国 / 一人公司：迁移任务，不照搬平台假设。</h3>
+            <p class="decision-note">
+              以下是需求与产品形态的类比，不代表政策、接口、授权范围或业务规则等价。
+            </p>
+            <dl class="mapping-grid">
+              <div class="mapping-item">
+                <dt>iMessage → 微信 / 飞书</dt>
+                <dd>
+                  迁移的是“在熟悉的消息入口里委托任务”，
+                  不是假设产品天然可以读取全部聊天或替用户发言。
+                </dd>
+              </div>
+              <div class="mapping-item">
+                <dt>HSA 报销 → 医保 / 发票报销 / 信用卡权益</dt>
+                <dd>
+                  迁移的是核对规则、整理材料、发现可得收益。
+                  涉及敏感信息和对外提交时，必须回到明确授权。
+                </dd>
+              </div>
+              <div class="mapping-item">
+                <dt>Agent 接商家 → 小程序 / 淘宝开放度</dt>
+                <dd>
+                  先核验接入、数据使用与代操作许可，再选择能够履约的供给。
+                  不能把海外平台的态度直接套到国内。
+                </dd>
+              </div>
+              <div class="mapping-item">
+                <dt>小切口 → 明确回报、可逆、后台运行</dt>
+                <dd>
+                  优先选择货币回报可核对、执行边界可解释、出错能够回退的单一任务，
+                  而不是先承诺成为全能个人管家。
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="action-panel" id="action-list" aria-labelledby="action-title">
+            <div class="action-header">
+              
+              <span class="action-status" id="action-status" hidden>
+                已标记
+                <output id="action-count" for="task-money task-permission task-silent task-trust" aria-live="polite">0 / 4</output>
+              </span>
+            </div>
+            
+
+            <div class="action-grid">
+              <label class="action-item" for="task-money">
+                <input class="sr-only action-input" id="task-money" type="checkbox">
+                <span class="check-ui" aria-hidden="true"></span>
+                <span class="action-copy">
+                  <strong>先做一个能算出省了多少钱的窄场景</strong>
+                  <span>
+                    可从退差价识别、报销材料核对或权益提醒切入。
+                    区分“可能节省”与“已兑现收益”，先交付可核对清单，不默认代提交。
+                  </span>
+                </span>
+              </label>
+
+              <label class="action-item" for="task-permission">
+                <input class="sr-only action-input" id="task-permission" type="checkbox">
+                <span class="check-ui" aria-hidden="true"></span>
+                <span class="action-copy">
+                  <strong>把「自主区 / 询问区」写成产品规则</strong>
+                  <span>
+                    逐项记录可访问什么、可做什么、何时必须停止、如何撤回。
+                    涉及新的对外承诺与后果时，先说明，再询问。
+                  </span>
+                </span>
+              </label>
+
+              <label class="action-item" for="task-silent">
+                <input class="sr-only action-input" id="task-silent" type="checkbox">
+                <span class="check-ui" aria-hidden="true"></span>
+                <span class="action-copy">
+                  <strong>默认沉默，按需私信</strong>
+                  <span>
+                    公共对话不抢话；只在完成、异常或需要决定时通知。
+                    结果摘要应帮助用户了解情况，而不是让用户重新做一遍工作。
+                  </span>
+                </span>
+              </label>
+
+              <label class="action-item" for="task-trust">
+                <input class="sr-only action-input" id="task-trust" type="checkbox">
+                <span class="check-ui" aria-hidden="true"></span>
+                <span class="action-copy">
+                  <strong>记录信任逐步扩大的曲线</strong>
+                  <span>
+                    按任务记录“仅建议 → 确认后执行 → 授权内自主”的变化，
+                    同时记录越界、撤回与授权收缩；每次扩权必须由用户同意。
+                  </span>
+                </span>
+              </label>
+            </div>
+
+            <p class="action-footnote">
+              勾选用于标记本页推进状态，不上传任何内容；完成标记不等于完成市场验证。
+            </p>
+          </section>
+
+          <p class="final-remark">先证明值得托付，再争取更多托付。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <div class="shell footer-grid">
+      <div>
+        <p>
+          来源为 a16z 播客（Anish Acharya × David Pawlan），经「深思圈」公众号中文整理，
+          <time datetime="2026-09-29">2026-09-29</time>；本页为二次分析。
+        </p>
+        <p>
+          该日期为中文整理发布日期。本页依据所给大纲重构，来源链路包含 Get 笔记 AI 总结；
+          数字与案例已对照「深思圈」原文核对，未对照播客音频。所有补充示例、信号分级与行动建议均已作为分析标注。
+        </p>
+      </div>
+      <a class="back-top" href="#top">回到顶部 ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const root = document.documentElement;
+      const progress = document.getElementById("reading-progress");
+      const printButton = document.getElementById("print-button");
+      const tocDetails = document.getElementById("toc-details");
+      const sourceDetails = document.getElementById("source-notes");
+      const chapters = Array.from(document.querySelectorAll(".chapter[id]"));
+      const tocLinks = Array.from(document.querySelectorAll(".toc-link"));
+      const actionInputs = Array.from(document.querySelectorAll(".action-input"));
+      const actionStatus = document.getElementById("action-status");
+      const actionCount = document.getElementById("action-count");
+
+      let framePending = false;
+      let activeId = "";
+
+      function updateReading() {
+        framePending = false;
+
+        const scrollableHeight = Math.max(root.scrollHeight - window.innerHeight, 1);
+        const fraction = Math.min(1, Math.max(0, window.scrollY / scrollableHeight));
+
+        if (progress) {
+          progress.style.setProperty("--reading-fraction", String(fraction));
+          progress.setAttribute("aria-valuenow", String(Math.round(fraction * 100)));
+        }
+
+        const activationLine = window.innerHeight * 0.24;
+        let nextActiveId = "";
+
+        for (const chapter of chapters) {
+          if (chapter.getBoundingClientRect().top <= activationLine) {
+            nextActiveId = chapter.id;
+          }
+        }
+
+        if (fraction >= 0.995 && chapters.length) {
+          nextActiveId = chapters[chapters.length - 1].id;
+        }
+
+        if (nextActiveId !== activeId) {
+          activeId = nextActiveId;
+          for (const link of tocLinks) {
+            if (link.getAttribute("href") === "#" + activeId) {
+              link.setAttribute("aria-current", "location");
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+        }
+      }
+
+      function scheduleReadingUpdate() {
+        if (!framePending) {
+          framePending = true;
+          window.requestAnimationFrame(updateReading);
+        }
+      }
+
+      if (progress) {
+        progress.hidden = false;
+      }
+
+      window.addEventListener("scroll", scheduleReadingUpdate, { passive: true });
+      window.addEventListener("resize", scheduleReadingUpdate);
+      window.addEventListener("hashchange", scheduleReadingUpdate);
+      window.addEventListener("load", scheduleReadingUpdate);
+
+      if (tocDetails && typeof window.matchMedia === "function") {
+        const desktopThreshold = getComputedStyle(root)
+          .getPropertyValue("--breakpoint-desktop")
+          .trim();
+
+        if (desktopThreshold) {
+          const desktopQuery = window.matchMedia(
+            "(min-width: " + desktopThreshold + ")"
+          );
+
+          const syncDirectory = () => {
+            tocDetails.open = desktopQuery.matches;
+            scheduleReadingUpdate();
+          };
+
+          syncDirectory();
+
+          if (typeof desktopQuery.addEventListener === "function") {
+            desktopQuery.addEventListener("change", syncDirectory);
+          } else if (typeof desktopQuery.addListener === "function") {
+            desktopQuery.addListener(syncDirectory);
+          }
+        }
+
+        tocDetails.addEventListener("toggle", scheduleReadingUpdate);
+      }
+
+      if (sourceDetails) {
+        sourceDetails.addEventListener("toggle", scheduleReadingUpdate);
+      }
+
+      function updateActionCount() {
+        if (!actionCount) return;
+        const checked = actionInputs.filter((input) => input.checked).length;
+        actionCount.textContent = checked + " / " + actionInputs.length;
+      }
+
+      if (actionStatus && actionCount) {
+        actionStatus.hidden = false;
+        for (const input of actionInputs) {
+          input.addEventListener("change", updateActionCount);
+        }
+        updateActionCount();
+      }
+
+      if (printButton && typeof window.print === "function") {
+        printButton.hidden = false;
+        printButton.addEventListener("click", () => window.print());
+      }
+
+      let sourceOpenBeforePrint;
+
+      window.addEventListener("beforeprint", () => {
+        if (sourceDetails && typeof sourceOpenBeforePrint !== "boolean") {
+          sourceOpenBeforePrint = sourceDetails.open;
+          sourceDetails.open = true;
+        }
+      });
+
+      window.addEventListener("afterprint", () => {
+        if (sourceDetails && typeof sourceOpenBeforePrint === "boolean") {
+          sourceDetails.open = sourceOpenBeforePrint;
+          sourceOpenBeforePrint = undefined;
+        }
+        scheduleReadingUpdate();
+      });
+
+      scheduleReadingUpdate();
+    })();
+  </script>
+</body>
+</html>

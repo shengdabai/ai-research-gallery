@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 网络安全灰犀牛：从风险情景到 48 小时实况（2026-10-23 合并版）</title>
+<style>
+/* ---------- TOKENS ----------
+   Layer 1 primitives -> Layer 2 semantic -> Layer 3 component.
+   Responsive threshold tokens: compact=760px, narrow=520px.
+   Media-query literals below are the documented equivalents of those thresholds.
+   Runtime bar widths encode评测数据, not design constants. No external assets.
+   Structural literals kept as-is by rule: 0, 100%, 1fr, grid-column:1/-1, auto, none, inherit, currentColor. */
+:root{
+/* L1 primitives */
+--c-base-0:#ffffff;--c-base-1:#f4f5f7;--c-base-2:#e7e9ed;--c-ink-0:#15181d;--c-ink-1:#3d434d;--c-ink-2:#5a6270;
+--c-line:#d3d7de;--c-line-strong:#9aa1ad;
+--c-brand:#1f4f7a;--c-brand-soft:#e3edf6;--c-brand-deep:#13304a;
+--c-alert:#9a2f2a;--c-alert-soft:#f7e6e4;
+--c-caution:#7a5312;--c-caution-soft:#f6ecd8;
+--c-ok:#24604a;--c-ok-soft:#e2efe9;
+--c-neutral:#4b5563;--c-neutral-soft:#eceef1;
+--sp-0:.25rem;--sp-1:.5rem;--sp-2:.75rem;--sp-3:1rem;--sp-4:1.5rem;--sp-5:2rem;--sp-6:3rem;--sp-7:4.5rem;--sp-8:6.5rem;
+--fz-tiny:.72rem;--fz-small:.84rem;--fz-body:1rem;--fz-lead:1.18rem;--fz-h3:1.3rem;--fz-h2:1.9rem;--fz-h1:3.4rem;--fz-h1-compact:2.1rem;--fz-h1-narrow:1.75rem;--fz-h2-compact:1.5rem;--fz-num:2.4rem;--fz-num-compact:1.9rem;
+--ff-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+--ff-serif:"Songti SC","STSong",Georgia,serif;
+--ff-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+--fw-normal:400;--fw-mid:600;--fw-strong:700;
+--lh-body:1.8;--lh-tight:1.25;--lh-snug:1.6;--lh-relaxed:1.7;--lh-flat:1.1;
+--ls-wide:.1em;--ls-mid:.04em;--ls-narrow:.03em;
+--c-overlay-fill:#ffffff14;--c-overlay-line:#ffffff38;
+--bd-1:1px;--bd-3:3px;--r-1:.3rem;--r-2:.6rem;
+--dur:160ms;--ease:ease-out;
+/* L2 semantic */
+--bg-page:var(--c-base-1);--bg-card:var(--c-base-0);--bg-sunken:var(--c-base-2);
+--fg-body:var(--c-ink-0);--fg-muted:var(--c-ink-2);--fg-second:var(--c-ink-1);
+--fg-link:var(--c-brand);--border:var(--c-line);--border-strong:var(--c-line-strong);
+--bg-invert:var(--c-brand-deep);--fg-invert:#eef3f8;--fg-invert-muted:#aec3d6;
+--w-max:1120px;--w-text:760px;--tap:2.75rem;
+--focus-w:3px;--focus-off:2px;--z-skip:9;--z-nav:5;--r-round:50%;--skip-hide:-250%;--center-shift:-50%;
+/* L3 component */
+--card-pad:var(--sp-4);--card-radius:var(--r-2);--card-shadow:0 1px 3px #15181d12;
+--bar-h:1.6rem;--bar-track:var(--c-base-2);
+--grid-2:repeat(2,minmax(0,1fr));--grid-3:repeat(3,minmax(0,1fr));--grid-4:repeat(4,minmax(0,1fr));
+--rail-w:16rem;--hero-cols:1.35fr .9fr;
+--tl-dot:.72rem;--tl-line:2px;--tl-inset:.6em;--tl-dot-top:.55em;--tl-dot-ring:2px;
+--claim-q-basis:14rem;--bar-label-min:6rem;--bar-label-max:11rem;--table-min:34rem;
+--list-indent:1.15em;--list-indent-tight:1.1em;
+--verdict-fill:var(--c-overlay-fill);--verdict-line:var(--c-overlay-line);
+--stepmark-size:1.7em;--stepmark-fz:.68em;--stepmark-fg:var(--c-base-0);--stepmark-shift:.1em;--stepmark-gap:.5em;
+--pill-pad-y:.12em;--pill-pad-x:.6em;--link-underline-off:.2em;
+}
+/* ---------- BASE ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg-page);color:var(--fg-body);font-family:var(--ff-sans);font-size:var(--fz-body);line-height:var(--lh-body);-webkit-text-size-adjust:100%}
+h1,h2,h3,h4,p,ul,ol,figure{margin-top:0}
+h1,h2,h3{font-family:var(--ff-serif);line-height:var(--lh-tight);font-weight:var(--fw-mid)}
+h1{font-size:var(--fz-h1);margin-bottom:var(--sp-4)}
+h2{font-size:var(--fz-h2);margin-bottom:var(--sp-3)}
+h3{font-size:var(--fz-h3);margin-bottom:var(--sp-2)}
+p{margin-bottom:var(--sp-3)}
+a{color:var(--fg-link);overflow-wrap:anywhere;text-underline-offset:var(--link-underline-off)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:var(--focus-w) solid var(--fg-link);outline-offset:var(--focus-off)}
+small,.small{font-size:var(--fz-small);color:var(--fg-muted);line-height:var(--lh-snug)}
+strong{font-weight:var(--fw-strong)}
+section{scroll-margin-top:var(--sp-5)}
+.wrap{max-width:var(--w-max);margin-inline:auto;padding-inline:var(--sp-4)}
+.measure{max-width:var(--w-text)}
+.skip{position:absolute;left:var(--sp-1);top:var(--sp-1);background:var(--bg-card);padding:var(--sp-2);transform:translateY(var(--skip-hide));z-index:var(--z-skip)}
+.skip:focus{transform:none}
+/* ---------- MASTHEAD / HERO ---------- */
+.mast{border-bottom:var(--bd-1) solid var(--border);background:var(--bg-card)}
+.mast .wrap{display:flex;flex-wrap:wrap;gap:var(--sp-2);justify-content:space-between;align-items:baseline;padding-block:var(--sp-3)}
+.kicker{font-family:var(--ff-mono);font-size:var(--fz-tiny);letter-spacing:var(--ls-wide);color:var(--fg-muted);text-transform:uppercase}
+.hero{background:var(--bg-invert);color:var(--fg-invert);padding-block:var(--sp-7)}
+.hero h1{color:var(--fg-invert)}
+.hero-grid{display:grid;grid-template-columns:var(--hero-cols);gap:var(--sp-5);align-items:start}
+.hero p{color:var(--fg-invert);font-size:var(--fz-lead)}
+.hero .small{color:var(--fg-invert-muted)}
+.verdict-box{background:var(--verdict-fill);border:var(--bd-1) solid var(--verdict-line);border-radius:var(--card-radius);padding:var(--card-pad)}
+.verdict-box h3{color:var(--fg-invert);font-family:var(--ff-sans);font-size:var(--fz-small);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--fg-invert-muted)}
+.verdict-box ul{margin:0;padding-left:var(--list-indent-tight);color:var(--fg-invert)}
+.verdict-box li{margin-bottom:var(--sp-1)}
+/* ---------- NAV ---------- */
+.toc{background:var(--bg-card);border-bottom:var(--bd-1) solid var(--border);position:sticky;top:0;z-index:var(--z-nav)}
+.toc ul{display:flex;gap:var(--sp-3);list-style:none;margin:0;padding:var(--sp-2) var(--sp-4);overflow-x:auto;max-width:var(--w-max);margin-inline:auto;font-size:var(--fz-small)}
+.toc a{white-space:nowrap;text-decoration:none;padding-block:var(--sp-0)}
+.toc a:hover{text-decoration:underline}
+/* ---------- BLOCKS ---------- */
+.band{padding-block:var(--sp-6)}
+.band--alt{background:var(--bg-card);border-block:var(--bd-1) solid var(--border)}
+.lede{font-size:var(--fz-lead);color:var(--fg-second)}
+.card{background:var(--bg-card);border:var(--bd-1) solid var(--border);border-radius:var(--card-radius);padding:var(--card-pad);box-shadow:var(--card-shadow)}
+.grid{display:grid;gap:var(--sp-3)}
+.grid--2{grid-template-columns:var(--grid-2)}
+.grid--3{grid-template-columns:var(--grid-3)}
+.grid--4{grid-template-columns:var(--grid-4)}
+.stat{font-family:var(--ff-serif);font-size:var(--fz-num);line-height:var(--lh-flat);color:var(--c-brand);display:block;margin-bottom:var(--sp-1)}
+/* tags */
+.tag{display:inline-block;font-size:var(--fz-tiny);letter-spacing:var(--ls-mid);padding:var(--pill-pad-y) var(--pill-pad-x);border-radius:var(--r-1);border:var(--bd-1) solid currentColor;white-space:nowrap}
+.tag--primary{color:var(--c-ok);background:var(--c-ok-soft)}
+.tag--second{color:var(--c-neutral);background:var(--c-neutral-soft)}
+.tag--media{color:var(--c-caution);background:var(--c-caution-soft)}
+.tag--infer{color:var(--c-brand);background:var(--c-brand-soft)}
+.tag--unver{color:var(--c-alert);background:var(--c-alert-soft)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-4)}
+/* ---------- TIMELINE ---------- */
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:calc(var(--tl-dot)/2);top:var(--tl-inset);bottom:var(--tl-inset);width:var(--tl-line);background:var(--border);transform:translateX(var(--center-shift))}
+.tl li{position:relative;padding-left:var(--sp-4);margin-bottom:var(--sp-4)}
+.tl li::before{content:"";position:absolute;left:0;top:var(--tl-dot-top);width:var(--tl-dot);height:var(--tl-dot);border-radius:var(--r-round);background:var(--c-brand);border:var(--tl-dot-ring) solid var(--bg-page)}
+.tl .date{font-family:var(--ff-mono);font-size:var(--fz-small);color:var(--c-brand);font-weight:var(--fw-mid);margin-right:var(--sp-1)}
+.tl p{margin-bottom:var(--sp-1)}
+/* ---------- CLAIM CARDS ---------- */
+.claim{border-left:var(--bd-3) solid var(--border-strong)}
+.claim--support{border-left-color:var(--c-ok)}
+.claim--partial{border-left-color:var(--c-caution)}
+.claim--weak{border-left-color:var(--c-alert)}
+.claim-head{display:flex;gap:var(--sp-2);align-items:baseline;flex-wrap:wrap;margin-bottom:var(--sp-2)}
+.claim-id{font-family:var(--ff-mono);font-weight:var(--fw-strong);color:var(--fg-muted)}
+.claim-q{font-weight:var(--fw-mid);flex:1 1 var(--claim-q-basis);min-width:0}
+.claim dt{font-size:var(--fz-tiny);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--fg-muted);margin-top:var(--sp-2)}
+.claim dd{margin:0;font-size:var(--fz-small);line-height:var(--lh-relaxed)}
+/* ---------- BARS ---------- */
+.bars{display:grid;gap:var(--sp-2)}
+.bar-row{display:grid;grid-template-columns:minmax(var(--bar-label-min),var(--bar-label-max)) 1fr auto;gap:var(--sp-2);align-items:center;font-size:var(--fz-small)}
+.bar-track{background:var(--bar-track);border-radius:var(--r-1);height:var(--bar-h);position:relative;overflow:hidden}
+.bar-fill{height:100%;background:var(--c-brand);border-radius:var(--r-1)}
+.bar-fill--cn{background:var(--c-caution)}
+.bar-val{font-family:var(--ff-mono);font-variant-numeric:tabular-nums}
+/* ---------- TABLE ---------- */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:var(--fz-small);min-width:var(--table-min)}
+th,td{text-align:left;padding:var(--sp-2);border-bottom:var(--bd-1) solid var(--border);vertical-align:top}
+th{font-weight:var(--fw-mid);background:var(--bg-sunken);white-space:nowrap}
+caption{text-align:left;font-size:var(--fz-small);color:var(--fg-muted);padding-bottom:var(--sp-2)}
+/* ---------- CHECKLIST ---------- */
+.step{counter-increment:step}
+.step h3::before{content:counter(step);display:inline-grid;place-items:center;width:var(--stepmark-size);height:var(--stepmark-size);border-radius:var(--r-round);background:var(--c-brand);color:var(--stepmark-fg);font-family:var(--ff-mono);font-size:var(--stepmark-fz);margin-right:var(--stepmark-gap);vertical-align:var(--stepmark-shift)}
+.steps{counter-reset:step;display:grid;gap:var(--sp-3)}
+.accept{background:var(--c-ok-soft);border-radius:var(--r-1);padding:var(--sp-2);font-size:var(--fz-small);margin-top:var(--sp-2)}
+.accept b{color:var(--c-ok)}
+.when{font-family:var(--ff-mono);font-size:var(--fz-tiny);color:var(--fg-muted);letter-spacing:var(--ls-narrow)}
+/* ---------- MISC ---------- */
+.callout{background:var(--c-caution-soft);border:var(--bd-1) solid var(--c-caution);border-radius:var(--card-radius);padding:var(--card-pad)}
+.callout h3{color:var(--c-caution)}
+details{background:var(--bg-card);border:var(--bd-1) solid var(--border);border-radius:var(--card-radius);padding:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-2)}
+summary{cursor:pointer;font-weight:var(--fw-mid);min-height:var(--tap);display:flex;align-items:center}
+.srcs{list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2)}
+.srcs li{font-size:var(--fz-small);padding-bottom:var(--sp-2);border-bottom:var(--bd-1) solid var(--border)}
+footer{background:var(--bg-invert);color:var(--fg-invert-muted);padding-block:var(--sp-5);font-size:var(--fz-small)}
+footer a{color:var(--fg-invert)}
+footer .small{color:var(--fg-invert-muted)}
+ul.tight{padding-left:var(--list-indent)}
+ul.tight li{margin-bottom:var(--sp-1)}
+.note{font-size:var(--fz-small);color:var(--fg-muted);border-left:var(--bd-3) solid var(--border);padding-left:var(--sp-2)}
+/* ---------- RESPONSIVE: compact=760px ---------- */
+@media (max-width:760px){
+  :root{--fz-h1:var(--fz-h1-compact);--fz-h2:var(--fz-h2-compact);--fz-num:var(--fz-num-compact);--card-pad:var(--sp-3);--sp-7:var(--sp-5);--sp-6:var(--sp-5)}
+  .hero-grid{grid-template-columns:1fr}
+  .grid--2,.grid--3,.grid--4{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:1fr;gap:var(--sp-0)}
+  .bar-val{justify-self:end;margin-top:calc(var(--sp-0)*-1)}
+  .toc{position:static}
+}
+@media (max-width:520px){
+  :root{--fz-h1:var(--fz-h1-narrow)}
+  .wrap{padding-inline:var(--sp-3)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{.toc,.skip{display:none}body{background:var(--c-base-0)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="mast">
+  <div class="wrap">
+    <span class="kicker">研究笔记 ·  · 合并 2026-10-20 版</span>
+    <span class="kicker">证据分级 · 判定留痕 · 可执行清单</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>AI 网络安全灰犀牛：<br>从风险情景到 48 小时实况</h1>
+      <p>10 月 20 日这页核对了一组判断：未来一两年网络安全会引发企业界动荡，进攻能力正在扩散到普通人手里，中国开源模型半年内追平前沿，企业里的「肥羊」是又大又老的保险、金融、传统制造。10 月 21–22 日集中披露或报道了四件事：PHP 两个高危漏洞、LiteLLM 发布链投毒、拉美银行遭 AI 代理攻击、华尔街银行拦截 AI 代理。本页把一段讲这四件事的口播逐条核对，再用它们检验 10 月 20 日的判断：哪些被证实了，哪些仍然只是推断。</p>
+      <p class="small">核对基于 2026-10-23 前可公开检索的材料。页面里每个事实都标了来源级别；凡是推断，都写明是推断。10 月 20 日版的全部内容保留在第 ③ 节之后。</p>
+    </div>
+    <div class="verdict-box">
+      <h3>总判断（2026-10-23 更新）</h3>
+      <ul>
+        <li><strong>方向成立：</strong>进攻能力在扩散，部分环节成本在下降。10-21 披露的 PHP 漏洞由 Calif、Wiz 分别用 AI 工具发现，披露后 Cloudflare 自家网络 45 分钟内检测到数万次攻击尝试。</li>
+        <li><strong>四件事改变了什么：</strong>风险从「情景」变成了有日期、有来源的事件。但三件事的根因不是模型能力：发布链投毒源于令牌泄漏，银行代理事件源于客户把密码交给 AI，PHP 漏洞已存在约 14 年。</li>
+        <li><strong>没改变什么：</strong>攻击尝试激增不能证明攻击由 AI 驱动，也不能证明 AI 是规模扩大的主因；预防性下线不等于被攻破；400 多个金融目标不等于 400 家被攻破的银行。</li>
+        <li><strong>时间表仍存疑：</strong>「1–2 年引发世界范围动荡」仍没有可验证门槛，属于值得做压力测试的风险情景。「两小时攻破」「追平后必然停止开源」「没有最强模型就守不住」三处仍判说过头。</li>
+        <li><strong>企业真正能控的：</strong>暴露面、身份与凭据、修复与补偿控制、隔离、检测响应、业务恢复，现在要加上发布流水线和 AI 代理权限。前沿模型能增强其中几环，不替代体系。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<nav class="toc" aria-label="目录">
+  <ul>
+    <li><a href="#h48">① 48 小时四件事</a></li>
+    <li><a href="#script">② 口播 14 条判定</a></li>
+    <li><a href="#timeline">③ 2026 时间线</a></li>
+    <li><a href="#capability">④ 能力差距</a></li>
+    <li><a href="#claims">⑤ 11 条主张判定</a></li>
+    <li><a href="#sheep">⑥ 谁是肥羊</a></li>
+    <li><a href="#policy">⑦ 开源会被叫停吗</a></li>
+    <li><a href="#plan">⑧ 企业与个人清单</a></li>
+    <li><a href="#traps">⑨ 叙事陷阱</a></li>
+    <li><a href="#sources">⑩ 来源</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<section class="band" id="h48">
+  <div class="wrap">
+    <h2>① 48 小时四件事：时间、来源级别、实际影响</h2>
+    <p class="lede measure">口播说「48 小时之内」。按来源核对，四件事是在 10 月 21–22 日集中披露或报道的，发生时间各不相同：PHP 漏洞 8 月已被发现、10 月 17 日已有试探；CyberCartel 的活动持续数月，数据库快照取自 9 月 24 日；银行限制代理的起始日期没有公开。下面每条都分开标「发生、报道、通报」，并把「发现、披露、补丁、攻击尝试、成功利用」分开写，避免把一个阶段的数字读成另一个阶段。</p>
+    <div class="legend" role="list">
+      <span class="tag tag--primary" role="listitem">一手：厂商/受害方/政府发布</span>
+      <span class="tag tag--second" role="listitem">独立评估</span>
+      <span class="tag tag--media" role="listitem">媒体转述</span>
+      <span class="tag tag--infer" role="listitem">推断</span>
+      <span class="tag tag--unver" role="listitem">未核实</span>
+    </div>
+
+    <div class="grid grid--4" style="margin-bottom:var(--sp-5)">
+      <div class="card"><span class="stat">69.3%</span><p class="small">使用 PHP 的网站比例。分母是「已知服务端语言的网站」（W3Techs，2026-10-23 读数），不是全部网站。安全公司 Wiz 写的「70% 的互联网」出自同一类统计。</p></div>
+      <div class="card"><span class="stat">9.2</span><p class="small">两个 PHP 漏洞的 CVSS v4.0 评分（PHP 官方口径，经媒体与安全厂商转述）。美国 NVD 按 v3.1 给 9.8。两套评分体系，不矛盾。</p></div>
+      <div class="card"><span class="stat">1 小时 44 分</span><p class="small">LiteLLM 被投毒的 PyPI 包在线时长（11:39–13:23 UTC，官方通报）。Docker 镜像更长，到 14:20 UTC，约 2 小时 34 分。</p></div>
+      <div class="card"><span class="stat">4,493</span><p class="small">安全公司 Straiker 在攻击团伙数据库快照里数到的记录数（9 月 24 日快照，媒体转述）。是「窃得的记录条数」，不是被攻破的机构数，也不是被成功使用的凭据数。</p></div>
+    </div>
+
+    <ol class="tl">
+      <li id="ev-discovery">
+        
+        <p class="small">这一条证明的是「AI 工具参与了漏洞发现」。它不证明攻击方也用 AI 写了利用代码——那是另一个需要单独举证的问题。</p>
+      </li>
+      <li id="ev-probe">
+        <p><span class="date">10-17 发生 · 10-22 报道</span><span class="tag tag--media">媒体转述</span> <strong>Amazon 威胁情报称观测到首次利用尝试</strong>，比公开披露早 4 天（SecurityWeek、Fortune 转述）。这只说明补丁前已存在试探；攻击方如何获得信息，公开材料没有说明，本页不作推断。</p>
+      </li>
+      <li id="ev-notice">
+        <p><span class="date">10-20 通报</span><span class="tag tag--media">媒体转述官方声明</span> <strong>PHP 安全团队发预告：</strong>两个高危漏洞，补丁随后发布（BleepingComputer 等转述，PHP 官方公告原文本次未直接读取）。同日论坛出现一则后被删除的帖子，Calif 误发了一段演示视频又撤下（媒体转述）。原定 10 月 22 日的补丁因此提前 24 小时。</p>
+        <p class="small">口播说「消息走漏」。更稳的写法是：因相关信息提前流出，披露与补丁安排提前。谁泄露、是否故意，公开材料没有定论。</p>
+      </li>
+      <li id="ev-cloudflare">
+        <p><span class="date">10-21 03:02 UTC</span><span class="tag tag--media">媒体转述</span> <strong>Cloudflare 在公开披露前约 9 小时上线防护规则</strong>，含免费套餐的托管规则（Cybersecurity News 转述 Cloudflare 技术博客）。随后 Cloudflare CEO 在 X 平台发帖：公布前 10 小时内其网络看到数千次尝试，公布后 45 分钟内数万次，2 小时内数十万次，当晚达到数百万次（Fortune、TheNextWeb 转述）。</p>
+        <p class="small"><strong>口径：</strong>这是 Cloudflare 自家网络检测到的「攻击尝试」计数，不是全网统计，更不是成功入侵数。所引的德国、荷兰、日本官方机构截至 10-22 表示尚无确认的成功入侵（TheNextWeb 转述）。<span class="tag tag--unver">未核实</span> 这些尝试中有多少由 AI 生成或自动编排。</p>
+      </li>
+      <li id="ev-litellm">
+        <p><span class="date">10-21 11:39 UTC 恶意包上线 · 同日通报</span><span class="tag tag--primary">一手</span> <strong>LiteLLM 发布流水线被攻破</strong>（官方事故通报，10-21 04:00 PST 发现；流水线被攻破的确切时间官方未给出）。恶意版本 v1.107.0 的 7 个 PyPI 安装包 11:39–13:23 UTC 在线，Docker Hub 的 v1.107.0 / latest / main-latest / main-stable 标签 11:46–14:20 UTC 指向恶意镜像。恶意代码窃取云凭据、SSH 密钥与 AI 服务密钥，并加载远程代码。</p>
+        <p class="small"><strong>根因（官方自述）：</strong>GitHub 命令行工具的 OAuth 令牌经内部部署的日志泄漏（官方称令牌曾出现在 Claude Code 输出与 LiteLLM 日志中），攻击者用组织所有者令牌关闭分支保护，再对一个只差一个连字符的仿冒仓库跑发布流程。这是 LiteLLM 今年第二次发布链事件（上一次在 3 月）。官方处置建议：锁定 1.106.2；装过 1.107.0 的主机按已失陷处理，轮换它能触达的全部密钥。<strong>口播说「从官网下载」</strong>，应改为「从官方包仓库和镜像仓库安装」。</p>
+      </li>
+      <li id="ev-patch">
+        <p><span class="date">10-21 14:00 UTC</span><span class="tag tag--media">媒体转述官方发布</span> <strong>PHP 发布补丁：</strong>8.5.12、8.4.27、8.3.36、8.2.35。已停止维护的分支不发正式版本，只提供源码补丁——这不等于官方恢复支持。漏洞编号 CVE-2026-109618 / CVE-2026-109619，合称 php2shell。可被未认证的远程请求触发代码执行，并可读取 PHP 工作进程内存（可能含密码、令牌、API key）；Apache mod_php 部署最危险，利用可在应用代码运行前触发（Tenable、Qualys 技术说明）。</p>
+        <p class="small">发布当时 php.net 和 Ubuntu 的 PHP 软件源都因负载短暂报错（媒体转述的时间线）。VulnCheck、Censys 等估计 10-21 当天仍有 100 万台以上 PHP 服务器未打补丁（独立估算，口径各异）。</p>
+      </li>
+      <li id="ev-cartel">
+        <p><span class="date">数月内发生 · 09-24 快照 · 10-21 报道</span><span class="tag tag--media">媒体转述</span> <strong>CyberCartel 用 AI 代理攻击拉美金融机构。</strong>安全公司 Straiker 的报告，经 The Information 首发。报告称：该团伙在几个月内攻击 400 多个金融目标（含银行与其他金融机构，报告未点名）；框架基于开源的 PentAGI，四个 Claude 代理（Opus 与 Sonnet）讨论目标与攻击选项、一个仲裁模型给出决定，Grok 代理负责搜集泄露凭据，另用 Kimi；绕过模型拒绝的方法是自称「授权红队」或「学术渗透测试」，模型拒绝时系统退回预写的攻击代码。Anthropic 称已吊销相关凭据，xAI 称在调查。</p>
+        <p class="small"><strong>口径：</strong>「攻击 400 多个目标」是攻击活动，不是 400 家被攻破；4,493 条记录含密码与 API key，其中有与墨西哥 SPEI 跨行支付系统「相关」的凭据，不等于 SPEI 系统本身的密码；这些凭据是否被成功使用、损失多少，报告没有说。单一安全公司来源，尚无独立核实；吊销凭据是已采取的准入处置，实际阻断效果未披露。</p>
+      </li>
+      <li id="ev-offline">
+        <p><span class="date">10-21 至 10-22 通报</span><span class="tag tag--media">媒体转述政府通报</span> <strong>多国政府预防性下线网站。</strong>英国技术大臣在上议院披露 32 项政府服务下线、4 项部分不可用（The Register 转述议会记录）；荷兰、芬兰、德国、法国、比利时、捷克、澳大利亚等国政府站点与 Archive.org 也主动下线（CNBC、The Record 等转述）。各方口径一致：预防性措施，不是已被攻破。</p>
+        <p class="small">口播大意是：AI 攻击大军把大门撞烂，网管吓得拔网线停服务。核实结果：「停服务」成立，但各方说的是预防性下线，不是被攻破后断网；「撞烂大门」<span class="tag tag--unver">未核实</span>；「AI 攻击大军」是<span class="tag tag--infer">推断</span>。</p>
+      </li>
+      <li id="ev-banks">
+        <p><span class="date">起始日期未公开 · 10-22 报道</span><span class="tag tag--media">媒体转述</span> <strong>美国大型银行限制第三方 AI 代理。</strong>Axios 援引知情人：摩根士丹利封堵外部代理，摩根大通、美国银行、花旗限制；起因是客户把网银用户名和密码交给 AI 助手，与多数银行「必须本人登录」的规则冲突；「有些代理在尝试看起来独立于用户指令的步骤」是匿名知情人说法，没有公开的技术证据。多数银行倾向于只读访问。摩根大通 CEO 在三季度财报会上说这类代理「可能有数千个」，并明确：客户授权的外部代理转错钱，损失算客户的。</p>
+        <p class="small">没有任何一家银行公布实际损失或未授权转账的数量。口播大意是「摩根士丹利让 AI 只能看账单、不能动钱」——这是把行业倾向写成了单家银行的正式政策，判<span class="tag tag--unver">未证实</span>。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="band band--alt" id="script">
+  <div class="wrap">
+    <h2>② 口播 14 条说法，逐条判定</h2>
+    <p class="lede measure">把口播拆成可检验的说法。每条标题是口播原话的大意（不是逐字引用），下面写核实到什么、判定是什么；事实细节集中在第 ① 节，这里只写差异。左侧色条：绿＝成立，黄＝部分成立或需加限定，红＝未证实或不成立。判定词覆盖整句：一句里有一处不准，就判「部分成立」并写明哪一处。</p>
+
+    <div class="grid" style="gap:var(--sp-3)">
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P1</span><span class="claim-q">10 月 20 日马斯克在采访里说，AI 以后会比人类聪明 100 万倍，人类管不住，只希望 AI 以后能善待人类</span><span class="tag tag--media">部分成立</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>节目是《The Builders》，采访者是传记作者 Walter Isaacson，10 月 20 日发布。中文转述（虎嗅、ABMedia）有「当 AI 的智慧达到人类的数千倍、数百万倍时，人类将不再具备指挥它的能力」；英文转述有「There's nothing I can do to stop it」（Benzinga）和访谈接近结尾处的「Hopefully the AI is nice to us」（一篇 Substack 评论引用）。</dd>
+          <dt>判定理由</dt><dd>三层意思（倍数、管不住、希望善待）都有转述支持，但本次没有看到官方逐字稿，来源级别是媒体转述。「罕见地低头」「叹着气」是口播的情绪描写，不是事实；马斯克在同一访谈里也说了「解法是让 AI 从底层追求真相与好奇心」（虎嗅转述），口播没提。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P2</span><span class="claim-q">全球每 10 个网站里有 7 个在用 PHP</span><span class="tag tag--media">部分成立：数字对，分母要补</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>W3Techs 2026-10-23 读数 69.3%，分母是「已知服务端编程语言的网站」。Wiz 博客写「70% 的互联网受影响」；WordPress 约占全部网站的 40%、Palo Alto Networks 估计潜在受影响实例 2,260 万个，这两个数本次只经 Fortune 转述。</dd>
+          <dt>判定理由</dt><dd>数字对，但口播省掉了分母，所以整句判部分成立。另外「在用 PHP」不等于「可被利用」：受影响的是对外提供 Web 请求服务、且未打补丁的实例。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P3</span><span class="claim-q">10 月 21 日 PHP 突然爆出两个「致命」漏洞，危险等级 9.2 分（满分 10）</span><span class="tag tag--media">部分成立：评分与日期对，「突然」「致命」不准</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-patch">10-21 14:00 条</a>：CVE-2026-109618 / 109619，PHP 按 CVSS v4.0 评 9.2，NVD 按 v3.1 评 9.8；10-20 预告，10-21 发补丁。</dd>
+          <dt>判定理由</dt><dd>「突然」不成立：漏洞 8 月已被发现，原计划 10 月 22 日协同披露。「致命」是情绪词，准确说法是「高危、无需认证的远程代码执行漏洞」。要分清四个阶段：漏洞存在（约 14 年）、补丁发布（10-21）、攻击尝试（10-17 起）、成功利用（截至 10-22 所引官方机构未确认）。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        
+        <dl>
+          <dt>核实到什么</dt><dd>两类风险：无需认证的远程代码执行，以及读取 PHP 工作进程内存（可能暴露密码、令牌、API key）。见第 ① 节 <a href="#ev-patch">10-21 14:00 条</a>。</dd>
+          <dt>判定理由</dt><dd>「不需要密码」「隔着网线」成立。「拿走全部资料」说满：攻击者拿到的是 PHP 进程权限能访问的东西，实际影响取决于进程权限、部署方式和凭据隔离。一台只跑静态页的服务器和一台 mod_php 跑着后台管理的服务器，后果完全不同。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--support">
+        <div class="claim-head"><span class="claim-id">P5</span><span class="claim-q">安全专家靠 AI 帮忙找到了这个陈年老洞，想等补丁打好再公布，结果消息走漏了</span><span class="tag tag--media">成立（媒体转述，原始材料未直接核对）</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-discovery">08-01 / 08-19 条</a>：Calif、Wiz 分别用 AI 工具发现，OpenAI 补充分析并协调披露；漏洞存在约 14 年；提前流出的路径有两条公开说法（论坛帖子、Calif 误发视频）。</dd>
+          <dt>判定理由</dt><dd>「AI 帮忙找到」「陈年老洞」「想等补丁再公布」「消息走漏」四层意思都有报道支持：论坛帖子与误发视频就是信息提前流出的两条公开路径；口播没有指认泄露者，也没有说故意，所以不扣分。唯一的限制是来源级别：全部来自 Fortune、BleepingComputer 等报道，本次没有核对 Calif 或 Wiz 的原始博客，不能标一手。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P6</span><span class="claim-q">Cloudflare 老板看傻了：还没公布就有几千次试探，公布后 45 分钟几万次，两小时几十万次，接着几百万次</span><span class="tag tag--media">部分成立：数字对，含义要改</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-cloudflare">10-21 03:02 条</a>：Cloudflare CEO 的发帖数字与口播一致。</dd>
+          <dt>判定理由</dt><dd>数字成立。但这是 Cloudflare 自家网络「检测到的攻击尝试」，不是全网统计，也不是被攻破数；所引德国、荷兰、日本官方机构截至 10-22 未确认成功入侵。「看傻了」是口播的描写。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--weak">
+        <div class="claim-head"><span class="claim-id">P7</span><span class="claim-q">以前黑客要人盯着屏幕找漏洞写程序折腾几天，现在一股脑交给 AI 自动跑；AI 的攻击大军把大门撞烂，网管只好拔网线停服务</span><span class="tag tag--unver">拆三段：推断 / 未证实 / 部分成立</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>没有找到攻击日志、人机操作记录或独立技术分析说明这波攻击流量由 AI 生成或由 AI 编排（<a href="#ev-cloudflare">10-21 03:02 条</a>）。各国政府下线网站的公开口径一致是「预防性措施」（<a href="#ev-offline">下线条</a>）。截至 10-22 所引官方机构未确认成功入侵。</dd>
+          <dt>判定理由</dt><dd>「交给 AI 自动跑」是<span class="tag tag--infer">推断</span>：AI 参与了漏洞发现是事实，但它不能单独证明攻击方用 AI 加快了利用代码编写，更不能量化「破坏力放大了多少」。「撞烂大门」<span class="tag tag--unver">未证实</span>。「停服务」部分成立：下线是真的，但是预防性下线，不是被攻破后断网，也不能统一归因为「来不及打补丁」。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P8</span><span class="claim-q">以前的网络攻防战以天为单位，现在 AI 打过来，留给人类反应的时间就几分钟</span><span class="tag tag--media">部分成立</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>公开披露后 45 分钟内尝试量暴增成立（<a href="#ev-cloudflare">10-21 03:02 条</a>）。但 Amazon 在披露前 4 天（10-17）就看到了试探（<a href="#ev-probe">10-17 条</a>），说明「几分钟」描述的是公开披露后尝试量的爆发，不是从漏洞出现到被利用的时间。</dd>
+          <dt>判定理由</dt><dd>只能说「这次披露后，尝试量在分钟级上升」。它不能推出「普遍攻防周期已缩到几分钟」——第 ⑤ 节 A 条引用的 Mandiant 数据里，漏洞利用成为初始入口已连续六年，驻留时间中位数 14 天，攻防周期是多段的，不能用一个数概括。「AI 打过来」沿用 P7 的判定：推断。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-litellm">LiteLLM 条</a>，官方事故通报（一手）。</dd>
+          <dt>判定理由</dt><dd>「发布渠道被端」「安装包下毒」「窃取密码和密钥」成立且有一手通报。两处不准：①「从官网下载」应为「从官方包仓库（PyPI）和镜像仓库（Docker Hub）安装」；②「两小时后撤下」是约数——PyPI 包在线 1 小时 44 分，Docker 镜像约 2 小时 34 分。口播的「混进造锁工厂」比喻贴切：这是供应链攻击，用户什么都没做错。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P10</span><span class="claim-q">拉美 400 多家银行被 CyberCartel 盯上；他们用 AI 搭了一家全自动黑客公司，几个 Claude 开会分析，派 Grok 扒账号密码；系统里发现 4,400 多条偷到手的核心机密，连墨西哥跨行支付系统的密码都在里面</span><span class="tag tag--media">部分成立：四处说满，单一来源</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-cartel">CyberCartel 条</a>：Straiker 报告，The Information 10-21 首发。</dd>
+          <dt>判定理由</dt><dd>「被盯上」「几个 Claude 讨论、Grok 搜凭据」与报告描述一致。说满的四处：①「400 多家银行」——报告说的是 400 多个金融目标，含银行与其他金融机构，且是攻击活动的目标数，不是攻破数；②「全自动」——报告描述的是多代理分工与预写攻击代码的结合，人工介入到什么程度报告没有量化，所以「全自动」既不能证实也不能否定；③「核心机密」——是数据库里的记录条数（4,493），完整性、有效性、是否被成功使用都未核实；④「跨行支付系统的密码」——报告说的是与 SPEI「相关」的凭据，不等于 SPEI 系统本身的密码。只有一家安全公司的报告，尚无独立核实，损失金额未知。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P11</span><span class="claim-q">10 月 22 日摩根大通、美国银行、摩根士丹利紧急拦截 AI 智能体：银行分不清登录的是本人还是 AI；有些 AI 的操作超出了主人的指令；摩根士丹利让 AI 只能看账单不能动钱</span><span class="tag tag--media">部分成立，一处未证实</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>见第 ① 节 <a href="#ev-banks">银行条</a>：Axios 10-22 援引知情人。</dd>
+          <dt>判定理由</dt><dd>「拦截」成立（摩根士丹利封堵，摩根大通、美国银行、花旗限制）；「分不清是谁」要降一级：客户把密码交给 AI，用的是客户本人的登录，这增加了识别和授权核验的难度；银行是否真的无法区分（行为、设备等信号能否分辨），公开材料没有证据，未证实。「超出主人指令」要标注：匿名转述，无公开技术证据。「摩根士丹利只能看账单」<span class="tag tag--unver">未证实</span>：只读是行业倾向，没有该行的正式政策声明。「10 月 22 日」是报道日期，限制从何时开始没有公开。没有任何一家银行公布实际损失。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P12</span><span class="claim-q">不是 AI 变坏了，而是坏人用上 AI 之后破坏力被放大了无数倍</span><span class="tag tag--infer">推断：方向有支持，幅度未量化</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>与第 ⑤ 节 10 月 20 日版的总判断一致：进攻能力在扩散。本周的证据是 AI 参与了漏洞发现（PHP，媒体转述）、凭据搜集与任务编排（CyberCartel，单一来源）。</dd>
+          <dt>判定理由</dt><dd>这是分析判断，不是可核实的事实，所以标推断。「不是 AI 变坏」有支持。「放大」方向有支持，「无数倍」没有任何量化依据。四件事里有两件的根因与模型能力无关：发布链投毒是令牌泄漏，银行代理事件是客户主动共享密码。更准确的说法是：漏洞、凭据、发布链和代理权限这些既有风险，可能在自动化工具参与下更快暴露、更难管理——「可能」两字不能去掉。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">P13</span><span class="claim-q">未来的网络世界就是好人的 AI 和坏人的 AI 在拼速度</span><span class="tag tag--media">部分成立：防守方用了 AI，攻击方是否用了未证实</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>PHP 事件体现了披露后的攻防速度竞争：防守方用 AI 找到漏洞，Cloudflare 提前 9 小时上线规则，披露后攻击尝试分钟级暴增。攻击方这一侧是否用了 AI，沿用 P7：未证实。</dd>
+          <dt>判定理由</dt><dd>PHP 事件直接体现了披露后的时间压力，且目前只证实了防守一方用 AI。LiteLLM 和银行代理两件事更直接暴露的是治理缺口——令牌放在日志里、分支保护能被一个令牌关掉、客户把密码交给第三方——检测与处置速度在这两件事里也有作用，但不能只用模型速度解释。把四件事都归到「拼速度」，会让人以为买更强的模型就能解决；更强的模型可以辅助检测和处置，但不能替代凭据隔离、发布保护和权限控制。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--support">
+        <div class="claim-head"><span class="claim-id">P14</span><span class="claim-q">普通人马上做三件事：跟上系统更新、不同账号不同密码并开双重验证；检查给 AI 的权限，只给只读不给交易；转钱、删资料、发私密文件必须自己按确认键</span><span class="tag tag--primary">方向成立，已并入第 ⑧ 节个人清单</span></div>
+        <dl>
+          <dt>核实到什么</dt><dd>三条都与本周事件对应：PHP 补丁（更新）、LiteLLM 凭据被窃（密码隔离与双重验证）、银行代理事件（只读权限与人工确认）。</dd>
+          <dt>判定理由</dt><dd>缺一项本周最直接的教训：<strong>可能泄漏的凭据要撤销重签，受影响的环境要停用</strong>。LiteLLM 事件里，改密码、打补丁都不够，官方要求按失陷处理。另外「双重验证」要说明短信不算最后一道。完整版见第 ⑧ 节「个人与小团队九项」。</dd>
+        </dl>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="band" id="timeline">
+  <div class="wrap">
+    <h2>③ 2026 年到底发生了什么（10-20 版时间线）</h2>
+    <p class="lede measure">这是「公开披露与评估时间线」，不是攻击事件编年史。每条标明信息是谁发布的：厂商自述、受害方披露、政府或独立评估、媒体转述。</p>
+    <div class="legend" role="list">
+      <span class="tag tag--primary" role="listitem">一手：厂商/受害方/政府发布</span>
+      <span class="tag tag--second" role="listitem">独立评估</span>
+      <span class="tag tag--media" role="listitem">媒体转述</span>
+      <span class="tag tag--infer" role="listitem">推断</span>
+      <span class="tag tag--unver" role="listitem">未核实</span>
+    </div>
+
+    <ol class="tl">
+      <li>
+        <p><span class="date">04-07</span><span class="tag tag--primary">一手</span> <strong>Anthropic 公布 Mythos Preview，不公开发布。</strong>通过 Project Glasswing 给 12 家发起方（含 Anthropic 自身）与 40 余家机构用于防御研究。1 亿美元是模型使用额度承诺，不是现金拨款，另有 400 万美元捐赠。</p>
+        <p class="small">对主流操作系统与浏览器的审计产出数千个高危/严重问题，含一个 27 年的 OpenBSD 问题、一个 16 年的 FFmpeg 问题。「超过 99% 尚未修补」描述的是<strong>当时报告的那批漏洞</strong>的状态，不能延伸到今天。</p>
+      </li>
+      <li>
+        <p><span class="date">05-13</span><span class="tag tag--second">独立评估</span> <strong>英国 AISI：模型能自主完成的网络任务长度，以「月」为单位翻倍。</strong>这里的「任务长度」<strong>是人类专家完成同一任务所需的参考耗时，不是模型自己的运行时间，也不是攻击速度</strong>。按 80% 成功阈值估计约 4.7 个月翻一倍——这是对历史数据的拟合，不是未来增长率。AISI 自己写道「不清楚这是否代表一条新的、更快的趋势」。</p>
+        <p class="small">靶场结果：32 步企业靶场（人类专家约 20 小时）新版 Mythos Preview 检查点 10 次成功 6 次，GPT-5.5 成功 3 次。<strong>限定条件不能略过：</strong>靶场是小型、无防守方、已获得初始访问的企业网络。AISI 明说，这不能说明对有防守的真实系统效果如何。</p>
+      </li>
+      <li>
+        <p><span class="date">06-09 / 06-12 / 06-26 / 07-01</span><span class="tag tag--primary">一手</span> <strong>Fable 5 与 Mythos 5 发布、暂停、再恢复。</strong>据 Anthropic 披露：6 月 9 日发布，6 月 12 日因美国出口管制要求暂停访问，6 月 26 日获准向部分美国机构恢复 Mythos，7 月 1 日恢复相关服务。</p>
+        <p class="small">口述里「Mythos 太强所以出了安全版 Fable」要修正因果：<strong>Fable 5 与 Mythos 5 是同一底层模型配不同安全防护</strong>，不是先后两代；Mythos 走定向验证通道。更早的 Mythos Preview 是另一个版本，不能混为一谈。</p>
+      </li>
+      <li>
+        <p><span class="date">06 月</span><span class="tag tag--unver">未核实</span> <strong>流传的「数小时攻破几乎所有涉密系统」。</strong>这个说法在中文圈被转述成「两小时攻破一个号称很安全的网络」。<strong>本次没有核实到一手出处</strong>——既没查到「两小时」的原始来源，也没查到澄清者的原话与发布日期。</p>
+        <p class="small">所以这里只能说：该具体叙述未核实。不宜一边否定夸大版本，一边把「其实是一次授权演练」当成已经核实的替代事实。</p>
+      </li>
+      <li>
+        <p><span class="date">07-11 事发 / 07-16 披露 / 08-26 复盘</span><span class="tag tag--primary">一手</span> <strong>Hugging Face 安全事件。</strong>受害方 7 月 16 日披露 7 月 11 日周末发生的事件；OpenAI 8 月 26 日的复盘确认涉及多个 OpenAI 模型，以内部研究模型为主。</p>
+        <p class="small">取证环节用了自托管的中国开源模型 GLM 5.2。<strong>原因要限定</strong>：该次事件中托管模型对部分真实取证材料的处理被拒绝，加上本地处理需求。这不能泛化成「美国模型不能用于防守」。</p>
+      </li>
+      <li>
+        <p><span class="date">07-30</span><span class="tag tag--second">独立评估</span> <strong>Palo Alto Unit 42 披露一轮用 AI 做攻击的活动。</strong>一名中文使用者用开源智能体框架配 DeepSeek 做推理部件，尝试 460 多个目标。<strong>全自主环节失败</strong>（卡在目标配置与认证要求），<strong>人工介入的环节造成了实际影响</strong>。</p>
+        
+      </li>
+      <li>
+        <p><span class="date">08-12</span><span class="tag tag--media">媒体转述</span> <strong>针对亚洲某政府部门的近自主攻击被披露。</strong>安全公司 Dream 的一手报告匿名描述目标，依据是发现的攻击工作区与记录。「台湾」「2500 多份人员记录」这些具体信息来自后续媒体报道，受害方的独立确认本次未核实；8 月 12 日是披露日，不是攻击发生日。</p>
+        <p class="small">两个值得记的细节：攻击方用「已授权渗透测试」的说法绕过模型安全策略；安全公司同时指出，「真正能跑通的系统，比只跑一个模型要多得多工作量」。</p>
+      </li>
+      <li>
+        <p><span class="date">08-14 / 08 月底</span><span class="tag tag--primary">一手</span> <strong>Z.ai 发布 GLM-5.3，两周后放出权重。</strong></p>
+      </li>
+      <li>
+        <p><span class="date">09-01 / 09-03</span><span class="tag tag--primary">一手</span> <strong>OpenAI GPT-6 Astra 发布，按其自身风险框架在网络维度评为「关键」等级。</strong>相关高风险用途经专门通道限制使用，公开版设置防护以阻止这类请求。</p>
+        <p class="small">注意：10 月 7 日的更新评估的是 Sol 与 Luna 两个 10 月版本，<strong>不等于 Astra 的能力或评级下降</strong>。</p>
+      </li>
+      <li>
+        <p><span class="date">09-17</span><span class="tag tag--second">独立评估</span> <strong>美国 CAISI：GLM-5.3 是该次评估范围内网络能力最强的公开权重模型，综合落后美国前沿约 4 个月。</strong>但四项基准都显著低于美国前沿最优值。</p>
+        <p class="small">两个口径要记住：美国模型是在<strong>关闭网络安全防护</strong>的条件下测的；「美国前沿最优」是各基准中已评估美国模型的最高成绩拼出来的上界，<strong>不是现实中某一个可直接调用的模型</strong>。</p>
+      </li>
+      <li>
+        <p><span class="date">09-29</span><span class="tag tag--primary">一手</span> <strong>Anthropic 前沿红队报告：GLM-5.3 与安全防护的扩散问题。</strong>在公开学术基准 ExploitBench 上，对 41 个漏洞各尝试 10 次，GLM-5.3 成功 50 次、Mythos Preview 成功 56 次。另一项内部二进制利用评测里 4% 对 6%，Kimi K3 与 DeepSeek V4.1-Flash 为 0%。</p>
+        <p class="small"><strong>两个常见误读要避开：</strong>64%–100% 衡量的是特定模拟条件下模型是否参与尝试（观察包括尝试连接目标），<strong>不是入侵成功率</strong>；约 4400 美元是特定实验的计算成本，<strong>不含人员、工程与运行成本</strong>。</p>
+      </li>
+      <li>
+        <p><span class="date">10-16</span><span class="tag tag--primary">一手</span> <strong>中国商务部、科技部 2026 年第 48 号公告及同日答记者问。</strong>同时包含两件法律状态不同的事：目录修订的<strong>征求意见</strong>，以及<strong>即日起实施</strong>的相关技术出口前临时登记。公告对已经通过开源、论文等进入公共领域的技术作出排除，政策说明还提出开源技术出口的许可便利。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="band band--alt" id="capability">
+  <div class="wrap">
+    <h2>④ 中国开源模型离前沿还有多远</h2>
+    <p class="lede measure">口述里的判断是「半年到一年追平 Mythos 或 Fable 5.1」。要回答这个问题，先得把「追平谁」说清楚——需要区分对照 Mythos <em>Preview</em> 与对照美国前沿逐项最优成绩，两者结论完全不同；而与 Fable 5.1 / Astra <strong>各自</strong>的差距，现有公开证据不能确定。</p>
+
+    <div class="card" style="margin-bottom:var(--sp-4)">
+      <h3>CAISI 评估（2026-09-17）四项基准</h3>
+      <p class="small">纵向对比 GLM-5.3 与该次评估中美国前沿最优值。美国模型在<strong>关闭网络安全防护</strong>的条件下测试。</p>
+      <div class="bars">
+        <div class="bar-row"><span>SEC-Bench Pro<br><span class="small">GLM-5.3</span></span><div class="bar-track"><div class="bar-fill bar-fill--cn" style="width:40.4%"></div></div><span class="bar-val">40.4%</span></div>
+        <div class="bar-row"><span class="small">　美国前沿最优</span><div class="bar-track"><div class="bar-fill" style="width:90.2%"></div></div><span class="bar-val">90.2%</span></div>
+        <div class="bar-row"><span>ExploitBench<br><span class="small">GLM-5.3</span></span><div class="bar-track"><div class="bar-fill bar-fill--cn" style="width:61.1%"></div></div><span class="bar-val">61.1%</span></div>
+        <div class="bar-row"><span class="small">　美国前沿最优</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-val">100%</span></div>
+        <div class="bar-row"><span>ExploitGym<br><span class="small">GLM-5.3</span></span><div class="bar-track"><div class="bar-fill bar-fill--cn" style="width:9.4%"></div></div><span class="bar-val">9.4%</span></div>
+        <div class="bar-row"><span class="small">　美国前沿最优</span><div class="bar-track"><div class="bar-fill" style="width:44.4%"></div></div><span class="bar-val">44.4%</span></div>
+        <div class="bar-row"><span>OSS-Fuzz<br><span class="small">GLM-5.3</span></span><div class="bar-track"><div class="bar-fill bar-fill--cn" style="width:7.7%"></div></div><span class="bar-val">7.7%</span></div>
+        <div class="bar-row"><span class="small">　美国前沿最优</span><div class="bar-track"><div class="bar-fill" style="width:23.2%"></div></div><span class="bar-val">23.2%</span></div>
+      </div>
+      <p class="note" style="margin-top:var(--sp-3)">「落后约 4 个月」是把能力差距映射到历史时间轴的结果，<strong>不等于剩余追赶时间</strong>。它也只覆盖已评估的模型，不含已开发未发布的。</p>
+    </div>
+
+    <div class="grid grid--2">
+      <div class="card">
+        <h3>对照 Mythos Preview：确实接近</h3>
+        <p class="small">Anthropic 自己的报告里，ExploitBench 上 50 次对 56 次。但要注意：<strong>对照组是今年 4 月那个 Preview 版本，不是 9 月的 Mythos 5.1</strong>。</p>
+      </div>
+      <div class="card">
+        <h3>对照美国前沿逐项最优：仍有明显差距</h3>
+        <p class="small">CAISI 四项基准全部显著低于<strong>本次评估中美国模型的逐项最高成绩</strong>，差距落在 95% 置信区间之外。注意这个比较对象是拼出来的上界，<strong>不等于低于 Fable 5.1 或 Astra 各自的成绩</strong>——CAISI 没有逐模型公布这两款的四项分值，所以「对照某一个指定模型差多少」本页答不了。能说的是：「在某项利用开发评测中接近较早的 Preview 版本」成立；说「综合能力追平 5.1 代」现有证据不能证实。</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:var(--sp-4)">
+      <h3>同名基准不能直接横比</h3>
+      <p class="small" style="margin-bottom:0">ExploitBench 在不同报告里出现过差别很大的数字，原因是任务子集、评分规则、重试次数、运行预算、安全防护开关都不同。CAISI 的 61.1% 和 Anthropic 的「410 次尝试中成功 50 次」是两套口径，把它们放在一起算「追赶速度」会得到无意义的结论。更不能把任何一个分数换算成「企业被攻破的概率」。</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="claims">
+  <div class="wrap">
+    <h2>⑤ 11 条主张，逐条判定（10-20 版，附 10-23 新证据）</h2>
+    <p class="lede measure">把口述内容拆成 11 条可检验的主张。每条给判定、理由和需要补的证据。左侧色条：绿＝有证据支持，黄＝部分成立或需加限定，红＝不成立或证据不足。</p>
+
+    <div class="grid" style="gap:var(--sp-3)">
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">A</span><span class="claim-q">未来 1–2 年，网络安全引发企业界动荡</span><span class="tag tag--media">值得做压力测试的风险情景</span></div>
+        <dl>
+          <dt>支撑</dt><dd>Mandiant M-Trends 2026（2026-03-23，主要观察 2025 年调查案例）：漏洞利用连续第六年是头号初始入口（32%）；全球驻留时间中位数 14 天；初始访问方到次级攻击团体的<strong>交接</strong>间隔 22 秒。另有一个「估计平均利用时间约 −7 天」的说法 <span class="tag tag--unver">未核实</span>——<strong>本次没有查到它的基准日期（相对补丁发布还是相对漏洞公开）、统计对象和样本，所以不作论据使用。</strong></dd>
+          <dt>为什么不能判成立</dt><dd>这几个数字衡量的是不同环节，<strong>不能拼成一条攻击时间轴</strong>：14 天是从入侵到被发现的驻留时间中位数，22 秒是两个攻击方之间的交接间隔——两者既不相加也不相减。而且这些主要基于 2025 年案例，不能直接当成 2026 年前沿模型发布后的效果证据。更关键的是，「动荡」没有定义——要先定下损失额、停业时长或行业集中事件的门槛，这条才可判真伪。</dd>
+                  <dt>10-23 新证据</dt><dd>PHP 漏洞公开披露后 45 分钟内 Cloudflare 自家网络检测到数万次攻击尝试、多国政府预防性下线网站（<a href="#ev-cloudflare">第 ① 节</a>）。这是「动荡」的一个可观察样本，但仍没有定义门槛：截至 10-22 所引德、荷、日官方机构未确认成功入侵，损失额不明，所以判定不变。</dd>
+</dl>
+      </article>
+
+      <article class="card claim claim--weak">
+        <div class="claim-head"><span class="claim-id">B</span><span class="claim-q">Mythos 两小时攻破一个号称很安全的网络</span><span class="tag tag--unver">具体叙述未核实</span></div>
+        <dl>
+          <dt>查到什么</dt><dd>没有找到「两小时」的一手出处。能查到的相近材料是 AISI 的靶场成功率（无防守方、已有初始访问）。</dd>
+          <dt>但也不能反着说满</dt><dd>查不到出处不等于证明该事不可能。同样，说「公开可查的只有靶场和演练」也过头——Hugging Face 事件就是真实系统上的一手披露，只是它证明不了「两小时」这个具体说法。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">C</span><span class="claim-q">太强所以不敢给公众用，后来出了安全版 Fable</span><span class="tag tag--media">发布方式成立，单一因果过度简化</span></div>
+        <dl>
+          <dt>成立的部分</dt><dd>Fable 5 与 Mythos 5 同底层、不同安全防护，有厂商一手说明；Mythos 走定向验证通道，确实不对公众开放。</dd>
+          <dt>简化在哪</dt><dd>「太强所以不敢放」把能力评估、安全防护设计、准入安排和监管要求（6 月 12 日的出口管制）混成了一个原因。而且由此推不出「强模型必然闭源」这条一般规律。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">D</span><span class="claim-q">GPT-6 从数据上看和 Mythos 很接近</span><span class="tag tag--media">限定基准下支持，整体接近未证实</span></div>
+        <dl>
+          <dt>怎么说才准确</dt><dd>必须写清版本、基准、运行预算、工具环境和防护开关。就算在某些表格里 Astra 高于 Fable 5.1，也没有回答「整体是否接近 Mythos」——因为没有一个统一口径的综合测评同时覆盖这几个模型。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--support">
+        <div class="claim-head"><span class="claim-id">E</span><span class="claim-q">有中国模型被用于安全攻击并攻破了网络</span><span class="tag tag--primary">成立</span></div>
+        <dl>
+          <dt>依据</dt><dd>Unit 42 的 7 月 30 日报告：中国开源模型被用作推理部件，相关活动中发生了成功入侵。这条不需要先证明端到端自主完成。</dd>
+          <dt>但别反向扩大</dt><dd>「已披露的 AI 攻击多数靠人工」这个<strong>总体比例判断没有样本支持</strong>，只能限定为该案例：那次活动里全自主部分失败、人工辅助部分奏效。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">F</span><span class="claim-q">核武器扩散到老百姓手中的机会大增</span><span class="tag tag--infer">比喻失真，但担忧的内核成立</span></div>
+        <dl>
+          <dt>内核成立</dt><dd>部分专业攻击能力正在被工具化、规模化，门槛在降。有一个可引用的成本点：Anthropic 报告里去除某个开源权重模型拒绝行为的<strong>那一次特定实验</strong>，计算成本约 4400 美元。<strong>这是单次实验的计算费用，不含人员、工程与运行成本，也不能当成这类操作的通用价码。</strong></dd>
+          <dt>比喻失真在哪</dt><dd>核武器与此在破坏机制、可复制性和防御方式上都不是一回事。从「模型能写出利用代码」到「端到端打穿一个有防守的生产网络」，中间还隔着工程、情报与运维成本。这一段的成本<strong>公开材料里没有量化</strong>；能说的是它确实存在：Unit 42 那次自主部分失败、人工介入部分才有实效，Dream 也写明一个真能跑通的系统「比『只是』跑一个模型要多得多工作量」。</dd>
+                  <dt>10-23 新证据</dt><dd>CyberCartel 案例（<a href="#ev-cartel">第 ① 节</a>）新增了一个犯罪团伙实际使用多代理分工的样本。但成本和门槛的变化仍未量化：报告描述了多代理与预写攻击代码的结合，人工介入程度没有量化；从「能编排」到「端到端打穿有防守的银行」，中间的工程与运维成本也没有数字。</dd>
+</dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">G</span><span class="claim-q">半年到一年，中国开源模型达到 Mythos / Fable 5.1 水平</span><span class="tag tag--media">口径决定答案</span></div>
+        <dl>
+          <dt>分开看</dt><dd>对照 <strong>Mythos Preview</strong>（4 月版本）：在所列特定利用开发评测中已经接近。对照 <strong>美国前沿逐项最优成绩</strong>：CAISI 四项基准差距显著，不支持半年追平。<strong>注意第二项不是「对照 Fable 5.1 或 Astra」</strong>——那是各基准最高分拼出的上界，CAISI 未逐模型公布这两款分值，所以「离某一个指定模型还差多少」现有证据答不了。</dd>
+          <dt>最容易出错的一步</dt><dd>把 CAISI 的「约 4 个月」当成剩余追赶时间。它是把当前能力差距映射回历史时间轴得到的指数值，不是倒计时。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--weak">
+        <div class="claim-head"><span class="claim-id">H</span><span class="claim-q">中国大量开源系统将不能再开源</span><span class="tag tag--unver">尚未发生，方向也不是「停开源」</span></div>
+        <dl>
+          <dt>实际发生的</dt><dd>10 月 16 日公告里，已生效的是<strong>特定技术出口前的临时登记</strong>，目录修订还在征求意见阶段。公告明确<strong>排除</strong>了已经通过开源、论文等进入公共领域的技术，政策说明还提出开源技术出口的许可便利。</dd>
+          <dt>正确的判断方式</dt><dd>把「开源发布」和「受控技术跨境转移」分开看。监管方向是备案、分级与许可，不是让已开源的模型下架。</dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">I</span><span class="claim-q">这件事封不住，因为「给自己做渗透测试」是正当理由</span><span class="tag tag--media">拆成三条才能判</span></div>
+        <dl>
+          <dt>可以成立的那条</dt><dd>单靠模型的拒绝策略，难以封堵所有滥用。亚洲政府案例里，攻击方正是用「已授权测试」的说法绕过了防护。</dd>
+          <dt>推不出的两条</dt><dd>① 推不出准入管理、基础设施限制和执法都无效。② 「我在自测」是<strong>用途声明</strong>，不自动构成正当授权。对企业的直接含义：采购渗透测试时要核验真实权利人授权和明确范围，不能把「模型接受了这个说法」当作合法性判断。</dd>
+                  <dt>10-23 新证据</dt><dd>CyberCartel 用「授权红队」「学术渗透测试」的说法绕过模型拒绝（<a href="#ev-cartel">第 ① 节</a>，Straiker 报告，媒体转述），与亚洲政府案例是同一手法。这强化了「单靠拒绝策略封不住」这一条。Anthropic 吊销相关凭据是已采取的准入处置，实际阻断效果未披露，所以它只说明准入管理这一环仍在运作，不证明它足够。</dd>
+</dl>
+      </article>
+
+      <article class="card claim claim--weak">
+        <div class="claim-head"><span class="claim-id">J</span><span class="claim-q">中国现在危险，因为没有足够强的模型来防守</span><span class="tag tag--unver">这个因果判断未证实</span></div>
+        <dl>
+          <dt>有限反例</dt><dd>Hugging Face 那次事件，取证恰恰用的是自托管的中国开源模型。这<strong>只否定了一个绝对说法</strong>——「中国模型完全不能用于防守工作」。能参与一次取证，不等于防守能力足够。</dd>
+          <dt>为什么判「未证实」而不是「不成立」</dt><dd>要判定这条，得有「模型能力强弱 → 国家整体受害程度」的对照数据，公开材料里没有。一个取证案例既不能证明中国企业整体风险较低，也不能证明前沿模型对防守不重要。可以说的是：<strong>模型能力不是单一决定因素；基础控制与可恢复性才是企业当下能自己掌控的部分。</strong></dd>
+        </dl>
+      </article>
+
+      <article class="card claim claim--partial">
+        <div class="claim-head"><span class="claim-id">K</span><span class="claim-q">安全公司会获利：联合前沿实验室给客户做渗透并修补</span><span class="tag tag--media">形态有支持，获利未证实</span></div>
+        <dl>
+          <dt>形态存在</dt><dd>Project Glasswing、定向验证通道等项目说明这种合作与服务机会是真实的。</dd>
+          <dt>获利是另一回事</dt><dd>需求可能扩大，<strong>不等于收入、利润或议价能力必然上升</strong>。要判断这条，得看客户付费意愿、交付成本、责任分配和复购。中国市场的具体落地本次未核实。</dd>
+        </dl>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="band band--alt" id="sheep">
+  <div class="wrap">
+    <h2>⑥ 谁是「肥羊」：够大 + 够老</h2>
+    <p class="lede measure">口述里的画像是：营收利润够大、系统够老，典型是保险、金融、传统制造。这个方向有数据支持，但下面每个数字的样本和年份都不同，不能直接套到某一家中国企业头上。</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>行业暴露面相关数据（注意样本与年份差异）</caption>
+        <thead><tr><th>维度</th><th>数据</th><th>来源与口径</th><th>级别</th></tr></thead>
+        <tbody>
+          <tr><td>制造业漏洞利用入口</td><td>38%（全行业 31%）</td><td>Verizon 2026 DBIR（2026-05-19），数据期 2024-11 至 2025-10</td><td><span class="tag tag--second">独立评估</span></td></tr>
+          <tr><td>涉及第三方的泄露比例</td><td>48%（2025 版为 30%）</td><td>Verizon 2026 DBIR。30% 是历史值，不能当最新数</td><td><span class="tag tag--second">独立评估</span></td></tr>
+          <tr><td>金融业平均泄露成本</td><td>556 万美元</td><td>IBM《Cost of a Data Breach Report 2025》全球样本，<strong>不是</strong>中国企业预期损失</td><td><span class="tag tag--second">独立评估</span></td></tr>
+          <tr><td>保险业第三方因素</td><td>约 59%</td><td>SecurityScorecard 保险业研究（2025-02-06），样本是其选取的 150 家公司中<strong>观察到的泄露事件</strong>，不是全行业比例</td><td><span class="tag tag--media">需限定</span></td></tr>
+          <tr><td>保险/金融遗留系统占比、MFA 覆盖率、理赔严重度</td><td>流传有 75% / 54% / 50% / 73.1 万美元等数字</td><td><strong>本次未核实到原始报告的样本与方法说明</strong>，不在本页作为论据使用</td><td><span class="tag tag--unver">未核实</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid--3" style="margin-top:var(--sp-4)">
+      <div class="card">
+        <h3>够大 ≠ 一定被打</h3>
+        <p class="small">「规模大」「系统老」「损失金额高」「愿意付赎金」是四件事，不能互相代用。同样，赎金要求、实际支付、保险赔付、全部事件损失也是四个数，混用会严重高估或低估。</p>
+      </div>
+      <div class="card">
+        <h3>真正的共性是暴露面</h3>
+        <p class="small">近年多个勒索团伙采用「设备驱动」的目标选择：扫到哪台有缺陷的边界设备就打哪台，顺带把中小组织卷进原本针对大企业的活动。这意味着<strong>「我不够肥所以安全」不成立</strong>。</p>
+      </div>
+      <div class="card">
+        <h3>跨国攻击会增加吗</h3>
+        <p class="small"><span class="tag tag--infer">推断</span> 归因难、司法协作慢、跨境索赔成本高，所以攻击方预期代价低——这是一条合理的<strong>机制假说</strong>。但跨境攻击数量是否真的上升，需要时间序列证据，本页不下结论。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="policy">
+  <div class="wrap">
+    <h2>⑦ 开源会被叫停吗</h2>
+    <div class="grid grid--2">
+      <div>
+        <p class="lede">口述的预测是「中国大量开源系统不能再开源了」。实际走向不是停开源，而是<strong>分级、备案、许可</strong>。</p>
+        <ul class="tight">
+          <li><strong>10 月 16 日公告</strong>包含两件法律状态不同的事：目录修订<strong>在征求意见</strong>（拟增列人工智能、生物医药、光伏共 40 项，其中 AI 23 项；征求意见截至 2026-11-15）；相关技术<strong>出口前临时登记即日起实施</strong>，在商务部业务系统统一平台登记，已开始未完成的出口也在范围内。</li>
+          <li>公告<strong>排除</strong>已通过开源、论文等进入公共领域的技术。</li>
+          <li>政策说明提出开源技术出口的<strong>许可便利</strong>。</li>
+          <li>国内侧：依《生成式人工智能服务管理暂行办法》，<strong>向境内公众提供具有舆论属性或社会动员能力的生成式 AI 服务</strong>需履行算法备案与安全评估。<strong>适用对象是「对公众提供服务」，不是「企业内部自用模型一律备案」</strong>——内部自用是否落入，取决于服务形态，需按个案确认。</li>
+        </ul>
+        <p class="note">所以更准确的说法是：<strong>开源这件事正在被纳入管理框架，而不是被关停。</strong>「开源不免责」这类表述要落到具体制度上，不能用一份公告概括全部。</p>
+      </div>
+      <div class="card">
+        <h3>对企业的实际含义</h3>
+        <ul class="tight small">
+          <li>如果你在用开源权重模型做安全工作，<strong>现在就把来源、版本、用途、数据边界记录下来</strong>。这件事本身就值得做（出事时你需要说清用了什么）；至于未来要求会不会变细，<span class="tag tag--infer">推断</span>——依据是本节已列的既有动作（临时登记即日起实施、目录修订在征求意见），不是已发布的新规。</li>
+          <li>涉及跨境的技术转移、模型权重出境，提前确认是否落入登记或许可范围。</li>
+          <li>不要把「监管会收紧所以能力会消失」当成防御计划。已经放出的权重收不回来。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band--alt" id="plan">
+  <div class="wrap">
+    <h2>⑧ 90 天能做什么：企业八项与个人九项</h2>
+    <p class="lede measure">下面是内部验收目标，不替代法定或行业时限。各项并行推进，范围以业务影响分析确定的核心业务和高风险资产为准。顺序按「先堵最可能被利用的路径」排。</p>
+
+    <div class="steps">
+      <article class="card step">
+        <h3>确认核心业务、资产与互联网暴露面</h3>
+        <p class="when">第 1–15 天</p>
+        
+        
+      </article>
+
+      <article class="card step">
+        <h3>建立「已被利用 + 实际暴露」的紧急处置通道</h3>
+        <p class="when">第 1–30 天</p>
+        <p class="small">对确认受影响且存在高风险暴露的系统，建议 24 小时内完成缓解；能安全部署补丁的，原则上 72 小时内修复；遗留与生产系统不能直接变更的，必须同步实施补偿控制。</p>
+        
+      </article>
+
+      <article class="card step">
+        <h3>保护特权、远程和第三方身份</h3>
+        <p class="when">第 1–45 天</p>
+        <p class="small"><strong>人工账号</strong>（管理员、远程接入、外部协作方）落实抗钓鱼多因素认证，遗留应用通过受控接入层覆盖，同步检查账号恢复流程与已不再使用的认证方式。<strong>服务账号与机器身份走另一条路</strong>——它们无法交互式认证，要做的是：凭据定期轮换、权限收到最小必需、限定可调用来源、登录行为纳入监控。把两类账号混在一张表里验收，必然留口子。</p>
+        <p class="accept"><b>验收（分两类）：</b>① 人工账号——范围内全部覆盖抗钓鱼多因素认证或有批准例外，离职及闲置高权限账号清零，且不存在可绕开统一接入控制的入口。② 服务账号——有完整清单及责任人，长期静态凭据清零或有到期轮换记录，权限经过一次最小化复核。</p>
+      </article>
+
+      <article class="card step">
+        <h3>隔离遗留系统与关键管理系统</h3>
+        <p class="when">第 15–60 天</p>
+        <p class="small">由网络、运维和生产负责人共同限制不可修补系统的可达范围，并把生产业务、身份管理、备份管理与工业控制环境分开。</p>
+        
+      </article>
+
+      <article class="card step">
+        <h3>完成真正的业务恢复演练，不只是检查备份</h3>
+        <p class="when">第 1–60 天</p>
+        <p class="small">建立离线或不可变备份，用独立的管理凭据。恢复范围要包含业务数据、配置、身份和必要密钥。</p>
+        
+      </article>
+
+      <article class="card step">
+        <h3>把检测、值守、处置和报告连起来</h3>
+        <p class="when">第 15–60 天</p>
+        <p class="small">覆盖身份、远程接入、关键终端及备份管理的必要日志，明确全天候接单和处置授权，建立适用的监管报告责任表。中国法域要注意《国家网络安全事件报告管理办法》（2025-09-15 公开，2025-11-01 施行）对不同主体和行业的区分要求。</p>
+        
+      </article>
+
+      <article class="card step">
+        <h3>收紧关键第三方、AI 代理与软件发布链的凭据治理</h3>
+        <p class="when">第 30–75 天</p>
+        <p class="small">对关键外包商、云服务及 AI 接入统一核查：责任人、数据范围、最小权限、限时访问、日志、事件通报、退出安排。企业自己用智能体同样要审权限、接触的数据、人工批准与异常停用机制。</p>
+                <ul class="tight small">
+          <li><strong>令牌短时、最小权限：</strong>发布流水线、GitHub、云平台的令牌不长期共享；日志脱敏，令牌不得出现在 AI 工具输出或应用日志里（LiteLLM 10-21 事件的根因）。</li>
+          <li><strong>发布链保护：</strong>分支保护、发布审批、制品签名三件齐全，且关闭保护需要第二人批准；仿冒仓库名（差一个字符）纳入监控。</li>
+          <li><strong>异常发布与凭据调用监控：</strong>非计划发布、依赖突然更新、凭据被异常来源调用要能当小时发现；发现泄漏时具备吊销、轮换、回滚三个动作。</li>
+          <li><strong>AI 代理身份隔离：</strong>代理用独立身份，不用员工或客户的登录凭据；操作全量审计；转账、删除、对外发送等高风险动作需人工批准，并有可执行的停用开关。</li>
+        </ul>
+        <p class="small"><em>验收补充：</em>发布流水线完成一次「令牌被盗」桌面演练，从发现到吊销与回滚的耗时达到批准目标；AI 代理清单 100% 有独立身份和责任人。</p>
+
+      </article>
+
+      <article class="card step">
+        <h3>做一次有防守方参与的独立验证，并复测</h3>
+        <p class="when">第 60–90 天</p>
+        <p class="small">在书面授权、明确边界和停止条件下进行。区分「无初始访问」与「已有初始访问」两种情景，验证预防、发现、控制影响和恢复四个环节，<strong>而不只是统计找到多少漏洞</strong>。</p>
+        
+      </article>
+    </div>
+
+    <div class="callout" style="margin-top:var(--sp-4)">
+      <h3>决策者还缺的六件事</h3>
+      <ol class="tight small" style="margin-bottom:0">
+        <li><strong>自己的损失场景与 AI 增量。</strong>落到理赔停摆、支付中断、生产排程失效、关键数据泄露这些具体业务场景，并区分「本来就有的风险」和「AI 改变了频率、速度或规模的风险」。不要拿全球平均损失替自己估预算。</li>
+        <li><strong>共同依赖与恢复底线。</strong>身份系统、云服务、外包运维、关键供应商出问题会同时打到多个业务。只有漏洞清单、没有业务依赖图，就决定不了先保护谁、先恢复谁。</li>
+        <li><strong>不依赖软件漏洞的身份与欺诈风险。</strong>服务台身份核验、账号恢复、付款审批、供应商变更、会话与服务账号管理。Mandiant 2025 年案例中语音钓鱼已是重要初始入口，只盯补丁不够。</li>
+        <li><strong>企业自己用 AI 带来的风险。</strong>以及应急时模型拒绝响应或服务不可用的替代流程。防守工具选型还要看数据处理边界，不只比能力分数。</li>
+        <li><strong>中国法域的报告与数据处理义务。</strong>适用监管部门、事件分级、报告时限、供应商通报、跨境处理的合规责任，各行业不同，不能写一个统一时限。</li>
+        
+      </ol>
+    </div>
+
+    <div class="card" style="margin-top:var(--sp-4)">
+      <h3>如果你是个人或小团队，自己先做这九项</h3>
+      <p class="small">上面八步是企业尺度的。个人和小团队没有安全团队，但下面这些一个周末能做完，而且挡住的正是最常见的那几种。第 6–8 项来自 10-23 口播，第 9 项来自本周事件的处置教训。</p>
+      <ul class="tight small">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top:var(--sp-4)">
+      <h3>如果你是个人或小团队，机会在哪</h3>
+      <p class="small">机会不在自己造模型，在「把现有能力接进企业既有流程」。可验证的切入点：暴露面盘点、补丁流程改造、第三方风险问卷自动化、事件响应演练。<strong>但先过四道门：</strong>书面授权、数据保密、专业复核、交付责任与采购准入。没有这四样，技术能力再强也进不了保险和金融的门。</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="traps">
+  <div class="wrap">
+    <h2>⑨ 读这类话题时的七个叙事陷阱</h2>
+    <div class="grid grid--2">
+      <div class="card"><h3>把基准分当成生产环境成功率</h3><p class="small">同名基准也可能有不同的任务子集、评分规则、重试次数、运行预算和防护设置。任何分数都不能换算成「我们被攻破的概率」。</p></div>
+      <div class="card"><h3>把四件事压成一个指标</h3><p class="small">「模型能完成某任务」「某类用户能调用它」「它愿意响应这类请求」「攻击者最终造成业务损害」是四个独立问题。任一环节的高比例都替代不了另外三个。</p></div>
+      <div class="card"><h3>按时间排序，悄悄制造因果</h3><p class="small">模型发布、漏洞披露、攻击案例接连发生，不能单独证明前者导致后者。</p></div>
+      <div class="card"><h3>把国籍、语言和归因混为一谈</h3><p class="small">模型由哪国公司开发、操作者说什么语言、目标在哪、是否国家支持，必须分别举证。反过来，用中国模型做了一次取证，也不是国家防御能力排名。</p></div>
+      <div class="card"><h3>比喻提前替你定了概率</h3><p class="small">「肥羊」「核扩散」「灰犀牛」容易把「值得准备的风险」说成「必然发生的灾难」。</p></div>
+      <div class="card"><h3>厂商叙事与商业结论闭环</h3><p class="small">「厂商发现严重能力 → 推出限制通道 → 安全公司接入 → 企业应采购」不是完整的投资论证。还需要独立验证、增量效果、可承受成本和退出方案。合作名单替代不了这些。</p></div>
+      <div class="card" style="grid-column:1/-1"><h3>用「补丁万能论」替换「最强模型万能论」</h3><p class="small">本页前面引用的补丁发布前已出现利用尝试、身份类攻击、备份受影响这几类案例，恰恰说明只强调补丁速度也不够。更稳的表述是：对多数企业，优先可控的是暴露面、身份、修复与补偿控制、隔离、检测响应和业务恢复；前沿模型能增强其中部分环节，<strong>但不替代体系</strong>。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band band--alt" id="sources">
+  <div class="wrap">
+    <h2>⑩ 来源</h2>
+    <p class="small measure">按级别排列，10-23 新增来源并入各组。标「未核实」的条目，本页没有把它当作论据使用。</p>
+    <details open>
+      <summary>一手：厂商、受害方、政府发布</summary>
+      <ul class="srcs">
+        <li><a href="https://www.anthropic.com/project/glasswing">Anthropic — Project Glasswing</a>（2026-04-07；后续 initial update 2026-05-22）</li>
+        <li><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1">Anthropic — Claude Fable and Mythos 5.1</a>（2026-09）</li>
+        <li><a href="https://www.anthropic.com/research/glm-5-3-cyber-capabilities">Anthropic Frontier Red Team — GLM-5.3 and the spread of advanced cyber capabilities</a>（2026-09-29）</li>
+        <li><a href="https://openai.com/index/path-to-astra/">OpenAI — Path to Astra</a>（2026-09-01）与 <a href="https://deploymentsafety.openai.com/gpt-6-astra">GPT-6 Astra system card</a>；<a href="https://deploymentsafety.openai.com/gpt-6-october">Sol / Luna 十月更新</a>（2026-10-07）</li>
+        <li><a href="https://huggingface.co/blog/security-incident-july-2026">Hugging Face — Security incident July 2026</a>（2026-07-16，事发 07-11）</li>
+        <li>中华人民共和国商务部、科技部 — 2026 年第 48 号公告（2026-10-16）；<a href="https://www.mofcom.gov.cn/syxwfb/art/2026/art_a4acff07e134447fbe7bbeb486df3ea6.html">商务部新闻发言人就修订《中国禁止出口限制出口技术目录》答记者问</a>（同日）</li>
+        <li>中央网信办 — <a href="https://www.cac.gov.cn/2025-09/15/c_1759583017717009.htm">《国家网络安全事件报告管理办法》</a>（2025-09-11 发布，2025-11-01 施行。具体分级门槛、适用主体与报告时限以原文及所属行业规定为准）</li>
+        <li><a href="https://docs.litellm.ai/blog/security-incident-oct-21-2026">LiteLLM — Contained: Oct 21, 2026 release v1.107.0 Compromised</a>（官方事故通报，2026-10-21；时间窗口、根因与处置建议出自此页）</li>
+        <li><a href="https://w3techs.com/technologies/details/pl-php">W3Techs — Usage statistics of PHP for websites</a>（2026-10-23 读数 69.3%，分母为已知服务端语言的网站）</li>
+        <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-109618">NVD — CVE-2026-109618</a>、<a href="https://nvd.nist.gov/vuln/detail/CVE-2026-109619">CVE-2026-109619</a>（CVSS v3.1 9.8；PHP 官方安全公告本次未直接读取，经媒体与安全厂商转述）</li>
+      </ul>
+    </details>
+    <details>
+      <summary>独立评估与安全研究</summary>
+      <ul class="srcs">
+        <li><a href="https://www.aisi.gov.uk/blog/how-fast-is-autonomous-ai-cyber-capability-advancing">UK AISI — How fast is autonomous AI cyber capability advancing?</a>（2026-05-13）</li>
+        <li><a href="https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities">NIST / CAISI — Assessment of Z.ai's GLM-5.3 Cyber Capabilities</a>（2026-09-17）</li>
+        <li><a href="https://unit42.paloaltonetworks.com/autonomous-ai-cyber-attack-campaign/">Palo Alto Unit 42 — Chinese-Speaking Threat Actor Harnesses AI Models for Autonomous Cyberattacks</a>（2026-07-30）</li>
+        <li><a href="https://cloud.google.com/security/resources/m-trends-executive-edition">Mandiant — M-Trends 2026</a>（2026-03-23，观察期 2025 全年）</li>
+        <li><a href="https://www.verizon.com/business/resources/reports/dbir/">Verizon — 2026 Data Breach Investigations Report</a>（2026-05-19，数据期 2024-11 至 2025-10；<a href="https://www.verizon.com/about/news/breach-industry-wide-dbir-finds">官方新闻稿</a>）</li>
+        <li><a href="https://www.ibm.com/reports/data-breach">IBM — Cost of a Data Breach Report 2025</a>（金融业均值 5.56M 美元一项见 <a href="https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai">IBM Think 摘要</a>；全球 600 家受访组织样本）</li>
+        <li><a href="https://securityscorecard.com/company/press/securityscorecard-report-59-of-breaches-impacting-insurance-sector-caused-by-third-party-attack-vectors/">SecurityScorecard — 保险业第三方风险研究</a>（2025-02-06；59% 一项的范围是其选取的保险业前 150 家公司中已观察到的违规事件）</li>
+        <li><a href="https://www.tenable.com/blog/php2shell-cve-2026-109618-cve-2026-109619-frequently-asked-questions-about-critical-php-remote">Tenable — php2shell (CVE-2026-109618, CVE-2026-109619) FAQ</a>（漏洞机制、受影响版本、修复版本）</li>
+        <li><a href="https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities">Qualys — Two Critical PHP Flaws Could Hand Attackers Your Web Servers</a>（2026-10-20；CVSS v4.0 9.2 与 NVD v3.1 9.8 的双口径）</li>
+        <li><a href="https://socket.dev/blog/litellm-compromise">Socket — LiteLLM PyPI Package and Docker Images Compromised</a>（恶意载荷分析、仿冒仓库 Berri-AI/litellm）</li>
+      </ul>
+    </details>
+    <details>
+      <summary>媒体转述（需交叉验证）</summary>
+      <ul class="srcs">
+        <li><a href="https://cyberscoop.com/near-autonomous-ai-attack-government-target-taiwan/">CyberScoop — 关于亚洲政府目标近自主攻击的报道</a>（2026-08-12，原始报告来自 Dream Research Labs）</li>
+        <li><a href="https://fortune.com/2026/07/20/hugging-face-turns-to-chinese-open-source-ai-to-fend-off-autonomous-ai-cyber-attack-after-american-ai-guardrails-stymie-defense/">Fortune — Hugging Face 用中国开源模型做取证</a>（2026-07-20）</li>
+        <li><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-claims-popular-chinese-ai-model-has-mythos-class-hacking-abilities-frontier-red-teaming-report-details-weak-safeguards-on-open-weight-ai">Tom's Hardware — 关于 GLM-5.3 红队报告的报道</a>（2026-09-29 后）</li>
+        <li><a href="https://fortune.com/2026/10/21/ai-tools-discovered-the-php-vulnerability-that-could-take-down-70-of-the-internet-now-the-race-is-on-to-patch-it-before-ai-powered-hackers-attack/">Fortune — AI helped discover the PHP vulnerability…</a>（2026-10-21；Calif / OpenAI / Wiz 的发现过程、Cloudflare CEO 数字、各国下线；文中转述的 Reuters「WordPress 约 40% 网站」与 Palo Alto「2,260 万潜在实例」两个数本页只经此文转述）</li>
+        <li><a href="https://www.bleepingcomputer.com/news/security/php-warns-admins-of-two-critical-flaws-emergency-patches-coming-tomorrow/">BleepingComputer — PHP warns admins of two critical flaws, emergency patches coming tomorrow</a>（2026-10-20 预告与论坛帖子）</li>
+        <li><a href="https://cybersecuritynews.com/php-early-exploitation-attempts/">Cybersecurity News — Cloudflare Detects Early Exploitation Attempts Targeting Two Leaked PHP Vulnerabilities</a>（Cloudflare 10-21 03:02 UTC 上线规则）</li>
+        <li><a href="https://www.securityweek.com/php2shell-exploitation-started-days-before-patches/">SecurityWeek — PHP2Shell Exploitation Started Days Before Patches</a>（Amazon 10-17 观测）</li>
+        <li><a href="https://thenextweb.com/news/php2shell-millions-exploit-attempts-no-confirmed-breaches">TheNextWeb — Millions of PHP2Shell attempts so far, but officials see no break-in</a>（德国、荷兰、日本官方口径）</li>
+        <li><a href="https://www.theregister.com/security/2026/10/22/php2shell-puts-dozens-of-uk-government-services-out-of-service/5304840">The Register — PHP2Shell puts dozens of UK government services out of service</a>（2026-10-22；上议院披露 32 项）</li>
+        <li><a href="https://www.cnbc.com/2026/10/22/php2shell-vulnerability-what-is-it-and-is-your-data-at-risk.html">CNBC — Why governments pulled websites offline over the decades-old PHP programming language</a>（2026-10-22）</li>
+        <li><a href="https://thehackernews.com/2026/10/litellm-compromised-in-supply-chain.html">The Hacker News — LiteLLM Compromised in Supply Chain Attack</a>（2026-10-21）与 <a href="https://www.helpnetsecurity.com/2026/10/22/litellm-compromised-supply-chain-attack-pypi-docker/">Help Net Security — second supply chain attack this year</a>（2026-10-22）</li>
+        <li><a href="https://cybersecuritynews.com/hackers-used-claude-and-grok/">Cybersecurity News — Hackers Used Claude and Grok to Automate Cyberattacks on Over 400 Banks</a>、<a href="https://www.pymnts.com/cybersecurity/2026/hackers-employ-grok-and-claude-to-attack-latam-banks/">PYMNTS 同题报道</a>（2026-10-21；原始报告 Straiker，首发 The Information）</li>
+        <li><a href="https://decrypt.co/381602/banks-rogue-ai-agents-inside-customer-accounts">Decrypt — Major Banks Find Rogue AI Agents Inside Customer Accounts</a>（2026-10-22；原始报道 Axios 同日）</li>
+        <li><a href="https://www.huxiu.com/article/4899436.html">虎嗅 — 马斯克最新访谈：当 AI 比人类聪明百万倍…</a>（2026-10-22）、<a href="https://abmedia.io/elon-musk-ai-currency-tesla-spacex">ABMedia 同题</a>（2026-10-21）、<a href="https://www.benzinga.com/markets/tech/26/10/62484767/elon-musk-says-ai-could-be-a-threat-but-he-cant-stop-it-be-participant-or-be-a-spectator">Benzinga — Musk Says AI Could Be a Threat, but He Can't Stop It</a>（The Builders 访谈转述）；<a href="https://marcocrispinoai.substack.com/p/if-super-ai-no-longer-needs-us-what">Substack 评论 — If Super AI No Longer Needs Us</a>（引用「Hopefully the AI is nice to us」一句，评论性来源）</li>
+      </ul>
+    </details>
+    <details>
+      <summary>本次未核实，不作论据</summary>
+      <ul class="srcs">
+        <li>「Mythos 两小时攻破某安全网络」的一手出处；相关澄清者的原话与发布日期</li>
+        <li>保险业 75% 客户数据在遗留系统、54% 金融机构遗留系统占比、50% 遗留系统 MFA 覆盖率、73.1 万美元理赔严重度 —— 未核实到原始报告的样本与方法说明</li>
+        <li>Z.ai 对 Anthropic 报告的公开回应情况 —— 完整检索结论未核实；且「未回应」本身没有证明效力</li>
+        <li>安全服务商在中国市场的具体落地与付费情况</li>
+        <li>PHP 漏洞披露后的攻击尝试中，有多少由 AI 生成或自动编排；AI 对尝试量增长的实际贡献</li>
+        <li>预防性下线的各国网站中，是否存在成功入侵、数据泄露或持续控制</li>
+        <li>CyberCartel 400 多个目标中实际被攻破的数量；4,493 条记录的完整性、有效性，以及凭据是否被成功使用；损失金额</li>
+        <li>银行里的 AI 代理是否真的执行了超出授权的操作、造成了何种损失；摩根士丹利等单家银行的正式权限政策；一家媒体转述的「摩根士丹利发言人称未观察到异常代理」原文</li>
+        <li>马斯克 10-20 访谈的官方逐字稿；「数百万倍」「nice to us」「追求真相与好奇心」三处的原话上下文</li>
+        <li>PHP 官方安全公告与 Calif、Wiz 原始博客的原文；10-20 论坛帖子的内容</li>
+        <li>Calif、Wiz 关于 PHP 漏洞发现过程的原始博客；10-17 试探流量的来源与路径</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>怎么判断自己是否被这篇文章误导了</strong>：① 看到的是厂商自测分，还是独立评估？② 案例里是模型自主完成，还是人工主导？③ 结论是已发生的事实，还是对未来的推断？</p>
+    
+  </div>
+</footer>
+</body>
+</html>

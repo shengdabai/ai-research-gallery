@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 把人类工具用在别处：例证、规律与值得深挖的工具</title>
+<style>
+/* ============ Tokens ============
+   单一 token 源：原始色阶 → 语义角色 → 组件。
+   断点：窄屏 720px（写在下方唯一一处 @media，CSS 自定义属性不能用于媒体查询阈值）。
+   扩展方法：新增颜色先加原始色阶，再映射到语义角色，组件只用语义角色。 */
+:root {
+  /* primitive colors */
+  --c-slate-950: #121b27;
+  --c-slate-700: #3c4a5c;
+  --c-slate-500: #5f6d7e;
+  --c-slate-300: #cfd7e1;
+  --c-slate-200: #e2e7ee;
+  --c-slate-100: #edf1f5;
+  --c-white: #ffffff;
+  --c-teal-700: #0f6b64;
+  --c-teal-100: #d6efeb;
+  --c-amber-700: #a14d07;
+  --c-amber-100: #fbecd8;
+  --c-red-700: #ab2318;
+  --c-red-100: #fbe2de;
+  --c-green-700: #17723a;
+  --c-green-100: #dbf1e2;
+  --c-blue-700: #1f48c4;
+  --c-blue-100: #e0e7fb;
+  --c-violet-700: #5b3cc4;
+  --c-violet-100: #e9e3fb;
+
+  /* semantic roles */
+  --color-page-bg: var(--c-slate-100);
+  --color-surface: var(--c-white);
+  --color-surface-muted: var(--c-slate-200);
+  --color-text: var(--c-slate-950);
+  --color-text-muted: var(--c-slate-700);
+  --color-text-faint: var(--c-slate-500);
+  --color-border: var(--c-slate-300);
+  --color-accent: var(--c-teal-700);
+  --color-accent-soft: var(--c-teal-100);
+  --color-ok: var(--c-green-700);
+  --color-ok-soft: var(--c-green-100);
+  --color-warn: var(--c-amber-700);
+  --color-warn-soft: var(--c-amber-100);
+  --color-bad: var(--c-red-700);
+  --color-bad-soft: var(--c-red-100);
+  --color-info: var(--c-blue-700);
+  --color-info-soft: var(--c-blue-100);
+  --color-alt: var(--c-violet-700);
+  --color-alt-soft: var(--c-violet-100);
+  --color-on-accent: var(--c-white);
+
+  /* typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.88rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.15rem;
+  --fs-xl: 1.4rem;
+  --fs-2xl: 1.9rem;
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --lh-tight: 1.3;
+  --lh-body: 1.7;
+
+  /* spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* shape & depth */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-round: 50%;
+  --border-w: 1px;
+  --border-accent-w: 4px;
+  --shadow-card: 0 1px 2px rgba(18, 27, 39, 0.06), 0 2px 8px rgba(18, 27, 39, 0.05);
+  --dot-size: 10px;
+  --focus-w: 2px;
+  --year-col: 72px;
+
+  /* layout */
+  --page-max: 1080px;
+  --card-min: 300px;
+  --col-min: 240px;
+  --table-min: 640px;
+
+  /* motion */
+  --dur-fast: 150ms;
+  --ease-std: ease-out;
+}
+
+/* ============ Base ============ */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh-body);
+}
+a { color: var(--color-accent); overflow-wrap: anywhere; }
+h1, h2, h3 { line-height: var(--lh-tight); margin: 0; }
+p { margin: 0 0 var(--sp-3); }
+ul { margin: 0; padding-left: var(--sp-5); }
+li { margin-bottom: var(--sp-1); }
+
+/* ============ Layout ============ */
+.wrap { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-7); }
+section { margin-top: var(--sp-7); }
+.sec-head { margin-bottom: var(--sp-4); }
+.sec-head h2 { font-size: var(--fs-xl); font-weight: var(--fw-bold); }
+.sec-head p { color: var(--color-text-muted); margin-top: var(--sp-2); }
+
+/* ============ Hero ============ */
+.hero {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-6);
+  border-top: var(--border-accent-w) solid var(--color-accent);
+}
+.hero h1 { font-size: var(--fs-2xl); font-weight: var(--fw-bold); }
+.hero .lead { font-size: var(--fs-lg); margin-top: var(--sp-4); }
+.hero .meta { color: var(--color-text-faint); font-size: var(--fs-sm); margin-top: var(--sp-4); }
+.keypoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--col-min), 1fr)); gap: var(--sp-4); margin-top: var(--sp-5); }
+.keypoint { background: var(--color-surface-muted); border-radius: var(--radius-md); padding: var(--sp-4); }
+.keypoint strong { display: block; margin-bottom: var(--sp-1); }
+
+/* ============ Tags ============ */
+.tag {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  padding: 0 var(--sp-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+.tag-ok { background: var(--color-ok-soft); color: var(--color-ok); }
+.tag-warn { background: var(--color-warn-soft); color: var(--color-warn); }
+.tag-bad { background: var(--color-bad-soft); color: var(--color-bad); }
+.tag-info { background: var(--color-info-soft); color: var(--color-info); }
+.tag-alt { background: var(--color-alt-soft); color: var(--color-alt); }
+.tag-accent { background: var(--color-accent-soft); color: var(--color-accent); }
+
+/* ============ Claims ============ */
+.claims { display: grid; gap: var(--sp-3); }
+.claim {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-4) var(--sp-5);
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--sp-5);
+}
+.claim .said { color: var(--color-text-muted); }
+.claim .said b { color: var(--color-text); }
+.claim .verdict .tag { margin-bottom: var(--sp-2); }
+
+/* ============ Timeline ============ */
+.timeline { background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: var(--sp-5); }
+.tl-year { display: grid; grid-template-columns: var(--year-col) minmax(0, 1fr); gap: var(--sp-4); padding: var(--sp-3) 0; border-top: var(--border-w) solid var(--color-border); }
+.tl-year:first-child { border-top: 0; }
+.tl-year > h3 { font-size: var(--fs-lg); color: var(--color-accent); }
+.tl-items { display: grid; gap: var(--sp-2); }
+.tl-item { display: flex; gap: var(--sp-2); align-items: baseline; flex-wrap: wrap; }
+.tl-item .tag { flex: none; }
+.tl-legend { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-3); font-size: var(--fs-sm); color: var(--color-text-muted); }
+
+/* ============ Cards ============ */
+.filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.filter-btn {
+  font: inherit;
+  font-size: var(--fs-sm);
+  padding: var(--sp-1) var(--sp-3);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std);
+}
+.filter-btn[aria-pressed="true"] { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.filter-btn:focus-visible { outline: var(--focus-w) solid var(--color-accent); outline-offset: var(--focus-w); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr)); gap: var(--sp-4); }
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.card[hidden] { display: none; }
+.card h3 { font-size: var(--fs-md); font-weight: var(--fw-bold); }
+.flow { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; font-size: var(--fs-sm); }
+.flow .from { color: var(--color-text-faint); text-decoration: line-through; }
+.flow .to { color: var(--color-accent); font-weight: var(--fw-semibold); }
+.card dl { margin: 0; font-size: var(--fs-sm); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-1) var(--sp-3); }
+.card dt { color: var(--color-text-faint); }
+.card dd { margin: 0; }
+.card .src { font-size: var(--fs-xs); margin-top: auto; padding-top: var(--sp-2); border-top: var(--border-w) solid var(--color-border); }
+.note { font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: var(--sp-3); }
+
+/* ============ Matrix ============ */
+.table-scroll { overflow-x: auto; background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
+table { border-collapse: collapse; width: 100%; min-width: var(--table-min); font-size: var(--fs-sm); }
+th, td { padding: var(--sp-2) var(--sp-3); text-align: left; border-bottom: var(--border-w) solid var(--color-border); vertical-align: top; }
+th { background: var(--color-surface-muted); font-weight: var(--fw-semibold); }
+tr:last-child td { border-bottom: 0; }
+.dots { display: inline-flex; gap: var(--sp-1); vertical-align: middle; }
+.dot { width: var(--dot-size); height: var(--dot-size); border-radius: var(--radius-round); background: var(--color-surface-muted); border: var(--border-w) solid var(--color-border); }
+.dot.on { background: var(--color-accent); border-color: var(--color-accent); }
+.anchors { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--col-min), 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.anchor { background: var(--color-surface); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); box-shadow: var(--shadow-card); }
+.anchor strong { display: block; }
+
+/* ============ Routes ============ */
+.routes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+.route { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--sp-4); border-top: var(--border-accent-w) solid var(--color-border); }
+.route.r-tool { border-top-color: var(--color-accent); }
+.route.r-mix { border-top-color: var(--color-alt); }
+.route.r-neural { border-top-color: var(--color-info); }
+.route h3 { font-size: var(--fs-lg); margin-bottom: var(--sp-2); }
+.route .pipe { background: var(--color-surface-muted); border-radius: var(--radius-sm); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); margin-bottom: var(--sp-3); }
+.route ul { font-size: var(--fs-sm); }
+.route .ex { font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: var(--sp-3); }
+
+/* ============ Exits ============ */
+.exits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+.exit { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-3); }
+.exit h3 { font-size: var(--fs-lg); }
+.exit .step { border-left: var(--border-accent-w) solid var(--color-border); padding-left: var(--sp-3); font-size: var(--fs-sm); }
+.exit .step.s-done { border-left-color: var(--color-ok); }
+.exit .step.s-part { border-left-color: var(--color-warn); }
+.exit .step.s-claim { border-left-color: var(--color-bad); }
+.exit .step b { display: block; }
+.callout { background: var(--color-accent-soft); border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-5); margin-top: var(--sp-4); }
+
+/* ============ Findings ============ */
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr)); gap: var(--sp-4); }
+.finding { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--sp-4); border-left: var(--border-accent-w) solid var(--color-accent); }
+.finding h3 { font-size: var(--fs-md); margin-bottom: var(--sp-2); }
+.finding p { font-size: var(--fs-sm); }
+.finding .basis { color: var(--color-text-muted); font-size: var(--fs-sm); margin: 0; }
+
+/* ============ Myths ============ */
+.myths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
+.myth { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--sp-4); }
+.myth h3 { font-size: var(--fs-md); margin: var(--sp-2) 0; }
+.myth p { font-size: var(--fs-sm); }
+
+/* ============ Sources ============ */
+.sources { background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: var(--sp-5); font-size: var(--fs-sm); }
+.sources ol { margin: 0; padding-left: var(--sp-5); }
+.sources li { margin-bottom: var(--sp-2); }
+footer { color: var(--color-text-faint); font-size: var(--fs-xs); margin-top: var(--sp-6); }
+
+/* ============ Responsive (breakpoint: 720px) ============ */
+@media (max-width: 720px) {
+  .wrap { padding: var(--sp-4) var(--sp-3) var(--sp-6); }
+  .hero { padding: var(--sp-5) var(--sp-4); }
+  .hero h1 { font-size: var(--fs-xl); }
+  .claim { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); padding: var(--sp-4); }
+  .tl-year { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
+  .routes, .exits, .myths { grid-template-columns: minmax(0, 1fr); }
+  .cards, .findings { grid-template-columns: minmax(0, 1fr); }
+  .timeline, .sources { padding: var(--sp-4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-btn { transition: none; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header class="hero">
+  <h1>AI 把人类工具用在别处：现象是真的，「人想不到」不是</h1>
+  <p class="lead">AI 确实在把 HTML、JavaScript、Python 这些工具用到它们原本不负责的事情上。但人早就想到过这些用法；从本页案例看，AI 降低了动手门槛；成本是否普遍下降还没有对照数据（作者判断）。真正值得深挖的，是「能写成文本、又有自动检查器」的工具。</p>
+  <div class="keypoints">
+    <div class="keypoint"><strong>现象成立</strong>HTML 做汇报、HTML 渲染成视频、用 Python 画辅助线来推理、用 Lean 检查数学证明，2023–2026 年都有可查的例子。</div>
+    <div class="keypoint"><strong>「人想不到」不成立</strong>reveal.js 在 2011 年就用 HTML 做演示；Remotion 作者在 2021 年说过「一直梦想用代码做视频」。</div>
+    <div class="keypoint"><strong>「跳过人类工具」只有局部证据</strong>AI 已在汇编和电路描述层找到更好的写法；本页的两个生产案例都经过人能复核的验证才被采用。「直接写二进制」目前只是预测。</div>
+  </div>
+  <p class="meta">核查日期：2026-10-13。页面里「作者判断」指本页的推断，不是测量结果。来源编号见页尾。</p>
+</header>
+
+<section id="claims">
+  <div class="sec-head">
+    <h2>原观点逐条核对</h2>
+    <p>左边是原观点的五个主张，右边是核对结论和依据。</p>
+  </div>
+  <div class="claims">
+    <div class="claim">
+      <div class="said"><b>主张一</b>：原本解决 A 问题的工具，被 AI 拿去解决 B 问题，而且做得更好。</div>
+      <div class="verdict"><span class="tag tag-warn">部分成立</span>
+        <p>「拿去解决 B」成立，例子见下面的卡片。「做得更好」目前没有质量、返工和总耗时的对照研究，只能说部分流程降低了动手门槛。</p></div>
+    </div>
+    <div class="claim">
+      <div class="said"><b>主张二</b>：人打死也想不到用 JS 做视频、用 HTML 做汇报，这是 AI 自己想出来的。</div>
+      <div class="verdict"><span class="tag tag-bad">不成立</span>
+        </div>
+    </div>
+    <div class="claim">
+      <div class="said"><b>主张三</b>：AI 只是在人类工具箱里重新排列组合，找最优解。</div>
+      <div class="verdict"><span class="tag tag-warn">部分成立</span>
+        <p>使用既有工具：成立。找到比已知记录更好的结果：有证据。保证找到最优解：没有证据。FunSearch 用普通 Python 程序找到了比已知记录更大的 cap set（n=8 时 512，旧记录 496）[S15]；AlphaEvolve 找到 4×4 复数矩阵乘法只需 48 次标量乘法的方法 [S17]。这些结果优于此前记录，但没有证明是全局最优。旧工具不等于没有新发现。</p></div>
+    </div>
+    <div class="claim">
+      <div class="said"><b>主张四</b>：未来 AI 不需要编程语言，会直接写二进制、直接在硅片上运算。</div>
+      <div class="verdict"><span class="tag tag-info">预测，有局部证据</span>
+        <p>AI 已经在汇编层（AlphaDev）[S16] 和电路描述层（AlphaEvolve 的 Verilog 改写）[S17] 工作，但这仍是换了一层人类语言。AlphaDev 的结果是翻译回 C++ 才并入 LLVM 的。Musk 在 2026 年 2 月预测「今年年底 AI 会直接生成二进制」[S20]，截至本页没有看到实现证据。</p></div>
+    </div>
+    <div class="claim">
+      <div class="said"><b>主张五</b>：到那时，人类可能看不懂 AI 做了什么、怎么做的。</div>
+      <div class="verdict"><span class="tag tag-warn">风险真实，不是必然</span>
+        <p>在隐空间推理的模型（Coconut）已经出现，它的中间推理不是文字 [S21]。41 位来自多家实验室的作者在 2025 年 7 月联名指出，可读的思维链是「新的、脆弱的」监控机会，开发决策会影响它能不能保住 [S22]。所以「看得懂」取决于开发者怎么选。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="sec-head">
+    <h2>时间线：人先想到，AI 让它更容易上手</h2>
+    <p>按年份排列。颜色区分事件类型。</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-legend"><span><span class="tag tag-accent">人做的代码化工具</span></span><span><span class="tag tag-alt">AI 用旧工具做新事</span></span><span><span class="tag tag-info">AI 往底层或绕过工具</span></span><span><span class="tag tag-bad">误传或预测</span></span></div>
+    <div class="tl-year"><h3>2011</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-accent">人</span>reveal.js 发布：用 HTML 做演示文稿 [S1]</div></div></div>
+    <div class="tl-year"><h3>约 2015</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-accent">人</span>3Blue1Brown 作者开始写 Manim，用 Python 做数学动画 [S2]</div></div></div>
+    <div class="tl-year"><h3>2017</h3><div class="tl-items">
+      </div></div>
+    <div class="tl-year"><h3>2021</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-accent">人</span>Remotion 发布：用 React 写视频 [S3]</div></div></div>
+    <div class="tl-year"><h3>2023</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-alt">AI</span>Voyager 在 Minecraft 里把 JS 代码当作技能库 [S11]</div>
+      <div class="tl-item"><span class="tag tag-info">底层</span>AlphaDev 在汇编层找到更短的排序例程 [S16]</div>
+      
+      <div class="tl-item"><span class="tag tag-alt">AI</span>FunSearch 用「程序加评估器」找到新的数学构造 [S15]</div></div></div>
+    <div class="tl-year"><h3>2024</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-alt">AI</span>Visual Sketchpad：模型写 Matplotlib 代码画辅助线来推理 [S8]</div>
+      <div class="tl-item"><span class="tag tag-alt">AI</span>AlphaProof 在 Lean 里证明 IMO 2024 三道题 [S12]</div>
+      <div class="tl-item"><span class="tag tag-info">绕过</span>GameNGen：神经网络直接生成 Doom 画面，单 TPU 20 帧每秒 [S18]</div>
+      <div class="tl-item"><span class="tag tag-info">隐空间</span>Coconut：模型在连续隐空间里推理 [S21]</div></div></div>
+    <div class="tl-year"><h3>2025</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-bad">误读</span>Gibberlink 演示：两个语音 agent 切换声波协议，是提示词预设的 [S24]</div>
+      <div class="tl-item"><span class="tag tag-info">底层</span>AlphaEvolve：48 次乘法、Verilog 改写进入未来 TPU [S17]</div>
+      <div class="tl-item"><span class="tag tag-alt">AI</span>BlenderMCP：AI 通过 Python API 操作 Blender [S10]</div>
+      <div class="tl-item"><span class="tag tag-alt">AI</span>TypeScript 按月活贡献者成为 GitHub 第一，报告把原因之一归于类型语言让 agent 编程更可靠 [S13]</div>
+      <div class="tl-item"><span class="tag tag-info">绕过</span>Genie 3：由文本生成可交互世界，720p、24 帧每秒，可持续几分钟 [S19]</div>
+      <div class="tl-item"><span class="tag tag-info">警告</span>思维链可监控性联名论文 [S22]</div></div></div>
+    <div class="tl-year"><h3>2026</h3><div class="tl-items">
+      <div class="tl-item"><span class="tag tag-alt">AI</span>Claude Code 负责人公开说明：早期用向量库检索，后来改用 agent 自己搜索文件 [S7]</div>
+      <div class="tl-item"><span class="tag tag-bad">预测</span>Musk：「今年年底 AI 会直接生成二进制」[S20]</div>
+      <div class="tl-item"><span class="tag tag-alt">AI</span>博客文章《In 2026, slides are HTML》[S5]；HeyGen 开源 HyperFrames，把 HTML 渲染成视频 [S4]</div></div></div>
+  </div>
+</section>
+
+<section id="cards">
+  <div class="sec-head">
+    <h2>正在发生的「A→B」：三类例证</h2>
+    <p>按类型筛选。每张卡片写明人设定了什么、AI 做了什么、边界在哪里。</p>
+  </div>
+  <div class="filters" role="group" aria-label="按类型筛选">
+    <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">全部</button>
+    <button class="filter-btn" type="button" data-filter="cross" aria-pressed="false">跨用途</button>
+    <button class="filter-btn" type="button" data-filter="auto" aria-pressed="false">原用途自动化</button>
+    <button class="filter-btn" type="button" data-filter="check" aria-pressed="false">当检查器用</button>
+  </div>
+  <div class="cards">
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>HTML/CSS 做汇报</h3>
+      <div class="flow"><span class="from">网页</span>→<span class="to">幻灯片</span></div>
+      <dl><dt>人设定</dt><dd>产品或 skill 规定输出 HTML</dd>
+      <dt>AI 做</dt><dd>写整套页面、动画和排版</dd>
+      <dt>原因</dt><dd>AI 擅长写 HTML/CSS；.pptx 是 ZIP 里的 XML，也能用 SDK 生成，但更难直接改 [S5]</dd>
+      <dt>边界</dt><dd>需要交给别人改的场合，HTML 转回可编辑 PPT 时排版可能走样（作者判断）</dd></dl>
+      <p class="src">来源 S5、S6；前身 reveal.js [S1]</p>
+    </article>
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>HTML/JS 做视频</h3>
+      <div class="flow"><span class="from">网页交互</span>→<span class="to">逐帧视频</span></div>
+      <dl><dt>人设定</dt><dd>HeyGen 搭好 HyperFrames：浏览器逐帧截图，再编码成 MP4</dd>
+      <dt>AI 做</dt><dd>agent 写 HTML、CSS 和 JS，项目可以再改</dd>
+      <dt>边界</dt><dd>适合排版、图表、文字动画；实拍画面仍要靠素材或生成模型</dd></dl>
+      <p class="src">来源 S4；前身 Remotion [S3]、Manim [S2]</p>
+    </article>
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>SVG 让文本模型画图</h3>
+      <div class="flow"><span class="from">矢量图格式</span>→<span class="to">模型评测载体</span></div>
+      <dl><dt>人设定</dt><dd>Simon Willison 出题「鹈鹕骑自行车」，要求输出 SVG</dd>
+      <dt>AI 做</dt><dd>写 SVG 代码，浏览器把它画出来</dd>
+      <dt>原话</dt><dd>纯文本模型「本不该会画画」，但「SVG 是代码」</dd>
+      <dt>迁移在哪</dt><dd>SVG 本来就用来画图；新用途是把它当作衡量文本模型能力的评测载体</dd>
+      <dt>边界</dt><dd>作者自己说这个测试起初是玩笑</dd></dl>
+      <p class="src">来源 S9</p>
+    </article>
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>Matplotlib 当推理草稿纸</h3>
+      <div class="flow"><span class="from">出图表</span>→<span class="to">画辅助线再看图推理</span></div>
+      <dl><dt>人设定</dt><dd>研究者给模型画图工具和视觉模型</dd>
+      <dt>AI 做</dt><dd>写代码画辅助线、框和标记，再读图继续推理</dd>
+      <dt>数字</dt><dd>数学任务平均提升 12.7%，视觉任务平均提升 8.6%（同一模型有无草稿纸对比）</dd>
+      <dt>边界</dt><dd>辅助线画错时，后面的推理也会跟着错（作者判断）</dd></dl>
+      <p class="src">来源 S8（NeurIPS 2024）</p>
+    </article>
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>JS 代码当游戏技能库</h3>
+      
+      <dl><dt>人设定</dt><dd>研究者设计「写技能、存技能、取技能」的机制</dd>
+      <dt>AI 做</dt><dd>GPT-4 写技能代码，存起来，在新任务里组合使用</dd>
+      <dt>数字</dt><dd>与此前最好的方法比：独特物品 3.3 倍，移动距离 2.3 倍，科技树里程碑最快 15.3 倍</dd>
+      <dt>边界</dt><dd>倍数是对旧 AI 方法，不是对人类玩家</dd></dl>
+      <p class="src">来源 S11</p>
+    </article>
+    <article class="card" data-type="cross">
+      <span class="tag tag-alt">跨用途</span>
+      <h3>React 组件设计电路板</h3>
+      <div class="flow"><span class="from">网页界面组件</span>→<span class="to">原理图和 PCB 布局</span></div>
+      <dl><dt>人设定</dt><dd>tscircuit 把电路元件做成 React 组件</dd>
+      <dt>AI 做</dt><dd>可以像写网页一样写 TSX 电路（作者判断：代码形式让 AI 更容易参与）</dd>
+      <dt>边界</dt><dd>能生成布局不等于能制造、能通过电气检查</dd></dl>
+      <p class="src">来源：tscircuit 官网与 GitHub 描述「用 React 和 TypeScript 做真实电子产品」</p>
+    </article>
+    <article class="card" data-type="auto">
+      <span class="tag tag-info">原用途自动化</span>
+      <h3>Blender Python 做 3D 布景</h3>
+      <div class="flow"><span class="from">人点鼠标</span>→<span class="to">AI 调 Python API</span></div>
+      <dl><dt>人设定</dt><dd>开发者用 MCP 把 Blender 接给 AI</dd>
+      <dt>AI 做</dt><dd>搭场景、放灯光和相机、批量改名和导出</dd>
+      <dt>边界</dt><dd>有机建模、绑定动画和拓扑处理较弱；精确空间定位差，要多轮修正；文章称它是快速原型工具</dd></dl>
+      <p class="src">来源 S10</p>
+    </article>
+    <article class="card" data-type="auto">
+      <span class="tag tag-info">原用途自动化</span>
+      <h3>CadQuery 代码化 CAD</h3>
+      <div class="flow"><span class="from">人画 3D 模型</span>→<span class="to">模型写 CAD 脚本</span></div>
+      <dl><dt>人设定</dt><dd>研究者给 17 万条 CadQuery 标注，微调 6 个开源模型</dd>
+      <dt>AI 做</dt><dd>按文字描述写 CadQuery 代码，生成 3D 形状</dd>
+      <dt>数字</dt><dd>最好模型 top-1 完全匹配率从 58.8% 升到 69.3%（论文自建数据集）</dd>
+      <dt>边界</dt><dd>能运行不等于可制造；不是工业 CAD 成功率</dd></dl>
+      <p class="src">来源：arXiv 2505.06507</p>
+    </article>
+    <article class="card" data-type="auto">
+      <span class="tag tag-info">原用途自动化</span>
+      <h3>grep 和文件系统做代码检索</h3>
+      <div class="flow"><span class="from">向量库检索</span>→<span class="to">agent 自己搜文件</span></div>
+      <dl><dt>人设定</dt><dd>团队先试了 RAG 加本地向量库</dd>
+      <dt>AI 做</dt><dd>用 Glob、Grep、Read 按需查找代码</dd>
+      <dt>原话</dt><dd>「agentic search generally works better」，而且更简单，没有安全、隐私、过期和可靠性问题</dd>
+      <dt>边界</dt><dd>这是代码库场景里的工程取舍；概念搜索、超大资料库仍可能需要检索索引</dd></dl>
+      <p class="src">来源 S7</p>
+    </article>
+    <article class="card" data-type="auto">
+      <span class="tag tag-info">原用途自动化</span>
+      <h3>Strudel 用代码写音乐</h3>
+      <div class="flow"><span class="from">人现场编码</span>→<span class="to">LLM 写节奏和旋律</span></div>
+      <dl><dt>人设定</dt><dd>社区做了 MCP 服务和 Claude Code skill</dd>
+      <dt>AI 做</dt><dd>写 Strudel 代码，在浏览器里直接播放</dd>
+      <dt>边界</dt><dd>能播放不等于好听，没有自动检查器；更像草稿本，不能代替编曲软件</dd></dl>
+      <p class="src">来源 S25</p>
+    </article>
+    <article class="card" data-type="check">
+      <span class="tag tag-ok">当检查器用</span>
+      <h3>Lean 检查数学证明</h3>
+      <div class="flow"><span class="from">数学家写形式化证明</span>→<span class="to">AI 训练和答题的裁判</span></div>
+      <dl><dt>人设定</dt><dd>专家先把 IMO 题目人工翻译成 Lean</dd>
+      <dt>AI 做</dt><dd>AlphaProof 搜索证明，Lean 判断对错</dd>
+      <dt>数字</dt><dd>AlphaProof 解出 3 题（21 分，含最难的第 6 题）；加上 AlphaGeometry 2 解的几何题，共 28/42 分，达到银牌线</dd>
+      <dt>边界</dt><dd>部分题目算了最多三天，人类选手只有两场各 4.5 小时；赛制不同</dd></dl>
+      <p class="src">来源 S12</p>
+    </article>
+    <article class="card" data-type="check">
+      <span class="tag tag-ok">当检查器用</span>
+      <h3>类型系统抓 AI 的错误</h3>
+      <div class="flow"><span class="from">帮人写大项目</span>→<span class="to">帮 AI 提前报错</span></div>
+      <dl><dt>现象</dt><dd>2025 年 8 月，TypeScript 按月活贡献者首次超过 Python 和 JavaScript</dd>
+      <dt>报告解释</dt><dd>类型语言让 agent 辅助编程在生产中更可靠；报告引用的研究称 LLM 生成代码的编译错误中 94% 是类型检查失败</dd>
+      <dt>边界</dt><dd>这是 GitHub 的解释，不是因果实验结论</dd></dl>
+      <p class="src">来源 S13</p>
+    </article>
+    <article class="card" data-type="check">
+      <span class="tag tag-ok">当检查器用</span>
+      <h3>仿真器给奖励代码打分</h3>
+      
+      <dl><dt>人设定</dt><dd>给出环境源码和任务描述</dd>
+      <dt>AI 做</dt><dd>GPT-4 写奖励代码，仿真训练后看结果再改</dd>
+      <dt>数字</dt><dd>29 个环境中 83% 超过人类专家写的奖励，平均标准化提升 52%</dd>
+      <dt>边界</dt><dd>每一轮都要完整训练，计算成本高</dd></dl>
+      <p class="src">来源 S14</p>
+    </article>
+    <article class="card" data-type="check">
+      <span class="tag tag-ok">当检查器用</span>
+      <h3>评估程序筛选数学构造</h3>
+      <div class="flow"><span class="from">跑 Python 打分</span>→<span class="to">发现新数学结果</span></div>
+      <dl><dt>人设定</dt><dd>研究者写程序骨架和评分函数</dd>
+      <dt>AI 做</dt><dd>LLM 反复改写一个函数，评分高的留下继续改</dd>
+      <dt>数字</dt><dd>n=8 时找到 512 个点的 cap set，旧记录 496</dd>
+      <dt>边界</dt><dd>只适合「结果能自动打分」的问题</dd></dl>
+      <p class="src">来源 S15</p>
+    </article>
+  </div>
+  <p class="note">分类说明：「跨用途」指工具被用在原设计之外的功能；「原用途自动化」指功能没变，只是由 AI 来操作；「当检查器用」指工具负责判断 AI 的产出对不对。</p>
+</section>
+
+<section id="matrix">
+  <div class="sec-head">
+    <h2>规律：什么样的工具最容易被 AI 拿去用</h2>
+    <p>作者判断：同时满足下面四个条件的工具，最有利于 AI 自动化。这是假说，不是测量。四列分开看，不加总分。</p>
+  </div>
+  <div class="anchors">
+    <div class="anchor"><strong>能写成文本</strong>3 = 源头是纯文本；2 = 主体是文本，部分状态要靠界面或二进制资源；1 = 大量状态藏在图形界面里</div>
+    <div class="anchor"><strong>有自动检查器</strong>3 = 能自动判断对错（证明器、仿真、编译）；2 = 能自动检查能否运行或渲染，内容对错要人看；1 = 只能跑出来，好坏全靠人看或人听</div>
+    <div class="anchor"><strong>训练语料多</strong>3 = 公开代码和教程极多；2 = 有一定规模的社区和文档；1 = 小众，样本少</div>
+    <div class="anchor"><strong>产物形态转换程度</strong>3 = 文字变成自由画面、视频、实物或电路；2 = 文字变成声音、证明结果或数据图表（图表单列为 2 分，因为它是数据的直接映射）；1 = 产物仍是文字或代码</div>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>工具</th><th>能写成文本</th><th>有自动检查器</th><th>训练语料多</th><th>产物形态转换程度</th><th>依据可靠度</th></tr></thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+  <p class="note">读法：「有自动检查器」得 1 分的工具（Blender Python、G-code、Strudel），最需要人把关。HTML 类工具得 2 分：能自动检查渲染和布局，但内容对错仍要人看。渲染成功不等于内容正确。</p>
+</section>
+
+<section id="routes">
+  <div class="sec-head">
+    <h2>两条路线和一条混合路线</h2>
+    <p>AI 产出图像、视频、世界时，不止「写代码再渲染」这一种做法。三种做法会按需求分工，不是谁取代谁。</p>
+  </div>
+  <div class="routes">
+    <div class="route r-tool">
+      <h3>工具中介</h3>
+      <div class="pipe">需求 → 代码（HTML/JS/Python） → 渲染器 → 成品</div>
+      <ul><li>可以改：改一行代码再渲染</li><li>可以查：源码就是记录</li><li>便于精确控制文字、数字和布局，但仍需检查</li></ul>
+      <p class="ex">例：HyperFrames [S4]、HTML 幻灯片 [S5]、CadQuery</p>
+    </div>
+    <div class="route r-mix">
+      <h3>混合</h3>
+      <div class="pipe">模型提方案 → 代码执行或渲染 → 模型看结果或评分 → 再改</div>
+      <ul><li>代码负责结构和检查</li><li>模型负责提出想法和判断</li><li>本页列举的「新发现」都出在这条路线上</li></ul>
+      <p class="ex">例：Visual Sketchpad [S8]、FunSearch [S15]、Eureka [S14]、AlphaEvolve [S17]</p>
+    </div>
+    <div class="route r-neural">
+      <h3>神经直接生成</h3>
+      <div class="pipe">需求 → 模型权重 → 像素或交互画面</div>
+      <ul><li>不写代码，没有中间源码</li><li>擅长真实感画面和开放场景</li><li>难精确修改，难逐步审查</li></ul>
+      <p class="ex">例：GameNGen 直接生成 Doom 画面 [S18]、Genie 3 生成可交互世界 [S19]</p>
+    </div>
+  </div>
+</section>
+
+<section id="exits">
+  <div class="sec-head">
+    <h2>「离开人类工具」走到了哪一步</h2>
+    <p>原观点说 AI 将来会跳过编程语言。现有证据分三个方向，颜色表示进度：绿色已落地，橙色部分落地，红色只有说法。</p>
+  </div>
+  <div class="exits">
+    <div class="exit">
+      <h3>往下走：更底层的语言</h3>
+      <div class="step s-done"><b>汇编（2023）</b>AlphaDev 找到更短的 3–5 元素排序例程，短序列最快约快 70%，超过 25 万元素时约快 1.7%；翻回 C++ 后并入 LLVM libc++ [S16]</div>
+      <div class="step s-done"><b>电路描述（2025）</b>AlphaEvolve 提出 Verilog 改写，去掉矩阵乘法电路里多余的位，进入未来的 TPU [S17]</div>
+      <div class="step s-claim"><b>直接二进制（预测）</b>Musk 2026 年 2 月预测年底实现 [S20]；没有实现证据</div>
+    </div>
+    <div class="exit">
+      <h3>往里走：不用文字思考</h3>
+      <div class="step s-part"><b>隐空间推理（2024）</b>Coconut 把隐藏状态直接作为下一步输入，能同时探索多条路径，在需要大量规划搜索的逻辑任务上超过思维链 [S21]</div>
+      <div class="step s-part"><b>风险提醒（2025）</b>联名论文：隐空间架构和大规模强化学习可能让思维链不再可读 [S22]</div>
+    </div>
+    <div class="exit">
+      <h3>绕过去：不写程序直接出结果</h3>
+      <div class="step s-done"><b>游戏模拟（2024）</b>GameNGen 用神经网络模拟 Doom，单 TPU 20 帧每秒；评分者区分真假片段的准确率接近随机 [S18]</div>
+      <div class="step s-done"><b>可交互世界（2025）</b>Genie 3 由文本生成 720p、24 帧每秒的世界，可持续几分钟 [S19]</div>
+    </div>
+  </div>
+  <div class="callout"><b>这两个案例的验证流程：</b>AlphaDev 的结果翻回 C++ 后才并入 LLVM；AlphaEvolve 的乘法方法能被数学检查，Verilog 改写经过电路验证。两者都在进入生产系统前经过了人能复核的验证。其他成果是否同样如此，本页没有核查。</div>
+</section>
+
+<section id="myths">
+  <div class="sec-head">
+    <h2>「AI 发明自己的语言」：两个常见误读</h2>
+    <p>「人类看不懂」的担忧值得认真对待，但常被引用的两个例子并不支持它。</p>
+  </div>
+  <div class="myths">
+    <div class="myth"><span class="tag tag-bad">误传</span>
+      </div>
+    <div class="myth"><span class="tag tag-bad">误读</span><h3>Gibberlink：两个 AI 改用声波说话</h3>
+      <p>2025 年 2 月黑客松项目。两个语音 agent 被提示词要求：确认对方是 AI 后切换到 ggwave 声波协议。这是开发者设定的，不是 AI 自发发明 [S24]。</p></div>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="sec-head">
+    <h2>更有意思的五个发现</h2>
+    <p>前两条是作者假说，后三条有直接例证。</p>
+  </div>
+  <div class="findings">
+    <div class="finding"><h3>文本接口在哪里，AI 就先到哪里</h3>
+      <p>HTML 汇报、SVG 画图、CadQuery、tscircuit、Strudel 的共同点是：原本要用图形界面做的事，有了一个文本入口。没有文本入口的专业软件，要么等 AI 学会点鼠标，要么被人补上文本接口。</p>
+      <p class="basis">性质：作者假说。反面证据：计算机使用基准 OSWorld 的 2024 年原论文中，最好模型只完成 12.24% 的任务，人类为 72.36% [S28]；2026-10-13 核查时，聚合榜单上的最高分约 85–86%，均为厂商自报，且与旧版不可直接比较 [S26]。AI 也在学图形界面。</p></div>
+    <div class="finding"><h3>检查器在升值</h3>
+      <p>Lean、类型系统、仿真器、评分程序原本是给人用的严格工具，现在成了 AI 的裁判和训练信号。图形界面编辑器是否在贬值，目前没有数据，只能算待验证的假说。</p>
+      <p class="basis">依据：AlphaProof [S12]、Octoverse [S13]、Eureka [S14]、FunSearch [S15]。</p></div>
+    <div class="finding"><h3>新意可以在产物里，不在工具里</h3>
+      <p>FunSearch 用的是普通 Python，找到的却是 20 年来最大的 cap set 渐近下界改进。用旧工具不等于只能做旧事。</p>
+      <p class="basis">依据：S15、S17。</p></div>
+    <div class="finding"><h3>代码是 AI 的外部记忆</h3>
+      <p>Voyager 不微调模型，靠把技能写成代码存起来，在后续任务中组合使用。衡量 AI 用工具的效果时，要看跨任务复用，不只看一次生成的质量。</p>
+      <p class="basis">依据：S11；Claude Code 改用文件搜索也是同一方向 [S7]。</p></div>
+    <div class="finding"><h3>「看得懂」是一种设计选择</h3>
+      <p>可读的中间产物（源码、调用日志、测试结果）是人能检查 AI 的前提。可读的思维链不一定忠实反映模型内部，所以优先保留可以复核的源码、日志和测试。</p>
+      <p class="basis">依据：S22。</p></div>
+  </div>
+</section>
+
+<section id="deepdive">
+  <div class="sec-head">
+    <h2>值得深挖的工具清单（按功能）</h2>
+    <p>每行给一个能在一两个小时内完成、能自己验收的小实验。优先级是作者判断。</p>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>功能</th><th>工具</th><th>为什么值得</th><th>检查器</th><th>验证小实验</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td>时间媒体</td><td>HyperFrames、Remotion、Manim</td><td>代码化视频可改、可复用模板</td><td>逐帧预览、渲染日志</td><td>同一段 60 秒讲解，分别用剪辑软件和代码做，记修改一处文字的耗时</td><td><span class="tag tag-ok">高</span></td></tr>
+        <tr><td>验证</td><td>Lean、TypeScript 类型、测试框架</td><td>检查器越强，越能放心让 AI 多做</td><td>自身就是检查器</td><td>同一个脚本分别用 JS 和 TS 让 AI 写，比较第一次运行的报错数</td><td><span class="tag tag-ok">高</span></td></tr>
+        <tr><td>推理草稿</td><td>Matplotlib、SVG、Mermaid</td><td>让 AI 先画图再判断，减少空想</td><td>看图是否与数据一致</td><td>拿 5 道带图的题，比较「先画辅助图」和「直接回答」的正确数</td><td><span class="tag tag-ok">高</span></td></tr>
+        <tr><td>外部记忆</td><td>Markdown、git、grep</td><td>把做过的事写成可复用的文件</td><td>git 历史、能否复跑</td><td>把一个重复任务写成脚本存起来，下一次只给文件名看 AI 能否复用</td><td><span class="tag tag-warn">中</span></td></tr>
+        <tr><td>物理设计</td><td>CadQuery、OpenSCAD、tscircuit</td><td>已有文本入口（OpenSCAD 官网有 2013 年的版本发布记录，它一直用脚本描述 3D 模型 [S29]），AI 可以直接生成和修改设计脚本</td><td>几何检查、电气规则检查</td><td>让 AI 写一个手机支架的 CadQuery 脚本，导出后检查尺寸</td><td><span class="tag tag-warn">中</span></td></tr>
+        <tr><td>3D 与图形</td><td>Blender Python、GLSL 着色器</td><td>布景和批量操作能自动化</td><td>渲染截图，人看</td><td>用 BlenderMCP 搭一个产品展示场景，记修正轮数</td><td><span class="tag tag-warn">中</span></td></tr>
+        <tr><td>声音</td><td>Strudel</td><td>音乐有了浏览器里能直接播放的文本格式</td><td>弱：只能人听</td><td>让 AI 写一段 30 秒背景节奏，比较与素材库找曲的耗时</td><td><span class="tag tag-info">低</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><b>对个人的建议：</b>先找自己工作里「只能点鼠标、没有文本入口」的环节，给它补一层模板或脚本，这是 AI 最容易放大的位置。挑工具时问四个问题：能不能写成文本？有没有自动检查器？语料多不多？产物形态转换程度如何？同时保留源码和日志，不要直接追求「AI 自己的格式」。</div>
+</section>
+
+<section id="sources">
+  <div class="sec-head"><h2>来源</h2><p>2026-10-13 核查。未能打开原文的条目在括号里注明。</p></div>
+  <div class="sources"><ol>
+    <li id="S1">reveal.js 作者 Hakim El Hattab 个人站（自述 2011 年首次发布）：<a href="https://hakim.se/">https://hakim.se/</a></li>
+    <li id="S2">3Blue1Brown About（Manim 来源）：<a href="https://www.3blue1brown.com/about/">https://www.3blue1brown.com/about/</a></li>
+    <li id="S3">Introducing Remotion（2021-02-08）：<a href="https://www.remotion.dev/blog/introducing-remotion">https://www.remotion.dev/blog/introducing-remotion</a></li>
+    <li id="S4">HeyGen HyperFrames 介绍：<a href="https://hyperframes.heygen.com/introduction">https://hyperframes.heygen.com/introduction</a>；研究页：<a href="https://www.heygen.com/research/html-to-video">https://www.heygen.com/research/html-to-video</a></li>
+    <li id="S5">In 2026, slides are HTML（2026-04-21）：<a href="https://jiaweing.com/blog/in-2026-slides-are-html">https://jiaweing.com/blog/in-2026-slides-are-html</a></li>
+    <li id="S6">MindStudio：Claude Design 幻灯片与原型：<a href="https://www.mindstudio.ai/blog/claude-design-animated-prototypes-slide-decks">https://www.mindstudio.ai/blog/claude-design-animated-prototypes-slide-decks</a></li>
+    
+    <li id="S8">Visual Sketchpad（arXiv 2406.09403，NeurIPS 2024）：<a href="https://arxiv.org/abs/2406.09403">https://arxiv.org/abs/2406.09403</a></li>
+    <li id="S9">Simon Willison：The last six months in LLMs（2025-06-06）：<a href="https://simonwillison.net/2025/Jun/6/six-months-in-llms/">https://simonwillison.net/2025/Jun/6/six-months-in-llms/</a></li>
+    
+    <li id="S11">Voyager（arXiv 2305.16291）：<a href="https://arxiv.org/abs/2305.16291">https://arxiv.org/abs/2305.16291</a></li>
+    <li id="S12">AlphaProof，Nature（2025-11）：<a href="https://www.nature.com/articles/s41586-025-09833-y">https://www.nature.com/articles/s41586-025-09833-y</a></li>
+    <li id="S13">GitHub Octoverse 2025：<a href="https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/">https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/</a></li>
+    <li id="S14">Eureka（arXiv 2310.12931）：<a href="https://arxiv.org/abs/2310.12931">https://arxiv.org/abs/2310.12931</a></li>
+    <li id="S15">FunSearch，Nature（2023-12-14）：<a href="https://www.nature.com/articles/s41586-023-06924-6">https://www.nature.com/articles/s41586-023-06924-6</a>；DeepMind 博客：<a href="https://deepmind.google/blog/funsearch-making-new-discoveries-in-mathematical-sciences-using-large-language-models/">链接</a></li>
+    <li id="S16">DeepMind：AlphaDev discovers faster sorting algorithms（2023-06-07）：<a href="https://deepmind.google/discover/blog/alphadev-discovers-faster-sorting-algorithms/">https://deepmind.google/discover/blog/alphadev-discovers-faster-sorting-algorithms/</a></li>
+    <li id="S17">DeepMind：AlphaEvolve（2025-05-14）：<a href="https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/">https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/</a></li>
+    <li id="S18">GameNGen（arXiv 2408.14837）：<a href="https://arxiv.org/abs/2408.14837">https://arxiv.org/abs/2408.14837</a></li>
+    <li id="S19">TechCrunch：Genie 3（2025-08-05）：<a href="https://techcrunch.com/2025/08/05/deepmind-thinks-genie-3-world-model-presents-stepping-stone-towards-agi/">https://techcrunch.com/2025/08/05/deepmind-thinks-genie-3-world-model-presents-stepping-stone-towards-agi/</a></li>
+    
+    <li id="S21">Coconut（arXiv 2412.06769）：<a href="https://arxiv.org/abs/2412.06769">https://arxiv.org/abs/2412.06769</a></li>
+    <li id="S22">Chain of Thought Monitorability（arXiv 2507.11473，2025-07-15）：<a href="https://arxiv.org/abs/2507.11473">https://arxiv.org/abs/2507.11473</a></li>
+    <li id="S23">The Register（2017-08-01）：<a href="https://www.theregister.com/2017/08/01/facebook_chatbots_did_not_invent_new_language/">https://www.theregister.com/2017/08/01/facebook_chatbots_did_not_invent_new_language/</a></li>
+    <li id="S24">Wikipedia：Gibberlink：<a href="https://en.wikipedia.org/wiki/Gibberlink">https://en.wikipedia.org/wiki/Gibberlink</a></li>
+    <li id="S25">Strudel：<a href="https://strudel.cc/">https://strudel.cc/</a>；LLM 协作仓库：<a href="https://github.com/calvinw/strudel-llm-docs">https://github.com/calvinw/strudel-llm-docs</a></li>
+    <li id="S26">OSWorld 聚合榜单（2026-10-13 核查，成绩为厂商自报，未逐条复测）：<a href="https://leaderboard.steel.dev/leaderboards/osworld/">https://leaderboard.steel.dev/leaderboards/osworld/</a></li>
+    <li id="S27">Text-to-CadQuery（arXiv 2505.06507）：<a href="https://arxiv.org/abs/2505.06507">https://arxiv.org/abs/2505.06507</a>；tscircuit：<a href="https://tscircuit.com/">https://tscircuit.com/</a></li>
+    <li id="S28">OSWorld 原论文（arXiv 2404.07972，2024-04）：<a href="https://arxiv.org/abs/2404.07972">https://arxiv.org/abs/2404.07972</a></li>
+    <li id="S29">OpenSCAD 新闻与发布记录：<a href="https://openscad.org/news.html">https://openscad.org/news.html</a></li>
+  </ol></div>
+  
+</section>
+
+</main>
+<script>
+(function () {
+  var rows = [
+    ["HTML/CSS（汇报）", 3, 2, 3, 3, "中"],
+    ["HTML/JS（视频）", 3, 2, 3, 3, "中"],
+    ["SVG", 3, 2, 2, 3, "中"],
+    ["Matplotlib", 3, 2, 3, 2, "高"],
+    ["Lean", 3, 3, 1, 2, "高"],
+    ["TypeScript 类型", 3, 3, 3, 1, "高"],
+    ["CadQuery / OpenSCAD", 3, 2, 1, 3, "中"],
+    ["tscircuit", 3, 2, 1, 3, "低"],
+    ["Blender Python", 2, 1, 2, 3, "中"],
+    ["Verilog", 3, 3, 1, 3, "中"],
+    ["G-code", 3, 1, 1, 3, "低"],
+    ["Strudel", 3, 1, 1, 2, "低"]
+  ];
+  var body = document.getElementById("matrix-body");
+  function dots(n) {
+    var wrap = document.createElement("span");
+    wrap.className = "dots";
+    wrap.setAttribute("aria-label", n + " / 3");
+    for (var i = 1; i <= 3; i++) {
+      var d = document.createElement("span");
+      d.className = i <= n ? "dot on" : "dot";
+      wrap.appendChild(d);
+    }
+    return wrap;
+  }
+  rows.forEach(function (r) {
+    var tr = document.createElement("tr");
+    var name = document.createElement("td");
+    name.textContent = r[0];
+    tr.appendChild(name);
+    for (var k = 1; k <= 4; k++) {
+      var td = document.createElement("td");
+      td.appendChild(dots(r[k]));
+      tr.appendChild(td);
+    }
+    var conf = document.createElement("td");
+    conf.textContent = r[5];
+    tr.appendChild(conf);
+    body.appendChild(tr);
+  });
+
+  var buttons = document.querySelectorAll(".filter-btn");
+  var cards = document.querySelectorAll(".card");
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var f = btn.getAttribute("data-filter");
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+      cards.forEach(function (c) { c.hidden = !(f === "all" || c.getAttribute("data-type") === f); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
