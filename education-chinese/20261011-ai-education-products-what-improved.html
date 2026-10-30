@@ -1,0 +1,2349 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="区分 AI 教育产品的局部效率、短期学习表现、延迟独立能力与真人迁移，重点讨论语言学习、学习动机及学—练—用—造。资料快照：2026-10-11。">
+  <title>AI 教育辅助产品全景：AI 到底改善了什么、没改善什么（含语言学习与学习动机）</title>
+  <style>
+    :root {
+      /* 断点文档：--bp-md: 760px；--bp-lg: 1040px。媒体查询中直接使用对应数值。 */
+
+      /* 字体与排版 */
+      --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      --font-xs: 0.78rem;
+      --font-sm: 0.875rem;
+      --font-table: 0.92rem;
+      --font-base: 1rem;
+      --font-lead: 1.1rem;
+      --font-h3: 1.16rem;
+      --font-h2: clamp(1.45rem, 2.5vw, 2rem);
+      --font-h1: clamp(2rem, 3.7vw, 3.35rem);
+      --font-h1-mobile: 1.8rem;
+      --font-metric: clamp(1.55rem, 2.5vw, 2.15rem);
+      --font-symbol: 1.25rem;
+      --font-chart-label: 14px;
+      --font-chart-tick: 12px;
+      --weight-normal: 400;
+      --weight-medium: 600;
+      --weight-bold: 700;
+      --weight-heavy: 800;
+      --line-body: 1.8;
+      --line-compact: 1.6;
+      --line-heading: 1.3;
+      --line-metric: 1.2;
+      --tracking-heading: -0.025em;
+      --font-style-normal: normal;
+
+      /* 深靛蓝、石板灰与单一青绿强调色 */
+      --page-bg: #f3f6fa;
+      --surface: #ffffff;
+      --surface-alt: #edf2f8;
+      --ink: #182747;
+      --muted: #4f6078;
+      --subtle: #5c6b80;
+      --line: #ccd6e3;
+      --line-strong: #8c9aaf;
+      --accent: #086b62;
+      --accent-dark: #07584f;
+      --accent-soft: #e2f2ee;
+      --conditional-bg: #e8edf5;
+      --risk-bg: #243653;
+      --inverse: #f5f8ff;
+      --inverse-muted: #c8d4e5;
+      --inverse-accent: #79e1cf;
+      --opinion-bg: #182747;
+      --opinion-card: #243652;
+      --opinion-line: #61728b;
+      --plot-axis: #64738a;
+      --plot-grid: #c8d3e1;
+      --transparent: transparent;
+      --range-pattern: repeating-linear-gradient(
+        135deg,
+        var(--accent-soft),
+        var(--accent-soft) 4px,
+        var(--accent) 4px,
+        var(--accent) 6px
+      );
+
+      /* 间距、尺寸与布局 */
+      --zero: 0;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-7: 2rem;
+      --space-8: 2.5rem;
+      --space-9: 3rem;
+      --space-10: 4rem;
+      --page-pad: 2rem;
+      --section-pad: 2rem;
+      --section-gap: 2rem;
+      --content-max: 1240px;
+      --reading-max: 76ch;
+      --full: 100%;
+      --auto: auto;
+      --min-zero: 0;
+      --cols-1: minmax(0, 1fr);
+      --cols-2: repeat(2, minmax(0, 1fr));
+      --cols-3: repeat(3, minmax(0, 1fr));
+      --cols-4: repeat(4, minmax(0, 1fr));
+      --cols-5: repeat(5, minmax(0, 1fr));
+      --cols-7: repeat(7, minmax(0, 1fr));
+      --effect-cols: minmax(0, 0.95fr) minmax(0, 1.35fr);
+      --metric-cols: var(--cols-5);
+      --loop-cols: var(--cols-7);
+      --table-min: 720px;
+      --heatmap-min: 980px;
+      --ledger-min: 1320px;
+      --matrix-min: 620px;
+      --heat-label-width: 30%;
+      --heat-cell-width: 17.5%;
+      --matrix-label-width: 52%;
+      --matrix-stage-width: 12%;
+      --ledger-id-width: 5%;
+      --ledger-study-width: 19%;
+      --ledger-sample-width: 12%;
+      --ledger-result-width: 29%;
+      --ledger-grade-width: 10%;
+      --ledger-date-width: 10%;
+      --ledger-source-width: 15%;
+      --bar-height: 0.8rem;
+      --legend-size: 1rem;
+      --loop-arrow-offset: -1.05rem;
+      --loop-arrow-top: 0.85rem;
+      --anchor-offset: 1.5rem;
+      --sr-size: 1px;
+      --sr-margin: -1px;
+      --skip-left: 1rem;
+      --skip-top: 1rem;
+
+      /* 数据几何：只控制图形长度，不增加报告中的统计口径 */
+      --dose-e1-trial: 96%;
+      --dose-e1-days: calc(100% / 3);
+      --dose-e1-errors: 17%;
+      --dose-e15-never-low: 40%;
+      --dose-e15-never-high: 47%;
+      --dose-e15-never-range: calc(var(--dose-e15-never-high) - var(--dose-e15-never-low));
+      --dose-e15-login: 41%;
+      --dose-e15-target: 5%;
+
+      /* 边框、圆角、阴影 */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --border: 1px solid var(--line);
+      --border-strong: 1px solid var(--line-strong);
+      --border-accent: 1px solid var(--accent);
+      --border-opinion: 1px solid var(--opinion-line);
+      --rule-accent: 3px solid var(--accent);
+      --rule-inverse: 3px solid var(--inverse-accent);
+      --border-inference: 1px dashed var(--line-strong);
+      --border-none: none;
+      --focus-outline: 3px solid var(--accent);
+      --focus-outline-inverse: 3px solid var(--inverse-accent);
+      --focus-offset: 3px;
+      --shadow-card: 0 6px 24px rgba(24, 39, 71, 0.055);
+      --shadow-none: none;
+      --chart-stroke: 1;
+      --chart-range-stroke: 3;
+      --chart-dash: 3 4;
+
+      /* 层级与动效 */
+      --z-skip: 100;
+      --motion-fast: 160ms;
+      --motion-slow: 240ms;
+      --motion-ease: ease-out;
+      --scroll-mode: smooth;
+      --animation-none: none;
+      --skip-transform: translateY(-180%);
+      --transform-none: none;
+
+      /* 通用布局值：正文规则统一引用自定义属性 */
+      --display-block: block;
+      --display-inline-block: inline-block;
+      --display-flex: flex;
+      --display-grid: grid;
+      --display-none: none;
+      --position-relative: relative;
+      --position-absolute: absolute;
+      --position-fixed: fixed;
+      --position-sticky: sticky;
+      --scroll-hint: "← 左右滑动查看完整表格 →";
+      --inset-zero: 0;
+      --box-model: border-box;
+      --overflow-auto: auto;
+      --overflow-hidden: hidden;
+      --wrap-anywhere: anywhere;
+      --white-space-normal: normal;
+      --flex-wrap: wrap;
+      --align-start: start;
+      --align-center: center;
+      --align-stretch: stretch;
+      --justify-between: space-between;
+      --text-left: left;
+      --text-center: center;
+      --vertical-top: top;
+      --table-collapse: collapse;
+      --table-fixed: fixed;
+      --cursor-pointer: pointer;
+      --decoration-underline: underline;
+      --decoration-none: none;
+      --underline-offset: 0.2em;
+      --underline-thickness: 0.07em;
+      --list-none: none;
+      --fill-none: none;
+      --clip-sr: inset(50%);
+      --arrow-right: "→";
+      --arrow-down: "↓";
+      --empty-content: "";
+    }
+
+    *, *::before, *::after { box-sizing: var(--box-model); }
+    html { scroll-behavior: var(--scroll-mode); }
+    body {
+      margin: var(--zero);
+      background: var(--page-bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: var(--font-base);
+      font-weight: var(--weight-normal);
+      line-height: var(--line-body);
+      overflow-wrap: var(--wrap-anywhere);
+    }
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: var(--zero); }
+    h1, h2, h3, h4 {
+      color: var(--ink);
+      line-height: var(--line-heading);
+      font-style: var(--font-style-normal);
+      font-weight: var(--weight-bold);
+    }
+    h1 { font-size: var(--font-h1); letter-spacing: var(--tracking-heading); }
+    h2 { font-size: var(--font-h2); }
+    h3 { font-size: var(--font-h3); }
+    h4 { font-size: var(--font-base); }
+    p + p { margin-block-start: var(--space-3); }
+    strong { font-weight: var(--weight-bold); }
+    a {
+      color: var(--accent);
+      text-decoration: var(--decoration-underline);
+      text-underline-offset: var(--underline-offset);
+      text-decoration-thickness: var(--underline-thickness);
+      overflow-wrap: var(--wrap-anywhere);
+      transition: color var(--motion-fast) var(--motion-ease);
+    }
+    a:hover { color: var(--accent-dark); }
+    :focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
+    [id] { scroll-margin-top: var(--anchor-offset); }
+    cite { font-style: var(--font-style-normal); }
+    svg {
+      display: var(--display-block);
+      width: var(--full);
+      height: var(--auto);
+      font-family: var(--font-body);
+    }
+    .wrap {
+      width: var(--full);
+      max-width: var(--content-max);
+      margin-inline: var(--auto);
+      padding-inline: var(--page-pad);
+    }
+    .skip-link {
+      position: var(--position-fixed);
+      inset-inline-start: var(--skip-left);
+      inset-block-start: var(--skip-top);
+      z-index: var(--z-skip);
+      transform: var(--skip-transform);
+      padding: var(--space-3) var(--space-4);
+      background: var(--surface);
+      border: var(--border-accent);
+      border-radius: var(--radius-sm);
+    }
+    .skip-link:focus { transform: var(--transform-none); }
+    .sr-only {
+      position: var(--position-absolute);
+      width: var(--sr-size);
+      height: var(--sr-size);
+      margin: var(--sr-margin);
+      padding: var(--zero);
+      border: var(--border-none);
+      overflow: var(--overflow-hidden);
+      clip-path: var(--clip-sr);
+    }
+    .hero {
+      padding-block: var(--space-9) var(--space-7);
+      background: var(--surface);
+      border-block-end: var(--border);
+    }
+    .eyebrow {
+      margin-block-end: var(--space-3);
+      color: var(--accent);
+      font-size: var(--font-sm);
+      font-weight: var(--weight-bold);
+    }
+    .snapshot {
+      margin-block-start: var(--space-4);
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+    .hero-conclusions {
+      display: var(--display-grid);
+      grid-template-columns: var(--cols-3);
+      gap: var(--space-4);
+      margin-block: var(--space-6) var(--space-4);
+    }
+    .hero-conclusion {
+      min-width: var(--min-zero);
+      padding: var(--space-4);
+      border: var(--border);
+      border-block-start: var(--rule-accent);
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+      font-size: var(--font-table);
+      line-height: var(--line-compact);
+    }
+    .hero-conclusion .meta { margin-block-start: var(--space-2); }
+    .language-thesis {
+      padding: var(--space-4) var(--space-5);
+      background: var(--accent-soft);
+      border-inline-start: var(--rule-accent);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-table);
+      line-height: var(--line-compact);
+    }
+    .jump-nav {
+      display: var(--display-flex);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--space-2) var(--space-5);
+      margin-block-start: var(--space-5);
+      padding-block-start: var(--space-4);
+      border-block-start: var(--border);
+      font-size: var(--font-sm);
+    }
+    .jump-nav a {
+      padding-block: var(--space-1);
+      font-weight: var(--weight-medium);
+    }
+    main { padding-block: var(--space-7) var(--space-9); }
+    .section {
+      min-width: var(--min-zero);
+      margin-block-end: var(--section-gap);
+      padding: var(--section-pad);
+      background: var(--surface);
+      border: var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+    }
+    .section-head { margin-block-end: var(--space-6); }
+    .section-head p {
+      max-width: var(--reading-max);
+      margin-block-start: var(--space-3);
+      color: var(--muted);
+    }
+    .subsection { margin-block-start: var(--space-8); }
+    .subsection > h3 { margin-block-end: var(--space-4); }
+    .meta, .source, .note {
+      color: var(--muted);
+      font-size: var(--font-sm);
+      line-height: var(--line-compact);
+    }
+    .source { margin-block-start: var(--space-3); }
+    .note { margin-block-start: var(--space-4); }
+    .lead { font-size: var(--font-lead); }
+    .grid-2, .grid-3, .grid-4 {
+      display: var(--display-grid);
+      gap: var(--space-5);
+      align-items: var(--align-stretch);
+    }
+    .grid-2 { grid-template-columns: var(--cols-2); }
+    .grid-3 { grid-template-columns: var(--cols-3); }
+    .grid-4 { grid-template-columns: var(--cols-4); }
+    .grid-2 > *, .grid-3 > *, .grid-4 > * { min-width: var(--min-zero); }
+    .card {
+      padding: var(--space-5);
+      background: var(--surface-alt);
+      border: var(--border);
+      border-radius: var(--radius-md);
+    }
+    .card h3, .card h4 { margin-block-end: var(--space-3); }
+    .card p { font-size: var(--font-table); }
+    .notice {
+      margin-block-block: var(--zero);
+      padding: var(--space-5);
+      border-inline-start: var(--rule-accent);
+      border-radius: var(--radius-sm);
+      background: var(--accent-soft);
+    }
+    .notice-dark {
+      padding: var(--space-5);
+      background: var(--risk-bg);
+      color: var(--inverse);
+      border-inline-start: var(--rule-inverse);
+      border-radius: var(--radius-sm);
+    }
+    .notice-dark a { color: var(--inverse-accent); }
+    .notice-dark .meta { color: var(--inverse-muted); }
+    .label {
+      display: var(--display-inline-block);
+      padding: var(--space-1) var(--space-2);
+      border: var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-alt);
+      color: var(--ink);
+      font-size: var(--font-xs);
+      font-weight: var(--weight-bold);
+      line-height: var(--line-compact);
+    }
+    .inference-note {
+      margin-block-start: var(--space-5);
+      padding: var(--space-5);
+      background: var(--surface-alt);
+      border: var(--border-inference);
+      border-radius: var(--radius-md);
+    }
+    .inference-note .label { margin-block-end: var(--space-2); }
+    .user-views { margin-block-end: var(--space-8); }
+    .user-views .label { margin-block-end: var(--space-2); }
+    .legend {
+      display: var(--display-flex);
+      flex-wrap: var(--flex-wrap);
+      gap: var(--space-3) var(--space-5);
+      margin-block: var(--space-4);
+      color: var(--muted);
+      font-size: var(--font-sm);
+      line-height: var(--line-compact);
+    }
+    .legend-item {
+      display: var(--display-flex);
+      align-items: var(--align-center);
+      gap: var(--space-2);
+    }
+    .swatch {
+      display: var(--display-inline-block);
+      width: var(--legend-size);
+      height: var(--legend-size);
+      border: var(--border-strong);
+      border-radius: var(--radius-sm);
+    }
+    .swatch-positive { background: var(--accent-soft); }
+    .swatch-conditional { background: var(--conditional-bg); }
+    .swatch-risk { background: var(--risk-bg); }
+    .swatch-empty { background: var(--surface); }
+    .table-scroll {
+      max-width: var(--full);
+      min-width: var(--min-zero);
+      overflow-x: var(--overflow-auto);
+      border: var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    table {
+      width: var(--full);
+      min-width: var(--table-min);
+      border-collapse: var(--table-collapse);
+      table-layout: var(--table-fixed);
+      font-size: var(--font-table);
+      line-height: var(--line-compact);
+    }
+    caption {
+      padding: var(--space-4);
+      color: var(--muted);
+      text-align: var(--text-left);
+      font-size: var(--font-sm);
+      background: var(--surface);
+    }
+    th, td {
+      padding: var(--space-4);
+      border-block-end: var(--border);
+      border-inline-end: var(--border);
+      vertical-align: var(--vertical-top);
+      text-align: var(--text-left);
+      overflow-wrap: var(--wrap-anywhere);
+      white-space: var(--white-space-normal);
+    }
+    th {
+      background: var(--surface-alt);
+      color: var(--ink);
+      font-weight: var(--weight-bold);
+    }
+    tr > :last-child { border-inline-end: var(--border-none); }
+    tbody tr:last-child > * { border-block-end: var(--border-none); }
+    td .meta, th .meta {
+      display: var(--display-block);
+      margin-block-start: var(--space-2);
+      font-weight: var(--weight-normal);
+    }
+    .heatmap { min-width: var(--heatmap-min); }
+    .heat-label-col { width: var(--heat-label-width); }
+    .heat-result-col { width: var(--heat-cell-width); }
+    .heatmap td { text-align: var(--text-center); }
+    .heat-positive { background: var(--accent-soft); color: var(--accent-dark); }
+    .heat-conditional { background: var(--conditional-bg); color: var(--ink); }
+    .heat-risk { background: var(--risk-bg); color: var(--inverse); }
+    .heat-risk a { color: var(--inverse-accent); }
+    .heat-risk .meta { color: var(--inverse-muted); }
+    .heat-empty { background: var(--surface); }
+    .heat-reading + .heat-reading {
+      margin-block-start: var(--space-3);
+      padding-block-start: var(--space-3);
+      border-block-start: var(--border);
+    }
+    .heat-reading strong { display: var(--display-block); }
+    .evidence-explain { margin-block-start: var(--space-6); }
+    .effect-chart { margin-block-start: var(--space-5); }
+    .effect-row {
+      display: var(--display-grid);
+      grid-template-columns: var(--effect-cols);
+      align-items: var(--align-center);
+      gap: var(--space-6);
+      padding-block: var(--space-5);
+      border-block-end: var(--border);
+    }
+    .effect-row:last-child { border-block-end: var(--border-none); }
+    .effect-row > * { min-width: var(--min-zero); }
+    .effect-label h3 { margin-block-end: var(--space-2); font-size: var(--font-base); }
+    .effect-label .meta + .meta { margin-block-start: var(--space-1); }
+    .plot-axis { stroke: var(--plot-axis); stroke-width: var(--chart-stroke); }
+    .plot-grid { stroke: var(--plot-grid); stroke-width: var(--chart-stroke); stroke-dasharray: var(--chart-dash); }
+    .plot-range { stroke: var(--accent); stroke-width: var(--chart-range-stroke); }
+    .plot-dot { fill: var(--accent); stroke: var(--accent-dark); stroke-width: var(--chart-stroke); }
+    .plot-baseline-dot { fill: var(--surface); stroke: var(--ink); stroke-width: var(--chart-range-stroke); }
+    .plot-label {
+      fill: var(--ink);
+      font-size: var(--font-chart-label);
+      font-weight: var(--weight-bold);
+    }
+    .plot-tick { fill: var(--muted); font-size: var(--font-chart-tick); }
+    .dose-grid { margin-block-start: var(--space-5); }
+    .dose-group {
+      padding: var(--space-5);
+      border: var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+    }
+    .dose-group h3 { margin-block-end: var(--space-2); }
+    .dose-item { margin-block-start: var(--space-5); }
+    .dose-heading {
+      display: var(--display-flex);
+      justify-content: var(--justify-between);
+      align-items: var(--align-start);
+      gap: var(--space-4);
+      font-size: var(--font-table);
+    }
+    .dose-heading strong { color: var(--accent-dark); }
+    .dose-track {
+      position: var(--position-relative);
+      height: var(--bar-height);
+      margin-block-start: var(--space-2);
+      background: var(--line);
+      border-radius: var(--radius-sm);
+      overflow: var(--overflow-hidden);
+    }
+    .dose-fill {
+      display: var(--display-block);
+      height: var(--full);
+      background: var(--accent);
+    }
+    .dose-e1-trial { width: var(--dose-e1-trial); }
+    .dose-e1-days { width: var(--dose-e1-days); }
+    .dose-e1-errors { width: var(--dose-e1-errors); }
+    .dose-e15-never { width: var(--dose-e15-never-low); }
+    .dose-range {
+      position: var(--position-absolute);
+      inset-inline-start: var(--dose-e15-never-low);
+      inset-block-start: var(--zero);
+      width: var(--dose-e15-never-range);
+      height: var(--full);
+      background: var(--range-pattern);
+    }
+    .dose-e15-login { width: var(--dose-e15-login); }
+    .dose-e15-target { width: var(--dose-e15-target); }
+    .metrics {
+      display: var(--display-grid);
+      grid-template-columns: var(--metric-cols);
+      gap: var(--space-4);
+      margin-block: var(--space-5);
+    }
+    .metric {
+      min-width: var(--min-zero);
+      padding: var(--space-5);
+      border: var(--border);
+      border-block-start: var(--rule-accent);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    .metric dt { font-size: var(--font-sm); color: var(--muted); font-weight: var(--weight-medium); }
+    .metric dd {
+      margin-block-start: var(--space-3);
+      color: var(--ink);
+      font-size: var(--font-metric);
+      font-weight: var(--weight-heavy);
+      line-height: var(--line-metric);
+    }
+    .metric-unit { display: var(--display-block); margin-block-start: var(--space-1); font-size: var(--font-sm); }
+    .metric-change {
+      margin-block-start: var(--space-3);
+      font-size: var(--font-sm);
+      color: var(--accent-dark);
+      font-weight: var(--weight-bold);
+    }
+    .metric-missing { color: var(--muted); font-weight: var(--weight-normal); }
+    .loop {
+      display: var(--display-grid);
+      grid-template-columns: var(--loop-cols);
+      gap: var(--space-6);
+      margin: var(--space-5) var(--zero);
+      padding: var(--zero);
+      list-style: var(--list-none);
+    }
+    .loop li {
+      position: var(--position-relative);
+      min-width: var(--min-zero);
+      padding: var(--space-4) var(--space-3);
+      background: var(--surface);
+      border: var(--border-strong);
+      border-radius: var(--radius-sm);
+      text-align: var(--text-center);
+      font-size: var(--font-table);
+      line-height: var(--line-compact);
+    }
+    .loop li:not(:last-child)::after {
+      content: var(--arrow-right);
+      position: var(--position-absolute);
+      inset-inline-end: var(--loop-arrow-offset);
+      inset-block-start: var(--loop-arrow-top);
+      color: var(--accent);
+      font-weight: var(--weight-bold);
+    }
+    .loop .loop-key { border: var(--border-accent); background: var(--accent-soft); }
+    .loop .loop-real { background: var(--accent); color: var(--inverse); border: var(--border-accent); }
+    .loop strong { display: var(--display-block); }
+    .loop small { display: var(--display-block); margin-block-start: var(--space-2); font-size: var(--font-xs); }
+    .voice-grid { margin-block-start: var(--space-5); }
+    .voice {
+      display: var(--display-flex);
+      flex-direction: column;
+      min-width: var(--min-zero);
+      padding: var(--space-5);
+      border: var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    .voice h3 { font-size: var(--font-h3); margin-block-end: var(--space-2); }
+    .voice blockquote {
+      margin-block: var(--space-4);
+      padding-inline-start: var(--space-4);
+      border-inline-start: var(--rule-accent);
+      color: var(--ink);
+      font-size: var(--font-base);
+      line-height: var(--line-compact);
+      overflow-wrap: var(--wrap-anywhere);
+    }
+    .voice blockquote p + p { margin-block-start: var(--space-3); }
+    .voice .interpretation {
+      padding: var(--space-4);
+      background: var(--surface-alt);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-table);
+    }
+    .voice footer { margin-block-start: var(--space-4); font-size: var(--font-sm); }
+    .opinion {
+      background: var(--opinion-bg);
+      border: var(--border-opinion);
+      color: var(--inverse);
+    }
+    .opinion h2, .opinion h3, .opinion h4 { color: var(--inverse); }
+    .opinion .section-head p, .opinion .meta, .opinion .note, .opinion .source { color: var(--inverse-muted); }
+    .opinion a { color: var(--inverse-accent); }
+    .opinion :focus-visible { outline: var(--focus-outline-inverse); }
+    .opinion .label {
+      border: var(--border-opinion);
+      background: var(--opinion-card);
+      color: var(--inverse-accent);
+      margin-block-end: var(--space-4);
+    }
+    .opinion .card {
+      background: var(--opinion-card);
+      border: var(--border-opinion);
+      color: var(--inverse);
+    }
+    .opinion .table-scroll { background: var(--opinion-bg); border: var(--border-opinion); }
+    .opinion table { min-width: var(--matrix-min); }
+    .opinion caption { background: var(--opinion-bg); color: var(--inverse-muted); }
+    .opinion th, .opinion td { border-color: var(--opinion-line); color: var(--inverse); }
+    .opinion th { background: var(--opinion-card); }
+    .opinion td { text-align: var(--text-center); font-size: var(--font-symbol); }
+    .opinion .mark-main { color: var(--inverse-accent); font-weight: var(--weight-bold); }
+    .opinion .mark-part { color: var(--inverse); }
+    .opinion .mark-none { color: var(--inverse-muted); }
+    .matrix-label-col { width: var(--matrix-label-width); }
+    .matrix-stage-col { width: var(--matrix-stage-width); }
+    .opinion-recommendation {
+      margin-block-start: var(--space-6);
+      padding: var(--space-5);
+      border-inline-start: var(--rule-inverse);
+      background: var(--opinion-card);
+      border-radius: var(--radius-sm);
+    }
+    details {
+      margin-block-start: var(--space-5);
+      border: var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    summary {
+      padding: var(--space-5);
+      color: var(--ink);
+      background: var(--surface-alt);
+      font-weight: var(--weight-bold);
+      cursor: var(--cursor-pointer);
+      line-height: var(--line-compact);
+    }
+    summary::marker { color: var(--accent); }
+    details[open] > summary { border-block-end: var(--border); }
+    .details-body { padding: var(--space-5); min-width: var(--min-zero); }
+    .ledger { min-width: var(--ledger-min); }
+    .ledger tbody tr:nth-child(even) { background: var(--surface-alt); }
+    .ledger-id-col { width: var(--ledger-id-width); }
+    .ledger-study-col { width: var(--ledger-study-width); }
+    .ledger-sample-col { width: var(--ledger-sample-width); }
+    .ledger-result-col { width: var(--ledger-result-width); }
+    .ledger-grade-col { width: var(--ledger-grade-width); }
+    .ledger-date-col { width: var(--ledger-date-width); }
+    .ledger-source-col { width: var(--ledger-source-width); }
+    .related {
+      display: var(--display-grid);
+      grid-template-columns: var(--cols-2);
+      gap: var(--space-3) var(--space-6);
+      margin-block-start: var(--space-5);
+    }
+    .related a {
+      padding-block: var(--space-3);
+      border-block-end: var(--border);
+      font-size: var(--font-table);
+    }
+    .site-footer {
+      padding-block: var(--space-8);
+      background: var(--surface-alt);
+      border-block-start: var(--border);
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+    .site-footer h2 { margin-block-end: var(--space-4); font-size: var(--font-h3); }
+    .site-footer h3 { margin-block-end: var(--space-3); font-size: var(--font-base); }
+    .footer-bottom {
+      display: var(--display-flex);
+      flex-wrap: var(--flex-wrap);
+      justify-content: var(--justify-between);
+      gap: var(--space-4);
+      margin-block-start: var(--space-6);
+      padding-block-start: var(--space-5);
+      border-block-start: var(--border);
+    }
+
+    @media (max-width: 1040px) {
+      :root { --metric-cols: var(--cols-3); }
+      .grid-4 { grid-template-columns: var(--cols-2); }
+      .loop { grid-template-columns: var(--cols-1); }
+      .loop li:not(:last-child)::after {
+        content: var(--arrow-down);
+        inset-inline-end: var(--auto);
+        inset-inline-start: var(--space-4);
+        inset-block-start: var(--auto);
+        inset-block-end: var(--loop-arrow-offset);
+      }
+      .loop li { text-align: var(--text-left); }
+    }
+    @media (max-width: 760px) {
+      :root {
+        --page-pad: var(--space-4);
+        --section-pad: var(--space-5);
+        --section-gap: var(--space-5);
+        --font-h1: var(--font-h1-mobile);
+        --effect-cols: var(--cols-1);
+        --metric-cols: var(--cols-2);
+      }
+      .hero { padding-block-start: var(--space-6); }
+      .hero-conclusions, .grid-2, .grid-3, .grid-4, .related { grid-template-columns: var(--cols-1); }
+      .hero-conclusions { gap: var(--space-3); }
+      .hero-conclusion { padding: var(--space-3); }
+      .jump-nav { gap: var(--space-2) var(--space-4); }
+      .section-head { margin-block-end: var(--space-5); }
+      .effect-row { gap: var(--space-3); }
+      .metric { padding: var(--space-4); }
+      .details-body { padding: var(--space-3); }
+      .voice { padding: var(--space-4); }
+      .subsection { margin-block-start: var(--space-7); }
+      .table-scroll::before {
+        content: var(--scroll-hint);
+        display: var(--display-block);
+        position: var(--position-sticky);
+        left: var(--inset-zero);
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--font-xs);
+        color: var(--muted);
+      }
+      .opinion .table-scroll::before { color: var(--inverse-muted); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --motion-fast: 0ms;
+        --motion-slow: 0ms;
+        --scroll-mode: auto;
+      }
+      *, *::before, *::after {
+        animation: var(--animation-none);
+        transition-duration: var(--motion-fast);
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到报告正文</a>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <p class="eyebrow">成人国际中文教学 · 产品全景与证据边界</p>
+      <h1>AI 教育辅助产品全景：AI 到底改善了什么、没改善什么（含语言学习与学习动机）</h1>
+      <p class="snapshot">快照日期：<time datetime="2026-10-11">2026-10-11</time>（上海时间） · 面向关注「学→练→用→造」的独立教育从业者</p>
+
+      <div class="hero-conclusions" aria-label="三句结论">
+        <div class="hero-conclusion">
+          <p><strong>有支持：</strong>特定备课任务省时，有结构的 AI 辅导出现短期测验正向信号，辅助真人辅导员也能改善特定数学任务的掌握率。</p>
+          <p class="meta"><a href="#e9">E9 · A · 2024-12</a>；<a href="#e3">E3 · A− · 2025-06-03</a>；<a href="#e4">E4 · B · 2024-10</a></p>
+        </div>
+        <div class="hero-conclusion">
+          <p><strong>未证明净增益：</strong>Khanmigo 两年随机试验的年增益约为 0.06–0.08 SD，与不带 AI 的 Khan Academy 练习相近，学生少用是核心瓶颈。</p>
+          <p class="meta"><a href="#e1">E1 · B · 2026-08</a></p>
+        </div>
+        <div class="hero-conclusion">
+          <p><strong>有风险：</strong>不设护栏、直接给答案的 AI，在特定数学任务里能提高练习成绩，却使撤掉 AI 后的独立考试表现更差。</p>
+          <p class="meta"><a href="#e2">E2 · A · 2025-06-25</a></p>
+        </div>
+      </div>
+
+      <p class="language-thesis"><strong>语言学习一句话：</strong>随时开口与即时纠音是最直观的新增能力，但证据以短期、小样本为主；本次材料尚未证明「在 AI 上敢说」能迁移为成人中文学习者「在真人面前能说」。</p>
+
+      
+    </div>
+  </header>
+
+  <main class="wrap" id="main">
+    <section class="section" id="evidence" aria-labelledby="evidence-title">
+      <div class="section-head">
+        <p class="eyebrow">证据区</p>
+        <h2 id="evidence-title">先分清：省时、做得更好，还是独立学会了？</h2>
+        <p>局部效率与短期学习改善有支持；AI 的净增益、长期独立能力，以及成人语言学习的真人迁移，需要分开评估。“带有 AI 的项目有效”，不等于“项目收益都来自 AI”。</p>
+      </div>
+
+      <figure aria-labelledby="heatmap-title">
+        <h3 id="heatmap-title">流程 × 结果类型证据热图</h3>
+        <div class="legend" aria-label="颜色图例">
+          <span class="legend-item"><span class="swatch swatch-positive" aria-hidden="true"></span>正向结果</span>
+          <span class="legend-item"><span class="swatch swatch-conditional" aria-hidden="true"></span>条件不一／未见显著损害</span>
+          <span class="legend-item"><span class="swatch swatch-risk" aria-hidden="true"></span>负向结果</span>
+          <span class="legend-item"><span class="swatch swatch-empty" aria-hidden="true"></span><strong>留白＝缺证；留白不代表零效果</strong></span>
+        </div>
+        
+
+        <div class="table-scroll" tabindex="0" role="region" aria-label="流程与结果类型证据热图，可横向滚动">
+          <table class="heatmap">
+            <caption>“改善”仅限所列场景；“未证明”表示不足以判断。无显著损害不等于证明安全。</caption>
+            <colgroup>
+              <col class="heat-label-col">
+              <col class="heat-result-col">
+              <col class="heat-result-col">
+              <col class="heat-result-col">
+              <col class="heat-result-col">
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">学习／教学流程与判定边界</th>
+                <th scope="col">省时</th>
+                <th scope="col">即时表现</th>
+                <th scope="col">延迟独立表现</th>
+                <th scope="col">真人迁移</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">教师备课／出题<span class="meta">特定备课任务省时；学生学习收益未确定。</span></th>
+                <td class="heat-positive"><strong>● 备课省时</strong><span class="meta"><a href="#e9">E9 · A</a><br><a href="#e10">E10 · A</a></span></td>
+                <td class="heat-empty" aria-label="学生即时学习收益缺证"></td>
+                <td class="heat-empty" aria-label="延迟独立学习收益缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">教师／辅导员实时支援<span class="meta">特定数学辅导中，AI 辅助真人可提高掌握率。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive"><strong>● 掌握率提高</strong><span class="meta"><a href="#e4">E4 · B</a></span></td>
+                <td class="heat-empty" aria-label="延迟独立表现缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">作业答疑：无护栏通用 AI<span class="meta">随机研究与观察性研究分开读，不合并成同一种因果证据。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive">
+                  <div class="heat-reading"><strong>● 练习提高</strong><a href="#e2">E2 · A</a></div>
+                  <div class="heat-reading"><strong>△ 作业提高</strong><a href="#e5">E5 · C · 观察性</a></div>
+                </td>
+                <td class="heat-risk">
+                  <div class="heat-reading"><strong>● 撤除后考试受损</strong><a href="#e2">E2 · A</a></div>
+                  <div class="heat-reading"><strong>△ 考试下降相关</strong><a href="#e5">E5 · C · 非随机</a></div>
+                </td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">作业答疑：护栏／苏格拉底式<span class="meta">部分设计改善即时表现；延迟独立表现不一。</span></th>
+                <td class="heat-conditional"><strong>◐ 时长结果不一</strong><span class="meta"><a href="#e3">E3 · A−</a><br><a href="#e14">E14 · B</a></span></td>
+                <td class="heat-positive"><strong>◐ 特定设计正向</strong><span class="meta"><a href="#e2">E2 · A</a>；<a href="#e3">E3 · A−</a><br><a href="#e14">E14 · B</a></span></td>
+                <td class="heat-conditional"><strong>◐ 非统一结论</strong><span class="meta"><a href="#e2">E2：未见显著损害</a><br><a href="#e14">E14：一周后已练材料边际提升</a></span></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">校内结构化 AI 辅导：全学年<span class="meta">Khanmigo 小幅增益；AI 相对无 AI 练习的净增益未识别。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive"><strong>◐ 项目测验小幅增益</strong><span class="meta"><a href="#e1">E1 · B</a></span></td>
+                <td class="heat-empty" aria-label="项目结束后的长期独立保持缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">课后／低资源地区结构化辅导<span class="meta">包含教师、额外课时和设备的配套项目，收益不能全归功 AI。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive"><strong>◐ 配套项目短期正向</strong><span class="meta"><a href="#e6">E6 · B（二手）</a><br><a href="#e7">E7 · B（公司主导）</a></span></td>
+                <td class="heat-empty" aria-label="延迟独立保持缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">AI 起草＋专家监督答疑<span class="meta">探索性研究中的后续新题属于近迁移，不能视为真人迁移。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive"><strong>△ 后续新题正向信号</strong><span class="meta"><a href="#e8">E8 · C</a></span></td>
+                <td class="heat-empty" aria-label="延迟独立保持缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">自适应练习／诊断<span class="meta"><a href="#e16">E16</a> 松鼠 AI 主要为厂商口径，独立证据弱。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-empty" aria-label="独立即时成效证据不足"></td>
+                <td class="heat-empty" aria-label="延迟独立表现缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">阅读朗读／口语纠音<span class="meta">△ <a href="#e20">E20</a>／<a href="#l5">L5 · C</a> 提供诊断可行性材料；诊断准确率不是学习收益。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-empty" aria-label="纠音导致学习改善的证据不足"></td>
+                <td class="heat-empty" aria-label="延迟独立表现缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">语言口语陪练<span class="meta">部分短期指标正向；焦虑结果不一。L1 汇总整体语言表现，并非专指生成式口语陪练。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-positive"><strong>◐ 部分短期指标正向</strong><span class="meta"><a href="#l1">L1 · A</a><br><a href="#l2">L2 · C</a></span></td>
+                <td class="heat-empty" aria-label="长期独立语言能力缺证"></td>
+                <td class="heat-empty" aria-label="成人中文真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">深度思考／写作独立性<span class="meta">△ <a href="#e11">E11 · C（预印本）</a> 有脑电连接降低信号；不能直接解释为能力退化，因此不填成学习效果。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-empty" aria-label="脑电指标不直接代表即时能力表现"></td>
+                <td class="heat-empty" aria-label="长期独立能力退化证据不足"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">自主持续参与<span class="meta"><a href="#e1">E1</a>／<a href="#e15">E15</a> 暴露使用剂量问题；低登录不等于低动机，用时不等于有效练习。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-empty" aria-label="自主参与改善缺证"></td>
+                <td class="heat-empty" aria-label="持续独立参与改善缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+              <tr>
+                <th scope="row">全 AI 学校模式<span class="meta"><a href="#e18">E18 · D/C</a> 的实际与预测对比不是实验对照，现有材料不足以判断。</span></th>
+                <td class="heat-empty" aria-label="省时缺证"></td>
+                <td class="heat-empty" aria-label="缺少可用于判断效果的实验对照"></td>
+                <td class="heat-empty" aria-label="延迟独立表现缺证"></td>
+                <td class="heat-empty" aria-label="真人迁移缺证"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption class="note">“即时表现”包含项目内或项目结束时的短期测验；不据此推定长期保持。“延迟独立表现”保留所列研究各自的时距与考试口径，并非统一延迟测量。只有诊断、使用、脑电或预测对比的材料，不强行填成学习成效。</figcaption>
+      </figure>
+
+      <div class="grid-2 evidence-explain">
+        <article class="card">
+          <h3>备课省时，不等于教学方式改变</h3>
+          <p>EEF ChatGPT 备课随机试验涉及 <strong>259 名教师</strong>，备课时间从 <strong>81.5 分钟降至 56.2 分钟，减少 31%</strong>。Oak Aila 试验显示每周省 <strong>49 分钟</strong>，但只支持 <strong>7%</strong> 的课，不到 <strong>1/5</strong> 的教师说它改变了教学。</p>
+          <p class="source"><a href="#e9">E9 · A · 2024-12</a>；<a href="#e10">E10 · A · 2026-10-07</a>。</p>
+        </article>
+        <article class="card">
+          <h3>“练习更好”与“撤掉后更好”会分离</h3>
+          <p>Bastani 等对约 <strong>1,000 名高中生</strong>的随机研究中，无护栏版本使练习表现提高 <strong>48%</strong>，但闭卷考试下降 <strong>17%</strong>；护栏版练习提高 <strong>127%</strong>，考试未见显著损害。该研究有勘误。</p>
+          <p class="source"><a href="#e2">E2 · A · 2025-06-25</a>。无显著损害不等于已经证明安全。</p>
+        </article>
+        <article class="card">
+          <h3>辅助真人：掌握率与近迁移的信号</h3>
+          <p>Tutor CoPilot 涉及 <strong>900 名辅导员、1,800 名学生</strong>，学生掌握率提高 <strong>4 个百分点</strong>，弱辅导员的学生提高 <strong>9 个百分点</strong>；成本约每位辅导员每年 <strong>20 美元</strong>。</p>
+          <p>Eedi×LearnLM 的 <strong>165 人</strong>探索性随机试验中，专家逐条审改 AI 草稿；后续新题表现为 <strong>66.2% vs 60.7%</strong>，<strong>76.4%</strong> 的草稿无需或仅需极小修改。</p>
+          <p class="source"><a href="#e4">E4 · B · 2024-10</a>；<a href="#e8">E8 · C · 2025-12</a>。E8 与纯真人辅导相比不劣，但仍是探索性、近迁移证据。</p>
+        </article>
+        <article class="card">
+          <h3>两类不能混读的风险材料</h3>
+          <p>中国县域研究涉及 <strong>26,811 名学生</strong>，作业 <strong>+18%</strong>、考试 <strong>−20%</strong>、中考 <strong>−24%</strong>。这是观察性双重差分，非随机，不能与 E2 合并为同一种因果证据。</p>
+          <p>Alpha School 关联学校 Unbound 的实际达标为 <strong>10%／28%</strong>，预测为 <strong>60%／65%</strong>；实际与预测的落差并不是实验效果。</p>
+          <p class="source"><a href="#e5">E5 · C · 2026-09-15</a>；<a href="#e18">E18 · D/C · 2026-09-02</a>。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="effects" aria-labelledby="effects-title">
+      <div class="section-head">
+        <h2 id="effects-title">标准差单位效应量：展示结果，不排“谁最有效”</h2>
+        <p>只放本次核实、以 SD／σ／g 报告的结果。不同研究的样本、时长、任务、对照与设计不同，<strong>不可直接比较</strong>；标准化单位并不会消除这些差异。</p>
+      </div>
+
+      <div class="notice">
+        <p><strong>读图边界：</strong>E1 的线段仅表示研究报告的年效应范围，不解释为置信区间；B1 是生成式 AI 之前的自适应基线；L1 是整体语言表现，不专指口语或生成式 AI 陪练。百分比、百分点及其他指标不混入此图。</p>
+      </div>
+
+      <figure class="effect-chart" aria-label="标准差单位效应量点图，每行使用相同横轴尺度">
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>E1 · Khanmigo：0.06–0.08 SD／年</h3>
+            <p class="meta">样本：田纳西 18 所初中。时长：两年；图中为年效应。</p>
+            
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-e1-title">
+            <title id="plot-e1-title">E1：0.06 至 0.08 SD 每年；田纳西 18 所初中，两年整群随机试验，等级 B。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <line class="plot-range" x1="46" y1="32" x2="56" y2="32"></line>
+            <circle class="plot-dot" cx="46" cy="32" r="4"></circle>
+            <circle class="plot-dot" cx="56" cy="32" r="4"></circle>
+            <text class="plot-label" x="18" y="16">0.06–0.08 SD／年</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>E3 · 哈佛物理 AI 导师：0.63 SD</h3>
+            <p class="meta">样本：194。时长：单节课，49 vs 60 分钟。</p>
+            <p class="meta">设计：同行评审随机研究；天花板效应、作者利益冲突。<a href="#e3">A− · 2025-06-03</a></p>
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-e3-title">
+            <title id="plot-e3-title">E3：0.63 SD；样本 194，单节课 49 对 60 分钟，随机研究，等级 A 减。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <circle class="plot-dot" cx="331" cy="32" r="5"></circle>
+            <text class="plot-label" x="331" y="16" text-anchor="middle">0.63 SD</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>E6 · 尼日利亚课后项目：英语 0.23 SD</h3>
+            <p class="meta">样本：约 800。时长：6 周。</p>
+            <p class="meta">设计：随机试验；本页材料为二手报道。<a href="#e6">B（二手）· 2025-02-18</a></p>
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-e6-title">
+            <title id="plot-e6-title">E6：英语 0.23 SD；约 800 人，6 周随机试验，等级 B，二手报道。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <circle class="plot-dot" cx="131" cy="32" r="5"></circle>
+            <text class="plot-label" x="131" y="16" text-anchor="middle">0.23 SD</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>E7 · DeepMind 塞拉利昂：0.258 SD</h3>
+            <p class="meta">样本：1,763。时长：本次未核实。</p>
+            <p class="meta">设计：公司主导、有对照。<a href="#e7">B（公司主导）· 2026-06-09</a></p>
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-e7-title">
+            <title id="plot-e7-title">E7：0.258 SD；样本 1763，时长未列，公司主导、有对照，等级 B。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <circle class="plot-dot" cx="145" cy="32" r="5"></circle>
+            <text class="plot-label" x="145" y="16" text-anchor="middle">0.258 SD</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>B1 · Mindspark 非生成式 AI 基线：数学 0.36σ</h3>
+            <p class="meta">样本：印度城市初中，人数未列。时长：4.5 个月。</p>
+            <p class="meta">设计：抽签。<a href="#b1">A · 2016／2019 AER</a></p>
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-b1-title">
+            <title id="plot-b1-title">B1：数学 0.36 个标准差；印度城市初中，人数未列，4.5 个月，抽签设计，等级 A。此项为非生成式 AI 基线。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <circle class="plot-baseline-dot" cx="196" cy="32" r="5"></circle>
+            <text class="plot-label" x="196" y="16" text-anchor="middle">0.36σ</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+
+        <div class="effect-row">
+          <div class="effect-label">
+            <h3>L1 · AI 与语言学习元分析：g＝0.484</h3>
+            <p class="meta">样本：28 项研究。时长：本次未核实。</p>
+            <p class="meta">设计：高质量元分析，整体语言表现。<a href="#l1">A · 2024</a></p>
+          </div>
+          <svg viewBox="0 0 400 66" width="100%" role="img" aria-labelledby="plot-l1-title">
+            <title id="plot-l1-title">L1：g 等于 0.484；28 项研究，时长未列，元分析，等级 A；结果为整体语言表现。</title>
+            <path class="plot-grid" d="M116 23V40 M216 23V40 M316 23V40"></path>
+            <path class="plot-axis" d="M16 32H366 M16 28V37 M116 28V37 M216 28V37 M316 28V37"></path>
+            <circle class="plot-dot" cx="258" cy="32" r="5"></circle>
+            <text class="plot-label" x="258" y="16" text-anchor="middle">g＝0.484</text>
+            <text class="plot-tick" x="16" y="57" text-anchor="middle">0</text>
+            <text class="plot-tick" x="116" y="57" text-anchor="middle">0.2</text>
+            <text class="plot-tick" x="216" y="57" text-anchor="middle">0.4</text>
+            <text class="plot-tick" x="316" y="57" text-anchor="middle">0.6</text>
+          </svg>
+        </div>
+        <figcaption class="note">横轴为标准化效应量数值。点位不是产品排名，也不表示可直接兑换的学习收益；空心点仅用于标出非生成式 AI 基线。E6、E7 的项目配套条件必须与结果一起读取。</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="participation" aria-labelledby="participation-title">
+      <div class="section-head">
+        <h2 id="participation-title">使用剂量：接触过，不等于真正练过</h2>
+        <p>Khanmigo 的难点不只在“模型会不会教”，也在学生是否主动使用。E1 与 E15 分别成组展示；即使在同一组内，分母与项目口径也不同，不能拼成转化漏斗。</p>
+      </div>
+
+      <figure aria-label="E1 与 E15 分组使用剂量条形图">
+        <div class="grid-2 dose-grid">
+          <div class="dose-group">
+            <h3>E1 · Khanmigo 两年试验</h3>
+            <p class="meta">田纳西 18 所初中；整群随机试验。<a href="#e1">B · 2026-08</a></p>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>试用过</span><strong>96%</strong></div>
+              <div class="dose-track" role="img" aria-label="96% 的学生试用过">
+                <span class="dose-fill dose-e1-trial"></span>
+              </div>
+              <p class="meta">学生层面的试用比例。</p>
+            </div>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>中位学生：发消息的练习日</span><strong>1/3</strong></div>
+              <div class="dose-track" role="img" aria-label="中位学生只在三分之一的练习日发消息">
+                <span class="dose-fill dose-e1-days"></span>
+              </div>
+              <p class="meta">练习日口径，不是三分之一的学生。</p>
+            </div>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>中位学生：发消息的出错环节</span><strong>17%</strong></div>
+              <div class="dose-track" role="img" aria-label="中位学生在 17% 的出错环节发消息">
+                <span class="dose-fill dose-e1-errors"></span>
+              </div>
+              <p class="meta">出错环节口径，不是登录率。</p>
+            </div>
+          </div>
+
+          <div class="dose-group">
+            <h3>E15 · Stanford SCALE 多项目材料</h3>
+            <p class="meta">多项目汇总，不是同一批学生的连续分层。<a href="#e15">B · 2026</a></p>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>从未用过辅导</span><strong>40–47%</strong></div>
+              <div class="dose-track" role="img" aria-label="40% 至 47% 从未用过辅导，斜纹表示范围部分">
+                <span class="dose-fill dose-e15-never"></span>
+                <span class="dose-range"></span>
+              </div>
+              <p class="meta">斜纹段表示所列范围。</p>
+            </div>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>从未登录</span><strong>41%</strong></div>
+              <div class="dose-track" role="img" aria-label="41% 从未登录">
+                <span class="dose-fill dose-e15-login"></span>
+              </div>
+              <p class="meta">单列登录指标，不与上项相减。</p>
+            </div>
+
+            <div class="dose-item">
+              <div class="dose-heading"><span>达到剂量</span><strong>5%</strong></div>
+              <div class="dose-track" role="img" aria-label="5% 达到剂量">
+                <span class="dose-fill dose-e15-target"></span>
+              </div>
+              <p class="meta">达到项目所列剂量的比例。</p>
+            </div>
+          </div>
+        </div>
+        <figcaption class="note">所有条形均以完整比例为参照。两组不是同一个漏斗；“从未使用”“从未登录”“达到剂量”也不能合并计算成统一留存率。</figcaption>
+      </figure>
+
+      <div class="grid-2 evidence-explain">
+        <article class="card">
+          <h3>E1：用了聊天，不一定用了教学</h3>
+          <p>试验在每日补救数学课中进行。学生发消息时，多为直接报答案或点击推荐提示。Sal Khan 对 Chalkbeat 将多数学生的体验称为 <span lang="en">“non-event”</span>。</p>
+          <p class="source">使用行为：<a href="#e1">E1 · B · 2026-08</a>。引述为媒体口径，本次未取得原始链接与单项日期。</p>
+        </article>
+        <article class="card">
+          <h3>E14：把提示放回掌握式流程</h3>
+          <p>NUMI 随机试验涉及 <strong>6,000+ 名初中生</strong>。与纯 CAL（传统计算机辅助练习，不含生成式 AI）相比，AI 组练得更慢、做题更少，但答错后的<strong>下一次作答</strong>更准确；嵌入掌握式流程时，<strong>一周后</strong>测验出现边际显著收益，主要集中在已练习过的材料。</p>
+          <p class="source"><a href="#e14">E14 · B · 2026</a>。这不是“聊天越多越有效”的证据。</p>
+        </article>
+      </div>
+      <p class="note"><strong>核心未解：</strong>低登录不等于低动机，在线时长不等于有效练习，试用率也不等于学习投入。</p>
+    </section>
+
+    <section class="section" id="products" aria-labelledby="products-title">
+      <div class="section-head">
+        <h2 id="products-title">产品全景：四类供给，四种不同的证据问题</h2>
+        <p>产品能力、用户规模和学习成效分开呈现。免费、开源、用户多或融资多，都不自动构成学习效果证据。</p>
+      </div>
+
+      <div class="subsection">
+        <h3>教学端与通用 AI 辅导</h3>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="教学端与通用 AI 辅导产品表，可横向滚动">
+          <table>
+            <thead>
+              <tr><th scope="col">产品</th><th scope="col">公开功能／定位</th><th scope="col">证据与边界</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Khanmigo</th>
+                <td>可汗学院学生端苏格拉底式辅导；教师端免费。</td>
+                <td>最强证据为 <a href="#e1">E1 · B · 2026-08</a>，大规模随机试验效果小。WSJ 曾报道基础算术出错；该媒体条目的日期与链接未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">OpenMAIC</th>
+                <td>清华 THU-MAIC 多智能体“AI 课堂”；把主题或材料变成有老师、同学角色的互动课。开源、可自部署。</td>
+                <td>MIT 许可；GitHub 40,331 星，快照 2026-10-11。论文标识 arXiv 2409.03512。尚无独立学习成效研究；项目资料不作效果证据。</td>
+              </tr>
+              <tr>
+                <th scope="row">DeepTutor</th>
+                <td>港大 HKUDS 的个人知识库式辅导／解题。</td>
+                <td>Apache-2.0；GitHub 41,098 星，快照 2026-10-11。开源项目资料不代表学习成效。</td>
+              </tr>
+              
+              <tr>
+                <th scope="row">ChatGPT Study Mode</th>
+                <td>2025-07-29 上线，采用苏格拉底式引导。</td>
+                <td>学生可以随时关闭。EdWeek 指出这是护栏弱点；产品与媒体口径，不等于独立成效结论。</td>
+              </tr>
+              
+              <tr>
+                <th scope="row">Gemini</th>
+                <td>Guided Learning：2025-08；Gemini in Classroom：ISTE 2025，面向教师免费。</td>
+                <td>产品功能与发布口径；不等于学习效果证据。</td>
+              </tr>
+              <tr>
+                <th scope="row">Oak National Academy Aila</th>
+                <td>英国公立免费备课助手。</td>
+                <td><a href="#e10">E10 · A · 2026-10-07</a> 支持特定备课任务省时；课堂覆盖与教学改变有限。</td>
+              </tr>
+              <tr>
+                <th scope="row">Cambridge Write &amp; Improve</th>
+                <td>剑桥英语免费写作自动反馈，支撑“写—反馈—重写”。</td>
+                <td>本页未找到独立效果研究；单项日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">MagicSchool／Brisk</th>
+                <td>教师工具。</td>
+                <td>用户数为厂商自报且本页未核实，不列数字。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>中国作业与学习机生态</h3>
+        <div class="grid-2">
+          <article class="card">
+            <h4>豆包爱学与学习机份额</h4>
+            <p>豆包爱学由字节推出，提供拍照解题与讲解。QuestMobile 口径 MAU 为 <strong>1943.81 万</strong>。学习机市场中，作业帮份额 <strong>32.9%</strong>，学而思 <strong>20%+</strong>；小猿持续推出 AI 学习机。</p>
+            <p class="source">豆包爱学：D · QuestMobile 口径、2026-09 报道。学习机份额：2026 Q1，本次未取得原始链接，未单独评级。</p>
+          </article>
+          <article class="card">
+            <h4>有道与松鼠 AI</h4>
+            <p>网易有道 <strong>2026 Q2</strong> 营收 <strong>14.7 亿元</strong>，AI 订阅约 <strong>1 亿元</strong>。松鼠 AI 自称服务 <strong>5,200 万学生</strong>，独立证据弱。</p>
+            <p class="source">有道：季度数据来自二手汇总，本次未取得原始链接，未单独评级。松鼠 AI：D · TIME 转述厂商口径，单项日期未列；见 <a href="#e16">E16</a>。</p>
+          </article>
+        </div>
+        <div class="notice evidence-explain">
+          <p><strong>关键警示：</strong>中国县域研究观察到拍照搜题／AI 作业普及与考试成绩下降相关，但它是观察性双重差分、非随机，不能据此认定每个学习机或拍照解题产品都有相同因果效果。<a href="#e5">E5 · C · 2026-09-15</a></p>
+        </div>
+      </div>
+
+      <div class="subsection grid-2">
+        <article class="card">
+          <h3>语言学习产品</h3>
+          <p>Duolingo、Speak、Praktika、ELSA、Babbel Speak、Loora、Busuu Conversations、Talkpal、Google Translate Practice，以及有道 Hi Echo、流利说，集中覆盖课程、纠音与口语练习。</p>
+          <p>HelloChinese、SuperChinese、DuChinese、LingoDeer、Pleco、Anki 则构成国际中文学习的重要产品与资源组合。功能与效果需要分开判断。</p>
+          <p class="source"><a href="#language">进入语言学习深挖</a></p>
+        </article>
+        <article class="card">
+          <h3>动机与好奇心相关产品</h3>
+          <p>Duolingo 的连胜、联赛与 Streak Revival；Khan 的掌握度进度；Brilliant 式交互解谜；Anki／FSRS 间隔重复；Speak 情景课与 Praktika 虚拟形象角色扮演。</p>
+          <p>另一类需求强调“真人内容”：Recabulary 真人发音，以及 DuChinese、The Chairman's Bao 分级读物。产品提供参与机制，不等于已经证明长期动机或真人迁移。</p>
+          <p class="source"><a href="#motivation">进入动机、好奇心与学习回路</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="language" aria-labelledby="language-title">
+      <div class="section-head">
+        <h2 id="language-title">语言学习：AI 扩大了练习供给，尚未跨过真人迁移的证据缺口</h2>
+        <p>需要拆开看：平台规模、内容生产、短期语言表现、焦虑与交流意愿，以及没有 AI 时的真人任务。它们不是同一个结果。</p>
+      </div>
+
+      <div class="subsection" id="duolingo">
+        <h3>Duolingo 2026 Q2：商业规模不是学习深度</h3>
+        <p class="source">以下卡片与留存数据均来自 <a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">2026 Q2 股东信（SEC）</a>，等级 D：厂商自报。本次未核实 MAU 与营收增速，不补算。</p>
+
+        <div class="metrics" aria-label="Duolingo 2026 年第二季度关键指标">
+          <div class="metric">
+            <dl><dt>DAU · 日活跃用户</dt><dd>5,870<span class="metric-unit">万</span></dd></dl>
+            <p class="metric-change">增速 +23%</p>
+          </div>
+          <div class="metric">
+            <dl><dt>MAU · 月活跃用户</dt><dd>1.406<span class="metric-unit">亿</span></dd></dl>
+            <p class="metric-change metric-missing">增速：未核实</p>
+          </div>
+          <div class="metric">
+            <dl><dt>付费订阅</dt><dd>1,270<span class="metric-unit">万</span></dd></dl>
+            <p class="metric-change">增速 +17%</p>
+          </div>
+          <div class="metric">
+            <dl><dt>营收</dt><dd>2.985<span class="metric-unit">亿美元</span></dd></dl>
+            <p class="metric-change metric-missing">增速：未核实</p>
+          </div>
+          <div class="metric">
+            <dl><dt>预订额</dt><dd>2.891<span class="metric-unit">亿美元</span></dd></dl>
+            <p class="metric-change">增速 +8%</p>
+          </div>
+        </div>
+
+        <div class="notice">
+          <p>同一季度披露的当前用户留存率 <strong>CURR 为 84%</strong>，<strong>Streak Revival 为 1,540 万次</strong>。这些是平台参与与商业指标，不是语言迁移指标。</p>
+          <p class="source">D · 2026 Q2 · <a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">股东信</a>。</p>
+        </div>
+
+        <div class="grid-2 evidence-explain">
+          <article class="card">
+            <h4>AI 改变了内容生产规模</h4>
+            <p><strong>2026 Q1</strong> DAU 为 <strong>5,650 万</strong>；单季新上线 <strong>20,500 个单元</strong>，而 <strong>2024 年</strong>每季约 <strong>1,800 个</strong>。厂商将这一扩张归于 AI 生成内容。</p>
+            <p>Duolingo Score 课程上限为 <strong>129（B2）</strong>；Video Call 每通话说出词数翻倍以上；目标为 <strong>2028 年 DAU 1 亿</strong>。</p>
+            <p class="source">D · 2026 Q1 产品／厂商口径；本次未取得该组数据的单项原始链接。</p>
+          </article>
+          <article class="card">
+            <h4>“AI-first”与口语开放</h4>
+            <p><strong>2025-04</strong> 的“AI-first”备忘录引发用户反弹；Fortune 在 <strong>2025-08-18</strong> 报道 CEO 回应。</p>
+            <p><strong>2026-02</strong> 官方宣布把 Video Call 下放到 Super 档，并扩大免费口语题；官方社区帖明确表示对话练习不应只放在最高付费档。</p>
+            <p class="source">D · 厂商／媒体口径。<a href="https://www.reddit.com/r/duolingo/comments/1rfpr8k/" target="_blank" rel="noopener">官方社区帖，2026-02-26</a>；Fortune 原始链接未列。</p>
+          </article>
+        </div>
+
+        <div class="inference-note">
+          <span class="label">观点／推断</span>
+          <p>预订额增速 <strong>+8%</strong> 低于 DAU 增速 <strong>+23%</strong>，本报告据此推断变现在放缓、增长更依赖免费用户。这是对商业指标的解释，不是学习效果结论。</p>
+          <p class="source">所用数字：D · 2026 Q2 · <a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Duolingo 股东信</a>。</p>
+        </div>
+
+        <p class="note"><strong>学习效果仍要另看：</strong>自家研究 DRR-24-04 称，学完 A2 后口语达到 ACTFL Novice High（美国外语教学委员会量表的“初级上”）（<a href="#l3">L3 · D · 2024</a>）。Smith／Jiang／Peters 发表于 LLT（《语言学习与技术》，Language Learning &amp; Technology 期刊）的研究只有 48 人、无对照组（<a href="#l4">L4 · C · 2024</a>）。本次材料缺少外部独立长期研究。</p>
+      </div>
+
+      <div class="subsection">
+        <h3>AI 原生口语平台：以英语为主</h3>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="AI 原生口语平台对照表，可横向滚动">
+          <table>
+            <caption>融资、估值与用户数只描述企业规模；未列日期或原始链接的项目保留缺口，不作为独立效果证据。</caption>
+            <thead>
+              <tr><th scope="col">产品</th><th scope="col">定位</th><th scope="col">关键数据／功能与等级</th><th scope="col">来源与日期</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Speak</th>
+                <td>韩国起家、OpenAI 投资的口语陪练。</td>
+                <td>融资 7,800 万美元，估值 10 亿美元；年化收入 1 亿美元+。D。</td>
+                <td>siliconangle，2024-12-10；Yahoo Finance。融资时间 2024-12；年化收入条目日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">Praktika</th>
+                <td>AI 虚拟形象家教。</td>
+                <td>融资 3,550 万美元，MAU 120 万。D。</td>
+                <td>Yahoo Finance；日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">ELSA Speak</th>
+                <td>发音纠正。</td>
+                <td>用户 5,000 万。D。</td>
+                <td>VnExpress；日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">Loora</th>
+                <td>以色列 AI 英语家教。</td>
+                <td>融资 2,200 万美元，约 1,500 万用户。D。</td>
+                <td>Globes；日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">Babbel Speak</th>
+                <td>老牌课程加 AI 口语。</td>
+                <td>产品发布。D。</td>
+                <td>Babbel 新闻稿；日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">Busuu Conversations</th>
+                <td>AI 对话练习。</td>
+                <td>产品功能；未见独立成效证据。</td>
+                <td>单项来源与日期未列。</td>
+              </tr>
+              <tr>
+                <th scope="row">Google Translate Practice</th>
+                <td>免费个性化听说练习。</td>
+                <td>免费。D。</td>
+                <td>Google 博客；2025-08。</td>
+              </tr>
+              <tr>
+                <th scope="row">Talkpal</th>
+                <td>GPT 陪练。</td>
+                <td>自报数字前后不一致，不采用。</td>
+                <td>单项来源与日期未列。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection grid-2">
+        <article class="card">
+          <h3>中国英语学习</h3>
+          <p>有道 Hi Echo 是 <strong>2023-10-11</strong> 发布的 AI 口语陪练虚拟人。流利说自报累计用户 <strong>2.537 亿</strong>。豆包与学习机也内置英语口语对话。</p>
+          <p class="source">Hi Echo：产品发布口径。流利说：D · <a href="https://www.liulishuo.com/aboutus.html" target="_blank" rel="noopener">官方介绍</a>，用户数统计日期未列。</p>
+          <div class="inference-note">
+            <span class="label">观点／推断</span>
+            <p>中国用户的“哑巴英语”痛点与 AI 陪练高度匹配，但缺少独立效果研究。</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>国际中文：功能加入了，反馈可信度仍待判断</h3>
+          <p>HelloChinese、SuperChinese 都已加入 AI 功能；用户数未核实，不列。LingoDeer 已转向生成式 AI 课程与 AI 聊天导师，社区中也出现寻找“非 AI”替代的声音。</p>
+          <p>DuChinese、The Chairman's Bao 分级读物、Pleco 与 Anki 被反复推荐为可靠资源；“真人制作”成为部分学习者的信任锚点。</p>
+          <p class="source">产品描述日期未逐项列明；社区声音见 <a href="https://www.reddit.com/r/ChineseLanguage/comments/1wmv1of/" target="_blank" rel="noopener">2026-09-22 帖</a>与<a href="https://www.reddit.com/r/ChineseLanguage/comments/1o5z3zi/" target="_blank" rel="noopener">2025-10-13 帖</a>。用户帖不作效果证据。</p>
+        </article>
+      </div>
+
+      <div class="subsection">
+        <h3>“敢开口”有信号，“面对真人能说”仍缺验证</h3>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="语言表现、焦虑与迁移证据表，可横向滚动">
+          <table>
+            <thead>
+              <tr><th scope="col">证据</th><th scope="col">样本与日期</th><th scope="col">报告了什么</th><th scope="col">不能推成什么</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><a href="#l1">L1 · A</a><br>Wang 等 RER 元分析</th>
+                <td>28 项研究；2024。</td>
+                <td>整体语言表现 g＝0.484。</td>
+                <td>不是生成式口语陪练的专门效果，也不是成人中文真人迁移。</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="#l2">L2 · C</a><br>Huang &amp; Kakham</th>
+                <td>83 人；2026。</td>
+                <td>口语 d＝1.09；焦虑组间差异不显著。</td>
+                <td>不能把口语指标改善等同于焦虑已下降。</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="#m4">M4 · B</a><br>AI 与学业焦虑元分析</th>
+                <td>样本未列；2026。</td>
+                <td>g＝−0.65，焦虑下降。</td>
+                <td>不能据此消除与 L2 不一致的结果，也不能自动外推到真人场景。</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="#m5">M5 · C</a><br>Susoy</th>
+                <td>48 人；2025。</td>
+                <td>焦虑—成绩相关：真人考官 r＝−0.50，AI 考官 r＝−0.042。</td>
+                <td>相关关系不同，不等于证明 AI 降低了焦虑。</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="#m6">M6 · C</a><br>Xu</th>
+                <td>420 人；2026。</td>
+                <td>问卷 + 结构方程模型（SEM）：AI 使用与交流意愿的关系，属相关分析。</td>
+                <td>交流意愿不是经真人任务验证的交流能力。</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="#l6">L6 · C</a><br>CHI'26 低资源学校田野研究</th>
+                <td>德里 4 所学校；6 天观察与访谈；2026-01。</td>
+                <td>自报口语信心提升；学生要开放对话，校方要课程对齐评估。</td>
+                <td>自报信心不等于独立能力，也不能直接外推到成人国际中文。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="notice evidence-explain">
+          <p><strong>声调反馈的边界：</strong>Wu 的特定系统在朗读样本上，普通话声调诊断约 <strong>80%</strong> 准确。按该准确率作直观换算，约每 <strong>5</strong> 次反馈可能有 <strong>1</strong> 次出错；这不是所有产品的统一错误率，也不是纠音带来学习提升的证据。</p>
+          <p class="source"><a href="#l5">L5 · C · 2024</a>；<a href="https://www.isca-archive.org/speechprosody_2024/wu24_speechprosody.html" target="_blank" rel="noopener">Speech Prosody 原始条目</a>。</p>
+        </div>
+
+        <div class="inference-note">
+          <span class="label">观点／推断</span>
+          <p>AI 更适合作为“排练室”，不能代替“舞台”。从 AI 排练到低风险真人交流，再到真实任务，应被当成需要设计和检验的阶梯，而不是默认会发生的迁移。</p>
+          <p>对中文的声调、汉字与语用，本报告判断 AI 反馈质量仍不稳；真人教师的价值在于判断反馈是否正确，并设计真实任务。声调反馈应保留人工抽检。</p>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>语言学习小结：真改变与未解决分开说</h3>
+        <div class="grid-3">
+          <article class="card">
+            <h4>改变了供给</h4>
+            <p>开口机会从“每周一节课”式供给变成随时可用；纠音与语法反馈即时化，内容生产成本下降。</p>
+            <p>粗略看，价格从真人每小时数十美元降到 AI 每月十几美元；这里没有逐项列出产品、来源与日期，不能用作统一价格比较或采购报价。</p>
+            <p class="source">产品能力与价格概括，不作学习效果证据。</p>
+          </article>
+          <article class="card">
+            <h4>没有解决迁移与持续性</h4>
+            <p>真实社交中的表现、长期坚持与文化语用，仍需要单独证明。“游戏化留存不等于学会”并未因 AI 自动消失。</p>
+            <p class="source">证据边界见 <a href="#l1">L1</a>、<a href="#l2">L2</a>、<a href="#l6">L6</a> 与 <a href="#m5">M5</a>。</p>
+          </article>
+          <article class="card">
+            <h4>出现新的质量与信任问题</h4>
+            <p>所列用户声音质疑 AI 内容不地道、谄媚，也有人主动回避 AI 生成的学习内容。这些声音提出待验证的问题，不证明所有产品都存在同样缺陷。</p>
+            <p class="source"><a href="#voices">用户声音区</a> · 非效果证据。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="motivation" aria-labelledby="motivation-title">
+      <div class="section-head">
+        <h2 id="motivation-title">动机与好奇心：从“愿意点开”到“愿意独立做”</h2>
+        <p>把理论、设计提案和评估指标分开。能维持行为的机制，不自动等于兴趣、意义或迁移；模型在场，也不等于真实关系。</p>
+      </div>
+
+      <div class="user-views">
+        <h3>起点：选题提出者的三个判断，与证据逐条对照</h3>
+        
+        <div class="grid-3">
+          <article class="card">
+            <span class="label">提出者观点</span>
+            <h4>学习是动态、长期的过程</h4>
+            <p><strong>证据支持：</strong>短期表现与独立能力会分离。无护栏 AI 让练习表现提高 48%，撤掉后闭卷考试下降 17%；Khanmigo 两年试验的项目效应约每年 0.06–0.08 SD，与不带 AI 的可汗学院相近。</p>
+            <p><strong>尚未证明：</strong>多数研究只测到项目内或一周后，AI 对长期独立能力的净增益仍缺数据。</p>
+            <p class="source"><a href="#e2">E2 · A</a>；<a href="#e1">E1 · B</a>；<a href="#e14">E14 · B</a>。</p>
+          </article>
+          <article class="card">
+            <span class="label">提出者观点</span>
+            <h4>很多人不敢开口，和 AI 说话也难</h4>
+            <p><strong>证据支持：</strong>AI 考官下焦虑与成绩几乎无关（r −0.042，真人考官为 −0.50，相关研究）；AI 与学业焦虑元分析显示焦虑下降（g＝−0.65）。社区里也有人学了多年仍害怕开口，并明确拒绝 AI 方案。</p>
+            <p><strong>尚未证明：</strong>另一项研究组间焦虑差异不显著；在 AI 面前敢说能否迁移到面对真人开口，本次没找到长期证据。“和 AI 说话也难”只有用户帖子，没有找到专门研究。</p>
+            <p class="source"><a href="#m5">M5 · C</a>；<a href="#m4">M4 · B</a>；<a href="#l2">L2 · C</a>；<a href="#voices">用户声音（非效果证据）</a>。</p>
+          </article>
+          <article class="card">
+            <span class="label">提出者观点</span>
+            <h4>学习的核心是动机与好奇心</h4>
+            <p><strong>证据支持：</strong>工具可用不等于愿意用。Khanmigo 试验中 96% 学生试用过，但中位学生只在 1/3 的练习日发消息；多项目材料中只有 5% 达到项目剂量。自我决定理论和兴趣发展模型都把自主、胜任与持续兴趣放在中心。</p>
+            <p><strong>尚未证明：</strong>本次没找到能稳定激发长期兴趣的 AI 产品证据；连胜和积分能维持行为，但不等于兴趣。</p>
+            <p class="source"><a href="#e1">E1 · B</a>；<a href="#e15">E15 · B</a>；<a href="#m1">M1 · A</a>。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>自我决定理论：自主、胜任、关系</h3>
+          <p>自我决定理论区分自主动机与受控动机，关注自主、胜任、关系三种基本心理需要。</p>
+          <p class="source">理论来源：<a href="https://selfdeterminationtheory.org/theory/" target="_blank" rel="noopener">Self-Determination Theory</a>。</p>
+          <div class="inference-note">
+            <span class="label">观点／推断 · 对应设计</span>
+            <p>让学习者自己选择真实任务，例如下周家庭聚餐或面试；让进步可见，而且是“独立完成”的进步；提供真人回应。</p>
+          </div>
+        </article>
+        <article class="card">
+          <h3>奖励不是必然有害，但留存不等于兴趣</h3>
+          <p>连胜与积分可以维持行为，但不等于学习兴趣。Sailer &amp; Homner 的游戏化元分析中，认知、动机、行为结果分别为 <strong>g＝.49／.36／.25</strong>；跨结局不宜直接比大小。</p>
+          <p>“激励话术”的效果有限：成长型思维干预总体效应弱；全国思维干预对低成绩群体的 GPA 有小幅提升。</p>
+          <p class="source"><a href="#m1">M1 · A · 2020</a>；<a href="#m2">M2 · A · 2018</a>；<a href="#m3">M3 · A · 2019，样本 12,000+</a>。</p>
+        </article>
+      </div>
+
+      <div class="subsection">
+        <h3>兴趣发展：短暂好奇不是持续兴趣</h3>
+        <p>Hidi &amp; Renninger 的兴趣发展四阶段模型为：<strong>情境兴趣被触发 → 情境兴趣维持 → 个人兴趣萌发 → 个人兴趣成熟</strong>。</p>
+        <p class="source">理论来源：Hidi &amp; Renninger，2006，Educational Psychologist；doi:10.1207/s15326985ep4102_4。</p>
+        <div class="inference-note">
+          <span class="label">观点／推断 · 对应设计</span>
+          <p>用语言或文化反差引发问题，例如中文语用中“客气话”的真实含义，再让学习者查证、比较、访谈、创作，把一次好奇接到持续活动上。</p>
+          <p class="source">“信息缺口＋安全感”只是待检验机制。<a href="#m7">M7 · C · 2026，n＝25，质性研究</a>，不构成已验证的因果链。</p>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>学习回路：让支持逐步退出，让真人任务进入</h3>
+        <p class="meta"><span class="label">观点／推断 · 设计提案</span> 下图是一条可执行的学习回路，不表示整条流程已经过统一实验验证。</p>
+        <figure aria-labelledby="loop-caption">
+          <ol class="loop">
+            <li><strong>选任务</strong><small>学习者自己选择</small></li>
+            <li><strong>定计划</strong><small>围绕真实任务</small></li>
+            <li><strong>先尝试</strong><small>先独立做</small></li>
+            <li class="loop-key"><strong>分级提示</strong><small>不给现成答案</small></li>
+            <li class="loop-key"><strong>撤除支持</strong><small>逐步独立完成</small></li>
+            <li class="loop-real"><strong>真人实践</strong><small>真实任务与回应</small></li>
+            <li><strong>复盘</strong><small>回看独立表现</small></li>
+          </ol>
+          <figcaption class="note" id="loop-caption">分级提示与掌握式流程参考 <a href="#e2">E2 · A · 2025-06-25</a>、<a href="#e14">E14 · B · 2026</a>；它们支持的是特定设计，不是对整条学习回路的总体验证。</figcaption>
+        </figure>
+
+        <div class="grid-2 evidence-explain">
+          <article class="card">
+            <h4>“排练室”有用，但焦虑证据不一致</h4>
+            <p>AI 考官下焦虑与成绩几乎不相关，是相关研究结果，不证明焦虑下降；焦虑元分析给出下降信号，但 L2 的组间焦虑差异不显著。</p>
+            <p class="source"><a href="#m5">M5 · C · 2025</a>；<a href="#m4">M4 · B · 2026</a>；<a href="#l2">L2 · C · 2026</a>。</p>
+          </article>
+          <article class="card">
+            <h4>辅助人类的证据，不是替代比较的定论</h4>
+            <p>E4、E8 使“AI 辅助人”的路径更有证据支撑，但不等于证明“辅助人一定优于替代人”。模型制造的在场感，也不等于真实关系。</p>
+            <p class="source"><a href="#e4">E4 · B · 2024-10</a>；<a href="#e8">E8 · C · 2025-12</a>。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>产品与教师应该测什么</h3>
+        <div class="notice">
+          <p><strong>自主选择率、主动追问次数、有效练习量、撤掉奖励后是否继续，以及延迟一周后的无 AI 真人任务表现。</strong></p>
+          <p class="meta">这是指标建议，不是本报告已经取得的测量结果；“有效练习量”不能用在线时长替代。</p>
+        </div>
+        <p class="note">对应产品机制：Duolingo 的连胜／联赛，Speak／Praktika 的角色扮演，Khanmigo 的护栏辅导，Anki／FSRS 的间隔重复，以及 OpenMAIC 的多角色课堂“同学”在场感。</p>
+      </div>
+    </section>
+
+    <section class="section" id="problems" aria-labelledby="problems-title">
+      <div class="section-head">
+        <h2 id="problems-title">当前问题清单：供给变容易，学习并没有自动闭环</h2>
+        <p>已解决或大幅缓解的主要是内容与个性化讲解供给、特定备课任务省时、随时可开口的练习对象，以及配套项目中的辅导可及性。不能将这些局部改善升级为长期独立能力的总判断。</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>使用剂量</h3>
+          <p>多数学生不用或很少用，是 E1、E15 暴露的核心问题。试用、登录、求助与有效练习需要分别测量。</p>
+          <p class="source"><a href="#e1">E1 · B · 2026-08</a>；<a href="#e15">E15 · B · 2026</a>。</p>
+        </article>
+        <article class="card">
+          <h3>要答案，还是学会</h3>
+          <p>E2 随机研究显示无护栏用法可能损害撤除后的考试表现；E5 提供观察性下降相关。Study Mode 可以被关闭，护栏也可能失效。</p>
+          <p class="source"><a href="#e2">E2 · A · 2025-06-25</a>；<a href="#e5">E5 · C · 2026-09-15</a>；Study Mode 产品发布日期 2025-07-29，媒体条目日期未列。</p>
+        </article>
+        <article class="card">
+          <h3>动机与学习意义</h3>
+          <p>连胜和积分维持行为，不等于产生兴趣或意义。所列教师社区声音还提出了“AI 会做，为什么还要学”的问题。</p>
+          <p class="source"><a href="#m1">M1 · A · 2020</a>；<a href="#voice-teachers">用户帖，2026-03-13，非效果证据</a>。</p>
+        </article>
+        <article class="card">
+          <h3>迁移</h3>
+          <p>AI 排练与真人真实场景之间的距离尚未被充分验证。交流意愿、低焦虑与真实交流表现不能相互替代。</p>
+          <p class="source"><a href="#l2">L2 · C · 2026</a>；<a href="#m5">M5 · C · 2025</a>；<a href="#m6">M6 · C · 2026</a>。</p>
+        </article>
+        <article class="card">
+          <h3>质量与安全护栏</h3>
+          <p>材料涉及数学出错、声调诊断局限，以及用户对语料不地道和越狱的质疑。不同问题的证据来源不能混成一个可靠性结论。</p>
+          <p class="source">WSJ 对 Khanmigo 的报道，日期／链接未列；<a href="#l5">L5 · C · 2024</a>；<a href="#voices">用户声音，非效果证据</a>。</p>
+        </article>
+        <article class="card">
+          <h3>评估与独立性</h3>
+          <p>长期独立研究极少；厂商报告、单节课实验和探索性研究各有边界。脑电指标下降不能直接解释为能力退化，写作还需区分代写、提示、反馈。</p>
+          <p class="source"><a href="#e3">E3 · A− · 2025-06-03</a>；<a href="#e11">E11 · C（预印本）· 2025-06，n＝54</a>。</p>
+        </article>
+        <article class="card">
+          <h3>信任</h3>
+          <p>一部分资深学习者与专业人士主动抵制 AI 内容。“真人制作”的吸引力，是产品信任问题的线索，不是效果优劣的实验结论。</p>
+          <p class="source"><a href="#voices">中文与语言学习社区声音</a> · 非效果证据。</p>
+        </article>
+        <article class="card">
+          <h3>教师角色</h3>
+          <p>Aila 只支持 <strong>7%</strong> 的课，不到 <strong>1/5</strong> 的教师说它改变了教学。省时可能成立，教学方式是否改变仍要单独判断。</p>
+          <p class="source"><a href="#e10">E10 · A · 2026-10-07</a>。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="voices" aria-labelledby="voices-title">
+      <div class="section-head">
+        <h2 id="voices-title">用户声音：把争议变成问题，而不是把个案变成结论</h2>
+        <p>保留所列英文短句，略去用户名。热度只是帖子热度，不代表观点的真实性、普遍性或产品效果。</p>
+      </div>
+
+      <div class="notice-dark">
+        <p class="lead"><strong>用户帖只提出问题，不作效果证据。</strong></p>
+        <p class="meta">以下材料不能用来证明产品成效，也不能用来证明迁移成功或失败；包含官方帖、个案与可能带有推广倾向的内容。</p>
+      </div>
+
+      <div class="grid-2 voice-grid">
+        <article class="voice">
+          <h3>连胜很长，家庭聚餐仍难参与</h3>
+          <p class="meta">r/languagelearning · 2026-04-08 · 2,482 赞／775 评<br>主题：341 天 Duolingo 连胜，在男友的墨西哥家庭聚餐上近乎沉默五小时。</p>
+          <blockquote lang="en">
+            <p>“I think I've been training the wrong thing this whole time.”</p>
+            <p>“Produce! You should be attempting to write and speak every day.”</p>
+          </blockquote>
+          <p class="meta">第二句为高赞回复，1,570 赞。</p>
+          <p class="interpretation"><strong>中文解读：</strong>提出“输入是否替代了输出训练”的问题。帖子编辑后推荐了某 AI 家教 App，带有软广嫌疑，不能当产品证据。</p>
+          <footer><a href="https://www.reddit.com/r/languagelearning/comments/1sg2h50/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>AI 陪练的语言是否过于迎合？</h3>
+          <p class="meta">r/languagelearning · 2026-09-13 · 1,676 赞／455 评</p>
+          <blockquote lang="en"><p>“unbearably sycophantic and corporate in its speech patterns”</p></blockquote>
+          <p class="meta">所引回复：581 赞。</p>
+          <p class="interpretation"><strong>中文解读：</strong>质疑 AI 语料“谄媚、公文腔”。另有回复要求证据，社区观点分化；这不是对所有 AI 语料的系统评估。</p>
+          <footer><a href="https://www.reddit.com/r/languagelearning/comments/1wf4fz6/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>Video Call 的安全护栏疑问</h3>
+          <p class="meta">r/duolingo · 2026-08-16 · 1,326 赞</p>
+          <blockquote lang="en"><p>“The AI in video call doesn't seem to have any jailbreak prevention”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>用户质疑护栏薄弱，提示需要独立的安全评估；帖子本身不构成系统性安全测试。</p>
+          <footer><a href="https://www.reddit.com/r/duolingo/comments/1vqc3zz/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>希望 AI 内容可标注、可跳过</h3>
+          <p class="meta">r/duolingo · 2026-04-28 · 289 赞</p>
+          <blockquote lang="en">
+            <p>“6 people in a Max subscription … they've all abandoned but me”</p>
+            <p>“There's something inherently wrong with a product when they make it so emotional to leave it”</p>
+          </blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>提出 AI 内容质量识别与退出情绪成本的问题。连胜可能让用户感到难以离开，但个案不能代表总体留存或学习效果。</p>
+          <footer><a href="https://www.reddit.com/r/duolingo/comments/1sxwl57/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>寻找“非 AI”中文 App</h3>
+          <p class="meta">r/ChineseLanguage · 2026-09-22 · 24 赞</p>
+          <blockquote lang="en"><p>“both of my main ones (HelloChinese and SuperChinese) have started using AI”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>中文 App 的 AI 化并非对所有用户都是吸引力；一部分学习者主动寻找替代。这是偏好与信任的线索。</p>
+          <footer><a href="https://www.reddit.com/r/ChineseLanguage/comments/1wmv1of/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>教材与分级读物仍是信任锚点</h3>
+          <p class="meta">r/ChineseLanguage · 2025-10-13 · 69 赞</p>
+          <blockquote lang="en"><p>“Textbooks, man!”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>在对学习资源中 AI 内容的失望下，回复推荐教材、DuChinese 与 The Chairman's Bao。推荐声量不等于比较试验。</p>
+          <footer><a href="https://www.reddit.com/r/ChineseLanguage/comments/1o5z3zi/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>AI 排练之后，终于和真人聊了</h3>
+          <p class="meta">r/EnglishLearning · 2026-06-06 · 48 赞</p>
+          <blockquote lang="en"><p>“I've been practicing speaking hard with AI app or talking to myself… I kept speaking for about an hour.”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>这是“AI 排练＋真人实战”的正向个案，可以提出迁移路径的假设，但不能证明一般迁移效果。</p>
+          <footer><a href="https://www.reddit.com/r/EnglishLearning/comments/1tyg0ma/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>害怕开口，也明确拒绝 AI 方案</h3>
+          <p class="meta">r/EnglishLearning · 2026-06-18 · 20 赞<br>主题：22 岁，学了很久英语仍害怕开口。</p>
+          <blockquote lang="en"><p>“i dont want AI ideas or to pay for an app”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>用户提出的是开口焦虑与对 AI 方案的拒绝。不能把所有开口困难都预设为一个新 App 能解决的问题。</p>
+          <footer><a href="https://www.reddit.com/r/EnglishLearning/comments/1u999dv/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice" id="voice-teachers">
+          <h3>学生问：为什么还要学？</h3>
+          <p class="meta">r/Teachers · 2026-03-13 · 4,889 赞／797 评<br>主题：高一数学课堂对话。</p>
+          <blockquote lang="en"><p>“why do we really need to learn any of this? ChatGPT will just do it all way faster”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>这提出了学习意义与动机的问题，而不只是“工具好不好用”。不能由一个课堂故事推断所有学生的动机变化。</p>
+          <footer><a href="https://www.reddit.com/r/Teachers/comments/1rs9uo6/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>口语 App 被当作“强制输出”工具</h3>
+          <p class="meta">r/EnglishLearning · 2025-10-21 · 18 赞</p>
+          <blockquote lang="en"><p>“I just need real time corrections… it's more to force me to create output.”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>用户要的是实时纠正与输出约束，而不是把 App 当作唯一学习来源。这是需求描述，不是成效证据。</p>
+          <footer><a href="https://www.reddit.com/r/EnglishLearning/comments/1oc03cu/" target="_blank" rel="noopener">查看原帖</a> · 非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>官方承认对话练习不应只在最高付费档</h3>
+          <p class="meta">r/duolingo 官方帖 · 2026-02-26 · 536 赞／362 评</p>
+          <blockquote lang="en"><p>“conversation practice is fundamental to learning and shouldn't sit behind our highest paywall”</p></blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>平台承认口语练习的重要性，并下放 Video Call。官方产品策略不等于口语学习效果已经得到证明。</p>
+          <footer><a href="https://www.reddit.com/r/duolingo/comments/1rfpr8k/" target="_blank" rel="noopener">查看官方帖</a> · 产品口径，非效果证据</footer>
+        </article>
+
+        <article class="voice">
+          <h3>缺计划、不愿用，以及知识如何被使用</h3>
+          <p class="meta">Hacker News · 2025–2026 · 热度未列<br>条目标识：item 45433754 等。</p>
+          <blockquote lang="en">
+            <p>“AI tutor doesn't seem to have a plan for me”</p>
+            <p>“most kids didn't want to use the AI tutor”</p>
+            <p>“optimize for knowledge transfer. The harder problem is knowledge use”</p>
+          </blockquote>
+          <p class="interpretation"><strong>中文解读：</strong>集中提出学习规划、主动使用和知识应用的问题，不是独立研究结论。</p>
+          <footer>原始链接：本次未保存 · 非效果证据</footer>
+        </article>
+      </div>
+    </section>
+
+    <section class="section opinion" id="viewpoint" aria-labelledby="viewpoint-title">
+      <div class="section-head">
+        <span class="label">观点／推断</span>
+        <h2 id="viewpoint-title">用「学→练→用→造」看产品：供给集中在哪里？</h2>
+        <p>以下矩阵依据公开功能描述作定性判断：● 主要；◐ 部分；○ 基本没有。它不是效果评价，不是产品排名，也不表示相同符号具有相同教学质量。</p>
+      </div>
+
+      <figure aria-labelledby="matrix-caption">
+        <div class="table-scroll" tabindex="0" role="region" aria-label="产品与学练用造功能矩阵，可横向滚动">
+          <table>
+            <caption id="matrix-caption">产品 × 学／练／用／造：按公开功能描述定性判断。</caption>
+            <colgroup>
+              <col class="matrix-label-col">
+              <col class="matrix-stage-col">
+              <col class="matrix-stage-col">
+              <col class="matrix-stage-col">
+              <col class="matrix-stage-col">
+            </colgroup>
+            <thead>
+              <tr><th scope="col">产品</th><th scope="col">学</th><th scope="col">练</th><th scope="col">用</th><th scope="col">造</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Khanmigo</th><td class="mark-main" aria-label="主要">●</td><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">OpenMAIC</th><td class="mark-main" aria-label="主要">●</td><td class="mark-part" aria-label="部分">◐</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">VideoTutor</th><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">豆包爱学／学习机</th><td class="mark-main" aria-label="主要">●</td><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">Duolingo（含 Video Call）</th><td class="mark-main" aria-label="主要">●</td><td class="mark-main" aria-label="主要">●</td><td class="mark-part" aria-label="部分">◐</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">Speak／Praktika</th><td class="mark-part" aria-label="部分">◐</td><td class="mark-main" aria-label="主要">●</td><td class="mark-part" aria-label="部分">◐</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">ELSA</th><td class="mark-none" aria-label="基本没有">○</td><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">HelloChinese／SuperChinese</th><td class="mark-main" aria-label="主要">●</td><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">DuChinese（分级读物）</th><td class="mark-main" aria-label="主要">●</td><td class="mark-part" aria-label="部分">◐</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">Anki／FSRS</th><td class="mark-none" aria-label="基本没有">○</td><td class="mark-main" aria-label="主要">●</td><td class="mark-none" aria-label="基本没有">○</td><td class="mark-none" aria-label="基本没有">○</td></tr>
+              <tr><th scope="row">ChatGPT／Claude／Gemini 学习模式</th><td class="mark-main" aria-label="主要">●</td><td class="mark-main" aria-label="主要">●</td><td class="mark-part" aria-label="部分">◐</td><td class="mark-part" aria-label="部分">◐</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption class="note">本报告判断：几乎所有产品集中在“学”和“练”；“用”由情景对话部分覆盖；“造”只有通用大模型能间接支持。模拟使用不等于真实使用。</figcaption>
+      </figure>
+
+      <div class="grid-4 evidence-explain">
+        <article class="card">
+          <h3>学</h3>
+          <p>本报告观点：AI 讲解已足够好，边际改进小。这里是对产品机会的判断，不是跨产品成效定论。</p>
+        </article>
+        <article class="card">
+          <h3>练</h3>
+          <p>本报告观点：这是 AI 最强的阶段，能提供大量题目与即时反馈；但需要护栏，避免练习退化为索取答案。</p>
+        </article>
+        <article class="card">
+          <h3>用</h3>
+          <p>本报告观点：最大空白。AI 可以模拟场景，真实社交与真实任务仍要进入人与真实世界。</p>
+        </article>
+        <article class="card">
+          <h3>造</h3>
+          
+        </article>
+      </div>
+
+      <div class="opinion-recommendation">
+        <h3>对成人国际中文教学的建议</h3>
+        <p>用 AI 做声调、句型排练与课前预热，把真人课时留给真实任务与创作；对 AI 声调反馈加入人工抽检。目标不是让学习者更熟练地依赖提示，而是逐步独立完成任务。</p>
+        <p class="source">性质：观点／推断。参考边界：<a href="#e2">E2</a>、<a href="#e14">E14</a>、<a href="#l5">L5</a>；并非针对成人国际中文整套方案的实验结论。</p>
+      </div>
+    </section>
+
+    <section class="section" id="appendix" aria-labelledby="appendix-title">
+      <div class="section-head">
+        
+        <p>研究结果、厂商口径、项目热度与用户声音保持分层。未提供的样本、日期或链接明确留缺，不将来源标识扩写成新的外链。</p>
+      </div>
+
+      <details open>
+        
+        <div class="details-body">
+          <p class="meta">A＝同行评审随机试验或高质量元分析；B＝工作论文随机试验／公司主导但有对照；C＝观察性、准实验、小样本、质性田野或预印本；D＝厂商自报／媒体转述。保留 A−、B（二手）、B（公司主导）、D/C、综述与不可用等原始限定。</p>
+          <p class="note">小样本不自动无效，元分析不自动最高。所列等级综合研究设计、偏倚风险、独立性与适用性；研究等级不意味着所列链接必然是一手论文。</p>
+
+          <div class="table-scroll evidence-explain" tabindex="0" role="region" aria-label="完整研究证据台账，可横向滚动">
+            <table class="ledger">
+              
+              <colgroup>
+                <col class="ledger-id-col">
+                <col class="ledger-study-col">
+                <col class="ledger-sample-col">
+                <col class="ledger-result-col">
+                <col class="ledger-grade-col">
+                <col class="ledger-date-col">
+                <col class="ledger-source-col">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">编号</th>
+                  <th scope="col">研究／设计</th>
+                  <th scope="col">样本／时长</th>
+                  <th scope="col">结果与限制</th>
+                  <th scope="col">等级</th>
+                  <th scope="col">日期</th>
+                  <th scope="col">来源</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="e1">
+                  <th scope="row">E1</th>
+                  <td>Oreopoulos &amp; Low，<span lang="en">One Click Away</span>；Khanmigo 两年整群 RCT，EdWorkingPaper 26-1551。</td>
+                  <td>田纳西 18 所初中；两年，在每日补救数学课里使用。</td>
+                  <td>每学期 +1.3 个百分位，约 0.06–0.08 SD／年；全年积极参与的隐含效应 0.14 SD。与无 AI 的 Khan Academy 练习相近，AI 净增益未识别。96% 试用；中位学生在 1/3 练习日、17% 出错环节发消息。</td>
+                  <td>B</td>
+                  <td>2026-08</td>
+                  <td><a href="https://edworkingpapers.com/sites/default/files/ai26-1551.pdf" target="_blank" rel="noopener">工作论文 PDF</a></td>
+                </tr>
+                <tr id="e2">
+                  <th scope="row">E2</th>
+                  <td>Bastani 等，PNAS，<span lang="en">Generative AI without guardrails can harm learning</span>；随机研究。</td>
+                  <td>约 1,000 名高中生；干预时长未列。</td>
+                  <td>无护栏：练习 +48%，闭卷考试 −17%；护栏版：练习 +127%，考试无显著损害。有勘误；无显著损害不等于证明安全。</td>
+                  <td>A</td>
+                  <td>2025-06-25</td>
+                  <td><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12232635/" target="_blank" rel="noopener">论文全文</a></td>
+                </tr>
+                <tr id="e3">
+                  <th scope="row">E3</th>
+                  <td>Kestin 等，Scientific Reports，哈佛物理 AI 导师。</td>
+                  <td>194；单节课，49 vs 60 分钟。</td>
+                  <td>0.63 SD。存在天花板效应与作者利益冲突；不能外推为长期成效。</td>
+                  <td>A−</td>
+                  <td>2025-06-03</td>
+                  <td><a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">论文</a></td>
+                </tr>
+                <tr id="e4">
+                  <th scope="row">E4</th>
+                  <td>Tutor CoPilot，斯坦福；AI 辅助真人辅导员。</td>
+                  <td>900 名辅导员／1,800 名学生；时长未列。</td>
+                  <td>学生掌握率 +4 个百分点；弱辅导员的学生 +9 个百分点。成本约每位辅导员每年 20 美元。</td>
+                  <td>B</td>
+                  <td>2024-10</td>
+                  <td><a href="https://arxiv.org/abs/2410.03017" target="_blank" rel="noopener">论文条目</a></td>
+                </tr>
+                <tr id="e5">
+                  <th scope="row">E5</th>
+                  <td>Strömberg 等，中国县域 AI 作业研究；观察性双重差分，非随机。</td>
+                  <td>26,811 名学生；时长未列。</td>
+                  <td>作业 +18%，考试 −20%，中考 −24%。属于观察性相关证据，不能与 E2 合并为同一种因果证据。</td>
+                  <td>C</td>
+                  <td>2026-09-15</td>
+                  <td><a href="https://news.qq.com/rain/a/20260915A05KZA00" target="_blank" rel="noopener">所列报道</a></td>
+                </tr>
+                <tr id="e6">
+                  <th scope="row">E6</th>
+                  <td>世行尼日利亚课后 AI 辅导；随机试验的二手报道。</td>
+                  <td>约 800；6 周。</td>
+                  <td>英语 0.23 SD，综合 0.31 SD。配套项目包含教师在场、额外课时、设备，不能把收益全部归于 AI。</td>
+                  <td>B（二手）</td>
+                  <td>2025-02-18</td>
+                  <td><a href="https://itdoeswhatnow.com/m/2025-02-18-world-bank-rct-finds-ai-tutoring-boosts-english/" target="_blank" rel="noopener">二手报道</a></td>
+                </tr>
+                <tr id="e7">
+                  <th scope="row">E7</th>
+                  <td>DeepMind 塞拉利昂项目；公司主导、有对照。</td>
+                  <td>1,763；时长未列。</td>
+                  <td>+0.258 SD。项目配套条件与公司主导性质需保留。</td>
+                  <td>B（公司主导）</td>
+                  <td>2026-06-09</td>
+                  <td><a href="https://deepmind.google/blog/measuring-the-impact-of-learning-with-ai-in-sierra-leone-and-beyond/" target="_blank" rel="noopener">公司研究介绍</a></td>
+                </tr>
+                <tr id="e8">
+                  <th scope="row">E8</th>
+                  <td>Eedi×LearnLM 探索性 RCT；AI 草稿＋专家监督，对照纯真人辅导。</td>
+                  <td>165；时长未列。</td>
+                  <td>专家逐条审改草稿；与纯真人辅导相比不劣。后续新题 66.2% vs 60.7%；76.4% 草稿零或极小修改。属于近迁移初步信号。</td>
+                  <td>C</td>
+                  <td>2025-12</td>
+                  <td><a href="https://arxiv.org/abs/2512.23633" target="_blank" rel="noopener">论文条目</a></td>
+                </tr>
+                <tr id="e9">
+                  <th scope="row">E9</th>
+                  <td>EEF ChatGPT 备课随机试验。</td>
+                  <td>259 名教师。</td>
+                  <td>备课时间 −31%，81.5→56.2 分钟。学生学习收益未确定。</td>
+                  <td>A</td>
+                  <td>2024-12</td>
+                  <td><a href="https://schoolsweek.co.uk/using-chatgpt-can-cut-lesson-planning-by-31-eef-study/" target="_blank" rel="noopener">试验报道</a></td>
+                </tr>
+                <tr id="e10">
+                  <th scope="row">E10</th>
+                  <td>EEF Oak Aila 备课试验。</td>
+                  <td>小学教师；人数未列。</td>
+                  <td>每周省 49 分钟，只支持 7% 的课；不到 1/5 说改变了教学。</td>
+                  <td>A</td>
+                  <td>2026-10-07</td>
+                  <td><a href="https://www.edtechinnovationhub.com/news/oaks-aila-saves-primary-teachers-49-minutes-a-week-on-lesson-planning-eef-trial-finds" target="_blank" rel="noopener">试验报道</a></td>
+                </tr>
+                <tr id="e11">
+                  <th scope="row">E11</th>
+                  <td>MIT，<span lang="en">Your Brain on ChatGPT</span>。</td>
+                  <td>54；时长未列。</td>
+                  <td>认知参与／脑电连接降低。脑电指标不直接代表能力退化；需要区分代写、提示、反馈三种用法。</td>
+                  <td>C（预印本）</td>
+                  <td>2025-06</td>
+                  <td><a href="https://arxiv.org/abs/2506.08872" target="_blank" rel="noopener">预印本</a></td>
+                </tr>
+                <tr id="e12">
+                  <th scope="row">E12</th>
+                  <td>Wang &amp; Fan，ChatGPT 效果元分析。</td>
+                  <td>未列。</td>
+                  <td><strong>已撤稿，不纳入效果判断。</strong></td>
+                  <td>不可用</td>
+                  <td>撤稿：2026-04-22</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="e14">
+                  <th scope="row">E14</th>
+                  <td>Oreopoulos 等，<span lang="en">Making AI Tutoring Productive</span>；NUMI 随机试验，EdWorkingPaper 26-1552。</td>
+                  <td>6,000+ 名初中生。</td>
+                  <td>AI 比纯 CAL 练得慢、做题少，但答错后的下一次作答更准确；嵌入掌握式流程时，一周后测验有边际显著收益，主要集中在已练习材料。</td>
+                  <td>B</td>
+                  <td>2026</td>
+                  <td><a href="https://edworkingpapers.com/sites/default/files/ai26-1552.pdf" target="_blank" rel="noopener">工作论文 PDF</a></td>
+                </tr>
+                <tr id="b1">
+                  <th scope="row">B1</th>
+                  <td>Muralidharan、Singh &amp; Ganimian，<span lang="en">Disrupting Education?</span>；Mindspark 自适应课后项目。</td>
+                  <td>印度城市初中，抽签；人数未列；4.5 个月。</td>
+                  <td>数学 +0.36σ，印地语 +0.22σ。生成式 AI 之前的自适应基线，不是生成式 AI 的独立增益。</td>
+                  <td>A</td>
+                  <td>2016／2019 AER</td>
+                  <td><a href="https://www.nber.org/papers/w22923" target="_blank" rel="noopener">NBER w22923</a></td>
+                </tr>
+                <tr id="e15">
+                  <th scope="row">E15</th>
+                  <td>Stanford SCALE，<span lang="en">AI tutoring is not a monolith</span>。</td>
+                  <td>多项目。</td>
+                  <td>40–47% 从未用过辅导；41% 从未登录；5% 达到剂量。不同项目与指标不能拼成同一漏斗。</td>
+                  <td>B</td>
+                  <td>2026</td>
+                  <td><a href="https://scale.stanford.edu/research-in-action/ai-tutoring-not-monolith" target="_blank" rel="noopener">SCALE 材料</a></td>
+                </tr>
+                <tr id="e17">
+                  <th scope="row">E17</th>
+                  <td>OECD 数字教育展望 2026。</td>
+                  <td>不适用。</td>
+                  <td>政策综述，不作为单项产品实验效果。</td>
+                  <td>综述</td>
+                  <td>2026</td>
+                  <td><a href="https://ciddl.org/summary-of-oecd-digital-education-outlook-2026/" target="_blank" rel="noopener">所列综述摘要</a></td>
+                </tr>
+                <tr id="e18">
+                  <th scope="row">E18</th>
+                  <td>Alpha School／Unbound 德州报道。</td>
+                  <td>未列。</td>
+                  <td>实际 10%／28% 达标，预测 60%／65%。实际与预测对比不是实验对照；现有材料不足以判断全 AI 学校模式。</td>
+                  <td>D/C</td>
+                  <td>2026-09-02</td>
+                  <td><a href="https://www.texastribune.org/2026/09/02/alpha-school-texas-vouchers-ai/" target="_blank" rel="noopener">德州论坛报</a></td>
+                </tr>
+                <tr id="l1">
+                  <th scope="row">L1</th>
+                  <td>Wang 等，RER 元分析：AI 与语言学习。</td>
+                  <td>28 项研究；时长未列。</td>
+                  <td>g＝0.484；整体语言表现，并非专指口语或生成式陪练。</td>
+                  <td>A</td>
+                  <td>2024</td>
+                  <td>doi:10.3102/00346543241255621</td>
+                </tr>
+                <tr id="l2">
+                  <th scope="row">L2</th>
+                  <td>Huang &amp; Kakham，Frontiers in Education。</td>
+                  <td>83；时长未列。</td>
+                  <td>口语 d＝1.09；焦虑组间差异不显著。</td>
+                  <td>C</td>
+                  <td>2026</td>
+                  <td><a href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2026.1799269/full" target="_blank" rel="noopener">论文全文</a></td>
+                </tr>
+                <tr id="l3">
+                  <th scope="row">L3</th>
+                  <td>Duolingo DRR-24-04，自家研究。</td>
+                  <td>未列。</td>
+                  <td>A2 末口语达 ACTFL Novice High。</td>
+                  <td>D</td>
+                  <td>2024</td>
+                  <td>Duolingo Research；链接未列。</td>
+                </tr>
+                <tr id="l4">
+                  <th scope="row">L4</th>
+                  <td>Smith／Jiang／Peters，LLT。</td>
+                  <td>48。</td>
+                  <td>无对照组。</td>
+                  <td>C</td>
+                  <td>2024</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="l5">
+                  <th scope="row">L5</th>
+                  <td>Wu，Speech Prosody，普通话声调诊断。</td>
+                  <td>特定系统、朗读样本；样本量未列。</td>
+                  <td>诊断约 80% 准确；不能外推到所有产品，也不等于纠音学习收益。</td>
+                  <td>C</td>
+                  <td>2024</td>
+                  <td><a href="https://www.isca-archive.org/speechprosody_2024/wu24_speechprosody.html" target="_blank" rel="noopener">研究条目</a></td>
+                </tr>
+                
+                <tr id="m1">
+                  <th scope="row">M1</th>
+                  <td>Sailer &amp; Homner，游戏化元分析。</td>
+                  <td>未列。</td>
+                  <td>认知 g＝.49，动机 .36，行为 .25；跨结局不宜直接比大小。</td>
+                  <td>A</td>
+                  <td>2020</td>
+                  <td>ERIC EJ1245270；链接未列。</td>
+                </tr>
+                <tr id="m2">
+                  <th scope="row">M2</th>
+                  <td>Sisk，成长型思维元分析。</td>
+                  <td>未列。</td>
+                  <td>总体效果很弱。</td>
+                  <td>A</td>
+                  <td>2018</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="m3">
+                  <th scope="row">M3</th>
+                  <td>Yeager，Nature，全国思维干预。</td>
+                  <td>12,000+。</td>
+                  <td>低成绩学生 GPA 小幅提升。</td>
+                  <td>A</td>
+                  <td>2019</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="m4">
+                  <th scope="row">M4</th>
+                  <td>BMC，AI 与学业焦虑元分析。</td>
+                  <td>未列。</td>
+                  <td>g＝−0.65，焦虑下降；与其他研究结果并不完全一致。</td>
+                  <td>B</td>
+                  <td>2026</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="m5">
+                  <th scope="row">M5</th>
+                  <td>Susoy，焦虑—成绩相关研究。</td>
+                  <td>48。</td>
+                  <td>真人考官 r＝−0.50，AI 考官 r＝−0.042。不能据相关关系推定 AI 导致焦虑下降。</td>
+                  <td>C</td>
+                  <td>2025</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="m6">
+                  <th scope="row">M6</th>
+                  <td>Xu，问卷 SEM。</td>
+                  <td>420。</td>
+                  <td>AI 使用→交流意愿；不等于真人任务能力验证。</td>
+                  <td>C</td>
+                  <td>2026</td>
+                  <td>链接未列。</td>
+                </tr>
+                <tr id="m7">
+                  <th scope="row">M7</th>
+                  <td>Aldamen，质性研究。</td>
+                  <td>25。</td>
+                  <td>好奇、安全感与未来自我；机制待检验，不画成已验证因果链。</td>
+                  <td>C</td>
+                  <td>2026</td>
+                  <td>链接未列。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2 evidence-explain">
+            <article class="card" id="e16">
+              <h3>E16 · 松鼠 AI 补充记录</h3>
+              <p>主要为厂商口径，独立证据弱。TIME 转述其自称服务 5,200 万学生，属于 D 类来源口径；本次未找到独立研究样本。</p>
+            </article>
+            <article class="card" id="e20">
+              <h3>E20 · Amira 补充记录</h3>
+              <p>EdWeek 有阅读朗读相关报道；本次未取得样本与量化结果，不据此补充学习收益数字。</p>
+            </article>
+          </div>
+
+          <div class="notice-dark evidence-explain">
+            <p><strong>撤稿与发表偏倚：</strong>Wang &amp; Fan 的 ChatGPT 效果元分析已于 <strong>2026-04-22</strong> 撤稿，<a href="#e12">E12 不可用</a>。另有 Bartoš 等指出，ChatGPT 元分析在发表偏倚校正后效果消失；本次未核到该条的原文与数字，不将其补写成新的量化结论。</p>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>开源项目表 · GitHub 快照 2026-10-11</summary>
+        <div class="details-body">
+          <p class="meta">星数、许可和维护状态是项目资料快照，不是学习效果等级或成效排名。仓库以 owner/name 标识。</p>
+          <div class="table-scroll evidence-explain" tabindex="0" role="region" aria-label="开源教育与语言学习项目表，可横向滚动">
+            <table>
+              <caption>GitHub 星数取于 2026-10-11。破折号表示未核实。</caption>
+              <thead>
+                <tr><th scope="col">仓库／项目</th><th scope="col">星数</th><th scope="col">许可</th><th scope="col">用途</th><th scope="col">状态</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">HKUDS/DeepTutor</th><td>41,098</td><td>Apache-2.0</td><td>个人知识库式 AI 辅导</td><td>活跃</td></tr>
+                <tr><th scope="row">THU-MAIC/OpenMAIC</th><td>40,331</td><td>MIT</td><td>多智能体 AI 课堂</td><td>活跃</td></tr>
+                <tr><th scope="row">ankitects/anki</th><td>31,905</td><td>AGPL</td><td>间隔重复</td><td>活跃</td></tr>
+                <tr><th scope="row">JushBJJ/Mr.-Ranedeer-AI-Tutor</th><td>29,562</td><td>无</td><td>GPT 提示词家教</td><td>停更</td></tr>
+                <tr><th scope="row">ankidroid/Anki-Android</th><td>11,981</td><td>GPL</td><td>Anki 安卓</td><td>活跃</td></tr>
+                <tr><th scope="row">read-frog</th><td>10,037</td><td>—</td><td>浏览器沉浸式翻译学语言</td><td>活跃</td></tr>
+                <tr><th scope="row">LLPlayer</th><td>4,351</td><td>—</td><td>语言学习视频播放器，AI 字幕</td><td>活跃</td></tr>
+                <tr><th scope="row">open-spaced-repetition/fsrs4anki</th><td>4,098</td><td>—</td><td>FSRS 记忆算法</td><td>活跃</td></tr>
+                <tr><th scope="row">LibreLingo</th><td>2,637</td><td>—</td><td>开源 Duolingo 替代</td><td>已归档</td></tr>
+                <tr><th scope="row">Li-Evan/Bloom</th><td>285</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><th scope="row">OATutor</th><td>264</td><td>—</td><td>开源自适应辅导，BKT</td><td>—</td></tr>
+                <tr><th scope="row">OpenPronounce</th><td>114</td><td>—</td><td>发音评测</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="inference-note">
+            <span class="label">观点／推断</span>
+            <p>本报告判断：开源在“AI 课堂／辅导”与“记忆算法”上较成熟。本次按 <span lang="en">AI speaking partner / conversation practice / pronunciation</span> 等关键词检索 GitHub，尚未找到有一定规模、仍在维护的开源口语陪练项目。“尚未找到”不等于不存在。</p>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>榜单与市场热度 · 不把“上榜”当作“学会”</summary>
+        <div class="details-body">
+          <div class="table-scroll" tabindex="0" role="region" aria-label="AI 消费应用榜单与中国市场资料，可横向滚动">
+            <table>
+              <thead>
+                <tr><th scope="col">榜单／口径</th><th scope="col">日期</th><th scope="col">所列教育相关应用／数字</th><th scope="col">来源与边界</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">a16z 全球消费级生成式 AI Top 100，第 7 版</th>
+                  <td>2026-10-05</td>
+                  <td>Gauth、Photomath、Jumpspeak；豆包上榜。</td>
+                  <td><a href="https://a16z.com/100-gen-ai-apps-7/" target="_blank" rel="noopener">第 7 版榜单</a>。榜单资料，非学习效果证据。</td>
+                </tr>
+                <tr>
+                  <th scope="row">a16z 第 6 版</th>
+                  <td>2026-03-09</td>
+                  <td>Brainly、Gauth、Photomath、Learna AI。</td>
+                  <td>本次未保存本版链接；非学习效果证据。</td>
+                </tr>
+                <tr>
+                  <th scope="row">中国：QuestMobile MAU</th>
+                  <td>2026-09 报道</td>
+                  <td>豆包爱学 1943.81 万。</td>
+                  <td>D · 所列市场口径；中国应用商店榜单未采集。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="inference-note">
+            <span class="label">观点／推断 · 榜单读法</span>
+            <p>本报告将上榜教育应用的主流需求概括为“拍照解题”和“拿到答案”。这与 E2 所揭示的无护栏风险用法相呼应；E5 则提供观察性下降相关。不能进一步推定每个上榜产品都导致考试下降。</p>
+            <p class="source"><a href="#e2">E2 · A · 2025-06-25</a>；<a href="#e5">E5 · C · 2026-09-15</a>。</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="related" aria-labelledby="related-title">
+      <div class="section-head">
+        <h2 id="related-title">相关站内报告</h2>
+        <p>同目录中的观点、案例与产品研究。</p>
+      </div>
+      <nav class="related" aria-label="相关站内报告">
+        <a href="20260617-1021-以造为终点的教育：AI时代的学习闭环.html">以造为终点的教育</a>
+        <a href="20260922-1319-AI教育全景研究｜能力边界、个人机会与90天验证.html">AI 教育全景研究</a>
+        <a href="20260922-2021-创造式学习产品反证与MVP研究.html">创造式学习产品反证与 MVP 研究</a>
+        <a href="20260927-2019-语言真实任务需求与产品机会.html">语言真实任务需求与产品机会</a>
+        <a href="20261004-1134-AI如何改变大学教育-18个案例与成果证据.html">AI 如何改变大学教育：18 个案例与成果证据</a>
+        <a href="20261010-2227-AI重构学习-李笑来笔记与个人行动路径.html">AI 重构学习：李笑来笔记与个人行动路径</a>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <h2>方法、缺口与局限</h2>
+      <div class="grid-2">
+        <section aria-labelledby="method-title">
+          <h3 id="method-title">方法说明</h3>
+          
+          <p>证据分级综合研究设计、偏倚风险、独立性与适用性：A 为同行评审随机试验或高质量元分析；B 为工作论文随机试验或公司主导但有对照；C 为观察性、准实验、小样本、质性田野或预印本；D 为厂商自报或媒体转述。小样本不自动无效，元分析不自动最高。</p>
+          <p>本报告使用的等级包括 A−、B（二手）、B（公司主导）、D/C、综述与不可用标记。来源仅给出 DOI、机构或媒体名的，保留标识与缺口；没有提供的增速、样本或日期不补算。</p>
+        </section>
+        <section aria-labelledby="limits-title">
+          <h3 id="limits-title">缺口与局限</h3>
+          <p>X（Twitter）未能采集；小红书、知乎及中国应用商店榜单未采集。HelloChinese／SuperChinese、MagicSchool 等用户数未核实，不列数字；多数语言 App 规模数字为厂商自报。</p>
+          <p>长期独立研究与成人中文真人迁移证据不足；单节课、短期、小样本、公司主导和二手报道的限制不能被产品热度抵消。用户帖只提出问题，不作成效或迁移失败的证据。</p>
+          <p><strong>留白不代表零效果；无显著损害不等于证明安全；留存不等于学会；AI 模拟对话不等于真人迁移。</strong></p>
+          <p>本页不构成投资或采购建议。</p>
+        </section>
+      </div>
+      <div class="footer-bottom">
+        <p>快照：2026-10-11（上海时间） · AI 教育辅助产品全景</p>
+        <a href="#top">返回标题与目录</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      function revealTarget(hash) {
+        if (!hash || hash === "#") return null;
+        let id;
+        try {
+          id = decodeURIComponent(hash.slice(1));
+        } catch {
+          return null;
+        }
+
+        const target = document.getElementById(id);
+        if (!target) return null;
+
+        let ancestor = target.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        return target;
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        const link = event.target.closest('a[href^="#"]');
+        if (link) revealTarget(link.getAttribute("href"));
+      });
+
+      window.addEventListener("hashchange", () => {
+        const target = revealTarget(window.location.hash);
+        if (target) target.scrollIntoView({ block: "start" });
+      });
+
+      const initialTarget = revealTarget(window.location.hash);
+      if (initialTarget) initialTarget.scrollIntoView({ block: "start" });
+    })();
+  </script>
+</body>
+</html>

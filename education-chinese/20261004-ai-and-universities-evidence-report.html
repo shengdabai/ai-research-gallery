@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light" name="color-scheme"/>
+<meta content="截至2026年10月4日，分析18个AI教育及新型学位案例，核验学习、认证、毕业与就业成果。" name="description"/>
+<meta content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<title>AI能答题，大学就该退场？｜高等教育转型证据报告</title>
+<style>/* Token source: primitives for paper/ink/type/space, then semantic components. BP_STACK=52rem; BP_COMPACT=30rem. Percentage --value values are research data. Grid cell indices and repeat counts are structural. */
+:root{
+--paper:#f5f3eb;--surface:#fffef9;--ink:#202c27;--muted:#58625c;--green:#24664f;--green-soft:#e7eee5;--rust:#96472f;--rust-soft:#f5e9e1;--line:#d4d8cd;--focus:#a64220;--white:#fffef9;
+--font-body:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--font-title:"Songti SC","STSong","SimSun",serif;--font-number:"SFMono-Regular",Consolas,monospace;
+--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.5rem;--space-6:2rem;--space-7:3rem;--space-8:4.5rem;
+--text-xs:.78rem;--text-sm:.9rem;--text-base:1rem;--text-lead:1.12rem;--text-subtitle:1.5rem;--text-metric:2rem;--text-h1:clamp(2.4rem,4.8vw,4.25rem);--text-h1-mobile:2.45rem;--text-h2:clamp(1.65rem,2.65vw,2.25rem);--text-price:clamp(1.8rem,3vw,2.5rem);
+--leading-tight:1.2;--leading-heading:1.5;--leading-copy:1.85;--weight-medium:650;--weight-bold:700;--weight-title:800;--tracking-wide:.07em;--tracking-tight:-.025em;
+--radius-circle:50%;--radius-sm:.35rem;--radius-md:.75rem;--layout-max:74rem;--page-pad:clamp(1.1rem,4vw,3.5rem);--deck-width:36rem;--lead-width:66rem;--touch-min:2.75rem;
+--line-fine:1px;--line-medium:2px;--line-strong:3px;--line-accent:4px;--focus-ring:var(--line-strong) solid var(--focus);--focus-offset:var(--space-1);--z-access:10;
+--hero-columns:minmax(0,1.4fr) minmax(0,.9fr);--fact-columns:minmax(0,.8fr) minmax(0,2fr);--case-columns:minmax(0,.75fr) minmax(0,2fr);--function-columns:minmax(0,.8fr) minmax(0,1.15fr) minmax(0,1.2fr);--bar-columns:minmax(9rem,1fr) minmax(4rem,2.4fr) 3.4rem;--bar-number-width:3.4rem;--metric-label-width:5rem;--timeline-dot:.6rem;--timeline-offset:.36rem;--bar-height:.7rem;--skip-hidden:-6rem;
+}
+*{box-sizing:border-box}html{scroll-padding-top:var(--space-5)}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:var(--text-base);line-height:var(--leading-copy);overflow-wrap:anywhere}[hidden]{display:none!important}
+a{color:var(--green);text-underline-offset:var(--space-1)}a:hover{text-decoration-thickness:var(--line-medium)}:focus-visible{outline:var(--focus-ring);outline-offset:var(--focus-offset)}button,input,textarea{font:inherit}button,summary{cursor:pointer}h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}h1,h2,h3,h4{overflow-wrap:break-word}p+p{margin-top:var(--space-3)}strong{font-weight:var(--weight-bold)}
+.shell{width:min(100%,calc(var(--layout-max) + var(--page-pad)*2));margin-inline:auto;padding-inline:var(--page-pad)}.skip-link{position:absolute;top:var(--skip-hidden);left:var(--space-4);z-index:var(--z-access);padding:var(--space-3) var(--space-4);background:var(--ink);color:var(--white)}.skip-link:focus{top:var(--space-4)}
+.masthead{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding-block:var(--space-5);border-bottom:var(--line-fine) solid var(--ink);font-size:var(--text-sm);letter-spacing:var(--tracking-wide)}.masthead strong{color:var(--green)}.dateline{color:var(--muted);white-space:nowrap}
+.hero{display:grid;grid-template-columns:var(--hero-columns);gap:var(--space-7);padding-block:var(--space-8) var(--space-7);align-items:end}.eyebrow{color:var(--green);font-size:var(--text-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-wide);margin-bottom:var(--space-4)}h1{font-family:var(--font-title);font-size:var(--text-h1);line-height:var(--leading-tight);font-weight:var(--weight-title);letter-spacing:var(--tracking-tight)}.deck{max-width:var(--deck-width);margin-top:var(--space-5);font-size:var(--text-lead);color:var(--muted)}
+.verdict{border-top:var(--line-accent) solid var(--green);background:var(--green-soft);padding:var(--space-5);border-radius:0 0 var(--radius-md) var(--radius-md)}.verdict h2{font-family:var(--font-title);font-size:var(--text-subtitle);line-height:var(--leading-heading);margin-bottom:var(--space-4)}.label{display:block;font-size:var(--text-xs);color:var(--muted);font-weight:var(--weight-bold);letter-spacing:var(--tracking-wide);margin-bottom:var(--space-2)}.lead{font-size:var(--text-lead);max-width:var(--lead-width);margin-bottom:var(--space-6)}
+.cite{display:inline;margin-inline:var(--space-1);font-size:var(--text-xs);font-weight:var(--weight-medium);white-space:nowrap;text-decoration:none;border-bottom:var(--line-fine) solid currentColor}.note{color:var(--muted);font-size:var(--text-sm)}.conventions{padding:var(--space-5);border:var(--line-fine) solid var(--line);background:var(--surface);border-radius:var(--radius-md)}.conventions h2{font-size:var(--text-base);margin-bottom:var(--space-3)}.legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4);margin-bottom:var(--space-3)}.tag{display:inline-block;padding:0 var(--space-2);border:var(--line-fine) solid var(--line);border-radius:var(--radius-sm);font-size:var(--text-xs);font-weight:var(--weight-medium);color:var(--muted);background:var(--surface)}.tag.research{color:var(--green);background:var(--green-soft)}.tag.plan{color:var(--rust);background:var(--rust-soft)}.tag.analysis{color:var(--ink);background:transparent}
+.toc{margin-top:var(--space-6);padding-block:var(--space-4);border-block:var(--line-fine) solid var(--line)}.toc-label{font-size:var(--text-xs);color:var(--muted);margin-bottom:var(--space-2)}.toc-links{display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-5)}.toc a{display:inline-flex;align-items:center;min-height:var(--touch-min);font-size:var(--text-sm);text-decoration:none}
+main>section{margin-top:var(--space-8);padding-top:var(--space-6);border-top:var(--line-fine) solid var(--line)}.section-head{display:flex;align-items:baseline;gap:var(--space-4);margin-bottom:var(--space-5)}.section-no{flex:0 0 auto;font-family:var(--font-number);font-size:var(--text-sm);color:var(--rust);font-weight:var(--weight-bold)}h2{font-family:var(--font-title);font-size:var(--text-h2);line-height:var(--leading-heading)}h3{font-size:var(--text-lead);line-height:var(--leading-heading)}h4{font-size:var(--text-base);line-height:var(--leading-heading)}.intro{max-width:var(--lead-width);margin-bottom:var(--space-5);color:var(--muted)}
+.two-col,.research-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.panel,.research-panel,.scenario{padding:var(--space-5);background:var(--surface);border:var(--line-fine) solid var(--line);min-width:0}.panel{border-radius:var(--radius-md)}.panel h3{margin-bottom:var(--space-3)}.callout{margin-top:var(--space-5);padding:var(--space-4) var(--space-5);border-left:var(--line-accent) solid var(--green);background:var(--green-soft)}.callout.warning{border-left-color:var(--rust);background:var(--rust-soft)}
+.fact-list{border-top:var(--line-fine) solid var(--line)}.fact-row{display:grid;grid-template-columns:var(--fact-columns);gap:var(--space-5);padding-block:var(--space-5);border-bottom:var(--line-fine) solid var(--line)}.fact-claim{font-family:var(--font-title);font-size:var(--text-lead)}.fact-row .tag{margin-bottom:var(--space-2)}.context-chart{margin-top:var(--space-6)}figcaption{margin-bottom:var(--space-4)}.bar-row{display:grid;grid-template-columns:var(--bar-columns);gap:var(--space-3);align-items:center;margin-block:var(--space-3)}.bar-label{font-size:var(--text-sm)}.bar-track{height:var(--bar-height);background:var(--green-soft);border-radius:var(--radius-sm);overflow:hidden}.bar-fill{display:block;width:var(--value);height:100%;background:var(--green)}.bar-value{text-align:right;font-family:var(--font-number);font-weight:var(--weight-bold)}
+.function-head,.function-row{display:grid;grid-template-columns:var(--function-columns);gap:var(--space-5);padding:var(--space-4) var(--space-5)}.function-head{background:var(--ink);color:var(--white);font-size:var(--text-sm)}.function-row{border-bottom:var(--line-fine) solid var(--line);background:var(--surface)}.function-row h3{font-size:var(--text-base)}.function-row p{font-size:var(--text-sm)}.mobile-label{display:none}.function-state{display:block;margin-top:var(--space-1);color:var(--green);font-size:var(--text-xs);font-weight:var(--weight-bold)}
+.timeline{margin-block:var(--space-5);padding-left:var(--space-5);border-left:var(--line-medium) solid var(--green)}.timeline-item{position:relative;padding-bottom:var(--space-5)}.timeline-item:last-child{padding-bottom:0}.timeline-item::before{content:"";position:absolute;width:var(--timeline-dot);height:var(--timeline-dot);border-radius:var(--radius-circle);background:var(--green);left:calc(-1 * var(--space-5) - var(--timeline-offset));top:var(--space-2)}.timeline-date{font-family:var(--font-number);font-size:var(--text-sm);font-weight:var(--weight-bold);color:var(--green)}.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4);margin-block:var(--space-5)}.pillar{padding:var(--space-4);border-top:var(--line-strong) solid var(--green);background:var(--surface)}.pillar h3{margin-bottom:var(--space-2)}
+.filter-panel{padding:var(--space-5);background:var(--green-soft);border-radius:var(--radius-md);margin-bottom:var(--space-5)}.filter-buttons{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-block:var(--space-3)}.filter-buttons button,.reset-button{min-height:var(--touch-min);padding:var(--space-2) var(--space-3);border:var(--line-fine) solid var(--green);border-radius:var(--radius-sm);background:var(--surface);color:var(--green);font-size:var(--text-sm);font-weight:var(--weight-medium)}.filter-buttons button[aria-pressed="true"]{background:var(--green);color:var(--white)}.filter-footer{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4)}.reset-button{background:transparent}.result-count{font-size:var(--text-sm);font-weight:var(--weight-medium)}
+.case-group{margin-top:var(--space-6)}.group-head{display:flex;gap:var(--space-4);align-items:baseline;padding-block:var(--space-3);border-bottom:var(--line-medium) solid var(--ink)}.group-head .group-letter{font-family:var(--font-number);color:var(--rust)}.case{display:grid;grid-template-columns:var(--case-columns);gap:var(--space-6);padding-block:var(--space-5);border-bottom:var(--line-fine) solid var(--line)}.case-id{color:var(--muted);font-family:var(--font-number);font-size:var(--text-xs)}.case-title h4{margin-block:var(--space-1) var(--space-2)}.case-mechanism{color:var(--muted);font-size:var(--text-sm)}.case-body p{font-size:var(--text-base)}.limit{padding-left:var(--space-3);border-left:var(--line-medium) solid var(--line)}.limit strong{color:var(--rust)}details{margin-top:var(--space-3)}summary{color:var(--green);font-size:var(--text-sm);font-weight:var(--weight-medium);padding-block:var(--space-2)}details>p{margin-top:var(--space-2);color:var(--muted)}.empty-state{padding:var(--space-6);border:var(--line-fine) dashed var(--line);text-align:center}.empty-state button{margin-top:var(--space-4)}
+.research-panel h3{margin-block:var(--space-2) var(--space-3)}.research-panel .note{margin-top:var(--space-3)}.baseline{text-align:center;padding:var(--space-3);background:var(--green-soft);border-radius:var(--radius-sm)}.median-pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-3)}.median-box{border:var(--line-fine) solid var(--line);padding:var(--space-4);text-align:center}.big-number{display:block;font-family:var(--font-number);font-size:var(--text-metric);line-height:var(--leading-tight);font-weight:var(--weight-bold);color:var(--green)}.difference{display:block;margin-top:var(--space-1);font-size:var(--text-sm);color:var(--muted)}.transfer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:var(--space-4);border-top:var(--line-fine) solid var(--line)}.transfer-grid>div{padding:var(--space-3) var(--space-1);border-bottom:var(--line-fine) solid var(--line);font-size:var(--text-sm)}.transfer-grid .column-title{font-size:var(--text-xs);color:var(--muted)}.positive{color:var(--green);font-weight:var(--weight-bold)}.negative{color:var(--rust);font-weight:var(--weight-bold)}
+.denominator-stack{display:grid;gap:var(--space-3);margin-block:var(--space-4)}.denominator-item{display:grid;grid-template-columns:var(--metric-label-width) minmax(0,1fr);align-items:center;gap:var(--space-3);padding-bottom:var(--space-3);border-bottom:var(--line-fine) solid var(--line)}.denominator-item .big-number{font-size:var(--text-subtitle)}.denominator-item p{font-size:var(--text-sm)}.separate-result{margin-top:var(--space-4);padding-top:var(--space-4);border-top:var(--line-fine) solid var(--line)}.metric-line{margin-block:var(--space-3)}.metric-line strong{font-family:var(--font-number);font-size:var(--text-subtitle);color:var(--green)}
+.ladder-wrap{margin-top:var(--space-6)}.ladder{list-style:none;padding:0;margin:var(--space-4) 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-3);counter-reset:ladder}.ladder li{position:relative;padding:var(--space-4);border-top:var(--line-strong) solid var(--green);background:var(--green-soft);min-width:0}.ladder li::before{counter-increment:ladder;content:"0" counter(ladder);display:block;font-family:var(--font-number);font-size:var(--text-xs);color:var(--green);margin-bottom:var(--space-1)}.ladder strong{display:block;font-size:var(--text-base)}.ladder span{display:block;font-size:var(--text-sm);color:var(--muted);margin-top:var(--space-1)}
+.price{font-family:var(--font-number);font-size:var(--text-price);color:var(--green);line-height:var(--leading-heading);margin-block:var(--space-3)}.price small{font-family:var(--font-body);font-size:var(--text-sm);color:var(--muted)}.price.secondary{font-size:var(--text-subtitle)}.cost-target{border-top:var(--line-accent) solid var(--rust)}.cost-established{border-top:var(--line-accent) solid var(--green)}.pilot{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4);margin-block:var(--space-4)}.pilot>div{padding:var(--space-4);border:var(--line-fine) solid var(--line);background:var(--surface)}.pilot h4{color:var(--green);margin-bottom:var(--space-2)}.pilot p{font-size:var(--text-sm)}.scenario-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4)}.scenario h3{margin-block:var(--space-3)}.revision{margin-top:var(--space-5)}.revision>div{display:grid;grid-template-columns:var(--fact-columns);gap:var(--space-5);padding-block:var(--space-3);border-bottom:var(--line-fine) solid var(--line)}.revision dt{font-weight:var(--weight-bold)}.revision dd{color:var(--muted)}
+.closing{padding:var(--space-6);background:var(--ink);color:var(--paper);border-radius:var(--radius-md)}.closing h3{font-family:var(--font-title);font-size:var(--text-subtitle);margin-bottom:var(--space-4)}.closing p+p{margin-top:var(--space-4)}.source-index{margin-top:var(--space-6)}.source-index>summary{font-size:var(--text-lead);padding-block:var(--space-3);border-block:var(--line-fine) solid var(--line)}.source-list{margin:var(--space-4) 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--space-6)}.source-list li{padding-block:var(--space-3);border-bottom:var(--line-fine) solid var(--line);min-width:0}.source-list a{font-size:var(--text-sm)}.source-meta{display:block;margin-top:var(--space-1);color:var(--muted);font-size:var(--text-xs)}.audit{margin-block:var(--space-7) var(--space-8);padding:var(--space-5);border:var(--line-fine) dashed var(--line);background:var(--surface)}.audit h2{font-family:var(--font-body);font-size:var(--text-base)}.audit-edit{margin-top:var(--space-3);font-size:var(--text-sm);color:var(--muted);white-space:pre-wrap}
+/* BP_STACK = 52rem */
+@media(max-width:52rem){.hero{grid-template-columns:1fr;gap:var(--space-6);padding-top:var(--space-7)}.deck{max-width:none}.two-col,.research-grid,.scenario-grid,.pillars{grid-template-columns:1fr}.fact-row{grid-template-columns:1fr;gap:var(--space-3)}.function-head{display:none}.function-row{grid-template-columns:1fr;gap:var(--space-3);margin-bottom:var(--space-4);border:var(--line-fine) solid var(--line);border-radius:var(--radius-sm)}.mobile-label{display:block;color:var(--muted);font-size:var(--text-xs);font-weight:var(--weight-bold);margin-bottom:var(--space-1)}.function-state{display:inline;margin-left:var(--space-3)}.case{grid-template-columns:1fr;gap:var(--space-3)}.case-title h4{display:inline;margin-right:var(--space-2)}.case-id{display:block}.case-mechanism{margin-top:var(--space-2)}.ladder{grid-template-columns:1fr;gap:var(--space-2)}.ladder li{display:grid;grid-template-columns:var(--space-6) minmax(0,1fr);gap:0 var(--space-3);border-top:0;border-left:var(--line-strong) solid var(--green)}.ladder li::before{grid-row:1/3;margin:0}.pilot{grid-template-columns:repeat(2,minmax(0,1fr))}.source-list{grid-template-columns:1fr}.revision>div{grid-template-columns:1fr;gap:var(--space-1)}main>section{margin-top:var(--space-7)}}
+/* BP_COMPACT = 30rem */
+@media(max-width:30rem){.masthead{align-items:flex-start;flex-direction:column;gap:var(--space-1);padding-block:var(--space-4)}h1{font-size:var(--text-h1-mobile)}.deck{font-size:var(--text-base)}.verdict,.panel,.research-panel,.filter-panel,.scenario{padding:var(--space-4)}.section-head{gap:var(--space-3)}.toc-links{gap:var(--space-1) var(--space-4)}.bar-row{grid-template-columns:minmax(0,1fr) var(--bar-number-width);gap:var(--space-1) var(--space-3)}.bar-label{grid-column:1/3}.bar-track{grid-column:1}.bar-value{grid-column:2}.filter-footer{align-items:flex-start;flex-direction:column;gap:var(--space-2)}.pilot{grid-template-columns:1fr}.median-box{padding:var(--space-3)}.function-row{padding:var(--space-4)}.closing,.conventions{padding:var(--space-5)}}
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">跳至报告正文</a>
+<div class="shell">
+<header>
+<div class="masthead">
+<strong>证据观察 / 高等教育 × AI</strong>
+<span class="dateline">截至 <time datetime="2026-10-04">2026年10月4日</time></span>
+</div>
+<div class="hero">
+<div>
+<p class="eyebrow">研究特稿 · 面向创作者、家长与教育建设者</p>
+<h1>AI 能答题，<br/>大学就该退场？</h1>
+<p class="deck">一次出色的辅导、一项新大学计划、一张受认可的文凭，是三件不同的事。真正的变革，藏在它们之间尚未接通的证据里。</p>
+</div>
+<aside aria-labelledby="verdict-title" class="verdict">
+<span class="label">有条件的判断</span>
+<h2 id="verdict-title">教学正在被改写，<br/>大学整体替代尚未获证。</h2>
+<p>精心设计的 AI 导师可以改善某些即时学习结果；这不等于已经接管学位、实验训练、导师关系与就业网络。现有证据更清楚地支持“重做教学环节”，而非“撤销大学”。<a class="cite" href="https://www.nature.com/articles/s41598-025-97652-6">[09]</a><a class="cite" href="https://www.tsinghua.edu.cn/jyjx/zxjy/fzgk.htm">[17]</a></p>
+</aside>
+</div>
+<p class="lead">最容易制造震撼的叙事，是把“知识解释越来越便宜”直接推成“大学已经没有必要”。但一名学生需要的可能不仅是解释，还包括独立解决问题的能力、被认可的资格，以及进入研究和职业共同体的机会。本报告将问题拆开：<strong>AI 改变了什么，什么已有结果，什么仍只是计划？</strong></p>
+<div aria-labelledby="conventions-title" class="conventions">
+<h2 id="conventions-title">先约定：这些证据不能互相冒充</h2>
+<div class="legend">
+<span class="tag plan">计划：承诺与待开发项目</span>
+<span class="tag">部署：课程、账号与覆盖</span>
+<span class="tag">自报：感受与问卷结果</span>
+<span class="tag research">试验：特定条件下的学习结果</span>
+<span class="tag">认证：特定机构与资格状态</span>
+</div>
+<p class="note">“教育中使用 AI”“学习 AI 知识”“获得经认证的在线学位”是三个维度，并非同一条升级路线。文中的“观察到”指来源实际报告的结果，不代表独立复现；工作论文、预印本与机构宣传分别标明。多家合作方的新闻稿也不构成多份独立验证。方括号均直达相关原始来源。</p>
+</div>
+<nav aria-label="报告目录" class="toc">
+<p class="toc-label">阅读路径</p>
+<div class="toc-links">
+<a href="#fact-check">01 传言核验</a>
+<a href="#functions">02 大学功能</a>
+<a href="#khan-ted">03 Khan TED</a>
+<a href="#cases">04 案例浏览</a>
+<a href="#research">05 学习证据</a>
+<a href="#costs">06 成本比较</a>
+<a href="#china">07 中国选择</a>
+<a href="#scenarios">08 情景与改判</a>
+<a href="#conclusion">09 实用结论</a>
+<a href="#sources">10 来源与边界</a>
+</div>
+</nav>
+</header>
+<main id="main">
+<section aria-labelledby="fact-title" id="fact-check">
+<div class="section-head">
+<span class="section-no">01</span>
+<h2 id="fact-title">一个真项目，撑不起一串过度推论</h2>
+</div>
+<p class="intro">传播叙事混合了可以核实的机构公告、无法归属的个人说法，以及对大学功能的推测。应保留前者，悬置后两者，而不是将整段视频当作单一事实。</p>
+<div class="fact-list">
+<article class="fact-row">
+<h3 class="fact-claim">“可汗、TED Tech、ETS 上个月在硅谷宣布 AI 大学。”</h3>
+<div>
+<span class="tag research">项目属实，机构与地点须更正</span>
+<p>联合发起者是非营利机构 Khan Academy、<strong>TED，而非 TED Tech</strong>，以及 ETS。正式公告发布于<strong>2026年4月14日，温哥华 TED 大会</strong>。地点应为温哥华；“上个月”因视频发布日期未知，无法核对。所述视频的发布日期与讲述者身份未获核实，不能据此反推相对时间或给某位人士归因。<a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+</div>
+</article>
+<article class="fact-row">
+<h3 class="fact-claim">“已经有一所不到一万美元的 AI 大学，可以替代传统本科。”</h3>
+<div>
+<span class="tag plan">把计划误写成已兑现产品</span>
+<p>Khan TED Institute 官网仍称项目在开发中，追求完整认证，获认证后才授予学位。2027年启动与预计申请安排是计划节点，表达兴趣不是录取，更不是已入学队列。可汗官方也将其定位为扩大选择，而非取代传统大学。<a class="cite" href="https://khanted.org/">[01]</a><a class="cite" href="https://blog.khanacademy.org/introducing-the-khan-ted-institute-a-new-approach-to-higher-education/">[03]</a></p>
+</div>
+</article>
+<article class="fact-row">
+<h3 class="fact-claim">“150名斯坦福学生说80%可替代；某C9院长说用了AI成绩也没变。”</h3>
+<div>
+<span class="tag plan">未核实轶事，不进入效果判断</span>
+<p>资料中没有可归属的数据集或足以核对的调查材料，无法判断样本、问题措辞与比较条件。即使学生确有这种感受，也不是大学功能被替代的测量。<strong>成绩稳定既不能证明学习稳定，也不能证明 AI 的因果作用</strong>；试题、评分与学生群体等因素需要另行控制。不猜测匿名学校，也不补认讲述者。</p>
+</div>
+</article>
+<article class="fact-row">
+<h3 class="fact-claim">“TED提供人生阅历，ETS负责考试，地理和学历壁垒就消失了。”</h3>
+<div>
+<span class="tag analysis">推论跨越了不同制度环节</span>
+
+</div>
+</article>
+</div>
+<figure aria-labelledby="hepi-caption" class="panel context-chart">
+<figcaption id="hepi-caption">
+<h3>广泛使用，确实已经发生；学习改善，仍是另一道题</h3>
+<p class="note">HEPI 2026报告：2025年12月调查的1,054名英国全日制本科生。三项均为该样本中的自报比例，不代表全球学生。<a class="cite" href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2026/">[27]</a></p>
+</figcaption>
+<div class="bar-row">
+<span class="bar-label">使用过 AI</span>
+<span aria-hidden="true" class="bar-track"><span class="bar-fill" style="--value:95%"></span></span>
+<span class="bar-value">95%</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">用 AI 支持考核作业</span>
+<span aria-hidden="true" class="bar-track"><span class="bar-fill" style="--value:94%"></span></span>
+<span class="bar-value">94%</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">认为学习体验改善</span>
+<span aria-hidden="true" class="bar-track"><span class="bar-fill" style="--value:49%"></span></span>
+<span class="bar-value">49%</span>
+</div>
+<p class="note">共同分母允许展示回答比例，但三个问题并非转化漏斗，也不能相加。“支持考核作业”不自动等于作弊；“体验改善”不是客观学习增益。</p>
+</figure>
+</section>
+<section aria-labelledby="functions-title" id="functions">
+<div class="section-head">
+<span class="section-no">02</span>
+<h2 id="functions-title">把大学拆开，才看得见替代的边界</h2>
+</div>
+
+<div aria-label="大学七类功能的定性分析" class="function-map" role="group">
+<div aria-hidden="true" class="function-head">
+<span>大学功能 / 判断</span><span>AI 可以重做什么</span><span>仍须另行证明什么</span>
+</div>
+<article class="function-row">
+<h3>内容解释<span class="function-state">重构最直接</span></h3>
+<p><span class="mobile-label">可重构部分</span>按先修水平换一种讲法，辅助阅读、写作与代码理解。</p>
+<p><span class="mobile-label">未跨越的边界</span>解释准确不等于形成完整知识结构，更不等于能独立运用。</p>
+</article>
+<article class="function-row">
+<h3>练习与反馈<span class="function-state">取决于教学设计</span></h3>
+<p><span class="mobile-label">可重构部分</span>增加反馈频率，提示下一步，围绕具体错误组织练习。</p>
+<p><span class="mobile-label">未跨越的边界</span>直接给答案可能替代思考；应检查撤去工具后的表现。</p>
+</article>
+<article class="function-row">
+<h3>学习评价<span class="function-state">形成性评价先变</span></h3>
+<p><span class="mobile-label">可重构部分</span>协助出题、反馈、诊断薄弱点与课程日常运营。</p>
+<p><span class="mobile-label">未跨越的边界</span>身份核验、独立作答、可信评分与高风险资格评价。</p>
+</article>
+<article class="function-row">
+<h3>导师与同伴<span class="function-state">扩展而非等同</span></h3>
+<p><span class="mobile-label">可重构部分</span>降低日常答疑等待，让人类指导集中于更复杂的问题。</p>
+<p><span class="mobile-label">未跨越的边界</span>长期判断、关照、冲突协作与真实关系，不能用对话次数代替。</p>
+</article>
+<article class="function-row">
+<h3>实验与临床学徒训练<span class="function-state">辅助不能充当完成</span></h3>
+<p><span class="mobile-label">可重构部分</span>预演流程、辅助解释与模拟练习。</p>
+<p><span class="mobile-label">未跨越的边界</span>真实设备、受监督实践、安全责任与专业能力签核。</p>
+</article>
+<article class="function-row">
+<h3>学位与招生筛选<span class="function-state">制度条件独立存在</span></h3>
+<p><span class="mobile-label">可重构部分</span>更灵活的学习路径与能力证明设计。</p>
+<p><span class="mobile-label">未跨越的边界</span>合法认证、录取资格、跨境认可与用人单位信任。</p>
+</article>
+<article class="function-row">
+<h3>研究与公共职能<span class="function-state">不能缩减为课程库</span></h3>
+<p><span class="mobile-label">可重构部分</span>辅助研究任务、知识整理与公共传播。</p>
+<p><span class="mobile-label">未跨越的边界</span>知识生产、学术共同体与公共责任是否被更好地承接。</p>
+</article>
+</div>
+<p class="note" style="margin-top:var(--space-4)">这张地图的判断依据是任务与制度的区别；材料中支持最具体的仍是辅导和课堂层面的研究，而非七类功能整体替代的试验。<a class="cite" href="https://www.nature.com/articles/s41598-025-97652-6">[09]</a><a class="cite" href="https://www.pnas.org/doi/10.1073/pnas.2422633122">[26]</a></p>
+</section>
+<section aria-labelledby="khan-title" id="khan-ted">
+<div class="section-head">
+<span class="section-no">03</span>
+<h2 id="khan-title">Khan TED：值得跟踪的新路径，尚非毕业结果</h2>
+</div>
+<p>它的重要性不在于已经证明“大学无用”，而在于尝试把学习、实践、测评与较低价格重新组合。三方合作连接 Khan Academy 的学习与辅导能力、TED 的思想和交流资源、ETS 的测评能力；不能将其简化成“视频加考试就能发文凭”。<a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+<div class="two-col" style="margin-top:var(--space-5)">
+<div class="panel">
+<h3>把公告、启动与招生分开</h3>
+<div class="timeline">
+<div class="timeline-item">
+<p class="timeline-date">2026-04-14 · 正式宣布</p>
+<p>温哥华 TED 大会发布合作计划；当时预计12—18个月后开放申请。这是预期，不是已发生的招生。<a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+</div>
+<div class="timeline-item">
+<p class="timeline-date">2026-10-04 · 本次核验节点</p>
+<p>官网仍标注项目开发中，认证、学位、费用、录取与结果的更多细节待发布；兴趣登记不等于申请成功。<a class="cite" href="https://khanted.org/">[01]</a></p>
+</div>
+<div class="timeline-item">
+<p class="timeline-date">2027 · 官网计划启动</p>
+<p>启动年份不等于已经入学，更不等于已经毕业。正式申请窗口与具体培养安排仍应以最终发布为准。<a class="cite" href="https://khanted.org/">[01]</a></p>
+</div>
+</div>
+</div>
+<div class="panel">
+<h3>三个尚未跨过的门槛</h3>
+
+<p><strong>价格：</strong>完整学位学费低于10,000美元是目标。培养时长、全部必要支出及最终招生条件仍待明确。<a class="cite" href="https://khanted.org/">[01]</a></p>
+<p><strong>结果：</strong>本次查证未见公开的已完成毕业生或就业队列报告。这是扫描范围内的证据空缺，不是证明现实中绝无任何队列。<a class="cite" href="https://khanted.org/">[01]</a><a class="cite" href="https://blog.khanacademy.org/introducing-the-khan-ted-institute-a-new-approach-to-higher-education/">[03]</a></p>
+</div>
+</div>
+<div aria-label="公告提出的三类培养支柱" class="pillars" role="group">
+<div class="pillar">
+<h3>核心知识</h3>
+<p>数学、统计、经济、计算机、科学、历史与写作，不是仅教提示词。</p>
+</div>
+<div class="pillar">
+<h3>应用 AI</h3>
+<p>应用、智能体与团队项目；不能把培养支柱写成已获批的“应用AI”专业名称。</p>
+</div>
+<div class="pillar">
+<h3>沟通与领导力</h3>
+<p>表达、领导力、同伴辅导与现场问答，说明设计本身仍包含人与人的学习。</p>
+</div>
+</div>
+<p class="note">以上为公告中的培养设计，并非已完成培养效果。<a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+<div class="callout">
+<p><strong>企业参与，不等于保就业。</strong>Google、Microsoft、Accenture、Bain、McKinsey 与 Replit 被列为提供课程思考与建议的合作伙伴；课程输入不应改写为录用承诺。真正值得等候的是：正式认可范围、实际入学与留存、独立考核、毕业率、全成本，以及有清晰分母和比较基准的就业结果。<a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+</div>
+</section>
+<section aria-labelledby="cases-title" id="cases">
+<div class="section-head">
+<span class="section-no">04</span>
+<h2 id="cases-title">18个案例：看见“做了什么”，也看见“没证明什么”</h2>
+</div>
+<p class="intro">不是大学排名，也不是 AI 成效排行榜。每例保留机构、机制、来源实际报告的结果与证据上限。学龄阶段研究用于提醒迁移边界，不能冒充大学毕业证据。</p>
+<div class="filter-panel" hidden="" id="filter-panel">
+<p id="filter-label"><strong>按路径筛选案例</strong></p>
+<div aria-labelledby="filter-label" class="filter-buttons" id="filter-buttons" role="group">
+<button aria-controls="case-collection" aria-pressed="true" data-filter="all" type="button">全部案例</button>
+<button aria-controls="case-collection" aria-pressed="false" data-filter="degree" type="button">学位路径</button>
+<button aria-controls="case-collection" aria-pressed="false" data-filter="university" type="button">现有大学</button>
+<button aria-controls="case-collection" aria-pressed="false" data-filter="platform" type="button">平台工具</button>
+<button aria-controls="case-collection" aria-pressed="false" data-filter="school" type="button">学龄阶段迁移证据</button>
+</div>
+<div class="filter-footer">
+<p aria-atomic="true" aria-live="polite" class="result-count" id="case-count" role="status">显示全部18个案例。</p>
+<button class="reset-button" data-reset="" type="button">重置为全部</button>
+</div>
+<p class="note">Tab 键访问按钮；左右方向键移动，回车或空格筛选；Home / End 到首尾。跨类案例会出现在相关筛选中。</p>
+</div>
+<noscript><p class="note">当前显示全部18个案例；详情与原始来源均可直接阅读。</p></noscript>
+<div id="case-collection">
+<section aria-labelledby="group-degree" class="case-group">
+<div class="group-head">
+<span class="group-letter">A</span>
+<h3 id="group-degree">学位路径与组织创新</h3>
+</div>
+<article class="case" data-kinds="degree" id="case-01">
+<div class="case-title">
+<span class="case-id">CASE 01</span>
+<h4>Khan TED Institute</h4>
+<span class="tag plan">官方计划</span>
+<p class="case-mechanism">机制：重新组合基础知识、应用AI、沟通训练与测评。</p>
+</div>
+<div class="case-body">
+<p><strong>实际进展：</strong>三方已宣布合作，官网发布2027年启动及完整学位低于10,000美元的目标；项目仍在开发、追求认证。这里的成果是计划与组织承诺，不是已实现的学位结果。<a class="cite" href="https://khanted.org/">[01]</a><a class="cite" href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02]</a></p>
+<p class="limit"><strong>不能证明：</strong>已获认证、已招收正式队列、已完成毕业就业验证，或对中国申请者已确认开放。</p>
+</div>
+</article>
+<article class="case" data-kinds="degree" id="case-02">
+<div class="case-title">
+<span class="case-id">CASE 02</span>
+<h4>Nexford University</h4>
+<span class="tag">校方认证说明 / 校友自报</span>
+<p class="case-mechanism">机制：运营在线学位，并将应用AI能力纳入学习路径。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>学校称获 DEAC 认证。2026年9月8日校友报告中，相关问题受访者92%调查时有工作，82%称获晋升或承担更多责任。<a class="cite" href="https://www.nexford.edu/nexford-accreditation">[04]</a><a class="cite" href="https://www.nexford.edu/research/2026-alumni-outcomes-report-nexford-university">[05]</a></p>
+<p class="limit"><strong>不能证明：</strong>AI使就业改善。学校明确提示这是全校校友结果，不是新AI项目队列；已访问概览未核实样本量与回复率，也没有因果对照。</p>
+<details>
+<summary>为何不把薪资数字当作AI回报率？</summary>
+<p>报告还称相关受访者约三分之一薪资增长至少50%。不同问题可能有不同分母；自报、选择性回复与入学前职业基础都限制解释，不能由此计算新AI学位的投资收益。<a class="cite" href="https://www.nexford.edu/research/2026-alumni-outcomes-report-nexford-university">[05]</a></p>
+</details>
+</div>
+</article>
+<article class="case" data-kinds="degree" id="case-03">
+<div class="case-title">
+<span class="case-id">CASE 03</span>
+<h4>University of the People</h4>
+<span class="tag">认证机构名录</span>
+<p class="case-mechanism">机制：低成本在线学位模式，而非新生成式AI替代实验。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>WSCUC 名录显示当前状态为 Accredited，首次认证记录为2024年，最近行动日期为2026年3月24日。它证明获认证的在线路径可以存在。<a class="cite" href="https://www.wscuc.org/institutions/university-of-the-people/">[06]</a></p>
+<p class="limit"><strong>不能证明：</strong>AI改善了学习，或在线文凭在所有国家和用途下自动获认可。不要将认证变化简写为“2025年首次获认证”。</p>
+<details>
+<summary>认证时间线的另一处易混淆点</summary>
+<p>校方说明，其此前与 DEAC 的认证关系于2025年12月31日结束；不同认证机构的记录应分开阅读。<a class="cite" href="https://www.uopeople.edu/student-experience/quality/accreditation/">[07]</a></p>
+</details>
+</div>
+</article>
+<article class="case" data-kinds="degree" id="case-04">
+<div class="case-title">
+<span class="case-id">CASE 04</span>
+<h4>Minerva University</h4>
+<span class="tag">校方结果自报</span>
+<p class="case-mechanism">机制：主动研讨、数字授课与全球沉浸，设计早于生成式AI浪潮。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>学校报告91%在毕业六个月内<strong>工作或进入研究生学习</strong>，97%有实习经历。前者是合并结果，不能改写成“91%就业率”。<a class="cite" href="https://www.minerva.edu/student-impact/">[08]</a></p>
+<p class="limit"><strong>不能证明：</strong>AI移除了教师或带来这些结果。查证记录未核实回复率，也没有可比反事实；个别优秀校友不能代表总体因果效果。</p>
+</div>
+</article>
+<article class="case" data-kinds="degree" id="case-05"><div class="case-title"><span class="case-id">CASE 05</span><h4>Tomorrow University</h4><span class="tag">官方办学名录 / 校方项目页</span><p class="case-mechanism">机制：德国线上学位、挑战式项目学习与AI专业课程。</p></div><div class="case-body"><p><strong>实际进展：</strong>黑森州主管部门高校名录列有该校。其官网已公布线上 AI &amp; Sustainability 本科项目、180 ECTS 与招生安排；这证明一种线上AI专业办学路线已进入运营，并不意味着由AI代替教师。<a class="cite" href="https://wissenschaft.hessen.de/Studieren/Hochschulen-in-Hessen">[30]</a><a class="cite" href="https://www.tomorrow.university/impact-bachelor-of-science/ai-sustainability">[31]</a></p><p class="limit"><strong>边界：</strong>机构在官方名录中，与某一具体专业的认证是不同层级。本次未独立核验该专业的认证决定，也未找到可比队列的学习与就业效果。个体推荐、学校宣称或欧洲学分，不能推出AI教学优势或中国留服认可。</p></div></article></section>
+<section aria-labelledby="group-university" class="case-group">
+<div class="group-head">
+<span class="group-letter">B</span>
+<h3 id="group-university">既有大学：从定制辅导到系统部署</h3>
+</div>
+<article class="case" data-kinds="university" id="case-06">
+<div class="case-title">
+<span class="case-id">CASE 06</span>
+<h4>哈佛大学 · 物理AI导师</h4>
+<span class="tag research">同行评议随机试验</span>
+<p class="case-mechanism">机制：按教学原则定制导师，与主动学习课堂比较。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2023年秋季研究涉及194名符合条件的入门物理学生，采用连续两周、两个主题的交叉安排。AI条件后测中位数4.5，主动课堂3.5，显示局部即时学习优势。<a class="cite" href="https://www.nature.com/articles/s41598-025-97652-6">[09]</a></p>
+
+</div>
+</article>
+<article class="case" data-kinds="university" id="case-07">
+<div class="case-title">
+<span class="case-id">CASE 07</span>
+<h4>Georgia Tech · Jill Watson</h4>
+<span class="tag">课堂观察 / 分班随机研究</span>
+<p class="case-mechanism">机制：自2016年演进的课程资料型虚拟助教，回答内容与课程事务问题。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2025年校方报道涉及2023年秋季一门 OMSCS 课程的600余名学生；与成绩的关联不是因果。另有随机分班研究发现，设计与组织方面的教学存在感、社会存在感等问卷构念有小幅显著改善。<a class="cite" href="https://www.ai.gatech.edu/news/georgia-techs-jill-watson-outperforms-chatgpt-real-classrooms">[10]</a><a class="cite" href="https://dilab.gatech.edu/publications/does-jill-watson-increase-teaching-presence/">[11]</a></p>
+<p class="limit"><strong>不能证明：</strong>毕业率提升，或在所有任务上优于 ChatGPT。标题中的比较不能脱离具体课程与评价任务。</p>
+<details>
+<summary>2026年扩展消息属于哪层证据？</summary>
+<p>2026年8月更新涉及未来扩大可用范围，应归入部署进展，而不是已经完成的新学习成效验证。<a class="cite" href="https://s1.c21u.gatech.edu/news/2026/08/defining-learning-age-ai">[12]</a></p>
+</details>
+</div>
+</article>
+<article class="case" data-kinds="university" id="case-08">
+<div class="case-title">
+<span class="case-id">CASE 08</span>
+<h4>Arizona State University</h4>
+<span class="tag">机构部署报告</span>
+<p class="case-mechanism">机制：在教学、研究与工作流程中增配AI工具。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2026年1月校方称 AI Innovation Challenge 已有近700个项目；2025年9月宣布向全校提供个人无需付费的 ChatGPT Edu 访问。模拟病人、语言伙伴是应用方向，不是随机试验结果。<a class="cite" href="https://tech.asu.edu/features/openai-joins-asu-campus-advance-strategic-collaboration">[13]</a><a class="cite" href="https://tech.asu.edu/features/asu-and-openai-expand-collaboration-scaling-ai">[14]</a></p>
+<p class="limit"><strong>不能证明：</strong>近700次有效教学改进，或“大学被替代”。项目数、账号覆盖与学习增益必须分列。</p>
+</div>
+</article>
+<article class="case" data-kinds="university" id="case-09">
+<div class="case-title">
+<span class="case-id">CASE 09</span>
+<h4>California State University 系统</h4>
+<span class="tag">合作方公告 / 校方调查</span>
+<p class="case-mechanism">机制：大学系统层面的AI工具与组织转型。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2025年2月公告的访问覆盖范围为46万余名学生、6.3万余名教职员工；这是当时的授权范围，不是当前活跃人数。系统也已设有2025年AI调查报告页面。<a class="cite" href="https://openai.com/index/openai-and-the-csu-system/">[15]</a><a class="cite" href="https://www.calstate.edu/impact-of-the-csu/technology/ai-empowered-csu/Pages/ai-survey.aspx">[16]</a></p>
+<p class="limit"><strong>不能证明：</strong>覆盖者均实际使用，更不能从许可证数量推出学习或毕业率改善。此例体现制度内转型，而非撤销大学。</p>
+</div>
+</article>
+<article class="case" data-kinds="university" id="case-10">
+<div class="case-title">
+<span class="case-id">CASE 10</span>
+<h4>清华大学 · AI赋能教学</h4>
+<span class="tag">校方部署记录</span>
+<p class="case-mechanism">机制：学科知识图谱、知识引擎与“清小搭”等教学支持。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>官方现行页面记录，AI支持课程由2023年秋季8门试点增至2026年春季451门。2026年3月的课程体系报道仍讨论人的教学角色。<a class="cite" href="https://www.tsinghua.edu.cn/jyjx/zxjy/fzgk.htm">[17]</a><a class="cite" href="https://www.tsinghua.edu.cn/info/1177/124916.htm">[18]</a></p>
+<p class="limit"><strong>不能证明：</strong>451门课程都已取得可归因的学习提升；部署课程数不是451项成功的随机试验。</p>
+</div>
+</article>
+<article class="case" data-kinds="university" id="case-11">
+<div class="case-title">
+<span class="case-id">CASE 11</span>
+<h4>华中科技大学 · “小生”助教</h4>
+<span class="tag">校方课程报道 / 使用自报</span>
+<p class="case-mechanism">机制：基于课程资料检索、使用 DeepSeek 的课程助教。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2025年3月报道的《生物计算与序列分析》课程有70余名学生；校方问卷称近70%经常使用，反馈涉及感知效率。<a class="cite" href="https://news.hust.edu.cn/info/1004/54765.htm">[19]</a></p>
+<p class="limit"><strong>不能证明：</strong>测试成绩因AI提高。资料未给出可核实的对照学习增益；准确性描述也是校方陈述，不是独立验证。</p>
+</div>
+</article>
+</section>
+<section aria-labelledby="group-platform" class="case-group">
+<div class="group-head">
+<span class="group-letter">C</span>
+<h3 id="group-platform">平台：满意度不是学习或职业因果效应</h3>
+</div>
+<article class="case" data-kinds="platform" id="case-12">
+<div class="case-title">
+<span class="case-id">CASE 12</span>
+<h4>Coursera Coach</h4>
+<span class="tag">平台问卷自报</span>
+<p class="case-mechanism">机制：在在线课程中提供对话式学习支持。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2025年报告称94%的 Coach 使用者认为体验改善。报告总体调查覆盖179个国家的52,000余名学习者，但不能把这个总体样本量写成 Coach 子群样本量。<a class="cite" href="https://www.coursera.org/explore/learner-outcomes">[20]</a></p>
+<p class="limit"><strong>不能证明：</strong>客观学习提升或AI带来职业收益。Coach 子群样本量未核实；平台总体职业结果也不能归因于该工具。</p>
+</div>
+</article>
+</section>
+<section aria-labelledby="group-school" class="case-group">
+<div class="group-head">
+<span class="group-letter">D</span>
+<h3 id="group-school">学龄阶段：提供机制线索，不代替大学证据</h3>
+</div>
+<article class="case" data-kinds="platform school" id="case-13">
+<div class="case-title">
+<span class="case-id">CASE 13</span>
+<h4>Khan Academy / Khanmigo</h4>
+<span class="tag research">集群随机试验 / 工作论文</span>
+<p class="case-mechanism">机制：田纳西州18所初中的两年干预，将可汗练习与Khanmigo一并提供。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2026年8月 NBER 工作论文报告每年0.06—0.08个标准差的成绩增益，同时发现实质互动偏低。处理组是“可汗平台加Khanmigo”，不能将全部平台增益当作纯AI效果。<a class="cite" href="https://www.nber.org/papers/w35620">[21]</a></p>
+<p class="limit"><strong>不能证明：</strong>普遍深度使用，或大学层面的学习与毕业优势。增益与无AI练习的既有结果相近，也不等于本研究完成了严格的AI开关因果拆分。</p>
+<details>
+<summary>0.14个标准差与“新版已改进”应怎样读？</summary>
+<p>0.14是按完整一年参与推算的效果，不是观察到的平均增益。可汗2026年8月回应认可使用偏低，并称已重设计体验；查证记录没有核实新版的学习有效性。<a class="cite" href="https://www.nber.org/papers/w35620">[21]</a><a class="cite" href="https://blog.khanacademy.org/what-i-found-compelling-in-a-new-randomized-trial-of-khan-academy-in-math-intervention/">[22]</a></p>
+</details>
+</div>
+</article>
+<article class="case" data-kinds="school" id="case-14">
+<div class="case-title">
+<span class="case-id">CASE 14</span>
+<h4>Alpha School</h4>
+<span class="tag plan">运营模式 / 宣传主张</span>
+<p class="case-mechanism">机制：AI与自适应工具支持两小时学科学习，配成人引导及后续生活技能活动。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>这是实际存在的学龄教育模式，官网宣传“2倍学习”等效果。但本次查证没有独立核实、可比的随机试验来支持该倍数。<a class="cite" href="https://alpha.school/">[23]</a></p>
+<p class="limit"><strong>不能证明：</strong>教师不再重要，或大学可以同样缩短。选择性收费学校的学生与条件，不能直接推广到大众高等教育。</p>
+</div>
+</article>
+<article class="case" data-kinds="school" id="case-15">
+<div class="case-title">
+<span class="case-id">CASE 15</span>
+<h4>Tutor CoPilot</h4>
+<span class="tag research">随机试验 / 预印本</span>
+<p class="case-mechanism">机制：AI给人类辅导者实时建议，而非直接移除辅导者。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>斯坦福主导研究涉及约900名辅导者、1,800名学龄学生，整体主题掌握率提高<strong>4个百分点</strong>。预印本最初发表于2024年10月，2025年1月更新。<a class="cite" href="https://arxiv.org/abs/2410.03017">[24]</a></p>
+<p class="limit"><strong>不能证明：</strong>相对提高4%、教师消失或大学完成率改善。它支持的是人机协作在该场景中的价值。</p>
+</div>
+</article>
+<article class="case" data-kinds="school" id="case-16">
+<div class="case-title">
+<span class="case-id">CASE 16</span>
+<h4>世界银行 · 尼日利亚中学干预</h4>
+<span class="tag research">随机试验 / 工作论文</span>
+<p class="case-mechanism">机制：学校组织、教师支持下，使用 Copilot / GPT-4 开展六周英语学习。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>2025年5月工作论文报告英语测评提高0.23个标准差，英语、AI与数字技能综合测评提高0.31个标准差。<a class="cite" href="https://documents1.worldbank.org/curated/en/099548105192529324/pdf/IDU-c09f40d8-9ff8-42dc-b315-591157499be7.pdf">[25]</a></p>
+<p class="limit"><strong>不能证明：</strong>学生独自聊天就能取得同样结果。“相当于1.5—2学年”是针对所测技能的模型基准换算，不是完成两年课程，更不是完成学位。</p>
+</div>
+</article>
+<article class="case" data-kinds="school" id="case-17">
+<div class="case-title">
+<span class="case-id">CASE 17</span>
+<h4>土耳其高中数学研究</h4>
+<span class="tag research">同行评议随机试验</span>
+<p class="case-mechanism">机制：近千名学生，比较基础GPT-4、受约束导师与无AI条件。</p>
+</div>
+<div class="case-body">
+<p><strong>观察到：</strong>辅助练习时，基础版与导师版成绩分别相对提高48%、127%；撤去AI后，基础版组相对对照低17%，教学防护缓解了损害。<a class="cite" href="https://www.pnas.org/doi/10.1073/pnas.2422633122">[26]</a></p>
+<p class="limit"><strong>不能证明：</strong>所有当代模型都伤害学习，也不能外推到所有大学课程。它揭示的是：辅助表现与独立能力可能背离。</p>
+</div>
+</article>
+<article class="case" data-kinds="platform school" id="case-18"><div class="case-title"><span class="case-id">CASE 18</span><h4>NUMI · 掌握式数学练习</h4><span class="tag research">随机试验 / 2026年工作论文</span><p class="case-mechanism">机制：比较AI与普通计算机练习，并随机配置掌握式进阶。</p></div><div class="case-body"><p><strong>观察到：</strong>NBER 2026年8月工作论文涉及6,000余名初中生，一周后测查练过与未练过内容。AI组进度较慢、尝试较少，遇错后的下一次作答正确率提高。<a class="cite" href="https://www.nber.org/papers/w35621">[32]</a></p><p class="limit"><strong>边界：</strong>较积极的延迟收益集中在“AI结合掌握式进阶”的已练习材料，且为边际显著；不能写成稳定改善所有延迟与迁移任务。工作论文尚不足以回答大学毕业或就业问题。它更支持“设计怎样处理错误”，而不是“模型上线就自然学会”。</p></div></article></section>
+</div>
+<div class="empty-state" hidden="" id="empty-state">
+<h3>当前类别没有匹配案例</h3>
+<p class="note">恢复全部案例，继续按机制与证据类型阅读。</p>
+<button class="reset-button" data-reset="" type="button">显示全部18个案例</button>
+</div>
+</section>
+<section aria-labelledby="research-title" id="research">
+<div class="section-head">
+<span class="section-no">05</span>
+<h2 id="research-title">四组对照：有效的是什么，又缺了哪一级验证？</h2>
+</div>
+<p class="intro">下列图示各自回答一个问题。人群、测试、时长与单位不同，不能画在同一坐标轴上排出“最强教育AI”。分数、相对百分比、标准差和百分点尤其不能混读。</p>
+<div class="research-grid">
+<figure class="research-panel">
+<figcaption>
+<span class="tag research">大学 / 即时学习</span>
+<h3>① 哈佛：提高的是局部学习增益，不是总分翻倍</h3>
+</figcaption>
+<div class="baseline">描述性共同基线：合并前测中位数 <strong>2.75</strong></div>
+<div class="median-pair">
+<div class="median-box">
+<span class="label">定制AI导师后测</span>
+<span class="big-number">4.5</span>
+<span class="difference">减去共同基线：1.75</span>
+</div>
+<div class="median-box">
+<span class="label">主动学习课堂后测</span>
+<span class="big-number">3.5</span>
+<span class="difference">减去共同基线：0.75</span>
+</div>
+</div>
+<p class="note">1.75与0.75来自“后测中位数减去合并前测中位数”，是描述性比较，不是个体配对增益中位数。所谓超过两倍指这组增益差值，不是总成绩。研究也报告AI条件用时较少，但仅覆盖有限主题与即时测试。<a class="cite" href="https://www.nature.com/articles/s41598-025-97652-6">[09]</a></p>
+</figure>
+<figure class="research-panel">
+<figcaption>
+<span class="tag research">高中 / 工具撤除</span>
+<h3>② 数学：练习做得更好，撤去AI后未必更会</h3>
+</figcaption>
+<div aria-label="土耳其高中数学研究的条件与结果" class="transfer-grid" role="group">
+<div class="column-title">条件</div>
+<div class="column-title">有辅助练习</div>
+<div class="column-title">撤去AI后</div>
+<div>基础GPT-4</div>
+<div class="positive">+48%</div>
+<div class="negative">−17%</div>
+<div>受约束导师</div>
+<div class="positive">+127%</div>
+<div>防护缓解损害</div>
+</div>
+<p class="note">数值均为研究内相对无AI对照的相对效果，不是百分点；练习与撤除后是不同评价条件。结果提醒设计者约束直接给答案，而非证明所有模型有害。<a class="cite" href="https://www.pnas.org/doi/10.1073/pnas.2422633122">[26]</a></p>
+</figure>
+<figure class="research-panel">
+<figcaption>
+<span class="tag research">初中 / 使用深度</span>
+<h3>③ Khanmigo：试过、常用、遇错求助是三个分母</h3>
+</figcaption>
+<div class="denominator-stack">
+<div class="denominator-item">
+<span class="big-number">96%</span>
+<p><strong>学生层面：</strong>处理组学生中，至少试用过一次的比例。</p>
+</div>
+<div class="denominator-item">
+<span class="big-number">1/3</span>
+<p><strong>练习日层面：</strong>学生发消息天数占练习天数的比例，其中位数约为三分之一。</p>
+</div>
+<div class="denominator-item">
+<span class="big-number">17%</span>
+<p><strong>错误会话层面：</strong>发生练习错误的会话中，使用AI的比例。</p>
+</div>
+</div>
+<p class="note">三个数不共用分母，所以不画成一条转化漏斗。高试用率并未自动转化为高实质参与；平台整体成绩增益也不能拆成纯AI贡献。<a class="cite" href="https://www.nber.org/papers/w35620">[21]</a></p>
+</figure>
+<figure class="research-panel">
+<figcaption>
+<span class="tag research">学龄阶段 / 有组织的人机协作</span>
+<h3>④ 人没有退场：不同支持方式，分别验证</h3>
+</figcaption>
+<p><strong>尼日利亚六周学校干预</strong></p>
+<p class="metric-line">英语：<strong>+0.23 SD</strong><br/>英语、AI与数字技能综合测评：<strong>+0.31 SD</strong></p>
+<p class="note">SD为标准差；两个数对应不同测评。1.5—2学年的说法是模型换算，不能按字面写成“六周学完两年”。<a class="cite" href="https://documents1.worldbank.org/curated/en/099548105192529324/pdf/IDU-c09f40d8-9ff8-42dc-b315-591157499be7.pdf">[25]</a></p>
+<div class="separate-result">
+<p><strong>Tutor CoPilot：AI支持人类辅导者</strong></p>
+<p class="metric-line">主题掌握率：<strong>+4 个百分点</strong></p>
+<p class="note">这是掌握率之差，不是相对增长4%，也不能与上方标准差直接比较。两个研究支持的是各自组织条件下的干预，不是“无人教学”。<a class="cite" href="https://arxiv.org/abs/2410.03017">[24]</a></p>
+</div>
+</figure>
+</div>
+<div class="ladder-wrap">
+<h3>从会用工具，到值得托付一段教育：证据要逐级补齐</h3>
+<p class="note"><span class="tag analysis">分析性证据阶梯</span> 这不是某个项目已经走完的路线，也不表示跨过前一级就必然跨过后一级。</p>
+<ol class="ladder">
+<li><strong>用AI完成任务</strong><span>记录辅助条件、使用方式与答案质量。</span></li>
+<li><strong>独立解决问题</strong><span>撤去工具，检查真实掌握而非答案复制。</span></li>
+<li><strong>延迟与迁移</strong><span>隔一段时间、换情境，能否保留和运用？</span></li>
+<li><strong>真实项目</strong><span>独立作品、过程证据与外部评价。</span></li>
+<li><strong>毕业与就业</strong><span>长期追踪，保留分母、基线和比较组。</span></li>
+</ol>
+<p class="note">合法认证与职业准入是另一道制度闸门，不会随着能力阶梯自动获得。教育产品应说明自己验证到了哪一级，而不是把满意度放在就业结果的位置。</p>
+</div>
+</section>
+<section aria-labelledby="costs-title" id="costs">
+<div class="section-head">
+<span class="section-no">06</span>
+<h2 id="costs-title">价格差很醒目，比较口径更重要</h2>
+</div>
+<p class="intro">一个是已公布的学年本科预算，一个是开发中项目的整学位目标学费。两者可以并列理解，但不能直接相除，制造“便宜40倍”的精确感。</p>
+<div class="two-col">
+<article class="panel cost-established">
+<span class="tag">已公布学年费用 · 2026—27</span>
+<h3 style="margin-top:var(--space-3)">斯坦福大学本科</h3>
+<p class="price">$67,731 <small>/ 学年学费</small></p>
+<p class="price secondary">$97,545 <small>/ 学年标准总预算</small></p>
+<p>标准总预算已含学费，不能再相加；另需考虑浮动旅行费、新生一次性费用及可能的保险支出。奖助学金改变个人净价，不能假定所有家庭都按标价支付。<a class="cite" href="https://financialaid.stanford.edu/undergrad/budget/index.html">[28]</a></p>
+</article>
+<article class="panel cost-target">
+<span class="tag plan">计划目标 · 不是最终报价</span>
+<h3 style="margin-top:var(--space-3)">Khan TED Institute</h3>
+<p class="price">&lt; $10,000 <small>/ 完整学位目标学费</small></p>
+<p>官网意向是完整学位学费低于一万美元，不是每年一万美元。培养时长、完整成本、认证与招生细节仍待明确，现阶段不能进行可靠的年度摊销或净成本比较。<a class="cite" href="https://khanted.org/">[01]</a></p>
+</article>
+</div>
+<div class="callout warning">
+<p><strong>家长该比较的是“完成目标路径的净成本”。</strong>先对齐培养周期，再核对生活支出、必要设备与实践、奖助、退出风险及认可用途。此处不推算四年总额、不做未经核验的人民币换算，也不把目标学费当作已经可以买到的同质替代品。</p>
+</div>
+</section>
+<section aria-labelledby="china-title" id="china">
+<div class="section-head">
+<span class="section-no">07</span>
+<h2 id="china-title">对中国家庭：技能进步与学历路径，要做两张表</h2>
+</div>
+<p>匿名C9成绩故事不能充当中国高校转型证据；清华课程扩展与华中科技大学课程助教才是可追溯案例。它们说明校内教学正在变化，但目前对应的主要是部署与使用反馈，不能替代全国学习成效判断。<a class="cite" href="https://www.tsinghua.edu.cn/jyjx/zxjy/fzgk.htm">[17]</a><a class="cite" href="https://news.hust.edu.cn/info/1004/54765.htm">[19]</a></p>
+<div class="callout warning">
+<h3>境外获认证，不等于中国留服自动认证</h3>
+
+<p class="note">这里提示的是已公布的一般规则，不是对某个人或某个具体项目的认证结论。实际学习方式、资格用途与主管机关现行要求，仍须逐项确认。</p>
+</div>
+<div class="two-col" style="margin-top:var(--space-5)">
+<article class="panel">
+<h3>路径一：学历、深造或职业准入是硬约束</h3>
+<p>先确认目标资格需要什么，再判断学校和学习方式能否满足。将AI用于补基础、练习与反馈，不要仅凭一个未来项目或一段爆款视频，就放弃211或普通本科的既有机会。</p>
+<p>需要追问的是：谁授予什么学位，认证覆盖什么，在哪里学习和考核，实践环节如何完成，退出后还能保留哪些选择？“课程能学到”不等于这些问题已有答案。</p>
+</article>
+<article class="panel">
+<h3>路径二：已在职，当前目标主要是技能</h3>
+<p>可以把低成本学习与现有工作并行，用独立作品、延迟测试和外部反馈判断进步；是否另购学位，应由实际资格需求决定，而不是由“AI大学”标签决定。</p>
+<p>这类尝试能帮助评估个人学习方式，但不能把一次作品完成或几句好评当作市场验证，更不能保证加薪与转岗。</p>
+</article>
+</div>
+<h3 style="margin-top:var(--space-6)">可选的四周技能试验：先测学习，不先赌学位</h3>
+<p class="note">以下是行动建议，不是研究结果；不要求额外付费，不把短期练习冒充职业资格。</p>
+<div class="pilot">
+<div>
+<h4>第1周 / 留下基线</h4>
+<p>选定一个具体能力目标，完成无AI测试，记录时间、错误与原始作品。</p>
+</div>
+<div>
+<h4>第2周 / 有辅助练习</h4>
+<p>让AI提供提示和反馈；记录自己真正完成的步骤，不只保存漂亮答案。</p>
+</div>
+<div>
+<h4>第3周 / 独立产出</h4>
+<p>关闭AI完成一件可检查的作品，请外部评价者按预先标准反馈。</p>
+</div>
+<div>
+<h4>第4周 / 延迟复测</h4>
+<p>换题复测保留与迁移，复盘完成率、独立程度及反馈差距。</p>
+</div>
+</div>
+<p>对教育建设者，这也是最低限度的产品纪律：把学习增益、有效参与和服务成本分开记录；再单独验证谁有需求、谁愿意付费。四周试验至多给出继续尝试的线索，不是教育市场已经成立的证明。</p>
+</section>
+<section aria-labelledby="scenarios-title" id="scenarios">
+<div class="section-head">
+<span class="section-no">08</span>
+<h2 id="scenarios-title">三种情景，不是假装精确的未来预测</h2>
+</div>
+<p class="intro"><span class="tag analysis">基于当前材料的推理</span> 不给概率，不给“大学消失年份”。关键是每种情景还需要补足哪些条件。</p>
+<div class="scenario-grid">
+<article class="scenario">
+<span class="tag research">观察最清楚</span>
+<h3>大学增配AI，重新组织教学</h3>
+<p>助教、反馈、课程运营与研究支持进入既有机构。ASU和清华的扩展最直接支持这一方向，但扩展本身仍不等于学习收益已经逐项测出。<a class="cite" href="https://tech.asu.edu/features/openai-joins-asu-campus-advance-strategic-collaboration">[13]</a><a class="cite" href="https://www.tsinghua.edu.cn/jyjx/zxjy/fzgk.htm">[17]</a></p>
+</article>
+<article class="scenario">
+<span class="tag plan">有条件的可能</span>
+<h3>低价能力型资格成为补充</h3>
+<p>若可信考核、合法认可与雇主信任建立起来，低价路径可能服务一部分学习者。Khan TED 的计划值得观察，但最终能否成立，取决于这些条件，而非伙伴名单的长度。<a class="cite" href="https://khanted.org/">[01]</a></p>
+</article>
+<article class="scenario">
+<span class="tag analysis">本材料未证实</span>
+<h3>AI整体取代大学</h3>
+<p>这要求不仅替代讲解，还要承接实践、认证、筛选、研究与共同体。现有材料没有完成这种系统级比较；不能把局部试验中的优势相加，得出机构整体可删去。</p>
+</article>
+</div>
+<div class="revision">
+<h3>什么证据会改变这一判断？</h3>
+<dl>
+<div>
+<dt>多年完成与留存</dt>
+<dd>可比起点的学生，在多个入学队列中是否达到相当或更好的留存、毕业与持续学习结果？</dd>
+</div>
+<div>
+<dt>独立能力与迁移</dt>
+<dd>监考、无AI或受控辅助条件下，延迟测试、陌生任务与实践能力是否保持优势？</dd>
+</div>
+<div>
+<dt>可解释的雇主结果</dt>
+<dd>就业、岗位质量与职业发展是否有完整分母、入学前基线、回复率和合理比较，而非挑选成功者？</dd>
+</div>
+<div>
+<dt>完整成本与公平性</dt>
+<dd>计入生活、设备、实践、支持和退出损失后，不同基础学生是否都真正获益，而不只是易成功者？</dd>
+</div>
+<div>
+<dt>合法认证与认可</dt>
+<dd>具体学位、学习方式与目标地区的认可是否落地，专业训练与责任是否被可靠承接？</dd>
+</div>
+</dl>
+</div>
+<p class="note" style="margin-top:var(--space-4)">若这些指标持续支持新路径，结论应上调；若撤去AI后能力下降、留存差或认可无法落地，结论应下调。立场应随结果改变，而不是随发布会改变。</p>
+</section>
+<section aria-labelledby="conclusion-title" id="conclusion">
+<div class="section-head">
+<span class="section-no">09</span>
+<h2 id="conclusion-title">把AI当作值得试的能力工具，而不是自动生效的退学理由</h2>
+</div>
+<div class="closing">
+<h3>真正的分水岭，不是“用了没有”，而是“离开它以后会不会”。</h3>
+<p><strong>对学生与家长：</strong>把AI带进学习，把认证核查留在决策表上。对依赖学历路径的选择保持可逆性；用独立能力判断辅导价值，不用宣传热度替代学位与实践要求。</p>
+<p><strong>对创作者：</strong>可以报道教育的重要变化，但应把“宣布、覆盖、使用、学会、毕业、就业”写成不同动词。不能把未核实轶事做成统计图，也不能把学校营销结果包装成独立证据。</p>
+<p><strong>对教育建设者：</strong>AI教程可能有用，但广泛采用不等于用户愿意付费，满意度也不等于持续学习或商业需求。“AI教程生意已被验证”仍需要独立的需求与交付证据。</p>
+</div>
+<p style="margin-top:var(--space-5)">因此，较稳妥的判断不是“大学不会变”，也不是“大学已经被替代”，而是：<strong>解释、辅导、写作、编码、形成性评价与课程运营已进入变化；机构价值是否被更便宜且可靠地重建，仍要一项项证明。</strong><a class="cite" href="https://www.nature.com/articles/s41598-025-97652-6">[09]</a><a class="cite" href="https://www.ai.gatech.edu/news/georgia-techs-jill-watson-outperforms-chatgpt-real-classrooms">[10]</a><a class="cite" href="https://tech.asu.edu/features/openai-joins-asu-campus-advance-strategic-collaboration">[13]</a></p>
+</section>
+<section aria-labelledby="sources-title" id="sources">
+<div class="section-head">
+<span class="section-no">10</span>
+<h2 id="sources-title">来源覆盖与证据边界</h2>
+</div>
+<p>本报告使用本次核验的公开来源，现行官方来源的核验截止日为<strong>2026年10月4日</strong>。这是一轮定向证据扫描，不是全球机构普查。教育可以被视为AI的重要应用场景之一，但本材料没有跨行业同口径比较，不能证明它是“最重要”或“使用最多”的领域。</p>
+
+<p>来源并非相互独立：机构和平台可能同时是产品提供者、研究合作者与宣传发布者。认证名录可证明其记载的认证状态，却不证明学习优势；随机研究可回答限定的因果问题，却不自动证明学位和就业结果。下列目录只重复标题、日期与类型，不重复整段主张。</p>
+<details class="source-index" open="">
+<summary>公开来源目录 · 32项（点击标题直达原文）</summary>
+<ol class="source-list">
+<li>
+<a href="https://khanted.org/">[01] Khan TED Institute · 官网</a>
+<span class="source-meta">2026-10-04核验 · 现行官方项目页</span>
+</li>
+<li>
+<a href="https://www.ets.org/newsroom/ets-khan-academy-ted-announce-new-institute-to-reimagine-higher-education-for-the-ai-age.html">[02] ETS · 三方宣布新高等教育机构</a>
+<span class="source-meta">2026-04-14 · 联合项目官方公告</span>
+</li>
+<li>
+<a href="https://blog.khanacademy.org/introducing-the-khan-ted-institute-a-new-approach-to-higher-education/">[03] Khan Academy · 介绍Khan TED Institute</a>
+<span class="source-meta">2026-04-14 · 官方项目说明</span>
+</li>
+<li>
+<a href="https://www.nexford.edu/nexford-accreditation">[04] Nexford · Accreditation</a>
+<span class="source-meta">2026-10-04核验 · 校方认证说明</span>
+</li>
+<li>
+<a href="https://www.nexford.edu/research/2026-alumni-outcomes-report-nexford-university">[05] Nexford · 2026 Alumni Outcomes Report</a>
+<span class="source-meta">2026-09-08 · 校友自报调查</span>
+</li>
+<li>
+<a href="https://www.wscuc.org/institutions/university-of-the-people/">[06] WSCUC · University of the People名录</a>
+<span class="source-meta">最新行动2026-03-24 · 认证机构记录</span>
+</li>
+<li>
+<a href="https://www.uopeople.edu/student-experience/quality/accreditation/">[07] University of the People · Accreditation</a>
+<span class="source-meta">2026-10-04核验 · 校方认证说明</span>
+</li>
+<li>
+<a href="https://www.minerva.edu/student-impact/">[08] Minerva · Student Impact</a>
+<span class="source-meta">2026-10-04核验 · 校方结果页面</span>
+</li>
+<li>
+<a href="https://www.nature.com/articles/s41598-025-97652-6">[09] Scientific Reports · 哈佛物理AI导师随机研究</a>
+<span class="source-meta">2025-06-03 · 同行评议论文</span>
+</li>
+<li>
+<a href="https://www.ai.gatech.edu/news/georgia-techs-jill-watson-outperforms-chatgpt-real-classrooms">[10] Georgia Tech · Jill Watson课堂表现报道</a>
+<span class="source-meta">2025-09-02 · 大学研究新闻</span>
+</li>
+<li>
+<a href="https://dilab.gatech.edu/publications/does-jill-watson-increase-teaching-presence/">[11] Does Jill Watson Increase Teaching Presence?</a>
+<span class="source-meta">日期未载于查证记录 · 实验论文机构条目</span>
+</li>
+<li>
+<a href="https://s1.c21u.gatech.edu/news/2026/08/defining-learning-age-ai">[12] Georgia Tech · Defining Learning in the Age of AI</a>
+<span class="source-meta">2026-08 · 大学进展报道</span>
+</li>
+<li>
+<a href="https://tech.asu.edu/features/openai-joins-asu-campus-advance-strategic-collaboration">[13] ASU · 推进AI战略合作</a>
+<span class="source-meta">2026-01-28 · 大学官方报道</span>
+</li>
+<li>
+<a href="https://tech.asu.edu/features/asu-and-openai-expand-collaboration-scaling-ai">[14] ASU · 扩大AI合作与访问</a>
+<span class="source-meta">2025-09-15 · 大学部署公告</span>
+</li>
+<li>
+<a href="https://openai.com/index/openai-and-the-csu-system/">[15] OpenAI · 与CSU系统合作</a>
+<span class="source-meta">2025-02-04 · 产品合作方公告</span>
+</li>
+<li>
+<a href="https://www.calstate.edu/impact-of-the-csu/technology/ai-empowered-csu/Pages/ai-survey.aspx">[16] CSU · AI Survey</a>
+<span class="source-meta">2025年调查 · 大学系统调查页面</span>
+</li>
+<li>
+<a href="https://www.tsinghua.edu.cn/jyjx/zxjy/fzgk.htm">[17] 清华大学 · 在线教育发展概况</a>
+<span class="source-meta">2026-10-04核验 · 现行官方部署记录</span>
+</li>
+<li>
+<a href="https://www.tsinghua.edu.cn/info/1177/124916.htm">[18] 清华大学 · AI课程体系与教学角色</a>
+<span class="source-meta">2026-03-26 · 大学官方报道</span>
+</li>
+<li>
+<a href="https://news.hust.edu.cn/info/1004/54765.htm">[19] 华中科技大学 · “小生”课程助教</a>
+<span class="source-meta">2025-03-11 · 大学课程报道</span>
+</li>
+<li>
+<a href="https://www.coursera.org/explore/learner-outcomes">[20] Coursera · Learner Outcomes</a>
+<span class="source-meta">2025年报告 · 平台学习者调查</span>
+</li>
+<li>
+<a href="https://www.nber.org/papers/w35620">[21] NBER Working Paper 35620 · 可汗平台与Khanmigo研究</a>
+<span class="source-meta">2026-08 · 工作论文，摘要已核验</span>
+</li>
+<li>
+<a href="https://blog.khanacademy.org/what-i-found-compelling-in-a-new-randomized-trial-of-khan-academy-in-math-intervention/">[22] Khan Academy · 回应数学干预随机试验</a>
+<span class="source-meta">2026-08-24 · 产品提供方解读</span>
+</li>
+<li>
+<a href="https://alpha.school/">[23] Alpha School · 官网</a>
+<span class="source-meta">2026-10-04核验 · 学校模式与宣传页面</span>
+</li>
+<li>
+<a href="https://arxiv.org/abs/2410.03017">[24] Tutor CoPilot · 人机协作辅导研究</a>
+<span class="source-meta">2024-10首发；2025-01更新 · 随机试验预印本</span>
+</li>
+<li>
+<a href="https://documents1.worldbank.org/curated/en/099548105192529324/pdf/IDU-c09f40d8-9ff8-42dc-b315-591157499be7.pdf">[25] 世界银行WPS 11125 · 尼日利亚生成式AI学习干预</a>
+<span class="source-meta">2025-05 · 工作论文 / PDF</span>
+</li>
+<li>
+<a href="https://www.pnas.org/doi/10.1073/pnas.2422633122">[26] PNAS · 高中数学AI辅助与独立学习研究</a>
+<span class="source-meta">2025-06-25 · 同行评议随机试验</span>
+</li>
+<li>
+<a href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2026/">[27] HEPI · Student Generative AI Survey 2026</a>
+<span class="source-meta">2026-03-12 · 英国本科生自报调查</span>
+</li>
+<li>
+<a href="https://financialaid.stanford.edu/undergrad/budget/index.html">[28] Stanford Financial Aid · Undergraduate Budget</a>
+<span class="source-meta">2026—27学年 · 官方本科预算</span>
+</li>
+
+<li><a href="https://wissenschaft.hessen.de/Studieren/Hochschulen-in-Hessen">[30] Hessen Wissenschaft · 黑森州高校名录</a><span class="source-meta">2026-10-04核验 · 官方办学名录</span></li><li><a href="https://www.tomorrow.university/impact-bachelor-of-science/ai-sustainability">[31] Tomorrow University · 线上AI与可持续发展本科</a><span class="source-meta">2026-10-04核验 · 校方招生与项目说明</span></li><li><a href="https://www.nber.org/papers/w35621">[32] NBER Working Paper 35621 · 掌握式练习与AI实验</a><span class="source-meta">2026-08 · 工作论文，原始摘要已核验</span></li></ol>
+</details>
+</section>
+</main>
+
+</div>
+<script>
+    (() => {
+      "use strict";
+
+      const panel = document.getElementById("filter-panel");
+      const buttonGroup = document.getElementById("filter-buttons");
+      const collection = document.getElementById("case-collection");
+      const count = document.getElementById("case-count");
+      const emptyState = document.getElementById("empty-state");
+
+      if (!panel || !buttonGroup || !collection || !count || !emptyState) return;
+
+      const buttons = Array.from(buttonGroup.querySelectorAll("button[data-filter]"));
+      const cases = Array.from(collection.querySelectorAll(".case[data-kinds]"));
+      const groups = Array.from(collection.querySelectorAll(".case-group"));
+      const resetButtons = Array.from(document.querySelectorAll("button[data-reset]"));
+      const validFilters = new Set(buttons.map(button => button.dataset.filter));
+
+      function applyFilter(requestedFilter) {
+        const filter = validFilters.has(requestedFilter) ? requestedFilter : "all";
+        let visibleCount = 0;
+
+        cases.forEach(item => {
+          const kinds = (item.dataset.kinds || "").split(/\s+/);
+          const matches = filter === "all" || kinds.includes(filter);
+          item.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+
+        groups.forEach(group => {
+          const groupCases = Array.from(group.querySelectorAll(".case"));
+          group.hidden = !groupCases.some(item => !item.hidden);
+        });
+
+        buttons.forEach(button => {
+          button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+        });
+
+        const selectedButton = buttons.find(button => button.dataset.filter === filter);
+        const label = selectedButton ? selectedButton.textContent.trim() : "全部案例";
+
+        count.textContent = filter === "all"
+          ? `显示全部${cases.length}个案例。`
+          : `${label}：显示${visibleCount}个，共${cases.length}个案例。`;
+
+        emptyState.hidden = visibleCount !== 0;
+      }
+
+      buttons.forEach(button => {
+        button.addEventListener("click", () => applyFilter(button.dataset.filter));
+      });
+
+      buttonGroup.addEventListener("keydown", event => {
+        const currentIndex = buttons.indexOf(document.activeElement);
+        if (currentIndex < 0) return;
+
+        let nextIndex = currentIndex;
+        if (event.key === "ArrowRight") {
+          nextIndex = (currentIndex + 1) % buttons.length;
+        } else if (event.key === "ArrowLeft") {
+          nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+        } else if (event.key === "Home") {
+          nextIndex = 0;
+        } else if (event.key === "End") {
+          nextIndex = buttons.length - 1;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+        buttons[nextIndex].focus();
+      });
+
+      resetButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          applyFilter("all");
+          const allButton = buttons.find(item => item.dataset.filter === "all");
+          if (allButton) allButton.focus();
+        });
+      });
+
+      applyFilter("all");
+      panel.hidden = false;
+    })();
+  </script>
+</body>
+</html>
