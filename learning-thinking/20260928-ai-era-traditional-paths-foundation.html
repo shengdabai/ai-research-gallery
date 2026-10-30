@@ -1,0 +1,2106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="AI 时代的传统路径复盘：围绕爬虫、网站、搜索、模板的六个判断、公开证据、分析框架与可验证行动。">
+  <title>AI 时代的“传统路径”复盘：爬虫、网站、搜索、模板为什么仍然是地基</title>
+  <style>
+    :root {
+      /* 基础色阶 */
+      --palette-white: #ffffff;
+      --palette-ink-950: #102236;
+      --palette-ink-900: #172e46;
+      --palette-ink-800: #25435e;
+      --palette-slate-700: #425366;
+      --palette-slate-600: #596b7d;
+      --palette-slate-500: #718193;
+      --palette-slate-300: #ccd6e0;
+      --palette-slate-200: #dce4ec;
+      --palette-slate-100: #edf2f6;
+      --palette-slate-50: #f6f8fa;
+      --palette-teal-900: #124f50;
+      --palette-teal-800: #155f5e;
+      --palette-teal-700: #176f6a;
+      --palette-teal-600: #187f78;
+      --palette-teal-400: #69b9ac;
+      --palette-teal-200: #b9ded5;
+      --palette-teal-100: #d9eee8;
+      --palette-teal-50: #eff8f5;
+      --palette-amber-800: #815515;
+      --palette-amber-200: #ead4aa;
+      --palette-amber-50: #fbf5e9;
+      --palette-blue-800: #315b80;
+      --palette-blue-200: #c7daeb;
+      --palette-blue-50: #eef4fa;
+      --palette-shadow: rgba(16, 34, 54, 0.08);
+
+      /* 基础尺寸、排版与形状 */
+      --space-0: 0;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-auto: auto;
+
+      --type-xs: 12px;
+      --type-sm: 13px;
+      --type-md: 14px;
+      --type-reading: 15px;
+      --type-base: 16px;
+      --type-lg: 18px;
+      --type-xl: 20px;
+      --type-2xl: 22px;
+      --type-3xl: 28px;
+      --type-mobile-title: 30px;
+      --type-mobile-kpi: 32px;
+      --type-kpi: 36px;
+      --type-title: 42px;
+      --type-print-xs: 8pt;
+      --type-print-sm: 8.5pt;
+      --type-print-body: 9.5pt;
+      --type-print-lead: 11pt;
+      --type-print-card-title: 12pt;
+      --type-print-section: 15pt;
+      --type-print-kpi: 22pt;
+      --type-print-title: 24pt;
+
+      --font-system: -apple-system, "PingFang SC", "Noto Sans SC", sans-serif;
+      --weight-regular: 400;
+      --weight-medium: 500;
+      --weight-semibold: 600;
+      --weight-bold: 700;
+      --leading-tight: 1.25;
+      --leading-heading: 1.4;
+      --leading-compact: 1.55;
+      --leading-body: 1.8;
+      --tracking-normal: 0;
+      --tracking-tight: -0.025em;
+      --tracking-label: 0.08em;
+
+      --radius-0: 0;
+      --radius-1: 3px;
+      --radius-2: 4px;
+      --radius-3: 8px;
+      --radius-4: 12px;
+      --radius-5: 16px;
+
+      --stroke-0: 0;
+      --stroke-1: 1px;
+      --stroke-2: 2px;
+      --stroke-3: 3px;
+      --shadow-0: none;
+      --shadow-1: 0 16px 48px var(--palette-shadow);
+
+      /* 语义色彩角色 */
+      --color-page: var(--palette-slate-100);
+      --color-surface: var(--palette-white);
+      --color-surface-subtle: var(--palette-slate-50);
+      --color-surface-accent: var(--palette-teal-50);
+      --color-text: var(--palette-ink-950);
+      --color-text-secondary: var(--palette-slate-600);
+      --color-text-muted: var(--palette-slate-500);
+      --color-link: var(--palette-teal-700);
+      --color-accent: var(--palette-teal-600);
+      --color-border: var(--palette-slate-200);
+      --color-border-strong: var(--palette-slate-300);
+
+      --color-hero-background: var(--palette-ink-950);
+      --color-hero-title: var(--palette-white);
+      --color-hero-copy: var(--palette-slate-200);
+      --color-hero-meta: var(--palette-teal-200);
+
+      --color-status-positive-text: var(--palette-teal-800);
+      --color-status-positive-background: var(--palette-teal-50);
+      --color-status-positive-border: var(--palette-teal-200);
+      --color-status-partial-text: var(--palette-amber-800);
+      --color-status-partial-background: var(--palette-amber-50);
+      --color-status-partial-border: var(--palette-amber-200);
+      --color-status-reframe-text: var(--palette-blue-800);
+      --color-status-reframe-background: var(--palette-blue-50);
+      --color-status-reframe-border: var(--palette-blue-200);
+      --color-status-unconfirmed-text: var(--palette-slate-700);
+      --color-status-unconfirmed-background: var(--palette-slate-100);
+      --color-status-unconfirmed-border: var(--palette-slate-300);
+
+      --color-chart-track: var(--palette-slate-100);
+      --color-chart-baseline: var(--palette-ink-800);
+      --color-chart-ai: var(--palette-teal-600);
+      --color-chart-link: var(--palette-teal-400);
+      --color-funnel-text: var(--palette-white);
+      --color-funnel-stage-1: var(--palette-ink-900);
+      --color-funnel-stage-2: var(--palette-ink-800);
+      --color-funnel-stage-3: var(--palette-teal-900);
+      --color-funnel-stage-4: var(--palette-teal-800);
+      --color-funnel-stage-5: var(--palette-teal-700);
+
+      /* 语义排版角色 */
+      --font-family-body: var(--font-system);
+      --font-size-body: var(--type-base);
+      --font-size-reading: var(--type-reading);
+      --font-size-title: var(--type-title);
+      --font-size-section: var(--type-3xl);
+      --font-size-card-title: var(--type-2xl);
+      --font-size-chart-title: var(--type-xl);
+      --font-size-lead: var(--type-lg);
+      --font-size-kpi: var(--type-kpi);
+      --font-size-label: var(--type-md);
+      --font-size-small: var(--type-sm);
+      --font-size-axis: var(--type-xs);
+      --font-size-source-url: var(--type-sm);
+
+      /* 语义布局、间距与组件角色 */
+      --report-width: 1280px;
+      --page-gutter: var(--space-8);
+      --hero-inset: var(--space-12);
+      --content-inset: var(--space-10);
+      --section-gap: var(--space-12);
+      --section-heading-gap: var(--space-5);
+      --grid-gap: var(--space-5);
+      --card-inset: var(--space-6);
+      --card-inset-small: var(--space-5);
+      --card-stack-gap: var(--space-5);
+      --text-stack-gap: var(--space-3);
+      --list-indent: var(--space-6);
+      --anchor-offset: var(--space-6);
+      --focus-offset: var(--space-1);
+      --underline-offset: var(--space-1);
+
+      --radius-report: var(--radius-5);
+      --radius-card: var(--radius-4);
+      --radius-panel: var(--radius-3);
+      --radius-badge: var(--radius-2);
+      --radius-bar: var(--radius-1);
+      --radius-focus: var(--radius-2);
+
+      --border-none: var(--stroke-0) solid var(--color-border);
+      --border-default: var(--stroke-1) solid var(--color-border);
+      --border-strong: var(--stroke-1) solid var(--color-border-strong);
+      --border-accent: var(--stroke-3) solid var(--color-accent);
+      --border-focus: var(--stroke-2) solid var(--color-accent);
+      --border-positive: var(--stroke-1) solid var(--color-status-positive-border);
+      --border-partial: var(--stroke-1) solid var(--color-status-partial-border);
+      --border-reframe: var(--stroke-1) solid var(--color-status-reframe-border);
+      --border-unconfirmed: var(--stroke-1) solid var(--color-status-unconfirmed-border);
+      --shadow-report: var(--shadow-1);
+
+      --width-full: 100%;
+      --size-zero: 0;
+      --size-unbounded: none;
+      --measure-subtitle: 960px;
+      --table-min-width: 720px;
+      --table-col-dimension: 14%;
+      --table-col-traditional: 25%;
+      --table-col-ai: 26%;
+      --table-col-combination: 35%;
+
+      --columns-one: minmax(0, 1fr);
+      --columns-two: repeat(2, minmax(0, 1fr));
+      --columns-three: repeat(3, minmax(0, 1fr));
+      --columns-evidence: minmax(0, 1.65fr) minmax(0, 1fr);
+
+      /* 图表几何：点击率共用 15% 上限；抓取比使用 log10，范围 1–10,000 */
+      --chart-bar-height: 18px;
+      --chart-axis-height: 28px;
+      --chart-tick-height: var(--space-1);
+      --chart-width-ctr-no-summary: 100%;
+      --chart-width-ctr-summary: 53.333333%;
+      --chart-width-ctr-summary-link: 6.666667%;
+      --chart-width-google: 24.3282%;
+      --chart-width-openai: 80.1030%;
+      --chart-position-start: 0%;
+      --chart-position-quarter: 25%;
+      --chart-position-third: 33.333333%;
+      --chart-position-half: 50%;
+      --chart-position-two-thirds: 66.666667%;
+      --chart-position-three-quarters: 75%;
+      --chart-position-end: 100%;
+      --transform-center: translateX(-50%);
+      --transform-end: translateX(-100%);
+      --transform-none: none;
+
+      /* 漏斗宽度仅表示流程递进，不表示实测转化率 */
+      --funnel-width-access: 100%;
+      --funnel-width-retrieval: 88%;
+      --funnel-width-citation: 76%;
+      --funnel-width-conversion: 64%;
+      --funnel-width-retention: 52%;
+
+      /* 无障碍与打印 */
+      --a11y-size: 1px;
+      --a11y-offset: -1px;
+      --a11y-clip: inset(50%);
+      --skip-transform-hidden: translateY(-200%);
+      --layer-skip-link: 100;
+      --print-page-margin: 12mm;
+      --text-orphans: 3;
+      --text-widows: 3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+    }
+
+    body {
+      margin: var(--space-0);
+      padding: var(--page-gutter);
+      background: var(--color-page);
+      color: var(--color-text);
+      font-family: var(--font-family-body);
+      font-size: var(--font-size-body);
+      font-weight: var(--weight-regular);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+      margin: var(--space-0);
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--color-text);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+      overflow-wrap: anywhere;
+    }
+
+    h2 {
+      font-size: var(--font-size-section);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    h3 {
+      font-size: var(--font-size-card-title);
+    }
+
+    h4 {
+      font-size: var(--font-size-label);
+    }
+
+    p, li {
+      orphans: var(--text-orphans);
+      widows: var(--text-widows);
+    }
+
+    strong, b {
+      font-weight: var(--weight-bold);
+    }
+
+    ul, ol {
+      margin: var(--space-0);
+      padding-inline-start: var(--list-indent);
+    }
+
+    a {
+      color: var(--color-link);
+      text-decoration-thickness: var(--stroke-1);
+      text-underline-offset: var(--underline-offset);
+    }
+
+    a:hover {
+      color: var(--color-text);
+    }
+
+    :focus-visible {
+      outline: var(--border-focus);
+      outline-offset: var(--focus-offset);
+      border-radius: var(--radius-focus);
+    }
+
+    section[id], li[id] {
+      scroll-margin-top: var(--anchor-offset);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: var(--a11y-size);
+      height: var(--a11y-size);
+      padding: var(--space-0);
+      margin: var(--a11y-offset);
+      overflow: hidden;
+      clip-path: var(--a11y-clip);
+      white-space: nowrap;
+      border: var(--border-none);
+    }
+
+    .skip-link {
+      position: fixed;
+      inset-block-start: var(--space-3);
+      inset-inline-start: var(--space-3);
+      z-index: var(--layer-skip-link);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-surface);
+      border: var(--border-focus);
+      border-radius: var(--radius-panel);
+      transform: var(--skip-transform-hidden);
+    }
+
+    .skip-link:focus {
+      transform: var(--transform-none);
+    }
+
+    .report {
+      width: var(--width-full);
+      max-width: var(--report-width);
+      margin-inline: var(--space-auto);
+      overflow: hidden;
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-report);
+      box-shadow: var(--shadow-report);
+    }
+
+    .hero {
+      padding: var(--hero-inset);
+      background: var(--color-hero-background);
+      border-block-end: var(--border-accent);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-block-end: var(--space-5);
+      color: var(--color-hero-meta);
+      font-size: var(--font-size-label);
+    }
+
+    .report-label {
+      font-weight: var(--weight-semibold);
+      letter-spacing: var(--tracking-label);
+    }
+
+    .hero-title {
+      color: var(--color-hero-title);
+      font-size: var(--font-size-title);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-heading);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .hero-title-line {
+      display: block;
+    }
+
+    .hero-subtitle {
+      max-width: var(--measure-subtitle);
+      margin-block-start: var(--space-5);
+      color: var(--color-hero-copy);
+      font-size: var(--font-size-body);
+    }
+
+    .report-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      padding: var(--space-2) var(--content-inset);
+      background: var(--color-surface);
+      border-block-end: var(--border-default);
+    }
+
+    .report-nav a {
+      display: block;
+      padding: var(--space-2) var(--space-3);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-label);
+      font-weight: var(--weight-medium);
+      text-decoration: none;
+      border-radius: var(--radius-badge);
+    }
+
+    .report-nav a:hover,
+    .report-nav a:focus-visible {
+      background: var(--color-surface-accent);
+      color: var(--color-link);
+    }
+
+    .content {
+      display: grid;
+      gap: var(--section-gap);
+      padding: var(--content-inset);
+    }
+
+    .content > section {
+      min-width: var(--size-zero);
+    }
+
+    .section-heading {
+      margin-block-end: var(--section-heading-gap);
+    }
+
+    .section-intro {
+      margin-block-start: var(--space-2);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-reading);
+    }
+
+    .thesis {
+      padding: var(--card-inset);
+      background: var(--color-surface-subtle);
+      border-inline-start: var(--border-accent);
+      border-radius: var(--radius-badge);
+    }
+
+    .thesis h2 {
+      margin-block-end: var(--space-3);
+      font-size: var(--font-size-lead);
+      letter-spacing: var(--tracking-normal);
+    }
+
+    .thesis-copy {
+      font-size: var(--font-size-lead);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: var(--columns-three);
+      gap: var(--grid-gap);
+    }
+
+    .kpi-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      min-width: var(--size-zero);
+      padding: var(--card-inset-small);
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .kpi-label {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-label);
+      font-weight: var(--weight-semibold);
+    }
+
+    .kpi-value {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-2);
+      color: var(--color-text);
+      font-size: var(--font-size-kpi);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-tight);
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .kpi-operator {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-lead);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-normal);
+    }
+
+    .kpi-description {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-label);
+      line-height: var(--leading-compact);
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--grid-gap);
+      margin-block-start: var(--space-6);
+    }
+
+    .chart-card {
+      display: flex;
+      flex-direction: column;
+      min-width: var(--size-zero);
+      padding: var(--card-inset);
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-card);
+    }
+
+    .chart-card h3 {
+      font-size: var(--font-size-chart-title);
+    }
+
+    .chart-unit {
+      margin-block-start: var(--space-2);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+    }
+
+    .chart-plot {
+      display: grid;
+      gap: var(--space-5);
+      margin-block: var(--space-6);
+    }
+
+    .bar-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-block-end: var(--space-2);
+      font-size: var(--font-size-label);
+      line-height: var(--leading-compact);
+    }
+
+    .bar-number {
+      flex-shrink: 0;
+      color: var(--color-text);
+      font-size: var(--font-size-chart-title);
+      font-variant-numeric: tabular-nums lining-nums;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: var(--chart-bar-height);
+      overflow: hidden;
+      background: var(--color-chart-track);
+      border-radius: var(--radius-bar);
+    }
+
+    .bar-fill {
+      display: block;
+      height: var(--width-full);
+      border-radius: var(--radius-bar);
+    }
+
+    .bar-fill--no-summary {
+      width: var(--chart-width-ctr-no-summary);
+      background: var(--color-chart-baseline);
+    }
+
+    .bar-fill--summary {
+      width: var(--chart-width-ctr-summary);
+      background: var(--color-chart-ai);
+    }
+
+    .bar-fill--summary-link {
+      width: var(--chart-width-ctr-summary-link);
+      background: var(--color-chart-link);
+    }
+
+    .bar-fill--google {
+      width: var(--chart-width-google);
+      background: var(--color-chart-baseline);
+    }
+
+    .bar-fill--openai {
+      width: var(--chart-width-openai);
+      background: var(--color-chart-ai);
+    }
+
+    .chart-axis {
+      position: relative;
+      height: var(--chart-axis-height);
+      border-block-start: var(--border-strong);
+    }
+
+    .axis-tick {
+      position: absolute;
+      inset-block-start: var(--space-0);
+      padding-block-start: var(--space-2);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-axis);
+      line-height: var(--leading-tight);
+      font-variant-numeric: tabular-nums lining-nums;
+      white-space: nowrap;
+      transform: var(--transform-center);
+    }
+
+    .axis-tick::before {
+      position: absolute;
+      inset-block-start: var(--space-0);
+      inset-inline-start: var(--chart-position-half);
+      height: var(--chart-tick-height);
+      border-inline-start: var(--border-strong);
+      content: "";
+    }
+
+    .axis-tick--start {
+      inset-inline-start: var(--chart-position-start);
+      transform: var(--transform-none);
+    }
+
+    .axis-tick--start::before {
+      inset-inline-start: var(--chart-position-start);
+    }
+
+    .axis-tick--quarter {
+      inset-inline-start: var(--chart-position-quarter);
+    }
+
+    .axis-tick--third {
+      inset-inline-start: var(--chart-position-third);
+    }
+
+    .axis-tick--half {
+      inset-inline-start: var(--chart-position-half);
+    }
+
+    .axis-tick--two-thirds {
+      inset-inline-start: var(--chart-position-two-thirds);
+    }
+
+    .axis-tick--three-quarters {
+      inset-inline-start: var(--chart-position-three-quarters);
+    }
+
+    .axis-tick--end {
+      inset-inline-start: var(--chart-position-end);
+      transform: var(--transform-end);
+    }
+
+    .axis-tick--end::before {
+      inset-inline-start: var(--chart-position-end);
+    }
+
+    .chart-caption {
+      margin-block-start: var(--space-auto);
+      padding-block-start: var(--space-4);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+      border-block-start: var(--border-default);
+    }
+
+    .chart-caption p + p {
+      margin-block-start: var(--space-2);
+    }
+
+    .chart-caveat {
+      margin-block-start: var(--space-4);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+    }
+
+    .judgment-stack {
+      display: grid;
+      gap: var(--card-stack-gap);
+    }
+
+    .judgment-card {
+      min-width: var(--size-zero);
+      overflow: hidden;
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-card);
+    }
+
+    .judgment-header {
+      padding: var(--card-inset);
+      background: var(--color-surface-subtle);
+      border-block-end: var(--border-default);
+    }
+
+    .field-label {
+      margin-block-end: var(--space-2);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-small);
+      font-weight: var(--weight-semibold);
+    }
+
+    .judgment-verdict {
+      margin-block-start: var(--space-3);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-reading);
+    }
+
+    .verdict-label {
+      color: var(--color-text);
+      font-weight: var(--weight-semibold);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-2);
+      font-size: var(--font-size-small);
+      font-weight: var(--weight-bold);
+      line-height: var(--leading-compact);
+      vertical-align: baseline;
+      border-radius: var(--radius-badge);
+    }
+
+    .badge--positive {
+      color: var(--color-status-positive-text);
+      background: var(--color-status-positive-background);
+      border: var(--border-positive);
+    }
+
+    .badge--partial {
+      color: var(--color-status-partial-text);
+      background: var(--color-status-partial-background);
+      border: var(--border-partial);
+    }
+
+    .badge--reframe {
+      color: var(--color-status-reframe-text);
+      background: var(--color-status-reframe-background);
+      border: var(--border-reframe);
+    }
+
+    .badge--unconfirmed {
+      color: var(--color-status-unconfirmed-text);
+      background: var(--color-status-unconfirmed-background);
+      border: var(--border-unconfirmed);
+    }
+
+    .judgment-layout {
+      display: grid;
+      grid-template-columns: var(--columns-evidence);
+      align-items: start;
+      gap: var(--grid-gap);
+      padding: var(--card-inset);
+    }
+
+    .evidence {
+      min-width: var(--size-zero);
+    }
+
+    .evidence-list {
+      margin-block-start: var(--space-3);
+      font-size: var(--font-size-reading);
+    }
+
+    .evidence-list li + li,
+    .action-list li + li,
+    .method-list li + li {
+      margin-block-start: var(--text-stack-gap);
+    }
+
+    .evidence-list li::marker,
+    .action-list li::marker {
+      color: var(--color-text-muted);
+    }
+
+    .synthesis {
+      display: grid;
+      gap: var(--space-4);
+      min-width: var(--size-zero);
+    }
+
+    .caution,
+    .revision {
+      padding: var(--space-4);
+      border-radius: var(--radius-panel);
+    }
+
+    .caution {
+      background: var(--color-surface-subtle);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-label);
+    }
+
+    .revision {
+      background: var(--color-surface-accent);
+      color: var(--color-text);
+      font-size: var(--font-size-reading);
+      border-inline-start: var(--border-accent);
+    }
+
+    .caution h4,
+    .revision h4 {
+      margin-block-end: var(--space-2);
+    }
+
+    .revision h4 {
+      color: var(--color-link);
+    }
+
+    .judgment-explanation {
+      padding: var(--card-inset);
+      font-size: var(--font-size-reading);
+    }
+
+    .judgment-explanation h4 {
+      margin-block-end: var(--space-3);
+    }
+
+    .dimension-grid {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--grid-gap);
+    }
+
+    .dimension-item {
+      min-width: var(--size-zero);
+      padding: var(--card-inset-small);
+      background: var(--color-surface-subtle);
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .dimension-item dt {
+      margin-block-end: var(--space-2);
+      font-size: var(--font-size-body);
+      font-weight: var(--weight-bold);
+    }
+
+    .dimension-item dd {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-reading);
+    }
+
+    .dimension-principle {
+      margin-block-start: var(--space-5);
+      padding: var(--space-4) var(--space-5);
+      background: var(--color-surface-accent);
+      font-size: var(--font-size-lead);
+      font-weight: var(--weight-semibold);
+      border-inline-start: var(--border-accent);
+      border-radius: var(--radius-badge);
+    }
+
+    .framework-grid {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--grid-gap);
+    }
+
+    .framework-card {
+      display: flex;
+      flex-direction: column;
+      min-width: var(--size-zero);
+      padding: var(--card-inset);
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-card);
+    }
+
+    .framework-card h3 {
+      font-size: var(--font-size-chart-title);
+    }
+
+    .framework-description {
+      margin-block-start: var(--space-3);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-reading);
+    }
+
+    .value-chain {
+      display: grid;
+      gap: var(--space-1);
+      margin-block-start: var(--space-5);
+      text-align: center;
+    }
+
+    .chain-node {
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-surface-subtle);
+      font-size: var(--font-size-reading);
+      font-weight: var(--weight-semibold);
+      border: var(--border-default);
+      border-radius: var(--radius-badge);
+    }
+
+    .chain-node--result {
+      background: var(--color-surface-accent);
+      color: var(--color-link);
+      border: var(--border-positive);
+    }
+
+    .chain-arrow {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-label);
+      line-height: var(--leading-tight);
+    }
+
+    .funnel {
+      display: grid;
+      gap: var(--space-2);
+      margin-block-start: var(--space-5);
+    }
+
+    .funnel-stage {
+      margin-inline: var(--space-auto);
+      padding: var(--space-2) var(--space-3);
+      color: var(--color-funnel-text);
+      font-size: var(--font-size-label);
+      font-weight: var(--weight-semibold);
+      line-height: var(--leading-compact);
+      text-align: center;
+      border-radius: var(--radius-bar);
+    }
+
+    .funnel-stage--access {
+      width: var(--funnel-width-access);
+      background: var(--color-funnel-stage-1);
+    }
+
+    .funnel-stage--retrieval {
+      width: var(--funnel-width-retrieval);
+      background: var(--color-funnel-stage-2);
+    }
+
+    .funnel-stage--citation {
+      width: var(--funnel-width-citation);
+      background: var(--color-funnel-stage-3);
+    }
+
+    .funnel-stage--conversion {
+      width: var(--funnel-width-conversion);
+      background: var(--color-funnel-stage-4);
+    }
+
+    .funnel-stage--retention {
+      width: var(--funnel-width-retention);
+      background: var(--color-funnel-stage-5);
+    }
+
+    .diagram-note {
+      margin-block-start: var(--space-3);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-small);
+    }
+
+    .access-pair {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--space-3);
+      margin-block-start: var(--space-5);
+    }
+
+    .access-cell {
+      padding: var(--space-4);
+      background: var(--color-surface-subtle);
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .access-cell--paid {
+      background: var(--color-surface-accent);
+      border: var(--border-positive);
+    }
+
+    .access-label {
+      display: block;
+      margin-block-end: var(--space-2);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+    }
+
+    .access-cell strong {
+      display: block;
+      font-size: var(--font-size-reading);
+    }
+
+    .equation {
+      margin-block-start: var(--space-5);
+      padding: var(--space-5);
+      background: var(--color-surface-subtle);
+      font-size: var(--font-size-lead);
+      line-height: var(--leading-body);
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .equation strong {
+      color: var(--color-link);
+    }
+
+    .equation-term {
+      display: inline-block;
+    }
+
+    .table-hint {
+      display: none;
+      margin-block-end: var(--space-3);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .comparison-table {
+      width: var(--width-full);
+      min-width: var(--table-min-width);
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: var(--font-size-reading);
+      line-height: var(--leading-body);
+    }
+
+    .col-dimension {
+      width: var(--table-col-dimension);
+    }
+
+    .col-traditional {
+      width: var(--table-col-traditional);
+    }
+
+    .col-ai {
+      width: var(--table-col-ai);
+    }
+
+    .col-combination {
+      width: var(--table-col-combination);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: var(--space-4);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      border-block-end: var(--border-default);
+    }
+
+    .comparison-table thead th {
+      background: var(--color-surface-subtle);
+      color: var(--color-text);
+      font-weight: var(--weight-bold);
+    }
+
+    .comparison-table tbody th {
+      color: var(--color-text);
+      font-weight: var(--weight-semibold);
+    }
+
+    .comparison-table td {
+      color: var(--color-text-secondary);
+    }
+
+    .comparison-table th:last-child,
+    .comparison-table td:last-child {
+      background: var(--color-surface-accent);
+      color: var(--color-text);
+    }
+
+    .comparison-table tbody tr:last-child th,
+    .comparison-table tbody tr:last-child td {
+      border-block-end: var(--border-none);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--grid-gap);
+    }
+
+    .action-card {
+      min-width: var(--size-zero);
+      padding: var(--card-inset);
+      background: var(--color-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-card);
+    }
+
+    .action-card h3 {
+      margin-block-end: var(--space-4);
+      font-size: var(--font-size-chart-title);
+    }
+
+    .action-card--wide {
+      grid-column: 1 / -1;
+      background: var(--color-surface-subtle);
+    }
+
+    .action-list {
+      font-size: var(--font-size-reading);
+    }
+
+    .method-panel {
+      padding: var(--card-inset);
+      background: var(--color-surface-subtle);
+      border: var(--border-default);
+      border-radius: var(--radius-panel);
+    }
+
+    .method-list {
+      font-size: var(--font-size-reading);
+    }
+
+    .method-list li::marker {
+      color: var(--color-text-secondary);
+      font-weight: var(--weight-semibold);
+    }
+
+    .method-note {
+      margin-block-start: var(--space-5);
+      padding-block-start: var(--space-4);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-label);
+      border-block-start: var(--border-default);
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: var(--columns-two);
+      gap: var(--space-4) var(--space-6);
+      padding: var(--space-0);
+      list-style: none;
+    }
+
+    .source-list li {
+      min-width: var(--size-zero);
+      padding-block-end: var(--space-4);
+      border-block-end: var(--border-default);
+    }
+
+    .source-list li:target {
+      background: var(--color-surface-accent);
+      outline: var(--border-focus);
+      outline-offset: var(--focus-offset);
+      border-radius: var(--radius-focus);
+    }
+
+    .source-link {
+      display: block;
+      color: var(--color-link);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .source-name {
+      display: block;
+      color: var(--color-text);
+      font-size: var(--font-size-label);
+      font-weight: var(--weight-semibold);
+      line-height: var(--leading-compact);
+    }
+
+    .source-url {
+      display: block;
+      margin-block-start: var(--space-2);
+      color: var(--color-link);
+      font-size: var(--font-size-source-url);
+      line-height: var(--leading-compact);
+      overflow-wrap: anywhere;
+    }
+
+    .source-link:hover .source-name {
+      color: var(--color-link);
+      text-decoration: underline;
+      text-decoration-thickness: var(--stroke-1);
+      text-underline-offset: var(--underline-offset);
+    }
+
+    .report-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-3) var(--space-6);
+      padding: var(--space-5) var(--content-inset);
+      background: var(--color-surface-subtle);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-small);
+      border-block-start: var(--border-default);
+    }
+
+    .handoff {
+      overflow-wrap: anywhere;
+    }
+
+    @media screen and (max-width: 1020px) {
+      :root {
+        --page-gutter: var(--space-5);
+        --hero-inset: var(--space-8);
+        --content-inset: var(--space-7);
+      }
+
+      .kpi-grid {
+        grid-template-columns: var(--columns-two);
+      }
+
+      .judgment-layout {
+        grid-template-columns: var(--columns-one);
+      }
+
+      .synthesis {
+        grid-template-columns: var(--columns-two);
+      }
+    }
+
+    @media screen and (max-width: 760px) {
+      :root {
+        --page-gutter: var(--space-0);
+        --hero-inset: var(--space-6);
+        --content-inset: var(--space-5);
+        --section-gap: var(--space-8);
+        --section-heading-gap: var(--space-4);
+        --grid-gap: var(--space-4);
+        --card-inset: var(--space-5);
+        --card-inset-small: var(--space-4);
+        --card-stack-gap: var(--space-4);
+        --font-size-title: var(--type-mobile-title);
+        --font-size-section: var(--type-2xl);
+        --font-size-card-title: var(--type-xl);
+        --font-size-chart-title: var(--type-lg);
+        --font-size-kpi: var(--type-mobile-kpi);
+        --font-size-lead: var(--type-base);
+      }
+
+      .report {
+        border: var(--border-none);
+        border-radius: var(--radius-0);
+        box-shadow: var(--shadow-0);
+      }
+
+      .report-nav {
+        gap: var(--space-1);
+        padding: var(--space-2) var(--space-3);
+      }
+
+      .chart-grid,
+      .synthesis,
+      .dimension-grid,
+      .framework-grid,
+      .action-grid,
+      .source-list {
+        grid-template-columns: var(--columns-one);
+      }
+
+      .chart-plot {
+        gap: var(--space-4);
+      }
+
+      .table-hint {
+        display: block;
+      }
+
+      .report-footer {
+        display: block;
+      }
+
+      .report-footer p + p {
+        margin-block-start: var(--space-2);
+      }
+    }
+
+    @media screen and (max-width: 520px) {
+      .kpi-grid {
+        grid-template-columns: var(--columns-one);
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: var(--print-page-margin);
+    }
+
+    @media print {
+      :root {
+        --color-page: var(--palette-white);
+        --color-hero-background: var(--palette-white);
+        --color-hero-title: var(--palette-ink-950);
+        --color-hero-copy: var(--palette-slate-700);
+        --color-hero-meta: var(--palette-slate-600);
+        --page-gutter: var(--space-0);
+        --content-inset: var(--space-0);
+        --section-gap: var(--space-6);
+        --section-heading-gap: var(--space-3);
+        --grid-gap: var(--space-3);
+        --card-inset: var(--space-4);
+        --card-inset-small: var(--space-3);
+        --card-stack-gap: var(--space-4);
+        --text-stack-gap: var(--space-2);
+        --font-size-body: var(--type-print-body);
+        --font-size-reading: var(--type-print-body);
+        --font-size-title: var(--type-print-title);
+        --font-size-section: var(--type-print-section);
+        --font-size-card-title: var(--type-print-card-title);
+        --font-size-chart-title: var(--type-print-lead);
+        --font-size-lead: var(--type-print-lead);
+        --font-size-kpi: var(--type-print-kpi);
+        --font-size-label: var(--type-print-sm);
+        --font-size-small: var(--type-print-xs);
+        --font-size-axis: var(--type-print-xs);
+        --font-size-source-url: var(--type-print-xs);
+        --table-min-width: var(--size-zero);
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        padding: var(--space-0);
+      }
+
+      .report {
+        max-width: var(--size-unbounded);
+        overflow: visible;
+        border: var(--border-none);
+        border-radius: var(--radius-0);
+        box-shadow: var(--shadow-0);
+      }
+
+      .hero {
+        padding: var(--space-0) var(--space-0) var(--space-5);
+        margin-block-end: var(--space-5);
+      }
+
+      .hero-meta {
+        margin-block-end: var(--space-3);
+      }
+
+      .hero-subtitle {
+        margin-block-start: var(--space-3);
+      }
+
+      .report-nav,
+      .skip-link,
+      .table-hint {
+        display: none;
+      }
+
+      .content {
+        display: block;
+        padding: var(--space-0);
+      }
+
+      .content > section + section {
+        margin-block-start: var(--section-gap);
+      }
+
+      .judgment-stack {
+        display: block;
+      }
+
+      .judgment-card + .judgment-card {
+        margin-block-start: var(--card-stack-gap);
+      }
+
+      .judgment-card,
+      .table-wrap {
+        overflow: visible;
+      }
+
+      .section-heading,
+      h2,
+      h3,
+      h4 {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .hero,
+      .thesis,
+      .kpi-card,
+      .chart-card,
+      .judgment-card,
+      .dimension-item,
+      .dimension-principle,
+      .framework-card,
+      .action-card,
+      .method-panel,
+      .source-list li,
+      .report-footer,
+      .comparison-table tr {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      .kpi-grid,
+      .chart-grid,
+      .framework-grid,
+      .table-wrap {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      .chart-plot {
+        gap: var(--space-3);
+        margin-block: var(--space-4);
+      }
+
+      .chart-caption {
+        padding-block-start: var(--space-3);
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: var(--space-3);
+      }
+
+      .comparison-table thead {
+        display: table-header-group;
+      }
+
+      .source-list {
+        gap: var(--space-3) var(--space-5);
+      }
+
+      .source-list li {
+        padding-block-end: var(--space-3);
+      }
+
+      .report-footer {
+        margin-block-start: var(--space-6);
+        padding: var(--space-4) var(--space-0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#report-content">跳转到报告正文</a>
+
+  <div class="report">
+    <header class="hero" id="top">
+      <div class="hero-meta">
+        <p class="report-label">研究简报</p>
+        <p>日期 <time datetime="2026-09-28">2026-09-28</time></p>
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-title-line">AI 时代的"传统路径"复盘：</span>
+        <span class="hero-title-line">爬虫、网站、搜索、模板为什么仍然是地基</span>
+      </h1>
+      
+    </header>
+
+    
+
+    <main class="content" id="report-content">
+      <section class="thesis" id="thesis" aria-labelledby="thesis-title">
+        <h2 id="thesis-title">一句话总论点</h2>
+        <p class="thesis-copy">AI 没有让传统路径过时，而是把它们压到了产品的地基层：许多依赖公开网页的产品，数据仍靠爬虫、索引与授权，分发仍大量依赖搜索引擎，交付常借助模板与设计系统。真正变化的是价值回收方式——<strong>曝光不再等于流量</strong>，谁能以可持续成本把合法、可信的数据变成用户愿意付费、且价值能留在自己手里的结果，谁才是赢家。</p>
+      </section>
+
+      <section id="kpis" aria-labelledby="kpis-title">
+        <div class="section-heading">
+          <h2 id="kpis-title">核心数字（KPI 卡）</h2>
+        </div>
+
+        <div class="kpi-grid">
+          <article class="kpi-card" aria-label="GPT-3 训练数据">
+            <p class="kpi-label">训练数据</p>
+            <p class="kpi-value">
+              <span>60%</span>
+              <span class="kpi-operator">/</span>
+              <span>~82%</span>
+            </p>
+            <p class="kpi-description">GPT-3 训练混合中 Common Crawl 的采样占比 / 原始 token 占比</p>
+          </article>
+
+          <article class="kpi-card" aria-label="SearchGPT 原型引用重合比例">
+            <p class="kpi-label">搜索引用</p>
+            <p class="kpi-value">87%</p>
+            <p class="kpi-description">SearchGPT 原型期引用与 Bing 前排结果的重合比例（Seer Interactive 样本研究，不代表当前产品）</p>
+          </article>
+
+          <article class="kpi-card" aria-label="AI 摘要与传统链接点击">
+            <p class="kpi-label">传统链接点击</p>
+            <p class="kpi-value">
+              <span>8%</span>
+              <span class="kpi-operator">vs</span>
+              <span>15%</span>
+            </p>
+            <p class="kpi-description">Google 搜索访问中点击传统结果的比例：出现 AI 摘要时 vs 未出现时（Pew，900 名美国成人 2025 年 3 月浏览数据）</p>
+          </article>
+
+          <article class="kpi-card" aria-label="OpenAI 抓取与回流比">
+            <p class="kpi-label">抓取 / 回流</p>
+            <p class="kpi-value">~1,600:1</p>
+            <p class="kpi-description">OpenAI 抓取页面数与带回访问数之比（Cloudflare，2025 年 6 月；Google 约 9.4:1）</p>
+          </article>
+
+          <article class="kpi-card" aria-label="WordPress 网站份额">
+            <p class="kpi-label">建站生态</p>
+            <p class="kpi-value">41.2%</p>
+            <p class="kpi-description">WordPress 占全部网站比例（W3Techs 动态统计，取数时数值，会随时间变化）</p>
+          </article>
+
+          <article class="kpi-card" aria-label="Show HN 落地页中的 AI 模板味">
+            <p class="kpi-label">AI 模板味</p>
+            <p class="kpi-value">
+              <span>22%</span>
+              <span class="kpi-operator">/</span>
+              <span>32%</span>
+            </p>
+            <p class="kpi-description">1,590 个 Show HN 落地页中重度 / 轻度"AI 模板味"比例（作者主观分类，非行业代表样本）</p>
+          </article>
+        </div>
+
+        <div class="chart-grid">
+          <figure class="chart-card" aria-labelledby="ctr-chart-title">
+            <h3 id="ctr-chart-title">有无 AI 摘要：点击率对比</h3>
+            <p class="chart-unit">线性刻度 · Google 搜索访问中的点击比例</p>
+
+            <div class="chart-plot" role="img" aria-label="点击率条形图，横轴范围为 0% 至 15%。未出现 AI 摘要时，传统链接点击比例为 15%；出现 AI 摘要时，传统链接点击比例为 8%；AI 摘要内链接点击比例为 1%。">
+              <div class="bar-row">
+                <div class="bar-heading">
+                  <span>未出现 AI 摘要 · 传统链接</span>
+                  <strong class="bar-number">15%</strong>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-fill bar-fill--no-summary"></span>
+                </div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-heading">
+                  <span>出现 AI 摘要 · 传统链接</span>
+                  <strong class="bar-number">8%</strong>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-fill bar-fill--summary"></span>
+                </div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-heading">
+                  <span>出现 AI 摘要 · 摘要内链接</span>
+                  <strong class="bar-number">1%</strong>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-fill bar-fill--summary-link"></span>
+                </div>
+              </div>
+
+              <div class="chart-axis" aria-hidden="true">
+                <span class="axis-tick axis-tick--start">0%</span>
+                <span class="axis-tick axis-tick--third">5%</span>
+                <span class="axis-tick axis-tick--two-thirds">10%</span>
+                <span class="axis-tick axis-tick--end">15%</span>
+              </div>
+            </div>
+
+            <figcaption class="chart-caption">
+              <p>来源：<a href="#source-pew">Pew Research Center</a>，2025 年 3 月美国样本。</p>
+              <p>前两项比较传统链接点击；第三项为摘要内链接点击，不是第三组传统链接数据。</p>
+            </figcaption>
+          </figure>
+
+          <figure class="chart-card" aria-labelledby="crawl-chart-title">
+            <h3 id="crawl-chart-title">抓取 / 回流比：Google 与 OpenAI</h3>
+            <p class="chart-unit">对数刻度 · 抓取页面数 / 带回访问数</p>
+
+            <div class="chart-plot" role="img" aria-label="抓取与回流比条形图，采用以 10 为底的对数刻度，横轴从 1 比 1 到 10,000 比 1。Google 约为 9.4 比 1，OpenAI 约为 1,600 比 1。条形长度不能作为线性倍数比较。">
+              <div class="bar-row">
+                <div class="bar-heading">
+                  <span>Google</span>
+                  <strong class="bar-number">约 9.4:1</strong>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-fill bar-fill--google"></span>
+                </div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-heading">
+                  <span>OpenAI</span>
+                  <strong class="bar-number">约 1,600:1</strong>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-fill bar-fill--openai"></span>
+                </div>
+              </div>
+
+              <div class="chart-axis" aria-hidden="true">
+                <span class="axis-tick axis-tick--start">1:1</span>
+                <span class="axis-tick axis-tick--quarter">10:1</span>
+                <span class="axis-tick axis-tick--half">100:1</span>
+                <span class="axis-tick axis-tick--three-quarters">1,000:1</span>
+                <span class="axis-tick axis-tick--end">10,000:1</span>
+              </div>
+            </div>
+
+            <figcaption class="chart-caption">
+              <p>来源：<a href="#source-cloudflare">Cloudflare</a>，2025 年 6 月。</p>
+              <p>横轴为以 10 为底的对数刻度，范围 1:1–10,000:1；等距刻度表示数量级变化，条长不是线性倍数。</p>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="chart-caveat"><strong>注意：</strong>Pew 是美国观察性数据，不能直接外推中国；Cloudflare 比值不等于收入损失率。</p>
+      </section>
+
+      <section id="judgments" aria-labelledby="judgments-title">
+        <div class="section-heading">
+          <h2 id="judgments-title">六个判断逐条核对</h2>
+          <p class="section-intro">每条：原直觉 → 判定 → 证据 → 修正后的说法</p>
+        </div>
+
+        <div class="judgment-stack">
+          <article class="judgment-card" aria-labelledby="judgment-1-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-1-title">判断 1：AI 产品本质是"爬虫 + 整合"</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--partial">部分成立</span>（数据层、检索层成立；价值层不成立）</p>
+            </header>
+            <div class="judgment-layout">
+              <div class="evidence">
+                <h4>证据：</h4>
+                <ul class="evidence-list">
+                  <li>GPT-3 训练数据 60% 采样自 Common Crawl（原始 token 约 82%）；Mozilla 统计 2019–2023 年 47 个 LLM 中至少 64% 用了 Common Crawl。</li>
+                  <li>运行时检索大量借用现成搜索索引：Seer 对 SearchGPT 原型的样本研究发现，其引用与 Bing 前排结果约 87% 重合；OpenAI 被报道曾经通过 SerpApi 获取 Google 结果；Claude 网页搜索被多方证据指向 Brave。</li>
+                  <li>但数据不只靠爬：Reddit 与 Google 年约 6,000 万美元授权；News Corp 与 OpenAI 5 年超 2.5 亿美元。</li>
+                </ul>
+              </div>
+              <aside class="synthesis" aria-label="判断 1 的注意事项与修正">
+                <div class="caution">
+                  <h4>注意：</h4>
+                  <p>训练语料来源 ≠ 产品运行机制；搜索结果重合也不能完全证明供应商关系（查询会被改写扩展）。</p>
+                </div>
+                <div class="revision">
+                  <h4>修正后：</h4>
+                  <p>底层管道是 20 年前的"爬虫 + 索引 + 搜索引擎 + 数据授权"，AI 新增的是理解、综合，以及越来越重要的"执行与交付结果"这一层。</p>
+                </div>
+              </aside>
+            </div>
+          </article>
+
+          <article class="judgment-card" aria-labelledby="judgment-2-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-2-title">判断 2：受隐私政策限制，AI 只能抓网页，所以网站优先的公司更受欢迎</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--reframe">方向对</span>，但要改成"可授权、可被机器访问优先"</p>
+            </header>
+            <div class="judgment-layout">
+              <div class="evidence">
+                <h4>证据：</h4>
+                <ul class="evidence-list">
+                  <li>封闭生态确实挡住 AI：微信公众号内容曾被腾讯元宝作为"独家"差异化（2025）；移动 App 对外部 AI 基本是围墙花园，需 App Intents / MCP 主动开放。</li>
+                  <li>但被抓取 ≠ 被访问：Pew 研究显示，出现 AI 摘要的 Google 搜索访问中，点击传统结果的比例从 15% 降到 8%，点击摘要内链接的仅 1%；Cloudflare 测得 OpenAI 抓取/回流约 1,600:1。</li>
+                  <li>网站方在反击：前 100 大网站约 26% 屏蔽 GPTBot，约一半新闻站屏蔽；Cloudflare 2025 年 7 月默认屏蔽 AI 爬虫并推出按次付费抓取；Perplexity 被指伪装浏览器绕过 robots.txt。</li>
+                  <li>屏蔽的主因多是商业利益，而非仅隐私法规；并且"允许搜索"和"允许训练"可以分开设置（屏蔽 GPTBot 仍可放行 OAI-SearchBot）。</li>
+                </ul>
+              </div>
+              <aside class="synthesis" aria-label="判断 2 的注意事项与修正">
+                <div class="caution">
+                  <h4>注意：</h4>
+                  <p>Pew 是美国观察性数据，不能直接外推中国；Cloudflare 比值不等于收入损失率。</p>
+                </div>
+                <div class="revision">
+                  <h4>修正后：</h4>
+                  <p>网站只是载体。AI 时代受益的是"能被机器合法读取 + 拥有难替代数据 + 有议价权"的内容方；只靠点击流量变现的网站反而受伤。</p>
+                </div>
+              </aside>
+            </div>
+          </article>
+
+          <article class="judgment-card" aria-labelledby="judgment-3-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-3-title">判断 3：GEO 是 SEO 在 AI 时代的延续</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--positive">成立</span>，但 GEO 的目标更多</p>
+            </header>
+            <div class="judgment-layout">
+              <div class="evidence">
+                <h4>证据：</h4>
+                <ul class="evidence-list">
+                  <li>Princeton 等 GEO 论文（KDD 2024）：加统计数据、引用、来源，在其基准上最高提升约 40% 可见度。</li>
+                  <li>后续研究（C-SEO Bench 2025、FeatGEO 2026、2026 综述）显示单点技巧在其他条件下不稳定，内容相关性最稳。</li>
+                  <li>llms.txt：SE Ranking 约 30 万域名研究未发现对 AI 引用有可测效果；Google 表示搜索系统不读取 llms.txt。</li>
+                  <li>对于依赖 Bing / Brave / Google 等传统索引的 AI 检索入口，"先被收录"是前提。</li>
+                </ul>
+              </div>
+              <aside class="synthesis" aria-label="判断 3 的修正">
+                <div class="revision">
+                  <h4>修正后：</h4>
+                  <p>SEO 是地基，GEO 在此之上还要追求被正确引用、被推荐、被归因，并最终落到成交；不要把 40% 当普适承诺。</p>
+                </div>
+              </aside>
+            </div>
+          </article>
+
+          <article class="judgment-card" aria-labelledby="judgment-4-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-4-title">判断 4：AI 很聪明，但很多能力回到了传统的爬虫、网页、搜索引擎</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--partial">部分成立</span></p>
+            </header>
+            <div class="judgment-explanation">
+              <h4>说明：</h4>
+              <p>复用旧基础设施 ≠ 能力倒退。真正的新东西是价值迁移——从"提供信息"到"执行、验证、交付结果"。<strong>机会在于把传统基础设施和新的执行层组合，而不是仅把旧东西换个包装。</strong></p>
+            </div>
+          </article>
+
+          <article class="judgment-card" aria-labelledby="judgment-5-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-5-title">判断 5：为什么不用成熟模板（WordPress 等）再用 AI 优化</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--positive">成立</span>，而且头部公司已经在这么做；但"模板有用"不等于"模板一定最优"</p>
+            </header>
+            <div class="judgment-layout">
+              <div class="evidence">
+                <h4>证据：</h4>
+                <ul class="evidence-list">
+                  <li>WordPress 仍占全部网站约 41%（W3Techs）；Wix、Squarespace 都走"模板 + AI"，WordPress 推出 Telex 用 AI 生成单个区块而不是整站。Zapier 评测：最好的 AI 建站工具首先是建站工具。</li>
+                  <li>AI 从零生成其实也在用"隐形模板"：v0 / Lovable 默认 shadcn/ui + Tailwind，可能加剧同质化；一项对 1,590 个 Show HN 落地页的主观分类中，22% 重度、32% 轻度"AI 味"。</li>
+                  <li>图片视频同理：Canva 同时拥有大规模用户与模板库（第三方统计汇编称 2025 年底约 2.65 亿月活、3,100 万付费用户，增长原因不能仅归于模板）；CapCut 有模板创作者分成。</li>
+                </ul>
+              </div>
+              <aside class="synthesis" aria-label="判断 5 的注意事项与修正">
+                <div class="caution">
+                  <h4>注意：</h4>
+                  <p>WordPress 份额下滑不能直接归因于 AI；模板有维护、性能、授权与定制约束，需同任务对照测试。</p>
+                </div>
+                <div class="revision">
+                  <h4>修正后：</h4>
+                  <p>模板 / 设计系统给"审美下限 + 兼容性 + 生态"，AI 给"定制上限 + 速度"；"模板打底 + AI 改造"是值得优先对照测试的候选方案，用同任务对照来选。</p>
+                </div>
+              </aside>
+            </div>
+          </article>
+
+          <article class="judgment-card" aria-labelledby="judgment-6-title">
+            <header class="judgment-header">
+              <p class="field-label">原直觉</p>
+              <h3 id="judgment-6-title">判断 6：这些传统路径好用，但被大多数人忽视了</h3>
+              <p class="judgment-verdict"><span class="verdict-label">判定：</span><span class="badge badge--unconfirmed">尚未证实</span>（是假设，不是结论）</p>
+            </header>
+            <div class="judgment-explanation">
+              <h4>说明：</h4>
+              <p>没有采用率调查能证明"大多数人忽视"。已有证据显示头部公司（Wix、Squarespace、Automattic、Canva）正把模板与 AI 融合；更可能被忽视的是独立开发者和新手的"从零生成"惯性。SaaS 的"工具 → 模板 → 市场"路径可以借鉴，但工具不必长成市场，市场也不会自动产生网络效应。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="dimensions" aria-labelledby="dimensions-title">
+        <div class="section-heading">
+          <h2 id="dimensions-title">补充维度（初稿遗漏，经讨论补上）</h2>
+        </div>
+
+        <dl class="dimension-grid">
+          <div class="dimension-item">
+            <dt>权利边界：</dt>
+            <dd>robots.txt 不等于授权；采集、训练、展示、转售是四种不同权限，需分别核查；公开的个人信息仍受个人信息保护法约束。</dd>
+          </div>
+          <div class="dimension-item">
+            <dt>中国差异：</dt>
+            <dd>主要内容在微信、抖音、小红书等封闭平台；AI 生成内容需按《人工智能生成合成内容标识办法》（自 2025 年 9 月 1 日起施行）标识。</dd>
+          </div>
+          <div class="dimension-item">
+            <dt>经营成本：</dt>
+            <dd>数据过期、溯源、纠错、人工复核、客服成本；按订阅、按量、按结果收费的差异。</dd>
+          </div>
+          <div class="dimension-item">
+            <dt>平台风险：</dt>
+            <dd>大平台内置同类功能、数据断供、模型换代后产品是否还有价值。</dd>
+          </div>
+        </dl>
+
+        <p class="dimension-principle">高曝光零收益不如低曝光高成交。</p>
+      </section>
+
+      <section id="frameworks" aria-labelledby="frameworks-title">
+        <div class="section-heading">
+          <h2 id="frameworks-title">四个分析框架</h2>
+        </div>
+
+        <div class="framework-grid">
+          <article class="framework-card" aria-labelledby="framework-1-title">
+            <h3 id="framework-1-title">1. 分层价值链</h3>
+            <p class="framework-description">数据获取 → 推理执行 → 结果交付，找用户真正付费的那一层。</p>
+            <div class="value-chain" aria-hidden="true">
+              <div class="chain-node">数据获取</div>
+              <div class="chain-arrow">↓</div>
+              <div class="chain-node">推理执行</div>
+              <div class="chain-arrow">↓</div>
+              <div class="chain-node chain-node--result">结果交付</div>
+            </div>
+          </article>
+
+          <article class="framework-card" aria-labelledby="framework-2-title">
+            <h3 id="framework-2-title">2. 价值回收漏斗</h3>
+            <p class="framework-description">可访问 → 被召回 → 被引用 → 成交 → 留存，逐层计量，别拿曝光代替收入。</p>
+            <div class="funnel" role="img" aria-label="五层价值回收漏斗：可访问、被召回、被引用、成交、留存。条宽递减仅为流程示意，不代表实测转化率。">
+              <div class="funnel-stage funnel-stage--access">可访问</div>
+              <div class="funnel-stage funnel-stage--retrieval">被召回</div>
+              <div class="funnel-stage funnel-stage--citation">被引用</div>
+              <div class="funnel-stage funnel-stage--conversion">成交</div>
+              <div class="funnel-stage funnel-stage--retention">留存</div>
+            </div>
+            
+          </article>
+
+          <article class="framework-card" aria-labelledby="framework-3-title">
+            <h3 id="framework-3-title">3. 开放 × 稀缺矩阵</h3>
+            <p class="framework-description">公开可验证的部分用来获客，合法拥有且难替代的数据用来收费。</p>
+            <div class="access-pair" aria-hidden="true">
+              <div class="access-cell">
+                <span class="access-label">获客</span>
+                <strong>公开可验证的部分</strong>
+              </div>
+              <div class="access-cell access-cell--paid">
+                <span class="access-label">收费</span>
+                <strong>合法拥有且难替代的数据</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="framework-card" aria-labelledby="framework-4-title">
+            <h3 id="framework-4-title">4. 单次成功任务经济账</h3>
+            <p class="framework-description">收入 − 采集 − 推理 − 重试 − 复核 − 维护 − 获客，决定能否规模化。</p>
+            <div class="equation" aria-hidden="true">
+              <strong>收入</strong>
+              <span class="equation-term">− 采集</span>
+              <span class="equation-term">− 推理</span>
+              <span class="equation-term">− 重试</span>
+              <span class="equation-term">− 复核</span>
+              <span class="equation-term">− 维护</span>
+              <span class="equation-term">− 获客</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="comparison" aria-labelledby="comparison-title">
+        <div class="section-heading">
+          <h2 id="comparison-title">传统路径 vs AI 原生路径对照表</h2>
+        </div>
+
+        <p class="table-hint" id="table-hint">可横向滑动查看完整对照表。</p>
+        <div class="table-wrap" role="region" aria-labelledby="comparison-title" tabindex="0">
+          <table class="comparison-table">
+            <caption class="sr-only">传统路径 vs AI 原生路径对照表</caption>
+            <colgroup>
+              <col class="col-dimension">
+              <col class="col-traditional">
+              <col class="col-ai">
+              <col class="col-combination">
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">维度</th>
+                <th scope="col">传统路径</th>
+                <th scope="col">AI 原生路径</th>
+                <th scope="col">建议组合</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <th scope="row">分发</th>
+                <td>SEO、搜索引擎、目录站</td>
+                <td>AI 答案引用（GEO）</td>
+                <td>先被收录，再优化引用与归因</td>
+              </tr>
+              <tr>
+                <th scope="row">建站</th>
+                <td>WordPress / Wix 模板</td>
+                <td>从零生成（v0、Lovable）</td>
+                <td>模板或设计系统打底 + AI 定制</td>
+              </tr>
+              <tr>
+                <th scope="row">视觉内容</th>
+                <td>Canva / 剪映模板</td>
+                <td>文生图、文生视频</td>
+                <td>爆款结构模板 + AI 变体</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="actions" aria-labelledby="actions-title">
+        <div class="section-heading">
+          
+        </div>
+
+        <div class="action-grid">
+          <article class="action-card" aria-labelledby="developer-actions-title">
+            <h3 id="developer-actions-title">独立开发者：</h3>
+            <ul class="action-list">
+              <li>先访谈 <strong>10 名</strong>目标用户，人工交付并争取 <strong>3 个付费试点</strong>，再写代码。</li>
+              
+              <li>有复购再扩模板库，不先搭市场。</li>
+            </ul>
+          </article>
+
+          <article class="action-card" aria-labelledby="creator-actions-title">
+            <h3 id="creator-actions-title">内容创作者：</h3>
+            <ul class="action-list">
+              <li>选 <strong>20 个</strong>目标问题，对应页面分组优化并保留对照组，连续 <strong>4 周</strong>在多个 AI 引擎重复测引用，同时记录线索与成交。</li>
+              <li>确保页面被 Bing / Google / Brave 收录；发布原创数据与案例；视频复用叙事结构和已授权素材，不照搬爆款。</li>
+            </ul>
+          </article>
+
+          <article class="action-card action-card--wide" aria-labelledby="website-actions-title">
+            <h3 id="website-actions-title">建站通用：</h3>
+            <ul class="action-list">
+              <li>让"模板版"和"AI 生成版"完成同一任务，比较上线与维护总工时、移动端表现、无障碍和关键流程，再选方案。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="method" aria-labelledby="method-title">
+        <div class="section-heading">
+          <h2 id="method-title">方法与迭代记录</h2>
+        </div>
+
+        <div class="method-panel">
+          <ol class="method-list">
+            
+            
+            
+          </ol>
+          <p class="method-note"><strong>注：</strong>ChatGPT 与 Codex 的意见不作为来源证据，数据以下列来源为准。</p>
+        </div>
+      </section>
+
+      <section id="sources" aria-labelledby="sources-title">
+        <div class="section-heading">
+          <h2 id="sources-title">来源</h2>
+        </div>
+
+        <ul class="source-list">
+          <li id="source-mozilla">
+            <a class="source-link" href="https://www.mozillafoundation.org/en/research/library/generative-ai-training-data/common-crawl/">
+              <span class="source-name">Mozilla Foundation：Training Data for the Price of a Sandwich（Common Crawl）</span>
+              <span class="source-url">https://www.mozillafoundation.org/en/research/library/generative-ai-training-data/common-crawl/</span>
+            </a>
+          </li>
+
+          <li id="source-seer">
+            <a class="source-link" href="https://www.seerinteractive.com/insights/87-percent-of-searchgpt-citations-match-bings-top-results">
+              <span class="source-name">Seer Interactive：87% of SearchGPT Citations Match Bing's Top Results</span>
+              <span class="source-url">https://www.seerinteractive.com/insights/87-percent-of-searchgpt-citations-match-bings-top-results</span>
+            </a>
+          </li>
+
+          <li id="source-serpapi">
+            <a class="source-link" href="https://searchengineland.com/openai-chatgpt-serpapi-google-search-results-461226">
+              <span class="source-name">Search Engine Land：ChatGPT's answers came from Google Search after all（SerpApi）</span>
+              <span class="source-url">https://searchengineland.com/openai-chatgpt-serpapi-google-search-results-461226</span>
+            </a>
+          </li>
+
+          <li id="source-brave">
+            <a class="source-link" href="https://techcrunch.com/2025/03/21/anthropic-appears-to-be-using-brave-to-power-web-searches-for-its-claude-chatbot/">
+              <span class="source-name">TechCrunch：Anthropic appears to be using Brave to power web search</span>
+              <span class="source-url">https://techcrunch.com/2025/03/21/anthropic-appears-to-be-using-brave-to-power-web-searches-for-its-claude-chatbot/</span>
+            </a>
+          </li>
+
+          <li id="source-cloudflare">
+            <a class="source-link" href="https://blog.cloudflare.com/ai-search-crawl-refer-ratio-on-radar/">
+              <span class="source-name">Cloudflare Blog：The crawl before the fall… of referrals</span>
+              <span class="source-url">https://blog.cloudflare.com/ai-search-crawl-refer-ratio-on-radar/</span>
+            </a>
+          </li>
+
+          <li id="source-pew">
+            <a class="source-link" href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/">
+              <span class="source-name">Pew Research Center：Google users are less likely to click on links when an AI summary appears</span>
+              <span class="source-url">https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/</span>
+            </a>
+          </li>
+
+          <li id="source-perplexity">
+            <a class="source-link" href="https://www.searchenginejournal.com/cloudflare-delists-and-blocks-perplexity-from-crawling-websites/552899/">
+              <span class="source-name">Search Engine Journal：Cloudflare delists and blocks Perplexity</span>
+              <span class="source-url">https://www.searchenginejournal.com/cloudflare-delists-and-blocks-perplexity-from-crawling-websites/552899/</span>
+            </a>
+          </li>
+
+          <li id="source-gptbot">
+            <a class="source-link" href="https://searchengineland.com/more-popular-websites-blocking-gptbot-432531">
+              <span class="source-name">Search Engine Land：26% of the top 100 websites are now blocking GPTBot</span>
+              <span class="source-url">https://searchengineland.com/more-popular-websites-blocking-gptbot-432531</span>
+            </a>
+          </li>
+
+          <li id="source-reddit">
+            <a class="source-link" href="https://www.nbcnews.com/tech/tech-news/reddit-strikes-60m-deal-allowing-google-to-train-ai-models-posts-unveils-rcna140168">
+              <span class="source-name">NBC News：Reddit strikes $60M deal allowing Google to train AI models</span>
+              <span class="source-url">https://www.nbcnews.com/tech/tech-news/reddit-strikes-60m-deal-allowing-google-to-train-ai-models-posts-unveils-rcna140168</span>
+            </a>
+          </li>
+
+          <li id="source-news-corp">
+            <a class="source-link" href="https://variety.com/2024/digital/news/news-corp-openai-licensing-deal-1236013734/">
+              <span class="source-name">Variety：News Corp inks OpenAI licensing deal potentially worth more than $250 million</span>
+              <span class="source-url">https://variety.com/2024/digital/news/news-corp-openai-licensing-deal-1236013734/</span>
+            </a>
+          </li>
+
+          <li id="source-geo">
+            <a class="source-link" href="https://arxiv.org/abs/2311.09735">
+              <span class="source-name">arXiv 2311.09735：GEO: Generative Engine Optimization</span>
+              <span class="source-url">https://arxiv.org/abs/2311.09735</span>
+            </a>
+          </li>
+
+          <li id="source-geo-survey">
+            <a class="source-link" href="https://arxiv.org/pdf/2607.14035">
+              <span class="source-name">arXiv 2607.14035：A Critical Survey of Generative Engine Optimization</span>
+              <span class="source-url">https://arxiv.org/pdf/2607.14035</span>
+            </a>
+          </li>
+
+          <li id="source-llms-txt">
+            <a class="source-link" href="https://www.searchenginejournal.com/llms-txt-shows-no-clear-effect-on-ai-citations-based-on-300k-domains/561542/">
+              <span class="source-name">Search Engine Journal：LLMs.txt shows no clear effect on AI citations</span>
+              <span class="source-url">https://www.searchenginejournal.com/llms-txt-shows-no-clear-effect-on-ai-citations-based-on-300k-domains/561542/</span>
+            </a>
+          </li>
+
+          <li id="source-w3techs">
+            <a class="source-link" href="https://w3techs.com/technologies/details/cm-wordpress">
+              <span class="source-name">W3Techs：Usage statistics of WordPress</span>
+              <span class="source-url">https://w3techs.com/technologies/details/cm-wordpress</span>
+            </a>
+          </li>
+
+          <li id="source-design-slop">
+            <a class="source-link" href="https://www.developersdigest.tech/blog/ai-design-slop-and-how-to-spot-it">
+              <span class="source-name">Developers Digest：AI Design Slop: 16 Patterns</span>
+              <span class="source-url">https://www.developersdigest.tech/blog/ai-design-slop-and-how-to-spot-it</span>
+            </a>
+          </li>
+
+          <li id="source-telex">
+            <a class="source-link" href="https://wordpress.com/blog/2025/09/23/telex-turns-everyone-into-a-wordpress-block-developer/">
+              <span class="source-name">WordPress.com：Telex turns everyone into a WordPress block developer</span>
+              <span class="source-url">https://wordpress.com/blog/2025/09/23/telex-turns-everyone-into-a-wordpress-block-developer/</span>
+            </a>
+          </li>
+
+          <li id="source-zapier">
+            <a class="source-link" href="https://zapier.com/blog/best-ai-website-builder/">
+              <span class="source-name">Zapier：The best AI website builders</span>
+              <span class="source-url">https://zapier.com/blog/best-ai-website-builder/</span>
+            </a>
+          </li>
+
+          <li id="source-canva">
+            <a class="source-link" href="https://www.stylefactoryproductions.com/blog/canva-statistics">
+              <span class="source-name">Style Factory：Canva statistics</span>
+              <span class="source-url">https://www.stylefactoryproductions.com/blog/canva-statistics</span>
+            </a>
+          </li>
+
+          <li id="source-cac-label">
+            <a class="source-link" href="https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm">
+              <span class="source-name">国家网信办等：关于印发《人工智能生成合成内容标识办法》的通知</span>
+              <span class="source-url">https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm</span>
+            </a>
+          </li>
+
+          <li id="source-yuanbao">
+            <a class="source-link" href="https://finance.sina.com.cn/tech/roll/2025-04-17/doc-inetnfmv9140945.shtml">
+              <span class="source-name">新浪科技：腾讯元宝入驻微信，一键解析公众号文章</span>
+              <span class="source-url">https://finance.sina.com.cn/tech/roll/2025-04-17/doc-inetnfmv9140945.shtml</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="report-footer">
+      <p>AI 时代的"传统路径"复盘 · <time datetime="2026-09-28">2026-09-28</time></p>
+    </footer>
+  </div>
+</body>
+</html>
